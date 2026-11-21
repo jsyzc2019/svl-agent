@@ -1,0 +1,20 @@
+{
+  "audit_id": "WB-CURSOR-INDEPENDENT-AUDIT",
+  "target": "github.com/jsyzc2019/wb-cursor-bridge",
+  "commit": "b1639ad",
+  "version": "0.6.2",
+  "object_type": "工程实现类：带治理与安全声明的开源工具（MCP bridge / A2A service）",
+  "for_method": "本仓 SVL 框架方法迁移；判据适配对象（KB-STRUCT01 第四次落地）",
+  "created_at": "2026-11-21T22:58:00+08:00",
+  "note": "预注册先于证据采集，防后知；判据为可执行动作而非清单勾选",
+  "criteria": [
+    {"id":"C1","name":"谱系污染与主体归属","question":"自带审计是自评还是第三方？是否自标注失效？同构结论不得当独立验证","trigger":"若自评审计未标注局限或被当作权威结论 → flag 谱系污染","method":"读三份 AUDIT 文档 + CHANGELOG 修复链，区分自评/第三方/当前状态"},
+    {"id":"C2","name":"claim-vs-code 一致性","question":"README 的安全声称（白名单 fail-closed、worktree 隔离、永不阻塞、权限集中不被 prompt 绕过）是否有代码实现","trigger":"任一安全声称在代码中找不到对应实现或找到反例 → 判为 vanity claim","method":"逐条定位实现文件与关键函数，检查是否有代码路径使声称失效"},
+    {"id":"C3","name":"测试真实性与可证伪","question":"测试是 happy-path 自证还是会 fail 的对抗测试？项目声称的 26 条修复是否有对应回归测试","trigger":"只有正向测试、缺负面/PoC 测试，或测试无法运行 → flag 测试不构成独立证据","method":"统计测试文件类型，实跑 npm test，检查 fail 路径与回归测试命名"},
+    {"id":"C4","name":"安全声明可证伪性","question":"路径白名单、argv 注入防护、权限分档、取消杀进程树等声明是否可被对抗输入验证","trigger":"安全声明无对抗测试支撑 → 降级为 unverified claim","method":"检查是否有针对注入/越权/隔离降级的专项测试或 PoC"},
+    {"id":"C5","name":"复现完整性","question":"npm install → build → test 是否可在本环境重现；CI 是否覆盖","trigger":"任一步骤失败或环境依赖缺失 → 判复现不完整","method":"实际执行 typecheck/test/build，读 CI 配置"},
+    {"id":"C6","name":"复述/长牙决策","question":"本框架能从该项目学到什么可编译成会拦会降级的门禁？","trigger":"按 KB-META01 检验：能否指出具体被拦动作，否则只记观察不强造模块","method":"对每条候选经验做具体拦截动作检验"}
+  ],
+  "evidence_plan": ["clone 一手源码","实跑 npm typecheck/test","静态核对 claim-vs-code","读自带审计与CHANGELOG","读CI配置"],
+  "honesty_rule": "三层诚实结论：事实真≠结论真；同构≠独立验证；算术/测试自洽≠系统正确"
+}

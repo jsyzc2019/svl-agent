@@ -1,0 +1,125 @@
+{
+  "audit_id": "FG-COMPARATIVE-AUDIT",
+  "verdict": "PASS-WITH-HONESTY-CAVEATS",
+  "all_judgments_fired": true,
+  "criteria_passed": 6,
+  "criteria_total": 6,
+  "criteria": {
+    "D1": {
+      "id": "D1",
+      "name": "谱系关系一手判定",
+      "checks": {
+        "upstream_earlier": true,
+        "copy_not_fork": true,
+        "cross_ge_3": true,
+        "self_declared": true
+      },
+      "pass": true,
+      "finding": "谱系确凿：下游是上游的复制式派生 + dev-sidecar 借鉴混合体；非 fork 使谱系更隐蔽"
+    },
+    "D2": {
+      "id": "D2",
+      "name": "同构≠独立验证",
+      "checks": {
+        "shared_files": 6,
+        "added_src": 4,
+        "added_selftests": 10,
+        "growing_modules": 4,
+        "recognizes_inherit": true,
+        "recognizes_delta": true
+      },
+      "pass": true,
+      "finding": "同构部分是继承而非独立验证；但下游确有大函数体增量与新增模块，非纯换皮。同源≠独立验证成立"
+    },
+    "D3": {
+      "id": "D3",
+      "name": "下游优化声称可证伪性",
+      "checks": {
+        "total_claims": 7,
+        "true_like": 5,
+        "mismatch_flagged": 1,
+        "amendment_corrections": 2,
+        "all_have_verdict": true,
+        "mismatches_not_hidden": true
+      },
+      "pass": true,
+      "mismatch_details": [
+        "超时10→5s",
+        "反馈通道声称",
+        "超时10→5s声称"
+      ],
+      "finding": "7 项声称逐条核对代码；2 项文档口径不一致（超时10→5s、反馈接口'新增'）被显式识别，非功能缺陷"
+    },
+    "D4": {
+      "id": "D4",
+      "name": "差异归因与净贡献",
+      "checks": {
+        "attribution_areas_ge2": 3,
+        "doc_backed_by_evidence": true,
+        "borrow_honestly_marked": true
+      },
+      "pass": true,
+      "finding": "净贡献真实（新增2核心模块+10自检+函数体增量），且借鉴来源标注诚实；但'优化版'的'优化'部分含相当比例的借鉴移植而非全自研"
+    },
+    "D5": {
+      "id": "D5",
+      "name": "复现完整性",
+      "checks": {
+        "ci_config": true,
+        "selftest_invocation_confirmed": true,
+        "environment_not_run_disclosed": true,
+        "honesty_boundary_marked": true
+      },
+      "pass": true,
+      "finding": "复现证据中等：CI 配置+调用链+自检断言充分，但本环境未实跑，不得伪造完成度；本环境无 .NET SDK，未实跑，据实标注"
+    },
+    "D6": {
+      "id": "D6",
+      "name": "复述/长牙决策",
+      "checks": {
+        "teeth_count": 2,
+        "observe_count": 1,
+        "teeth_all_actionable": true
+      },
+      "teeth": [
+        "SelfTest 写好了却没调用点=从未执行；新增自检必须注册",
+        "小样本期禁用成功率判定（1次失败=成功率0误杀）"
+      ],
+      "observations": [
+        "生态调研用 GitHub API 实测而非空谈"
+      ],
+      "pass": true,
+      "finding": "2 项可编译为会拦会降级的门禁，1 项只记观察不强造模块"
+    }
+  },
+  "judge_self_audit": {
+    "passed": true,
+    "incidents": [
+      {
+        "id": "SA1",
+        "kb": "KB-AUDIT02",
+        "incident": "文档抓取返回118字符，初判'内容过大'，实为URL中文路径未编码",
+        "caught_by": "读取内容而非仅看长度"
+      },
+      {
+        "id": "SA2",
+        "kb": "KB-AUDIT01",
+        "incident": "SelfTest 断言 grep 首次未命中(实为 Assert( 写法)，单一模式漏判",
+        "caught_by": "语义动作词集合替代单一模式"
+      },
+      {
+        "id": "SA3",
+        "kb": "KB-AUDIT02",
+        "incident": "IDomainResolver 下游文件更小，差点判'声称不成立'，实为接口外移重构",
+        "caught_by": "读全文交叉确认，amendment 记录"
+      }
+    ],
+    "note": "三次均为检查方法/单一信号失真，非项目缺陷；证明 KB-AUDIT01/02 首次真实迁移即拦截成功"
+  },
+  "three_layer": {
+    "事实": "两项目同源确凿（上游7月/下游10月，复制式派生非fork）；下游新增2核心模块+10个可证伪自检+CI冒烟，净贡献真实",
+    "结论": "同构部分是继承而非独立验证；'优化版'含相当比例的 dev-sidecar 借鉴移植（但标注诚实）；2项文档口径不一致（超时、反馈接口）非功能缺陷",
+    "迁移": "本环境未实跑 .NET 构建，复现证据止于 CI 配置与调用链，不得伪造完成度；KB-AUDIT01/02 首次迁移即3次拦截检查方法失真"
+  },
+  "honesty_boundary": "文档声称核对基于源码静态证据；未实跑构建/自检；上游历史演进引用下游日志文档属二手，未经独立复现"
+}

@@ -1,0 +1,999 @@
+[
+  {
+    "institution_name": "广发证券",
+    "category": "券商",
+    "skills": [
+      {
+        "skill_name": "股票简况信息",
+        "description": "沪深上市公司基本信息/三大表/股东数据",
+        "platform": "IMA / Coze / 华为小艺 / OpenClaw / WorkBuddy / 扣子 Coze",
+        "install_method": "API Key 注册 → 一键复制安装",
+        "evaluation": "基础数据覆盖全面，行业首家入驻IMA和Coze"
+      },
+      {
+        "skill_name": "财务对比",
+        "description": "两家公司多维度财务横向对比（估值/盈利/现金流/偿债/营运/成长）",
+        "platform": "IMA / Coze / 华为小艺 / OpenClaw / WorkBuddy / 扣子 Coze",
+        "install_method": "API Key 注册 → 一键复制安装",
+        "evaluation": "多维度对比实用性强"
+      },
+      {
+        "skill_name": "沪深龙虎榜",
+        "description": "交易所盘后异动股 + 历史回溯",
+        "platform": "IMA / Coze / 华为小艺 / OpenClaw / WorkBuddy / 扣子 Coze",
+        "install_method": "API Key 注册 → 一键复制安装",
+        "evaluation": "龙虎榜数据及时可靠"
+      },
+      {
+        "skill_name": "ETF筛选",
+        "description": "多维度组合条件筛ETF（跟踪指数/规模/成交/成立时间）",
+        "platform": "IMA / Coze / 华为小艺 / OpenClaw / WorkBuddy / 扣子 Coze",
+        "install_method": "API Key 注册 → 一键复制安装",
+        "evaluation": "ETF筛选维度丰富"
+      },
+      {
+        "skill_name": "ETF涨幅榜单",
+        "description": "ETF涨跌幅/特色榜/融资榜实时排行",
+        "platform": "IMA / Coze / 华为小艺 / OpenClaw / WorkBuddy / 扣子 Coze",
+        "install_method": "API Key 注册 → 一键复制安装",
+        "evaluation": "榜单覆盖全面"
+      },
+      {
+        "skill_name": "ETF资金异动追踪",
+        "description": "每日净申购资金大幅流入/流出监测",
+        "platform": "IMA / Coze / 华为小艺 / OpenClaw / WorkBuddy / 扣子 Coze",
+        "install_method": "API Key 注册 → 一键复制安装",
+        "evaluation": "资金异动捕捉及时"
+      },
+      {
+        "skill_name": "基金定投计算器",
+        "description": "已知基金的历史定投收益回测",
+        "platform": "IMA / Coze / 华为小艺 / OpenClaw / WorkBuddy / 扣子 Coze",
+        "install_method": "API Key 注册 → 一键复制安装",
+        "evaluation": "定投回测功能实用"
+      },
+      {
+        "skill_name": "基金简况信息",
+        "description": "基金净值/类型/涨跌/申赎/持仓查询",
+        "platform": "IMA / Coze / 华为小艺 / OpenClaw / WorkBuddy / 扣子 Coze",
+        "install_method": "API Key 注册 → 一键复制安装",
+        "evaluation": "基金基础数据覆盖"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研 + 2026-09 巡检更新",
+    "last_updated": "2026-09-21",
+    "sources": [
+      {
+        "title": "财联社：哪些券商的 Skills 率先在 WorkBuddy 上线了（11 家券商 54 个 Skill）",
+        "url": "https://m.cls.cn/detail/2455726"
+      },
+      {
+        "title": "财联社：券商密集上线 Skills，重构服务颗粒度",
+        "url": "https://m.cls.cn/detail/2404777"
+      }
+    ]
+  },
+  {
+    "institution_name": "东方财富",
+    "category": "券商",
+    "skills": [
+      {
+        "skill_name": "综合诊基",
+        "description": "单基金结构化诊断报告（风险收益/持仓/适合人群）",
+        "platform": "IMA / Coze / 飞书 / OpenClaw",
+        "install_method": "财富号自带 API Key，无需额外配置",
+        "evaluation": "C端流量最大，基金诊断体验好"
+      },
+      {
+        "skill_name": "综合诊股",
+        "description": "单股票结构化诊断报告",
+        "platform": "IMA / Coze / 飞书 / OpenClaw",
+        "install_method": "财富号自带 API Key",
+        "evaluation": "个股诊断全面"
+      },
+      {
+        "skill_name": "金融数据",
+        "description": "A股/港股/美股/基金/债券行情+公司信息+估值+财报",
+        "platform": "IMA / Coze / 飞书 / OpenClaw",
+        "install_method": "财富号自带 API Key",
+        "evaluation": "数据覆盖面广"
+      },
+      {
+        "skill_name": "市场搜索",
+        "description": "公告/研报/新闻搜索",
+        "platform": "IMA / Coze / 飞书 / OpenClaw",
+        "install_method": "财富号自带 API Key",
+        "evaluation": "搜索覆盖多信息源"
+      },
+      {
+        "skill_name": "宏观查询",
+        "description": "GDP/CPI/PMI 等宏观指标一句话查询",
+        "platform": "IMA / Coze / 飞书 / OpenClaw",
+        "install_method": "财富号自带 API Key",
+        "evaluation": "宏观数据获取便捷"
+      },
+      {
+        "skill_name": "智能选股",
+        "description": "自然语言条件筛选股票/基金/债券",
+        "platform": "IMA / Coze / 飞书 / OpenClaw",
+        "install_method": "财富号自带 API Key",
+        "evaluation": "自然语言选股体验好"
+      },
+      {
+        "skill_name": "热点发现",
+        "description": "实时盘面异动、热门板块锁定",
+        "platform": "IMA / Coze / 飞书 / OpenClaw",
+        "install_method": "财富号自带 API Key",
+        "evaluation": "热点捕捉及时"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研",
+    "last_updated": "2026-07-13",
+    "sources": [
+      {
+        "title": "财联社：哪些券商的 Skills 率先在 WorkBuddy 上线了（11 家券商 54 个 Skill）",
+        "url": "https://m.cls.cn/detail/2455726"
+      }
+    ]
+  },
+  {
+    "institution_name": "国泰海通",
+    "category": "券商",
+    "skills": [
+      {
+        "skill_name": "研报搜索",
+        "description": "自动提取券商研报核心观点和数据",
+        "platform": "华为小艺 / OpenClaw / ClawHub / 千问",
+        "install_method": "君弘APP搜索「灵犀Skills」→ 领资格 → 一键复制安装",
+        "evaluation": "首批官方金融Skill包，研报提取能力强"
+      },
+      {
+        "skill_name": "实时行情",
+        "description": "毫秒级 A股/港股/美股/ETF 行情+盘口",
+        "platform": "华为小艺 / OpenClaw / ClawHub / 千问",
+        "install_method": "君弘APP每日领名额",
+        "evaluation": "毫秒级行情，延迟低"
+      },
+      {
+        "skill_name": "金融数据",
+        "description": "财务指标/估值水平/趋势形态一键查询",
+        "platform": "华为小艺 / OpenClaw / ClawHub / 千问",
+        "install_method": "君弘APP每日领名额",
+        "evaluation": "数据查询便捷"
+      },
+      {
+        "skill_name": "市场热榜",
+        "description": "实时市场热点和资金流向跟踪",
+        "platform": "华为小艺 / OpenClaw / ClawHub / 千问",
+        "install_method": "君弘APP每日领名额",
+        "evaluation": "热点追踪及时"
+      },
+      {
+        "skill_name": "智能选股",
+        "description": "自然语言多指标选股+历史回测",
+        "platform": "华为小艺 / OpenClaw / ClawHub / 千问",
+        "install_method": "君弘APP每日领名额",
+        "evaluation": "选股+回测一体化"
+      },
+      {
+        "skill_name": "自选管理",
+        "description": "自动管理自选股，涨跌条件触发提醒",
+        "platform": "华为小艺 / OpenClaw / ClawHub / 千问",
+        "install_method": "君弘APP每日领名额",
+        "evaluation": "自选提醒机制实用"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研 + 2026-09 巡检更新",
+    "last_updated": "2026-09-21",
+    "sources": [
+      {
+        "title": "财联社：哪些券商的 Skills 率先在 WorkBuddy 上线了（11 家券商 54 个 Skill）",
+        "url": "https://m.cls.cn/detail/2455726"
+      },
+      {
+        "title": "财联社：券商密集上线 Skills，重构服务颗粒度",
+        "url": "https://m.cls.cn/detail/2404777"
+      },
+      {
+        "title": "中国金融信息网：千问接入十余家金融类智能体（2026-09-07）",
+        "url": "https://m.cnfin.com/kx//zixun/20260907/4465997_1.html"
+      }
+    ]
+  },
+  {
+    "institution_name": "华泰证券",
+    "category": "券商",
+    "skills": [
+      {
+        "skill_name": "金融分析与资讯查询",
+        "description": "个股/大盘/板块资讯+投资日历+基金诊断",
+        "platform": "涨乐App / OpenClaw",
+        "install_method": "AI涨乐App → 复制提示词&Key → 粘贴安装",
+        "evaluation": "零售端覆盖面广，机构+零售双线布局"
+      },
+      {
+        "skill_name": "金融指标与行情综合检索",
+        "description": "实时/历史行情+财务指标+估值数据",
+        "platform": "涨乐App / OpenClaw",
+        "install_method": "AI涨乐App → 复制安装",
+        "evaluation": "行情数据全面"
+      },
+      {
+        "skill_name": "A股模拟交易",
+        "description": "完整模拟盘（行情/持仓/买卖/撤单）",
+        "platform": "涨乐App / OpenClaw",
+        "install_method": "AI涨乐App → 复制安装",
+        "evaluation": "模拟交易功能完整"
+      },
+      {
+        "skill_name": "条件选股",
+        "description": "自然语言描述筛选条件（行业/财务/技术面）",
+        "platform": "涨乐App / OpenClaw",
+        "install_method": "AI涨乐App → 复制安装",
+        "evaluation": "自然语言选股灵活"
+      },
+      {
+        "skill_name": "自选股管理",
+        "description": "多股票分组管理",
+        "platform": "涨乐App / OpenClaw",
+        "install_method": "AI涨乐App → 复制安装",
+        "evaluation": "自选股管理便捷"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研",
+    "last_updated": "2026-07-13",
+    "sources": [
+      {
+        "title": "财联社：哪些券商的 Skills 率先在 WorkBuddy 上线了（11 家券商 54 个 Skill）",
+        "url": "https://m.cls.cn/detail/2455726"
+      },
+      {
+        "title": "财联社：券商密集上线 Skills，重构服务颗粒度",
+        "url": "https://m.cls.cn/detail/2404777"
+      }
+    ]
+  },
+  {
+    "institution_name": "中金公司",
+    "category": "券商",
+    "skills": [
+      {
+        "skill_name": "行情数据",
+        "description": "实时行情查询",
+        "platform": "中金点睛 / OpenClaw / 千问",
+        "install_method": "中金财富 Skills 中心注册 → 获取 API Key → 一键安装",
+        "evaluation": "机构级数据质量高"
+      },
+      {
+        "skill_name": "财务分析",
+        "description": "个股财务深度分析",
+        "platform": "中金点睛 / OpenClaw / 千问",
+        "install_method": "中金财富 Skills 中心注册",
+        "evaluation": "财务分析有深度"
+      },
+      {
+        "skill_name": "热榜资讯",
+        "description": "市场热点+资讯聚合",
+        "platform": "中金点睛 / OpenClaw / 千问",
+        "install_method": "中金财富 Skills 中心注册",
+        "evaluation": "资讯聚合能力强"
+      },
+      {
+        "skill_name": "分析师「老于」数字分身",
+        "description": "计算机首席于钟海数字分身（30万字+研报训练）",
+        "platform": "中金点睛 / 千问",
+        "install_method": "面向机构付费",
+        "evaluation": "分析师IP化创新，行业标杆"
+      },
+      {
+        "skill_name": "策略/宏观/新能源分析师专属Skill",
+        "description": "各领域首席投研框架（含策略、宏观、新能源等）",
+        "platform": "中金点睛 / 千问",
+        "install_method": "面向机构付费",
+        "evaluation": "首席投研框架独家性强"
+      },
+      {
+        "skill_name": "点睛 AI 双引擎（分析师 Skill + MCP）",
+        "description": "中金点睛双引擎架构：分析师专属 Skill 负责投研框架与观点，MCP 负责行情/财务/资讯数据供给，可组合接入外部 Agent",
+        "platform": "中金点睛 / OpenClaw / 千问",
+        "install_method": "中金财富 Skills 中心注册 → 获取 API Key → 一键安装",
+        "evaluation": "Skill + MCP 双通道，机构级数据与分析师观点解耦，便于二次编排"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研 + 2026-09 巡检更新",
+    "last_updated": "2026-09-21",
+    "sources": [
+      {
+        "title": "财联社：券商密集上线 Skills，重构服务颗粒度",
+        "url": "https://m.cls.cn/detail/2404777"
+      },
+      {
+        "title": "财联社：证券业扎堆布局 AI Skills 服务自家客户",
+        "url": "https://m.cls.cn/detail/2450745"
+      }
+    ]
+  },
+  {
+    "institution_name": "国信证券",
+    "category": "券商",
+    "skills": [
+      {
+        "skill_name": "智能选股",
+        "description": "自然语言选股",
+        "platform": "小信助手 / OpenClaw / Coze",
+        "install_method": "https://skillhub.cloud.tencent.com/enterprise/org-c35jqdjt",
+        "evaluation": "自然语言交互流畅"
+      },
+      {
+        "skill_name": "ETF筛选",
+        "description": "多维度 ETF 筛选",
+        "platform": "小信助手 / OpenClaw / Coze",
+        "install_method": "小信助手 Skills 中心",
+        "evaluation": "ETF筛选维度实用"
+      },
+      {
+        "skill_name": "基金对比",
+        "description": "多基金横向对比",
+        "platform": "小信助手 / OpenClaw / Coze",
+        "install_method": "小信助手 Skills 中心",
+        "evaluation": "对比功能直观"
+      },
+      {
+        "skill_name": "宏观数据查询",
+        "description": "GDP/CPI/PMI 等",
+        "platform": "小信助手 / OpenClaw / Coze",
+        "install_method": "小信助手 Skills 中心",
+        "evaluation": "宏观数据查询便捷"
+      },
+      {
+        "skill_name": "行情查询",
+        "description": "实时/历史行情",
+        "platform": "小信助手 / OpenClaw / Coze",
+        "install_method": "小信助手 Skills 中心",
+        "evaluation": "行情数据覆盖广"
+      },
+      {
+        "skill_name": "研报查询",
+        "description": "研报核心提取",
+        "platform": "小信助手 / OpenClaw / Coze",
+        "install_method": "小信助手 Skills 中心",
+        "evaluation": "研报核心观点提取准确"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研",
+    "last_updated": "2026-07-13",
+    "sources": [
+      {
+        "title": "财联社：哪些券商的 Skills 率先在 WorkBuddy 上线了（11 家券商 54 个 Skill）",
+        "url": "https://m.cls.cn/detail/2455726"
+      },
+      {
+        "title": "财联社：券商密集上线 Skills，重构服务颗粒度",
+        "url": "https://m.cls.cn/detail/2404777"
+      }
+    ]
+  },
+  {
+    "institution_name": "中信建投",
+    "category": "券商",
+    "skills": [
+      {
+        "skill_name": "AI蜻蜓翼答",
+        "description": "选股/资讯/交易全链条AI助手",
+        "platform": "蜻蜓点金 App",
+        "install_method": "蜻蜓点金 App 内置使用",
+        "evaluation": "全链条覆盖；2026-05 升级上线五大 AI 功能"
+      },
+      {
+        "skill_name": "智研多资产配置",
+        "description": "多资产配置AI智能体矩阵",
+        "platform": "机构端平台",
+        "install_method": "机构端内部使用",
+        "evaluation": "资产配置能力全面"
+      },
+      {
+        "skill_name": "蜻蜓 Skill·ETF 筛选",
+        "description": "围绕产品规模、跟踪指数、行业或主题等多维度智能筛选与多维对比，输出收益、回撤等核心指标",
+        "platform": "蜻蜓 Skill 广场 / 蜻蜓点金 App",
+        "install_method": "手机号注册领取专属 API Key，复制技能地址给 Agent 轻量部署",
+        "evaluation": "2026-07-17 首发三大技能之一"
+      },
+      {
+        "skill_name": "蜻蜓 Skill·个股研判",
+        "description": "整合公司基本资料、主营业务、管理层与发行信息，围绕收入/利润/成长/盈利能力/估值做行业排名与同业对标",
+        "platform": "蜻蜓 Skill 广场 / 蜻蜓点金 App",
+        "install_method": "手机号注册领取专属 API Key，复制技能地址给 Agent 轻量部署",
+        "evaluation": "支持单公司全景画像与多标的横向对比"
+      },
+      {
+        "skill_name": "蜻蜓 Skill·财报透视",
+        "description": "A 股上市公司利润表、资产负债表、现金流量表及关键财务指标定向查询与多公司对比",
+        "platform": "蜻蜓 Skill 广场 / 蜻蜓点金 App",
+        "install_method": "手机号注册领取专属 API Key，复制技能地址给 Agent 轻量部署",
+        "evaluation": "解决财报专业度高、信息提炼难的问题"
+      }
+    ],
+    "data_source": "2026-09 巡检更新（央广网 + 财联社 + 腾讯新闻 + 搜狐）",
+    "last_updated": "2026-09-21",
+    "sources": [
+      {
+        "title": "央广网：中信建投蜻蜓 Skill 广场上线，三大核心技能（2026-07-17）",
+        "url": "https://finance.cnr.cn/zghq/20260717/t20260717_527715007.shtml"
+      },
+      {
+        "title": "搜狐：中信建投 Skill 上线，打造智能投研技能生态",
+        "url": "https://www.sohu.com/a/1051460058_362042"
+      },
+      {
+        "title": "财联社：券商密集上线 Skills，重构服务颗粒度",
+        "url": "https://m.cls.cn/detail/2404777"
+      },
+      {
+        "title": "腾讯新闻：中信建投蜻蜓点金 App「AI 翼答」升级（2026-05-12）",
+        "url": "https://news.qq.com/rain/a/20260512A03NAD00"
+      }
+    ]
+  },
+  {
+    "institution_name": "广东博众",
+    "category": "券商",
+    "skills": [
+      {
+        "skill_name": "股票智能分析",
+        "description": "综合个股分析",
+        "platform": "Coze / 万得 AIFin Market",
+        "install_method": "Coze技能商店 / 万得AIFin Market",
+        "evaluation": "综合个股分析全面"
+      },
+      {
+        "skill_name": "量化成长选股助手",
+        "description": "量化因子选股",
+        "platform": "Coze",
+        "install_method": "Coze技能商店",
+        "evaluation": "量化因子策略丰富"
+      },
+      {
+        "skill_name": "股票情绪分析",
+        "description": "市场情绪判断",
+        "platform": "Coze",
+        "install_method": "Coze技能商店",
+        "evaluation": "情绪分析维度独特"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研",
+    "last_updated": "2026-07-13"
+  },
+  {
+    "institution_name": "兴业证券",
+    "category": "券商",
+    "skills": [
+      {
+        "skill_name": "兴证智达 Skill Hub",
+        "description": "统一技能中台，依托 ETF 与财富管理优势沉淀投研技能，核心服务内部投顾体系",
+        "platform": "兴证智达 / 自有平台",
+        "install_method": "内部投顾体系接入",
+        "evaluation": "2026-07 上线，券商自建 Skill 中台代表案例"
+      },
+      {
+        "skill_name": "兴业证券八大 Skills",
+        "description": "围绕投资者核心需求场景的八大技能，覆盖实时行情获取、股票及研报智能查询等技能项",
+        "platform": "腾讯 SkillHub / WorkBuddy",
+        "install_method": "WorkBuddy 一键安装调用",
+        "evaluation": "已正式上线腾讯 SkillHub，属券商投研 Skills 上架潮首批"
+      },
+      {
+        "skill_name": "兴业证券智能投资助手",
+        "description": "结合市场信息与机构研究视角，梳理当日 A股热点板块表现及背后的行业、政策或资金逻辑",
+        "platform": "千问 / 华为小艺",
+        "install_method": "千问对话中 @ 调用；小艺智能体广场搜索「兴业证券」",
+        "evaluation": "2026-09-07 千问开放平台金融智能体首批 4 款券商智能体之一"
+      },
+      {
+        "skill_name": "知己管家（优理宝 App）",
+        "description": "7×24 小时 AI 投资伙伴，贯通资讯解读、选股诊股、自选分析、盯盘预警到交易下单，支持自然语言一句话盯盘下单",
+        "platform": "优理宝 App / 鸿蒙",
+        "install_method": "App 首页 AI 图标进入；鸿蒙版支持小艺语音与悬浮窗常驻",
+        "evaluation": "上线两个月超 20 万客户使用，六大核心亮点含多因子智能诊断"
+      },
+      {
+        "skill_name": "AI 老铁（员工智能助手）",
+        "description": "面向投顾展业的内部智能助手，客户简报一键生成、制度与业务问答秒级响应、可生成可分享 H5 办理指引",
+        "platform": "企业微信",
+        "install_method": "内部员工企微入口",
+        "evaluation": "2026-04 上线，已 100% 覆盖全司员工，日问答量 100 → 近 2000 次"
+      }
+    ],
+    "data_source": "2026-09 巡检更新（官方披露 + 财联社/腾讯新闻/中国金融信息网报道）",
+    "last_updated": "2026-09-21",
+    "sources": [
+      {
+        "title": "腾讯新闻：在兴业证券工位，看到了三个 AI「新同事」（2026-09-03）",
+        "url": "https://news.qq.com/rain/a/20260903A084LM00"
+      },
+      {
+        "title": "中国金融信息网：兴业证券数智化转型的「兴」实践（2026-07-08）",
+        "url": "https://cnfin.com/cmjj-lb/detail/20260708/4437429_1.html"
+      },
+      {
+        "title": "澎湃：兴业证券 App「知己管家」上线",
+        "url": "https://www.thepaper.cn/newsDetail_forward_33337849"
+      },
+      {
+        "title": "中国经济新闻网：兴业证券知己管家智能投顾",
+        "url": "https://www.cet.com.cn/wzsy/cyzx/10406398.shtml"
+      },
+      {
+        "title": "中国金融信息网：千问接入十余家金融类智能体（2026-09-07）",
+        "url": "https://m.cnfin.com/kx//zixun/20260907/4465997_1.html"
+      },
+      {
+        "title": "财联社：证券业扎堆布局 AI Skills 服务自家客户",
+        "url": "https://m.cls.cn/detail/2450745"
+      }
+    ]
+  },
+  {
+    "institution_name": "万得 (Wind)",
+    "category": "数据商",
+    "skills": [
+      {
+        "skill_name": "WindClaw",
+        "description": "独立Agent（龙虾），金融数据+分析全链路",
+        "platform": "桌面端",
+        "install_method": "下载安装",
+        "evaluation": "机构级数据最全，分析链路完整"
+      },
+      {
+        "skill_name": "AIFin Market",
+        "description": "A股/港股/美股行情财报、ETF/基金/债券/指数/宏观数据的MCP开放平台",
+        "platform": "WorkBuddy / OpenClaw / Hermes Agent",
+        "install_method": "MCP协议接入 WorkBuddy",
+        "evaluation": "MCP标准化程度高，生态兼容性好"
+      },
+      {
+        "skill_name": "万得 AI (Wind Alice)",
+        "description": "行业个股分析/估值建模/策略回测/PPT生成",
+        "platform": "独立App + 微信",
+        "install_method": "独立App或微信接入",
+        "evaluation": "C端产品覆盖分析+回测+报告生成"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研",
+    "last_updated": "2026-07-13"
+  },
+  {
+    "institution_name": "同花顺",
+    "category": "数据商",
+    "skills": [
+      {
+        "skill_name": "iFinD MCP",
+        "description": "金融数据库开放调用（全品类数据）",
+        "platform": "MCP协议",
+        "install_method": "MCP协议接入",
+        "evaluation": "MCP标准化，数据品类全面"
+      },
+      {
+        "skill_name": "问财 SkillHub",
+        "description": "股基债期全品类数据+上百个社区Skill（DCF估值/量化策略等）",
+        "platform": "OpenClaw / Claude / ChatGPT / Cursor",
+        "install_method": "搜索「同花顺问财」一键安装",
+        "evaluation": "社区Skill生态丰富，安装便捷"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研",
+    "last_updated": "2026-07-13"
+  },
+  {
+    "institution_name": "盈米基金",
+    "category": "数据商",
+    "skills": [
+      {
+        "skill_name": "盈米MCP",
+        "description": "69个标准化MCP工具 + 16项核心技能组件，涵盖金融数据、投研服务（组合回测、蒙特卡洛模拟）、投顾内容与策略",
+        "platform": "MCP / Coze / Dify / Cursor",
+        "install_method": "联系盈米AI开放平台",
+        "evaluation": "基金投研工具最丰富，组合回测/蒙特卡洛模拟是亮点"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研",
+    "last_updated": "2026-07-13"
+  },
+  {
+    "institution_name": "易方达基金",
+    "category": "基金",
+    "skills": [
+      {
+        "skill_name": "ETF查询",
+        "description": "ETF基金经理/规模/重仓股/区间收益/历史分红；支持反向查询（股票→含该股票的ETF）",
+        "platform": "WorkBuddy / OpenClaw / Hermes Agent / ArkClaw / 千问",
+        "install_method": "微信小程序「指数直通车」→ AI Skills → 获取 API Key → 复制指令 → 发送给 WorkBuddy",
+        "evaluation": "唯一明确对接WorkBuddy的基金公司，反向查询实用"
+      },
+      {
+        "skill_name": "场外指数基金查询",
+        "description": "净值/规模/收益/基金经理/区间收益/历史分红",
+        "platform": "WorkBuddy / OpenClaw / Hermes Agent / ArkClaw / 千问",
+        "install_method": "微信小程序获取Key → 一键安装",
+        "evaluation": "场外指数基金覆盖全面"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研 + 2026-09 巡检更新",
+    "last_updated": "2026-09-21",
+    "sources": [
+      {
+        "title": "中国金融信息网：千问接入十余家金融类智能体（2026-09-07）",
+        "url": "https://m.cnfin.com/kx//zixun/20260907/4465997_1.html"
+      }
+    ]
+  },
+  {
+    "institution_name": "南方基金",
+    "category": "基金",
+    "skills": [
+      {
+        "skill_name": "AI梦",
+        "description": "选基/诊基/行情/交易全流程AI助手",
+        "platform": "南方基金App",
+        "install_method": "App内置，未开放外部Skill",
+        "evaluation": "App内体验闭环，但未对外开放"
+      },
+      {
+        "skill_name": "南南FUND搭子",
+        "description": "24小时投教咨询智能体",
+        "platform": "南方基金App",
+        "install_method": "App内置",
+        "evaluation": "投教方向差异化"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研",
+    "last_updated": "2026-07-13"
+  },
+  {
+    "institution_name": "天弘基金",
+    "category": "基金",
+    "skills": [
+      {
+        "skill_name": "FinAgent 金融智能体系统",
+        "description": "投研分析/销售话术/合规风控/热门事件助手",
+        "platform": "内部系统",
+        "install_method": "内部系统，未开放外部Skill",
+        "evaluation": "内部应用深度强，但未对外"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713 + 深度调研",
+    "last_updated": "2026-07-13"
+  },
+  {
+    "institution_name": "中国平安",
+    "category": "银行保险",
+    "skills": [
+      {
+        "skill_name": "智小安AI保险顾问",
+        "description": "面向C端的AI保险顾问",
+        "platform": "平安旗下App",
+        "install_method": "内部平台为主，未明确开放外部Skill",
+        "evaluation": "超7万个内部智能体，但外部开放度低"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713",
+    "last_updated": "2026-07-13"
+  },
+  {
+    "institution_name": "招商银行",
+    "category": "银行保险",
+    "skills": [
+      {
+        "skill_name": "「小助」系列智能体",
+        "description": "覆盖零售/批发/风险/运营的AI智能体矩阵",
+        "platform": "内部使用",
+        "install_method": "内部使用，未开放外部Skill",
+        "evaluation": "内部应用全面，暂未对外"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713",
+    "last_updated": "2026-07-13"
+  },
+  {
+    "institution_name": "工商银行",
+    "category": "银行保险",
+    "skills": [
+      {
+        "skill_name": "AI数字员工",
+        "description": "500+AI应用，AI数字员工相当5.5万人年工作量",
+        "platform": "内部使用",
+        "install_method": "内部使用，未开放外部Skill",
+        "evaluation": "规模最大但未对外开放"
+      }
+    ],
+    "data_source": "prod_金融公司Skill上线调研报告_20260713",
+    "last_updated": "2026-07-13"
+  },
+  {
+    "institution_name": "蚂蚁数科",
+    "category": "平台",
+    "skills": [
+      {
+        "skill_name": "Agentar 金融智能体平台",
+        "description": "面向金融机构的智能体开发平台，提供金融知识库、工具编排与风控合规组件，支持投研问答、财富管理助手等场景落地",
+        "platform": "Agentar / 百宝箱",
+        "install_method": "蚂蚁数科官网申请试用 / 企业对接",
+        "evaluation": "大厂 Agent 平台化能力，偏机构侧交付"
+      },
+      {
+        "skill_name": "支小宝金融场景能力",
+        "description": "面向 C 端财富管理问答与理财陪伴的智能体能力，可复用于投顾场景",
+        "platform": "支付宝 / 百宝箱",
+        "install_method": "平台内直接体验",
+        "evaluation": "C 端产品化成熟，机构接入需商务对接"
+      }
+    ],
+    "data_source": "2026-09 巡检更新",
+    "last_updated": "2026-09-21"
+  },
+  {
+    "institution_name": "腾讯（WorkBuddy 金融版）",
+    "category": "平台",
+    "skills": [
+      {
+        "skill_name": "WorkBuddy 金融版专家智能体",
+        "description": "面向金融机构的 AI 智能工作台，内置 80+ 金融专属专家与专家团，覆盖银行、资管、保险等行业核心业务场景",
+        "platform": "WorkBuddy",
+        "install_method": "腾讯 WorkBuddy 官网申请 / 企业对接",
+        "evaluation": "2026-09-03 正式发布，已落地中金公司、国投证券等 100+ 家金融机构"
+      },
+      {
+        "skill_name": "金融专家团协同能力",
+        "description": "多专家智能体协同完成复杂金融任务，支持任务拆解与工作流编排，面向机构私有化交付",
+        "platform": "WorkBuddy",
+        "install_method": "平台内配置启用",
+        "evaluation": "大厂工作台形态，金融级安全与权限治理"
+      }
+    ],
+    "data_source": "2026-09 巡检更新（官方发布信息）",
+    "last_updated": "2026-09-21",
+    "sources": [
+      {
+        "title": "财联社：哪些券商的 Skills 率先在 WorkBuddy 上线了（11 家券商 54 个 Skill）",
+        "url": "https://m.cls.cn/detail/2455726"
+      },
+      {
+        "title": "21 财经：券商涌入 WorkBuddy 等 AI 平台，角力下一个流量入口",
+        "url": "https://m.21jingji.com/article/20260918/86c024019335cbb9245181c605a714aa.html"
+      }
+    ]
+  },
+  {
+    "institution_name": "阿里巴巴（千问开放平台）",
+    "category": "平台",
+    "skills": [
+      {
+        "skill_name": "千问金融智能体专区",
+        "description": "千问开放平台首批集中上线 12 个金融类智能体，覆盖证券投资、基金、期货、保险等领域",
+        "platform": "千问",
+        "install_method": "千问开放平台搜索机构名直接使用",
+        "evaluation": "2026-09-07 上线，兴业证券、国泰海通、中金财富、易方达等机构入驻"
+      },
+      {
+        "skill_name": "机构智能体分发入口",
+        "description": "作为券商 / 基金 / 保险机构智能体的第三方分发渠道，与华为小艺、OpenClaw 等平台并列，降低用户获取门槛",
+        "platform": "千问",
+        "install_method": "平台入口直达，无需单独申请 Key",
+        "evaluation": "大厂流量入口，机构覆盖面广"
+      }
+    ],
+    "data_source": "2026-09 巡检更新（官方发布信息）",
+    "last_updated": "2026-09-21",
+    "sources": [
+      {
+        "title": "中国金融信息网：千问接入十余家金融类智能体（2026-09-07）",
+        "url": "https://m.cnfin.com/kx//zixun/20260907/4465997_1.html"
+      },
+      {
+        "title": "AIBase：千问开放平台再上新 10+ 金融服务智能体",
+        "url": "https://news.aibase.com/tw/news/30865"
+      },
+      {
+        "title": "太平洋科技：千问开放平台 10+ 金融智能体",
+        "url": "https://www.pconline.com.cn/ai/2181/21816441.html"
+      }
+    ]
+  },
+  {
+    "institution_name": "中国银河证券",
+    "category": "券商",
+    "skills": [
+      {
+        "skill_name": "星耀数智金融数据 Skill",
+        "description": "股票/债券/基金/期货/期权/港股通行情 + 财务报表、股东股本等基本面数据（AmazingData API）",
+        "platform": "腾讯 SkillHub / WorkBuddy",
+        "install_method": "SkillHub 一键安装；或 gitee 克隆 xysz 项目，向营业部申请 API 账号密码",
+        "evaluation": "SkillHub 下载约 5.5 万次，券商 Skill 下载量第一梯队"
+      },
+      {
+        "skill_name": "星耀数智技术面指标 Skill",
+        "description": "56 个技术指标计算，覆盖超买超卖/趋势/能量/成交量/均线/路径等 7 大类（MACD、KDJ、RSI、布林线、DMI、TRIX、SAR）",
+        "platform": "腾讯 SkillHub / WorkBuddy",
+        "install_method": "SkillHub 一键安装",
+        "evaluation": "下载约 2.33 万次，仅输出指标数值、不给买卖信号"
+      },
+      {
+        "skill_name": "星耀数智基本面指标 Skill",
+        "description": "90 个基本面指标计算，覆盖盈利能力/成长/营运效率/盈余质量/安全性/公司治理/估值/股东/规模 9 大类",
+        "platform": "腾讯 SkillHub / WorkBuddy",
+        "install_method": "SkillHub 一键安装",
+        "evaluation": "下载约 2.30 万次，A 股财务分析场景直用"
+      },
+      {
+        "skill_name": "星耀数智因子分析 Skill",
+        "description": "单因子分析（预处理 + IC/回归/分层三方法 + 因子拥挤度）与多因子合成（共线性检测 + 正交化 + 8 种加权 + 打分），自动生成可视化 HTML 报告",
+        "platform": "腾讯 SkillHub / WorkBuddy",
+        "install_method": "SkillHub 一键安装",
+        "evaluation": "下载约 6.3 万次，最接近量化研究工作流的券商 Skill"
+      },
+      {
+        "skill_name": "星耀数智公告搜索 Skill",
+        "description": "按分类筛选公告列表，下载 PDF 原文并转 Markdown 供 AI 阅读分析，支持股票/ETF/可转债",
+        "platform": "腾讯 SkillHub / WorkBuddy",
+        "install_method": "SkillHub 一键安装",
+        "evaluation": "长文档结构化能力，公告解析场景补位"
+      },
+      {
+        "skill_name": "启睿策略中心 MCP / Skill",
+        "description": "策略回测、策略比对、策略构建与 MCP 服务，面向 PB 及机构交易场景",
+        "platform": "银河 PB 交易体系 / 机构端",
+        "install_method": "机构客户接入（与「启明」算法中心、「启泰」风控中心并列的 PB 三大中心之一）",
+        "evaluation": "2026 半年报确认已上线「策略中心 MCP/Skill」"
+      }
+    ],
+    "data_source": "2026-09 巡检更新（银河官网 + 腾讯 SkillHub + 财联社 + 2026 半年度报告）",
+    "last_updated": "2026-09-21",
+    "sources": [
+      {
+        "title": "银河官网·星耀数智服务平台",
+        "url": "https://www.chinastock.com.cn/newsite/cgs-services/strategyTrade/geWuInstitution.html"
+      },
+      {
+        "title": "腾讯 SkillHub·中国银河证券企业主页",
+        "url": "https://skillhub.cloud.tencent.com/enterprise/org-rwhv0nty?publisher=%E4%B8%AD%E5%9B%BD%E9%93%B6%E6%B2%B3%E8%AF%81%E5%88%B8"
+      },
+      {
+        "title": "腾讯 SkillHub·星耀数智金融数据 Skill",
+        "url": "https://skillhub.cloud.tencent.com/skills/ad-api"
+      },
+      {
+        "title": "财联社：哪些券商的 Skills 率先在 WorkBuddy 上线了（11 家券商 54 个 Skill）",
+        "url": "https://m.cls.cn/detail/2455726"
+      },
+      {
+        "title": "银河证券 2026 半年度报告摘要（PB 三大中心 + 策略中心 MCP/Skill）",
+        "url": "http://cdn.chinastock.com.cn/omc/investRelation/sh/601881_20260829_0ECY.pdf"
+      }
+    ]
+  },
+  {
+    "institution_name": "国投证券",
+    "category": "券商",
+    "skills": [
+      {
+        "skill_name": "智能选股",
+        "description": "通过自然语言描述单指标或多指标选股条件，调用智能选股 API 返回符合条件的股票列表",
+        "platform": "国投证券 Skills 中心 / 腾讯 SkillHub",
+        "install_method": "官网 Skills 中心登录后下载；WorkBuddy 一键安装",
+        "evaluation": "2026-07-03 首批四大 AI Skills 之一"
+      },
+      {
+        "skill_name": "行情数据",
+        "description": "A 股及主要指数实时与历史行情、板块排名与表现等多维数据，支持自然语言查询",
+        "platform": "国投证券 Skills 中心 / 腾讯 SkillHub",
+        "install_method": "官网 Skills 中心登录后下载；WorkBuddy 一键安装",
+        "evaluation": "覆盖实时行情、K 线与板块排名"
+      },
+      {
+        "skill_name": "基金对比",
+        "description": "场外公募基金信息查询与多维度对比（业绩、风险、持仓、基金经理）",
+        "platform": "国投证券 Skills 中心 / 腾讯 SkillHub",
+        "install_method": "官网 Skills 中心登录后下载；WorkBuddy 一键安装",
+        "evaluation": "选基场景实用，支持单只穿透与多只横向对比"
+      },
+      {
+        "skill_name": "行业拥挤度",
+        "description": "依托全市场成交额、总市值、换手率等指标输出行业拥挤度数据",
+        "platform": "国投证券 Skills 中心 / 腾讯 SkillHub",
+        "install_method": "官网 Skills 中心登录后下载；WorkBuddy 一键安装",
+        "evaluation": "独家指标，与同质化行情类 Skill 形成差异"
+      }
+    ],
+    "data_source": "2026-09 巡检更新（国投证券官网 Skills 中心 + 财联社 + 壹览商业）",
+    "last_updated": "2026-09-21",
+    "sources": [
+      {
+        "title": "国投证券官网·Skills 中心（智能选股 / 行情数据 / 基金对比 / 行业拥挤度）",
+        "url": "https://www.sdicsc.com.cn/skills"
+      },
+      {
+        "title": "财联社：证券业扎堆布局 AI Skills 服务自家客户",
+        "url": "https://m.cls.cn/detail/2450745"
+      },
+      {
+        "title": "壹览商业：国投证券金融 Skills 上线腾讯 SkillHub（2026-08-12）",
+        "url": "https://www.yilantop.com/news/102030"
+      },
+      {
+        "title": "财联社：哪些券商的 Skills 率先在 WorkBuddy 上线了（11 家券商 54 个 Skill）",
+        "url": "https://m.cls.cn/detail/2455726"
+      }
+    ]
+  },
+  {
+    "institution_name": "东吴证券",
+    "category": "券商",
+    "skills": [
+      {
+        "skill_name": "东吴秀财 GPT",
+        "description": "自研千亿参数证券垂类大模型，构建「平台 + 模型 + 生态」三位一体的「AI 即服务」体系",
+        "platform": "东吴秀财 App / 公司内部体系",
+        "install_method": "自有 App 与内部业务体系接入",
+        "evaluation": "2024-04 完成算法备案，券业首个自研并备案的证券垂类大模型"
+      },
+      {
+        "skill_name": "量化投研 Skills（金工团队）",
+        "description": "覆盖量化交易、主动研究及基金研究四大类专业投研 Skill",
+        "platform": "机构端 / 东吴金工",
+        "install_method": "优先对分仓机构与专业投资者开放",
+        "evaluation": "2026-08 发布，机构侧差异化路线，研究所业务与 AI 工具双向导流"
+      },
+      {
+        "skill_name": "东吴之声（AI 投顾）",
+        "description": "面向高净值客户的 AI 投顾，提供个性化、精准的资产配置建议",
+        "platform": "东吴秀财 App",
+        "install_method": "App 内使用",
+        "evaluation": "2025-03 发布，买方投顾数字化载体"
+      },
+      {
+        "skill_name": "智能「小水滴」",
+        "description": "秀财 App 内智能服务助手，提供便捷化、个性化客户服务",
+        "platform": "东吴秀财 App",
+        "install_method": "App 内使用",
+        "evaluation": "2025-08 上线"
+      },
+      {
+        "skill_name": "东吴秀财智能体（千问）",
+        "description": "千问开放平台首批 12 个金融类智能体之一，覆盖证券投资场景",
+        "platform": "千问 / 华为小艺",
+        "install_method": "千问对话中调用",
+        "evaluation": "2026-09-07 上线，与国泰海通、中金财富等同批入驻"
+      },
+      {
+        "skill_name": "秀捷（机构交易品牌）",
+        "description": "以「AI + 金融」深度融合为抓手，推动机构经纪服务智能化、精品化转型",
+        "platform": "机构端",
+        "install_method": "机构客户接入",
+        "evaluation": "2025-09 启动，定位量化投资智能化服务"
+      }
+    ],
+    "data_source": "2026-09 巡检更新（中国经济网 + 财联社 + 中国金融信息网 + 同花顺财经）",
+    "last_updated": "2026-09-21",
+    "sources": [
+      {
+        "title": "中国经济网：东吴证券科技践行专业文化理念（秀财 GPT / 东吴之声 / 小水滴 / 秀捷）",
+        "url": "https://finance.ce.cn/stock/gsgdbd/202511/t20251114_2580207.shtml"
+      },
+      {
+        "title": "搜狐：东吴证券梁纯良谈「AI 即服务」，50+ AI 应用场景",
+        "url": "https://m.sohu.com/a/969071386_120988576"
+      },
+      {
+        "title": "财联社：证券业扎堆布局 AI Skills 服务自家客户",
+        "url": "https://m.cls.cn/detail/2450745"
+      },
+      {
+        "title": "中国金融信息网：千问接入十余家金融类智能体（2026-09-07）",
+        "url": "https://m.cnfin.com/kx//zixun/20260907/4465997_1.html"
+      },
+      {
+        "title": "同花顺财经：券商中期业绩说明会，AI 话题浓度飙升（2026-09-09）",
+        "url": "https://m.10jqka.com.cn/20260909/c679746007.shtml"
+      }
+    ]
+  }
+]

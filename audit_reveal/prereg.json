@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "target": {
+    "title": "ReVeal: Self-Evolving Code Agents via Reliable Self-Verification",
+    "venue": "ICLR 2026",
+    "arxiv": "2506.11442",
+    "openreview": "q56ZI1Co43",
+    "project_page": "https://ReVeal.github.io/",
+    "authors_affiliation_self_reported": [
+      "Microsoft Research Asia",
+      "Tongji University",
+      "University of Science and Technology of China"
+    ],
+    "object_type": "academic_empirical_paper_with_public_code",
+    "object_type_rationale": "顶会同行评审论文，含可验证奖励RL方法、多轮生成-验证框架、基准数字与声称的代码开源。判据聚焦 claim-vs-code、数字复算、消融归因、基线独立性、可复现性；不做统计重算实验（无算力实跑），但对已报告数字做算术一致性核对。"
+  },
+  "procedural_honesty": {
+    "prereg_before_deep_analysis": true,
+    "knowledge_at_design_time": "预注册设计前，已通过公开检索看到：(1)论文摘要全文；(2)Figure 1 的两组数字(Pass@1 turn1 34.8%→turn25 38.7%；Pass@k 表 k=1..128)；(3)二手笔记对方法的概述(交替生成-验证循环、TAPO turn-aware credit、joint verifiable reward=outcome+generation+verification、训练用 Golden Filter、Python 执行器反馈、32B backbone、训练3轮推理20+轮)。这些信息来自公开摘要/第三方笔记，非一手全文精读；判据设计刻意覆盖这些已知断言以便独立核对，不因已知而预先判定为真。",
+    "source_isolation": "一手证据仅取 arXiv PDF 全文 + OpenReview 元信息 + 官方代码仓库 raw/API；二手笔记(sina/papernotes/微软中文稿)只作线索，不作定论来源。",
+    "lock_order": "源材料SHA256 → 预注册SHA256 → 深度分析 → 证据SHA256 → 判据引擎"
+  },
+  "judges": [
+    {
+      "id": "V1",
+      "name": "claim_vs_code",
+      "question": "论文三大核心设计是否有真实代码实体与接线，而非 README 空声称？",
+      "criteria": [
+        "交替生成-验证循环(奇轮code/偶轮test)有实现与调用点",
+        "TAPO(Turn-Aware Policy Optimization)有算法实现，非仅在文中描述",
+        "joint verifiable reward(outcome+generation+verification)三项在代码中有对应",
+        "训练脚本接线(enable开关/关键参数)与论文方法一致",
+        "超参值核对：论文正文/附录给出的具体数值与代码配置是否漂移(承 KB-AUDIT06)"
+      ],
+      "verdict_levels": ["IMPLEMENTED", "IMPLEMENTED_WITH_DRIFT", "PARTIAL", "UNVERIFIED", "MISSING"]
+    },
+    {
+      "id": "V2",
+      "name": "number_consistency",
+      "question": "报告数字是否算术自洽、图表一致、口径披露？",
+      "criteria": [
+        "Pass@1 34.8%→38.7%(turn1→turn25) 与 Figure 数据点一致",
+        "Pass@k 表(k=1..128)随k单调、ReVeal≥基线方向成立",
+        "正文3轮训练/20+轮推理与实验设置一致",
+        "任何 Overall/平均列的聚合口径是否明示；差异>0.4需解释"
+      ],
+      "verdict_levels": ["CONSISTENT", "MINOR_DRIFT", "MAJOR_INCONSISTENT", "UNVERIFIED"],
+      "note": "承 KB-AUDIT02：单点差异不定罪；承 KB-AUDIT04：核对比较两端口径对等(如Pass@k的k定义、turn定义)。"
+    },
+    {
+      "id": "V3",
+      "name": "self_verification_reliability_subject",
+      "question": "最危险断言：推理时无金标，'可靠自验证'如何成立？验证主体是否分阶段偷换？",
+      "criteria": [
+        "Golden Filter 在训练/推理各阶段的使用是否明确区分(承 KB-SIM02 分阶段主体错位)",
+        "推理时自构造测试的可靠性来源：是模型自判、执行器反馈、还是金标？执行器只给pass/fail不给正确性时如何避免'自造测试自洽但答案错'",
+        "是否讨论/防 reward hacking(生成垃圾测试骗验证奖励、propose大量简单测试)",
+        "verification-generation asymmetry 被'显式优化验证'拉大的因果证据，而非仅结果提升"
+      ],
+      "verdict_levels": ["CLEAR", "PARTIAL", "AMBIGUOUS", "SUBJECT_SHIFT"],
+      "weight": "highest",
+      "rationale": "这是本文核心卖点，也是与 SVL 框架'验证者独立性/来源隔离'最同构、最易被同谱系印证虚高点亮的部位。"
+    },
+    {
+      "id": "V4",
+      "name": "ablation_attribution",
+      "question": "消融是否隔离了核心机制(显式验证优化、dense turn reward、TAPO)的独立贡献？",
+      "criteria": [
+        "是否有'仅多轮RL不显式优化验证'对照，以排除'多轮本身'解释",
+        "是否单独消融 verification reward / generation reward / outcome reward",
+        "是否消融 TAPO vs 普通GRPO/turn-level朴素归因",
+        "排除混杂：是否控制测试生成数量、rollout预算、模型规模"
+      ],
+      "verdict_levels": ["ISOLATED", "PARTIAL", "CONFOUNDED", "MISSING"]
+    },
+    {
+      "id": "V5",
+      "name": "baseline_independence_and_contamination",
+      "question": "基线是否独立重跑、backbone是否公平、LiveCodeBench V6 是否有训练污染？",
+      "criteria": [
+        "基线数字自跑 or 引用他人(reproduced from prior work)——须明示",
+        "backbone 是否同一(DAPO-Qwen2.5-32B 等)与训练数据是否可比",
+        "LiveCodeBench V6 题目是否可能进入训练数据/自验证测试生成，是否披露",
+        "Pass@k 提升是'扩展推理边界'还是'采样更多'——是否有对照支撑"
+      ],
+      "verdict_levels": ["INDEPENDENT", "MIXED", "CITED_BASELINE", "UNVERIFIED"]
+    },
+    {
+      "id": "V6",
+      "name": "reproducibility",
+      "question": "代码/数据/检查点公开到什么程度，能否实跑？",
+      "criteria": [
+        "训练代码、训练脚本是否公开且可定位",
+        "训练数据、SFT/RL检查点是否公开或给出获取方式",
+        "README 是否明确列出未公开资源(诚实信号)",
+        "评估脚本/提示词模板是否公开"
+      ],
+      "verdict_levels": ["FULL", "PARTIAL", "CODE_ONLY", "UNVERIFIED"]
+    },
+    {
+      "id": "V7",
+      "name": "isomorphism_and_teeth",
+      "question": "与 SVL 框架同构处判谱系打折；真实新意按 KB-META01'会拦才入'决策？",
+      "criteria": [
+        "列出与 SVL 重叠点(验证者独立性/来源隔离/预注册/会拦才入/分阶段核验)",
+        "同构处判同谱系印证并打折(KB-STRUCT02)，不因'英雄所见略同'虚高",
+        "真实新意(如有)是否能编译出独立拦截动作",
+        "入库决策：新增/加固/记观察，遵循 vanity 门禁不灌水"
+      ],
+      "verdict_levels": ["DISCOUNTED", "NEW_TEETH", "OBSERVE_ONLY"]
+    }
+  ],
+  "judge_self_audit": {
+    "principle": "判据执行后必须自审：检查器是否用脆弱字面串(KB-AUDIT01)、是否单点定罪(KB-AUDIT02)、验证对象是否等于结论对象(KB-AUDIT04)、是否把'事实真'当'结论真'(KB-R-MS01)、是否漏判分阶段主体错位(KB-SIM02)。",
+    "required": true
+  },
+  "honesty_tiers": {
+    "tier1": "一手证据直接支持",
+    "tier2": "一手证据支持但口径/范围有限",
+    "tier3": "未能独立核验，据实标注 UNVERIFIED，不判 FALSE",
+    "forbidden": "把 self-reported 数字当作独立验证结果"
+  },
+  "created_at": "2026-11-22T01:25:00+08:00"
+}

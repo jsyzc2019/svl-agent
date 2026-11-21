@@ -1,0 +1,28 @@
+{
+  "audit_id": "FG-COMPARATIVE-AUDIT",
+  "targets": {
+    "downstream": "jsyzc2019/FastGithubOps.UI@main",
+    "upstream": "yuan71058/FastGithub@master"
+  },
+  "object_type": "对比审计：两个同源(C#/.NET)工程实现代码仓库，下游自陈为上游的'取长补短优化版'",
+  "for_method": "本仓 SVL 框架方法迁移（第五类任务：谱系对比审计）；判据适配对象 KB-STRUCT01 扩展落地",
+  "created_at": "2026-11-21T23:38:00+08:00",
+  "note": "预注册先于证据分析，防后知；本次是对同源项目对比，谱系污染/同构≠独立验证风险最高，刻意先锁判据",
+  "preregistered_evidence_so_far": {
+    "api_metadata": "两仓库 created_at/size/stars/fork=False；下游描述自陈派生关系",
+    "tree_sha": {"downstream":"97aa5fc108ea21266a2011cf10178974eb78d565","upstream":"d9c40dde7ca51fef809d23871d74191bfa046478"},
+    "file_counts": {"downstream_blobs":220,"upstream_blobs":174},
+    "note": "上述为判据设计前已获取的中立元数据，仅用于判据适配，不作为判据结论"
+  },
+  "criteria": [
+    {"id":"D1","name":"谱系关系一手判定","question":"谁派生谁？是否 fork？下游自陈是否属实？","trigger":"仅凭描述或文件名相似度即断谱系→flag；须用 created_at+tree结构+自陈描述+commit 交叉","method":"比对 created_at、fork 标志、tree SHA、目录结构与自陈描述"},
+    {"id":"D2","name":"同构≠独立验证","question":"两项目代码高度相似，是否构成相互验证？下游'优化'是否只是复述/换皮？","trigger":"把相似当独立佐证、或把'优化声称'当已证事实→flag","method":"逐文件 diff 关键模块，区分同源继承与真实新增"},
+    {"id":"D3","name":"下游优化声称可证伪性","question":"下游声称的 IP健康度反馈闭环/污染IP过滤/系统代理兜底/net10.0 是否有代码实现与自测？","trigger":"声称在代码中找不到对应实现或自测→判 vanity claim","method":"定位 SelfTest.cs 与实现代码，读 docs/上游对照报告，检查是否可运行验证"},
+    {"id":"D4","name":"差异归因与净贡献","question":"下游相对上游新增了什么？是自研、借鉴 dev-sidecar 还是仅文档/配置？","trigger":"把借鉴当自研、把文档当代码贡献→flag","method":"文件级差异分类：新增源码/新增测试/仅文档/仅配置/换皮"},
+    {"id":"D5","name":"复现完整性","question":"两项目是否可构建/可测试？下游 SelfTest 是自证还是可证伪？","trigger":"无法复现或测试无法运行→判复现不完整","method":"检查 csproj 目标框架、CI 配置、SelfTest 性质；条件允许则实跑"},
+    {"id":"D6","name":"复述/长牙决策","question":"本次对比能编译成什么会拦会降级的门禁？","trigger":"按 KB-META01 检验具体被拦动作，否则只记观察","method":"对每条候选经验做具体拦截动作检验"}
+  ],
+  "judge_self_audit": "显式调用 KB-AUDIT01（脆弱字面串检查→假阴性）与 KB-AUDIT02（单一检查点不足以定罪）审查本次判据引擎；结果反直觉先怀疑检查器",
+  "honesty_rule": "三层诚实结论：事实真≠结论真；同构/同源≠独立验证；测试/文档自洽≠代码正确",
+  "scope_limit": "网络大文件传输不稳，采用 API Tree+Blob 逐文件读取；若无法实跑构建，须如实标注未复现，不得伪造完成度"
+}

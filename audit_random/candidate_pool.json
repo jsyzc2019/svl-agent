@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "rule": "pushed_at>=2026-10-22, exclude audited/archived/disabled",
+  "seed": 20261122,
+  "pool_size": 38,
+  "selected": [
+    {
+      "full_name": "jsyzc2019/awesome-finai-tools-zn",
+      "pushed_at": "2026-11-18T13:51:51Z",
+      "language": "Python",
+      "fork": true,
+      "size": 1318,
+      "description": "中国金融 AI 工具全景图：Market Data MCP / 量化框架 / 券商 Skills / 金融 CLI / Python 金融库。覆盖 A股 港股 基金 期货 行情数据 量化回测 因子挖掘 舆情分析 投研。支持 OpenClaw / Claude / Cursor / Coze 等 AI Agent 平台。每周自动巡检更新。"
+    },
+    {
+      "full_name": "jsyzc2019/claude-trading-skills-tradermonty",
+      "pushed_at": "2026-11-16T19:51:28Z",
+      "language": "Python",
+      "fork": true,
+      "size": 71452,
+      "description": "Claude Code skills for equity investors and traders — market analysis, technical charting, economic calendars, screeners, and trading strategy development."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "amendment_id": "FG-AMEND-01",
+  "reason": "证据采集后深挖 IDomainResolver 接口时的发现；原始证据锁存不改动，此 amendment 为前提修正记录（沿用 commentary §39 纪律）",
+  "amends": "D3_claim_vs_code.claims[2] 反馈通道 / D4_attribution",
+  "finding": {
+    "initial_read": "下游 IDomainResolver.cs 1725B < 上游 1957B，但 README 声称'新增 ReportSuccess/ReportFailure/IsBlacklisted'——疑似矛盾",
+    "deep_check": "读取两文件全文：上游接口本就有 ReportFailure/ReportSuccess/IsFailed；下游将其抽取为 IIpHealthFeedback 接口(IDomainResolver : IIpHealthFeedback)并新增 GetIpHealth() 快照",
+    "truth": "README '新增反馈接口'口径不准确：反馈方法上游已有，下游是重组+强化+新增健康快照；文件变小因方法外移，非功能缺失",
+    "kb_audit02_triggered": true,
+    "note": "这是 KB-AUDIT02（单一检查点不足以定罪）的第三次真实拦截：文件大小这一单一信号差点造成误判"
+  },
+  "revised_verdicts": {
+    "反馈通道声称": "MISMATCH-MINOR（文档口径：重构非全新）",
+    "超时10→5s声称": "MISMATCH（文档漂移：README 数字与代码/演进日志三方对不上，非功能缺陷）"
+  },
+  "impact": "两项 MISMATCH 均为文档表述精度问题，不构成功能缺陷；审计结论从'6/7 TRUE'修正为'5 TRUE + 2 MISMATCH-MINOR（文档层）'"
+}

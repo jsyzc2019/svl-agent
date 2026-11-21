@@ -1,0 +1,93 @@
+{
+  "task": "本仓代码从 SIM 再审任务学到啥：把循环论证警觉编译成通用谱系打折门禁",
+  "prereg": "lineage_guard_prereg.json",
+  "prereg_sha256": "8c73da8d92d98fe6106f3fac1cd93502fa1d6833e5335df47a9ea926d7f2e675",
+  "source": {
+    "trigger": "§55 SIM 再审（旧论文×新框架）的循环论证警觉",
+    "existing_counterpart": "rsis_framework_analysis.py:t2_isomorphism_contamination（专用 brittle 字面串匹配，不可复用）",
+    "finding": "§55 最重要元认知只停在文字层，SIM 再审全程靠人工警觉，无通用门禁兜底"
+  },
+  "increment": {
+    "status": "true_increment_not_vanity",
+    "novelty": [
+      "从专用 brittle 函数泛化为通用可复用门禁",
+      "从字面串匹配改为语义标志位输入（传字符串直接 flag，扬长避短）",
+      "从『记一句打折』升级为会拦会判会降级：循环声称被 block，禁止把学生评老师当独立验证"
+    ],
+    "covered_by_existing": "KB-STRUCT02（同构≠独立验证）已覆盖认知层，但无通用可执行门禁；本次是给它长牙，非新知识"
+  },
+  "gate": {
+    "module": "svagent/lineage_guard.py",
+    "main_function": "discount_claim",
+    "rules": [
+      "R1 source_overlap=full 且声称独立 → block / LINEAGE.CIRCULAR_CLAIM（判据从对象长出，再用来证明对象错了=循环论证）",
+      "R2 isomorphism=high 且声称独立 → downgrade / LINEAGE.ISOMORPHIC_NOT_INDEPENDENT（同构≠独立验证，KB-STRUCT02）",
+      "R3 isomorphism=partial 且声称独立 → flag / LINEAGE.PARTIAL_OVERLAP",
+      "R4 未声称独立且确实同源/同构 → ok / preserve（诚实标注谱系呼应，非拦截）",
+      "R5 无同源且无同构 → ok / independent",
+      "R6 输入为字面串而非语义枚举 → flag / LINEAGE.NON_SEMANTIC_INPUT（拒绝对字符串内容做判定，避开 t2 的 brittle 根因）"
+    ],
+    "design": "纯函数/冻结数据类；输入为语义枚举（source_overlap: none|partial|full, isomorphism: none|partial|high, claimed_independence: bool, claim_type）；规则写死按优先级判定，不事后加权；无全局副作用；固定规则可复现。"
+  },
+  "live_regression": {
+    "sim_review": {
+      "action": "block",
+      "code": "LINEAGE.CIRCULAR_CLAIM"
+    },
+    "swe_borrow": {
+      "action": "ok",
+      "code": "LINEAGE.PRESERVE_HONEST_LABEL"
+    },
+    "independent": {
+      "action": "ok",
+      "code": "LINEAGE.INDEPENDENT"
+    },
+    "brittle_control": {
+      "action": "flag",
+      "code": "LINEAGE.NON_SEMANTIC_INPUT"
+    },
+    "checks": {
+      "sim_circular_blocked": true,
+      "swe_honest_preserved": true,
+      "independent_ok": true,
+      "brittle_rejected": true
+    },
+    "all_passed": true
+  },
+  "yang_avoid": {
+    "borrow": "§55 的循环论证/同构打折警觉，编译成通用可执行门禁",
+    "avoid": "t2_isomorphism_contamination 的脆弱字面串匹配与专用硬编码；不把打折做成可被字符串绕过或可被喂词操纵的软规则",
+    "guardrail": "语义枚举输入 + 写死规则 + 纯函数；门禁只给结论打折，不产生新的优化目标，防 Goodhart"
+  },
+  "verification": {
+    "new_tests": 13,
+    "total_tests": 343,
+    "baseline_tests": 330,
+    "all_live_passed": true,
+    "no_brittle_literal_in_judgment_code": true,
+    "self_audit_false_positive": "自审脚本初版把代码注释里举例的字面串当判定逻辑，误报 FAIL；口径修正（去 docstring+去注释）后通过——验证工具也须口径对等（KB-AUDIT04）"
+  },
+  "kb_decision": {
+    "new_items": 0,
+    "items_total": 101,
+    "ready": true,
+    "vanity": 0.04,
+    "reinforced_support": [
+      "KB-STRUCT02",
+      "KB-META01",
+      "KB-AUDIT04"
+    ],
+    "rule": "不新增条目。KB-STRUCT02 已覆盖同构打折认知，本次是编译成通用代码（长牙），按 KB-META01 属强固非新知识。加固 KB-STRUCT02/META01 support 指针实现认知域协同。"
+  },
+  "dual_source_retro": {
+    "task_content": "从 SIM 再审提炼：循环论证警觉需代码化，不能只写文字",
+    "process": "探查发现唯一对应物是 brittle 专用函数；写活体样例时须确认 R1 拦截循环声称而非放行——若自咬则信规则改样例",
+    "benefits_user": true
+  },
+  "honesty": [
+    "门禁只给独立性声称打折，不判定对象对错、不替代实质证据评估",
+    "谱系/同构关系须调用方如实声明，声明本身不可自证",
+    "本模块由 SIM 经验启发，不给本仓框架独立背书（KB-STRUCT02）",
+    "代码注释里出现字面串示例不等于判定逻辑读字面串——验证脚本口径须对等"
+  ]
+}

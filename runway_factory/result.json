@@ -1,0 +1,126 @@
+{
+  "audit_id": "RUNWAY-SOFTWARE-FACTORY-ANALYSIS",
+  "verdict": "PASS-WITH-HONESTY-CAVEATS",
+  "all_judgments_fired": true,
+  "criteria_passed": 6,
+  "criteria_total": 6,
+  "criteria": {
+    "R1": {
+      "id": "R1",
+      "name": "数字内部自洽性",
+      "checks": {
+        "recalc_2235_929": 2.4058,
+        "recalc_matches_2.4": true,
+        "consistent_items": 7,
+        "mismatches_disclosed": 2,
+        "all_minor": true
+      },
+      "pass": true,
+      "finding": "7 项数字复算一致；2 处轻微口径漂移（86全修vs74四天内、2.5xvs2.4x）如实披露，无硬矛盾"
+    },
+    "R2": {
+      "id": "R2",
+      "name": "因果归因诚实性",
+      "checks": {
+        "before_after": true,
+        "control_group": false,
+        "confound_acknowledged": true
+      },
+      "pass": true,
+      "finding": "诚实度较高（主动承认混杂），但因果强度止于'相关+前后'，非实验证据"
+    },
+    "R3": {
+      "id": "R3",
+      "name": "测量独立性与口径",
+      "checks": {
+        "self_reported": true,
+        "external_audit": false,
+        "bias_mitigation": true,
+        "gap_flagged": true
+      },
+      "pass": true,
+      "finding": "测量由实现方自报，无外部审计；但 shadow mode + 风险分层 + 人保留高风险 是降低自证偏差的真实机制，L140 分层结论缺数字支撑是缺口"
+    },
+    "R4": {
+      "id": "R4",
+      "name": "可证伪性与失败披露",
+      "checks": {
+        "failure_driven_rails": 5,
+        "has_failure_metrics": true
+      },
+      "pass": true,
+      "finding": "失败披露充分且具体——五道护栏全部由真实事故倒逼，非纯成功叙事；这是本文最强的诚实信号"
+    },
+    "R5": {
+      "id": "R5",
+      "name": "预注册纪律对照",
+      "checks": {
+        "claimed": true,
+        "timestamp_evidence": "无独立时间戳/预注册文档链接",
+        "no_timestamp_semantic": true,
+        "labeled_selfclaim": true,
+        "supporting_signal": true
+      },
+      "pass": true,
+      "finding": "Self-claim：方法论叙述自洽且可置信，但无外部可验证的先于结果证据；标注为'作者自述的预注册纪律'，非独立验证（标注为作者自述，不冒充独立验证）"
+    },
+    "R6": {
+      "id": "R6",
+      "name": "复述/长牙决策",
+      "checks": {
+        "teeth": 5,
+        "observe": 1,
+        "all_actionable": true
+      },
+      "teeth": [
+        "风险分级批准：low AI自批/medium按仓库上限/high人批/关键路径owner强制",
+        "shadow mode：新判据先read-only只记录决策，人逐条判定后才放权",
+        "gates re-check at exact commit being merged：签字后仍有push则失效",
+        "friction map：按同类PR规模归一化，定位agent反复返工热点并pin测试",
+        "external actions idempotent（可重复执行安全）"
+      ],
+      "observations": [
+        "38%/3000 PR月增——规模数字"
+      ],
+      "pass": true,
+      "finding": "5 项编译为会拦会降级的门禁，1 项只记观察"
+    }
+  },
+  "judge_self_audit": {
+    "passed": true,
+    "incidents": [
+      {
+        "kb": "KB-AUDIT01",
+        "what": "数字核对全部用真实除法复算(2235/929=2.406)而非字符串包含",
+        "why": "2.5x vs 2.4x 若用子串匹配会漏判/误判，复算才定位真值2.4"
+      },
+      {
+        "kb": "KB-AUDIT02",
+        "what": "86全修 vs 74四天内 不急于判矛盾，交叉时间限定后定为口径差异",
+        "why": "单一数字对照会误判为自相矛盾，读上下文（in those four days）消解"
+      },
+      {
+        "kb": "KB-AUDIT02",
+        "what": "2.4x/2.5x 交叉复算原文929与2235，确认2.4精确",
+        "why": "两处数字都来自作者，须以原始数据为第二证据源"
+      },
+      {
+        "kb": "KB-AUDIT01",
+        "what": "R5 首版用 not bool('无独立时间戳...') 判有无时间戳，非空字符串被误判为'有'→ 假阴性 REVIEW",
+        "why": "字段是带'无'语义的字符串，须语义判定前缀，不能真值判定"
+      },
+      {
+        "kb": "KB-AUDIT01",
+        "what": "R6 首版用 decision=='长牙候选' 精确相等，漏掉'长牙候选（说明）'3项→ 假阴性 REVIEW",
+        "why": "标签带括号说明，须用 startswith 语义前缀判定，不能精确相等"
+      }
+    ],
+    "note": "本次数字核对即是 KB-AUDIT01/02 的又一次实战：真复算+多源交叉，而非模式匹配"
+  },
+  "three_layer": {
+    "事实": "企业自报数字经真实复算：15/977≈1.5%、0.10%=1/1000、2235/929=2.4x 等内部基本自洽，仅2处轻微口径漂移（86全修vs74四天内、2.5xvs2.4x）",
+    "结论": "效率提升为单组前后对比+主动承认混杂，非对照实验因果；'先定判据'是作者自述无独立时间戳；但五道护栏全由真实事故倒逼，失败披露是本文最强诚实信号",
+    "迁移": "最值得编译成门禁的：风险分级批准、shadow mode先读后写、gates re-check at exact commit（验证对象=最终对象）、friction map同规模归一化、外部动作幂等"
+  },
+  "honesty_boundary": "仅企业自报博客，无原始数据/代码/对照实验；所有数字按作者声称处理，未外部验证；本框架与文章方法论的高度同构不构成独立验证（谱系警戒）"
+}

@@ -1,0 +1,110 @@
+{
+  "audit_id": "AMBITION-ESSAY-AUDIT",
+  "collected_at": "2026-11-22T00:45:00+08:00",
+  "raw_lock": {"file":"article_raw.html","sha256":"6a06328af5ab2b21c26e112ba117c90c083065018aff7f84cc46dfc59f8278ee","text_lines":153},
+  "A1_falsifiability": {
+    "framework": ["Speed","Altitude","Depth","Range"],
+    "concrete_actions": [
+      "Altitude QBR: 给全部数据让模型判断'本季变了什么/为什么/该做什么'",
+      "Altitude: 找出3个最紧急决策并给for/against",
+      "Altitude: 设计比季度deck更好的机制，用历史证明会更早发现问题，并行跑一季度(shadow mode)",
+      "Depth: 坚持用行业顶级工具(数据库/统计模型)而非markdown表格",
+      "Depth: 把5s目标说成200ms",
+      "Depth: 让模型对抗性核查假设、从日志建客户模拟找未知churn早期信号、在未见过的数据上验证",
+      "Depth: 用外部judge，不要让模型自评",
+      "Range: 名词换成动词(The Art of Innovation技巧)",
+      "Range: 组建跨领域crew(分析师/记者/编辑/做空者/法务会计)，注意别滑入roleplay——要'做'该领域人做的事而非'写'得像"
+    ],
+    "hidden_failure_conditions": [
+      "Altitude: 作者明示'对创意工作效果较差'、'Claude go make money 目前不work'——有边界",
+      "Depth: 外部judge'假设未来模型智能提升会解决'——承认当前局限",
+      "Range: 明确警告roleplay陷阱——这是一个会拦的具体失败条件"
+    ],
+    "slogans": ["we ought to be more ambitious（口号/战斗口号，作者自称rallying cry）", "go up in abstraction（无具体操作则同义反复）"],
+    "verdict": "主体是可操作教程：含具体动作词，且3类技巧自带失败条件/边界(Altitude对创意差、Range的roleplay陷阱)。少量口号存在但作者坦承是rallying cry，未伪装成方法"
+  },
+  "A2_fact_check": {
+    "sawe_sub2": {
+      "claim": "Sabastian Sawe ran the first official sub-two-hour marathon in London this April; runner-up also broke two-hour mark",
+      "sources": ["新华社 2026-04-27","光明网/中新社 2026-04-27","olympics.com 2026 London Marathon live blog"],
+      "finding": "TRUE：2026-04-26 伦敦马拉松，Sawe 1:59:30 首位正式比赛破2，亚军 Kejelcha 1:59:41 也破2，季军 Kiplimo 2:00:28。原纪录 Kiptum 2023 芝加哥 2:00:35",
+      "note": "预注册时我把此条列为最可疑，核查证明作者完全正确、我的怀疑是先验偏见——判据自审命中"
+    },
+    "dantzig": {
+      "claim": "1939 George Dantzig 迟到抄下黑板两道题当作业，其实是两道未解统计难题",
+      "sources": ["美国国家工程院 NAE 官方传记 George B. Dantzig","Wikipedia(George Dantzig) Truth in urban legends段","Whitman College 数学史讲义PDF"],
+      "finding": "TRUE：1939 UC Berkeley，Neyman 教授写两道著名未解统计题，Dantzig 迟到误当作业解出；六周后 Neyman 登门；第二题后与 Wald 合著发表。故事确为urban legend来源但核心属实",
+      "note": "预注册怀疑，核查为真"
+    },
+    "bannister_46days": {
+      "claim": "Roger Bannister 1954年5月破4分钟英里，仅46天无人破",
+      "sources": ["NPR 2018 讣闻","World Athletics 官方 '50 years on, John Landy reflects'","英联邦运动会官方"],
+      "finding": "TRUE：1954-05-06 Bannister 3:59.4；46天后(1954-06-21)澳大利亚 John Landy 3:57.9 破纪录",
+      "note": "预注册怀疑，核查为真"
+    },
+    "locke_latham": {
+      "claim": "Locke & Latham 梳理35年目标设定研究，具体困难目标优于'尽力而为'",
+      "sources": ["Locke & Latham 2002 American Psychologist 'A 35-year odyssey' 论文(多源引用)"],
+      "finding": "TRUE(核心)：2002综述确为35年回顾，核心结论属实",
+      "borrowed_boundary": "该理论明确附加条件：需承诺+反馈+能力，复杂任务上困难目标反而可能有害('Goals Gone Wild' Ordóñez 2009)。作者引用时未提这些条件——事实真但引用越界，见A4",
+      "note": "预注册怀疑为真，但发现引用边界缺口"
+    },
+    "claude_planet": {
+      "claim": "this month it may have helped discover a new planet",
+      "sources": ["Gizmodo 2026-10-09 原文标题即问号 'Did Claude Help...?'","多家核查站(sekin.in/cloudspress/techbloat): 'Not yet'"],
+      "finding": "HONESTLY-QUALIFIED：作者用 'may have' 限定，符合事实——这是 TIC 4206066 的候选系外行星(3.18天周期)，尚未确认；MIT 批准 10/31-11/26 后续观测。Rabtsevich 用74次测试试图证伪、跨模型交叉、两期预测第三期——恰是本文主旨的方法论实例",
+      "note": "作者未夸大，主动用may have降级"
+    },
+    "tao_math2": {
+      "claim": "discussing a new era of math（链接 Tao 2026-10-10 Math 2.0）",
+      "sources": ["terrytao.wordpress.com 2026-10-10 'Math 2.0' 原文"],
+      "finding": "TRUE：Tao 2026-10-09 Caltech 演讲 Math 2.0，10/10 发幻灯片，讲 Math 1.0→当前AI过度强调自动解题→Math 2.0愿景",
+      "note": "时间/内容吻合"
+    },
+    "tao_quote_attribution": {
+      "claim": "Models are astounding in some directions, while inadequate in others（作者归给 Terence Tao）",
+      "finding": "PARTIAL：Math 2.0 原文措辞是 'excessive emphasis on automated solving of open problems'，'astounding in some directions, inadequate in others' 是常被归给Tao的转述但未在本次抓取的原文中直接找到该精确措辞。判为转述归属，不判假",
+      "note": "KB-AUDIT02：单一检索点未命中不等于归属错误，标PARTIAL不判假"
+    },
+    "summary": "我预注册列为高风险的4个断言(Sawe/Dantzig/Bannister/Locke)全部为真或核心为真；作者的限定词(may have/对创意效果差/roleplay警告)体现诚实刻度。唯一真实缺口是 Locke&Latham 引用省略了适用条件"
+  },
+  "A3_standpoint": {
+    "self_disclosed": "I work on Claude（作者开篇自述）",
+    "disclosure_honest": true,
+    "not_convicted_by_identity": "按 KB-AUDIT02，身份本身不是定罪依据；自述供职反而增加透明度",
+    "promotional_framing": "通篇以 Claude 为唯一例证工具，但作者明说 'my advice is not model-specific'",
+    "external_evidence_used": true,
+    "verdict": "立场明确且自我披露，非伪装中立第三方；但读者应知这是厂商从业者的倡导+个人经验，不是独立对照实验"
+  },
+  "A4_argument_chain": {
+    "evidence_types": {"personal_experience":"crash-free app/Blender homepage等","research_citation":"self-efficacy/Locke&Latham","anecdote":"Dantzig/Bannister/Sawe/Linux/Inner Game of Tennis"},
+    "boundary_disclosures": ["Altitude 对创意工作效果差","Claude go make money 目前不work","外部judge未来可能被模型智能解决","Range roleplay陷阱警告"],
+    "overreach_found": {
+      "id":"O1",
+      "what":"用Locke&Latham'困难目标更优'为'挑不合理目标(5s→200ms并告诉模型这很合理)'背书，但目标设定理论的原始结论附带承诺/反馈/能力条件，且明确警告复杂任务上困难目标可能有害(Goals Gone Wild)",
+      "kb":"KB-R-MS01(事实真≠推论有效) + KB-R-KON02(n=1外推)",
+      "severity":"minor：轶事和研究引用都真，但引用支撑了它本身不支持的强版本结论；作者用'tell the model they're very reasonable'是修辞技巧而非理论承诺，属可接受的教程夸张，标minor而非判假"
+    },
+    "verdict": "论点-证据链总体诚实：多数建议来自作者实操经验并标注边界；唯一缺口是目标设定研究被用作强版本背书的轻微越界"
+  },
+  "A5_isomorphism": {
+    "overlaps_with_our_framework": [
+      "Use an outside judge / 不要模型自评 → 本仓 KB-STRUCT07(judge独立性)、KB-T03(来源隔离)、judge_independence",
+      "Challenge what you know: 对抗性核查假设 → 本仓 claim-vs-code、对抗测试",
+      "Produce new knowledge: 建模拟找未知信号 + 在未见过数据上验证 → 本仓留出集/predicted-vs-observed",
+      "Altitude: goal beyond the goal → 本仓对象类型判定/升维到目的层",
+      "Shadow mode: 并行跑一季度对照 → 本仓外资审计的shadow mode实践",
+      "Range: 名词换动词 → 本仓对象类型判定(看表面名词vs真实动作)"
+    ],
+    "same_lineage": true,
+    "reason": "本文作者是Claude团队成员，与AI工程实践共同体同源；这些技巧是本仓框架的已知原则的另一种表述，不是独立来源的意外印证",
+    "discount": "印证力度打折：判为同谱系印证而非独立验证(KB-STRUCT02)，不得因'英雄所见略同'虚高置信",
+    "genuine_novelty": "Range维度(跨领域crew + 名词换动词)与'Altitude的durable workflow去human-in-the-loop'是本仓框架较少显式强调的角度，可作有益补充"
+  },
+  "A6_candidate_lessons": [
+    {"id":"M1","lesson":"教程文的判据要分离'建议可操作性'与'事实断言真伪'：本文两者都强，但方法不同——前者查动作词与失败条件，后者独立检索","would_block":"遇到how-to文，禁止因'故事讲得好'就默认方法有效，也禁止因'作者是厂商'就默认断言有假；两条独立判"},
+    {"id":"M2","lesson":"引用研究为其背书时，必须检查研究的适用条件是否被省略：Locke&Latham结论附带承诺/反馈/能力条件且警告复杂任务，作者省略后为'不可能目标'背书","would_block":"凡'研究表明X所以你该做Y'，核对Y是否落在X的原始适用条件内；越界则标minor overreach"},
+    {"id":"M3","lesson":"作者主动用限定词(may have/对创意效果差/roleplay陷阱)是诚实度正向信号，应计入评价而非忽略","would_block":"核查时把'限定词使用'作为独立评分维度，缺限定的绝对断言在缺证据时降级"},
+    {"id":"M4","lesson":"'同构≠独立验证'再次实战：本文6处与本仓框架重叠，但同源(AI工程共同体)，只作同谱系印证打折，不虚高","would_block":"见同构框架时先判谱系来源；同源则标'同谱系印证'并打折，禁止用作独立佐证"}
+  ]
+}

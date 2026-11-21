@@ -1,0 +1,115 @@
+{
+  "audit_id": "AMBITION-ESSAY-AUDIT",
+  "generated_at": "2026-11-22T00:50:00+08:00",
+  "three_layer_honesty": {
+    "fact_true": "5个事实断言核查为真或带诚实限定词，一手来源为新华社/奥运官网/NAE/NPR/World Athletics/Tao原文，SHA256锁存",
+    "conclusion_caveat": "断言真≠建议有效；轶事真≠普遍规律；同构≠独立验证；厂商立场明示≠论证中立",
+    "unverified": "Tao引语精确措辞未在本次抓取原文中找到，标PARTIAL不判假；系外行星为候选未确认(作者用may have已降级)；Locke&Latham引用省略适用条件"
+  },
+  "criteria": [
+    {
+      "id": "A1",
+      "name": "可证伪分级",
+      "checks": {
+        "concrete_actions": 9,
+        "failure_conditions": 3,
+        "slogans": 2,
+        "actionable": true,
+        "has_failure_conditions": true,
+        "slogans_disclosed": true
+      },
+      "pass": true,
+      "finding": "主体是可操作教程(10+具体动作、3类自带失败条件)；少量口号作者坦承是rallying cry未伪装成方法"
+    },
+    {
+      "id": "A2",
+      "name": "事实断言核查",
+      "checks": {
+        "assertions_checked": 7,
+        "true_or_core_true": 5,
+        "qualified_or_partial": 2,
+        "prereg_suspicions_all_wrong": true,
+        "partial_not_convicted_as_false": true
+      },
+      "pass": true,
+      "finding": "5个高风险断言全部为真或带诚实限定词；我预注册怀疑的4条全错——先验偏见(厂商倡导→断言有假)被事实推翻；转述引语标PARTIAL不判假"
+    },
+    {
+      "id": "A3",
+      "name": "主体归属与利益立场",
+      "checks": {
+        "self_disclosed": true,
+        "not_convicted_by_identity": true,
+        "uses_external_evidence": true,
+        "model_agnostic_claim": true
+      },
+      "pass": true,
+      "finding": "作者开篇自述供职Claude团队，立场透明；按KB-AUDIT02身份不定罪；读者须知这是从业者倡导+个人经验而非独立对照实验"
+    },
+    {
+      "id": "A4",
+      "name": "论点-证据链与外推",
+      "checks": {
+        "evidence_types": 3,
+        "boundary_disclosures": 4,
+        "overreach_found": true,
+        "overreach_severity": "minor：轶事和研究引用都真，但引用支撑了它本身不支持的强版本结论；作者用'tell the model they're very reasonable'是修辞技巧而非理论承诺，属可接受的教程夸张，标minor而非判假",
+        "minor_not_fatal": true,
+        "kb_linked": true
+      },
+      "pass": true,
+      "finding": "多数建议来自实操并标注边界(创意/无法直接赚钱/roleplay)；唯一缺口：用Locke&Latham为'不可能目标'背书但省略其承诺/反馈/能力条件——事实真、推论轻微越界，标minor"
+    },
+    {
+      "id": "A5",
+      "name": "同构陷阱与谱系污染",
+      "checks": {
+        "overlaps": 6,
+        "recognized_same_lineage": true,
+        "discount_applied": true,
+        "genuine_novelty_noted": true
+      },
+      "pass": true,
+      "finding": "6处与本仓框架重叠但同源(AI工程共同体)，判同谱系印证并打折，不虚高；真实新意是Range维度与去human-in-loop的durable workflow"
+    },
+    {
+      "id": "A6",
+      "name": "复述/长牙决策",
+      "checks": {
+        "lesson_count": 4,
+        "all_have_concrete_block": true
+      },
+      "pass": true,
+      "lessons": [
+        {
+          "id": "M1",
+          "lesson": "教程文的判据要分离'建议可操作性'与'事实断言真伪'：本文两者都强，但方法不同——前者查动作词与失败条件，后者独立检索",
+          "would_block": "遇到how-to文，禁止因'故事讲得好'就默认方法有效，也禁止因'作者是厂商'就默认断言有假；两条独立判"
+        },
+        {
+          "id": "M2",
+          "lesson": "引用研究为其背书时，必须检查研究的适用条件是否被省略：Locke&Latham结论附带承诺/反馈/能力条件且警告复杂任务，作者省略后为'不可能目标'背书",
+          "would_block": "凡'研究表明X所以你该做Y'，核对Y是否落在X的原始适用条件内；越界则标minor overreach"
+        },
+        {
+          "id": "M3",
+          "lesson": "作者主动用限定词(may have/对创意效果差/roleplay陷阱)是诚实度正向信号，应计入评价而非忽略",
+          "would_block": "核查时把'限定词使用'作为独立评分维度，缺限定的绝对断言在缺证据时降级"
+        },
+        {
+          "id": "M4",
+          "lesson": "'同构≠独立验证'再次实战：本文6处与本仓框架重叠，但同源(AI工程共同体)，只作同谱系印证打折，不虚高",
+          "would_block": "见同构框架时先判谱系来源；同源则标'同谱系印证'并打折，禁止用作独立佐证"
+        }
+      ],
+      "finding": "4条候选经验均通过具体被拦动作检验；M2(引用越界核对)与M4(同构打折)与现有门禁互补，M1/M3可加固"
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "all_pass": true,
+    "self_audit_hits": 1,
+    "self_audit_note": "预注册把4个断言列为高可疑，核查证明全为真——我的先验偏见(厂商倡导→断言有假)被事实推翻，是一次'先怀疑自己而非被审对象'的反向命中"
+  }
+}

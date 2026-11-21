@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>随机活跃双仓审计 · SVL 框架报告</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--bd:#30363d;--fg:#e6edf3;--mut:#8b949e;--acc:#58a6ff;--ok:#3fb950;--no:#f85149;--warn:#d29922;--purple:#bc8cff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:40px 24px 80px}
+h1{font-size:28px;margin:0 0 6px}h2{font-size:20px;margin:44px 0 16px;padding-left:12px;border-left:4px solid var(--acc)}
+h3{font-size:16px;margin:0 0 10px;color:var(--acc)}.sub{color:var(--mut);margin-bottom:28px}
+.verdict{display:inline-block;background:rgba(63,185,80,.12);border:1px solid var(--ok);color:var(--ok);border-radius:8px;padding:10px 18px;font-weight:700;font-size:17px;margin:8px 0 4px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+th,td{border:1px solid var(--bd);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#1c2128;color:var(--acc);font-weight:600}
+.crit{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:18px 20px;margin:14px 0}
+.crit-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px}
+.badge.ok{background:rgba(63,185,80,.15);color:var(--ok);border:1px solid var(--ok)}
+.badge.no{background:rgba(248,81,73,.15);color:var(--no);border:1px solid var(--no)}
+.checks{margin:6px 0 10px;padding-left:22px;color:var(--mut)}
+.checks code{color:var(--purple);background:rgba(188,140,255,.08);padding:1px 5px;border-radius:4px}
+.finding{margin:8px 0 0;color:var(--fg)}
+.layer{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--warn);border-radius:8px;padding:14px 18px;margin:12px 0}
+.layer-k{color:var(--warn);font-weight:700;margin-bottom:5px}
+.block{color:var(--ok)}
+.kb{background:rgba(88,166,255,.12);color:var(--acc);padding:1px 6px;border-radius:4px;font-family:monospace}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.meta span{background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:6px 12px;font-size:13px;color:var(--mut)}
+.foot{color:var(--mut);font-size:13px;margin-top:40px;border-top:1px solid var(--bd);padding-top:18px}
+code{font-family:ui-monospace,Menlo,Consolas,monospace}
+</style></head><body><div class="wrap">
+<h1>随机活跃双仓审计</h1>
+<p class="sub">SVL 自进化框架 · 第五类任务迁移（fork 仓库谱系 + 判据自审） · 生成于 2026-11-22T00:35:00+08:00</p>
+
+<div class="meta">
+  <span>抽样种子：20261122</span>
+  <span>候选池：38 仓（近 30 天活跃）</span>
+  <span>判据：6 条</span>
+  <span>通过：6/6</span>
+  <span>判据自审捕获假阳性：2 次</span>
+</div>
+
+<div class="verdict">6/6 判据通过 · 自审两次咬住检查器 · 新增 KB-AUDIT04</div>
+
+<h2>一、抽样对象（可复现）</h2>
+<p>规则：pushed_at ≥ 2026-10-22，排除已审计对象与 archived/disabled，固定种子随机抽取。两仓均为 fork——本仓 KB-STRUCT02 要求 fork 双向都不可靠：既不能因 fork 判无贡献，也不能因 fork 豁免净贡献核查。</p>
+<table><tr><th>仓库</th><th>近期推送</th><th>类型</th><th>上游</th></tr><tr><td>jsyzc2019/awesome-finai-tools-zn</td><td>2026-11-18</td><td>fork</td><td>lj22503/awesome-finai-tools-zn</td></tr><tr><td>jsyzc2019/claude-trading-skills-tradermonty</td><td>2026-11-16</td><td>fork</td><td>tradermonty/claude-trading-skills</td></tr></table>
+
+<h2>二、判据执行</h2>
+
+    <div class="crit">
+      <div class="crit-head"><span class="badge ok">PASS</span>
+        <strong>R1 · 谱系与净贡献判定</strong></div>
+      <ul class="checks"><li><code>method_two_sided</code>: True</li></ul>
+      <p class="finding">两仓均 fork 且保留上游归属；r1 有中国平台周报增量（shallow 限制下不能列全），r2 有 issue 级可追溯修复；均不单凭 fork 标签下结论</p>
+    </div>
+    <div class="crit">
+      <div class="crit-head"><span class="badge ok">PASS</span>
+        <strong>R2 · 自动更新机制真实性（r1）</strong></div>
+      <ul class="checks"><li><code>called_scripts_exist</code>: True</li><li><code>reports_contiguous</code>: True</li><li><code>reports_nonempty</code>: True</li><li><code>self_healing_documented</code>: True</li><li><code>evidence_dimensions</code>: 3</li></ul>
+      <p class="finding">周更真实接线：调用脚本全存在、9 期周报连续非空、CHANGELOG 记录曾空转并自我修复——三维交叉成立，非 vanity</p>
+    </div>
+    <div class="crit">
+      <div class="crit-head"><span class="badge ok">PASS</span>
+        <strong>R3 · 数据口径自洽（r1）</strong></div>
+      <ul class="checks"><li><code>tools_json</code>: 55</li><li><code>badge</code>: 55</li><li><code>category_rows</code>: 55</li><li><code>h3_adjusted</code>: 55</li><li><code>four_way_consistent</code>: True</li><li><code>h3_gap_explained</code>: True</li><li><code>timestamp_semantics_ok</code>: True</li><li><code>self_audit_recorded</code>: True</li></ul>
+      <p class="finding">tools.json/badge/分类表/详情(扣6非工具小节)=55 全自洽；『61≠55』为 h3 计数假阳性，判据自审排除；时间戳不矛盾（周报=候选池 vs tools.json=正式清单）</p>
+    </div>
+    <div class="crit">
+      <div class="crit-head"><span class="badge ok">PASS</span>
+        <strong>R4 · CI 门禁接线与可证伪工程（r2）</strong></div>
+      <ul class="checks"><li><code>chain_wired</code>: True</li><li><code>job_count</code>: 6</li><li><code>waivers_empty</code>: True</li><li><code>doc_drift_honestly_report_only</code>: True</li><li><code>actions_pinned</code>: True</li></ul>
+      <p class="finding">discover→matrix→test→coverage 完整接线，分层覆盖率+空 waiver 是可证伪门禁；doc-drift 诚实标注 report-only 不假装阻断</p>
+    </div>
+    <div class="crit">
+      <div class="crit-head"><span class="badge ok">PASS</span>
+        <strong>R5 · 自我纠错台账可信度（r2）</strong></div>
+      <ul class="checks"><li><code>root_causes_ge5</code>: True</li><li><code>per_ticker_evidence</code>: True</li><li><code>old_report_invalidation_warning</code>: Until merged, do not re-run the old reports for orders</li><li><code>traceability</code>: True</li><li><code>headline_corrected</code>: True</li></ul>
+      <p class="finding">errata 逐条给出原判/改正/5类根因/证据，明确旧报告不可下单，带 issue 追溯——『会拦会降级』实证</p>
+    </div>
+    <div class="crit">
+      <div class="crit-head"><span class="badge ok">PASS</span>
+        <strong>R6 · 复述/长牙决策与判据自审</strong></div>
+      <ul class="checks"><li><code>lesson_count</code>: 5</li><li><code>all_have_concrete_block_action</code>: True</li></ul>
+      <p class="finding">5 条候选经验均通过『具体被拦动作』检验，属长牙候选而非复述；可考虑编译进本仓门禁</p>
+    </div>
+
+<h2>三、三层诚实结论</h2>
+<div class='layer'><div class='layer-k'>fact_true</div><div class='layer-v'>证据均为一手文件/API 元数据，SHA256 已锁存</div></div><div class='layer'><div class='layer-k'>conclusion_caveat</div><div class='layer-v'>结论真需满足判据+证据交叉；fork 不等于原创/非贡献；文档自洽≠代码正确；测试存在≠已执行</div></div><div class='layer'><div class='layer-k'>unverified</div><div class='layer-v'>未实跑两仓脚本；r1 shallow clone 无法列全 commit 级净贡献；r2 未逐文件 diff 上游</div></div>
+
+<h2>四、长牙候选（复述 vs 长牙）</h2>
+<p>每条候选经验都通过「具体被拦动作」检验才算长牙；5 条全部通过。本次入库决策：新增 1 条（KB-AUDIT04），其余加固或只记观察，避免灌水。</p>
+<table><tr><th>ID</th><th>来源</th><th>机制</th><th>会拦什么</th></tr><tr><td>L1</td><td>r1</td><td>周更类仓库的真实性要看『调用链脚本是否存在+历史周报是否连续+是否自我发现过空转』三维交叉，不能只看 workflow yml 存在</td><td class='block'>仅有一个漂亮 workflow 文件但脚本缺失/周报断档的仓库，判 vanity 并拒绝其『自动更新』声称</td></tr><tr><td>L2</td><td>r1</td><td>计数口径不对等会产生假差异：h3 数≠工具数，非工具小节计入即误报</td><td class='block'>任何『A数量≠B数量』结论前，先确认两端计数口径对等，否则先怀疑检查器（KB-AUDIT02）</td></tr><tr><td>L3</td><td>r2</td><td>report-only 门禁与阻断门禁必须显式区分并标注，把 report-only 当已阻断是自欺</td><td class='block'>审查 CI 时若发现门禁仅产出报告无非零退出，标注为『提示非阻断』，不计入质量门禁通过数</td></tr><tr><td>L4</td><td>r2</td><td>errata/纠错台账的价值在根因分类+逐条证据+旧结论作废声明，三者缺一不可</td><td class='block'>只有结论更正无根因/证据的『纠错』判为不可证伪，不予采信</td></tr><tr><td>L5</td><td>both</td><td>fork 标签双向都不可靠：既不能因 fork 判无贡献，也不能因 fork 豁免净贡献核查</td><td class='block'>任何 fork 仓库审计强制走『归属链接+下游可追溯增量』双判据，缺一不给原创性结论</td></tr></table>
+
+<h2>五、判据自审（本次核心发现）</h2>
+<p><span class="kb">KB-AUDIT01/02</span> 实战延续，但拦截动作独立：判据成立的<b>前置条件</b>是验证对象等于结论所指对象、比较两端计数口径对等。本次两次假阳性都不是被审对象的缺陷，而是检查方法失真——先怀疑检查器、交叉确认后排除，并固化为 KB-AUDIT04。</p>
+
+<div class="foot">
+证据通道：API 元数据 + Tree + git clone + raw 单线程重试。预注册与证据均 SHA256 锁存（random_prereg.sha256 / random_evidence.sha256）。
+未实跑两仓脚本；r1 为 shallow clone（unshallow 网络超时失败），无法列全 commit 级净贡献；r2 未逐文件 diff 上游——据实标注，不伪造完成度。
+</div>
+</div></body></html>

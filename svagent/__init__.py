@@ -91,6 +91,23 @@ _LAZY: dict[str, tuple[str, str]] = {
     "TransferVerdict": ("svagent.transfer_holdout", "TransferVerdict"),
     "check_transfer": ("svagent.transfer_holdout", "check_transfer"),
     "transfer_live_regression": ("svagent.transfer_holdout", "live_regression"),
+    # 判定稳健性（SWE-Gym 工程纪律编译：bootstrap置信度/条件消融/活体样例校验）
+    "StabilityReport": ("svagent.judgment_robustness", "StabilityReport"),
+    "bootstrap_stability": ("svagent.judgment_robustness", "bootstrap_stability"),
+    "AblationReport": ("svagent.judgment_robustness", "AblationReport"),
+    "ablate_conditions": ("svagent.judgment_robustness", "ablate_conditions"),
+    "LiveCase": ("svagent.judgment_robustness", "LiveCase"),
+    "SuiteReport": ("svagent.judgment_robustness", "SuiteReport"),
+    "validate_live_suite": ("svagent.judgment_robustness", "validate_live_suite"),
+    "robustness_live_regression": ("svagent.judgment_robustness", "live_regression"),
+    # 任务复盘门禁（元学习闭环泛化：双源+可证伪+目的约束）
+    "KnowledgeCandidate": ("svagent.task_retrospective", "KnowledgeCandidate"),
+    "RetroVerdict": ("svagent.task_retrospective", "RetroVerdict"),
+    "retrospect": ("svagent.task_retrospective", "retrospect"),
+    "retro_live_regression": ("svagent.task_retrospective", "live_regression"),
+    "discount_claim": ("svagent.lineage_guard", "discount_claim"),
+    "DiscountVerdict": ("svagent.lineage_guard", "DiscountVerdict"),
+    "lineage_live_regression": ("svagent.lineage_guard", "live_regression"),
 }
 
 

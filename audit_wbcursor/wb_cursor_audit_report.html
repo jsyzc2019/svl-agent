@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>独立审计报告 · wb-cursor-bridge</title>
+<style>
+:root{--ink:#1f2328;--muted:#57606a;--line:#d0d7de;--accent:#0969da;--ok:#1a7f37;--bg:#fff;--soft:#f6f8fa}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);line-height:1.7;max-width:960px;margin:0 auto;padding:32px 20px;background:var(--bg)}
+h1{font-size:26px;border-bottom:3px solid var(--accent);padding-bottom:10px}
+h2{font-size:19px;margin-top:34px;border-left:4px solid var(--accent);padding-left:10px}
+.sub{color:var(--muted);font-size:14px}
+.verdict{background:linear-gradient(135deg,#dafbe1,#e6f6ea);border:1px solid #1a7f37;border-radius:10px;padding:16px 20px;margin:20px 0}
+.verdict b{color:var(--ok);font-size:18px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--soft)}
+.note{background:#fff8c5;border-left:4px solid #d4a72c;padding:12px 16px;margin:14px 0;border-radius:4px}
+.quote{background:var(--soft);border-left:4px solid var(--muted);padding:10px 14px;color:var(--muted);font-style:italic;margin:12px 0}
+code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:13px}
+ul{margin:8px 0} li{margin:5px 0}
+footer{margin-top:40px;border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:12px}
+</style></head><body>
+
+<h1>独立审计报告 · wb-cursor-bridge</h1>
+<p class="sub">审计方法：本仓 SVL 自进化框架（判据适配对象 / 一手证据 / 谱系污染 / 判据自审 / 三层诚实结论 / 复述-vs-长牙）<br>
+对象类型：<b>工程实现类：带治理与安全声明的开源工具（MCP bridge / A2A service）</b><br>
+目标：<code>github.com/jsyzc2019/wb-cursor-bridge</code> · commit <code>b1639ad</code> · v0.6.2 · 审计时间 2026-11-21T23:05:00+08:00</p>
+
+<div class="verdict">
+<b>总判定：PASS-WITH-HONESTY-CAVEATS</b><br>
+6 项预注册判据全部按预期触发并通过；独立证据来自本地实跑（220/220 测试 + 28/28 对抗测试）与 claim-vs-code 静态核对，而非引用项目自带审计结论。
+</div>
+
+<h2>一、判据结果（预注册 SHA256 锁存后执行）</h2>
+<table>
+<tr><th>编号</th><th>判据</th><th>结果</th><th>发现</th></tr>
+<tr>
+<td><b>C1</b></td>
+<td>谱系污染与主体归属</td>
+<td style="color:#1a7f37">✅ 通过</td>
+<td>三份自带审计均实现方自评；A+ 自标失效并引用第三方36 PoC/26缺陷；自评结论不可当独立验证，修复有效性另由反向回归测试独立佐证</td>
+</tr>
+<tr>
+<td><b>C2</b></td>
+<td>claim-vs-code 一致性</td>
+<td style="color:#1a7f37">✅ 通过</td>
+<td>5 项安全声称均在代码有对应实现（fail-closed/worktree/不阻塞/权限集中/环境白名单）；工具数 9=9 一致；自查的'4 case vs 9 tool'疑似矛盾经判据自审确认为检查方法失真</td>
+</tr>
+<tr>
+<td><b>C3</b></td>
+<td>测试真实性与可证伪</td>
+<td style="color:#1a7f37">✅ 通过</td>
+<td>220/220 + 28/28 对抗测试全绿；负面测试含双重断言（拦坏 AND 放行好），如私有地址被拦但公网域名不被误拦 —— 这是可证伪测试的标志，非 happy-path 自证</td>
+</tr>
+<tr>
+<td><b>C4</b></td>
+<td>安全声明可证伪性</td>
+<td style="color:#1a7f37">✅ 通过</td>
+<td>argv注入/路径白名单/环境白名单/进程树kill/私网URL拦截/能力诚实 六维均有代码+对抗测试支撑；capability honesty 尤其突出：gRPC未声明就不跑，65案例skipped而非制造假绿</td>
+</tr>
+<tr>
+<td><b>C5</b></td>
+<td>复现完整性</td>
+<td style="color:#1a7f37">✅ 通过</td>
+<td>本地实跑 install/typecheck/lint(2 warning)/build/test 全通过；CI 双平台 + 官方TCK(pin commit) + Agent Card扫描 + 可复现release哈希 + least-privilege token</td>
+</tr>
+<tr>
+<td><b>C6</b></td>
+<td>复述/长牙决策</td>
+<td style="color:#1a7f37">✅ 通过</td>
+<td>3 项可编译为会拦会降级的门禁，2 项只记观察不强造模块</td>
+</tr>
+</table>
+<p class="sub">预注册锁存：<code>09484b69…</code>（审计后 <code>sha256sum -c</code> 复核 OK，判据未被事后篡改）；证据锁存：<code>779a9c14…</code>。</p>
+
+<h2>二、关键一手证据</h2>
+<table>
+<tr><th>维度</th><th>实测结果</th></tr>
+<tr><td>复现链</td><td>npm install(200包) → typecheck → lint(2 warning/0 error) → build → <b>220/220 测试全过</b>（19.5s）</td></tr>
+<tr><td>对抗测试</td><td>audit-b0/b1/b2 + fault + hardening：<b>28/28 全过</b>，含可证伪双重断言</td></tr>
+<tr><td>工具声称</td><td>README 声称 9 个工具，运行时 <code>TOOL_DEFINITIONS.length=9</code>，一致</td></tr>
+<tr><td>安全声称</td><td>fail-closed / worktree 隔离 / 不阻塞 / 权限集中 / 环境白名单 五项均有代码实现</td></tr>
+<tr><td>CI</td><td>双平台矩阵 + 官方 A2A TCK(pin commit) + Agent Card 扫描 + 可复现 release 哈希 + least-privilege token</td></tr>
+</table>
+
+<h2>三、判据自审：审计工具本身会骗人</h2>
+<div class="note">
+本次审计两次抓到「检查器自身的失真」，而非项目缺陷 —— 这正是本仓框架反复强调的纪律：
+<b>判据可信度 ∝ 1 / 所需理解量</b>，审计者必须审自己的审计。
+</div>
+<ul>
+<li><b>假疑似不一致</b>：<code>tools.ts</code> 的 switch 只有 4 个 case，一度被我判为「README 声称 9 工具不符」。判据自审定位到真实定义在 <code>actions/registry.ts</code>（9 个 action，运行时实测 9）—— 单一检查点不足以定罪，这与本仓 §33 量纲错误、§40 算术自审一脉相承。</li>
+<li><b>脆弱字符串检查</b>：判据引擎首版 C6 写死 <code>"能否拦" in gate_test</code>，候选1用等价措辞「能否指出具体被拦动作」导致假阴性 verdict=REVIEW。已改为动作词语义判定并复跑，6 项全过 —— 与 §40 E2 的脆弱包含检查完全同类。</li>
+</ul>
+
+<h2>四、谱系污染辨析（C1）</h2>
+<p>项目自带三份审计报告，其中 <code>AUDIT-PROD-GRADE-A+.md</code> 已自我标注失效：</p>
+<div class="quote">"A+ 只描述清单完成度，不是生产可用结论；第三方 36 PoC 测出 26 缺陷，该自评不覆盖任何一条"</div>
+<p>按本仓 <b>触发≠真相 / 同构≠独立验证</b> 判据：项目自评被第三方 36 PoC 推翻（26 条可复现缺陷，4 条可打挂进程），又在 0.5.0 把 PoC 反向改写为 21 项回归测试。这段「自评—推翻—修复—回归」链本身值得肯定，但<b>它不能替代本次独立审计的实跑证据</b>。二者同构，不可混同。</p>
+
+<h2>五、三层诚实结论</h2>
+<table>
+<tr><th>层级</th><th>结论</th></tr>
+<tr><td><b>事实层</b></td><td>项目 v0.6.2 本地实跑 220/220 测试 + 28/28 对抗测试通过；9 工具声称与运行时一致；5 项安全声称有代码实现；CI 含官方 TCK 与可复现构建</td></tr>
+<tr><td><b>结论层</b></td><td>工程成熟度高于一般开源工具：自带审计诚实标注失效 + 第三方 PoC 反向改写回归 + 能力诚实（不造假绿）是本仓框架最值得吸收的三点；但'测试全绿'只是该测试集下自洽，不等于无缺陷</td></tr>
+<tr><td><b>迁移层</b></td><td>同构判据不等于独立验证（自带审计与框架判据自审同构）；本审计的独立证据来自本地实跑，而非引用项目自带审计结论</td></tr>
+</table>
+
+<h2>六、复述 vs 长牙决策（C6）</h2>
+<p><b>可编译为门禁（长牙候选）：</b></p>
+<ul><li>自带审计自标失效 + 第三方 PoC 反向改写回归</li>
+<li>capability honesty: 未声明能力不跑测试凑绿</li>
+<li>负面对抗测试含双重断言（block bad AND allow good）</li></ul>
+<p><b>只记观察、不强造模块：</b></p>
+<ul><li>release SHA256 可复现构建校验</li>
+<li>CI least-privilege token</li></ul>
+
+<h2>七、诚实边界</h2>
+<div class="note">
+① 测试全绿只证明「在该测试集下自洽」，不等于系统无缺陷；② 本审计为静态核对 + 本地实跑，未覆盖真实 Cursor CLI 的端到端行为（依赖平台与二进制）；③ 自带审计与第三方 PoC 的结论未经我方独立复现每一条，仅引用其修复链作为谱系证据；④ 本次结论的独立性来自本地实跑，而非项目自述。
+</div>
+
+<footer>
+本报告由本仓 SVL 框架方法生成 · 判据预注册锁存 · 证据链完整 · 结论可证伪 ·
+判据引擎 <code>audit_wbcursor/wb_audit_engine.py</code> · 结果 <code>wb_audit_result.json</code>
+</footer>
+</body></html>

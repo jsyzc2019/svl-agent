@@ -1,0 +1,99 @@
+{
+  "audit_id": "RANDOM-ACTIVE-REPOS-AUDIT",
+  "collected_at": "2026-11-22T00:30:00+08:00",
+  "channels": {
+    "api_meta": "GET /repos/jsyzc2019/{repo} —— fork/created/pushed/parent/size",
+    "api_tree": "GET /repos/{repo}/git/trees/main?recursive=1 —— 全文件清单",
+    "git_clone": "r1 完整工作树（shallow 单 commit）；r2 clone 超时，改用 raw",
+    "raw": "raw.githubusercontent.com 单线程重试下载关键文件"
+  },
+  "R1_lineage": {
+    "r1": {
+      "fork": true,
+      "parent": "lj22503/awesome-finai-tools-zn",
+      "created": "2026-10-27T14:35:55Z",
+      "pushed": "2026-11-18T13:51:51Z",
+      "readme_badge_points_to": "github.com/lj22503/awesome-finai-tools-zn",
+      "readme_self_links_to_upstream_count": 2,
+      "changelog_versions": ["0.4.3","0.4.4","0.4.5","0.4.6"],
+      "changelog_dates": "2026-09-22（均为 fork 之前的上游历史）",
+      "downstream_specific_artifacts": [
+        "data/weekly-report-china-2026-09-22..11-16（中国平台周报，9 期）",
+        "scripts/update_china_platforms.py（国内平台巡检脚本）"
+      ],
+      "shallow_limit": "仅 1 个可见 commit（a70def7 国内平台周更 2026-11-16），unshallow 因网络超时失败，无法完整比对分叉后全部增量",
+      "verdict": "fork 自 lj22503；README 归属仍指向上游，CHANGELOG 为 fork 前上游历史；下游可识别增量是中国平台周报与 update_china_platforms.py，但受 shallow 限制不能给出完整 commit 级净贡献清单"
+    },
+    "r2": {
+      "fork": true,
+      "expected_upstream": "tradermonty/claude-trading-skills（README release/latest 与 quality-dashboard 链接指向 tradermonty.github.io 与 github.com/tradermonty）",
+      "blobs": 2429,
+      "test_files": 571,
+      "visible_net_contribution": "CHANGELOG [Unreleased] 段记录 fork 后大量具体修复（FMP canary 幂等、trader-memory 非有限值拒绝、CLI 缺失依赖退出约定 #497、FMP 价格单一信息源 #666 等），带 issue 编号，属可追溯增量而非纯镜像",
+      "verdict": "fork 且保留上游归属；但 Unreleased 段有 issue 级可追溯的实质修复，净贡献真实存在（限于静态证据，未比对上游逐文件 diff）"
+    },
+    "method_note": "KB-STRUCT02：fork_flag 不等于非同源，也不等于无贡献；两仓均以归属链接保留 + 下游增量双重判据，不单凭标签下结论"
+  },
+  "R2_update_mechanism_r1": {
+    "weekly_update_workflow": {
+      "file": ".github/workflows/weekly-update.yml",
+      "cron": "0 9 * * 1（周一 09:00 UTC）",
+      "calls": ["scripts/update_tools.py","scripts/generate_readme.py"],
+      "all_called_scripts_exist": true,
+      "commit_step": "git add data README.md llms.txt; 无变更则跳过提交"
+    },
+    "weekly_china_workflow": {
+      "file": ".github/workflows/weekly-china-update.yml",
+      "calls": ["scripts/update_china_platforms.py","scripts/generate_readme.py"],
+      "all_called_scripts_exist": true
+    },
+    "script_line_counts": {"update_tools.py":462,"generate_readme.py":769,"update_china_platforms.py":839,"review_candidates.py":495,"fix_clawhub_links.py":154,"add_institution.py":187},
+    "weekly_reports_global": {"count":9,"from":"2026-09-22","to":"2026-11-16","min_bytes":4120,"max_bytes":5565,"contiguous":true},
+    "weekly_reports_china": {"count":9,"from":"2026-09-22","to":"2026-11-16","min_bytes":17759,"max_bytes":21093,"contiguous":true},
+    "changelog_evidence": "0.4.3 明确记录『三个数据源此前全部失效，周更长期空转』并重写；0.4.4 链接格式修复；0.4.5/0.4.6 质检口径调整——自我修复留痕，非从未运行",
+    "verdict": "周更机制真实接线且历史上有过空转并被自我发现修复；当前调用链完整、周报连续非空"
+  },
+  "R3_data_consistency_r1": {
+    "tools_json": {"version":"2026-09-21","last_updated":"2026-09-21","tool_count":55},
+    "badge_claim": {"tools":55,"updated":"2026-09-21"},
+    "category_table_anchor_rows": 55,
+    "detail_h3_count": 61,
+    "h3_minus_tools_explained": ["方式一：直接使用 CLI（推荐零配置场景）","方式二：使用 MCP（AI Agent 接入）","方式三：使用 Python 库（开发者）","🔗 权威信源（可点击直达）","变化摘要","趋势评论"],
+    "non_tool_h3_count": 6,
+    "h3_adjusted": 55,
+    "verdict": "tools.json/badge/分类表/详情(扣除6个非工具小节)均为55，口径自洽；last_updated=2026-09-21 与周报更新到11-16 不矛盾——周报是候选池巡检、tools.json 是正式收录清单，二者语义不同。初看『61 vs 55』是 h3 计数假阳性，判据自审后排除",
+    "self_audit_hit": "KB-AUDIT01/02：曾误把部分下载目录当完整仓库得出『脚本缺失』、把 h3 计数当工具计数得出『61≠55』，均为检查方法错误，交叉确认后排除"
+  },
+  "R4_ci_wiring_r2": {
+    "ci_jobs": ["lint","docs-cli-examples","discover-tests","test","coverage","metadata"],
+    "test_chain": "discover-tests 运行 scripts/ci_test_matrix.py matrix 产出 matrix → test 依赖 discover-tests，按 matrix.id 分舱运行 ci_test_matrix.py run → coverage 依赖 test，ci_test_matrix.py aggregate 合并",
+    "coverage_policy": {"aggregate_target":75,"default_target":70,"tier_core_risk_math_state":85,"waivers":"null/空","allowed_failures":"空，且要求带到期日+issue+reason"},
+    "doc_drift_workflow": {
+      "file": ".github/workflows/skill-doc-drift.yml",
+      "mode": "report-only",
+      "honest_label": "name: Skill guide drift (report-only)；step: Report guide drift without executing examples；明确不执行示例",
+      "artifact": "upload-artifact if-no-files-found: error, retention 30d"
+    },
+    "pinned_actions": "actions/checkout@3d3c42e5... v7.0.1 等均用 SHA 钉死",
+    "test_matrix_real": true,
+    "verdict": "CI 调用链完整（discover→matrix→test→coverage），分层覆盖率与空 waiver 是可证伪门禁；doc-drift 诚实标注 report-only 不作阻断，符合『不假装阻断』的诚实边界"
+  },
+  "R5_errata_r2": {
+    "file": "audits/errata/2026-05-17-kanchi-screening.md",
+    "git_tracked": true,
+    "reports_gitignored": true,
+    "root_causes": ["D1 freeze","D2 GAAP-payout distortion","D3 forward M&A miss","D4 special/variable trap","D5 stale-dividend false-negative"],
+    "headline_correction": "『11 PASS』→ 实际 CLEAN-PASS 仅 HOMB，2-3 个即时可操作；无条件 clean buy 仅 HOMB",
+    "has_per_ticker_evidence": true,
+    "has_actionable_warning": "Until merged, do not re-run the old reports for orders",
+    "traceability": "improvement-plan v2 MJ-9 / 4th-review point 2；engine fix WS-1..WS-8",
+    "verdict": "高质量自我纠错：逐条给出原判/改正/根因/证据，明确旧报告不可用于下单，属『会拦会降级』的实证，非仅改结论"
+  },
+  "R6_candidate_lessons": [
+    {"id":"L1","from":"r1","lesson":"周更类仓库的真实性要看『调用链脚本是否存在+历史周报是否连续+是否自我发现过空转』三维交叉，不能只看 workflow yml 存在","would_block":"仅有一个漂亮 workflow 文件但脚本缺失/周报断档的仓库，判 vanity 并拒绝其『自动更新』声称"},
+    {"id":"L2","from":"r1","lesson":"计数口径不对等会产生假差异：h3 数≠工具数，非工具小节计入即误报","would_block":"任何『A数量≠B数量』结论前，先确认两端计数口径对等，否则先怀疑检查器（KB-AUDIT02）"},
+    {"id":"L3","from":"r2","lesson":"report-only 门禁与阻断门禁必须显式区分并标注，把 report-only 当已阻断是自欺","would_block":"审查 CI 时若发现门禁仅产出报告无非零退出，标注为『提示非阻断』，不计入质量门禁通过数"},
+    {"id":"L4","from":"r2","lesson":"errata/纠错台账的价值在根因分类+逐条证据+旧结论作废声明，三者缺一不可","would_block":"只有结论更正无根因/证据的『纠错』判为不可证伪，不予采信"},
+    {"id":"L5","from":"both","lesson":"fork 标签双向都不可靠：既不能因 fork 判无贡献，也不能因 fork 豁免净贡献核查","would_block":"任何 fork 仓库审计强制走『归属链接+下游可追溯增量』双判据，缺一不给原创性结论"}
+  ]
+}

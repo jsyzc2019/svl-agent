@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>rea-video 文章研读审计</title><style>
+:root{--bg:#0d1117;--card:#161b22;--bd:#30363d;--fg:#e6edf3;--mut:#8b949e;--ok:#3fb950;--warn:#d29922;--acc:#58a6ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 -apple-system,"Segoe UI",sans-serif;padding:28px}
+.wrap{max-width:900px;margin:0 auto}
+h1{font-size:25px;margin:0 0 4px}
+.sub{color:var(--mut);font-size:14px;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:18px 20px;margin:14px 0}
+.card h2{font-size:17px;margin:0 0 10px;color:var(--acc)}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:700;margin-right:8px}
+.badge.ok{background:rgba(63,185,80,.15);color:var(--ok);border:1px solid var(--ok)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:top}
+th{color:var(--mut)}
+code{background:#010409;color:var(--acc);padding:1px 6px;border-radius:5px;font-size:13px}
+.note{border-left:3px solid var(--acc);padding:10px 14px;background:rgba(88,166,255,.06);margin:12px 0;border-radius:0 8px 8px 0}
+.vd{color:var(--ok);font-weight:600}
+.kv{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.kv span{background:#010409;border:1px solid var(--bd);border-radius:8px;padding:8px 12px;font-size:13px}
+.kv b{color:var(--acc)}
+</style></head><body><div class="wrap">
+<h1>rea-video 文章研读 · 框架审计</h1>
+<div class="sub">cherryquant.com · fendouai · 2026-11-21 · 对象类型：项目介绍/准评测文 · 判据 7/7 PASS</div>
+<div class="card"><h2>判据执行结果</h2><table><tr><th>判据</th><th>结果</th><th>证据</th></tr>
+<tr><td><b>V1 · 主体归属与立场</b></td><td><span class="badge ok">PASS</span></td><td>立场=立场=项目介绍/轻度导流，纳入置信度折价但不据此判假（触发≠真相）<br><span style="color:var(--mut)">识别立场并折价，未据立场直接定罪</span></td></tr>
+<tr><td><b>V2 · 关键事实断言一手溯源</b></td><td><span class="badge ok">PASS</span></td><td>共10条: TRUE=9 UNVERIFIED=1 FALSE=0<br><span style="color:var(--mut)">UNVERIFIED=['GitHub 约 1.16 万 Star'] 不判假；无一手反证</span></td></tr>
+<tr><td><b>V3 · 免责声明诚实性</b></td><td><span class="badge ok">PASS</span></td><td>免责8条 一手对应5条 额外认识论限定=True<br><span style="color:var(--mut)">免责逐条映射一手局限，判诚实信号而非营销盾牌</span></td></tr>
+<tr><td><b>V4 · 数字口径与外推边界</b></td><td><span class="badge ok">PASS</span></td><td>阶段数=4 主动警示=True 转述更克制=True<br><span style="color:var(--mut)">分阶段标注齐全，作者警示不可外推，无越界</span></td></tr>
+<tr><td><b>V5 · 同构陷阱判定</b></td><td><span class="badge ok">PASS</span></td><td>重叠5处 谱系打折=True<br><span style="color:var(--mut)">同谱系印证打折，真实新意与重叠分离</span></td></tr>
+<tr><td><b>V6 · 复述/长牙决策</b></td><td><span class="badge ok">PASS</span></td><td>候选4条: 长牙/加固=3 记观察=1<br><span style="color:var(--mut)">每条有拦截动作或观察理由，未硬造新牙</span></td></tr>
+<tr><td><b>SELF · 判据自审（偏见防线）</b></td><td><span class="badge ok">PASS</span></td><td>自审项4条；预注册前已读全文已如实标注<br><span style="color:var(--mut)">先验偏见被显式锁住；UNVERIFIED≠FALSE；事实真≠结论真</span></td></tr>
+</table></div>
+<div class="card"><h2>关键事实断言一手溯源（9 TRUE / 1 UNVERIFIED / 0 FALSE）</h2><table><tr><th>断言</th><th>状态</th><th>一手证据</th></tr>
+<tr><td>GitHub 项目 JuneYaooo/rea-video 存在</td><td style="color:var(--ok);font-weight:700">TRUE</td><td>raw 通道成功抓到 README/README_zh/cli/RESULTS/LICENSE 五份一手文档</td></tr>
+<tr><td>Apache-2.0 许可证</td><td style="color:var(--ok);font-weight:700">TRUE</td><td>src_LICENSE 第1-3行 Apache License Version 2.0</td></tr>
+<tr><td>Python 3.10+ 与 FFmpeg 基础依赖</td><td style="color:var(--ok);font-weight:700">TRUE</td><td>README_zh L43 电脑上需要有 ffmpeg 和 Python 3.10 以上</td></tr>
+<tr><td>依赖含 OpenCV/NumPy/ONNX Runtime</td><td style="color:var(--ok);font-weight:700">TRUE</td><td>cli.md L11 numpy/opencv/pillow/pyyaml/onnxruntime</td></tr>
+<tr><td>命令 rea-video decompose ref.mp4 -o out/ref</td><td style="color:var(--ok);font-weight:700">TRUE</td><td>cli.md L35 逐字一致</td></tr>
+<tr><td>带货 46.4% → 63.9% → 97.5%（工具/看图/agent复核）</td><td style="color:var(--ok);font-weight:700">TRUE</td><td>RESULTS.md L97 逐字一致</td></tr>
+<tr><td>重测带货 63.2%、影视混剪 15.8%</td><td style="color:var(--ok);font-weight:700">TRUE</td><td>RESULTS.md L156/L158/L163 逐字一致</td></tr>
+<tr><td>混合片 19秒/10镜</td><td style="color:var(--ok);font-weight:700">TRUE</td><td>README_zh L89 混合片 · 19 秒 · 10 镜</td></tr>
+<tr><td>产品片 70秒/12镜、83%代码动效/12%录屏、Remotion 重建</td><td style="color:var(--ok);font-weight:700">TRUE</td><td>README_zh L103-104 逐字一致</td></tr>
+<tr><td>GitHub 约 1.16 万 Star</td><td style="color:var(--warn);font-weight:700">UNVERIFIED</td><td>README 仅有动态 shields.io badge，raw 文档无静态数字；匿名 API 限流无法读 stargazers_count</td></tr>
+</table></div>
+<div class="card"><h2>三层诚实结论</h2>
+<p><b>事实</b>：9 条可溯源断言与项目一手文档逐字一致；Star 数因 API 限流未核（UNVERIFIED）。</p>
+<p><b>结论</b>：免责声明逐条映射一手局限，判诚实信号；97.5% 是缓存融合、未在从头解码重测，作者主动降级不做普遍承诺——事实全真，但方法普适性仍需独立验证。</p>
+<p><b>迁移</b>：5 处与本仓同构判同谱系打折；真实新意是"先选工具再投入生成成本"的成本前置，记观察。</p>
+</div>
+<div class="card"><h2>复述/长牙与入库决策</h2>
+<ul>
+<li>转码/重编码会改变取证特征，判断前先核对当前对象与取证时对象是否同一版本 → <b>已有KB-AUDIT05/04覆盖，加固不新增</b></li>
+<li>最高准确率数字（97.5%）是缓存融合、未在从头解码重测；引用准确率时须带口径（阶段/样本/是否重测） → <b>长牙候选，与KB-R-MS03(略去条件=选择性呈现)同构，加固</b></li>
+<li>反推提示词≠原作者提示词：方法描述的『可行』不等于『事实如此』 → <b>KB-R-MS01已覆盖，加固</b></li>
+<li>工具选型前置：先判断这段是否真需要视频模型（83%代码动效用Remotion）再投入生成成本 → <b>新观察，属领域方法非通用判据，先记观察不硬造门禁</b></li>
+</ul>
+<div class="note">克制：不新增条目（"数字须带口径"已被 KB-R-MS03 + KB-STRUCT08 + KB-AUDIT04 覆盖，入则灌水）。加固 KB-R-MS03 / KB-STRUCT08 / KB-R-MS01 / KB-AUDIT04 四条 support；知识库保持 98 条，ready=True，vanity 占比 0.041。</div>
+</div>
+<div class="card vd">诚实的项目介绍文：所有可溯源数字与一手文档一致，免责逐条对应一手局限；无事实错误，仅1条Star数因API限流未核</div>
+<div class="sub" style="margin-top:16px">三重 SHA256 锁存：原文 / 预注册 / 证据 均校验 OK · 全量 287 项测试通过 · commentary §46</div>
+</div></body></html>

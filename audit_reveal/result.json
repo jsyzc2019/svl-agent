@@ -1,0 +1,85 @@
+{
+  "target": "ReVeal: Self-Evolving Code Agents via Reliable Self-Verification (ICLR 2026, arXiv 2506.11442v2)",
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "all_pass": true,
+    "verdicts": {
+      "V1": "IMPLEMENTED",
+      "V2": "CONSISTENT",
+      "V3": "PARTIAL",
+      "V4": "PARTIAL",
+      "V5": "MIXED",
+      "V6": "PARTIAL",
+      "V7": "OBSERVE_ONLY",
+      "SA": "PASS"
+    },
+    "headline": "顶会实证论文,代码扎实超参一致; '可靠自验证'有诚实边界(训练golden/测试自主+∆↓反例); 不新增知识条目,记观察"
+  },
+  "judges": [
+    {
+      "id": "V1",
+      "name": "claim_vs_code",
+      "pass": true,
+      "verdict": "IMPLEMENTED",
+      "finding": "5/5核心设计有代码实体且接线; 论文-代码超参(abs=0,imp=1)一致无漂移; reward格式项拆分(format独立vs并入outcome)属口径非漂移; 缺口: 训练脚本 code_train_path/code_test_path 为占位符(path_to_train_data);README无数据下载链接,需自行跑taco_filter",
+      "confidence": "high"
+    },
+    {
+      "id": "V2",
+      "name": "number_consistency",
+      "pass": true,
+      "verdict": "CONSISTENT",
+      "finding": "5/5项复算自洽; 主动标注3处口径警示(轮数不等/自定义指标/基线版本),未单点定罪",
+      "confidence": "high"
+    },
+    {
+      "id": "V3",
+      "name": "self_verification_reliability_subject",
+      "pass": true,
+      "verdict": "PARTIAL",
+      "finding": "训练r_ver依赖golden,测试无golden自主——差异被作者主动披露(disclosure=True); TAPO有防hacking设计(anti_hack=True); 保留迁移假设反例: ∆↓=0在Qwen backbone上非TAPO独有。判PARTIAL不判隐瞒偷换",
+      "confidence": "high"
+    },
+    {
+      "id": "V4",
+      "name": "ablation_attribution",
+      "pass": true,
+      "verdict": "PARTIAL",
+      "finding": "3项混杂控制(prompt-only/跨backbone/8次std); 同轮数消融×8 TAPO+1.6pp且∆↓1.32→0.0; 但3处缺口: 未单独消融verification reward、Qwen上∆↓=0反例、最强数字来自×25非隔离机制",
+      "confidence": "medium"
+    },
+    {
+      "id": "V5",
+      "name": "baseline_independence_and_contamination",
+      "pass": true,
+      "verdict": "MIXED",
+      "finding": "CTRL/critic基线引用自Xie2025旧LCB版本(非独立重跑); 同backbone的single-turn RL公平; 训练TACO早于LCB V6测试窗口污染风险低但无去污染声明——按KB-STRUCT07对引用基线降级",
+      "confidence": "medium"
+    },
+    {
+      "id": "V6",
+      "name": "reproducibility",
+      "pass": true,
+      "verdict": "PARTIAL",
+      "finding": "代码MIT/TAPO/golden/reward全公开(完整度高),但训练数据需自过滤、测试集未单独发布、推理20+轮脚本未完整公开、检查点未给——代码公开≠可实跑复现",
+      "confidence": "high"
+    },
+    {
+      "id": "V7",
+      "name": "isomorphism_and_teeth",
+      "pass": true,
+      "verdict": "OBSERVE_ONLY",
+      "finding": "5处与SVL同构,同谱系打折(KB-STRUCT02); 真实新意(reward通道隔离)已被KB-META01/KB-STRUCT07覆盖 → 记观察不新增(vanity门禁)",
+      "confidence": "high"
+    },
+    {
+      "id": "SA",
+      "name": "judge_self_audit",
+      "pass": true,
+      "verdict": "PASS",
+      "finding": "5条自审规则全过: 无脆弱字面串/无单点定罪/口径对等/事实真≠结论真/分阶段主体已核",
+      "confidence": "high"
+    }
+  ]
+}

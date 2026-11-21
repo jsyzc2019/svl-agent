@@ -1,0 +1,45 @@
+{
+  "task": "SWE-Gym 代码工程纪律 → 本仓代码强固（认知+代码协同工作流首例）",
+  "date": "2026-11-22",
+  "object_type": "工程代码借鉴（非审计判据、非架构泛比）——聚焦 SWE-Gym 公开代码里可直接编译进本仓的工程纪律",
+  "one_hand_sources": {
+    "already_locked": "audit_swegym/source.sha256（paper.pdf/paper.txt/arxiv_abs.html/prereg.json，上一轮已锁存）",
+    "code_repo": "github.com/SWE-Gym/SWE-Gym HEAD 005c2fb",
+    "code_evidence": [
+      "scripts/openhands-verifier/aggregate_stats_pass_at_n.ipynb cell16: get_bootstrap_accuracy_std（借自 openai/evals，bootstrap std）",
+      "scripts/moatless-verifier/eval_verifier.ipynb cell5/17: calculate_average_scores num_trials=100 shuffle 取平均±std",
+      "scripts/moatless-verifier/curate_dataset.ipynb cell2: seed(42) + CAP_PER_INSTANCE=2 + 正负各自 cap",
+      "scripts/moatless-verifier/eval_verifier.ipynb cell1: D={k:v for k,v in D.items() if len(v[True])>0} 只保留有正例的实例，成对构 prompt",
+      "scripts/training/openhands/configs/{policy,verifiers}/*: 25pct/50pct/uniq-data/sort/random、RM-1x/2x/onpolicy/claude+4o+onpolicy 受控配比消融",
+      "scripts/openhands-verifier/aggregate_stats_pass_at_n.ipynb cell14: get_predict_resolve_score softmax(' YES',' NO') 连续分数 + assert 两 token 都在"
+    ]
+  },
+  "borrow_rules": [
+    "只落地满足 KB-META01 的项：能编译成会拦/会判/会降级的动作，不是复述",
+    "每条落地能力锚定具体知识库条目并在其 support 加固指针——与已进化认知域协同",
+    "扬长避短：借鉴工程纪律（置信度/稳健性/成对cap/消融），避开 SWE-Gym 的短处（可训练 verifier + 标量 reward 可被 hacking）",
+    "置信度是'判定的稳定性'，不得被优化成新的 Goodhart 目标；规则写死、纯函数、不可被数据权重带偏",
+    "不重复现有模块：evaluation_reliability（judge独立/复现/可扩展）、component_attribution（归因）、scoring_integrity（计分完整性）已覆盖的不碰",
+    "同构打折（KB-STRUCT02）：SWE agent 工程技巧 ≠ 本仓框架真理，借鉴机制不整体背书"
+  ],
+  "planned_capabilities": {
+    "C1_bootstrap_stability": "对一组判定做固定seed的bootstrap重采样，输出点估计+std+置信区间；std超阈值→downgrade（判定本身不稳，不据单点下强结论）。锚定 KB-RSI06/KB-STRUCT07",
+    "C2_condition_ablation": "对判定规则的每个条件做'去掉它'消融，算净贡献；净贡献=0的冗余条件→flag（防堆条件制造看似严苛的假象）。锚定 KB-META01/组件归因净贡献",
+    "C3_live_suite_validation": "校验活体回归样例集：攻击类型须正负成对、每类样例数≤cap、声明固定seed、无重复；不满足→flag（活体样例集本身不可信）。锚定 KB-AUDIT02/KB-META01"
+  },
+  "acceptance_criteria": [
+    "三能力均为纯函数/数据类，无外部依赖，登记 __init__.py 惰性导入",
+    "固定seed可复现：同输入重复调用结果一致",
+    "三条活体回归：高不稳定判定被降级、冗余条件被flag、不成对/超cap样例集被flag",
+    "不踩脆弱字面串（KB-AUDIT01）、不单点定罪（KB-AUDIT02）、口径对等（KB-AUDIT04）",
+    "全量测试通过且向后兼容（原301项不回归）",
+    "知识库不新增条目（防vanity），仅加固≥3条 support 指针指向新模块",
+    "知识库仍 100 条 ready=True vanity≈0.04"
+  ],
+  "kb_decision_rule": "新能力是'工程纪律编译成代码'，属代码强固非新知识；不新增KB条目，仅给被锚定条目加固 support 指针（指向模块+测试+活体回归）",
+  "honesty_boundaries": [
+    "SWE-Gym 代码机制为一手仓库快照，本仓借鉴的是工程纪律而非复现其实验",
+    "bootstrap std 是判定统计量，不是被优化目标；不得反过来用它刷分",
+    "活体样例为机制回归用途，非 SWE-Gym 实验结果复现"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "audit_id": "AMBITION-ESSAY-AUDIT",
+  "created_at": "2026-11-22T00:33:00+08:00",
+  "target": "https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/",
+  "author": "Felix Rieseberg（自述 I work on Claude，Anthropic 团队成员）",
+  "published": "2026-10-13",
+  "object_type": "观点/教程文（essay + how-to）：无统计量可复算、无分类学需自洽；核心是把『雄心』拆成 Speed/Altitude/Depth/Range 四类并给技巧，末尾用心理学与历史轶事论证『为何要雄心』",
+  "for_method": "本仓 SVL 框架方法迁移（第三类对象：观点/教程文，KB-AGI01 + KB-STRUCT01 判据适配）；同时检验与框架同构时的谱系污染风险（KB-STRUCT02）",
+  "note": "预注册先于事实核查锁定。已抓原文并锁 SHA256，但未开始核查断言真伪；判据在此刻固定，防后知。",
+  "raw_lock": {"file": "article_raw.html", "sha256": "6a06328af5ab2b21c26e112ba117c90c083065018aff7f84cc46dfc59f8278ee", "size": 32069},
+  "preregistered_neutral_meta": "判据设计前仅知：标题、作者自述供职 Claude 团队、发布日期、四类雄心框架、末尾引用 self-efficacy/Locke&Dantzig/Bannister/Sawe 等例子。真伪未查。",
+  "criteria": [
+    {"id":"A1","name":"可证伪分级","question":"四类雄心与所给技巧，哪些是具体可执行可判失败的，哪些只是口号/同义反复？","trigger":"把『要有雄心』当可操作指令、或把抽象建议当已验证方法→flag","method":"逐条判断建议是否含可观察动作与失败条件；区分教程(可操作)与口号(不可证伪)"},
+    {"id":"A2","name":"事实断言核查","question":"末尾历史/科学例子是否属实：Dantzig 1939 两道未解题、Bannister 4分钟英里后仅46天无人破、Sawe 2026四月伦敦首破2小时且亚军也破2小时、Locke&Latham 35年研究、self-efficacy 可 hacked？","trigger":"以作者权威代替核查、或把流行轶事当史实→flag；核查结果与断言冲突须显式记录","method":"对每个可核查断言做独立检索；区分『属实/存疑/与公开事实冲突』；不确定的标注不确定"},
+    {"id":"A3","name":"主体归属与利益立场","question":"作者自述在 Claude 团队，文中推广『用模型要更有雄心』——立场是否影响论证？是否披露？","trigger":"把厂商从业者的倡导当中立第三方结论→flag；但自述身份本身是诚实披露，不因身份定罪","method":"核对是否明示身份、是否区分个人经验与事实、是否有可独立验证的外部证据支撑"},
+    {"id":"A4","name":"论点-证据链与外推","question":"『更雄心→更好结果』的论断靠什么支撑？轶事能否支撑普遍建议？假设是否明示？","trigger":"用 n=1 轶事外推普遍规律、把『可能』当『必然』→flag(KB-R-KON02)","method":"检查每个建议的证据类型(个人经验/研究/轶事)，外推是否有边界说明(如 altitude 对创意工作效果差作者已标注)"},
+    {"id":"A5","name":"同构陷阱与谱系污染","question":"本文『外部judge/对抗核查/原始材料/留出集验证』与本仓框架高度同构，是否构成独立验证？","trigger":"把同构当独立佐证、因『英雄所见略同』而虚高印证→flag(KB-STRUCT02)","method":"显式判定：这是同谱系印证(AI工程实践共同体)还是独立来源；记录印证力度折扣"},
+    {"id":"A6","name":"复述/长牙决策","question":"本次研读能编译成什么会拦会降级的门禁？","trigger":"只复述四类雄心、或按 KB-META01 检验无具体被拦动作→只记观察","method":"对每条候选经验做具体拦截动作检验；特别关注与现有门禁互补而非重复的部分"}
+  ],
+  "judge_self_audit": "显式调用 KB-AUDIT01（脆弱字面串→假阴性）与 KB-AUDIT02（单一检查点不足定罪、先怀疑检查器）；历史教训：曾把 Sawe 类名字/数字误判，须交叉确认来源后再定罪；不确定断言降级为『存疑』而非直接判假。",
+  "honesty_rule": "三层诚实结论：事实真≠结论真；轶事真≠建议有效；同构≠独立验证；作者立场明示≠论证中立。",
+  "scope_limit": "事实核查依赖公开检索，检索无结果≠断言为假，只能标注『未找到佐证/存疑』；历史轶事年代久远存在记忆偏差，须区分『明显与公开记录冲突』与『无法核实』"
+}

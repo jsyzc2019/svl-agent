@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "target": "Training Software Engineering Agents and Verifiers with SWE-Gym (ICML 2025, PMLR 267, arXiv:2412.21139v2, 6 Jun 2025)",
+  "authors": "Jiayi Pan, Xingyao Wang, Graham Neubig, Navdeep Jaitly, Heng Ji, Alane Suhr, Yizhe Zhang (UC Berkeley/UIUC/CMU/Apple)",
+  "object_type": "学术实证论文 + 公开代码（环境/数据集论文，含 agent 训练与 verifier 实验）",
+  "preregistered_at": "2026-11-22T02:22:00+08:00",
+  "prior_exposure": "设计判据前已从二手（arXiv 摘要/Google Scholar/OpenReview/HF README）看到方法与部分数字：2438 任务、491 轨迹、+19% gains、32%/26% SOTA、Figure1 scaling 曲线。如实标注，不伪装空白。",
+  "evidence_lock": {
+    "paper_pdf": "paper.pdf 576KB, %%EOF 完整, v2 6 Jun 2025",
+    "paper_text": "paper.txt 1212 行 / 111352 字符, pdftotext -layout",
+    "arxiv_abs": "arxiv_abs.html 41KB",
+    "code_repo": "github.com/SWE-Gym/SWE-Gym, Apache-2.0, clone 4.8MB, HEAD 005c2fb, 19 代码/文档文件（数据在 HF, 不在仓）"
+  },
+  "judges": [
+    {
+      "id": "S1",
+      "name": "claim_vs_code",
+      "question": "论文关键方法声称在公开代码里有无实体：verifier reward 公式 r=exp(ly)/(exp(ly)+exp(ln))、on/off-policy 数据混合、per-instance capping=2、训练超参(lr/epochs/batch/context)、491 轨迹。",
+      "pass_rule": "核心机制有代码实体即 IMPLEMENTED；核心机制在论文写但代码仓库不含（如环境构建脚本未放出）如实标 PARTIAL/NOT_IN_REPO，不定罪。",
+      "anti_bias": "不把'仓库小/只有脚本'当'方法造假'——数据在 HuggingFace、环境在 SWE-Bench-Fork，属论文明示的分流。"
+    },
+    {
+      "id": "S2",
+      "name": "number_caliber",
+      "question": "复算论文关键数字是否自洽，并核查引用口径：2438 vs 2294、491 轨迹构成(106+19+67+299)、+19% gains vs 表内最大 +13.6、32.0/26.0 SOTA、LoRA 29.8@8 vs full 27.2@8。",
+      "pass_rule": "算术自洽 + 主动标注口径差异（子集/全量、zero-shot/fine-tuned、表内最大值 vs 摘要表述）；数字真≠引用口径对。"
+    },
+    {
+      "id": "S3",
+      "name": "core_assumption",
+      "question": "核心假设：'SWE-Gym 的可执行环境+测试奖励能训练出更强 SWE agent/verifier，且能 scale'。是否有独立佐证还是同义反复。",
+      "pass_rule": "看是否有跨 scaffold（OpenHands 通用 + MoatlessTools 专用）、跨模型规模、跨 benchmark（Lite/Verified）、scaling 曲线、以及反例（self-improvement 无效）作为独立佐证；论文是否承认假设边界。"
+    },
+    {
+      "id": "S4",
+      "name": "ablation_attribution",
+      "question": "消融归因是否干净：verifier 训练数据混合(on+off)、训练数据量 scaling、per-instance capping、模型规模、LoRA vs full。",
+      "pass_rule": "有对照、结论与数据一致即 ISOLATED；算力对等/方差是否披露如实标注 caveat。"
+    },
+    {
+      "id": "S5",
+      "name": "verifier_reliability",
+      "question": "verifier（ORM）本身的可靠性：Best@k vs Pass@k 的 gap、<YES>/<NO> 二值打分是否有校准、verifier 训练数据是否可能被污染/过拟合。",
+      "pass_rule": "论文是否主动报告 gap 与局限；是否披露 verifier 只是 trajectory 级别 outcome supervision 而非逐步验证。据实判定，不把 Best@k 当真值。"
+    },
+    {
+      "id": "S6",
+      "name": "reproducibility_and_contamination",
+      "question": "可复现性（代码/数据/模型/环境开放度）与数据污染控制（训练 repo 与 SWE-Bench test 分离）。",
+      "pass_rule": "开放物清单 + 污染控制有无一手依据；6TB Docker/2周级成本/环境构建脚本是否在仓，如实标注。"
+    },
+    {
+      "id": "S7",
+      "name": "isomorphism_bias_guard",
+      "question": "与本仓 SVL 框架的同构度：verifier≈外置判据、rejection sampling≈筛选、self-improvement≈自改进、scaling≈复利、trajectory 数据≈经验库。",
+      "pass_rule": "逐条列同构，但按 KB-STRUCT02 打折——SWE agent 与本仓同属 agent 共同体，同构不构成对本仓框架的独立验证；识别真实差异（训练/权重 vs 判据语义、标量 reward vs 可证伪、固定 benchmark vs 自造判据）。"
+    },
+    {
+      "id": "SA",
+      "name": "judge_self_audit",
+      "question": "对本次判据执行做自审：无脆弱字面串、无单点定罪、口径对等、事实真≠结论真、分阶段主体、同构打折。",
+      "pass_rule": "6 条全过才 SA=PASS。"
+    }
+  ],
+  "kb_decision_rule": "先判后入库：只有'会拦/会判/会降级'且与现有 KB 机制不同才新增；否则加固 support 或记观察。特别注意与 KB-AUDIT07（评价函数被篡改）、KB-STRUCT07（评估者独立性）、KB-SIM05（经验阶梯）、KB-RSI06（样本外复验）的关系——SWE-Gym 的 verifier 是 outcome reward，与本仓可证伪判据不同，防混淆。",
+  "honest_boundaries": [
+    "论文数字均为作者 self-reported，未实跑 SWE-Gym（需 GPU/6TB 环境/显著成本）",
+    "代码结论基于公开仓 19 文件（训练/推理/数据准备脚本 + 配置），不等于逐行审阅训练框架依赖（torchtune/SGLang/Unsloth）",
+    "仓库无数据集/模型权重/环境镜像（在 HuggingFace/DockerHub），无法验证数据实体本身",
+    "核心'训练 env→能力↑'是经验假设，非定理；Best@k 依赖 verifier 精度，非真值上界"
+  ]
+}

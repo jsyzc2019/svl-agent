@@ -278,7 +278,8 @@
       "timestamp": "2026-11-21T05:06:00.497266+00:00",
       "support": [
         "commentary:§22",
-        "commentary:§23"
+        "commentary:§23",
+        "svagent/task_retrospective.py:retrospect — 复盘对象校正绑定到所有任务收尾；process 源专门记录框架方法的弯路/自咬，非研究对象"
       ],
       "evidence": "reflection",
       "addressable": true,
@@ -320,7 +321,8 @@
       "timestamp": "2026-11-21T05:06:00.497270+00:00",
       "support": [
         "commentary:§23.3",
-        "commentary:§23.4"
+        "commentary:§23.4",
+        "svagent/task_retrospective.py:RetroVerdict.classified_as — fix/vanity/preserve 三分在任务复盘中可执行：fix(双源可证伪)/vanity(复述)/observe(降级)"
       ],
       "evidence": "reflection",
       "addressable": false,
@@ -1434,7 +1436,9 @@
       "support": [
         "rsi_full_result.json:R5 out_excess=-0.0239",
         "commentary:§28 上证样本外回测",
-        "svagent/transfer_holdout.py:check_transfer + tests/test_transfer_holdout.py — 样本外复验编译为迁移增益判定(相对目标域基线,非绝对精度)"
+        "svagent/transfer_holdout.py:check_transfer + tests/test_transfer_holdout.py — 样本外复验编译为迁移增益判定(相对目标域基线,非绝对精度)",
+        "audit_swegym/result.json:S2 — 摘要19%gains vs 表内13.6%口径差;491轨迹样本外scaling但主结果无多次std,样本外复验需看口径",
+        "svagent/judgment_robustness.py:bootstrap_stability + tests/test_judgment_robustness.py — SWE-Gym get_bootstrap_accuracy_std 编译：判定附 bootstrap std/置信区间，std≥0.10 降级（同证据重排会摆动，不据单点下强结论）；固定 seed=42 可复现"
       ],
       "evidence": "experiment",
       "addressable": true,
@@ -1503,7 +1507,8 @@
         "rsi_sim_evidence.json:secondary_narrative",
         "commentary:§31 大摩文主体错位",
         "audit_skillmaster/evidence.json:S4 \"移除外部teacher\"仅指RL阶段,冷启动SFT仍用Claude生成技能推理轨迹——分阶段主体错位的具体实例",
-        "audit_reveal/evidence.json:V3 — 分阶段信号源差异新实例:训练时r_ver依赖golden过滤+golden验证反馈,测试时无golden全自主;作者主动披露故判PARTIAL非隐瞒。与\"冷启动teacher→RL自主\"同类但为验证信号源维度"
+        "audit_reveal/evidence.json:V3 — 分阶段信号源差异新实例:训练时r_ver依赖golden过滤+golden验证反馈,测试时无golden全自主;作者主动披露故判PARTIAL非隐瞒。与\"冷启动teacher→RL自主\"同类但为验证信号源维度",
+        "sim_review_result.json:N2 — 再审用相对基线口径确认跨模型迁移(+0.1133)，并指出with_sim/without_sim同为Gemini域，跨模型增益口径须谨慎（主体错位门禁的迁移版）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -1570,7 +1575,9 @@
         "rsi_sim_evidence.json:memory_schema_fields",
         "sim_framework_result.json:S6",
         "svagent/improvement_memory.py:四要素可执行模块",
-        "audit_dgm/evidence.json:D3 — 核心假设\"benchmark↑=self-improve能力↑\"的独立佐证:Table2后代可编辑率51.3%vs32.5%+跨基准held-out,这是三代证据阶梯\"结构有递归≠实证能力变强\"的实例"
+        "audit_dgm/evidence.json:D3 — 核心假设\"benchmark↑=self-improve能力↑\"的独立佐证:Table2后代可编辑率51.3%vs32.5%+跨基准held-out,这是三代证据阶梯\"结构有递归≠实证能力变强\"的实例",
+        "svagent/task_retrospective.py:retrospect G2/G5 — predicted↔observed 与『失败尝试也保留』从改进记录扩展到所有任务过程复盘",
+        "sim_review_result.json:N3/N6 — bootstrap重采样揭示\"留一稳但重采样不稳\"张力(std≥0.10降级)；本次再审任务自身过双源复盘RETRO.OK"
       ],
       "evidence": "theory",
       "addressable": true,
@@ -1709,7 +1716,11 @@
         "svagent/disambiguation_gate.py:术语歧义编译成门禁(第一颗牙)",
         "svagent/improvement_memory.py:四要素编译成落空/回归/迁移判据(第二颗牙)",
         "runway_factory/result.json:R6 shadow mode——作长牙判定时判为与预注册纪律同源、机制不独立，按KB-META01记观察而非硬造新牙",
-        "audit_reveal/evidence.json:V7 — TAPO reward通道隔离(gen reward不按验证成功加分防hacking)与\"会拦才入/判据自审\"同构,同谱系打折记观察不硬造新牙"
+        "audit_reveal/evidence.json:V7 — TAPO reward通道隔离(gen reward不按验证成功加分防hacking)与\"会拦才入/判据自审\"同构,同谱系打折记观察不硬造新牙",
+        "audit_swegym/result.json:S7 — 环境→轨迹→判据同构按KB-STRUCT02打折,不把顶会环境论文当本仓框架独立验证",
+        "svagent/judgment_robustness.py:ablate_conditions + validate_live_suite + tests/test_judgment_robustness.py — 防 vanity 两道：冗余条件（堆条件看似严苛）与样例堆砌（超 cap/重复/不成对）均 flag；活体回归证明三能力会拦会判会降级",
+        "svagent/task_retrospective.py:retrospect — 复述vs长牙从『借鉴外部方法』扩展到『自己完成任务的过程』；复述候选被 G3 block 拦截",
+        "svagent/lineage_guard.py:R4 preserve + R6 语义枚举 — 复述vs长牙在谱系场景：诚实标注机制借鉴不拦截、循环声称拦截；写死规则+纯函数防把打折做成新 Goodhart 目标"
       ],
       "evidence": "reflection",
       "addressable": true,
@@ -1760,7 +1771,8 @@
         "audit_fg_compare/fg_evidence.json:D1_lineage(两库fork_flag均false但确为派生)",
         "audit_ambition/evidence.json:A5_isomorphism — 雄心教程6处与本仓框架重叠(外部judge/对抗核查/留出验证/shadow mode)，同源AI工程共同体，判同谱系印证打折",
         "audit_skillmaster/evidence.json:S5 论文5处与SVL同构(反事实效用≈会拦才入,方向一致性≈单一检查点),同AI自我改进谱系打折不虚高",
-        "audit_dgm/evidence.json:D7 — DGM与SVL框架6处同构(archive≈知识库/self-modify≈SVL闭环/empirical-validation≈预注册判据/self-modifiability门槛≈会拦才入/踏脚石≈判据自审/objective hacking≈Goodhart),同RSI共同体判同谱系打折,不把顶会论文当框架独立验证"
+        "audit_dgm/evidence.json:D7 — DGM与SVL框架6处同构(archive≈知识库/self-modify≈SVL闭环/empirical-validation≈预注册判据/self-modifiability门槛≈会拦才入/踏脚石≈判据自审/objective hacking≈Goodhart),同RSI共同体判同谱系打折,不把顶会论文当框架独立验证",
+        "svagent/lineage_guard.py:discount_claim — 同构打折从文字警觉编译为通用门禁：R1 循环声称 block / R2 高同构 downgrade / R3 部分 flag / R4 诚实标注 preserve；替代 rsis_framework_analysis.py:t2 的 brittle 字面串匹配；活体回归4/4"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -1784,7 +1796,8 @@
       "support": [
         "rsi_structure_paper.txt:§3 operational definitions",
         "svagent/component_attribution.py:guard",
-        "tests/test_component_attribution.py"
+        "tests/test_component_attribution.py",
+        "svagent/judgment_robustness.py:ablate_conditions — 归因净贡献可执行化：对判定条件做“去掉它”消融，零翻转=冗余条件 flag；组件归因须显式且各有净贡献"
       ],
       "evidence": "theory",
       "addressable": true,
@@ -1878,7 +1891,10 @@
         "rsi_structure_full.txt:§10.3 multiple model judges share errors",
         "svagent/evaluation_reliability.py:judge_independence",
         "rsi_structure_amendment.json",
-        "audit_reveal/evidence.json:V5 — CTRL/critic基线引用自Xie2025旧LCB版本(24.08-24.11)非独立重跑,按评估者独立性降级看待;golden filter是训练侧来源隔离的正向工程实例"
+        "audit_reveal/evidence.json:V5 — CTRL/critic基线引用自Xie2025旧LCB版本(24.08-24.11)非独立重跑,按评估者独立性降级看待;golden filter是训练侧来源隔离的正向工程实例",
+        "audit_swegym/result.json:S5 — Pass@k37.8 vs Best@k29.8@k8 的gap=verifier不完美;Best@k不是真值,评估者可靠性再证",
+        "svagent/judgment_robustness.py:bootstrap_stability — 评估者可靠性补“判定稳定性”维度：不止看 judge 个数，还看结论在重采样下是否稳定；借鉴 SWE-Gym pass@k±std 不给裸点估计",
+        "sim_review_result.json:N1 — judge/proposer/selector同源Gemini→REL.SHARED_JUDGE_ERROR(workspace域)；coding用frozen verifier→SCALABLE_OK。评估者可靠性首次分域判定"
       ],
       "evidence": "theory",
       "addressable": true,
@@ -2093,7 +2109,8 @@
         "commentary:§33 量纲误判（同类：检查器先错）",
         "audit_fg_compare/fg_result.json:judge_self_audit.SA1(118字符误判内容过大,实为URL编码)",
         "audit_fg_compare/fg_result.json:judge_self_audit.SA3(IDomainResolver文件变小差点误判,读全文确认接口外移)",
-        "audit_reveal/evidence.json:V4 — ∆↓=0在DAPO上TAPO(0.0)vs outcome(1.32)有差异,但Qwen backbone上两者都0.0 → 单一backbone的指标差不定罪,保留反例;主表×25与消融×8轮数不等改用同轮数比较"
+        "audit_reveal/evidence.json:V4 — ∆↓=0在DAPO上TAPO(0.0)vs outcome(1.32)有差异,但Qwen backbone上两者都0.0 → 单一backbone的指标差不定罪,保留反例;主表×25与消融×8轮数不等改用同轮数比较",
+        "svagent/judgment_robustness.py:validate_live_suite — 不单点定罪编译到活体样例集：每个攻击族须正负成对，只反例或只正例 flag；借鉴 SWE-Gym D={k:v if len(v[True])>0}"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -2142,7 +2159,8 @@
         "audit_random/random_evidence.json:R1/R3 self_audit记录",
         "audit_random/random_prereg.json:judge_self_audit",
         "KB-AUDIT01(脆弱断言)与KB-AUDIT02(单一检查点)的同类但机制不同：本次是对象/口径不等价",
-        "audit_reavideo/evidence.json:V5 — 转码改变取证特征,拿转码后文件套原文件规则=验证对象≠取证对象的新实例"
+        "audit_reavideo/evidence.json:V5 — 转码改变取证特征,拿转码后文件套原文件规则=验证对象≠取证对象的新实例",
+        "§56 自审工具假阳性实录：源码级核验脚本把代码注释里举例的「高度同构」当成判定逻辑字面串，误报 FAIL；口径修正（先去 docstring 再去行注释）后通过——验证工具的对象/口径也须对等，否则误伤正确代码（process 源增量，超出预注册列举）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -2222,9 +2240,37 @@
         "audit_dgm/evidence.json:D3 — 检测机制在被优化者代码库内,是被攻击面",
         "KB-R-AIDET03(文本去味绕过检测)的具体化;KB-STRUCT07(评估者独立性)不覆盖评价函数本身被改",
         "audit_dgm/evidence.json:D1 全仓核实 — 诊断FM主体分层(coding_agent_polyglot.py:116 self_improve用OPENAI_MODEL vs 解题用CLAUDE_MODEL),是\"改进者自身能力依赖外部\"的分阶段边界",
-        "svagent/scoring_integrity.py:check_scoring_integrity + tests/test_scoring_integrity.py — KB-AUDIT07已编译为活体门禁(node114作废/node96保留); 相对基线/可写范围语义判定"
+        "svagent/scoring_integrity.py:check_scoring_integrity + tests/test_scoring_integrity.py — KB-AUDIT07已编译为活体门禁(node114作废/node96保留); 相对基线/可写范围语义判定",
+        "audit_swegym/result.json:S5 — SWE-Gym verifier(trajectory级ORM)可被reward hacking,是评价函数被篡改攻击面的一手实证(LLMs发YES/NO打分,score=归一化logprob)",
+        "sim_review_result.json:N5 — 论文自承\"自修改harness可满足评估器\"=KB-AUDIT07在RSI harness的实例；held-out+frozen verifier为独立通道，门禁SCORE.INTEGRITY_OK放行——攻击面+缓解精确化"
       ],
       "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META02",
+      "kind": "thinking_experience",
+      "mechanism": "元学习触发须从『审读外部对象』泛化到『所有既定任务』：每次任务收尾都要从双源汲取——task_content（任务结论本身）+ process（弯路/判据自咬/工具失败/修正）；且汲取须有利于用户、可证伪(predicted↔observed)、非复述。只从结论学、不从过程学，会丢掉最有价值的失败教训；只写『要反思』是复述不是长牙。",
+      "trigger": [
+        "完成任务",
+        "任务收尾",
+        "复盘",
+        "汲取知识",
+        "提升认知",
+        "从过程学习",
+        "元学习",
+        "反思"
+      ],
+      "action": "任一既定任务（含工程/推送/修bug）收尾，调用 svagent/task_retrospective.py:retrospect 对每条候选知识裁决：单 task_content 源→降级、无 predicted↔observed→降级、复述→拦截、无用户价值→flag、失败未记→降级；双源齐全+可证伪+利用户→可入库/强固。process 源自证风险高，故强制可证伪与用户价值门。",
+      "provenance": "用户意图(2026-11-22) + commentary:§54 + benchmark:meta_loop_prereg.json",
+      "timestamp": "2026-11-22T02:40:00+08:00",
+      "support": [
+        "commentary:§54 元学习闭环泛化",
+        "svagent/task_retrospective.py:retrospect + tests/test_task_retrospective.py(14项) — 双源/可证伪/目的约束编译成门禁",
+        "活体回归: §53真实任务双源→ok / 复述→block / 仅任务源→downgrade；写活体样例时被判据自咬并修正"
+      ],
+      "evidence": "self_task_reflection",
       "addressable": true,
       "improvement_class": "fix"
     }

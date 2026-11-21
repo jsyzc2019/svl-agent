@@ -12,10 +12,10 @@
 | 顺序 | 文件 | 作用 |
 |---|---|---|
 | 1 | `README.md` | 核心命题、三层递归、关键实测结果、设计原则 |
-| 2 | `commentary.md` | 完整推导日志，§1–§51 逐节记录机制如何长出来 |
+| 2 | `commentary.md` | 完整推导日志，§1–§56 逐节记录机制如何长出来 |
 | 3 | `REPOSITORY_MAP.md`（本文件） | 文件按主题归位 |
-| 4 | `svagent/` | 可执行代码（40 个模块，惰性导入） |
-| 5 | `tests/` | 回归测试（301 项，`python3 -m pytest -q`） |
+| 4 | `svagent/` | 可执行代码（43 个模块，惰性导入） |
+| 5 | `tests/` | 回归测试（343 项，`python3 -m pytest -q`） |
 
 ---
 
@@ -113,15 +113,23 @@ core → verifiers → harness → handoff          L0 产物层：生成→判�
 - 分析代码：`svagent/agi_essay_analysis.py`（含 `verify_extrapolation_arithmetic()` 真实复算）
 
 ### L. 知识库本体
-- `knowledge_base_store.json`（100 条知识，就绪）、`knowledge_base_report.html`
+- `knowledge_base_store.json`（101 条知识，就绪）、`knowledge_base_report.html`
 - 代码：`svagent/knowledge_base.py`
 
 ### M. DGM 论文研读 + 架构对比线（§49–§50）
 - 研读：`audit_dgm/`（预注册/五重 SHA256/8 判据/报告 `dgm_report.html`，结果 `result.json`）
 - 架构对比：`build_dgm_svl_compare.py` → `dgm_svl_compare.html` + `dgm_svl_compare_result.json`
   （8 维逐项对照 / 16 一手锚点 / 16 条双向借鉴；同构打折、不新增 KB）
-- 推导：`commentary.md` §49（判据审计）/ §50（扬长避短·相互借鉴）/ §51（代码落地：两道门禁 + 判据自咬修正）
+- 推导：`commentary.md` §49（判据审计）/ §50（扬长避短·相互借鉴）/ §51（代码落地：两道门禁 + 判据自咬修正）/ §53（SWE-Gym 代码强固 + 审读三段式工作流规范）/ §54（元学习闭环泛化：所有任务双源复盘 + 判据自咬实录）/ §55（SIM 再审：旧论文×新框架，3 补刀 + 循环论证警觉）/ §56（谱系打折门禁：警觉长牙 + 自审工具假阳性）
+- 谱系打折门禁（§56）：`lineage_guard_prereg.json` + `lineage_guard_prereg.sha256`（实现前锁存）→ `svagent/lineage_guard.py`（discount_claim：R1 循环 block / R2 同构 downgrade / R3 部分 flag / R4 诚实 preserve / R5 独立 ok / R6 字面串 flag）→ `tests/test_lineage_guard.py`（13 项）→ `build_lineage_result.py` + `lineage_guard_result.json` + `lineage_guard_report.html`（后验）。把 §55 循环论证警觉从文字编译成通用门禁，替代 t2 brittle 匹配；自审工具口径错位（注释当代码）假阳性→修工具不修代码；101 条不新增，加固 3 条（STRUCT02/META01/AUDIT04）；全量 343 passed。
 - 优化落地：`optimize_preregistration.json` + `optimize_prereg.sha256`（预注册锁存）→ `svagent/scoring_integrity.py` + `svagent/transfer_holdout.py`（两道门禁）→ `tests/test_scoring_integrity.py` + `tests/test_transfer_holdout.py`（14 项）→ `build_optimize_result.py` + `optimize_result.json`（后验结果）。100 条不新增，仅加固 3 条 support；全量 301 passed。
+- 代码强固（§53）：`robustness_prereg.json` + `robustness_prereg.sha256`（实现前锁存）→ `svagent/judgment_robustness.py`（C1 bootstrap 稳定性 / C2 条件消融 / C3 活体样例校验）→ `tests/test_judgment_robustness.py`（15 项）→ `build_robustness_result.py` + `robustness_result.json` + `robustness_report.html`（后验）。借自 SWE-Gym 五类工程纪律，避其可训练 verifier 攻击面；加固 5 条 KB support（RSI06/STRUCT07/STRUCT03/AUDIT02/META01）；100 条不新增，全量 316 passed。
+- 元学习闭环（§54）：`meta_loop_prereg.json` + `meta_loop_prereg.sha256`（实现前锁存）→ `svagent/task_retrospective.py`（双源复盘：task_content+process，G1-G5 规则）→ `tests/test_task_retrospective.py`（14 项）→ `build_meta_loop_result.py` + `meta_loop_result.json` + `meta_loop_report.html`（后验）。新增 1 条 KB-META02（触发泛化），加固 4 条（META01/R06/R08/SIM05）；活体样例写错被 G1 判据自咬并修正；全量 330 passed。
+- SIM 再审（§55）：`sim_review_prereg.json` + `sim_review_prereg.sha256`（实现前锁存）→ `sim_review_engine.py`（六道新门禁咬向原论文：N1 分域 judge / N2 相对基线迁移 / N3 bootstrap / N4 消融 / N5 计分完整性 / N6 双源复盘）→ `sim_review_result.json` + `build_sim_review_report.py` + `sim_review_report.html`（后验）。3 处补刀（N1/N3/N5）+ 循环论证警觉；101 条不新增，加固 4 条（SIM02/SIM05/STRUCT07/AUDIT07）；330 passed。
+
+### N. SWE-Gym 论文精研线（§52）
+- `audit_swegym/`：预注册 `prereg.json` + 四重 `source.sha256` → `paper.pdf`/`paper.txt`/`arxiv_abs.html` → `engine.py`（8 判据 + 10 项数字复算）→ `result.json` → `build_report.py` + `swegym_report.html`；代码仓 `repo/`（clone，已在 .gitignore 排除大原件）。
+- 结论：verifier 是 trajectory 级 ORM、可被 reward hacking（本仓 KB-AUDIT07 攻击面的一手实证）；摘要 19% gains vs 表内 13.6% 口径差；同构打折不新增条目，加固 4 条 support。推导见 commentary §52。
 
 ---
 
@@ -137,8 +145,11 @@ core → verifiers → harness → handoff          L0 产物层：生成→判�
 | `svagent/evaluation_reliability.py` | J 全文 + K 线 | judge 独立性、复现完整性/双编码、评估可扩展性降级 |
 | `svagent/scoring_integrity.py` | DGM 附录 H（§51） | 计分完整性：检测字段被篡改/绕过 → 分数作废或降级；node114 活体回归 |
 | `svagent/transfer_holdout.py` | DGM 跨基准 + KB-RSI06/SIM09（§51） | 跨领域迁移：按相对基线增益判过拟合 vs 可迁移；上下文漂移 revise |
+| `svagent/judgment_robustness.py` | SWE-Gym 代码工程纪律（§53） | 判定稳健性：bootstrap 置信度降级 / 条件消融揪冗余 / 活体样例成对+cap+seed 校验 |
+| `svagent/task_retrospective.py` | 用户元学习想法（§54） | 任务复盘：双源（任务+过程）+ 可证伪 + 目的约束 + 非复述；复述拦截/单源降级/失败未记降级 |
+| `svagent/lineage_guard.py` | SIM 再审循环论证警觉（§56） | 谱系打折：判据来源与被审对象同源却声称独立 → block；高同构 → downgrade；诚实标注 → preserve；字面串输入 flag |
 
-每道门禁都有对应测试：`tests/test_disambiguation_gate.py` `test_improvement_memory.py` `test_component_attribution.py` `test_evaluation_reliability.py` `test_scoring_integrity.py` `test_transfer_holdout.py`。
+每道门禁都有对应测试：`tests/test_disambiguation_gate.py` `test_improvement_memory.py` `test_component_attribution.py` `test_evaluation_reliability.py` `test_scoring_integrity.py` `test_transfer_holdout.py` `test_judgment_robustness.py` `test_task_retrospective.py` `test_lineage_guard.py`。
 
 ---
 

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>研读《How to be more ambitious》· SVL 框架审计</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--bd:#30363d;--fg:#e6edf3;--mut:#8b949e;--acc:#58a6ff;--ok:#3fb950;--no:#f85149;--warn:#d29922;--purple:#bc8cff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:40px 24px 80px}
+h1{font-size:27px;margin:0 0 6px}h2{font-size:20px;margin:44px 0 16px;padding-left:12px;border-left:4px solid var(--acc)}
+.sub{color:var(--mut);margin-bottom:28px}
+.verdict{display:inline-block;background:rgba(63,185,80,.12);border:1px solid var(--ok);color:var(--ok);border-radius:8px;padding:10px 18px;font-weight:700;font-size:17px;margin:8px 0 4px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+th,td{border:1px solid var(--bd);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#1c2128;color:var(--acc);font-weight:600}
+.crit{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:18px 20px;margin:14px 0}
+.crit-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
+.badge.ok{background:rgba(63,185,80,.15);color:var(--ok);border:1px solid var(--ok)}
+.badge.no{background:rgba(248,81,73,.15);color:var(--no);border:1px solid var(--no)}
+.checks{margin:6px 0 10px;padding-left:22px;color:var(--mut)}
+.checks code{color:var(--purple);background:rgba(188,140,255,.08);padding:1px 5px;border-radius:4px}
+.finding{margin:8px 0 0}
+.v-true{color:var(--ok)}.v-qual{color:var(--warn)}
+.layer{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--warn);border-radius:8px;padding:14px 18px;margin:12px 0}
+.layer-k{color:var(--warn);font-weight:700;margin-bottom:5px}
+.block{color:var(--ok)}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.meta span{background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:6px 12px;font-size:13px;color:var(--mut)}
+.foot{color:var(--mut);font-size:13px;margin-top:40px;border-top:1px solid var(--bd);padding-top:18px}
+code{font-family:ui-monospace,Menlo,Consolas,monospace}
+</style></head><body><div class="wrap">
+<h1>研读《How to be more ambitious》</h1>
+<p class="sub">Felix Rieseberg · 2026-10-13 · SVL 框架第三类对象（观点/教程文）审计 · 2026-11-22T00:50:00+08:00</p>
+
+<div class="meta">
+  <span>判据 6 条</span>
+  <span>通过 6/6</span>
+  <span>事实断言核查 7 条</span>
+  <span>判据自审反向命中 1 次</span>
+</div>
+
+<div class="verdict">6/6 判据通过 · 我的四个怀疑全错 · 不新增知识条目（克制）</div>
+
+<h2>一、对象类型与纪律</h2>
+<p>本文是观点/教程文：无统计量可复算、无分类学需自洽。判据按 KB-AGI01 切换为「论点-证据链、事实断言核查、主体归属、可证伪分级」，并显式检验与框架同构时的谱系污染（KB-STRUCT02）。预注册与原文 SHA256 先于核查锁定。</p>
+
+<h2>二、事实断言核查（本次核心）</h2>
+<p>预注册时我怀疑 4 条断言（厂商倡导文会夸大），核查证明全部为真或带诚实限定词——<b>先验偏见被事实推翻</b>。</p>
+<table><tr><th>断言</th><th>核查结论</th></tr><tr><td>sawe_sub2</td><td class='v-true'>TRUE：2026-04-26 伦敦马拉松，Sawe 1:59:30 首位正式比赛破2，亚军 Kejelcha 1:59:41 也破2，季军 Kiplimo 2:00:28。原纪录 Kiptum 2023 芝加哥 2:00:35</td></tr><tr><td>dantzig</td><td class='v-true'>TRUE：1939 UC Berkeley，Neyman 教授写两道著名未解统计题，Dantzig 迟到误当作业解出；六周后 Neyman 登门；第二题后与 Wald 合著发表。故事确为urban legend来源但核心属实</td></tr><tr><td>bannister_46days</td><td class='v-true'>TRUE：1954-05-06 Bannister 3:59.4；46天后(1954-06-21)澳大利亚 John Landy 3:57.9 破纪录</td></tr><tr><td>locke_latham</td><td class='v-true'>TRUE(核心)：2002综述确为35年回顾，核心结论属实</td></tr><tr><td>claude_planet</td><td class='v-qual'>HONESTLY-QUALIFIED：作者用 'may have' 限定，符合事实——这是 TIC 4206066 的候选系外行星(3.18天周期)，尚未确认；MIT 批准 10/31-11/26 后续观测。Rabtsevich 用74次测试试图证伪、跨模型交叉、两期预测第三期——恰是本文主旨的方法论实例</td></tr><tr><td>tao_math2</td><td class='v-true'>TRUE：Tao 2026-10-09 Caltech 演讲 Math 2.0，10/10 发幻灯片，讲 Math 1.0→当前AI过度强调自动解题→Math 2.0愿景</td></tr><tr><td>tao_quote_attribution</td><td class='v-qual'>PARTIAL：Math 2.0 原文措辞是 'excessive emphasis on automated solving of open problems'，'astounding in some directions, inadequate in others' 是常被归给Tao的转述但未在本次抓取的原文中直接找到该精确措辞。判为转述归属，不判假</td></tr></table>
+
+<h2>三、判据执行</h2>
+
+    <div class="crit">
+      <div class="crit-head"><span class="badge ok">PASS</span>
+        <strong>A1 · 可证伪分级</strong></div>
+      <ul class="checks"><li><code>concrete_actions</code>: 9</li><li><code>failure_conditions</code>: 3</li><li><code>slogans</code>: 2</li><li><code>actionable</code>: True</li><li><code>has_failure_conditions</code>: True</li><li><code>slogans_disclosed</code>: True</li></ul>
+      <p class="finding">主体是可操作教程(10+具体动作、3类自带失败条件)；少量口号作者坦承是rallying cry未伪装成方法</p>
+    </div>
+    <div class="crit">
+      <div class="crit-head"><span class="badge ok">PASS</span>
+        <strong>A2 · 事实断言核查</strong></div>
+      <ul class="checks"><li><code>assertions_checked</code>: 7</li><li><code>true_or_core_true</code>: 5</li><li><code>qualified_or_partial</code>: 2</li><li><code>prereg_suspicions_all_wrong</code>: True</li><li><code>partial_not_convicted_as_false</code>: True</li></ul>
+      <p class="finding">5个高风险断言全部为真或带诚实限定词；我预注册怀疑的4条全错——先验偏见(厂商倡导→断言有假)被事实推翻；转述引语标PARTIAL不判假</p>
+    </div>
+    <div class="crit">
+      <div class="crit-head"><span class="badge ok">PASS</span>
+        <strong>A3 · 主体归属与利益立场</strong></div>
+      <ul class="checks"><li><code>self_disclosed</code>: True</li><li><code>not_convicted_by_identity</code>: True</li><li><code>uses_external_evidence</code>: True</li><li><code>model_agnostic_claim</code>: True</li></ul>
+      <p class="finding">作者开篇自述供职Claude团队，立场透明；按KB-AUDIT02身份不定罪；读者须知这是从业者倡导+个人经验而非独立对照实验</p>
+    </div>
+    <div class="crit">
+      <div class="crit-head"><span class="badge ok">PASS</span>
+        <strong>A4 · 论点-证据链与外推</strong></div>
+      <ul class="checks"><li><code>evidence_types</code>: 3</li><li><code>boundary_disclosures</code>: 4</li><li><code>overreach_found</code>: True</li><li><code>overreach_severity</code>: minor：轶事和研究引用都真，但引用支撑了它本身不支持的强版本结论；作者用'tell the model they're very reasonable'是修辞技巧而非理论承诺，属可接受的教程夸张，标minor而非判假</li><li><code>minor_not_fatal</code>: True</li><li><code>kb_linked</code>: True</li></ul>
+      <p class="finding">多数建议来自实操并标注边界(创意/无法直接赚钱/roleplay)；唯一缺口：用Locke&amp;Latham为'不可能目标'背书但省略其承诺/反馈/能力条件——事实真、推论轻微越界，标minor</p>
+    </div>
+    <div class="crit">
+      <div class="crit-head"><span class="badge ok">PASS</span>
+        <strong>A5 · 同构陷阱与谱系污染</strong></div>
+      <ul class="checks"><li><code>overlaps</code>: 6</li><li><code>recognized_same_lineage</code>: True</li><li><code>discount_applied</code>: True</li><li><code>genuine_novelty_noted</code>: True</li></ul>
+      <p class="finding">6处与本仓框架重叠但同源(AI工程共同体)，判同谱系印证并打折，不虚高；真实新意是Range维度与去human-in-loop的durable workflow</p>
+    </div>
+    <div class="crit">
+      <div class="crit-head"><span class="badge ok">PASS</span>
+        <strong>A6 · 复述/长牙决策</strong></div>
+      <ul class="checks"><li><code>lesson_count</code>: 4</li><li><code>all_have_concrete_block</code>: True</li></ul>
+      <p class="finding">4条候选经验均通过具体被拦动作检验；M2(引用越界核对)与M4(同构打折)与现有门禁互补，M1/M3可加固</p>
+    </div>
+
+<h2>四、三层诚实结论</h2>
+<div class='layer'><div class='layer-k'>fact_true</div><div class='layer-v'>5个事实断言核查为真或带诚实限定词，一手来源为新华社/奥运官网/NAE/NPR/World Athletics/Tao原文，SHA256锁存</div></div><div class='layer'><div class='layer-k'>conclusion_caveat</div><div class='layer-v'>断言真≠建议有效；轶事真≠普遍规律；同构≠独立验证；厂商立场明示≠论证中立</div></div><div class='layer'><div class='layer-k'>unverified</div><div class='layer-v'>Tao引语精确措辞未在本次抓取原文中找到，标PARTIAL不判假；系外行星为候选未确认(作者用may have已降级)；Locke&amp;Latham引用省略适用条件</div></div>
+
+<h2>五、长牙候选</h2>
+<table><tr><th>ID</th><th>机制</th><th>会拦什么</th></tr><tr><td>M1</td><td>教程文的判据要分离'建议可操作性'与'事实断言真伪'：本文两者都强，但方法不同——前者查动作词与失败条件，后者独立检索</td><td class='block'>遇到how-to文，禁止因'故事讲得好'就默认方法有效，也禁止因'作者是厂商'就默认断言有假；两条独立判</td></tr><tr><td>M2</td><td>引用研究为其背书时，必须检查研究的适用条件是否被省略：Locke&amp;Latham结论附带承诺/反馈/能力条件且警告复杂任务，作者省略后为'不可能目标'背书</td><td class='block'>凡'研究表明X所以你该做Y'，核对Y是否落在X的原始适用条件内；越界则标minor overreach</td></tr><tr><td>M3</td><td>作者主动用限定词(may have/对创意效果差/roleplay陷阱)是诚实度正向信号，应计入评价而非忽略</td><td class='block'>核查时把'限定词使用'作为独立评分维度，缺限定的绝对断言在缺证据时降级</td></tr><tr><td>M4</td><td>'同构≠独立验证'再次实战：本文6处与本仓框架重叠，但同源(AI工程共同体)，只作同谱系印证打折，不虚高</td><td class='block'>见同构框架时先判谱系来源；同源则标'同谱系印证'并打折，禁止用作独立佐证</td></tr></table>
+<p>入库决策：不新增（M2已被 KB-R-MS03 覆盖，入则灌水）；加固 KB-R-MS03 / KB-STRUCT02 / KB-R-MS01 的 support，知识库保持 97 条。</p>
+
+<div class="foot">
+证据通道：原文 HTML(sha256锁存) + WebFetch 正文 + 独立 WebSearch 事实核查（新华社/奥运官网/NAE/NPR/World Athletics/Tao 原文）。预注册与证据均 SHA256 锁存。
+Tao 引语精确措辞未在抓取原文找到，标 PARTIAL 不判假；系外行星为候选未确认（作者用 may have 已降级）——据实标注。
+</div>
+</div></body></html>

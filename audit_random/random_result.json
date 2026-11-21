@@ -1,0 +1,138 @@
+{
+  "audit_id": "RANDOM-ACTIVE-REPOS-AUDIT",
+  "generated_at": "2026-11-22T00:35:00+08:00",
+  "three_layer_honesty": {
+    "fact_true": "证据均为一手文件/API 元数据，SHA256 已锁存",
+    "conclusion_caveat": "结论真需满足判据+证据交叉；fork 不等于原创/非贡献；文档自洽≠代码正确；测试存在≠已执行",
+    "unverified": "未实跑两仓脚本；r1 shallow clone 无法列全 commit 级净贡献；r2 未逐文件 diff 上游"
+  },
+  "criteria": [
+    {
+      "id": "R1",
+      "name": "谱系与净贡献判定",
+      "checks": {
+        "r1": {
+          "fork": true,
+          "upstream_attribution_kept": true,
+          "has_traceable_delta": true,
+          "scope_limit_disclosed": true,
+          "pass": true
+        },
+        "r2": {
+          "fork": true,
+          "upstream_attribution_kept": true,
+          "has_traceable_delta": true,
+          "scope_limit_disclosed": true,
+          "pass": true
+        },
+        "method_two_sided": true
+      },
+      "pass": true,
+      "finding": "两仓均 fork 且保留上游归属；r1 有中国平台周报增量（shallow 限制下不能列全），r2 有 issue 级可追溯修复；均不单凭 fork 标签下结论"
+    },
+    {
+      "id": "R2",
+      "name": "自动更新机制真实性（r1）",
+      "checks": {
+        "called_scripts_exist": true,
+        "reports_contiguous": true,
+        "reports_nonempty": true,
+        "self_healing_documented": true,
+        "evidence_dimensions": 3
+      },
+      "pass": true,
+      "finding": "周更真实接线：调用脚本全存在、9 期周报连续非空、CHANGELOG 记录曾空转并自我修复——三维交叉成立，非 vanity"
+    },
+    {
+      "id": "R3",
+      "name": "数据口径自洽（r1）",
+      "checks": {
+        "tools_json": 55,
+        "badge": 55,
+        "category_rows": 55,
+        "h3_adjusted": 55,
+        "four_way_consistent": true,
+        "h3_gap_explained": true,
+        "timestamp_semantics_ok": true,
+        "self_audit_recorded": true
+      },
+      "pass": true,
+      "finding": "tools.json/badge/分类表/详情(扣6非工具小节)=55 全自洽；『61≠55』为 h3 计数假阳性，判据自审排除；时间戳不矛盾（周报=候选池 vs tools.json=正式清单）"
+    },
+    {
+      "id": "R4",
+      "name": "CI 门禁接线与可证伪工程（r2）",
+      "checks": {
+        "chain_wired": true,
+        "job_count": 6,
+        "waivers_empty": true,
+        "doc_drift_honestly_report_only": true,
+        "actions_pinned": true
+      },
+      "pass": true,
+      "finding": "discover→matrix→test→coverage 完整接线，分层覆盖率+空 waiver 是可证伪门禁；doc-drift 诚实标注 report-only 不假装阻断"
+    },
+    {
+      "id": "R5",
+      "name": "自我纠错台账可信度（r2）",
+      "checks": {
+        "root_causes_ge5": true,
+        "per_ticker_evidence": true,
+        "old_report_invalidation_warning": "Until merged, do not re-run the old reports for orders",
+        "traceability": true,
+        "headline_corrected": true
+      },
+      "pass": true,
+      "finding": "errata 逐条给出原判/改正/5类根因/证据，明确旧报告不可下单，带 issue 追溯——『会拦会降级』实证"
+    },
+    {
+      "id": "R6",
+      "name": "复述/长牙决策与判据自审",
+      "checks": {
+        "lesson_count": 5,
+        "all_have_concrete_block_action": true
+      },
+      "pass": true,
+      "lessons": [
+        {
+          "id": "L1",
+          "from": "r1",
+          "lesson": "周更类仓库的真实性要看『调用链脚本是否存在+历史周报是否连续+是否自我发现过空转』三维交叉，不能只看 workflow yml 存在",
+          "would_block": "仅有一个漂亮 workflow 文件但脚本缺失/周报断档的仓库，判 vanity 并拒绝其『自动更新』声称"
+        },
+        {
+          "id": "L2",
+          "from": "r1",
+          "lesson": "计数口径不对等会产生假差异：h3 数≠工具数，非工具小节计入即误报",
+          "would_block": "任何『A数量≠B数量』结论前，先确认两端计数口径对等，否则先怀疑检查器（KB-AUDIT02）"
+        },
+        {
+          "id": "L3",
+          "from": "r2",
+          "lesson": "report-only 门禁与阻断门禁必须显式区分并标注，把 report-only 当已阻断是自欺",
+          "would_block": "审查 CI 时若发现门禁仅产出报告无非零退出，标注为『提示非阻断』，不计入质量门禁通过数"
+        },
+        {
+          "id": "L4",
+          "from": "r2",
+          "lesson": "errata/纠错台账的价值在根因分类+逐条证据+旧结论作废声明，三者缺一不可",
+          "would_block": "只有结论更正无根因/证据的『纠错』判为不可证伪，不予采信"
+        },
+        {
+          "id": "L5",
+          "from": "both",
+          "lesson": "fork 标签双向都不可靠：既不能因 fork 判无贡献，也不能因 fork 豁免净贡献核查",
+          "would_block": "任何 fork 仓库审计强制走『归属链接+下游可追溯增量』双判据，缺一不给原创性结论"
+        }
+      ],
+      "finding": "5 条候选经验均通过『具体被拦动作』检验，属长牙候选而非复述；可考虑编译进本仓门禁"
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "all_pass": true,
+    "self_audit_hits": 2,
+    "self_audit_note": "实际捕获并排除 2 次检查器假阳性（脚本缺失误判、h3 计数误判），均已写入证据并反向印证 KB-AUDIT01/02"
+  }
+}

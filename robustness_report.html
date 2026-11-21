@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>SWE-Gym 代码强固落地 · SVL</title><style>
+:root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--fg:#e6edf3;--mut:#8b949e;--acc:#58a6ff;--ok:#3fb950;--warn:#d29922}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 -apple-system,"PingFang SC",Segoe UI,sans-serif;padding:40px max(24px,calc((100% - 1000px)/2))}
+h1{font-size:26px;color:var(--acc);margin-bottom:6px}h2{font-size:19px;margin-top:36px;border-bottom:1px solid var(--border);padding-bottom:8px;color:var(--acc)}
+.lead{color:var(--mut)}table{width:100%;border-collapse:collapse;margin:16px 0}th,td{border:1px solid var(--border);padding:9px 12px;text-align:left;font-size:14px}th{background:var(--panel);color:var(--acc)}code{color:#79c0ff;font-size:13px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:14px 0}.card h3{margin:0 0 8px;font-size:16px}.action{color:var(--mut)}
+.ok{color:var(--ok);font-weight:700}.warn{color:var(--warn)}.pill{display:inline-block;background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 12px;margin:3px;font-size:13px}
+.seg{background:var(--panel);border-left:3px solid var(--acc);padding:10px 16px;margin:10px 0}.seg b{color:var(--acc)}
+ul{padding-left:22px}li{margin:5px 0}.foot{color:var(--mut);font-size:13px;margin-top:34px;border-top:1px solid var(--border);padding-top:14px}
+</style></head><body>
+<h1>SWE-Gym 代码工程纪律 → 本仓代码强固</h1>
+<p class="lead">认知 + 代码强固协同工作流首例 · 扬长避短 · 与已进化认知域对齐 · 预注册 SHA256 锁存于实现前</p>
+<h2>一、从 SWE-Gym 一手代码借鉴的五类工程纪律</h2>
+<table><tr><th>纪律</th><th>代码一手锚点</th><th>编译到本仓</th></tr><tr><td>bootstrap 置信度</td><td><code>aggregate_stats_pass_at_n.ipynb cell16 get_bootstrap_accuracy_std</code></td><td>C1 bootstrap_stability</td></tr><tr><td>100次shuffle稳健性</td><td><code>eval_verifier.ipynb cell5/17 num_trials=100</code></td><td>C1（std阈值/重采样）</td></tr><tr><td>per-instance cap + 固定seed</td><td><code>curate_dataset.ipynb cell2 seed(42)/CAP_PER_INSTANCE=2</code></td><td>C3 validate_live_suite</td></tr><tr><td>正负成对构造</td><td><code>eval_verifier.ipynb cell1 D={k:v if len(v[True])&gt;0}</code></td><td>C3（成对校验）</td></tr><tr><td>受控配比消融</td><td><code>configs policy/verifiers 25pct/50pct/uniq/sort/onpolicy</code></td><td>C2 ablate_conditions</td></tr></table>
+<h2>二、落地的三道稳健性能力（均长牙）</h2>
+<div class='card'><h3>C1 · bootstrap_stability</h3><p class='action'>std≥0.10 → downgrade；空样本 flag；否则 ok</p><p>认知域锚点：<b>KB-RSI06, KB-STRUCT07</b></p><p>活体回归：<span class='ok'>PASS</span></p></div><div class='card'><h3>C2 · ablate_conditions</h3><p class='action'>条件净贡献=0 → flag 冗余；长度不匹配 flag（口径对等）</p><p>认知域锚点：<b>KB-STRUCT03, KB-META01</b></p><p>活体回归：<span class='ok'>PASS</span></p></div><div class='card'><h3>C3 · validate_live_suite</h3><p class='action'>无seed/不成对/超cap/重复 → flag</p><p>认知域锚点：<b>KB-AUDIT02, KB-META01</b></p><p>活体回归：<span class='ok'>PASS</span></p></div>
+<h2>三、扬长避短</h2>
+<div class="card"><p><b class="ok">借鉴：</b>工程纪律：给判定附置信度、用重采样验稳、活体样例成对且有上限、判定条件做消融</p><p><b class="warn">避开：</b>不借鉴 SWE-Gym 的『可训练 verifier + 标量 reward』——那是 KB-AUDIT07 的 reward hacking 攻击面，本仓判据保持不可被权重带偏的静态可证伪结构</p><p class="action">护栏：置信度是判定统计量，不得被优化成新 Goodhart 目标；规则写死、纯函数、固定seed</p></div>
+<h2>四、认知域协同：加固的 support 指针</h2>
+<p>不新增条目（100 条不变、ready=True、vanity 0.04），仅把每项代码能力挂回它服务的认知条目：</p>
+<p><span class='pill'>KB-RSI06</span><span class='pill'>KB-META01</span><span class='pill'>KB-STRUCT03</span><span class='pill'>KB-STRUCT07</span><span class='pill'>KB-AUDIT02</span></p>
+<h2>五、今后审读工作流（三段式，默认执行）</h2>
+<div class="seg"><b>第一段 · 认知学习</b><br>认知学习：一手证据 + 判据结论 + 知识库加固（复述vs长牙）</div>
+<div class="seg"><b>第二段 · 代码强固</b><br>代码强固：问『这次认知能否编译成会拦/会判/会降级的动作』；扬长避短——借鉴长处、避开对象短处；满足 KB-META01 才落地</div>
+<div class="seg"><b>第三段 · 认知域协同</b><br>认知域协同：每项代码能力锚定具体 KB 条目 + 加固 support 指针 + 同构打折（KB-STRUCT02）</div>
+<h2>六、验证与诚实边界</h2>
+<ul><li>新增 15 项测试，全量 316 passed；活体回归 PASS；固定 seed 可复现；无脆弱字面串判定。</li>
+<li>SWE-Gym 代码为一手快照，借鉴的是工程纪律非复现其实验</li><li>bootstrap std 是统计量不是优化目标，不反过来刷分</li><li>活体样例用于机制回归，非 SWE-Gym 实验结果复现</li><li>同构不等于互证：顶会工程技巧不构成本仓框架独立验证</li></ul>
+<p class="foot">预注册 0b685d45ce197b60… · 后验结果 robustness_result.json 与其分离，不伪装。生成：build_robustness_result.py</p>
+</body></html>

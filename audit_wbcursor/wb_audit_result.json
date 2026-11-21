@@ -1,0 +1,77 @@
+{
+  "audit_id": "WB-CURSOR-INDEPENDENT-AUDIT",
+  "target": "github.com/jsyzc2019/wb-cursor-bridge",
+  "object_type": "工程实现类：带治理与安全声明的开源工具（MCP bridge / A2A service）",
+  "criteria": {
+    "C1": {
+      "id": "C1",
+      "name": "谱系污染与主体归属",
+      "triggered": true,
+      "evidence": "A+ 只描述清单完成度，不是生产可用结论；第三方 36 PoC 测出 26 缺陷，该自评不覆盖任何一条...",
+      "finding": "三份自带审计均实现方自评；A+ 自标失效并引用第三方36 PoC/26缺陷；自评结论不可当独立验证，修复有效性另由反向回归测试独立佐证",
+      "honesty": "自评被第三方推翻这件事本身 ≠ 我方独立验证了项目；我方独立证据是本地实跑220测试+28对抗测试+claim-vs-code核对",
+      "pass": true
+    },
+    "C2": {
+      "id": "C2",
+      "name": "claim-vs-code 一致性",
+      "triggered": false,
+      "verified_claims": "5/5",
+      "tools_claim": 9,
+      "tools_actual": 9,
+      "finding": "5 项安全声称均在代码有对应实现（fail-closed/worktree/不阻塞/权限集中/环境白名单）；工具数 9=9 一致；自查的'4 case vs 9 tool'疑似矛盾经判据自审确认为检查方法失真",
+      "self_audit": "抓到审计工具本身会骗人：tools.ts 的 switch 只特判4个需特殊序列化的工具，真实定义在 actions/registry.ts；单一检查点不足以定罪（呼应 §40 算术自审）",
+      "pass": true
+    },
+    "C3": {
+      "id": "C3",
+      "name": "测试真实性与可证伪",
+      "triggered": false,
+      "tests": "220/220 pass",
+      "adversarial": "28/28 pass",
+      "finding": "220/220 + 28/28 对抗测试全绿；负面测试含双重断言（拦坏 AND 放行好），如私有地址被拦但公网域名不被误拦 —— 这是可证伪测试的标志，非 happy-path 自证",
+      "honesty": "测试全绿只证明'在这些测试下自洽'，不等于系统无缺陷（§40: 算术自洽≠外推成立）",
+      "pass": true
+    },
+    "C4": {
+      "id": "C4",
+      "name": "安全声明可证伪性",
+      "triggered": false,
+      "covered_dims": "6/6",
+      "finding": "argv注入/路径白名单/环境白名单/进程树kill/私网URL拦截/能力诚实 六维均有代码+对抗测试支撑；capability honesty 尤其突出：gRPC未声明就不跑，65案例skipped而非制造假绿",
+      "pass": true
+    },
+    "C5": {
+      "id": "C5",
+      "name": "复现完整性",
+      "triggered": false,
+      "finding": "本地实跑 install/typecheck/lint(2 warning)/build/test 全通过；CI 双平台 + 官方TCK(pin commit) + Agent Card扫描 + 可复现release哈希 + least-privilege token",
+      "pass": true
+    },
+    "C6": {
+      "id": "C6",
+      "name": "复述/长牙决策",
+      "triggered": false,
+      "teeth": [
+        "自带审计自标失效 + 第三方 PoC 反向改写回归",
+        "capability honesty: 未声明能力不跑测试凑绿",
+        "负面对抗测试含双重断言（block bad AND allow good）"
+      ],
+      "observations": [
+        "release SHA256 可复现构建校验",
+        "CI least-privilege token"
+      ],
+      "finding": "3 项可编译为会拦会降级的门禁，2 项只记观察不强造模块",
+      "self_audit": "修复首版脆弱字符串检查（'能否拦' 字面匹配）导致的假阴性，改为动作词语义判定，与 §40 E2 算术自审同类",
+      "pass": true
+    }
+  },
+  "all_judgments_fired": true,
+  "three_layer": {
+    "事实层": "项目 v0.6.2 本地实跑 220/220 测试 + 28/28 对抗测试通过；9 工具声称与运行时一致；5 项安全声称有代码实现；CI 含官方 TCK 与可复现构建",
+    "结论层": "工程成熟度高于一般开源工具：自带审计诚实标注失效 + 第三方 PoC 反向改写回归 + 能力诚实（不造假绿）是本仓框架最值得吸收的三点；但'测试全绿'只是该测试集下自洽，不等于无缺陷",
+    "迁移层": "同构判据不等于独立验证（自带审计与框架判据自审同构）；本审计的独立证据来自本地实跑，而非引用项目自带审计结论"
+  },
+  "verdict": "PASS-WITH-HONESTY-CAVEATS",
+  "honesty_rule": "三层诚实结论：事实真≠结论真；同构≠独立验证；算术/测试自洽≠系统正确"
+}

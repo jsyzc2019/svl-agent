@@ -1,0 +1,135 @@
+{
+  "task": "SWE-Gym 代码工程纪律 → 本仓代码强固（认知+代码协同工作流首例）",
+  "prereg": "robustness_prereg.json",
+  "prereg_sha256": "0b685d45ce197b60349076fb9f0b1afc893ed73e62708099c2f11a31759ee4d8",
+  "source": {
+    "repo": "github.com/SWE-Gym/SWE-Gym HEAD 005c2fb",
+    "one_hand_lock": "audit_swegym/source.sha256（上一轮已锁存）",
+    "borrowed_disciplines": [
+      {
+        "discipline": "bootstrap 置信度",
+        "code": "aggregate_stats_pass_at_n.ipynb cell16 get_bootstrap_accuracy_std",
+        "borrowed_to": "C1 bootstrap_stability"
+      },
+      {
+        "discipline": "100次shuffle稳健性",
+        "code": "eval_verifier.ipynb cell5/17 num_trials=100",
+        "borrowed_to": "C1（std阈值/重采样）"
+      },
+      {
+        "discipline": "per-instance cap + 固定seed",
+        "code": "curate_dataset.ipynb cell2 seed(42)/CAP_PER_INSTANCE=2",
+        "borrowed_to": "C3 validate_live_suite"
+      },
+      {
+        "discipline": "正负成对构造",
+        "code": "eval_verifier.ipynb cell1 D={k:v if len(v[True])>0}",
+        "borrowed_to": "C3（成对校验）"
+      },
+      {
+        "discipline": "受控配比消融",
+        "code": "configs policy/verifiers 25pct/50pct/uniq/sort/onpolicy",
+        "borrowed_to": "C2 ablate_conditions"
+      }
+    ]
+  },
+  "capabilities": [
+    {
+      "id": "C1",
+      "name": "bootstrap_stability",
+      "file": "svagent/judgment_robustness.py",
+      "action": "std≥0.10 → downgrade；空样本 flag；否则 ok",
+      "kb_anchors": [
+        "KB-RSI06",
+        "KB-STRUCT07"
+      ],
+      "live": {
+        "unstable": "downgrade",
+        "stable": "ok",
+        "unstable_std": 0.175,
+        "passed": true
+      }
+    },
+    {
+      "id": "C2",
+      "name": "ablate_conditions",
+      "file": "svagent/judgment_robustness.py",
+      "action": "条件净贡献=0 → flag 冗余；长度不匹配 flag（口径对等）",
+      "kb_anchors": [
+        "KB-STRUCT03",
+        "KB-META01"
+      ],
+      "live": {
+        "action": "flag",
+        "redundant": [
+          "tautology"
+        ],
+        "contributions": {
+          "score_rose": 1,
+          "tautology": 0,
+          "writable": 1,
+          "tampered": 1
+        },
+        "passed": true
+      }
+    },
+    {
+      "id": "C3",
+      "name": "validate_live_suite",
+      "file": "svagent/judgment_robustness.py",
+      "action": "无seed/不成对/超cap/重复 → flag",
+      "kb_anchors": [
+        "KB-AUDIT02",
+        "KB-META01"
+      ],
+      "live": {
+        "good": "ok",
+        "bad": "flag",
+        "bad_issues": [
+          "NO_FIXED_SEED:未声明固定随机种子，样例集不可复现",
+          "CAP_EXCEEDED:A/positive=3>2",
+          "UNPAIRED:B 缺正例",
+          "DUPLICATE_CASE:1 条重复 payload 夸大覆盖"
+        ],
+        "passed": true
+      }
+    }
+  ],
+  "yang_avoid": {
+    "borrow": "工程纪律：给判定附置信度、用重采样验稳、活体样例成对且有上限、判定条件做消融",
+    "avoid": "不借鉴 SWE-Gym 的『可训练 verifier + 标量 reward』——那是 KB-AUDIT07 的 reward hacking 攻击面，本仓判据保持不可被权重带偏的静态可证伪结构",
+    "guard": "置信度是判定统计量，不得被优化成新 Goodhart 目标；规则写死、纯函数、固定seed"
+  },
+  "verification": {
+    "new_tests": 15,
+    "total_tests": 316,
+    "all_live_passed": true,
+    "fixed_seed_reproducible": true,
+    "no_brittle_literal": true
+  },
+  "kb_decision": {
+    "new_items": 0,
+    "items_total": 100,
+    "ready": true,
+    "vanity": 0.04,
+    "reinforced_support": [
+      "KB-RSI06",
+      "KB-META01",
+      "KB-STRUCT03",
+      "KB-STRUCT07",
+      "KB-AUDIT02"
+    ]
+  },
+  "workflow_norm": {
+    "rule": "今后应用本仓架构审读项目/文章，默认执行三段式，不再只产出认知结论",
+    "seg1_cognition": "认知学习：一手证据 + 判据结论 + 知识库加固（复述vs长牙）",
+    "seg2_code": "代码强固：问『这次认知能否编译成会拦/会判/会降级的动作』；扬长避短——借鉴长处、避开对象短处；满足 KB-META01 才落地",
+    "seg3_synergy": "认知域协同：每项代码能力锚定具体 KB 条目 + 加固 support 指针 + 同构打折（KB-STRUCT02）"
+  },
+  "honesty": [
+    "SWE-Gym 代码为一手快照，借鉴的是工程纪律非复现其实验",
+    "bootstrap std 是统计量不是优化目标，不反过来刷分",
+    "活体样例用于机制回归，非 SWE-Gym 实验结果复现",
+    "同构不等于互证：顶会工程技巧不构成本仓框架独立验证"
+  ]
+}

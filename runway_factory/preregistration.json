@@ -1,0 +1,20 @@
+{
+  "audit_id": "RUNWAY-SOFTWARE-FACTORY-ANALYSIS",
+  "source": "https://runway.com/news/engineering/building-a-software-factory",
+  "author": "Alejandro Alvarez, Technical Staff",
+  "published": "2026-11-20",
+  "object_type": "工程实践报告文（一手叙事 + 内部度量数字 + 方法论主张），非统计论文、非纯观点文",
+  "for_method": "本仓 SVL 框架方法迁移（第六类对象：企业工程博客/实践报告）；判据适配 KB-STRUCT01",
+  "created_at": "2026-11-22T00:05:00+08:00",
+  "note": "预注册先于分析。一手原文已 SHA256 锁存。本类对象不套统计复算，改查数字自洽、口径一致、因果归因、测量独立性、可迁移性。",
+  "criteria": [
+    {"id":"R1","name":"数字内部自洽性","question":"文中同一指标在不同位置给出的数字是否一致？分子分母是否可核对？","trigger":"同一指标出现两个不同值且无解释→flag 口径不一致","method":"逐条提取数字声称(38%/0.1%/2.3h/5min/86/74/67/977/15/1.5%/0.10%/1/200/2.4x/2.5x/14000/1900/442/16%)建表交叉"},
+    {"id":"R2","name":"因果归因诚实性","question":"效率提升归因于agent接管，是否有对照/基线？相关≠因果是否被承认？","trigger":"把时间趋势直接当因果、无对照→降级为相关","method":"查是否有before/after、对照组、混杂因素说明"},
+    {"id":"R3","name":"测量独立性与口径","question":"度量由谁做？'agent批准'与'人批准'的revert率比较是否同风险层？样本是否自选？","trigger":"比较跨风险层未校正、或自评自证→flag","method":"核对文中是否承认风险构成差异并做分层比较"},
+    {"id":"R4","name":"可证伪性与失败披露","question":"是否披露失败案例、revert、越权、幻觉修复？safety rails是否由真实事故倒逼？","trigger":"只有成功叙事无失败→flag 宣传文","method":"提取'Without it...'安全护栏与失败记录"},
+    {"id":"R5","name":"预注册纪律对照","question":"作者声称'在看结果前先定如何判断每次交接'——是否有证据支持这一先于结果的行为？","trigger":"声称先定判据但无时间戳/方法说明→标注为 Self-claim","method":"核对文中对判据设定时点的描述"},
+    {"id":"R6","name":"复述/长牙决策","question":"本框架能编译哪些会拦会降级的门禁？","trigger":"按 KB-META01 检验具体被拦动作，否则只记观察","method":"对 risk-based approval/shadow mode/gate recheck@commit/friction map 逐条做拦截检验"}
+  ],
+  "honesty_rule": "三层诚实结论：事实(数字)真≠结论(因果)真；相关性≠因果；企业自报数字未经独立审计",
+  "scope_limit": "仅有企业自报博客，无原始数据/代码/对照实验；所有数字按'作者声称'处理，不外部验证"
+}

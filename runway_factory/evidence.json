@@ -1,0 +1,63 @@
+{
+  "audit_id": "RUNWAY-SOFTWARE-FACTORY-ANALYSIS",
+  "collected_at": "2026-11-22T00:08:00+08:00",
+  "source": "一手原文（WebFetch 抓取并 SHA256 锁存，runway_factory_raw.txt）",
+  "R1_numbers": {
+    "verified_consistent": [
+      {"claim":"15 of 977 ≈ 1.5% (L116)","recalc":"15/977=1.535%","verdict":"一致（四舍五入）"},
+      {"claim":"0.10% revert = one in a thousand (L162/L140)","recalc":"0.10%=1/1000","verdict":"一致"},
+      {"claim":"one in two hundred human revert (L140)","recalc":"1/200=0.5%","verdict":"一致（文中未直接写0.5%，换算自洽）"},
+      {"claim":"38% Oct, 30% Nov, 30-40% range (L16/L58/L300)","recalc":"同一指标不同时段","verdict":"一致"},
+      {"claim":"2.3h→5min, 78% within 1h, 79h p90 (L148-160)","recalc":"前后对比","verdict":"内部自洽"},
+      {"claim":"14,000 tasks / 1,900 PRs / 442 merges (L262/L300)","recalc":"漏斗递减","verdict":"自洽"},
+      {"claim":"86 found / 74 fixed / 67 rerun-verified / 68 of 71 PRs agent-written (L190-216)","recalc":"74/86=86%; 67/86=78%; 68/71=96%","verdict":"比例自洽，一个PR可修多bug"}
+    ],
+    "mismatches": [
+      {"claim":"'agents fixed all of them'(L190, 86 bugs) vs '74 Fixed in those four days'(L198)","verdict":"口径差异：前者无时间限定，后者限定四天；86最终全修 vs 74在4天内修","severity":"轻微"},
+      {"claim":"'2.5 times'(L292) vs '2.4 times higher'(L298)","recalc":"2235/929=2.406→应为2.4","verdict":"同一指标两种约数，2.4精确、2.5偏高","severity":"轻微"}
+    ],
+    "note":"所有数字经真实除法复算（非字符串匹配，实践 KB-AUDIT01）；无硬性自相矛盾，2 处轻微口径漂移"
+  },
+  "R2_causality": {
+    "has_before_after": true,
+    "has_control_group": false,
+    "has_confound_acknowledgment": true,
+    "evidence": "L140 明确承认'大多数AI批准是低风险变更、本就不易revert'，并称'cross risk levels compared, AI approvals hold comparable to humans'；L298 用三周移动平均+固定6仓库集合控制口径。但整体仍是单组前后对比，非随机对照；时段重合（季度性、团队学习、产品成熟度）未被排除。",
+    "verdict": "诚实度较高（主动承认混杂），但因果强度止于'相关+前后'，非实验证据"
+  },
+  "R3_measurement_independence": {
+    "self_reported": true,
+    "external_audit": false,
+    "risk_stratified_revert": "L140 承认跨风险层比较并称分层后相当（但未给分层后具体数字，只给结论）",
+    "agent_judge_agent": "L114 AI reviewer 审 AI 写的码，人只审高风险；L80 'author is another agent'",
+    "shadow_mode": "L262/L264 批准前先 read-only shadow mode，人判断每个proposed action",
+    "verdict": "测量由实现方自报，无外部审计；但 shadow mode + 风险分层 + 人保留高风险 是降低自证偏差的真实机制，L140 分层结论缺数字支撑是缺口"
+  },
+  "R4_failure_disclosure": {
+    "safety_rails_from_failures": [
+      "L264 read-only shadow：否则read-only发现的bug会上线并重跑已完成工作",
+      "L267 gates re-check at exact commit：否则PR被override合并、reviewer签字后agent继续push",
+      "L270 external actions idempotent：否则agent争抢同任务互相取消",
+      "L273 people by policy not accident：否则旧merge工具3次卡在prompt等人、阻塞超1小时",
+      "L276 rollback in one call：否则release train因噪声信号撤掉所有生产池"
+    ],
+    "failure_metrics": "L116 15/977人反对; L140 0.10% revert; L238 140 alerts中1次需call人; L266-278 五条'Without it'失败倒逼",
+    "verdict": "失败披露充分且具体——五道护栏全部由真实事故倒逼，非纯成功叙事；这是本文最强的诚实信号"
+  },
+  "R5_prereg_claim": {
+    "claim_location": "L14 'decided how we would judge each handover before looking at its results'; L313 'decide how each station will be judged before we look at its results'",
+    "timestamp_evidence": "无独立时间戳/预注册文档链接",
+    "supporting_signal": "L80/L112/L262 描述先shadow后批准、先并行审批后放权——方法叙述与'先定判据'一致",
+    "verdict": "Self-claim：方法论叙述自洽且可置信，但无外部可验证的先于结果证据；标注为'作者自述的预注册纪律'，非独立验证"
+  },
+  "R6_absorption": {
+    "candidates": [
+      {"idea":"风险分级批准：low AI自批/medium按仓库上限/high人批/关键路径owner强制","gate":"能否拦：一律自动化或一律人工→按风险+关键路径分流，flag未分级→是","decision":"长牙候选"},
+      {"idea":"shadow mode：新判据先read-only只记录决策，人逐条判定后才放权","gate":"能否拦：判据直接上线写操作→要求先shadow→是","decision":"长牙候选（与KB-META01/预注册纪律同源，机制更具体）"},
+      {"idea":"gates re-check at exact commit being merged：签字后仍有push则失效","gate":"能否拦：验证对象≠最终对象→要求同commit复验→是","decision":"长牙候选（强，直击'验证后漂移'）"},
+      {"idea":"friction map：按同类PR规模归一化，定位agent反复返工热点并pin测试","gate":"能否拦：只凭绝对数寻找问题区→要求同规模基线归一化→是","decision":"长牙候选"},
+      {"idea":"external actions idempotent（可重复执行安全）","gate":"能否拦：agent并发争抢同任务→要求幂等→是","decision":"长牙候选"},
+      {"idea":"38%/3000 PR月增——规模数字","gate":"本框架不产PR，不适用","decision":"观察"}
+    ]
+  }
+}

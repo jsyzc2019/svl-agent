@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Runway · Building a Software Factory · 深度研究</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--bd:#30363d;--fg:#e6edf3;--mut:#8b949e;--acc:#58a6ff;--ok:#3fb950;--no:#f85149;--warn:#d29922;--purple:#bc8cff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:40px 24px 80px}h1{font-size:27px;margin:0 0 6px}h2{font-size:20px;margin:42px 0 16px;padding-left:12px;border-left:4px solid var(--acc)}
+.sub{color:var(--mut);margin-bottom:24px}.verdict{display:inline-block;background:rgba(63,185,80,.12);border:1px solid var(--ok);color:var(--ok);border-radius:8px;padding:10px 18px;font-weight:700;font-size:17px;margin:8px 0}
+.meta{color:var(--mut);font-size:13px}table{width:100%;border-collapse:collapse;margin:14px 0;background:var(--card);border-radius:8px;overflow:hidden;font-size:13.5px}
+th,td{border:1px solid var(--bd);padding:9px 12px;text-align:left;vertical-align:top}th{background:#1c2128;color:var(--acc)}
+.v-true{color:var(--ok)}.v-mis{color:var(--warn);font-weight:700}.kb{background:rgba(188,140,255,.15);color:var(--purple);border-radius:4px;padding:1px 7px;font-size:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:18px 20px;margin:14px 0}
+.crit{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;margin:12px 0}
+.crit-head{display:flex;align-items:center;gap:10px;font-size:15px}.badge{font-size:11px;font-weight:800;padding:2px 9px;border-radius:20px}.badge.ok{background:rgba(63,185,80,.15);color:var(--ok)}.badge.no{background:rgba(248,81,73,.15);color:var(--no)}
+.checks{margin:10px 0 6px;padding-left:20px;color:var(--mut);font-size:13px}.checks code{color:var(--fg);background:#21262d;padding:1px 6px;border-radius:4px}
+.finding{margin:6px 0 0}.teeth{margin:8px 0 0;color:var(--warn);font-size:13px}
+.note{background:rgba(210,153,34,.08);border-left:3px solid var(--warn);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0;color:#e3c07b}
+.layer{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--bd)}.layer-k{flex:0 0 56px;color:var(--acc);font-weight:700}.layer-v{flex:1}
+code{font-family:ui-monospace,Menlo,Consolas,monospace}.foot{margin-top:46px;color:var(--mut);font-size:12px;border-top:1px solid var(--bd);padding-top:16px}
+.chain{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}.st{background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:6px 12px;font-size:13px}.st.done{border-color:var(--ok);color:var(--ok)}.ar{color:var(--mut)}
+</style></head><body><div class="wrap">
+<h1>Building a Software Factory · 深度研究</h1>
+<div class="sub">Runway 工程博客 · Alejandro Alvarez · 2026-11-20 · 本仓 SVL 框架方法迁移（第六类对象：企业工程实践报告）</div>
+<div class="verdict">PASS-WITH-HONESTY-CAVEATS</div>
+<div class="meta">判据 6/6 · 判据自审 5 次拦截 · 一手原文已 SHA256 锁存</div>
+
+<h2>一、文章核心：把交付线逐站交给 agent</h2>
+<div class="chain">
+<span class='st done'>Write</span><span class='ar'>→</span><span class='st done'>Pass CI</span><span class='ar'>→</span><span class='st done'>Review</span><span class='ar'>→</span><span class='st done'>Approve</span><span class='ar'>→</span><span class='st done'>QA</span><span class='ar'>→</span><span class='st done'>Fix breaks</span><span class='ar'>→</span><span class='st done'>Run the line</span><span class='ar'>→</span>
+</div>
+<p>核心叙事：AI 让写代码变快，<b>review 成了瓶颈</b>。Runway 没有要求 agent 写出更好的 change，而是逐站把软件交付的每个环节交给 agent——每交一站，先定"如何判断这次交接"，再看结果。瓶颈随之后移到下一站：write→CI→<b>review</b>→<b>approve</b>→<b>QA</b>→<b>fix breaks</b>→<b>run the line</b>。最终工程师的角色从"读 diff"转为"决定造什么、修 agent 卡住的地方、守住度量诚实"。</p>
+<div class="card"><b>最关键的工程机制（安全护栏，全部由真实事故倒逼）：</b><ul><li>L264 read-only shadow：否则read-only发现的bug会上线并重跑已完成工作</li><li>L267 gates re-check at exact commit：否则PR被override合并、reviewer签字后agent继续push</li><li>L270 external actions idempotent：否则agent争抢同任务互相取消</li><li>L273 people by policy not accident：否则旧merge工具3次卡在prompt等人、阻塞超1小时</li><li>L276 rollback in one call：否则release train因噪声信号撤掉所有生产池</li></ul></div>
+<div class="note">与本仓框架高度同构：shadow mode（先读后写）≈ 预注册门禁；gates re-check at exact commit ≈ 预注册 SHA256 锁存 + 验证对象=最终对象；friction map ≈ 判据自审/审计工具本身；"在看结果前先定判据"≈ 本仓防后知纪律。<b>但同构 ≠ 独立验证</b>——这是两个不同来源各自收敛到相似做法，不能互相当作证据。</div>
+
+<h2>二、逐判据结果</h2>
+<div class='crit'><div class='crit-head'><span class='badge ok'>PASS</span><strong>R1 · 数字内部自洽性</strong></div><ul class='checks'><li><code>recalc_2235_929</code>: 2.4058</li><li><code>recalc_matches_2.4</code>: True</li><li><code>consistent_items</code>: 7</li><li><code>mismatches_disclosed</code>: 2</li><li><code>all_minor</code>: True</li></ul><p class='finding'>7 项数字复算一致；2 处轻微口径漂移（86全修vs74四天内、2.5xvs2.4x）如实披露，无硬矛盾</p></div><div class='crit'><div class='crit-head'><span class='badge ok'>PASS</span><strong>R2 · 因果归因诚实性</strong></div><ul class='checks'><li><code>before_after</code>: True</li><li><code>control_group</code>: False</li><li><code>confound_acknowledged</code>: True</li></ul><p class='finding'>诚实度较高（主动承认混杂），但因果强度止于'相关+前后'，非实验证据</p></div><div class='crit'><div class='crit-head'><span class='badge ok'>PASS</span><strong>R3 · 测量独立性与口径</strong></div><ul class='checks'><li><code>self_reported</code>: True</li><li><code>external_audit</code>: False</li><li><code>bias_mitigation</code>: True</li><li><code>gap_flagged</code>: True</li></ul><p class='finding'>测量由实现方自报，无外部审计；但 shadow mode + 风险分层 + 人保留高风险 是降低自证偏差的真实机制，L140 分层结论缺数字支撑是缺口</p></div><div class='crit'><div class='crit-head'><span class='badge ok'>PASS</span><strong>R4 · 可证伪性与失败披露</strong></div><ul class='checks'><li><code>failure_driven_rails</code>: 5</li><li><code>has_failure_metrics</code>: True</li></ul><p class='finding'>失败披露充分且具体——五道护栏全部由真实事故倒逼，非纯成功叙事；这是本文最强的诚实信号</p></div><div class='crit'><div class='crit-head'><span class='badge ok'>PASS</span><strong>R5 · 预注册纪律对照</strong></div><ul class='checks'><li><code>claimed</code>: True</li><li><code>timestamp_evidence</code>: 无独立时间戳/预注册文档链接</li><li><code>no_timestamp_semantic</code>: True</li><li><code>labeled_selfclaim</code>: True</li><li><code>supporting_signal</code>: True</li></ul><p class='finding'>Self-claim：方法论叙述自洽且可置信，但无外部可验证的先于结果证据；标注为'作者自述的预注册纪律'，非独立验证（标注为作者自述，不冒充独立验证）</p></div><div class='crit'><div class='crit-head'><span class='badge ok'>PASS</span><strong>R6 · 复述/长牙决策</strong></div><ul class='checks'><li><code>teeth</code>: 5</li><li><code>observe</code>: 1</li><li><code>all_actionable</code>: True</li></ul><p class='finding'>5 项编译为会拦会降级的门禁，1 项只记观察</p><p class='teeth'><b>长牙：</b>风险分级批准：low AI自批/medium按仓库上限/high人批/关键路径owner强制；shadow mode：新判据先read-only只记录决策，人逐条判定后才放权；gates re-check at exact commit being merged：签字后仍有push则失效；friction map：按同类PR规模归一化，定位agent反复返工热点并pin测试；external actions idempotent（可重复执行安全）</p></div>
+
+<h2>三、数字自洽性核对（真实复算，非字符串匹配）</h2>
+<table><tr><th>原文声称</th><th>复算</th><th>判定</th></tr><tr><td>15 of 977 ≈ 1.5% (L116)</td><td>15/977=1.535%</td><td class='v-true'>一致（四舍五入）</td></tr><tr><td>0.10% revert = one in a thousand (L162/L140)</td><td>0.10%=1/1000</td><td class='v-true'>一致</td></tr><tr><td>one in two hundred human revert (L140)</td><td>1/200=0.5%</td><td class='v-true'>一致（文中未直接写0.5%，换算自洽）</td></tr><tr><td>38% Oct, 30% Nov, 30-40% range (L16/L58/L300)</td><td>同一指标不同时段</td><td class='v-true'>一致</td></tr><tr><td>2.3h→5min, 78% within 1h, 79h p90 (L148-160)</td><td>前后对比</td><td class='v-true'>内部自洽</td></tr><tr><td>14,000 tasks / 1,900 PRs / 442 merges (L262/L300)</td><td>漏斗递减</td><td class='v-true'>自洽</td></tr><tr><td>86 found / 74 fixed / 67 rerun-verified / 68 of 71 PRs agent-written (L190-216)</td><td>74/86=86%; 67/86=78%; 68/71=96%</td><td class='v-true'>比例自洽，一个PR可修多bug</td></tr><tr><td>'agents fixed all of them'(L190, 86 bugs) vs '74 Fixed in those four days'(L198)</td><td>—</td><td class='v-mis'>口径差异：前者无时间限定，后者限定四天；86最终全修 vs 74在4天内修（轻微）</td></tr><tr><td>'2.5 times'(L292) vs '2.4 times higher'(L298)</td><td>2235/929=2.406→应为2.4</td><td class='v-mis'>同一指标两种约数，2.4精确、2.5偏高（轻微）</td></tr></table>
+<div class="note"><b>唯一两处口径漂移（均轻微）：</b>① L190"agents fixed all of them（86 个）"vs L198"74 Fixed in those four days"——前者无时间限定、后者限定四天，属口径差异非硬矛盾；② L292"2.5 times"vs L298"2.4 times higher"，而 2235/929=2.406，2.4 精确、2.5 偏高。<b>所有数字经真实除法复算</b>，无自相矛盾。企业自报数据未经外部审计，按"作者声称"处理。</div>
+
+<h2>四、因果与方法论诚实度</h2>
+<div class="card">
+<b>因果</b>：单组前后对比 + 三周移动平均 + 固定 6 仓库集合控制口径，<b>无随机对照</b>。但 L140 主动承认"多数 AI 批准是低风险、本就不易 revert"这一混杂，并称跨风险层比较后相当——只是未给出分层后的具体数字（缺口）。<br><br>
+<b>测量</b>：全部作者自报，无外部审计；但 shadow mode、风险分层、人保留高风险 是降低自证偏差的真实机制。<br><br>
+<b>失败披露（本文最强诚实信号）</b>：五道护栏全部由"Without it..."真实事故倒逼，还披露 15/977 人反对、0.10% revert、140 次告警中 1 次需叫人——不是纯成功叙事。
+</div>
+
+<h2>五、判据自审：抓到 5 次失真</h2>
+<p>其中 2 次是本次分析器的真实 bug（与审计文章的数字问题无关），再次印证 KB-AUDIT01：</p>
+<table><tr><th>教训</th><th>失真</th><th>纠正</th></tr><tr><td><span class='kb'>KB-AUDIT01</span></td><td>数字核对全部用真实除法复算(2235/929=2.406)而非字符串包含</td><td>2.5x vs 2.4x 若用子串匹配会漏判/误判，复算才定位真值2.4</td></tr><tr><td><span class='kb'>KB-AUDIT02</span></td><td>86全修 vs 74四天内 不急于判矛盾，交叉时间限定后定为口径差异</td><td>单一数字对照会误判为自相矛盾，读上下文（in those four days）消解</td></tr><tr><td><span class='kb'>KB-AUDIT02</span></td><td>2.4x/2.5x 交叉复算原文929与2235，确认2.4精确</td><td>两处数字都来自作者，须以原始数据为第二证据源</td></tr><tr><td><span class='kb'>KB-AUDIT01</span></td><td>R5 首版用 not bool('无独立时间戳...') 判有无时间戳，非空字符串被误判为'有'→ 假阴性 REVIEW</td><td>字段是带'无'语义的字符串，须语义判定前缀，不能真值判定</td></tr><tr><td><span class='kb'>KB-AUDIT01</span></td><td>R6 首版用 decision=='长牙候选' 精确相等，漏掉'长牙候选（说明）'3项→ 假阴性 REVIEW</td><td>标签带括号说明，须用 startswith 语义前缀判定，不能精确相等</td></tr></table>
+
+<h2>六、三层诚实结论</h2>
+<div class='layer'><div class='layer-k'>事实</div><div class='layer-v'>企业自报数字经真实复算：15/977≈1.5%、0.10%=1/1000、2235/929=2.4x 等内部基本自洽，仅2处轻微口径漂移（86全修vs74四天内、2.5xvs2.4x）</div></div><div class='layer'><div class='layer-k'>结论</div><div class='layer-v'>效率提升为单组前后对比+主动承认混杂，非对照实验因果；'先定判据'是作者自述无独立时间戳；但五道护栏全由真实事故倒逼，失败披露是本文最强诚实信号</div></div><div class='layer'><div class='layer-k'>迁移</div><div class='layer-v'>最值得编译成门禁的：风险分级批准、shadow mode先读后写、gates re-check at exact commit（验证对象=最终对象）、friction map同规模归一化、外部动作幂等</div></div>
+
+<h2>七、复述 vs 长牙：本框架该吸收什么</h2>
+<div class="card"><h3>编译成门禁（长牙）</h3><ol>
+<li><b>风险分级批准</b>：按风险+关键路径分流，未分级即 flag——防"一律自动/一律人工"的粗暴做法</li>
+<li><b>shadow mode 先读后写</b>：新判据上线前必须 read-only 跑一段、人逐条判定——本仓"预注册"纪律的更具体形态</li>
+<li><b>gates re-check at exact commit</b>：验证对象必须=最终合并对象，签字后 push 则失效——直击"验证后漂移"，可编译成哈希门禁</li>
+<li><b>friction map 同规模归一化</b>：按同类 PR 规模归一化找返工热点，不凭绝对数——审计定位的严谨方法</li>
+<li><b>外部动作幂等</b>：agent 并发争抢同任务要幂等——防重复执行副作用</li>
+</ol></div>
+<div class="card"><h3>只记观察</h3><p>38%/3000 PR 月增等规模数字——本框架不产 PR，不适用，不造模块。</p></div>
+<div class="note">克制：与上一轮一致，本次仍<b>不强造通用模块</b>。"gates re-check at exact commit"与已有预注册 SHA256 锁存高度重叠，标记为其强化而非新模块；shadow mode/风险分级属方法论层，先入库为 reasoning_lesson 观察复现。</div>
+
+<h2>八、诚实边界</h2>
+<div class="note">仅企业自报博客，无原始数据/代码/对照实验；所有数字按作者声称处理，未外部验证；本框架与文章方法论的高度同构不构成独立验证（谱系警戒）</div>
+
+<div class="foot">交付物：<code>runway_factory/</code> 下 runway_factory_raw.txt（原文，SHA256 锁存）、preregistration.json（锁存）、evidence.json（锁存）、engine.py、result.json、本报告。<br>方法：对象类型判定 → 预注册锁存 → 一手原文 → 真实复算 → 判据自审 → 复述/长牙决策。</div>
+</div></body></html>

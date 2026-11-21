@@ -1,0 +1,36 @@
+{
+  "audit_id": "RANDOM-ACTIVE-REPOS-AUDIT",
+  "created_at": "2026-11-22T00:25:00+08:00",
+  "authorization": "用户先前授权『在Github仓库中随机选两个近期活动频繁的项目审计』，本轮依授权直接执行，不再二次确认",
+  "selection": {
+    "source": "/workspace/audit_random/allrepos.json (jsyzc2019 300 仓库快照)",
+    "rule": "pushed_at >= 2026-10-22（近30天）且排除已审计对象(svl-agent/wb-cursor-bridge/FastGithubOps.UI/FastGithub)及archived/disabled",
+    "seed": 20261122,
+    "pool_size": 38,
+    "selected": [
+      {"full_name": "jsyzc2019/awesome-finai-tools-zn", "pushed_at": "2026-11-18", "fork": true, "upstream": "lj22503/awesome-finai-tools-zn"},
+      {"full_name": "jsyzc2019/claude-trading-skills-tradermonty", "pushed_at": "2026-11-16", "fork": true, "upstream": "tradermonty/claude-trading-skills"}
+    ],
+    "note": "两个对象均为 fork；本仓框架 KB-STRUCT02 明确 fork_flag 不等于非同源，须查谱系与净贡献，不得因 fork 标签直接贬损或豁免"
+  },
+  "object_types": {
+    "r1": "fork 的金融 AI 工具清单仓（数据目录 + 周更自动化 + Agent Skill 封装），非原创工具实现",
+    "r2": "fork 的大型交易 Skills 工程（2429 文件，含测试矩阵/CI 门禁/自我纠错台账），软件工程制品"
+  },
+  "evidence_access_note": "预注册设计判据前：r1 已读取 README/SKILL/CHANGELOG/周报（判据适配需要）；r2 仅获取文件清单(tree)与少量文件名，未读正文内容。此差异如实披露，r2 判据先于正文深读锁定。",
+  "preregistered_neutral_meta": {
+    "r1": {"fork": true, "created": "2026-10-27", "pushed": "2026-11-18", "size_kb": 1318, "tools_json_count": 55, "badge_claim": "55工具/更新2026-09-21", "latest_weekly": "2026-11-16"},
+    "r2": {"fork": true, "blobs": 2429, "test_files": 571, "has_errata_ledger": true, "has_ci_matrix": true}
+  },
+  "criteria": [
+    {"id":"R1","name":"谱系与净贡献判定","question":"两仓均为 fork：fork 后 jsyzc2019 有无真实净贡献？还是纯镜像？","trigger":"仅凭 fork 标签定罪或豁免→flag；须区分上游继承与下游增量","method":"比对 created_at、parent、README 归属链接、CHANGELOG 记录的具体改动、周报是否为下游新增内容"},
+    {"id":"R2","name":"自动更新机制真实性（r1）","question":"『每周自动更新』是否空转？数据源脚本是否真实存在且被 workflow 调用？","trigger":"workflow 调用的脚本不存在或从未运行→判 vanity；单一检查点不足以定罪","method":"核对 weekly-update.yml 调用链、scripts/ 下脚本存在性、周报文件连续性与内容非空"},
+    {"id":"R3","name":"数据口径自洽（r1）","question":"工具数量声明（badge/README/tools.json/分类表）是否自洽？更新时间戳是否与周报日期冲突？","trigger":"用 h3 计数等非等价口径误判差异→假阳性；须用 tools.json 权威计数","method":"以 tools.json 为准，交叉 badge/分类表/详情；区分工具条目与非工具小节；核对 last_updated 语义"},
+    {"id":"R4","name":"CI 门禁接线与可证伪工程（r2）","question":"r2 的测试矩阵/coverage 分层/drift 门禁是真实接线还是仅有断言无调用点？","trigger":"测试存在≠已执行；门禁 report-only 需诚实标注，不得当作阻断","method":"核对 ci.yml 的 discover→matrix→test→coverage 调用链、ci-test-policy 分层、doc-drift 的 report-only 标注"},
+    {"id":"R5","name":"自我纠错台账可信度（r2）","question":"errata 把『11 PASS』纠正为 2-3 可操作，是否给出根因与证据、可追溯？","trigger":"只改结论不给根因/证据→判不可证伪；须有 D1-D5 根因与逐条证据","method":"读 errata 的根因分类、逐条纠正、证据引用、『勿用旧报告下单』告警"},
+    {"id":"R6","name":"复述/长牙决策与判据自审","question":"本次两仓审计能编译成什么会拦会降级的门禁？判据引擎自身有无 KB-AUDIT01/02 风险？","trigger":"把观察当门禁、或用脆弱字面串/单一检查点→flag","method":"对每条候选经验做具体拦截动作检验；用动作词集合与多维交叉重写检查器"}
+  ],
+  "judge_self_audit": "显式调用 KB-AUDIT01（脆弱字面串→假阴性）与 KB-AUDIT02（单一检查点不足以定罪、先怀疑检查器）；已实际发生一次：r1 脚本『缺失』是部分下载目录造成的假阳性，改用完整 clone 后排除——记入证据。",
+  "honesty_rule": "三层诚实结论：事实真≠结论真；fork/同构≠独立验证或原创；文档自洽≠代码正确；测试存在≠已执行。",
+  "scope_limit": "网络大文件传输不稳，采用 git clone / raw 单线程重试 / tree 元数据三通道；r1 为 shallow clone 单 commit（unshallow 因网络超时失败），无法完整比对 fork 分叉点，据实标注。未实跑两仓脚本构建/测试，结论限于静态证据。"
+}

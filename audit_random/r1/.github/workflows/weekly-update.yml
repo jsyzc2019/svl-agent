@@ -1,0 +1,47 @@
+name: Weekly FinAI Tools Update
+
+on:
+  schedule:
+    # 每周一 09:00 UTC = 北京时间 17:00
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run weekly update script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/update_tools.py
+
+      - name: Regenerate README and llms.txt
+        run: python scripts/generate_readme.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data README.md llms.txt
+          if git diff --cached --quiet; then
+            echo "本次无变更，跳过提交"
+          else
+            git commit -m "chore(data): 周更 FinAI 工具数据 $(date -u +%Y-%m-%d)"
+            git push
+          fi

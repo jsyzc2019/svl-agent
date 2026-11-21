@@ -1,0 +1,73 @@
+{
+  "audit_id": "AUDIT-REAVIDEO-2026-11-22",
+  "source_files": {
+    "article": "article_raw.html (69965b, sha256=32588f8f...)",
+    "primary": ["src_README.md","src_i18n__README_zh.md","src_docs__cli.md","src_eval__RESULTS.md","src_LICENSE"],
+    "primary_channel": "raw.githubusercontent.com/JuneYaooo/rea-video/main/"
+  },
+  "V1_standing": {
+    "author": "fendouai @ CherryQuant（站点定位：量化/AI 工具资讯，文章属项目介绍栏）",
+    "disclosure": "文章末尾给出项目地址与安装命令，有导流成分；但通篇数字均带来源标注且声明非实测",
+    "relation": "未发现作者与项目的利益关联证据（无署名、无赞助声明）；导流属介绍文常规",
+    "judgment": "立场=项目介绍/轻度导流，纳入置信度折价但不据此判假（触发≠真相）"
+  },
+  "V2_factual_claims": [
+    {"claim":"GitHub 项目 JuneYaooo/rea-video 存在","evidence":"raw 通道成功抓到 README/README_zh/cli/RESULTS/LICENSE 五份一手文档","status":"TRUE"},
+    {"claim":"Apache-2.0 许可证","evidence":"src_LICENSE 第1-3行 Apache License Version 2.0","status":"TRUE"},
+    {"claim":"Python 3.10+ 与 FFmpeg 基础依赖","evidence":"README_zh L43 电脑上需要有 ffmpeg 和 Python 3.10 以上","status":"TRUE"},
+    {"claim":"依赖含 OpenCV/NumPy/ONNX Runtime","evidence":"cli.md L11 numpy/opencv/pillow/pyyaml/onnxruntime","status":"TRUE"},
+    {"claim":"命令 rea-video decompose ref.mp4 -o out/ref","evidence":"cli.md L35 逐字一致","status":"TRUE"},
+    {"claim":"带货 46.4% → 63.9% → 97.5%（工具/看图/agent复核）","evidence":"RESULTS.md L97 逐字一致","status":"TRUE"},
+    {"claim":"重测带货 63.2%、影视混剪 15.8%","evidence":"RESULTS.md L156/L158/L163 逐字一致","status":"TRUE"},
+    {"claim":"混合片 19秒/10镜","evidence":"README_zh L89 混合片 · 19 秒 · 10 镜","status":"TRUE"},
+    {"claim":"产品片 70秒/12镜、83%代码动效/12%录屏、Remotion 重建","evidence":"README_zh L103-104 逐字一致","status":"TRUE"},
+    {"claim":"GitHub 约 1.16 万 Star","evidence":"README 仅有动态 shields.io badge，raw 文档无静态数字；匿名 API 限流无法读 stargazers_count","status":"UNVERIFIED"}
+  ],
+  "V3_disclaimer_honesty": {
+    "author_disclaimers": [
+      "来源：官方案例，非本文实测",
+      "比例属于作者对该样片的分析，不代表所有宣传片的构成",
+      "数值和分类以对应报告版本为准",
+      "无法证明原作者使用的就是这段提示词",
+      "这些数字来自不同阶段的小样本实验，部分规则经过样本调优，部分集合还有缺失素材",
+      "不能把最高的一个数字，当成对所有视频的承诺",
+      "没有运行本机测速，也不将作者的示例耗时当成你的电脑速度",
+      "不同内容类型的可靠性差异很大，不能从一个成功案例推到所有视频"
+    ],
+    "primary_counterparts": [
+      "RESULTS.md L9-10: 规则在这批样本上设计 / holdout 已不完全独立",
+      "RESULTS.md L148/L153-154: 缺 3-4 条样本不计入",
+      "RESULTS.md L165-171: 已知局限（实拍仅3条、看图分数未在从头解码重测、暗底细碎图形局限）",
+      "RESULTS.md L58/L101: 转码相关规则看过样本后加、转码误判",
+      "RESULTS.md L170: 只开看图不做agent复核曾在留出集低于只用工具"
+    ],
+    "judgment": "免责逐条可映射到一手文档的自身局限，且与项目自述相比作者额外加了认识论限定（反推提示词≠原提示词）——判诚实信号，非营销盾牌"
+  },
+  "V4_number_scope": {
+    "stages": {
+      "early_daihuo": "46.4% 首遇带货、规则未经调优（RESULTS L97/L113）",
+      "with_vlm": "63.9% 加看图模型",
+      "with_agent": "97.5% agent复核，但 RESULTS L170 注明是缓存答案融合、未在从头解码重测",
+      "reencode_retest": "重测带货 63.2%、影视混剪 15.8%（L156/L158/L163，部分样本缺失）"
+    },
+    "author_extrapolation": "作者主动写『不能把最高的一个数字当成对所有视频的承诺』『不同内容类型可靠性差异大』",
+    "judgment": "转述窄于一手文档（更克制），无越界外推；唯一可议点是 15.8% 属『15%→15.8%微调』的最新值，文章取新值属实但语境略简化"
+  },
+  "V5_isomorphism": {
+    "overlaps": [
+      "工具测量+多模态看图+冲突复核 ≈ 本仓多源证据+来源隔离+外部judge(KB-STRUCT07)",
+      "『报告里的分类应连同证据一起读』≈ 本仓证据阶梯/判据自审",
+      "VIDEO.md 分层给Agent读（概览/时间线/逐镜）≈ 本仓知识可寻址(addressable)",
+      "『反推提示词无法证明原作者用的就是这段』≈ 本仓事实真≠推论有效(KB-R-MS01)",
+      "『转码改变证据，按原文件特征判断会误认』≈ 本仓验证对象=结论对象(KB-AUDIT04)"
+    ],
+    "lineage": "同属AI工程实践共同体，判同谱系印证并打折（KB-STRUCT02），不虚高置信",
+    "genuine_novelty": "『先判断这段该用什么工具/是否值得用视频模型，再投入生成成本』的决策前置——本仓框架偏重验证判断，对工具选型的成本前置较少显式化"
+  },
+  "V6_teeth_candidates": [
+    {"idea":"转码/重编码会改变取证特征，判断前先核对当前对象与取证时对象是否同一版本","gate":"能拦：拿转码后文件套用原文件特征规则→先验证对象=取证对象(KB-AUDIT04)","decision":"已有KB-AUDIT05/04覆盖，加固不新增"},
+    {"idea":"最高准确率数字（97.5%）是缓存融合、未在从头解码重测；引用准确率时须带口径（阶段/样本/是否重测）","gate":"能拦：拿单一最高数字当普遍承诺→须标注口径与适用条件","decision":"长牙候选，与KB-R-MS03(略去条件=选择性呈现)同构，加固"},
+    {"idea":"反推提示词≠原作者提示词：方法描述的『可行』不等于『事实如此』","gate":"能拦：把『能实现的描述』当『原作者所用』→标QUALIFIED","decision":"KB-R-MS01已覆盖，加固"},
+    {"idea":"工具选型前置：先判断这段是否真需要视频模型（83%代码动效用Remotion）再投入生成成本","gate":"能拦：所有镜头一律丢给最贵模型→先做方法分类再选型","decision":"新观察，属领域方法非通用判据，先记观察不硬造门禁"}
+  ]
+}

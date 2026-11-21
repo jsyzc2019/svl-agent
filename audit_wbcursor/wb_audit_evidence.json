@@ -1,0 +1,73 @@
+{
+  "target": "github.com/jsyzc2019/wb-cursor-bridge",
+  "commit": "b1639ad",
+  "version": "0.6.2",
+  "collected_at": "2026-11-21T23:05:00+08:00",
+  "source": "一手：clone 仓库 + 本地实跑 + 源码静态核对",
+  "C1_lineage": {
+    "self_audits": ["AUDIT-REPORT-v0.3.3.md (自评, verify全绿)", "AUDIT-REPORT-A2A-v0.3.3.md (自评, 静态审查)", "AUDIT-PROD-GRADE-A+.md (自评, 已自标失效)"],
+    "self_marked_invalid": true,
+    "self_mark_quote": "A+ 只描述清单完成度，不是生产可用结论；第三方 36 PoC 测出 26 缺陷，该自评不覆盖任何一条",
+    "third_party_audit": "外部审计附 36 可执行 PoC，26 条可复现，4 条可打挂进程",
+    "fix_chain": "CHANGELOG 0.5.0: 26 条全部不复现，21 项改写为反向回归，测试 130→151",
+    "lineage_verdict": "三份自带审计均为实现方自评；其中一份已自我否定并引用第三方 PoC 证据；自评与第三方结论不可混同，同构不等于独立验证"
+  },
+  "C2_claim_vs_code": {
+    "total_src_lines": 8871,
+    "tools_claimed": 9,
+    "tools_runtime_actual": 9,
+    "tools_definition": "src/actions/registry.ts 定义 9 个 action，TOOL_DEFINITIONS 由 toolDefinitions() 生成，运行时实测 length=9",
+    "claims": [
+      {"claim":"白名单 fail-closed","code":"src/util/paths.ts:123 escapes configured roots 拒绝；runner.ts:407 Fail closed 不再把 --force 交 caller","verified":true},
+      {"claim":"execute 隔离在 git worktree","code":"src/a2a/skills.ts:103/137; actions/registry.ts:46; cli.ts buildArgs","verified":true},
+      {"claim":"cursor_run 永不阻塞","code":"actions/registry.ts:44 'This tool never blocks...poll cursor_status'","verified":true},
+      {"claim":"权限策略集中不被 prompt 绕过","code":"cli.ts:89 防 smuggle --force; buildArgs 由 tier 决定参数","verified":true},
+      {"claim":"环境 allowlist 非 host 复制","code":"cli.ts:176 旧版 {...process.env} 泄露 secret 已修","verified":true}
+    ],
+    "counterexample_found": null,
+    "note": "自查一处疑似不一致（tools.ts switch 只 4 case vs README 9 工具），判据自审确认是检查方法错误：switch 只特判需特殊序列化的 4 个，其余走通用路径；真实定义在 registry.ts"
+  },
+  "C3_test_authenticity": {
+    "test_files": 24,
+    "tests_run": 220,
+    "tests_pass": 220,
+    "tests_fail": 0,
+    "duration_sec": 19.5,
+    "negative_tests_sample": [
+      "B0-8 event ring bounded in BYTES not just count",
+      "B1-1 execute on non-git workspace REFUSED not run in place",
+      "B2-4 Agent Card does not disclose absolute host paths",
+      "B2-7 rate limiting per client so one caller cannot starve rest",
+      "unsafePushUrl: private/metadata blocked BUT legitimate public domains NOT falsely blocked",
+      "A2A malformed artifact path returns 400 and does NOT crash"
+    ],
+    "adversarial_suite": {"file":"audit-b0/b1/b2 + fault + hardening","tests":28,"pass":28},
+    "verdict": "测试为可证伪负面测试（含双重断言防过度拦截），非 happy-path 自证；第三方 PoC 已反向改写为回归"
+  },
+  "C4_security_falsifiability": {
+    "argv_injection": "cli.ts:105 注释 prompt '--force' 曾变 flag 的漏洞已修；spawn 不开 shell (CVE-2024-27980) 注释 line 156",
+    "path_whitelist": "paths.ts assertWorkspaceAllowed + symlink escape 检测 (line 123)",
+    "env_allowlist": "B1-8 test: environment is allowlist not host copy; explicit passthrough wins over sensitive filter",
+    "process_tree_kill": "B1-7 test: taskkill exit codes classified; cancel kills whole tree (README)",
+    "private_url_block": "B1-5 CGNAT/IPv4-mapped; unsafePushUrl IPv6 loopback/ULA blocked but public NOT false-blocked",
+    "capability_honesty": "CI 注释: gRPC 不声明就不跑，65 grpc cases skipped 而非假绿",
+    "verdict": "安全声明有对抗测试与代码双重支撑，可证伪性高"
+  },
+  "C5_reproduction": {
+    "node_version": "v22.13.1",
+    "npm_install": "success (200 packages, 6s)",
+    "typecheck": "pass",
+    "lint": "pass (2 warnings, 0 errors: no-explicit-any in cursor/parse.ts)",
+    "build": "pass",
+    "npm_test": "220/220 pass",
+    "ci": "Linux + Windows matrix; npm audit --omit=dev; official A2A TCK pinned commit; Agent Card scan; e2e real-run; reproducible release SHA256 verify; PowerShell parse gate; least-privilege token",
+    "verdict": "完整复现：install→typecheck→lint→build→test 全通过，CI 覆盖全面且有多道治理门禁"
+  },
+  "C6_absorption_candidates": [
+    {"idea":"自带审计自标失效 + 第三方 PoC 反向改写回归","gate_test":"能否指出具体被拦动作：自评被提升为结论时降级为快照 → 是，可编译为谱系门禁","decision":"长牙候选"},
+    {"idea":"capability honesty: 未声明能力不跑测试凑绿","gate_test":"能否拦：声称能力但无验证契约 → flag over-claim → 是","decision":"长牙候选"},
+    {"idea":"负面对抗测试含双重断言（block bad AND allow good）","gate_test":"能否拦：只测拦截不测误杀 → flag 测试不充分 → 是","decision":"长牙候选"},
+    {"idea":"release SHA256 可复现构建校验","gate_test":"能否拦：构建不可复现 → flag → 是但本仓已有类似机制","decision":"观察（不重复造）"},
+    {"idea":"CI least-privilege token","gate_test":"本仓无 CI token 写入场景","decision":"观察（不适用）"}
+  ]
+}

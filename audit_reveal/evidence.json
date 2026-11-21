@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "target": "ReVeal: Self-Evolving Code Agents via Reliable Self-Verification (ICLR 2026, arXiv 2506.11442v2)",
+  "evidence_locked_at": "2026-11-22T01:32:00+08:00",
+  "sources": {
+    "paper_pdf": "paper.pdf (2.8MB, 19页, %%EOF完整, v2 21 Oct 2025)",
+    "paper_text": "paper.txt (1053行)",
+    "arxiv_abs": "arxiv_abs.html (Submitted 13 Jun 2025, last revised 21 Oct 2025 v2; cs.SE; cs.LG)",
+    "openreview": "openreview.html (反爬拦截页, 仅作录用旁证, ICLR poster id=10007284 已确认)",
+    "project_page": "WebFetch shimly-2.github.io/ReVeal.github.io (确认 accepted by ICLR 2026, 代码 github.com/Shimly-2/ReVeal)",
+    "repo": "repo/ (git clone --depth=1, 289文件, 7.0MB), README MIT license, News: 2026/03/01 full code released",
+    "sha256_locks": ["paper.pdf", "paper.txt", "arxiv_abs.html", "openreview.html 见 source.sha256", "prereg.json 见 prereg.sha256"]
+  },
+
+  "V1_claim_vs_code": {
+    "verdict": "IMPLEMENTED",
+    "claims": [
+      {
+        "claim": "交替生成-验证循环, 单策略兼任生成与验证",
+        "code": "llm_agent/generation.py:_execute_tool_calls + generate_sequences 多轮循环; run_reveal.sh max_turns=3",
+        "status": "IMPLEMENTED"
+      },
+      {
+        "claim": "Golden Filter: 训练时测试须经golden验证才执行",
+        "code": "run_reveal.sh:tool.filter_tc_by_goldencode=True; generation.py:175 if self.filter_tc_by_goldencode → coderun(golden_code,test_case); config ppo_trainer.yaml:435 filter_tc_by_goldencode:True",
+        "status": "IMPLEMENTED"
+      },
+      {
+        "claim": "三项reward: outcome(含format)/generation/verification",
+        "code": "run_reveal.sh:107 reward_type=['outcome','format','generation','verification']; code_judge.py:151-160 experiment_type=+outcome 分支累加; gen_scores/ver_scores 逐轮计算",
+        "status": "IMPLEMENTED",
+        "note": "论文把format并入outcome(公式1 routcome=rformat+rpassrate),代码列为独立format项——口径拆分不同但语义一致,非漂移"
+      },
+      {
+        "claim": "TAPO turn-aware return 替代GAE, 防reward gaming",
+        "code": "core_algos.py:210 compute_mc_advantage_return: gen_returns=r_turn+gamma_turn*lam*last_turn; ver_returns=r_turn+last_turn(不折前轮) —— 逐字对应论文公式(6)(7)(8); run_reveal.sh:42 adv_estimator=turn_level_gae, :105 gamma_turn=0.0, :104 use_turn_level_value=False",
+        "status": "IMPLEMENTED",
+        "note": "论文称算法TAPO,代码命名turn_level_gae(注释options: gae/turn_level_gae);机制对应,命名差异非漂移"
+      },
+      {
+        "claim": "超参 abs=0, imp=1",
+        "code": "run_reveal.sh:44-45 absolute_weight=0.0 improve_weight=1.0; code_judge.py:33 默认值一致; 论文line 246 'We set abs=0, imp=1'",
+        "status": "IMPLEMENTED",
+        "note": "与SKILLMASTER的alpha漂移不同,本次论文-代码超参完全一致"
+      }
+    ],
+    "reproducibility_gap": "训练脚本 code_train_path/code_test_path 为占位符(path_to_train_data);README无数据下载链接,需自行跑taco_filter.py从TACO(26443题)过滤出11151训练题;推理侧20+轮scaling脚本未完整公开(main_eval.py仅verl通用离线评估器)。代码公开≠数据/推理脚本完整。"
+  },
+
+  "V2_number_consistency": {
+    "verdict": "CONSISTENT",
+    "recomputations": [
+      {"item": "LCB ReVeal×25 38.7 − Single-turn RL 32.8", "value": 5.9, "report": "wide margin", "ok": true},
+      {"item": "同轮数消融×8: TAPO 37.7 − outcome 36.1", "value": 1.6, "report": "TAPO更优", "ok": true, "note": "口径对等的公平比较"},
+      {"item": "Fig1 Pass@1 turn1 34.8→turn25 38.7", "value": 3.9, "report": "渐进提升", "ok": true},
+      {"item": "Table8 8次运行 t=(38.02−37.09)/sqrt(0.33²/8+0.31²/8)", "value": 5.81, "report": "statistically significant", "ok": true, "note": "std=0.31偏小,可能固定评估集,诚实标注"},
+      {"item": "CodeContests 33.6−21.0", "value": 12.6, "ok": true}
+    ],
+    "caliber_cautions": [
+      "主表ReVeal×25 vs 消融×8轮数不等(25 vs 8),不得把38.7−36.1=2.6pp全归给TAPO;同轮数比较应用×8:37.7−36.1=1.6pp",
+      "∆↑/∆↓为作者自定义指标(初始错→对比例 / 初始对→错比例),非标准Pass@1",
+      "CTRL基线引用自LCB 24.08-24.11旧版(非V6),作者以Table7 V5对比部分缓解"
+    ]
+  },
+
+  "V3_self_verification_reliability_subject": {
+    "verdict": "PARTIAL",
+    "train_vs_test_signal_source": {
+      "train": "r_ver = 在golden code上通过的测试比例(论文公式3); golden filter保证反馈合法; verification reward依赖金标",
+      "test": "无golden,所有测试执行,验证完全自主(论文line206-207); 对模型自造测试质量提出强需求",
+      "honest_disclosure": "作者明确写出该差异并承认对测试质量要求高——诚实信号,非隐瞒"
+    },
+    "anti_hacking": "TAPO turn-level return设计: generation reward只按代码质量,verification reward严格限本轮——论文line287-292明确防'生成trivial code骗验证奖励'; 代码core_algos.py gen/ver分支对应",
+    "key_caveat": "训练时'可靠验证'信号来自golden,推理时无golden;'训练出的验证能力可迁移到无金标推理'是迁移假设,须靠推理时独立证据支撑。作者用∆↓≈0(错误修正不降级)作为可靠性证据,但(见V4)该指标在Qwen backbone上outcome-only也为0.0,不全是显式验证优化之功劳。",
+    "judgment": "主体在训练/测试两阶段用了不同信号源(golden vs 自主),但作者充分披露且有prompt-only对照;判PARTIAL(有诚实边界与反例),不判SUBJECT_SHIFT(非隐瞒偷换)"
+  },
+
+  "V4_ablation_attribution": {
+    "verdict": "PARTIAL",
+    "ablation_table": "Table1消融区: ReVeal×8 w/ outcome reward 36.1/∆↑4.69/∆↓1.32 vs ReVeal×8 w/ TAPO+joint 37.7/∆↑5.62/∆↓0.0(同轮数,口径对等)",
+    "confound_controls": [
+      {"control": "prompt-only ReVeal(同工具同prompt无RL训练)", "result": "Table9: ×6仅27.4/∆↓1.31 vs 训练后38.0/∆↓0.0", "effect": "排除'仅工具+提示'混杂,支持显式优化有效"},
+      {"control": "另backbone Qwen2.5-32B-Instruct", "result": "Table7: ReVeal×6 38.0 vs single-turn RL 33.9(+4.1)", "effect": "跨模型有效性"},
+      {"control": "8次运行mean±std", "result": "Table8: 38.02±0.31 vs 37.09±0.33", "effect": "统计显著"}
+    ],
+    "gaps": [
+      "未单独消融verification reward本身(联合reward整体移除,非只去verification),故'验证奖励独立贡献'未隔离",
+      "Table7反例: Qwen backbone上outcome-only的∆↓也=0.0 → ∆↓=0非TAPO独有,可能是backbone属性;主表DAPO上的∆↓差异(1.32→0.0)才是TAPO增量的较干净证据但仅单一backbone",
+      "主表×25(38.7)与消融×8(37.7)轮数不同,最强数字来自最深轮数而非隔离机制"
+    ]
+  },
+
+  "V5_baseline_independence_and_contamination": {
+    "verdict": "MIXED",
+    "facts": [
+      {"item": "base/DAPO数字", "status": "自跑或官方发布模型直接评估(HF链接明确)"},
+      {"item": "CTRL/w-critic基线", "status": "引用自Xie et al.2025原论文,且LCB版本24.08-24.11非V6——引用基线,非独立重跑"},
+      {"item": "backbone公平性", "status": "ReVeal基于DAPO-Qwen-32B,single-turn RL同backbone——公平;但critics用Qwen2.5-Coder/GPT-4o不同backbone,非严格同条件"},
+      {"item": "LiveCodeBench V6(2025.02-05) vs 训练TACO", "status": "训练集TACO来自LeetCode/Codeforces historic题,LCB V6为2025.02-05新题;作者未报告去污染检查,但时间段上训练数据早于测试窗口,污染风险较低(未独立验证)"},
+      {"item": "Pass@k'扩展推理边界'", "status": "Figure1(b)显示ReVeal在k=1..128全程高于base与RL基线;报告max 10 turns/例。属实测曲线,非自证结论"}
+    ],
+    "note": "基线混合(部分引用/部分自跑),按KB-STRUCT07评估者独立性须降级看待引用基线;未发现明显数据污染证据也无去污染声明"
+  },
+
+  "V6_reproducibility": {
+    "verdict": "PARTIAL",
+    "facts": [
+      "MIT license, 2026/03/01 full code released(非匿名版,代码完整度高)",
+      "训练代码/框架(verl)与run_reveal.sh公开,超参表Table2/3详尽",
+      "TAPO实现(core_algos.py compute_mc_advantage_return)、golden filter(generation.py)、reward(code_judge.py)均可见",
+      "训练数据需自行从TACO过滤(脚本taco_filter.py在),无现成11,151题数据包;测试集509题未单独发布",
+      "推理侧20+轮scaling脚本未完整公开;main_eval.py是verl通用离线评估器,非专用推理实现",
+      "检查点/模型权重未在项目页提供"
+    ]
+  },
+
+  "V7_isomorphism_and_teeth": {
+    "verdict": "OBSERVE_ONLY",
+    "isomorphisms": [
+      "验证-生成不对称(V-G gap) ≈ SVL'判断环境/会拦判决'——同谱系",
+      "TAPO防reward gaming(gen reward不按验证成功给) ≈ KB-META01'复述不算长牙/判据自审'",
+      "Golden filter(训练用金标验证反馈质量) ≈ KB-STRUCT07来源隔离/评估者独立",
+      "prompt-only对照排除工具混杂 ≈ KB-AUDIT04验证对象=结论对象",
+      "训练3轮推理20+轮的迁移假设 ≈ KB-SIM02分阶段主体错位(本次活跃)"
+    ],
+    "discount": "5处同构,同属AI自我改进/RLVR谱系,按KB-STRUCT02判同谱系印证并打折,不因'英雄所见略同'虚高置信",
+    "genuine_novelty": "TAPO把'reward只给对应角色轮'做成防hacking的credit assignment,是一种可编译的'判据隔离'机制(生成好坏不因验证成功而加分),本仓框架较少显式化此'奖励通道隔离'形态——但已被KB-META01/KB-STRUCT07的概念覆盖,按vanity门禁不新增独立条目,记观察"
+  },
+
+  "judge_self_audit": {
+    "checks": [
+      {"rule": "KB-AUDIT01脆弱字面串", "result": "引擎用语义/动作词判定,未用脆弱字面串"},
+      {"rule": "KB-AUDIT02单点定罪", "result": "∆↓=0反例与3处口径差异均标minor,未单点定罪"},
+      {"rule": "KB-AUDIT04口径对等", "result": "主动标注×25 vs ×8轮数不等,改用同轮数消融比较"},
+      {"rule": "KB-R-MS01事实真≠结论真", "result": "数字全对仍独立判归因(∆↓=0不全是TAPO功劳)"},
+      {"rule": "KB-SIM02分阶段主体", "result": "训练golden/测试自主的信号源差异主动核查并披露"}
+    ],
+    "all_passed": true
+  }
+}

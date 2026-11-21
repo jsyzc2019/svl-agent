@@ -1,0 +1,110 @@
+"""生成元学习闭环泛化落地结果（JSON + dark-theme HTML），预注册分离，后验不伪装。"""
+import json
+
+from svagent.task_retrospective import live_regression
+
+live = live_regression()
+
+result = {
+    "task": "元学习闭环泛化：从所有既定任务本身与完成过程汲取知识",
+    "user_intent": "完成既定任务时，也要从任务本身和完成过程汲取有利于我的知识，进而提升本仓认知和能力",
+    "prereg": "meta_loop_prereg.json",
+    "prereg_sha256": open("meta_loop_prereg.sha256").read().split()[0],
+    "increment": [
+        {"dim": "触发泛化", "from": "审读外部对象才复盘", "to": "所有既定任务（含工程/推送/修bug）收尾都触发"},
+        {"dim": "双知识源", "from": "只从任务结论学", "to": "task_content + process（弯路/判据自咬/工具失败/修正）分别声明"},
+        {"dim": "目的约束", "from": "为进化而进化", "to": "须有利于用户 + 可证伪 + 非复述"},
+    ],
+    "why_not_vanity": "已有 KB-R06/R08/SIM05/META01 与 autopoiesis.MetaLearner 都在审读/借鉴/封闭实验语境；本轮增量是触发泛化+双源+目的约束，且编译成会拦会判会降级的 task_retrospective 门禁——通过 KB-META01 的 vanity 测试",
+    "gate": {
+        "module": "svagent/task_retrospective.py",
+        "tests": "tests/test_task_retrospective.py（14 项）",
+        "rules": [
+            "G3 复述冒充 → block/vanity（KB-META01）",
+            "G4 无用户价值 → flag/observe",
+            "G1 仅 task_content 单源 → downgrade/observe（process 单源有意放行：用户核心增量）",
+            "G2 无 predicted↔observed → downgrade/observe（KB-SIM05）",
+            "G5 失败未记 → downgrade/observe（KB-SIM05）",
+            "PASS 双源+可证伪+利用户+非复述 → ok/fix，可入库/强固",
+        ],
+        "self_bite": "写活体样例时误把单 task_content 源设为 ok，被 G1 正确降级——判据自咬；如实修正为双源，并把'自咬被记录'写进 predicted↔observed，成为活体样例本身。这是 process 源的真实知识。",
+    },
+    "live": live,
+    "kb_decision": {
+        "new_items": 1, "new_id": "KB-META02", "items_total": 101,
+        "ready": True, "vanity": 0.04,
+        "reinforced_support": ["KB-META01", "KB-R06", "KB-R08", "KB-SIM05"],
+        "reason": "触发泛化是真新认知且已编译成门禁通过 vanity 测试，非复述；addressable=True",
+    },
+    "workflow_norm": "§53 的『审读三段式』升级为所有任务通用的元学习闭环：任一任务收尾默认过一遍 task_retrospective 裁决——从任务本身和完成过程各汲取一条，能编译成动作则强固，复述则拦截，单源/不可证伪则降级为观察。",
+    "verification": {"new_tests": 14, "total_tests": 330, "all_live_passed": live["all_passed"],
+                     "prereg_locked_before_impl": True, "backward_compatible": True},
+    "honesty": [
+        "本轮『知识』来自我自己完成任务的过程，非用户明确提供的外部事实，不伪装成用户教授的知识",
+        "process 源自证风险高（自己说自己学到了），故强制 predicted↔observed 与用户价值门防自欺",
+        "元学习闭环是工作流纪律，不等于本仓已具备自主意识",
+        "同构打折（KB-STRUCT02）：本条为工作流原则，不宣称被任何外部论文验证",
+    ],
+}
+
+json.dump(result, open("meta_loop_result.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+
+def esc(s):
+    return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+inc_rows = "".join(
+    "<tr><td>" + esc(x["dim"]) + "</td><td>" + esc(x["from"]) + "</td><td class='ok'>" + esc(x["to"]) + "</td></tr>"
+    for x in result["increment"]
+)
+rule_rows = "".join("<li>" + esc(r) + "</li>" for r in result["gate"]["rules"])
+live_rows = "".join(
+    "<tr><td>" + esc(k) + "</td><td>" + esc(v["action"]) + "</td><td>" + esc(v["code"]) + "</td><td>" + esc(v["classified_as"]) + "</td></tr>"
+    for k, v in live.items() if isinstance(v, dict)
+)
+pills = "".join("<span class='pill'>" + esc(x) + "</span>" for x in result["kb_decision"]["reinforced_support"])
+honest = "".join("<li>" + esc(h) + "</li>" for h in result["honesty"])
+
+html = """<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>元学习闭环泛化 · SVL</title><style>
+:root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--fg:#e6edf3;--mut:#8b949e;--acc:#58a6ff;--ok:#3fb950;--warn:#d29922;--blk:#f85149}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 -apple-system,"PingFang SC",Segoe UI,sans-serif;padding:40px max(24px,calc((100% - 1020px)/2))}
+h1{font-size:26px;color:var(--acc);margin-bottom:6px}h2{font-size:19px;margin-top:34px;border-bottom:1px solid var(--border);padding-bottom:8px;color:var(--acc)}
+.lead{color:var(--mut)}table{width:100%;border-collapse:collapse;margin:16px 0}th,td{border:1px solid var(--border);padding:9px 12px;text-align:left;font-size:14px}th{background:var(--panel);color:var(--acc)}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:14px 0}.ok{color:var(--ok)}.warn{color:var(--warn)}.blk{color:var(--blk)}
+.pill{display:inline-block;background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 12px;margin:3px;font-size:13px}
+.quote{border-left:3px solid var(--acc);padding:8px 16px;color:var(--fg);background:var(--panel);margin:12px 0}
+.foot{color:var(--mut);font-size:13px;margin-top:34px;border-top:1px solid var(--border);padding-top:14px}
+ul{padding-left:22px}li{margin:5px 0}
+</style></head><body>
+<h1>元学习闭环泛化：从所有任务汲取知识</h1>
+<p class="lead">用户想法固化 · 双源复盘门禁 · 与认知域协同 · 预注册实现前 SHA256 锁存</p>
+<div class="quote">“__INTENT__”</div>
+<h2>一、相对已有能力的真实增量（为何不是 vanity 重述）</h2>
+<table><tr><th>维度</th><th>已有</th><th>本轮增量</th></tr>__INC__</table>
+<p class="lead">__WHY__</p>
+<h2>二、编译成的门禁：task_retrospective.py</h2>
+<div class="card"><ul>__RULES__</ul></div>
+<div class="card"><b class="warn">判据自咬实录：</b>__BITE__</div>
+<h2>三、活体回归（§53 真实任务复盘）</h2>
+<table><tr><th>样例</th><th>action</th><th>code</th><th>classified_as</th></tr>__LIVE__</table>
+<h2>四、认知域协同：新增 KB-META02 + 加固指针</h2>
+<p>知识库 100 → <b>101 条</b>，ready=True，vanity 0.04 持平（不升反稳）。新增 <b>KB-META02</b>（触发泛化+双源+目的约束，addressable=True，指向新门禁）；加固：</p>
+<p>__PILLS__</p>
+<h2>五、工作流规范升级</h2>
+<div class="card">__NORM__</div>
+<h2>六、验证与诚实边界</h2>
+<ul><li>新增 __NEW__ 项测试，全量 __TOTAL__ passed，向后兼容；预注册实现前锁存，后验分离。</li>__HONEST__</ul>
+<p class="foot">预注册 __PREG__ · 后验 meta_loop_result.json 分离，不伪装。生成：build_meta_loop_result.py</p>
+</body></html>"""
+html = (html.replace("__INTENT__", esc(result["user_intent"]))
+        .replace("__INC__", inc_rows).replace("__WHY__", esc(result["why_not_vanity"]))
+        .replace("__RULES__", rule_rows).replace("__BITE__", esc(result["gate"]["self_bite"]))
+        .replace("__LIVE__", live_rows).replace("__PILLS__", pills)
+        .replace("__NORM__", esc(result["workflow_norm"]))
+        .replace("__NEW__", str(result["verification"]["new_tests"]))
+        .replace("__TOTAL__", str(result["verification"]["total_tests"]))
+        .replace("__HONEST__", honest)
+        .replace("__PREG__", esc(result["prereg_sha256"][:16]) + "…"))
+open("meta_loop_report.html", "w", encoding="utf-8").write(html)
+print("JSON 顶层字段:", len(json.load(open("meta_loop_result.json"))))
+print("HTML 闭合:", html.rstrip().endswith("</html>"), "| 增量行:", html.count("<td class='ok'>"), "| live 行:", html.count("RETRO."))

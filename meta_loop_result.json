@@ -1,0 +1,88 @@
+{
+  "task": "元学习闭环泛化：从所有既定任务本身与完成过程汲取知识",
+  "user_intent": "完成既定任务时，也要从任务本身和完成过程汲取有利于我的知识，进而提升本仓认知和能力",
+  "prereg": "meta_loop_prereg.json",
+  "prereg_sha256": "a2e65f86bf4a8647e2d0ee70afe2e1dd342429941caafe1675a1bc7c9dffcf47",
+  "increment": [
+    {
+      "dim": "触发泛化",
+      "from": "审读外部对象才复盘",
+      "to": "所有既定任务（含工程/推送/修bug）收尾都触发"
+    },
+    {
+      "dim": "双知识源",
+      "from": "只从任务结论学",
+      "to": "task_content + process（弯路/判据自咬/工具失败/修正）分别声明"
+    },
+    {
+      "dim": "目的约束",
+      "from": "为进化而进化",
+      "to": "须有利于用户 + 可证伪 + 非复述"
+    }
+  ],
+  "why_not_vanity": "已有 KB-R06/R08/SIM05/META01 与 autopoiesis.MetaLearner 都在审读/借鉴/封闭实验语境；本轮增量是触发泛化+双源+目的约束，且编译成会拦会判会降级的 task_retrospective 门禁——通过 KB-META01 的 vanity 测试",
+  "gate": {
+    "module": "svagent/task_retrospective.py",
+    "tests": "tests/test_task_retrospective.py（14 项）",
+    "rules": [
+      "G3 复述冒充 → block/vanity（KB-META01）",
+      "G4 无用户价值 → flag/observe",
+      "G1 仅 task_content 单源 → downgrade/observe（process 单源有意放行：用户核心增量）",
+      "G2 无 predicted↔observed → downgrade/observe（KB-SIM05）",
+      "G5 失败未记 → downgrade/observe（KB-SIM05）",
+      "PASS 双源+可证伪+利用户+非复述 → ok/fix，可入库/强固"
+    ],
+    "self_bite": "写活体样例时误把单 task_content 源设为 ok，被 G1 正确降级——判据自咬；如实修正为双源，并把'自咬被记录'写进 predicted↔observed，成为活体样例本身。这是 process 源的真实知识。"
+  },
+  "live": {
+    "dual_source": {
+      "action": "ok",
+      "code": "RETRO.OK",
+      "classified_as": "fix"
+    },
+    "process": {
+      "action": "ok",
+      "code": "RETRO.OK",
+      "classified_as": "fix"
+    },
+    "restatement": {
+      "action": "block",
+      "code": "RETRO.RESTATEMENT",
+      "classified_as": "vanity"
+    },
+    "single_source": {
+      "action": "downgrade",
+      "code": "RETRO.SINGLE_SOURCE",
+      "classified_as": "observe"
+    },
+    "all_passed": true
+  },
+  "kb_decision": {
+    "new_items": 1,
+    "new_id": "KB-META02",
+    "items_total": 101,
+    "ready": true,
+    "vanity": 0.04,
+    "reinforced_support": [
+      "KB-META01",
+      "KB-R06",
+      "KB-R08",
+      "KB-SIM05"
+    ],
+    "reason": "触发泛化是真新认知且已编译成门禁通过 vanity 测试，非复述；addressable=True"
+  },
+  "workflow_norm": "§53 的『审读三段式』升级为所有任务通用的元学习闭环：任一任务收尾默认过一遍 task_retrospective 裁决——从任务本身和完成过程各汲取一条，能编译成动作则强固，复述则拦截，单源/不可证伪则降级为观察。",
+  "verification": {
+    "new_tests": 14,
+    "total_tests": 330,
+    "all_live_passed": true,
+    "prereg_locked_before_impl": true,
+    "backward_compatible": true
+  },
+  "honesty": [
+    "本轮『知识』来自我自己完成任务的过程，非用户明确提供的外部事实，不伪装成用户教授的知识",
+    "process 源自证风险高（自己说自己学到了），故强制 predicted↔observed 与用户价值门防自欺",
+    "元学习闭环是工作流纪律，不等于本仓已具备自主意识",
+    "同构打折（KB-STRUCT02）：本条为工作流原则，不宣称被任何外部论文验证"
+  ]
+}

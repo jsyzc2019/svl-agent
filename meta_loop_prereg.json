@@ -1,0 +1,50 @@
+{
+  "task": "元学习闭环泛化：从所有既定任务本身与完成过程汲取知识，提升本仓认知与能力",
+  "date": "2026-11-22",
+  "user_intent": "完成既定任务时，也要从任务本身和完成过程汲取有利于用户的知识，进而提升本仓认知和能力",
+  "object_type": "工作流元原则（非审读、非代码借鉴）——把元学习触发从『审读外部对象』泛化到『所有既定任务』",
+  "increment_vs_existing": {
+    "KB-R06": "已有『复盘针对框架非研究对象』，但未规定复盘触发覆盖所有任务、也未区分双知识源",
+    "KB-R08": "已有 fix/vanity/preserve 三分，但未绑定到任务完成时的强制复盘动作",
+    "KB-SIM05": "已有 predicted↔observed 三要素，但针对改进记录，不针对任务过程本身",
+    "KB-META01": "已有『复述vs长牙』，但针对借鉴外部方法，未针对『从自己完成任务的过程汲取』",
+    "autopoiesis.MetaLearner": "已有封闭实验里按 accept/reject 调策略权重，但非真实任务复盘工作流、无双源、无三分",
+    "true_increment": [
+      "触发泛化：所有既定任务（含工程/推送/修bug）收尾都触发元学习，不只审读",
+      "双知识源：task_content（任务本身结论）+ process（弯路/判据自咬/工具失败/修正）须分别显式声明",
+      "目的约束：汲取须『有利于用户』且可证伪、非复述——否则降级/拦截"
+    ],
+    "vanity_test": "若只能写成一条『要反思』的原则、编译不出会拦/会判/会降级的动作，则判为 vanity 不新增；本轮通过编译任务复盘门禁证明非 vanity"
+  },
+  "planned_capability": {
+    "module": "svagent/task_retrospective.py",
+    "core": "retrospect(chi) -> RetroVerdict：一次任务收尾的双源复盘裁决",
+    "rules_locked": [
+      "G1 双源缺失：只声明 task_content、process 源空缺 → downgrade（过程也是知识源，不得只从结论学）",
+      "G2 不可证伪：候选无 predicted↔observed → downgrade（KB-SIM05，不给强结论）",
+      "G3 复述冒充：判定为 restatement 却声称认知提升 → block（KB-META01）",
+      "G4 无用户价值：benefits_user 为假 → flag（汲取须有利于用户）",
+      "G5 回归未记：process 有失败/回滚但未记录 → downgrade（失败尝试也要留，KB-SIM05）",
+      "PASS：双源齐全 + 可证伪 + 非复述 + 有利于用户 → ok，知识候选可入库/强固"
+    ],
+    "live_cases": [
+      "§53 真实任务：task_content=借 SWE-Gym 五类工程纪律编译 C1/C2/C3（有 predicted↔observed），process=构建脚本键名前导空格致 KeyError→修复、判据自咬修正 → 双源齐全 + 可证伪 → ok",
+      "反例A：只有任务结论、process 空 → downgrade",
+      "反例B：声称『学到了要反思』但无 predicted/observed → block（复述冒充）"
+    ]
+  },
+  "kb_decision_rule": "新增 1 条 KB-META02（元学习触发泛化+双源+目的约束，addressable=True），并把其 support 指向新门禁；加固 KB-META01/KB-R06/KB-R08/KB-SIM05 各一条指针。理由：这是真的新认知（触发泛化），且已编译成门禁通过 vanity 测试，非复述",
+  "acceptance_criteria": [
+    "task_retrospective 为纯函数/数据类，登记 __init__.py 惰性导入",
+    "五条规则 G1-G5 各有断言，活体三样例命中预期",
+    "知识库 100→101 条，ready=True，vanity 不升反降或持平（≤0.04）",
+    "全量测试通过且向后兼容（原316不回归）",
+    "预注册实现前 SHA256 锁存，后验结果分离",
+    "同构打折：本条是工作流原则，不宣称被任何外部论文验证"
+  ],
+  "honesty_boundaries": [
+    "本轮『知识』来自我自己完成任务的过程，非用户明确提供的外部事实——不得伪装成用户教授的知识",
+    "process 源可能自证（自己说自己学到了），故强制 predicted↔observed 与用户价值门，防自欺",
+    "元学习闭环是工作流纪律，不等于本仓已具备自主意识"
+  ]
+}

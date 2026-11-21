@@ -1,0 +1,85 @@
+{
+  "audit_id": "AUDIT-SKILLMASTER-2026-11-22",
+  "sources": {
+    "paper_pdf": "paper.pdf 4109251b 24p complete(%%EOF) sha256=9c87bb2f...",
+    "paper_text": "paper.txt 86855b sha256=c471bdcf...",
+    "arxiv_abs": "arxiv_abs.html 44377b (v1 2026-05-09, v3 2026-09-30)",
+    "repo": "github.com/sduyangmin/Skill-Master (4 stars, size 45MB, pushed 2026-09-30); clone/zip 因网络超时失败, raw 抓到 README/setup.py/pyproject/LICENSE + 训练脚本(见 code_evidence)"
+  },
+  "S1_claim_vs_code": {
+    "claims": [
+      {"claim":"Trajectory-informed skill review: propose_skill/update_skill/keep_skill 三个工具调用","code_status":"IMPLEMENTED","evidence":"run_alfworld_skill_tool_rollout.sh: +env.skill_tool_rollout.enable=True, mutate_on_train=True, mutate_on_validation=True, apply_on_validation=True, autosave=True; skill_tool_config_path 指向 skill_bank_tool_config.yaml"},
+      {"claim":"Counterfactual Skill Utility Reward: probe 上 B vs B' 对比, K=4, 方向一致性项, Rutility>0 才提交","code_status":"IMPLEMENTED_WITH_DRIFT","evidence":"脚本: +env.skill_tool_rollout.utility_reward.enable=True, same_probe_k=4, same_delta_win_loss_gamma=0.2, alfworld_probe_gamefiles_path=..., apply_on_validation=False(评估时无utility反馈,与论文§2.1一致); 漂移: 论文正文/附录C写 alpha=0.3(paper.txt L376/L739), 代码 same_delta_win_loss_gamma=0.2 —— 方向一致性系数论文0.3 vs 代码0.2, minor口径漂移"},
+      {"claim":"DualAdv-GRPO: action/skill 双流优势归一化 + gamma 合并","code_status":"IMPLEMENTED","evidence":"脚本: algorithm.adv_estimator=grpo, +env.skill_tool_rollout.skill_mgmt_advantage_weight=0.2(skill优势权重gamma), actor.use_kl_loss=True kl_loss_coef=0.01, lr=1e-6, env.rollout.n=8 —— 与论文§3实现细节一致"}
+    ],
+    "repo_nature": "基于 verl(字节跳动 Volcano Engine RL 框架)定制, setup.py 版权 Bytedance, project name=verl; 训练脚本在 examples/grpo_trainer/ 真实存在且参数详尽; 从空库启动时若 skill_bank_path 不存在则 cp base_skill_bank, 与论文初始库设置一致",
+    "reproducibility_gap": "README 明确: anonymous release 不含 full training datasets / processed SFT datasets / SFT checkpoints / RL checkpoints, 称录用后发布 —— 关键复现资源未公开; 训练需自设 MODEL_PATH 到 SFT checkpoint",
+    "verdict": "三大核心设计全部有代码实体且接线(非仅README声称), claim-vs-code 总体一致; 1处 minor 系数漂移(α 0.3 vs 0.2); 复现资源未公开是主要缺口"
+  },
+  "S2_number_consistency": {
+    "table1_alfworld": {
+      "skillmaster_families": [100,100,100,97.1,95.7,100],
+      "reported_all": 98.7,
+      "simple_mean": 98.8,
+      "diff": 0.1,
+      "verdict": "minor: All 非六族简单平均(疑加权/四舍五入), 方向一致"
+    },
+    "table2_searchqa": {
+      "skillmaster": [49.1,62.9,47.0,45.6,41.6,20.5,70.7],
+      "skillrl": [45.9,63.3,45.9,43.2,40.3,20.2,73.8],
+      "reported_overall_sm": 48.0, "simple_mean_sm": 48.2, "diff_sm": 0.2,
+      "reported_overall_sr": 47.1, "simple_mean_sr": 47.5, "diff_sr": 0.4,
+      "sm_minus_sr_reported": 0.9,
+      "improved_count": 5, "declined_count": 2,
+      "verdict": "minor: Overall 聚合口径未在论文说明(疑按样本量加权), 两方法同向; 正文'5/7提升、超0.9pp'与逐项复算一致"
+    },
+    "table4_ablation_arithmetic": {
+      "sft_grpo_vs_skillmaster_alfworld": "98.7-92.2=6.5 与正文一致",
+      "sft_grpo_vs_skillmaster_webshop": "82.0-75.8=6.2 与正文一致",
+      "review_only_gain": "78.4-77.6=0.8, 66.9-66.1=0.8 与正文一致",
+      "verdict": "自洽"
+    },
+    "table8_repeated_runs": {
+      "alfworld_all": "98.7 ± 0.4", "webshop_score": "95.0 ± 1.0", "webshop_succ": "82.0 ± 0.8", "searchqa": "48.0 ± 0.1",
+      "verdict": "mean 与主表完全一致; std 极小, 强可复现信号但评估集固定/解码确定性可能, 论文未说明"
+    },
+    "self_reported": true
+  },
+  "S3_ablation_causality": {
+    "table3_overhead": "+3.87min/step(+31.9% wall-clock), peak GPU 61.29→70.49GiB —— 诚实披露开销",
+    "table4_necessity": "review-only 仅+0.8pp(排除'多一轮复盘'), SFT+GRPO vs SKILLMASTER 差6.5/6.2pp(排除冷启动SFT) —— 排除两个替代解释, 设计正确",
+    "table5_robustness": "初始库 100/50/25/0% 时 SKILLRL 89.9/84.6/78.8/74.8 vs SKILLMASTER 98.7/94.1/92.5/89.4 —— 排除'继承强初始库'",
+    "gap": "没有单独消融'反事实效用奖励'本身: Table4 的 review-only 去掉的是整个 skill management, 而非只去掉 counterfactual probe。核心设计 Rutility 的独立贡献未被隔离",
+    "verdict": "归因强度: skill-management 整体有效=因果级(有控制); 反事实效用单独贡献=相关级(未单独消融)"
+  },
+  "S4_baseline_fairness": {
+    "fair_protocol_claims": "Appendix J: 同 backbone Qwen2.5-7B-Instruct, 同初始技能集, 同 rollout 预算, 同 top-K 检索, 同 test-time 条件",
+    "baseline_source": "Table2 注明基线结果 taken from Xia et al. 2026; Appendix J 说 SKILLRL/RLOO/GRPO/ReAct/Reflexion 数字 reproduced from prior work —— 主要基线非作者独立重跑",
+    "independence": "self-reported + baseline 引用, 同协议为作者声称, 本文无法独立验证(KB-STRUCT07)",
+    "lim disclosures": [
+      "probe 选择依赖任务家族/商品类别, 开放环境需自适应相似度",
+      "O(K) probe 开销随频繁编辑增长",
+      "仅在 ALFWorld/WebShop 结构化基准, 未验证软件工程/开放网页",
+      "N 节: 从空库重建 only partially compensates, 显式技能记忆仍重要(未夸大自给自足)",
+      "冷启动 SFT 仍用 Claude 作 teacher 生成技能推理轨迹 —— '移除外部teacher'仅指 RL 阶段, SFT 阶段仍依赖教师"
+    ],
+    "verdict": "诚实披露充分; 但'无teacher'表述需限定(冷启动仍用Claude), 基线非自跑需标注"
+  },
+  "S5_isomorphism": {
+    "overlaps": [
+      "反事实效用 Rutility>0 才提交技能编辑 ≈ 本仓 KB-META01 '会拦才入'/improvement_memory 可证伪入库",
+      "方向一致性项 (w-l)/K 抑制单 probe 离群 ≈ 本仓 KB-AUDIT02 单一检查点不足以定罪",
+      "held-out probe pool 测迁移而非记忆 ≈ 本仓留出验证/防后知",
+      "轨迹证据复盘 propose/update/keep ≈ 本仓 PDCA + 经验回收",
+      "双流优势分离避免目标干扰 ≈ 本仓来源隔离/判据适配对象类型"
+    ],
+    "lineage": "AI 自我改进/技能学习谱系, 与 SVL 框架同谱系; 按 KB-STRUCT02 打折, 不作独立验证",
+    "genuine_novelty": "把'经验是否有用'做成可微的学习信号(反事实 probe delta)并端到端训练编辑决策 —— 本仓目前靠规则/人工门禁, 不做梯度训练; 这是机制层新意但依赖可 probe 的结构化环境"
+  },
+  "S6_teeth_candidates": [
+    {"idea":"技能/经验条目增删前, 必须在 held-out probe 上做前后对比, 仅当多数 probe 同向改善才提交","gate":"能拦: 凭单次成功就固化一条'经验'→要求同向多probe证据","decision":"长牙候选, 但本仓无结构化probe环境, 降级为'有probe才用'的条件门禁"},
+    {"idea":"方向一致性: w-l/K 抑制单个离群样本驱动的经验变更","gate":"能拦: 一条戏剧性案例就改判据→要求多源同向","decision":"与KB-AUDIT02重叠, 加固不新增"},
+    {"idea":"'移除外部teacher'需限定阶段: 冷启动SFT仍用Claude, 只有RL阶段自主","gate":"能拦: 把部分阶段自主讲成全流程自主→核对各阶段主体","decision":"长牙候选, 与KB-SIM02主体错位同源, 加固"},
+    {"idea":"工具选型/环境结构化程度是方法可迁移性的前提","gate":"能拦: 把结构化基准结论外推到开放环境→先判环境可probe性","decision":"记观察, 属适用边界非通用门禁"}
+  ]
+}

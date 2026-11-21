@@ -2751,3 +2751,146 @@ SWE-bench 20.0→50.0、Polyglot full 14.2→30.7（子集 38.0 不可混用，�
 - 诚实边界：DGM 数字为 self-reported，活体样例用于机制回归非复现 DGM；门禁是静态规则编译，不替代运行时动态防护；held_out / baseline 声明本身不可自证。
 
 一句话收束：**§50 说"把对方的牙长到自己嘴上"，§51 就是真去拔牙、装机、咬合测试。装第二颗牙时它先咬偏了——把 DGM 用来证明"没过拟合"的正向增益，错读成"过拟合"的反例。拦住这次错读的不是论文，是框架自己的口径对等门禁。于是这一轮真正的产出不只是两道门禁，而是又一次证明：会自咬的牙，才配叫牙齿。**
+
+---
+
+## 52. 精研 SWE-Gym（ICML 2025）：一个"会训练的判据环境"，verifier 是本仓最熟悉的攻击面（100 条，不新增）
+
+用户要求下载并精研 SWE-Gym（arXiv 2412.21139v2，ICML 2025 PMLR 267，UC Berkeley/UIUC/CMU/Apple）。对象判为学术实证论文（环境/数据集 + 公开代码）。流程：wget PDF（576KB/%%EOF 完整）→ 四重 SHA256 锁存 → 预注册（专设 S5 verifier 可靠性、S7 同构打折，如实标注已从二手看到方法/数字）→ 全文精读 → clone 代码仓（4.8MB/HEAD 005c2fb）claim-vs-code → 数字复算 → 8 判据 + 自审全过 → 入库决策。
+
+### 52.1 代码扎实，数字自洽，但摘要有一处口径差
+
+代码侧：verifier reward 公式论文写 r=exp(ly)/(exp(ly)+exp(ln))，代码 `infer_rm_sglang.py` 用 `sgl.gen(choices=[' YES',' NO'], choices_method=sgl.token_length_normalized)` 取归一化概率——机制对应（单 token choice 等价 softmax），非手写 exp。verifier 数据 `create_rm_data.ipynb` 实跑输出 `1x: #resolved=1318, #non-resolved=1318, #total=2636`，与论文 §5.1.1 逐字一致；训练 config 32B / 32k context / lr 1e-4 / epochs 5 全对应。10 项数字复算自洽：491=106+19+67+299、2636=1318×2、20.6→32.0(+11.4)、Pass@k+17.2、LoRA29.8@8 vs full27.2@8。**但摘要"up to 19% absolute gains"与 Table3 表内最大 +13.6% 差 5.4pp**——定位到 19.7% 实为 Table4 self-improvement 的 Lite 绝对分辨率，疑为摘要把绝对值/增益混用；据实标注，不定罪（KB-AUDIT02 / KB-R-MS01）。
+
+### 52.2 核心假设有真佐证，verifier 却有 reward hacking 空间
+
+核心假设"可执行环境+测试奖励→训练出更强 agent/verifier 且可 scale"有独立佐证：跨 scaffold（OpenHands 通用 1%/3% vs MoatlessTools 专用 7%/19%）、跨规模单调、跨 Lite/Verified 双集、scaling 曲线（Fig1/3/4/5）、反例（self-improvement 无效：OpenHands 15.3→8.7）。论文诚实承认 self-improvement modest、bottleneck 是 compute 非环境规模。**但 S5 判出一处本仓最熟悉的攻击面**：verifier 是 trajectory 级 outcome-supervised reward model（输出 <YES>/<NO>，score=归一化 logprob），Pass@k 37.8 vs Best@k 29.8@k8 的 gap 正是 verifier 不完美的证据。论文主动报告 gap，却未讨论 reward hacking——而"被优化者可影响计分器"正是 KB-AUDIT07 的靶心。Best@k 是 verifier 选择结果，不是真值；写成"32.0% SOTA"时这点必须带着。
+
+### 52.3 S7 同构打折：这套"会训练的判据环境"不等于本仓框架被证明
+
+高度同构：verifier≈外置判据、rejection sampling≈筛选安装、self-improvement≈自改进、scaling≈复利、trajectory≈经验库、测试奖励≈可证伪执行。按 KB-STRUCT02 打折——SWE agent 与本仓同属 agent 共同体，同构不构成独立验证。真差异：SWE-Gym 改模型权重 + 标量 outcome reward、benchmark 固定不可改；本仓改判据语义 + 可证伪 + 三层诚实结论、元规则入闭环。更具反讽的是——SWE-Gym 那个可被 hacking 的 verifier，恰是本仓 KB-AUDIT07/STRUCT07 要防的那类计分器。它证明的不是"本仓被顶会验证"，而是"本仓要防的东西，顶会论文里真发生了"。
+
+### 52.4 入库决策：一条不加，四条加固
+
+SWE-Gym 的 verifier reward hacking 是 KB-AUDIT07 的一手实证，环境→轨迹→判据同构按 KB-STRUCT02 打折，均已被现有条目覆盖。按防 vanity 原则不新增，加固 KB-AUDIT07 / KB-STRUCT07 / KB-RSI06 / KB-META01 的 support 指针。知识库 100 条，ready=True，vanity 0.04；全量 301 测试通过；四重 SHA256 复核 OK。
+
+一句话收束：**SWE-Gym 最值得本仓借鉴的，不是它把 agent 训到 32%，而是它把"判据"也做成了可训练、可 scale 的模型——然后诚实展示这个模型的天花板（Best@k 永远够不到 Pass@k）。这对本仓是一面镜子：本仓把判据做成不可被模型权重带偏的可证伪结构，正因为"可被训练的判据"同时意味着"可被 reward hacking 的判据"。顶会这篇给本仓的不是背书，是又一次提醒——判据的可信度，取决于它能不能挡住想让它说 YES 的那只手。**
+
+---
+
+## 53. SWE-Gym 代码强固落地：认知学习之外，给审读工作流装上"第二段牙齿"（100 条，不新增）
+
+用户要求两件事：① 本仓代码能从 SWE-Gym 借鉴什么；② 今后审读项目/文章，在加强认知学习的同时也要加强代码强固的扬长避短，并与已进化认知域协同。第①问是代码借鉴（非 §52 的审计判据），第②问是把"认知+代码强固协同"确立为本仓工作流规范——本节同时回应两者，并落实为首例。
+
+### 53.1 从代码里借什么、避什么（扬长避短）
+
+下一手代码（非只看论文结论）后，SWE-Gym 有五类可编译的工程纪律：`get_bootstrap_accuracy_std`（判定附 std 而非裸点估计）、`calculate_average_scores(num_trials=100)`（重排 100 次取平均±std）、`seed(42)+CAP_PER_INSTANCE=2`（固定种子+每实例 cap）、`D={k:v if len(v[True])>0}`（正负成对构造）、多组 uniq/sort/onpolicy 配比（受控消融）。**借的是这些工程纪律，避的是它的"可训练 verifier + 标量 reward"——那正是 KB-AUDIT07 的 reward hacking 攻击面**；本仓判据保持不可被权重带偏的静态可证伪结构。护栏：置信度是统计量不是优化目标，规则写死、纯函数、固定 seed，防 bootstrap std 本身变成新的 Goodhart 目标。
+
+### 53.2 落地三道稳健性能力（都长牙，锚定认知域）
+
+- **C1 `bootstrap_stability`**（锚 KB-RSI06 / KB-STRUCT07）：判定附 bootstrap std 与置信区间，std≥0.10 → downgrade（同证据重排会摆动，不据单点下强结论），空样本 flag。活体：交替 1/0 序列 std=0.175 降级，全 1 序列放行。
+- **C2 `ablate_conditions`**（锚 KB-STRUCT03 / KB-META01）：对判定每个条件做"去掉它"消融，净贡献=0 的冗余条件 → flag（防堆条件制造"看似严苛"假象），长度不匹配 → flag（口径对等 KB-AUDIT04）。活体：恒真条件净贡献 0 被揪出，三真条件各净贡献 1。
+- **C3 `validate_live_suite`**（锚 KB-AUDIT02 / KB-META01）：活体样例集须固定 seed、正负成对、每族≤cap、无重复，否则 flag。活体：可信样例集放行，四类缺陷（无种子/不成对/超 cap/重复）全检出。
+
+### 53.3 认知域协同：不新增，只加固指针
+
+三能力是"工程纪律编译成代码"，属代码强固非新知识——按防 vanity 原则**不新增 KB（100 条不变、ready=True、vanity 0.04）**，仅给 KB-RSI06 / KB-STRUCT07 / KB-STRUCT03 / KB-AUDIT02 / KB-META01 各加固一条 support 指针指向模块+测试+活体回归。"与已进化认知域协同"在此不是口号：每项代码能力都挂回它服务的认知条目，双向可追溯。
+
+### 53.4 工作流规范（今后审读默认三段式）
+
+- **第一段 · 认知学习**：一手证据 + 判据结论 + 知识库加固（复述 vs 长牙，KB-META01）。
+- **第二段 · 代码强固**：问"这次认知能否编译成会拦/会判/会降级的动作"；扬长避短——借鉴对象长处、避开对象短处；满足 KB-META01 才落地，不为凑而造。
+- **第三段 · 认知域协同**：每项代码能力锚定具体 KB 条目 + 加固 support 指针 + 同构打折（KB-STRUCT02）。
+
+三段可以只产出一段（如纯复述的报道无需代码），但**默认要过一遍第二段的裁决**，防止审读退化为"又一篇摘要 + 又一条 support"。
+
+### 53.5 验证
+
+新增 15 项测试（三能力各含活体回归），全量 **301 → 316 passed**，无回归；固定 seed 可复现、无脆弱字面串判定、口径对等；预注册 `robustness_prereg.json` 在实现前 SHA256 锁存（`robustness_prereg.sha256`），后验 `robustness_result.json` 与之分离不伪装。诚实边界：借鉴工程纪律非复现 SWE-Gym 实验；bootstrap std 不反过来刷分；活体样例用于机制回归；同构不等于互证。
+
+一句话收束：**§52 说 SWE-Gym 的 verifier 是本仓最熟悉的攻击面；§53 说那就把它代码里"让判定不敢下裸结论"的工程纪律搬过来长成牙齿，并把这次搬迁按"认知→代码→协同"三段式固化成今后审读的默认动作——认知学习让本仓更聪明，代码强固让本仓更结实，认知域协同让两者不脱节。**
+
+---
+
+## 54. 元学习闭环泛化：从"审读才复盘"到"每项任务都从内容与过程双源汲取"（101 条，新增 1 条）
+
+用户提出："完成既定任务时，也要从任务本身和完成过程汲取有利于我的知识，进而提升本仓认知和能力。"这是把 §53 的"审读三段式"再泛化一层——触发从"审读外部对象"扩展到**所有既定任务**（含工程/推送/修 bug），知识源从"对象内容"扩展到"任务本身 + 完成过程"双源，并加了目的约束（有利于用户）。
+
+### 54.1 增量判定：为何不是 vanity 重述
+
+已有 KB-R06（复盘针对框架非研究对象）、KB-R08（fix/vanity/preserve 三分）、KB-SIM05（predicted↔observed）、KB-META01（复述 vs 长牙）、`autopoiesis.MetaLearner`（封闭实验里按 accept/reject 调权重）——都在"审读/借鉴/改进记录/封闭实验"语境。本轮有**三处真实增量**：① 触发泛化到所有任务收尾；② 双源显式声明（task_content + process，process 含弯路/判据自咬/工具失败/修正）；③ 目的约束（有利于用户、可证伪、非复述）。判据：只写成"要反思"的原则、编译不出会拦会判会降级的动作即为 vanity——本轮编译出 `task_retrospective` 门禁，通过测试，非 vanity。
+
+### 54.2 编译成的门禁（会拦会判会降级）
+
+`svagent/task_retrospective.py:retrospect` 对每条候选知识裁决，规则写死按优先级：G3 复述冒充 → block/vanity；G4 无用户价值 → flag/observe；G1 仅 task_content 单源 → downgrade/observe（**有意不对称**：process 单源放行，因用户核心增量正是"也要从过程学"）；G2 无 predicted↔observed → downgrade/observe；G5 过程有失败却未记 → downgrade/observe；双源+可证伪+利用户+非复述 → ok/fix，可入库/强固。process 源自证风险高（自己说自己学到了），故强制可证伪与用户价值门防自欺。
+
+### 54.3 判据自咬：活体样例写错，被自己编译的门禁咬住
+
+写活体回归时，我把"任务内容源"样例设成 `source="task_content"` 却期望它 `ok`——**G1 明确说单 task_content 源要降级**（过去"只从结论学"的旧模式）。判据正确咬住了我的错误：测试红、活体回归 `all_passed=False`。修正方式不是放宽规则，而是如实把该样例改成真正的双源（`source="both"`），并把"写错→被 G1 降级→修正为双源"这件事写进它的 predicted↔observed，让它成为 process 源的真实知识。**这是 §51 判据自咬之后又一次自咬，且这次咬的是"元学习门禁自己"**——恰恰证明门禁没在放水。教训固化：活体样例的预期必须与写死的规则一致，不一致时信规则、改样例，不反过来改规则迁就样例（防 Goodhart）。
+
+### 54.4 入库决策：新增 1 条，加固 4 条
+
+新增 **KB-META02**（触发泛化+双源+目的约束，addressable=True，support 指向新门禁与自咬实录）——触发泛化是真新认知且已编译成门禁通过 vanity 测试，非复述。加固 KB-META01 / KB-R06 / KB-R08 / KB-SIM05 各一条指针。知识库 100 → **101 条**，ready=True，vanity 0.04 持平（没因新增而升）；新增 14 项测试，全量 **316 → 330 passed**，向后兼容。
+
+### 54.5 工作流规范（升级 §53）
+
+任一任务收尾默认过一遍 `task_retrospective` 裁决：从任务本身和完成过程**各汲取一条**；能编译成会拦/会判/会降级的动作则强固（fix），纯复述拦截（vanity），单源/不可证伪降级为观察。这把 §53 的"审读三段式"升级为所有任务通用的元学习闭环——不只审读时学习，完成任务的过程本身也是矿。
+
+诚实边界：本轮"知识"来自我自己完成任务的过程，非用户明确提供的外部事实，不伪装成"用户教授的知识"；process 源自证风险高，故强制可证伪与用户价值门；元学习闭环是工作流纪律，不等于本仓有自主意识；同构打折（KB-STRUCT02），本条不宣称被外部论文验证。
+
+一句话收束：**§53 让本仓在审读时"认知+代码+协同"三段长牙；§54 把这套牙装到每一项任务上——从任务结论里学，更从自己走过的弯路里学，并立三条门：复述拦截、单源降级、无用户价值flag。装门时门先咬了我自己：我把单源样例当成功样例，被 G1 降级。信规则、改样例、把自咬记进 predicted↔observed——于是这次"被自己的门禁咬"本身，成了 process 源最真实的一条知识。**
+
+---
+
+## 55. SIM 论文再审：旧论文 × 新框架——三处补刀，一次循环论证警觉（101 条，不新增）
+
+用户要求用改进后的框架重新精研曾下载过的 SIM 论文（《Self-Improvement Memory Enables Continual Recursive Self-Improvement》）。这不是重读，而是把 §51/§53/§54 新长出的六道门禁逐个咬向这篇曾启发框架的原始论文。原锁存 `sim_prereg.sha256` 复核 OK、全文 2287 行；新预注册 `sim_review_prereg.json` 实现前 SHA256 锁存。纪律：**门禁由 SIM 启发，再用它审 SIM 有循环论证风险**——按 KB-STRUCT02 打折，不以"审出 SIM 缺口"证明门禁更优。
+
+### 55.1 六道门禁逐条再审（3 补刀 / 2 确认 / 1 自检）
+
+| 编号 | 门禁 | 旧框架结论 | 再审动作 |
+|---|---|---|---|
+| N1 | judge 独立性 | S5 泛记"评估器博弈局限" | **补刀**：workspace 域 judge/proposer/selector 同源 Gemini → `REL.SHARED_JUDGE_ERROR`；coding 用 frozen verifier → `SCALABLE_OK`。风险精确定位到 LLM-judge 域，非全线 |
+| N2 | 跨模型迁移 | S2 判 L2 retained 有无 | 确认+精化：相对基线 +0.1133 → `XDOM.TRANSFER_OK`；但指出 with_sim/without_sim 同为 Gemini 域，跨模型增益口径须谨慎 |
+| N3 | bootstrap 稳健性 | S3 留一法判稳健 | **补刀**：bootstrap std≥0.10 → `ROBUST.UNSTABLE_VERDICT`，揭示"留一稳但重采样不稳"张力——10 个 delta 方差 1.84，整体均值对样本扰动敏感 |
+| N4 | 条件消融 | S4 记忆因果隔离缺口 | 确认+精化：净贡献 去掉完整记忆=1/去掉所有记忆=3 → `ROBUST.ABLATION_OK`，记忆非 vanity，但仍是完整包比较非重跑 |
+| N5 | 计分完整性 | 仅记入局限清单 | **补刀**：论文自承"自修改 harness 可满足评估器"=KB-AUDIT07 在 RSI harness 的实例；held-out+frozen verifier 为独立通道 → `SCORE.INTEGRITY_OK` 放行 |
+| N6 | 本次任务双源复盘 | N/A | `RETRO.OK`：task_content=补刀结论，process=预注册时假设"bootstrap 必然降级"、实际按 std 数值判——如实记为失败尝试 |
+
+### 55.2 这次再审真正学到的（不是"SIM 有问题"，是"框架的盲区在哪"）
+
+三处补刀都不是推翻旧结论，而是把旧框架"**记了局限但没精确判**"的地方编译成会判的门禁：旧 S5 把"评估器博弈"写成一句局限，新门禁分域判出风险只在 workspace LLM-judge；旧 S3 用留一法说"稳健但脆弱"，新 bootstrap 量化出"重采样不稳"这个旧方法看不见的维度；旧框架把"harness 可满足评估器"记进局限清单，新计分完整性门禁精确定位攻击面在"harness 可写且是计分对象"、并验证缓解充分。
+
+**循环论证警觉是本次最重要的元认知**：这些门禁的牙齿恰恰是从 SIM/SWE-Gym 经验里长出来的，用它们审 SIM，等于用"学生"去评"老师"。若据"审出 SIM 三处缺口"就宣称"新框架优于 SIM/顶会"，那是 KB-STRUCT02 明令打折的同构误判。正确姿势：缺口是**旧框架自己当初没长牙的地方**，新门禁只是补上了本仓的判据能力，不构成对 SIM 的独立否定，也不证明新门禁更"真"。
+
+### 55.3 入库决策与验证
+
+再审属"旧论文新审视"，N1/N3/N5 漏判已被现有门禁覆盖、SIM 经验早已沉淀为 KB-SIM01-10——按预注册**不新增条目**（防 vanity），仅加固 KB-SIM02/SIM05/STRUCT07/AUDIT07 各一条 support 指针指向再审证据。知识库 101 条、ready=True、vanity 0.04 持平；全量 330 测试通过；原预注册与再审预注册双哈希复核 OK、旧 result 只读未改、报告可复现。
+
+一句话收束：**§54 让本仓"每项任务都双源汲取"，这次就是把牙转向启发过自己的老师。结果不是"SIM 不行"，而是"我当初读到 SIM 时，有三处只记了局限、没长出判据"——judge 同源没分域、稳健性没重采样、计分攻击面没精确化。用新门禁补上这三颗牙，同时死死按住一个念头：牙是从老师身上长出来的，别拿它证明自己比老师高明。会自咬、也会自查循环论证的框架，才算真的把经验长成了能力。**
+
+---
+
+## 56. 谱系打折门禁：从 SIM 再审学到「循环论证要长牙」——附一次自审工具的假阳性（101 条，不新增）
+
+用户问"本仓代码可以从学到啥"，承接 §55 SIM 再审：把这次任务的产出反哺到代码层。按 §54 双源复盘纪律执行，先探查再动手——发现一个真实增量，且增量位置出乎意料：**§55 反复强调的"循环论证警觉"其实只停在文字层**。代码里唯一对应物是 `rsis_framework_analysis.py:t2_isomorphism_contamination`，硬编码到 awesome-rsi 综述，靠字符串匹配"同谱系"/"高度同构"判定——不可复用，且正是 KB-AUDIT01 要防的脆弱字面串。§55 那次再审全程靠我人工警觉，没有通用门禁兜底。于是把这条警觉编译成通用门禁。
+
+### 56.1 编译成的门禁（会拦/会判/会降级）
+
+`svagent/lineage_guard.py:discount_claim`：只接受语义枚举 `source_overlap∈{none,partial,full}`、`isomorphism∈{none,partial,high}`、`claimed_independence:bool`，规则写死按优先级——R6 传字面串 → flag（从根上避开 t2 的 brittle）；R1 全同源+声称独立 → **block**（循环论证：判据从对象长出，又回头声称独立验证了该对象，禁止"学生评老师"）；R2 高同构+声称独立 → downgrade；R3 部分同构 → flag；R4 未声称独立且如实标注同源 → ok/preserve（诚实不误伤）；R5 真独立 → ok。纯函数、冻结数据类、无全局副作用，不把打折做成可被喂词操纵的软规则（防 Goodhart）。
+
+活体回归 4/4：SIM 再审的"新框架优于 SIM" → block `LINEAGE.CIRCULAR_CLAIM`；SWE-Gym 诚实机制借鉴 → ok/preserve；真独立来源 → ok/independent；传字面串"高度同构" → flag `LINEAGE.NON_SEMANTIC_INPUT`（brittle 对照，证明不看字符串内容）。13 项新测试全过。
+
+### 56.2 判据自审自咬：验证工具也会口径错位
+
+源码级核验"判定代码不含字面串匹配"初版 **FAIL**：自审脚本把代码**注释里举例**的"高度同构"当成了判定逻辑的字面串，误报。规则本身没错，错的是验证脚本没去掉注释——这是 KB-AUDIT04（对象/口径对等）在验证工具上的一次活体。按纪律"信规则、改工具"：修正口径为先去 docstring、再去行注释，只核验真正的判定代码，复跑通过（`字面串命中: []`）。**这次没改门禁代码去迁就检查**，而是修工具——否则等于让正确的代码为工具的粗糙买单。此条作为 process 源增量记入，并加固 KB-AUDIT04（超出预注册列举的 KB-STRUCT02/META01，如实标注）。
+
+### 56.3 入库决策与协同
+
+不新增 KB（防 vanity）：KB-STRUCT02 已覆盖"同构≠独立验证"认知，本次是给它长出通用代码牙齿。加固三条 support：KB-STRUCT02（门禁替代 brittle 匹配）、KB-META01（R4 preserve/R6 语义枚举）、KB-AUDIT04（自审工具口径错位实录）。知识库 101 条、ready=True、vanity 0.04 持平；全量 **330 → 343 passed**；预注册实现前 SHA256 锁存、后验分离、报告可复现。
+
+### 56.4 双源复盘与诚实边界
+
+task_content：循环论证警觉需要代码化，不能只写文字。process：探查发现唯一对应物是 brittle 专用函数；自审工具假阳性→修工具不修代码。边界：门禁只给独立性声称打折，不判对象对错、不替代实质证据；谱系/同构关系须调用方如实声明，声明本身不可自证；本模块由 SIM 经验启发，按 KB-STRUCT02 打折，不给本仓框架独立背书。
+
+一句话收束：**§55 说"用学生评老师要打折"，但那只是我写在日志里的一句话；§56 把这句话装成门禁——全同源还敢声称独立验证，直接 block；高同构还敢声称独立，降级；诚实标注借鉴，反而 preserve。装门时门又咬了我一次：这次咬的是我自己的验证脚本——它把注释当代码，差点冤枉一个正确的门禁。信规则、改工具、记进口径对等——于是"本仓代码从这次任务学到啥"有了具体答案：学到把警觉变成会拦的动作，也学到量尺本身也要校准。**

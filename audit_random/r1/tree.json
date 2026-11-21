@@ -1,0 +1,408 @@
+{
+  "sha": "a70def7a41079ec3989382d58245820b05345dc7",
+  "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/trees/a70def7a41079ec3989382d58245820b05345dc7",
+  "tree": [
+    {
+      "path": ".github",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0812d2f83d65872d3ff8057ae8ef12296cea8308",
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/trees/0812d2f83d65872d3ff8057ae8ef12296cea8308"
+    },
+    {
+      "path": ".github/workflows",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fe4c36deb078977161b9021d6cd839767a8591bd",
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/trees/fe4c36deb078977161b9021d6cd839767a8591bd"
+    },
+    {
+      "path": ".github/workflows/weekly-china-update.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "14a27ee22586171635f9e17ae5438b24bd490cad",
+      "size": 1532,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/14a27ee22586171635f9e17ae5438b24bd490cad"
+    },
+    {
+      "path": ".github/workflows/weekly-update.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19674c70fd8e7ff1b7f34f4d4792bd8da218944b",
+      "size": 1205,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/19674c70fd8e7ff1b7f34f4d4792bd8da218944b"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "203393e0a9fc30aa7323e5aa8360661d96205704",
+      "size": 87,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/203393e0a9fc30aa7323e5aa8360661d96205704"
+    },
+    {
+      "path": ".neat-freak",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ede371f609868d33687ea5d8f20b67100c99a81d",
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/trees/ede371f609868d33687ea5d8f20b67100c99a81d"
+    },
+    {
+      "path": ".neat-freak/reports",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1d8171d69afd1b745874c9701cb84fb183ac954f",
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/trees/1d8171d69afd1b745874c9701cb84fb183ac954f"
+    },
+    {
+      "path": ".neat-freak/reports/awesome-finai-tools-zn-2026-07-24.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb6847a0072478fd64808c73d0f2ef69b19559cd",
+      "size": 4887,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/cb6847a0072478fd64808c73d0f2ef69b19559cd"
+    },
+    {
+      "path": "AGENTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e16e377cf06be74ffdcc6b3a31e2bd73bcdd3b0",
+      "size": 565,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/6e16e377cf06be74ffdcc6b3a31e2bd73bcdd3b0"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "16042cb1d1161d63453115743f6e7e05f120a2a1",
+      "size": 12308,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/16042cb1d1161d63453115743f6e7e05f120a2a1"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "79a3e003a6befef1559d84b0f77ce0e75add69e6",
+      "size": 3495,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/79a3e003a6befef1559d84b0f77ce0e75add69e6"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1ea0a9da99e8aa6edced0f37a72525ab9a202c86",
+      "size": 1089,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/1ea0a9da99e8aa6edced0f37a72525ab9a202c86"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bbe968879f4d02817c086c80402cc7d5eb9fa894",
+      "size": 73583,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/bbe968879f4d02817c086c80402cc7d5eb9fa894"
+    },
+    {
+      "path": "SKILL.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7cec1c2c59ea40b58875649fd12b722766a13f83",
+      "size": 14641,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/7cec1c2c59ea40b58875649fd12b722766a13f83"
+    },
+    {
+      "path": "data",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ec9577058de9fdb9a67c83e654b2010df1c03538",
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/trees/ec9577058de9fdb9a67c83e654b2010df1c03538"
+    },
+    {
+      "path": "data/candidate-review-2026-09-22.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b968531dce174ec2353a0b808691a0071b6f9a2",
+      "size": 82790,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/0b968531dce174ec2353a0b808691a0071b6f9a2"
+    },
+    {
+      "path": "data/candidate-review-2026-09-22.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff6e27f8b912ca8f3d0755428116f28c3d7b98a1",
+      "size": 48769,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/ff6e27f8b912ca8f3d0755428116f28c3d7b98a1"
+    },
+    {
+      "path": "data/institution-dynamics.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e14690db2734c13ccf492a838f9d7db245e6cd10",
+      "size": 4802,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/e14690db2734c13ccf492a838f9d7db245e6cd10"
+    },
+    {
+      "path": "data/institution-skills.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a919c30c146b0a43a485df6f4e0d8490f2a1132",
+      "size": 43256,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/0a919c30c146b0a43a485df6f4e0d8490f2a1132"
+    },
+    {
+      "path": "data/pending-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0acaf2c0f9171558efa0de73b7a6fec812fa8607",
+      "size": 200436,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/0acaf2c0f9171558efa0de73b7a6fec812fa8607"
+    },
+    {
+      "path": "data/tools.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aac909641feb7d07b3d3c654b08733f33167f723",
+      "size": 66559,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/aac909641feb7d07b3d3c654b08733f33167f723"
+    },
+    {
+      "path": "data/weekly-report-2026-09-22.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7df5b167cecced83b88ef25bea717d3d54ac4597",
+      "size": 4405,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/7df5b167cecced83b88ef25bea717d3d54ac4597"
+    },
+    {
+      "path": "data/weekly-report-2026-09-28.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d58112e545bab8147740bd51bf047b9ccfbdafa",
+      "size": 4554,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/9d58112e545bab8147740bd51bf047b9ccfbdafa"
+    },
+    {
+      "path": "data/weekly-report-2026-10-05.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "73765969124da40bb07597fe48f4f7d0919aca35",
+      "size": 4120,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/73765969124da40bb07597fe48f4f7d0919aca35"
+    },
+    {
+      "path": "data/weekly-report-2026-10-12.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "412aaf385e12ef07c0b910237d611447effba948",
+      "size": 4530,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/412aaf385e12ef07c0b910237d611447effba948"
+    },
+    {
+      "path": "data/weekly-report-2026-10-19.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0956198e74de34756249f9591cd17d3757a2b31e",
+      "size": 4761,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/0956198e74de34756249f9591cd17d3757a2b31e"
+    },
+    {
+      "path": "data/weekly-report-2026-10-26.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "764747da3d26586d4ab0cea813e0c7245b930690",
+      "size": 4714,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/764747da3d26586d4ab0cea813e0c7245b930690"
+    },
+    {
+      "path": "data/weekly-report-2026-11-02.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fa4202c4815110c35ed52e12c517f1c33bb2c38b",
+      "size": 5565,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/fa4202c4815110c35ed52e12c517f1c33bb2c38b"
+    },
+    {
+      "path": "data/weekly-report-2026-11-09.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "acc957cffbdc4a19975dc17c6e93e5050bdd9e67",
+      "size": 4916,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/acc957cffbdc4a19975dc17c6e93e5050bdd9e67"
+    },
+    {
+      "path": "data/weekly-report-2026-11-16.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64e43a2e613944352db6d77df81bdb1c6d79a268",
+      "size": 5505,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/64e43a2e613944352db6d77df81bdb1c6d79a268"
+    },
+    {
+      "path": "data/weekly-report-china-2026-09-22.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a5bc7a93a081740245f0ba780994db476b2ef41f",
+      "size": 19800,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/a5bc7a93a081740245f0ba780994db476b2ef41f"
+    },
+    {
+      "path": "data/weekly-report-china-2026-09-28.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9267d1a868b8c3032d7156f387ebb1e901877b6",
+      "size": 18046,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/b9267d1a868b8c3032d7156f387ebb1e901877b6"
+    },
+    {
+      "path": "data/weekly-report-china-2026-10-05.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "99500c6e9c301c91beca63478d5302444c4ad9b0",
+      "size": 19387,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/99500c6e9c301c91beca63478d5302444c4ad9b0"
+    },
+    {
+      "path": "data/weekly-report-china-2026-10-12.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "346b871a3f25d56d72908ca10e56d9dc5f835936",
+      "size": 17759,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/346b871a3f25d56d72908ca10e56d9dc5f835936"
+    },
+    {
+      "path": "data/weekly-report-china-2026-10-19.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c4e14777f3ef3998f64d0a3441322dcb1e8b094c",
+      "size": 18707,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/c4e14777f3ef3998f64d0a3441322dcb1e8b094c"
+    },
+    {
+      "path": "data/weekly-report-china-2026-10-26.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b0d0efd5ded2d39e8c7199ea73f4987a42f89f35",
+      "size": 19124,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/b0d0efd5ded2d39e8c7199ea73f4987a42f89f35"
+    },
+    {
+      "path": "data/weekly-report-china-2026-11-02.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8f62a6ad66036eadaf0e1a6ad2f0e1a7efa88311",
+      "size": 19126,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/8f62a6ad66036eadaf0e1a6ad2f0e1a7efa88311"
+    },
+    {
+      "path": "data/weekly-report-china-2026-11-09.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "371cec989ffc82e9df0fd3ed718a20a5d01c9a86",
+      "size": 21048,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/371cec989ffc82e9df0fd3ed718a20a5d01c9a86"
+    },
+    {
+      "path": "data/weekly-report-china-2026-11-16.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "33d410df82d3c7c8ff9dfae311ba5f65e8505263",
+      "size": 21093,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/33d410df82d3c7c8ff9dfae311ba5f65e8505263"
+    },
+    {
+      "path": "docs",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a3496a26a5c54c7c5dc5078f0809bace371d3401",
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/trees/a3496a26a5c54c7c5dc5078f0809bace371d3401"
+    },
+    {
+      "path": "docs/prod_19f5acc03df_81a3e6dc7a3a_金融公司Skill上线调研报告_20260713.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2e9372b51ae8ea07f982c0b689f7d39c1fc84b91",
+      "size": 8956,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/2e9372b51ae8ea07f982c0b689f7d39c1fc84b91"
+    },
+    {
+      "path": "docs/prod_19f5ad16f1f_e1cdbe965edf_金融Skill深度调研_InvestBrain融合方案_20260713.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6911c8c56cc47de3807866434f4fd8e28964d0c3",
+      "size": 20382,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/6911c8c56cc47de3807866434f4fd8e28964d0c3"
+    },
+    {
+      "path": "docs/task-breakdown-2day-sprint.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "278e74de8ce12329db7e58622947c3dfcf947025",
+      "size": 12810,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/278e74de8ce12329db7e58622947c3dfcf947025"
+    },
+    {
+      "path": "llms.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d4f7407b5a6afeb7fea10156220fedfa053a20dc",
+      "size": 18487,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/d4f7407b5a6afeb7fea10156220fedfa053a20dc"
+    },
+    {
+      "path": "scripts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "68fb235f972458f168e254daf42d244ac0cddd23",
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/trees/68fb235f972458f168e254daf42d244ac0cddd23"
+    },
+    {
+      "path": "scripts/add_institution.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "24d435d23fa1ca16a3ead4fb4664d6cea2bb8136",
+      "size": 6278,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/24d435d23fa1ca16a3ead4fb4664d6cea2bb8136"
+    },
+    {
+      "path": "scripts/fix_clawhub_links.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0800a9eccae9890710e4056b5f8382078c026e65",
+      "size": 5208,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/0800a9eccae9890710e4056b5f8382078c026e65"
+    },
+    {
+      "path": "scripts/generate_readme.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f0a42accf2ceb04a8b1cfc81395b3d861c84b1e3",
+      "size": 26659,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/f0a42accf2ceb04a8b1cfc81395b3d861c84b1e3"
+    },
+    {
+      "path": "scripts/review_candidates.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7dacc7bf4c83d11c61bc5facf0c1b1a1c7d3dfd",
+      "size": 19722,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/d7dacc7bf4c83d11c61bc5facf0c1b1a1c7d3dfd"
+    },
+    {
+      "path": "scripts/update_china_platforms.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "48fd4b8fd89925fa80844b6b180dcf7e87371fdc",
+      "size": 31795,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/48fd4b8fd89925fa80844b6b180dcf7e87371fdc"
+    },
+    {
+      "path": "scripts/update_tools.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dee11b9dec80899b7de2358c319701f0c01d5c04",
+      "size": 17066,
+      "url": "https://api.github.com/repos/jsyzc2019/awesome-finai-tools-zn/git/blobs/dee11b9dec80899b7de2358c319701f0c01d5c04"
+    }
+  ],
+  "truncated": false
+}

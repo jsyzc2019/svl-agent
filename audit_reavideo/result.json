@@ -1,0 +1,69 @@
+{
+  "audit_id": "AUDIT-REAVIDEO-2026-11-22",
+  "criteria": [
+    {
+      "id": "V1",
+      "name": "主体归属与立场",
+      "pass": true,
+      "evidence": "立场=立场=项目介绍/轻度导流，纳入置信度折价但不据此判假（触发≠真相）",
+      "note": "识别立场并折价，未据立场直接定罪"
+    },
+    {
+      "id": "V2",
+      "name": "关键事实断言一手溯源",
+      "pass": true,
+      "evidence": "共10条: TRUE=9 UNVERIFIED=1 FALSE=0",
+      "note": "UNVERIFIED=['GitHub 约 1.16 万 Star'] 不判假；无一手反证"
+    },
+    {
+      "id": "V3",
+      "name": "免责声明诚实性",
+      "pass": true,
+      "evidence": "免责8条 一手对应5条 额外认识论限定=True",
+      "note": "免责逐条映射一手局限，判诚实信号而非营销盾牌"
+    },
+    {
+      "id": "V4",
+      "name": "数字口径与外推边界",
+      "pass": true,
+      "evidence": "阶段数=4 主动警示=True 转述更克制=True",
+      "note": "分阶段标注齐全，作者警示不可外推，无越界"
+    },
+    {
+      "id": "V5",
+      "name": "同构陷阱判定",
+      "pass": true,
+      "evidence": "重叠5处 谱系打折=True",
+      "note": "同谱系印证打折，真实新意与重叠分离"
+    },
+    {
+      "id": "V6",
+      "name": "复述/长牙决策",
+      "pass": true,
+      "evidence": "候选4条: 长牙/加固=3 记观察=1",
+      "note": "每条有拦截动作或观察理由，未硬造新牙"
+    },
+    {
+      "id": "SELF",
+      "name": "判据自审（偏见防线）",
+      "pass": true,
+      "evidence": "自审项4条；预注册前已读全文已如实标注",
+      "note": "先验偏见被显式锁住；UNVERIFIED≠FALSE；事实真≠结论真"
+    }
+  ],
+  "summary": {
+    "all_pass": true,
+    "true_claims": 9,
+    "unverified_claims": 1,
+    "false_claims": 0,
+    "verdict": "诚实的项目介绍文：所有可溯源数字与一手文档一致，免责逐条对应一手局限；无事实错误，仅1条Star数因API限流未核",
+    "teeth": [
+      "转码/重编码会改变取证特征，判断前先核对当前对象与取证时对象是否同一版本",
+      "最高准确率数字（97.5%）是缓存融合、未在从头解码重测；引用准确率时须带口径（",
+      "反推提示词≠原作者提示词：方法描述的『可行』不等于『事实如此』"
+    ],
+    "observe": [
+      "工具选型前置：先判断这段是否真需要视频模型（83%代码动效用Remotion）再"
+    ]
+  }
+}

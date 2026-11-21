@@ -1,0 +1,71 @@
+{
+  "task": "用改进后框架重新审视 SIM 论文（旧论文 × 新门禁 再审）",
+  "date": "2026-11-22",
+  "object_type": "学术实证论文再审——非重读，而是把 §51/§53/§54 新长出的门禁逐个咬向曾启发框架的原始论文",
+  "one_hand_sources": {
+    "paper": "rsi_sim_paper.pdf / rsi_sim_paper.txt（2287行，v? 已下载）",
+    "evidence": "rsi_sim_evidence.json",
+    "old_result": "sim_framework_result.json（S1-S6）",
+    "old_prereg_sha256": "eda33fc1393da8f634f8ceda9c1788b41ac9804465cd4fb6c72436918f87231b（已复核 OK）",
+    "new_gates": ["judge_independence", "check_transfer", "bootstrap_stability", "ablate_conditions", "check_scoring_integrity", "retrospect"]
+  },
+  "principle": "三层诚实结论 + 同构打折（KB-STRUCT02）：不因这些门禁由 SIM 启发就互证；旧结论该保留的保留，新门禁该补刀的补刀，错判要认",
+  "re_review_claims": [
+    {
+      "id": "N1",
+      "gate": "judge_independence",
+      "target": "论文 L3.3: 'Gemini 3.8 Flash also serves as proposer and selector' + 'Gemini 3.8 Flash as the judge'（workspace 域）；coding 域用 frozen verifier",
+      "hypothesis": "workspace 域 judge/proposer/selector 同源 Gemini → 共享错误风险，独立源数=1 → downgrade；但论文有 held-out + frozen verifier 缓解，coding 域应放行。旧 S5 只泛记'评估器博弈局限'，未精确到域",
+      "expected_old_gap": "旧框架未用独立性门禁分域判定"
+    },
+    {
+      "id": "N2",
+      "gate": "check_transfer",
+      "target": "cross_model_workspace: with_sim 84.75 vs without_sim 73.42 (gap 11.33)；跨模型 Opus→Gemini",
+      "hypothesis": "真 held-out 且相对基线增益>0 → ok/retain；注意口径：增益是相对同域基线，不是绝对分。旧 S2 只判 L2 有无，未判增益健康度",
+      "expected_old_gap": "旧框架判 retained gain 有无，未用相对基线口径"
+    },
+    {
+      "id": "N3",
+      "gate": "bootstrap_stability",
+      "target": "table3_deltas 10 个配对差值（含 -0.61）",
+      "hypothesis": "bootstrap std 可能偏高（n=10 且 delta 方差大 1.84）→ 若 std≥0.10 判 downgrade；旧 S3 用留一法判稳健，新方法给重采样稳定性量化，可能揭示'留一稳但重采样不稳'的张力",
+      "expected_old_gap": "旧框架无 bootstrap 稳定性量化"
+    },
+    {
+      "id": "N4",
+      "gate": "ablate_conditions",
+      "target": "四条件：Cold Start / Harness Transfer / Problem-Only Memory / Full SIM；source-RSI ablation（Table7）",
+      "hypothesis": "'Problem-Only(仅root cause)' vs 'Harness Transfer(无记忆)' 若有净贡献→记忆有真作用；但论文自承'完整包测试无法隔离记忆单独贡献'——abin 判应指出：已从根因层看到贡献，但完整记忆的独立净贡献仍缺隔离",
+      "expected_old_gap": "旧 S4 已列缺口，新门禁给出更精确的净贡献定位"
+    },
+    {
+      "id": "N5",
+      "gate": "check_scoring_integrity",
+      "target": "论文自承局限: '自修改harness可能满足评估器而未解意图任务；已用held-out隔离+固定verifier缓解'",
+      "hypothesis": "这是 KB-AUDIT07 攻击面在 RSI harness 上的实例：harness 可写且是计分对象 → optimizee_writable=True；但论文有 held-out + frozen verifier（独立通道）→ independent_recheck=True → 应 flag 后放行(ok)。旧框架记了局限但没用计分完整性门禁判",
+      "expected_old_gap": "旧框架未用计分完整性门禁精确化攻击面与缓解"
+    },
+    {
+      "id": "N6",
+      "gate": "retrospect",
+      "target": "本次再审任务自身（§54 要求）",
+      "hypothesis": "task_content=用新门禁再审发现旧漏判；process=写预注册时先误把 bootstrap 当'必然 downgrade'、实际要看 std 数值——双源齐全+可证伪→ok/fix",
+      "expected_old_gap": "N/A（这是新工作流自检）"
+    }
+  ],
+  "acceptance_criteria": [
+    "六道门禁全部执行并给出 action/code，逐条对比旧结论标注'补刀/确认/修正'",
+    "至少识别出 1 处旧框架漏判（预期 N1 分域 judge 独立性、N3 bootstrap 稳定性）",
+    "若发现旧结论错误，如实修正并记入 process 源，不改历史 result.json（后验不伪装）",
+    "预注册实现前 SHA256 锁存",
+    "三层诚实结论：能判什么/不能判什么/同构打折",
+    "双源复盘 N6 命中 ok，任务自身合规"
+  ],
+  "kb_decision_rule": "再审属'旧论文新审视'，原则上不新增 KB（防 vanity）；若发现真新攻击面或旧条目需修正，则加固 support 或据实修正，不硬造条目",
+  "honesty_boundaries": [
+    "门禁由 SIM 经验启发，再用它审 SIM 有循环论证风险——必须同构打折，不以'新门禁审出SIM问题'证明新门禁更优",
+    "论文数字为 self-reported，bootstrap/迁移判定基于证据 JSON 的数值，不重新跑论文实验",
+    "judge 独立性判定基于论文文字声明，未接触其内部实现"
+  ]
+}

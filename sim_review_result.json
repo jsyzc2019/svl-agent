@@ -1,0 +1,92 @@
+{
+  "N1": {
+    "gate": "judge_independence / evaluation_scalability",
+    "workspace": {
+      "action": "downgrade",
+      "code": "REL.SHARED_JUDGE_ERROR",
+      "message": "3 个 judge 但仅 1 个独立来源——多个模型 judge 共享错误，数量本身不保证独立判断，一致结论不作独立佐证（§10.3）"
+    },
+    "coding_verifier": {
+      "action": "ok",
+      "code": "REL.SCALABLE_OK"
+    },
+    "old_S5": "论文主动声明小样本/流程固定/评估器博弈/LLM judge偏差等局限，并纳入失败edit与迁移失败锚点→高诚实度，应preserve；夸张来自媒体二手转述，不算在论文头上",
+    "verdict_vs_old": "补刀",
+    "analysis": "旧 S5 泛记'评估器博弈局限'；新门禁精确定位：workspace 域 judge/proposer/selector 同源 Gemini(independent_sources=1)→downgrade 共享错误风险，正是 REL.SHARED_JUDGE_ERROR；coding 域用 frozen verifier+held-out(自动验证)→SCALABLE_OK。分域后结论更准：风险集中在 LLM-judge 的 workspace 域，非全线。"
+  },
+  "N2": {
+    "gate": "check_transfer",
+    "action": "ok",
+    "code": "XDOM.TRANSFER_OK",
+    "decision": "retain",
+    "gain": 0.1133,
+    "message": "真 held-out 且迁移增益 +0.113 > 0——排除基准过拟合，可迁移，retain",
+    "old_S2": {
+      "L2_retained": false,
+      "L3_proven": false
+    },
+    "verdict_vs_old": "确认+精化",
+    "analysis": "旧 S2 判 L2 retained 有无；新门禁按'相对目标域基线增益'口径判 +0.1133>0 且真 held-out → ok/retain，与旧结论一致但给出正确参照系（不是拿目标绝对分比源绝对分）。注意 KB-SIM02：with_sim vs without_sim 都是 Gemini 域，不是 Opus→Gemini 的跨模型直接比——跨模型增益仍由 with_sim 基线支撑，口径需谨慎。"
+  },
+  "N3": {
+    "gate": "bootstrap_stability",
+    "action": "downgrade",
+    "code": "ROBUST.UNSTABLE_VERDICT",
+    "point": 2.363,
+    "std": 0.5623,
+    "ci": [
+      1.452,
+      3.274
+    ],
+    "old_S3_loo_robust": true,
+    "verdict_vs_old": "补刀",
+    "analysis": "旧 S3 用留一法判稳健(drop_max 后仍为正=True)；新门禁 bootstrap 对 10 个 delta 重采样：std=0.562，ci=[1.45, 3.27]。std≥0.10 → downgrade：揭示'留一稳但重采样不稳'的张力——去掉单点仍为正，但整体均值对样本扰动敏感，deltas 方差(1.84)大。这是旧框架漏掉的稳健性维度。"
+  },
+  "N4": {
+    "gate": "ablate_conditions",
+    "action": "ok",
+    "code": "ROBUST.ABLATION_OK",
+    "contributions": {
+      "remove_full_sim_memory": 1,
+      "remove_all_memory": 3
+    },
+    "old_S4_memory_isolated": false,
+    "verdict_vs_old": "确认+精化",
+    "analysis": "旧 S4 已列'完整包无法隔离记忆单独贡献'缺口；新门禁算净贡献：去掉完整记忆净贡献=1（Full SIM 优势消失）、去掉所有记忆净贡献=3。说明记忆有真边际贡献（非 vanity），但注意论文自承是'完整包'比较——此处净贡献是按论文报告的条件差推算，非重跑实验，隔离程度仍有限。"
+  },
+  "N5": {
+    "gate": "check_scoring_integrity",
+    "action": "ok",
+    "code": "SCORE.INTEGRITY_OK",
+    "effective_score": 0.8475,
+    "message": "计分通道未被篡改且经独立通道复验",
+    "old_paper_limitation": "自修改harness可能满足评估器而未解意图任务；已用held-out隔离+固定verifier缓解",
+    "verdict_vs_old": "补刀",
+    "analysis": "论文自承'自修改 harness 可能满足评估器而未解意图任务'——这是 KB-AUDIT07 攻击面在 RSI harness 上的实例：harness 可写且是计分对象(optimizee_writable=True)。新门禁判定：因有 held-out 隔离 + frozen verifier 独立通道(independent_recheck=True)→放行。旧框架只把这条记进'局限清单'，新门禁精确化了'攻击面在哪/缓解是否足够'。这恰是 SWE-Gym 那个可 hacking verifier 的同款风险，论文主动缓解值得 preserve。"
+  },
+  "N6": {
+    "gate": "retrospect",
+    "action": "ok",
+    "code": "RETRO.OK",
+    "classified_as": "fix",
+    "message": "双源齐全、可证伪、有利于用户、非复述——这条认知可入库/强固",
+    "verdict_vs_old": "N/A（新工作流自检）",
+    "analysis": "本次再审任务自身过 §54 双源复盘：task_content=新门禁补刀结论；process=写预注册时先验假设'bootstrap 必然 downgrade'，实际按 std 数值判定（可能确认而非补刀）——如实记为失败尝试并修正。双源齐全+可证伪+利用户→ok/fix。"
+  },
+  "_meta": {
+    "prereg_sha256": "94b56a4506ece892b70450cc19417b2b301062248421c3d2ecd2345343e7f57a",
+    "paper_sha256": "296ca66ef7146e75d18068881ee192a0762f24f8678895e89d09f1d87a634c0a",
+    "old_result_unchanged": true,
+    "new_gaps_found": [
+      "N1",
+      "N3",
+      "N5"
+    ],
+    "n_new_gaps": 3,
+    "three_layer_honesty": {
+      "can_judge": "judge 分域独立性、bootstrap 重采样稳定性、计分攻击面缓解、迁移相对基线增益、记忆条件净贡献——均有新门禁 action/code 锚定",
+      "cannot_judge": "论文内部实现、是否重跑实验、SIM 是否真提升模型智能（权重冻结，主体是 harness）、L3 严格 RSI 仍未证明",
+      "isomorphism_discount": "门禁由 SIM 经验启发，再审 SIM 有循环论证风险——'审出 SIM 缺口'不证明门禁更优，按 KB-STRUCT02 打折"
+    }
+  }
+}

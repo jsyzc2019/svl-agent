@@ -1,0 +1,51 @@
+{
+  "audit_id": "FG-COMPARATIVE-AUDIT",
+  "collected_at": "2026-11-21T23:42:00+08:00",
+  "source": "一手：GitHub API metadata + Tree API + Blob 逐文件读取（30 文件）+ 两项目 README/docs/源码（网络大文件传输不稳，改用 API 小通道，未实跑 .NET 构建）",
+  "D1_lineage": {
+    "upstream": {"repo":"yuan71058/FastGithub","created":"2026-07-16","stars":65,"forks":17,"default":"master","tree_sha_head":"d9c40dde","blobs":174,"fork_flag":false},
+    "downstream": {"repo":"jsyzc2019/FastGithubOps.UI","created":"2026-10-02","stars":2,"forks":1,"default":"main","tree_sha_head":"97aa5fc1","blobs":220,"fork_flag":false},
+    "self_declared": "下游 README 与 description 明确自陈：在 yuan71058/FastGithub v2.3.1 基础上，与 docmirror/dev-sidecar 逐项对比后取长补短的优化版",
+    "evidence_cross": ["created_at 相差 78 天，上游在先","fork_flag 均 false → 代码复制式派生而非 GitHub fork","目录结构 9 个项目文件同名同构","下游致谢体系统一标注上游+dev-sidecar"],
+    "verdict": "谱系确凿：下游是上游的复制式派生 + dev-sidecar 借鉴混合体；非 fork 使谱系更隐蔽"
+  },
+  "D2_isomorphism": {
+    "shared_files_with_same_name": ["FastGithub.DomainResolve/DnsClient.cs","DomainResolver.cs","Http/HttpClientHandler.cs","Startup.cs","HttpServer/KestrelServerExtensions.cs","PacketIntercept/*HostedService.cs"],
+    "downstream_added_src": ["IpHealthTracker.cs","IpAddressFilter.cs","IpHealthSnapshot.cs","IIpHealthFeedback.cs"],
+    "downstream_added_selftests": ["IpHealthTrackerSelfTest","IpAddressFilterSelfTest","DohBackoffSelfTest","DohEndpointSelfTest","HostsSourceSelfTest","MetaRangeSelfTest","PersistenceSelfTest","CandidatePolicySelfTest","TlsPolicySelfTest","TelemetryPolicySelfTest"],
+    "growth": {"DomainResolver.cs_bytes":"13778→22639","HttpClientHandler.cs_bytes":"15948→23974","DnsClient.cs_bytes":"20832→27988","Startup.cs_bytes":"6593→12461"},
+    "verdict": "同构部分是继承而非独立验证；但下游确有大函数体增量与新增模块，非纯换皮。同源≠独立验证成立"
+  },
+  "D3_claim_vs_code": {
+    "claims": [
+      {"id":"健康度闭环","claim":"IpHealthTracker 成功率+连续失败+拉黑","code":"IpHealthTracker.cs:240-319 ReportSuccess/ReportFailure/IsBlacklisted，MinSuccessRate=0.4，分级拉黑","selftest":"IpHealthTrackerSelfTest 8用例+11 Assert","verdict":"TRUE"},
+      {"id":"污染IP过滤","claim":"0.0.0.0/私有段/保留段/24污染IP/IPv6映射","code":"IpAddressFilter.cs:198-301 完整网段+face:b00c特征+::ffff映射防御","selftest":"IpAddressFilterSelfTest","verdict":"TRUE"},
+      {"id":"反馈通道","claim":"IDomainResolver 新增 ReportSuccess/Failure/IsBlacklisted","code":"下游 IDomainResolver.cs 1725B vs 上游 1957B（注意：下游文件更小，需核实接口定义方式）","verdict":"PARTIAL - 见下方自审"},
+      {"id":"38457兜底","claim":"本版新增系统代理兜底","code":"FastGithubOptions 下游新增 DefaultHttpProxyPort=38457 常量；上游已有字面量 38457；下游 DnsInterceptHostedService catch 后降级存活而非 StopAsync","verdict":"TRUE（行为新增；端口字面量上游已有）"},
+      {"id":"降级存活","claim":"驱动异常不终止进程","code":"下游 DnsInterceptHostedService.cs:92-111 catch Exception 后降级+提示；上游 line90 直接 host.StopAsync","verdict":"TRUE"},
+      {"id":"net10.0","claim":"TFM net7→net10","code":"下游 csproj Version=10.0.0；上游 7.0.0-rc*；CI setup-dotnet 10.0.x","verdict":"TRUE"},
+      {"id":"超时10→5s","claim":"README: 单IP超时 10s→5s","code":"下游 defaultConnectTimeout=10s，totalConnectBudget=10s（注释20s→10s），ResponseDrainTimeout=5s；上游 connectTimeout=1.5s/connectTotalTimeout=4s。日志分析文档记录演进链 v2.4.0 10→4s、v2.4.4 4→2s","verdict":"MISMATCH - README 口径与代码/文档均不一致"}
+    ],
+    "counterexample_found": "超时10→5s 声称：README 简化表述与代码实际值（默认10s）+上游基线（1.5s）+演进文档（10→4→2s）三方均对不上"
+  },
+  "D4_attribution": {
+    "self_research": ["IpHealthTracker 分级拉黑（含小样本保护设计）","face:b00c/::ffff 污染特征识别","SelfTest 调用点修复","日志驱动的 v2.4.x-v2.6.x 迭代"],
+    "borrowed_from_dev_sidecar": ["健康度反馈闭环思想（README 明确标注 DynamicChoice）","isZeroIp 过滤思想（README 标注）","SpeedTester 超时思想","系统代理兜底模式"],
+    "borrowed_from_upstream": ["透明拦截/WinDivert/DNS劫持基座","9个appsettings域名配置","整体项目结构与程序入口"],
+    "documentation_vs_code": "docs/ 下 5 份中文分析文档（上游对照/日志分析/生态调研）为下游新增，且有真实 GitHub API 实测与日志行号引用 → 非纯文档堆砌",
+    "verdict": "净贡献真实（新增2核心模块+10自检+函数体增量），且借鉴来源标注诚实；但'优化版'的'优化'部分含相当比例的借鉴移植而非全自研"
+  },
+  "D5_reproduction": {
+    "environment": "本审计环境无 .NET SDK，且网络大文件传输不稳；未实跑 dotnet build/test",
+    "ci": "下游 .github/workflows/build.yml：windows-latest, setup-dotnet 10.0.x, restore/build/publish, --SelfTest 冒烟（10个自检）",
+    "selftest_invocation": "Program.cs:RunSelfTest 确认 10 个 SelfTest 全部注册，failed>0 设 ExitCode=1；非死代码",
+    "self_audit_gem": "Program.cs 注释：'过去 IpAddressFilterSelfTest 写好了却没有调用点，等于从未真正执行过' —— 项目自己长出的判据自审牙齿",
+    "verdict": "复现证据中等：CI 配置+调用链+自检断言充分，但本环境未实跑，不得伪造完成度"
+  },
+  "D6_absorption_candidates": [
+    {"idea":"SelfTest 写好了却没调用点=从未执行；新增自检必须注册","gate":"能否拦：测试存在但无调用点→flag→是","decision":"长牙候选"},
+    {"idea":"小样本期禁用成功率判定（1次失败=成功率0误杀）","gate":"能否拦：统计量样本不足仍判据生效→flag→是","decision":"长牙候选"},
+    {"idea":"README 简化表述与代码实际值漂移","gate":"能否拦：声称值≠代码值→需两处交叉确认→是","decision":"长牙候选（KB-AUDIT02 已覆盖）"},
+    {"idea":"生态调研用 GitHub API 实测而非空谈","gate":"本仓已有 API 取证纪律","decision":"观察（不重复造）"}
+  ]
+}

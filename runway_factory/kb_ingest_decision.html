@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Runway 教训补落盘决策</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--bd:#30363d;--fg:#e6edf3;--mut:#8b949e;--ok:#3fb950;--warn:#d29922;--acc:#58a6ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 -apple-system,"Segoe UI",sans-serif;padding:28px}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-size:24px;margin:0 0 6px}
+.sub{color:var(--mut);margin-bottom:24px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:18px 20px;margin:14px 0}
+.card h2{font-size:17px;margin:0 0 10px}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:700;margin-right:8px}
+.badge.yes{background:rgba(63,185,80,.15);color:var(--ok);border:1px solid var(--ok)}
+.badge.no{background:rgba(210,153,34,.15);color:var(--warn);border:1px solid var(--warn)}
+table{width:100%;border-collapse:collapse;margin:8px 0}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--bd);vertical-align:top;font-size:14px}
+th{color:var(--mut);width:120px}
+code{background:#010409;padding:2px 6px;border-radius:5px;color:var(--acc);font-size:13px}
+.kv{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.kv span{background:#010409;border:1px solid var(--bd);border-radius:8px;padding:8px 12px;font-size:13px}
+.kv b{color:var(--acc)}
+.note{border-left:3px solid var(--acc);padding:10px 14px;background:rgba(88,166,255,.06);color:var(--fg);margin:12px 0;border-radius:0 8px 8px 0}
+.end{color:var(--ok);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Runway 教训补落盘决策</h1>
+  <div class="sub">触发：用户追问"这些工作做完了吗" · 2026-11-22 · 来源：runway_factory《Building a Software Factory》研读</div>
+
+  <div class="card">
+    <h2>核查发现的真实缺口</h2>
+    <p>Runway 研读的 <code>build_report.py</code> 末尾写了"shadow mode/风险分级先入库为 reasoning_lesson 观察复现"，但知识库从未真正落地这两条——97 条中无对应项，commentary 也无 Runway 专章。<b>报告承诺 ≠ 已落盘</b>，又是一次"声明完成"与"实际完成"的差。本次按授权补齐。</p>
+  </div>
+
+  <div class="card">
+    <h2>决策（KB-META01 会拦才入，独立复核而非盲从倾向）</h2>
+    <table>
+      <tr><th>gates re-check</th><td><span class="badge yes">入库</span>新增 <code>KB-AUDIT05</code>。有独立拦截动作：签字/CI 通过结论绑定精确 commit SHA，合并前 re-check，HEAD 漂移则结果失效重验。与 KB-AUDIT04（检查当下用错对象）不同——本条是<b>时间维度的验证后漂移</b>；与预注册 SHA256 锁存同源但补齐"commit 被替换则门禁失效"的具体动作。fix，addressable。</td></tr>
+      <tr><th>shadow mode</th><td><span class="badge no">记观察</span>先 read-only 后人逐条判定 ≈ 本仓预注册门禁的方法论层形态，机制不独立，硬造新条目会触 vanity 门禁。只加固 KB-E07 / KB-META01 的 support 作佐证。</td></tr>
+    </table>
+    <div class="note">独立复核结论与用户倾向一致，但理由是自证的：gates re-check 拦的是"签字后对象被换掉"的时间维度漂移，静态哈希锁存覆盖不到；shadow mode 与预注册同源，只配做佐证，不配单列成牙。</div>
+  </div>
+
+  <div class="card">
+    <h2>校验</h2>
+    <div class="kv">
+      <span>知识库 <b>97 → 98 条</b></span>
+      <span>readiness <b>ready=True</b></span>
+      <span>佐证占比 <b>0.837</b></span>
+      <span>fix 类 <b>55</b></span>
+      <span>vanity 占比 <b>0.041</b>（&lt;0.2）</span>
+      <span>全量测试 <b>287 通过</b></span>
+    </div>
+    <p style="color:var(--mut);font-size:13px;margin-bottom:0">三处数字一致：知识库实际 98 条 / REPOSITORY_MAP 98 / commentary §45（共 46 章）。</p>
+  </div>
+
+  <div class="card end">
+    这次的价值不在教训本身，而在发现"报告里写了要入库"和"真的入库了"是两件事——若无这次追问，两条承诺会一直悬空。
+  </div>
+</div>
+</body>
+</html>

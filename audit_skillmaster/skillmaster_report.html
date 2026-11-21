@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SKILLMASTER 论文深读审计</title><style>
+:root{--bg:#0d1117;--card:#161b22;--bd:#30363d;--fg:#e6edf3;--mut:#8b949e;--ok:#3fb950;--warn:#d29922;--acc:#58a6ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 -apple-system,"Segoe UI",sans-serif;padding:28px}
+.wrap{max-width:920px;margin:0 auto}
+h1{font-size:25px;margin:0 0 4px}
+.sub{color:var(--mut);font-size:14px;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:18px 20px;margin:14px 0}
+.card h2{font-size:17px;margin:0 0 10px;color:var(--acc)}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:700;margin-right:8px}
+.badge.ok{background:rgba(63,185,80,.15);color:var(--ok);border:1px solid var(--ok)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:top}
+th{color:var(--mut)}
+code{background:#010409;color:var(--acc);padding:1px 6px;border-radius:5px;font-size:12px}
+.note{border-left:3px solid var(--acc);padding:10px 14px;background:rgba(88,166,255,.06);margin:12px 0;border-radius:0 8px 8px 0}
+.warnbox{border-left:3px solid var(--warn);padding:10px 14px;background:rgba(210,153,34,.06);margin:12px 0;border-radius:0 8px 8px 0}
+.vd{color:var(--ok);font-weight:600}
+.kv{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.kv span{background:#010409;border:1px solid var(--bd);border-radius:8px;padding:8px 12px;font-size:13px}
+.kv b{color:var(--acc)}
+</style></head><body><div class="wrap">
+<h1>SKILLMASTER 论文深读 · 框架审计</h1>
+<div class="sub">arXiv:2605.08693 v3 (2026-09-30) · 山东大学/中关村学院/清华/东南/中科大 · 对象类型：学术实证论文 · 判据 7/7 PASS</div>
+<div class="card"><h2>判据执行结果</h2><table><tr><th>判据</th><th>结果</th><th>证据与判语</th></tr>
+<tr><td><b>S1 · claim-vs-code 一致性</b></td><td><span class="badge ok">PASS</span></td><td>3设计实现状态=['IMPLEMENTED', 'IMPLEMENTED_WITH_DRIFT', 'IMPLEMENTED']; 漂移1处<br><span style="color:var(--mut)">三设计均有代码实体且接线; 1处系数漂移(α0.3vs0.2)标minor; 复现资源未公开另记</span></td></tr>
+<tr><td><b>S2 · 实验数字内部自洽</b></td><td><span class="badge ok">PASS</span></td><td>聚合口径微小差异=[0.1, 0.2, 0.4](均&lt;0.5); 消融算术自洽=True; Table8与主表一致=True<br><span style="color:var(--mut)">数字方向一致; Overall聚合口径未明示(疑加权)标minor; 全部self-reported</span></td></tr>
+<tr><td><b>S3 · 消融支撑因果归因</b></td><td><span class="badge ok">PASS</span></td><td>控制组review-only/SFT+GRPO=True; 弱初始库到0%=True; 缺口已标=True<br><span style="color:var(--mut)">skill-management整体=因果级; 反事实效用单独贡献=相关级(未单独消融,如实降级)</span></td></tr>
+<tr><td><b>S4 · 基线公平性与自证偏差</b></td><td><span class="badge ok">PASS</span></td><td>公平协议=True; 基线非自跑已标=True; 局限披露5条<br><span style="color:var(--mut)">同backbone但基线数字引自前作,同协议为作者声称不可独立验证; 局限披露充分含冷启动仍用Claude</span></td></tr>
+<tr><td><b>S5 · 同构陷阱判定</b></td><td><span class="badge ok">PASS</span></td><td>重叠5处; 同谱系打折=True<br><span style="color:var(--mut)">与SVL同谱系印证并打折,不虚高; 新意=反事实probe作为可训练学习信号,但依赖结构化环境</span></td></tr>
+<tr><td><b>S6 · 复述/长牙决策</b></td><td><span class="badge ok">PASS</span></td><td>候选4条, 均有拦截动作=True, 记观察1条<br><span style="color:var(--mut)">每条有能拦什么; 条件门禁/加固/观察分层,未硬造通用模块</span></td></tr>
+<tr><td><b>SELF · 判据自审（偏见防线）</b></td><td><span class="badge ok">PASS</span></td><td>自审项5条; 完整PDF替换截断版并更新锁存<br><span style="color:var(--mut)">不因同构虚高/不因单点定罪/验证对象=v3完整版; 先读摘要已如实标注</span></td></tr>
+</table></div>
+<div class="card"><h2>claim-vs-code：三设计全部接线</h2><table><tr><th>设计</th><th>代码状态</th><th>证据</th></tr>
+<tr><td>Trajectory-informed skill review: propose_skill/update_skill/keep_skill 三个工具调用</td><td><b style="color:var(--ok)">IMPLEMENTED</b></td><td>run_alfworld_skill_tool_rollout.sh: +env.skill_tool_rollout.enable=True, mutate_on_train=True, mutate_on_validation=True, apply_on_validation=True, autosave=True; skill_tool_config_path 指向 skill_bank_tool_config.yaml</td></tr>
+<tr><td>Counterfactual Skill Utility Reward: probe 上 B vs B' 对比, K=4, 方向一致性项, Rutility&gt;0 才提交</td><td><b style="color:var(--ok)">IMPLEMENTED_WITH_DRIFT</b></td><td>脚本: +env.skill_tool_rollout.utility_reward.enable=True, same_probe_k=4, same_delta_win_loss_gamma=0.2, alfworld_probe_gamefiles_path=..., apply_on_validation=False(评估时无utility反馈,与论文§2.1一致); 漂移: 论文正文/附录C写 alpha=0.3(paper.txt L376/L739), 代码 same_delta_win_loss_gamma=0.2 —— 方向一致性系数论文0.3 vs 代码0.2, minor口径漂移</td></tr>
+<tr><td>DualAdv-GRPO: action/skill 双流优势归一化 + gamma 合并</td><td><b style="color:var(--ok)">IMPLEMENTED</b></td><td>脚本: algorithm.adv_estimator=grpo, +env.skill_tool_rollout.skill_mgmt_advantage_weight=0.2(skill优势权重gamma), actor.use_kl_loss=True kl_loss_coef=0.01, lr=1e-6, env.rollout.n=8 —— 与论文§3实现细节一致</td></tr>
+</table>
+<div class="warnbox"><b>参数级漂移</b>：论文 α=0.3（正文 L376 / 附录 C L739），训练脚本 <code>same_delta_win_loss_gamma=0.2</code>。方法名与代码实体都对上，但超参值对不上 → minor 口径漂移，不得写成"论文与代码完全一致"。<br><b>复现缺口</b>：README 明言匿名版不含训练数据/SFT&RL 检查点，称录用后发布。</div>
+</div>
+<div class="card"><h2>数字复算（self-reported）</h2><table><tr><th>检查项</th><th>结论</th></tr>
+<tr><td>主表 ALFWorld 89.9→98.7（+8.8pp）</td><td>自洽</td></tr>
+<tr><td>SearchQA 超 SkillRL 0.9pp / 7 中 5 升 2 降</td><td>逐项复算一致</td></tr>
+<tr><td>Overall 聚合差异（ALF 0.1 / QA-SM 0.2 / QA-SR 0.4）</td><td>minor，口径未明示（疑加权），方向一致</td></tr>
+<tr><td>Table8 三次运行 mean±std</td><td>mean 与主表完全一致; std 极小, 强可复现信号但评估集固定/解码确定性可能, 论文未说明</td></tr>
+</table></div>
+<div class="card"><h2>三层诚实结论</h2>
+<p><b>事实</b>：三设计有代码实体且接线；数字大体自洽；消融排除两个替代解释（review-only 仅 +0.8pp，弱初始库到 0% 仍 89.4 vs 74.8）。</p>
+<p><b>结论</b>：skill-management 整体有效=因果级；反事实效用单独贡献=相关级（未单独消融，论文 gap 已如实写）；基线数字引自 Xia et al. 2026 非独立重跑，同协议为作者声称不可独立验证。</p>
+<p><b>迁移</b>：与 SVL 框架 5 处同构（反事实效用≈会拦才入、方向一致性≈单一检查点不足定罪等），同谱系打折；真实新意是把"经验是否有用"做成可训练学习信号，但依赖可 probe 的结构化环境。</p>
+</div>
+<div class="card"><h2>判据自审亮点：引擎自己咬到自己</h2>
+<div class="note">S3 判据首次跑出 FLAG——引擎用脆弱字面串 <code>"未单独消融" in gap</code> 匹配，但证据字段写的是"<b>没有</b>单独消融"，匹配失败致假阴性。改为语义/动作词判定后 7/7 全过。<b>这是 KB-AUDIT01（脆弱断言致假阴性）的活体复现——判据引擎当场犯了它要防的错。</b></div>
+</div>
+<div class="card"><h2>复述/长牙与入库决策</h2><ul>
+<li>技能/经验条目增删前, 必须在 held-out probe 上做前后对比, 仅当多数 probe 同向改善才提交 → <b>长牙候选, 但本仓无结构化probe环境, 降级为'有probe才用'的条件门禁</b></li>
+<li>方向一致性: w-l/K 抑制单个离群样本驱动的经验变更 → <b>与KB-AUDIT02重叠, 加固不新增</b></li>
+<li>'移除外部teacher'需限定阶段: 冷启动SFT仍用Claude, 只有RL阶段自主 → <b>长牙候选, 与KB-SIM02主体错位同源, 加固</b></li>
+<li>工具选型/环境结构化程度是方法可迁移性的前提 → <b>记观察, 属适用边界非通用门禁</b></li>
+</ul>
+<div class="note">新增 <b>KB-AUDIT06</b>（claim-vs-code 要核到超参值那一层）；加固 KB-AUDIT01 / KB-SIM02 / KB-STRUCT02。知识库 98 → <b>99 条</b>，ready=True，vanity 0.04，全量 287 项测试通过。</div>
+</div>
+<div class="card vd">扎实的一手实证论文: 三设计claim-vs-code全部接线, 数字内部自洽(聚合口径minor未明示), 消融排除两替代解释但未单独消融反事实效用; 同SVL框架同谱系需打折</div>
+<div class="sub" style="margin-top:16px">锁存：完整PDF(9c87bb2f)/预注册(114816ae)/证据(9fa835e4) SHA256 · GitHub raw 抓到训练脚本 · commentary §47</div>
+</div></body></html>

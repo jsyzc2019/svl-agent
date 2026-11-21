@@ -1,0 +1,71 @@
+{
+  "audit_id": "AUDIT-SKILLMASTER-2026-11-22",
+  "criteria": [
+    {
+      "id": "S1",
+      "name": "claim-vs-code 一致性",
+      "pass": true,
+      "evidence": "3设计实现状态=['IMPLEMENTED', 'IMPLEMENTED_WITH_DRIFT', 'IMPLEMENTED']; 漂移1处",
+      "note": "三设计均有代码实体且接线; 1处系数漂移(α0.3vs0.2)标minor; 复现资源未公开另记"
+    },
+    {
+      "id": "S2",
+      "name": "实验数字内部自洽",
+      "pass": true,
+      "evidence": "聚合口径微小差异=[0.1, 0.2, 0.4](均<0.5); 消融算术自洽=True; Table8与主表一致=True",
+      "note": "数字方向一致; Overall聚合口径未明示(疑加权)标minor; 全部self-reported"
+    },
+    {
+      "id": "S3",
+      "name": "消融支撑因果归因",
+      "pass": true,
+      "evidence": "控制组review-only/SFT+GRPO=True; 弱初始库到0%=True; 缺口已标=True",
+      "note": "skill-management整体=因果级; 反事实效用单独贡献=相关级(未单独消融,如实降级)"
+    },
+    {
+      "id": "S4",
+      "name": "基线公平性与自证偏差",
+      "pass": true,
+      "evidence": "公平协议=True; 基线非自跑已标=True; 局限披露5条",
+      "note": "同backbone但基线数字引自前作,同协议为作者声称不可独立验证; 局限披露充分含冷启动仍用Claude"
+    },
+    {
+      "id": "S5",
+      "name": "同构陷阱判定",
+      "pass": true,
+      "evidence": "重叠5处; 同谱系打折=True",
+      "note": "与SVL同谱系印证并打折,不虚高; 新意=反事实probe作为可训练学习信号,但依赖结构化环境"
+    },
+    {
+      "id": "S6",
+      "name": "复述/长牙决策",
+      "pass": true,
+      "evidence": "候选4条, 均有拦截动作=True, 记观察1条",
+      "note": "每条有能拦什么; 条件门禁/加固/观察分层,未硬造通用模块"
+    },
+    {
+      "id": "SELF",
+      "name": "判据自审（偏见防线）",
+      "pass": true,
+      "evidence": "自审项5条; 完整PDF替换截断版并更新锁存",
+      "note": "不因同构虚高/不因单点定罪/验证对象=v3完整版; 先读摘要已如实标注"
+    }
+  ],
+  "summary": {
+    "all_pass": true,
+    "verdict": "扎实的一手实证论文: 三设计claim-vs-code全部接线, 数字内部自洽(聚合口径minor未明示), 消融排除两替代解释但未单独消融反事实效用; 同SVL框架同谱系需打折",
+    "key_drift": "α 论文0.3 vs 代码same_delta_win_loss_gamma=0.2 (minor)",
+    "key_gaps": [
+      "复现资源(数据/SFT&RL检查点)未公开,称录用后发布",
+      "主要基线数字引自Xia et al.2026非独立重跑",
+      "冷启动SFT仍用Claude作teacher(仅RL阶段自主)",
+      "反事实效用未单独消融"
+    ],
+    "teeth": [
+      "技能/经验条目增删前, 必须在 held-out probe 上做前后对比, 仅当多数 ",
+      "方向一致性: w-l/K 抑制单个离群样本驱动的经验变更",
+      "'移除外部teacher'需限定阶段: 冷启动SFT仍用Claude, 只有RL阶段自主",
+      "工具选型/环境结构化程度是方法可迁移性的前提"
+    ]
+  }
+}

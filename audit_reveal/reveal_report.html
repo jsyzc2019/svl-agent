@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ReVeal 深研审计</title><style>
+:root{{--bg:#0d1117;--card:#161b22;--fg:#e6edf3;--mut:#8b949e;--ok:#3fb950;--warn:#d29922;--no:#f85149;--acc:#58a6ff;--bd:#30363d}}
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{background:var(--bg);color:var(--fg);font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;padding:40px 20px}}
+.wrap{{max-width:960px;margin:0 auto}}
+h1{{font-size:26px;color:var(--acc);margin-bottom:6px}}
+.sub{{color:var(--mut);font-size:14px;margin-bottom:28px}}
+.badge{{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;margin-right:6px}}
+.badge.ok{{background:rgba(63,185,80,.15);color:var(--ok);border:1px solid var(--ok)}}
+.badge.warn{{background:rgba(210,153,34,.15);color:var(--warn);border:1px solid var(--warn)}}
+.hero{{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:22px;margin-bottom:24px}}
+.hero .headline{{font-size:15px;color:var(--fg);margin-top:12px}}
+.kpi{{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap}}
+.kpi div{{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:10px 16px;font-size:13px;color:var(--mut)}}
+.kpi b{{color:var(--fg);font-size:18px;display:block}}
+h2{{font-size:18px;color:var(--acc);margin:26px 0 12px;border-left:3px solid var(--acc);padding-left:10px}}
+.card{{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px 18px;margin-bottom:12px}}
+.card .t{{font-size:15px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}}
+.card .f{{font-size:13px;color:var(--mut)}}
+table{{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}}
+th,td{{border:1px solid var(--bd);padding:8px 10px;text-align:left}}
+th{{background:var(--card);color:var(--acc)}}
+.note{{background:rgba(88,166,255,.08);border-left:3px solid var(--acc);padding:10px 14px;font-size:13px;color:var(--mut);margin-top:12px;border-radius:4px}}
+footer{{color:var(--mut);font-size:12px;margin-top:30px;text-align:center;border-top:1px solid var(--bd);padding-top:16px}}
+</style></head><body><div class="wrap">
+<h1>ReVeal: Self-Evolving Code Agents via Reliable Self-Verification</h1>
+<div class="sub">ICLR 2026 · arXiv 2506.11442v2 · 微软亚研院 / 同济 / 中科大 · 学术实证论文（公开代码） · 审计于 2026-11-22</div>
+
+<div class="hero">
+  <div><span class="badge ok">8/8 判据通过</span><span class="badge warn">代码扎实</span><span class="badge warn">归因有边界</span></div>
+  <div class="headline">顶会实证论文,代码扎实超参一致; '可靠自验证'有诚实边界(训练golden/测试自主+∆↓反例); 不新增知识条目,记观察</div>
+  <div class="kpi">
+    <div><b>8/8</b>判据通过</div>
+    <div><b>5/5</b>核心设计有代码实体</div>
+    <div><b>0</b>论文-代码超参漂移</div>
+    <div><b>99</b>知识库条目（未新增）</div>
+  </div>
+</div>
+
+<h2>一手材料与锁存</h2>
+<div class="card"><div class="f">
+PDF 完整下载（2.8MB / 19 页 / EOF 完整，避免 SKILLMASTER 那次截断）；arXiv abs（v1 2025-06-13，v2 2025-10-21）；
+ICLR poster（id=10007284）确认录用；GitHub <b>Shimly-2/ReVeal</b>（289 文件，7MB，MIT，2026-03-01 全文代码发布）。
+六重 SHA256 锁存全部校验 OK。预注册如实标注"判据设计前已从公开摘要获知方法三件套与 Figure 数字"。
+</div></div>
+
+<h2>判据结论</h2>
+<div class="card"><div class="t"><span class="badge ok">IMPLEMENTED</span> <span>V1 · claim_vs_code</span></div><div class="f">5/5核心设计有代码实体且接线; 论文-代码超参(abs=0,imp=1)一致无漂移; reward格式项拆分(format独立vs并入outcome)属口径非漂移; 缺口: 训练脚本 code_train_path/code_test_path 为占位符(path_to_train_data);README无数据下载链接,需自行跑taco_filter</div></div><div class="card"><div class="t"><span class="badge ok">CONSISTENT</span> <span>V2 · number_consistency</span></div><div class="f">5/5项复算自洽; 主动标注3处口径警示(轮数不等/自定义指标/基线版本),未单点定罪</div></div><div class="card"><div class="t"><span class="badge warn">PARTIAL</span> <span>V3 · self_verification_reliability_subject</span></div><div class="f">训练r_ver依赖golden,测试无golden自主——差异被作者主动披露(disclosure=True); TAPO有防hacking设计(anti_hack=True); 保留迁移假设反例: ∆↓=0在Qwen backbone上非TAPO独有。判PARTIAL不判隐瞒偷换</div></div><div class="card"><div class="t"><span class="badge warn">PARTIAL</span> <span>V4 · ablation_attribution</span></div><div class="f">3项混杂控制(prompt-only/跨backbone/8次std); 同轮数消融×8 TAPO+1.6pp且∆↓1.32→0.0; 但3处缺口: 未单独消融verification reward、Qwen上∆↓=0反例、最强数字来自×25非隔离机制</div></div><div class="card"><div class="t"><span class="badge warn">MIXED</span> <span>V5 · baseline_independence_and_contamination</span></div><div class="f">CTRL/critic基线引用自Xie2025旧LCB版本(非独立重跑); 同backbone的single-turn RL公平; 训练TACO早于LCB V6测试窗口污染风险低但无去污染声明——按KB-STRUCT07对引用基线降级</div></div><div class="card"><div class="t"><span class="badge warn">PARTIAL</span> <span>V6 · reproducibility</span></div><div class="f">代码MIT/TAPO/golden/reward全公开(完整度高),但训练数据需自过滤、测试集未单独发布、推理20+轮脚本未完整公开、检查点未给——代码公开≠可实跑复现</div></div><div class="card"><div class="t"><span class="badge warn">OBSERVE_ONLY</span> <span>V7 · isomorphism_and_teeth</span></div><div class="f">5处与SVL同构,同谱系打折(KB-STRUCT02); 真实新意(reward通道隔离)已被KB-META01/KB-STRUCT07覆盖 → 记观察不新增(vanity门禁)</div></div><div class="card"><div class="t"><span class="badge ok">PASS</span> <span>SA · judge_self_audit</span></div><div class="f">5条自审规则全过: 无脆弱字面串/无单点定罪/口径对等/事实真≠结论真/分阶段主体已核</div></div>
+
+<h2>关键判据点：可靠自验证的分阶段信号源</h2>
+<div class="card"><table>
+<tr><th>阶段</th><th>验证信号来源</th><th>含义</th></tr>
+<tr><td>训练</td><td>r_ver = 在 golden code 上通过的测试比例；golden filter 保证反馈合法</td><td>验证质量信号依赖金标</td></tr>
+<tr><td>测试</td><td>无 golden，所有测试自主执行</td><td>验证完全自主，对自造测试质量提出强需求</td></tr>
+</table>
+<div class="note">作者主动披露该差异 → 判 PARTIAL 不判隐瞒偷换。但"训练可靠→测试可靠"是迁移假设；∆↓≈0 被用作可靠性证据，
+反例是 Qwen backbone 上 outcome-only 的 ∆↓ 也 = 0.0——该指标不全是 TAPO 功劳。prompt-only 对照（×6 仅 27.4）排除了"仅工具+提示"混杂，这部分是真支撑。</div></div>
+
+<h2>数字复算（口径对等优先）</h2>
+<div class="card"><table>
+<tr><th>项</th><th>数值</th><th>判定</th></tr>
+<tr><td>同轮数消融×8：TAPO − outcome</td><td>37.7 − 36.1 = +1.6pp</td><td>口径对等，公平</td></tr>
+<tr><td>同轮数消融 ∆↓</td><td>1.32 → 0.0</td><td>支持 TAPO（DAPO backbone）</td></tr>
+<tr><td>主表 Pass@1 turn1→turn25</td><td>34.8% → 38.7%（+3.9）</td><td>与图表一致</td></tr>
+<tr><td>8 次运行显著性</td><td>t = 5.81</td><td>统计显著（std 偏小需标注）</td></tr>
+<tr><td>主表×25 vs 消融×8</td><td>轮数不等</td><td>不混比，标注 minor</td></tr>
+</table></div>
+
+<h2>入库决策</h2>
+<div class="card"><div class="f">
+不新增条目：reward 通道隔离（KB-META01/KB-STRUCT07）、分阶段信号源（KB-SIM02）、∆↓反例（KB-AUDIT02/KB-R-MS01）均已覆盖，入则灌水。
+加固上述四条 support。知识库保持 99 条，ready=True，vanity 占比 0.04；全量 287 项测试通过。
+</div></div>
+
+<footer>诚实边界：论文数字均为作者 self-reported；未实跑代码/复现实验；训练数据需自过滤、推理脚本与检查点未完整公开；
+CTRL 基线引用旧版 LCB 非独立重跑；结论限于静态证据与论文报告数字的算术一致性核对。</footer>
+</div></body></html>

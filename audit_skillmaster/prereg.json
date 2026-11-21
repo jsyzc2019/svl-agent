@@ -1,0 +1,66 @@
+{
+  "audit_id": "AUDIT-SKILLMASTER-2026-11-22",
+  "object": "SKILLMASTER: Toward Autonomous Skill Mastery in LLM Agents (arXiv:2605.08693, v3 2026-09-30)",
+  "github": "https://github.com/sduyangmin/Skill-Master",
+  "object_type": "学术实证论文（一手方法+实验），非观点/综述/教程文",
+  "object_type_basis": "作者自述提出训练框架，含三设计(轨迹引导技能复盘/反事实效用评估/DualAdv-GRPO)、三基准(ALFWorld/WebShop/SearchQA)实验与消融。判据应适配：claim-vs-code、实验数字内部自洽、消融是否支撑因果归因、基线公平性、可复现性、与用户框架的同构陷阱。",
+  "source_lock": {
+    "arxiv_abs.html": "b309b2ef37b5a87efac7901bfb400dc70a8306e1761ad7f2e745d7e97b9106c0",
+    "paper.pdf(partial,curl超时截断但前24页可读)": "839256fee8310085211dfed72d78e80a640a65488a1bd8ca11a449fa93ac9a57",
+    "paper_partial.txt": "acbbe5cd00057c702174caa655b84bee0fc92ade8b149ede942bd336fdc7e758",
+    "note": "完整版重下中；若拿到完整PDF则更新锁存，判据以完整版为准"
+  },
+  "honesty_disclosure": "判据设计前已读摘要与引言前2页（对象类型判定不可避免依赖）。深度方法/实验分析在锁存之后。不预设『论文必夸大』，也不因与自己框架同构就虚高印证（承接§44偏见锁 + KB-STRUCT02）。",
+  "criteria": [
+    {
+      "id": "S1",
+      "name": "claim-vs-code 一致性",
+      "question": "论文声称的方法（轨迹复盘/反事实效用/DualAdv-GRPO 三设计）是否真的在公开代码中实现？",
+      "method": "对照 GitHub repo：找 skill review/编辑、counterfactual probe、DualAdv-GRPO 优势分离的代码实体；核对 README 声称与代码。区分『有实现』『有骨架无调用』『完全缺失』(KB-AUDIT03 测试存在≠执行)。",
+      "pass_condition": "每条核心claim标注实现状态，缺失需证据；不因README自述判已实现"
+    },
+    {
+      "id": "S2",
+      "name": "实验数字内部自洽",
+      "question": "主表数字、消融数字、分析数字是否自洽？有无口径漂移或前后矛盾？",
+      "method": "抽取主结果表与消融表数字，复算相对提升/排序；检查同一方法在不同表的数字是否一致。数字来自论文自报，标 self-reported。",
+      "pass_condition": "内部矛盾需披露；口径漂移标 minor/major，不因单点差异定罪(KB-AUDIT02)"
+    },
+    {
+      "id": "S3",
+      "name": "消融支撑因果归因",
+      "question": "三设计各自的消融是否真的支撑『各自必要』的结论？",
+      "method": "找 -skill review / -counterfactual / -DualAdv 的消融行；检查是否只去掉该组件、其他固定。若消融同时改动多处则归因不成立。",
+      "pass_condition": "归因强度分级（因果/相关/不足），不过度解读"
+    },
+    {
+      "id": "S4",
+      "name": "基线公平性与自证偏差",
+      "question": "对比方法是否公平？测量是否独立？作者是否主动披露局限？",
+      "method": "核对基线选择、backbone 是否一致、是否自报测量。重点看作者是否承认局限（如skill bank膨胀、成本、泛化边界）。",
+      "pass_condition": "公平性/独立性/局限披露分别判定，不因自报直接判假"
+    },
+    {
+      "id": "S5",
+      "name": "同构陷阱判定（对用户框架）",
+      "question": "本文机制（技能自我管理/反事实效用/轨迹复盘/双优势）与用户SVL框架是否同构？是否独立验证？",
+      "method": "按KB-STRUCT02列重叠点，判同谱系打折，找真实新意，不虚高；注意这是AI自我改进谱系，与用户框架可能共享思想源。",
+      "pass_condition": "显式标注谱系来源并打折，新意与重叠分离"
+    },
+    {
+      "id": "S6",
+      "name": "复述/长牙决策",
+      "question": "对SVL框架能编译出什么会拦会降级的门禁？",
+      "method": "按KB-META01逐条检验具体被拦动作，只写笔记无拦截动作→记观察。特别关注反事实效用(编辑前先在probe任务上测)这一可编译机制。",
+      "pass_condition": "每条决策有明确『能拦什么』，否则记观察不硬造"
+    }
+  ],
+  "judge_self_audit": [
+    "不因论文与SVL框架同构就判『证明了我对』(KB-STRUCT02)",
+    "不因代码缺失单点就判论文造假——先查是否路径/版本问题(KB-AUDIT02/04)",
+    "数字自报≠造假，标self-reported即可",
+    "事实真(方法有效)≠结论真(普适/可迁移到用户框架)仍须独立判",
+    "验证对象=最终对象：核对的是v3而非v1(KB-AUDIT05)"
+  ],
+  "preregistered_at": "2026-11-22T00:58:00+08:00"
+}
