@@ -1,0 +1,691 @@
+                                                           HiGR: Industrial-Scale Hierarchical Generative Slate
+                                                               Recommendation Framework in Tencent
+                                                            Yunsheng Pang∗                                                      Zijian Liu∗                                     Yudong Li†
+                                             Platform and Content Group, Tencent                             Platform and Content Group, Tencent                 Platform and Content Group, Tencent
+                                                     yspang@tencent.com                                             kevinsliu@tencent.com                                elsonli@tencent.com
+
+                                                               Shaojie Zhu                                                      Zijian Luo                                     Chenyun Yu
+                                             Platform and Content Group, Tencent                                        Sun Yat-sen University                            Sun Yat-sen University
+
+                                                                  Sikai Wu                                                   Shichen Shen                                         Cong Xu
+                                             Platform and Content Group, Tencent                             Platform and Content Group, Tencent                 Platform and Content Group, Tencent
+arXiv:2512.24787v5 [cs.IR] 11 Jun 2026
+
+
+
+
+                                                                 Bin Wang                                                         Kai Jiang                                Chengxiang Zhuo
+                                             Platform and Content Group, Tencent                             Platform and Content Group, Tencent                 Platform and Content Group, Tencent
+
+                                                                                                                                   Zang Li
+                                                                                                             Platform and Content Group, Tencent
+
+                                         Abstract                                                                                        in offline recommendation quality while achieving a 5× inference
+                                         Slate recommendation, which presents users with a ranked item                                   speedup. Online A/B tests on Tencent platforms further improve
+                                         list in a single display, is ubiquitous across mainstream online plat-                          watch time by 1.22% and video plays by 1.73%. HiGR has been de-
+                                         forms. While recent generative recommendation methods have                                      ployed on multiple Tencent platform surfaces (e.g., news, videos,
+                                         shown strong potential in modeling item sequences with semantic                                 and web novels), serving hundreds of millions of users and proving
+                                         IDs, directly applying them to industrial-scale slate recommenda-                               its industrial-scale applicability.
+                                         tion faces a fundamental disconnect: entangled SID spaces confound
+                                         high-level list planning, fine-grained autoregressive decoding over                             CCS Concepts
+                                         long sequences limits semantic planning efficiency, and token-level                             • Information systems → Recommender systems.
+                                         objectives misalign with holistic slate quality. In this paper, we pro-
+                                         pose HiGR, an industrial-scale hierarchical generative framework
+                                                                                                                                         Keywords
+                                         for slate recommendation that bridges this disconnect through a
+                                         co-designed pipeline. First, HiGR learns structured SIDs via a Prefix-                          Generative Recommendation, Slate Recommendation
+                                         Contrastive Residual Quantized VAE (PCRQ-VAE). By enforcing
+                                                                                                                                         ACM Reference Format:
+                                         high-level prefixes to capture shared semantics, PCRQ-VAE cre-                                  Yunsheng Pang, Zijian Liu, Yudong Li, Shaojie Zhu, Zijian Luo, Chenyun Yu,
+                                         ates a controllable discrete space that acts as a prerequisite for                              Sikai Wu, Shichen Shen, Cong Xu, Bin Wang, Kai Jiang, Chengxiang Zhuo,
+                                         efficient planning. Leveraging this structured space, our Hierar-                               and Zang Li. 2024. HiGR: Industrial-Scale Hierarchical Generative Slate
+                                         chical Slate Decoder (HSD) shifts autoregressive modeling from                                  Recommendation Framework in Tencent. In Proceedings of Make sure to enter
+                                         entangled token-level decoding to coarse-grained preference em-                                 the correct conference title from your rights confirmation email (CIKM ’26).
+                                         beddings. This design significantly reduces inference latency while                             ACM, New York, NY, USA, 8 pages. https://doi.org/XXXXXXX.XXXXXXX
+                                         allowing explicit global slate structure planning. Finally, this stable
+                                         planning space enables an ORPO-based listwise alignment mecha-
+                                         nism to optimize triple-objective implicit feedback—ranking fidelity,                           1    Introduction
+                                         genuine user interest, and diversity. Extensive offline experiments                             Personalized recommendation systems play a central role in large-
+                                         show that HiGR outperforms state-of-the-art baselines by over 10%                               scale online platforms, such as video feeds, news feeds, e-commerce,
+                                         ∗ Both authors contributed equally to this research.                                            and homepage recommendation services [1, 18, 26, 32]. In many
+                                         † Corresponding author.                                                                         of these scenarios users are shown an ordered list of items in a
+                                                                                                                                         single display—a setting commonly known as slate recommenda-
+                                         Permission to make digital or hard copies of all or part of this work for personal or
+                                         classroom use is granted without fee provided that copies are not made or distributed           tion—where quality depends not only on individual item relevance
+                                         for profit or commercial advantage and that copies bear this notice and the full citation       but also on the inter-item structure of the list (ordering, compati-
+                                         on the first page. Copyrights for components of this work owned by others than the              bility, and diversity).
+                                         author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or
+                                         republish, to post on servers or to redistribute to lists, requires prior specific permission      Most industrial recommendation systems still follow a discrimi-
+                                         and/or a fee. Request permissions from permissions@acm.org.                                     native two-stage paradigm. They first score candidate items inde-
+                                         CIKM ’26, Rome, ITALY                                                                           pendently with point-wise or pair-wise ranking models [16], and
+                                         © 2024 Copyright held by the owner/author(s). Publication rights licensed to ACM.
+                                         ACM ISBN 978-1-4503-XXXX-X/18/06                                                                then assemble the final slate through greedy selection, heuristic
+                                         https://doi.org/XXXXXXX.XXXXXXX                                                                 rules, or reranking modules. Optimizing items in isolation limits
+CIKM ’26, November 7-11, 2026, Rome, ITALY                                                                                             Y. Pang et al.
+
+
+the ability to capture inter-item dependencies and positional ef-           of relying on item-level rewards, we construct slate-level prefer-
+fects, often yielding slates that are locally reasonable but globally       ence pairs from implicit user feedback and optimize the model with
+suboptimal.                                                                 Odds Ratio Preference Optimization (ORPO). The preference pairs
+    Recent advances in generative recommendation provide a promis-          are designed to reflect three complementary objectives: ranking
+ing alternative. By formulating recommendation as a sequence gen-           fidelity, genuine user interest, and slate diversity. In this way, HiGR
+eration problem, generative models can directly produce an ordered          directly aligns the generated slate with holistic user preferences
+slate and naturally model dependencies among items [6, 7]. In par-          and practical business metrics.
+ticular, semantic-ID-based methods tokenize items into compact                 Our main contributions are summarized as follows:
+discrete codes through vector quantization, making it possible to
+                                                                            • We propose HiGR, an end-to-end generative slate recommenda-
+generate items in a language-model-like manner without relying
+                                                                              tion framework that significantly boosts both inference efficiency
+on an extremely large item vocabulary [22, 25]. This generative
+                                                                              and recommendation performance, enabling its deployment on
+formulation is conceptually appealing for slate recommendation,
+                                                                              large-scale online platforms.
+because it shifts the task from independently selecting items to
+                                                                            • We develop three tightly coupled components, PCRQ-VAE, HSD,
+directly generating a structured list.
+                                                                              and ORPO-based preference alignment, forming a unified pipeline
+    However, directly applying existing generative recommendation
+                                                                              from structured SID tokenization to efficient slate generation and
+methods to slate recommendation exposes a fundamental discon-
+                                                                              listwise quality optimization.
+nect between item-level generation and holistic slate optimization
+                                                                            • Extensive offline experiments and online A/B tests demonstrate
+in three aspects. First, generative recommendation relies on high-
+                                                                              the effectiveness of HiGR. It consistently outperforms state-of-
+quality item tokenization, but existing semantic ID methods often
+                                                                              the-art baselines in recommendation quality and achieves sig-
+produce entangled code spaces, where inconsistent SID prefixes
+                                                                              nificant inference acceleration. HiGR has also been deployed
+weaken controllability and hinder slate-level relevance and diver-
+                                                                              on multiple business scenarios on Tencent platforms, serving
+sity guidance. Second, slate generation with semantic IDs remains
+                                                                              hundreds of millions of users and bringing consistent online
+inefficient: an 𝑀-item slate requires decoding 𝑀 × 𝐷 SID tokens
+                                                                              improvements.
+(with 𝐷 SIDs per item), while full-sequence autoregressive beam
+search introduces substantial latency and entangles intra-item se-
+mantics with inter-item transitions, obscuring global slate structure.      2 Related Work
+Third, token-level likelihood training does not directly optimize           2.1 Slate Recommendation
+user-perceived slate quality. Real-world recommendation platforms
+                                                                            Standard pointwise recommendation methods [3, 4, 9, 12, 15, 19, 23]
+care about multiple list-level objectives, such as ranking fidelity,
+                                                                            score user-item pairs independently. Although effective for individ-
+genuine user interest, and intra-list diversity, which cannot be fully
+                                                                            ual feedback prediction such as CTR, they largely ignore inter-item
+captured by next-token prediction alone.
+                                                                            dependencies and positional effects. Slate recommendation instead
+    To address these challenges, we propose HiGR, an industrial-
+                                                                            optimizes the whole list to capture global context and item interac-
+scale hierarchical generative framework for slate recommendation.
+                                                                            tions. Representative methods include ListCVAE [14], which models
+HiGR builds a unified pipeline from structured item tokenization, to
+                                                                            list distributions with conditional VAEs; GFN4Rec [17], which for-
+efficient hierarchical slate generation, and finally to slate-level pref-
+                                                                            mulates list generation as a reward-proportional flow; and DMSG
+erence alignment. Specifically, we first design a Prefix-Contrastive
+                                                                            [24], which adopts conditional diffusion models for coherent and
+Residual Quantized VAE (PCRQ-VAE) to learn semantically struc-
+                                                                            diverse slate generation. However, these methods often rely on
+tured item IDs. By introducing prefix-level contrastive alignment
+                                                                            reranking pipelines or complex objectives, causing cascading errors
+into residual quantization, PCRQ-VAE encourages semantically
+                                                                            or training instability. In contrast, we formulate slate construction
+or collaboratively similar items to share high-level SID prefixes,
+                                                                            as end-to-end autoregressive generation, enabling scalable global
+while preserving the final code layer for fine-grained item dis-
+                                                                            planning for industrial deployment.
+crimination. This provides a more controllable discrete space for
+subsequent slate generation. Based on the structured SID space,
+we further propose a Hierarchical Slate Decoder (HSD) for effi-             2.2    Generative Recommendation
+cient coarse-to-fine slate generation. Instead of decoding the entire       Inspired by LLMs, recommendation systems are shifting from dis-
+𝑀 ×𝐷 SID sequence autoregressively, HSD first plans the slate at the        criminative scoring to generative modeling [5, 10, 13, 28–31], where
+preference-embedding level, where each embedding represents the             recommendation is formulated as a sequence generation task. Since
+intended semantics of one slate position. A lightweight item gener-         directly using items as tokens leads to a huge vocabulary and poor
+ator then decodes the corresponding SID sequence conditioned on             cold-start generalization [2], Semantic IDs from vector quantiza-
+each preference embedding. By shifting global autoregressive mod-           tion have been widely adopted to represent items with compact
+eling from fine-grained SID tokens to coarse-grained preference             discrete codes. Representative methods include TIGER [22], which
+embeddings and restricting beam search to short item-level decod-           uses RQ-VAE for recursive item tokenization, LETTER [25], which
+ing, HSD substantially reduces inference latency while preserving           learns codebooks end-to-end, and OneRec [7], which constructs
+high-quality slate generation. Finally, to bridge the gap between           hierarchical IDs via iterative K-means. However, these methods
+token-level generation and real user experience, we introduce a             mainly align item features before or after quantization, leaving the
+listwise multi-objective preference alignment mechanism. Instead            internal SID hierarchy insufficiently structured. In contrast, our
+                                                                            Prefix-Contrastive RQ-VAE enforces prefix-level alignment during
+HiGR: Hierarchical Generative Slate Recommendation                                                            CIKM ’26, November 7-11, 2026, Rome, ITALY
+
+
+quantization, making high-level SID prefixes more semantic and               representation 𝑧 = E (𝑥), which is recursively quantized by 𝐷 resid-
+controllable for hierarchical slate generation.                              ual codebooks, producing SIDs {𝑠 𝑑 }𝑑=1
+                                                                                                                   𝐷 and the aggregated quan-
+
+   Preference alignment bridges next-token prediction and busi-
+                                                                                                        Í𝐷 𝑑
+                                                                             tized representation 𝑧ˆ = 𝑑=1 𝑒𝑠𝑑 . The decoder then reconstructs
+ness metrics. PrefRec [27] uses an RLHF-style reward model, while            the input embedding as 𝑥ˆ = D (𝑧).
+                                                                                                              ˆ Standard RQ-VAE commonly op-
+DPO-based methods [7, 21, 33] offer more stable optimization for             timizes quantization at each residual layer independently. However,
+generative recommenders. However, they often require reference               this layer-wise constraint tends to pull each residual 𝑟𝑑 −1 too close
+models or rely on generic/item-level objectives, failing to capture          to its selected codeword, causing residual vanishing in deeper code-
+the multi-dimensional nature of slate quality. We adopt reference-           books and limiting their ability to capture fine-grained semantics.
+free ORPO and design triple-objective slate-level preferences to             To address this issue, we introduce a global quantization objective
+jointly improve ranking fidelity, genuine interest, and diversity.           that directly aligns the aggregated quantized representation 𝑧ˆ with
+                                                                             the original latent embedding 𝑧:
+3 The HiGR Framework                                                                      Lglobal_quan = ∥𝑧ˆ − sg(𝑧)∥ 22 + 𝜂 ∥𝑧 − sg(𝑧)∥
+                                                                                                                                     ˆ 22,           (2)
+3.1 Framework Overview                                                       where sg(·) denotes the stop-gradient operation and 𝜂 controls the
+Slate recommendation aims to generate an ordered item list that              commitment strength. By optimizing quantization at the global
+optimizes user feedback at the list level. Let U and V denote the            latent level, this objective preserves informative residuals across
+user and item sets. For each 𝑢 ∈ U with chronological interaction            codebook layers and stabilizes hierarchical SID learning.
+history 𝑆 𝑢 = {𝑣 𝑢1 , · · · , 𝑣𝑛𝑢 }, the model generates an 𝑀-item slate:
+                                                                             3.2.2 Prefix-level Contrastive Alignment. Although global quanti-
+                             𝑂 𝑢 = F𝜃 (𝑢, 𝑆 𝑢 ),                      (1)    zation stabilizes hierarchical SID learning, reconstruction-based
+                                                                             objectives alone cannot explicitly align the relational structure
+where F𝜃 denotes the recommendation model and 𝑂 𝑢 = {𝑣ˆ𝑢1 , · · · , 𝑣ˆ𝑢𝑀 }   among items. To inject collaborative and semantic signals into the
+is optimized for holistic slate quality rather than item-wise quality.       SID space, we introduce prefix-level contrastive alignment over the
+   In this paper, we propose HiGR, a hierarchical generative frame-          first 𝐷 − 1 codebook layers. For each anchor item 𝑎, we construct
+work tailored for high-quality and efficient slate recommendation.           a positive item 𝑝 from semantic neighbors or high co-occurrence
+As shown in Figure 1, HiGR explicitly considers the list-level nature        signals, while treating other in-batch items as negatives. Let 𝑒𝑎𝑑 , 𝑒𝑝𝑑 ,
+of slate recommendation from three coupled perspectives: First,              and 𝑒𝑛𝑑 denote the selected codeword embeddings of the anchor,
+Prefix-Contrastive RQ-VAE learns hierarchical SIDs whose prefixes            positive, and negative items at the 𝑑-th quantization layer. We apply
+encode item-level semantic and collaborative similarity, providing           a temperature-scaled InfoNCE loss over SID prefixes:
+structured discrete tokens for slate generation. Second, the Hier-                            𝐷 −1
+archical Slate Decoder generates a slate by first planning list-level                      1 ∑︁                        exp(cos(𝑒𝑎𝑑 , 𝑒𝑝𝑑 )/𝜏)
+                                                                             Lcont = −             𝑤𝑑 log                                                  ,
+                                                                                        𝐷 −1
+                                                                                                                                 Í
+preferences and then decoding item-level SIDs. Third, listwise pref-                           𝑑=1
+                                                                                                          exp(cos(𝑒𝑎 , 𝑒𝑝𝑑 )/𝜏) + 𝑛 exp(cos(𝑒𝑎𝑑 , 𝑒𝑛𝑑 )/𝜏)
+                                                                                                                   𝑑
+
+erence alignment further optimizes the generated slate as a whole                                                                                (3)
+with multi-objective implicit feedback. These components form                where 𝜏 is the temperature and 𝑤𝑑 controls the importance of
+a unified pipeline from slate-aware item tokenization to efficient           each prefix layer. We deliberately exclude the last codebook layer
+slate generation and final slate-level alignment.                            from contrastive alignment. This design encourages high-level SID
+                                                                             prefixes to capture shared semantics, while preserving the final
+3.2    Prefix-Contrastive RQ-VAE(PCRQ-VAE)                                   layer for fine-grained item discrimination. The overall PCRQ-VAE
+                                                                             objective is:
+Semantic IDs (SIDs) are essential for generative slate recommen-
+dation, as they convert a slate into discrete token sequences. How-                      LPCRQ-VAE = Lrecon + 𝜆1 Lglobal_quan + 𝜆2 Lcont .           (4)
+ever, standard RQ-based tokenization often produces entangled
+                                                                             where Lrecon is the reconstruction loss of standard RQ-VAE, 𝜆1
+and sparse ID spaces, where SID prefixes fail to reliably reflect
+                                                                             and 𝜆2 weight the quantization and contrastive terms. This quan-
+item semantics or collaborative relations. This weakens generation
+                                                                             tization ensures that similarity has been internalized into the ID
+controllability and makes it difficult to guide slate-level relevance
+                                                                             prefixes. Consequently, slate recommendation can directly impose
+and diversity through discrete prefixes. To address this issue, we
+                                                                             constraints and rewards on prefixes to control diversity and rel-
+propose Prefix-Contrastive RQ-VAE (PCRQ-VAE), which enhances
+                                                                             evance during decoding, without resorting to costly a posteriori
+residual quantization with global quantization and prefix-level con-
+                                                                             comparisons over aggregated continuous embeddings.
+trastive alignment. The former stabilizes hierarchical SID learning
+by preserving informative residuals across codebook layers, while
+the latter injects semantic and collaborative signals into SID pre-
+                                                                             3.3    Hierarchical Slate Decoder (HSD)
+fixes. As a result, similar items are encouraged to share high-level         A straightforward generative approach treats each item’s SID se-
+prefixes, whereas the final codebook layer remains available for             quence as tokens and generates the whole slate autoregressively.
+fine-grained item discrimination.                                            However, since each item consists of 𝐷 SIDs, producing an 𝑀-item
+                                                                             slate requires 𝑀 × 𝐷 sequential decoding steps, leading to high
+3.2.1 Global Quantization for Residual Preservation. We adopt a              latency in real-time recommendation. Moreover, token-level gener-
+standard RQ-VAE backbone to tokenize each item embedding 𝑥 into              ation entangles intra-item semantic composition with inter-item
+a hierarchical SID sequence. The encoder first maps 𝑥 into a latent          transition modeling, making it difficult to explicitly capture global
+CIKM ’26, November 7-11, 2026, Rome, ITALY                                                                                                                                                                                                           Y. Pang et al.
+
+
+        (a) PCRQ-VAE                                         0              1             ...       1024                0          1        ...       1024                      0          1            ...       1024
+
+
+
+
+                                                                                                                                                                                                                                  Decoder
+                                Encoder
+                                                             1          =             0         -    341                2      =        1         -       42                    3      =            2         -     96
+               Emb                                                                                                                                                                                                                             Emb
+
+                                                                                                                                                                      =
+
+
+
+
+                                                                                                                                                      +
+                                                                                                                               +
+                                                                                                            pull       341                  42                 96
+                                                                                                                                                                      =
+
+
+
+
+                                                                                                                                                      +
+                                                                                                                               +
+                                                                                                                       341                  42                 8
+                                                                                                            push
+                                                                                                                                                                      =
+
+
+
+
+                                                                                                                                                      +
+                                                                                                                               +
+                                                                                                                        70              501                    35
+
+        (b) The Architecture of HiGR
+                                                                                                                                        3 5 7                                          1 2 6                        …             4 5 8
+
+                                                                                                                                                                          Hierarchical Slate Decoder
+                                                Context Encoder
+                                                                                                                                         Fine-grained
+                                                                                                                                       Item Generator
+                                                                                                                                                                                      Fine-grained
+                                                                                                                                                                                    Item Generator
+                                                                                                                                                                                                                    …            Fine-grained
+                                                                                                                                                                                                                               Item Generator
+                                                                                                                       Key/
+                                                                                                                       Value
+                                                    Tokenizer                                                                                                             Coarse-grained Slate Planner
+
+
+                                                                            …                                                                BOS                                               𝒊𝟏                   …                       𝒊m−1
+            User Profile                          User Behavior Sequence                                                                                                  Slate Preference Embeddings
+
+        (c) Preference Alignment of HiGR                                                            Pos      Item1           Item2      … Itemm
+                                                                                                                                                                                                                                  ORPO
+                                                                                                    Neg      Item1′          Item′2     … Itemm′                           Rank
+                           Pairwise Slate                        Tri-obj
+                             Sampling                                                               Neg      Item1′′         Item′′2    … Item′′m                         Diversity                                        HiGR
+                                                                                                    Neg      Item′′′
+                                                                                                                 1           Item′′′
+                                                                                                                                  2
+                                                                                                                                        … Item′′′
+                                                                                                                                              m
+                                                                                                                                                                          Preference
+
+
+Figure 1: The overall framework of HiGR, which contains (a) PCRQ-VAE for semantic tokenization, (b) Hierarchical Slate
+Decoder for coarse-to-fine generation, and (c) ORPO-based Preference Alignment for slate quality optimization.
+
+               𝒔1𝟏        𝒔2𝟏             𝒔3𝟏       𝒊𝟏           𝒔12        𝒔22           𝒔32          𝒊2                                    embeddings of previous items:
+
+                                                                                                             …
+                                                                                                                                                                    ℎ (0) = [Emb(BOS), 𝑖 1, · · · , 𝑖 𝑀 −1 ] ∈ R𝑀 ×𝑑model ,                                    (5)
+                       Linear                                           Linear
+
+  Context
+                                                  Share                                                                                      where 𝑖𝑚 is the preference embedding of item 𝑚, and 𝑑 model is the
+                 Transformer Block                                Transformer Block
+   Emb
+                       × Litem                                          × Litem                                                              hidden dimension. Following the coarse-to-fine semantics of SIDs,
+                                                            Fine-grained Item Generator
+             Fine-grained Item Generator
+                                                                                                                                             we define it as the sum of the corresponding SID embeddings:
+                 i𝟏Ƹ      𝒔1𝟏             𝒔2𝟏                    i2Ƹ            𝒔12       𝒔22                 i3Ƹ     …                                                                                            𝐷
+                                                                                                                                                                                                                  ∑︁
+                                                                                                                                                                                                                         𝑑
+                                                                                                                                                                                                    𝑖𝑚 =                𝑠𝑚 .                                   (6)
+                       Projector                   Share               Projector                             …
+                                                                                                                                                                                                                  𝑑=1
+
+  Context                                          Transformer Block                                                                         where 𝑠𝑚𝑑 is the 𝑑-th SID embedding of item 𝑚. After 𝑙
+                                                                                                                                                                                                     slate Trans-
+   Emb                                              Transformer Block
+                                                     Transformer Block × L𝐬𝐥𝐚𝐭𝐞                                                              former layers with cross-attention over 𝐶, the planner outputs the
+                                                   Coarse-grained Slate Planner                                                              predicted preference sequence:
+               BOS                                               𝒊𝟏                                           𝒊2      …                                             𝐼ˆ = Projector(TransformerDecoder(𝐶, ℎ (0) ))                                              (7)
+                                                                                                                                             where 𝐼ˆ = [𝑖ˆ1, · · · , 𝑖ˆ𝑀 ] represents the planned preference embed-
+             Figure 2: The overall architecture of HSD.
+                                                                                                                                             dings for the slate. Projector(·) is implemented as a lightweight
+slate structure. To address these issues, we propose the Hierar-                                                                             linear transformation that maps the preference embedding into the
+chical Slate Decoder (HSD), which decomposes slate generation                                                                                SID embedding space for subsequent fine-grained item generation.
+into a coarse-to-fine process. As shown in Figure 2, HSD contains                                                                            3.3.2 Fine-grained Item Generator. The item generator grounds
+two components: a coarse-grained slate planner that predicts slate-                                                                          each planned preference embedding into a concrete SID sequence.
+level preference representations, and a fine-grained item generator                                                                          For the 𝑚-th item, given the planned preference embedding 𝑖ˆ𝑚 , the
+that instantiates each preference representation into concrete SIDs.                                                                         input sequence is constructed by prepending 𝑖ˆ𝑚 to the previous
+Given user features 𝑢 and historical behaviors 𝑆 𝑢 , the context en-                                                                         ground-truth SIDs during training:
+coder first produces a context representation 𝐶 = E (𝑢, 𝑆 𝑢 ), which                                                                                                        (0)                        𝐷 −1
+serves as the key and value for cross-attention in both stages.                                                                                                            𝑔𝑚             1
+                                                                                                                                                                                = [𝑖ˆ𝑚 , 𝑠𝑚 , · · · , 𝑠𝑚    ] ∈ R𝐷 ×𝑑model ,                                   (8)
+                                                                                                                                             where 𝑠𝑚
+                                                                                                                                                    𝑑 denotes the 𝑑-th SID embedding of the 𝑚-th item. Af-
+3.3.1 Coarse-grained Slate Planner. The slate planner autoregres-
+                                                                                                                                             ter 𝑙 item Transformer layers with cross-attention over 𝐶, the item
+sively models the global structure of the target slate in the pref-
+                                                                                                                                             generator predicts the SID sequence as:
+erence embedding space. During training, the input sequence is
+                                                                                                                                                                                                        (0)
+constructed from a beginning-of-sequence token and the preference                                                                                                   𝑆ˆ𝑚 = Linear(TransformerDecoder(𝐶, 𝑔𝑚   )),                                                (9)
+HiGR: Hierarchical Generative Slate Recommendation                                                                             CIKM ’26, November 7-11, 2026, Rome, ITALY
+
+
+where 𝑆ˆ𝑚 = [ˆ𝑠𝑚1 , · · · , 𝑠ˆ𝐷 ] denotes the predicted SID logits of the
+                              𝑚                                                              and preserves the pretrained semantic distribution. We further
+𝑚-th item. The same fine-grained item generator is shared across all                         construct preference pairs from implicit slate-level feedback, such
+slate positions, which improves parameter efficiency and supports                            as watch time, completion rate, and user satisfaction, so that HiGR
+variable-length slate generation.                                                            is directly aligned with key online business metrics.
+3.3.3 Controllable Preference Planning. A key advantage of HSD                               3.4.1 Construction of Slate-Level Preference pairs. We construct
+is that the slate-level preference embeddings provide an explicit                            slate-level preference pairs (𝑦 +, 𝑦 − ) to support “triple-objective”
+interface for controlling global slate properties before item decoding.                      optimization. Positive slates (𝑦 + ): Rerank a user’s engaged watch
+Besides the token-level slate generation objective,                                          sequence in descending order based on true user feedback. Nega-
+                 𝑀 ∑︁
+                 ∑︁ 𝐷                                                                        tive slates (𝑦 − ) are designed according to our three optimization
+    Lslate = −                      𝑑+1 ˆ
+                           log 𝑃 (𝑠ˆ𝑚                         1
+                                       |𝑖 1, · · · , 𝑖ˆ𝑚−1, 𝑠ˆ𝑚             𝑑
+                                                                , · · · , 𝑠ˆ𝑚 ; Θ),   (10)   objectives, respectively:
+                 𝑚=1 𝑑=1                                                                     • Randomly permute 𝑦 + to disrupt its optimal ordering;
+where Θ denotes the model parameters, we can further regularize                              • Replace items in 𝑦 with those receiving negative feedback to filter
+the geometry of planned preference embeddings to encourage de-                                 exposure noise;
+sirable list-level structures. In this work, we introduce an intra-list                      • Anchor the first item in 𝑦+ and append top-(𝑀 − 1) semanti-
+diversity (ILD) term to reduce redundancy among planned items:                                 cally similar items to discourage repetitive recommendations and
+                                   𝑀 ∑︁
+                                                                                               “information cocoons”, thereby promoting slate diversity.
+                            1     ∑︁
+            L𝐼 𝐿𝐷 = −                     (1 − cos(𝑖ˆ𝑚 , 𝑖ˆ𝑛 )).                      (11)   By performing contrastive optimization between 𝑦 + and these di-
+                        𝑀 (𝑀 − 1) 𝑚=1 𝑛≠𝑚                                                    verse negatives, our HiGR model learns to reject suboptimal slates
+By minimizing pairwise similarity among preference embeddings,                               that are poorly ranked, irrelevant, or repetitive.
+HSD encourages the item generator to produce a more diverse                                  3.4.2 ORPO-based Post-Training Loss Function. We define the per-
+slate without expensive post-hoc diversity estimation over decoded                           step log-odds for a slate 𝑦 as,
+items. The final training objective is:
+                                                                                                                                     𝜋𝜃 (𝑦𝑡 | 𝑥, 𝑦 <𝑡 )
+                           L𝐻𝑆𝐷 = Lslate + 𝛽L𝐼 𝐿𝐷 ,                                   (12)                     ℓ𝜃 (𝑥, 𝑦𝑡 ) = log                                    (13)
+                                                                                                                                   1 − 𝜋𝜃 (𝑦𝑡 | 𝑥, 𝑦 <𝑡 )
+where 𝛽 controls the strength of diversity regularization. This de-                          where 𝜋𝜃 is the policy actor.
+sign preserves accurate SID generation while enabling flexible con-
+                                                                                                         Í
+                                                                                                Let 𝑧𝜃 = 𝑡𝑀𝐷
+                                                                                                           =1 ℓ𝜃 (𝑥, 𝑦𝑡 ) denote the slate-level log-odds. For pref-
+trol over slate-level diversity.                                                             erence pair {(𝑦 +, 𝑦 − )}, the combined post-training objective is:
+                                                                                              Lpost = − log 𝜋𝜃 (𝑦𝑡+ |𝑥, 𝑦𝑖<𝑡
+                                                                                                                          +
+                                                                                                                             ) − 𝛼 log 𝜎 𝑧𝜃 (𝑥, 𝑦𝑡+ ) − 𝑧𝜃 (𝑥, 𝑦𝑡− ) (14)
+                                                                                                                                                                    
+3.3.4 Efficient Coarse-to-Fine Inference. HSD accelerates slate gen-
+eration by shifting global autoregressive modeling from fine-grained
+                                                                                             where 𝛼 is the preference alignment coefficient. This combined loss
+SID tokens to coarse-grained preference embeddings. Instead of
+                                                                                             enables the model to learn true user preferences while preserving
+applying beam search over the full 𝑀 × 𝐷 SID sequence, the slate
+                                                                                             generative accuracy without an auxiliary reference model. In sum-
+planner first generates 𝑀 preference embeddings to capture global
+                                                                                             mary, our post-training approach transforms preference alignment
+slate intent. Then, instead of continuing beam search across the
+                                                                                             into a holistic slate optimization process, ensuring generated SID
+entire slate, a lightweight item generator performs beam search
+                                                                                             sequences are accurate, diverse and well-ordered.
+locally to decode the 𝐷-token SID sequence conditioned on each
+preference embedding. This design restricts the time-consuming
+beam search to short item-level decoding while preserving global
+                                                                                             4    System Deployment
+slate planning at the preference-embedding level. As a result, HSD                           Training follows a three-stage pipeline (PCRQ-VAE, HSD pretrain-
+significantly reduces the effective search space and inference la-                           ing, ORPO alignment) on filtered high-quality slate-level samples.
+tency while maintaining high-quality slate generation.                                       In online deployment, HiGR is deployed on clusters with tens of
+                                                                                             NVIDIA H20 and L20 GPUs for training and serving, respectively.
+3.4    Multi-objective Preference Alignment                                                  For each request, the online feature assembler retrieves real-time
+                                                                                             user features, and HiGR generates slate SIDs via HSD coarse-to-
+Recently, RL-based post-training has been widely adopted to en-
+                                                                                             fine decoding with KV caching. The SIDs are mapped back to items
+hance model performance. However, existing approaches overem-
+                                                                                             through the SID-to-item index, then filtered by deduplication, avail-
+phasize item-level preference alignment, leaving them susceptible
+                                                                                             ability, safety, and business rules before being returned to users,
+to historical exposure bias and unable to capture the holistic and
+                                                                                             while exposure and feedback logs are sent back for continuous up-
+comparative nature of user slate evaluation. To enhance slate gen-
+                                                                                             dates. At the same throughput, HiGR keeps P99 latency below 50ms
+eration quality, we propose a listwise preference alignment mecha-
+                                                                                             and reduces GPU demand by about 60% over OneRec, showing
+nism that jointly optimizes three core objectives: ranking fidelity
+                                                                                             strong cost-effectiveness for industrial slate recommendation.
+(O1), genuine user interest (O2), and slate diversity (O3).
+   We adopt Odds Ratio Preference Optimization (ORPO) [11] for
+efficient and stable alignment. As a reference-free method, ORPO
+                                                                                             5    Experiments
+reduces forward computation and GPU memory cost, enabling                                    To verify the effectiveness of HiGR, we have conducted comprehen-
+high-throughput post-training. Moreover, by combining preference                             sive experiments to solve the following five key research questions:
+optimization with supervised learning, it mitigates objective drift                          • RQ1: How does HiGR compare against SOTA baseline models?
+CIKM ’26, November 7-11, 2026, Rome, ITALY                                                                                                       Y. Pang et al.
+
+
+                         Table 1: Offline Performance of HiGR and baselines on industrial and public datasets.
+
+                                              Our industrial dataset                                                    KuaiRec
+  Methods                        Impressions             Effective Views                        Impressions              Effective Views
+                                                                               NDCG@5                                                          NDCG@5
+                            hit@5      recall@5      hit@5          recall@5                 hit@5       recall@5       hit@5     recall@5
+  ListCVAE                  0.0857       0.0178      0.0571          0.0117     0.0186       0.2304        0.0523       0.0757     0.0161        0.0630
+  BertRec                   0.0911       0.0187      0.0632          0.0129     0.0201       0.2612        0.0583       0.0829     0.0177        0.0713
+  SASRec                    0.1057       0.0218      0.0700          0.0143     0.0243       0.3017        0.0756       0.1028     0.0231        0.0839
+  TIGER                     0.1812       0.0383      0.1204         0.0249     0.0406        0.4455       0.1299        0.1566     0.0378        0.1363
+  HSTU                      0.2281       0.0506      0.1487         0.0310     0.0492        0.5055       0.1334        0.1728     0.0397        0.1466
+  OneRec-25M                0.2438       0.0577      0.1603         0.0367     0.0589        0.5150       0.1395        0.1782     0.0422        0.1496
+  HiGR-25M-w/o RL           0.2641       0.0612      0.1810         0.0395     0.0631        0.5218       0.1437        0.1805     0.0462        0.1536
+  HiGR-25M                  0.2825       0.0692      0.1945         0.0433     0.0714        0.5290       0.1485        0.1846     0.0491        0.1574
+  HiGR-100M                 0.3163       0.0760      0.2145         0.0495     0.0831        0.5360       0.1544        0.1905     0.0546        0.1651
+
+Table 2: Performance comparison of baselines and our PCRQ-                               Table 3: Ablation experiments of HSD variants.
+VAE with different prefix contrastive constraints.
+                                                                                                         Impressions      Effective Views
+                                                                                   Variant                                                  NDCG@5      ILD
+                                                         PCRQ-VAE                                     hit@5 recall@5     hit@5 recall@5
+  Methods            RQ-Kmeans       RQ-VAE
+                                                                                   HiGR               0.2994   0.0721    0.2012   0.0465     0.0753    0.62
+                                               prefix1    prefix2    prefix3
+                                                                                    - w/o L𝐼 𝐿𝐷       0.2997   0.0722    0.2009   0.0464     0.0755    0.59
+  Collision ↓           0.2126       0.0298     0.0264    0.0237     0.0873         - w/o CE          0.2785   0.0651    0.1837   0.0418     0.0664      -
+  Concentration ↑        0.83         0.75       0.88      0.93       0.96          - Non-shared      0.2973   0.0735    0.2002   0.0477     0.0748      -
+  Consistency ↑         0.4533       0.5577     0.6205    0.6647     0.6932
+                                                                                 KuaiRec across all metrics, demonstrating strong effectiveness and
+• RQ2: What is the contribution of each core component in HiGR?
+                                                                                 robustness. The gains over traditional slate recommendation, dis-
+• RQ3: Does the performance of HiGR follow scaling laws?
+                                                                                 criminative models, and recent generative baselines validate the
+• RQ4: How efficient is HiGR?
+                                                                                 benefits of prefix-contrastive RQ-VAE, hierarchical slate generation
+• RQ5: How does HiGR perform in real-world deployments?
+                                                                                 and listwise preference alignment.
+5.1    Experimental Setup
+                                                                                 5.3     Ablation Study (RQ2)
+5.1.1 Baseline Methods. For evaluation, we compare HiGR with
+representative baselines across three pretraining paradigms: tradi-              5.3.1 Performance of PCRQ-VAE. Table 2 evaluates PCRQ-VAE
+tional slate recommendation, ListCVAE [14]; discriminative mod-                  against baselines and ablates our prefix-level constraint design. We
+els, SASRec [15] and BERT4Rec [23]; and recent generative meth-                  use three metrics for SID quality. Collision: The ratio of distinct
+ods, TIGER [22], HSTU [28], and OneRec [7]. For post-training,                   items mapped to the same SID; Concentration: The category pu-
+we further compare with DPO [20].                                                rity of items sharing the same prefix; Consistency: The pairwise
+                                                                                 category agreement within each prefix group. Our optimal config-
+5.1.2 Datasets and Metrics. We evaluate HiGR on a large-scale Ten-               uration (prefix2-contra), which applies contrastive constraints
+cent commercial media platform and the public KuaiRec dataset [8]                strictly to the first 𝐷 −1 layers, remarkably reduces the collision rate
+with offline metrics and online A/B tests. For industrial dataset, we            to 2.37% while achieving 93% concentration and 66.47% consistency
+used 1 billion samples from all users for pre-training, selected 3%              (outperforming RQ-VAE by ∼10.7%). This shows that contrastive
+of samples for post-training. For KuaiRec, we build chronological                learning improves the codebook space, while the 𝐷 − 1 constraint
+user sequences and adopt leave-five-out slate evaluation. Offline                preserves early-layer semantic hierarchy and leaves the final layer
+metrics include Effective View-based Hit Rate, Recall, and NDCG                  for unique item identities. Extending constraints to the leaf level
+on positive-feedback slates, as well as Impression-based Hit Rate                (prefix3-contra) risks "identity collapse"; it yields only marginal
+and Recall from exposure logs to assess exposure-pattern modeling.               consistency gains but inflates collision nearly 4× (0.0237 → 0.0873).
+                                                                                 Thus, prefix-level constraints are essential to achieve semantic con-
+5.1.3 Implementation Details. We set 𝑑 model = 512, 𝑑 FFN = 2048,
+                                                                                 sistency without compromising fine-grained item discriminability.
+𝐷 = 3, and the codebook size to 1024. For PCRQ-VAE, we set 𝜂 = 0.1,
+𝜆1 = 0.1, and 𝜆2 = 0.01 in Eq. (4), and 𝑤 1 = 1, 𝑤 2 = 0.1 in Eq. (3).           5.3.2 Ablation Study of HSD Component. Table 3 studies three
+For preference alignment, we set the coefficient 𝛼 = 0.1 in Eq. (14).            HSD designs: diversity regularization, context embedding, and item-
+                                                                                 generator sharing. Removing L𝐼 𝐿𝐷 keeps accuracy metrics nearly
+5.2    Main Results (RQ1)                                                        unchanged but reduces ILD from 0.62 to 0.59, showing its effective-
+Table 1 presents the overall comparison results between HiGR                     ness in improving intra-list diversity. Removing context embedding
+and other representative recommendation methods. HiGR consis-                    causes a notable performance drop, confirming its importance for
+tently outperforms all methods on both the industrial dataset and                conditional SID decoding. In addition, non-shared item generators
+HiGR: Hierarchical Generative Slate Recommendation                                                                                                                       CIKM ’26, November 7-11, 2026, Rome, ITALY
+
+
+Table 4: Intra-list Diversity (ILD) of HiGR and baselines on                       5.4                             Scaling-Law Validation (RQ3)
+industrial and public datasets.
+                                                                                  To investigate the scalability of our proposed framework, we eval-
+                                                            HiGR                  uated the loss and NDCG@5 of HiGR across a broad spectrum of
+  Datasets        TIGER    HSTU         OneRec
+                                                   w/o RL    DPO      ORPO        model sizes, spanning 0.05B to 2B parameters. As shown in Figure
+                                                                                  4, the results exhibit a clear linear trajectory on a logarithmic scale,
+  Industrial       0.38     0.42         0.48        0.52     0.57    0.62
+                                                                                  revealing a power-law relationship between model capacity and
+  KuaiRec          0.40     0.43         0.50        0.55     0.60    0.63
+                                                                                  performance. This property is critical for industrial applications, as
+                                                                                  it implies that predictable performance gains can be consistently
+bring no clear gain, we therefore employ a shared item generator                  achieved by scaling model capacity, thereby offering a reliable path-
+to ensure efficiency and handle variable-length sequences.                        way to improve recommendation quality in large-scale scenarios.
+
+5.3.3 Ablation Study of Preference Alignment. Table 4 reports the                  5.5                             Efficiency Analysis (RQ4)
+Intra-list Diversity (ILD) of various models on two datasets. Even                                                                                faster                                                                  %
+                                                                                                       0.075                                                                                                                                   / R V V               0 H W U L F
+
+
+
+
+                                                                               Performace (recall@5)
+                                                                                                                                    HiGR w/o KV
+without reinforcement learning (RL), our HiGR model outperforms                                                OneRec-Beam w/o KV                                                                                                                                                               
+
+
+
+
+                                                                                                                                                                            & R Q Y H U J H Q F H  / R V V
+                                                                                                       0.070                                                                                                                          %
+
+
+
+
+                                                                                                                                                                                                                                                                                                      1 ' & * #   0 H W U L F
+                                                                                                                                                                better
+                                                                                                                                                  HiGR w/ KV                                                                                                                            %
+baselines (TIGER, HSTU, OneRec). Moreover, RL-based post-training                                      0.065       OneRec-Beam w/ KV                                                                                                                                         %
+                                                                                                                                                                                                                                                  %                                            
+                                                                                                                                                                                                                                                           %
+further enhances diversity, with ORPO achieving the best overall                                       0.060
+                                                                                                                                                                                                                                                  %       %
+ILD scores (0.62 and 0.63), demonstrating its superiority over DPO.                                    0.055                                                                                                                                                               %                   
+                                                                                                                                                                                                                                      %
+                                                                                                                                                                                                                                                                                        %
+                                                                                                       0.050        OneRec-Greedy w/o KV      OneRec-Greedy w/ KV                                                         %
+5.3.4 Effect of Layer Configurations. We evaluate different layer                                      0.045                                                                                                                                                                   
+                                                                                                                                                                                                                                                                                                  
+allocations between the slate planner and item generator under                                                 0       2       4        6         8        10                                                                                                             
+                                                                                                                           Efficiency (10k/min)                                                                         1 X P E H U  R I  3 D U D P H W H U V   % L O O L R Q V 
+a fixed total depth. Since slate planning involves global list-level
+modeling, whereas item generation is a lightweight SID decoding
+                                                                                   Figure 3: Efficiency compari- Figure 4: Scaling trends of
+task, assigning more layers to the planner is more effective. As
+                                                                                   son of HiGR and OneRec.       HiGR on loss and NDCG@5.
+shown in Table 5, the default 14:2 configuration provides the best
+quality-latency trade-off. Compared with 12:4, it reduces inference                    We validate HiGR’s efficiency through complexity analysis and
+latency by 26% while causing only a 0.6% drop in NDCG@5. Thus,                    empirical evaluations. For a slate of 𝑀 items with 𝐷 SIDs each,
+we use 𝑙 slate = 14 and 𝑙 item = 2 by default.                                    decoding involves 𝑀 × 𝐷 tokens. Let 𝑑 be the hidden dimension,
+                                                                                  𝑙 slate the number of slate-planners in HiGR and lazy decoders in
+                                                                                  OneRec, and 𝑙 item the number of item-generators. Decomposing
+Table 5: Ablation study of layer configurations on recommen-
+                                                                                  decoding into greedy slate planning with beam SID generation
+dation quality and inference latency.
+                                                                                  drops complexity from O (𝐵 · 𝑀 3 𝐷 3 · 𝑙 slate · 𝑑) (OneRec) to O (𝑀 3 ·
+ 𝐿slate + 𝐿item           15 + 1       14 + 2     12 + 4    10 + 6    8+8         𝑙 slate · 𝑑 + 𝐵 · 𝑀𝐷 3 · 𝑙 item · 𝑑), theoretically demonstrating that HiGR
+ NDCG@5                   0.0623       0.0631     0.0635    0.0621    0.0605      has substantially lower decoding complexity than OneRec. For a
+ Relative Latency         0.932×       1.000×     1.355×    1.710×    2.065×      fair empirical comparison, OneRec and HiGR use identical model
+                                                                                  settings and the same hardware environment. As shown in figure
+                                                                                  3, without KV caching, HiGR achieves over 5% higher Recall@5
+Table 6: Performance comparison of HiGR with different                            than OneRec-Beam with more than 5× speedup, and also surpasses
+preference objectives.                                                            OneRec-Greedy in both accuracy and speed. With KV caching, it
+         O1          O2        O3               NDCG@5          ILD               still offers the best quality-efficiency trade-off.
+          ✘           ✘            ✘             0.0753        0.52                5.6                             Online A/B Tests (RQ5)
+          ✔           ✘            ✘             0.0812        0.54
+          ✘           ✔            ✘             0.0792        0.55               We conducted online A/B tests with 5% live traffic on Tencent’s com-
+          ✘           ✘            ✔             0.0780        0.64               mercial media platform serving hundreds of millions of users. Com-
+          ✔           ✔            ✔             0.0831        0.62               pared with the incumbent multi-stage system, HiGR improves Av-
+                                                                                  erage Stay Time, Average Watch Time, Average Video Views,
+5.3.5 Performance of HiGR with Different Preference Objectives.                   and Average Request Count by 1.03%, 1.22%, 1.73%, and 1.57%,
+We evaluate the three objectives defined in Section 3.4, i.e., ranking            respectively, demonstrating clear real-world engagement gains.
+fidelity (O1), genuine interest (O2), and slate diversity (O3). Sym-
+bols ✔ and ✘ denote the inclusion and exclusion of an objective
+                                                                                   6                      Conclusion
+during ORPO training, respectively. As shown in Table 6, the three                We propose HiGR, a hierarchical generative framework for effi-
+objectives play differentiated roles: O1 and O2 mainly improve the                cient slate recommendation. HiGR combines Prefix-Contrastive
+ranking metric NDCG@5 (0.0812 and 0.0792 vs. 0.0780 for O3 alone),                RQ-VAE for structured item tokenization, Hierarchical Slate De-
+as both are ranking-oriented signals, while O3 primarily boosts the               coder for coarse-to-fine slate generation, and listwise preference
+diversity metric ILD (0.64 vs. 0.54/0.55). Jointly optimizing all three           alignment for holistic slate optimization. Extensive offline and on-
+achieves the best NDCG@5 (0.0831) without sacrificing ILD (0.62),                 line results show that HiGR improves both recommendation quality
+showing that ranking accuracy and diversity are complementary                     and inference efficiency, demonstrating the potential of hierarchical
+rather than conflicting.                                                          generative modeling for industrial slate recommendation.
+CIKM ’26, November 7-11, 2026, Rome, ITALY                                                                                                                      Y. Pang et al.
+
+
+Generative AI Usage Disclosure                                                                Cai, Yunfan Wu, Hongtao Cheng, Zexuan Cheng, Lu Ren, Huanjie Wang, Yi
+                                                                                              Su, Ruiming Tang, Kun Gai, and Guorui Zhou. 2025. OneRec-Think: In-Text
+We acknowledge the use of generative AI (e.g., ChatGPT) strictly                              Reasoning for Generative Recommendation. arXiv:2510.11639 [cs.IR] https:
+for manuscript copyediting (grammar and phrasing) and software                                //arxiv.org/abs/2510.11639
+                                                                                         [19] Junyan Qiu, Ze Wang, Fan Zhang, Zuowu Zheng, Jile Zhu, Jiangke Fan, Teng
+engineering assistance (code snippets and debugging). All scien-                              Zhang, Haitao Wang, and Xingxing Wang. 2025. One Model to Rank Them
+tific contributions, including idea conceptualization, methodology                            All: Unifying Online Advertising with End-to-End Learning. arXiv preprint
+design, and data analysis, are entirely human-authored.                                       arXiv:2505.19755 (2025).
+                                                                                         [20] Rafael Rafailov, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher D.
+                                                                                              Manning, and Chelsea Finn. 2024. Direct Preference Optimization: Your Language
+                                                                                              Model is Secretly a Reward Model. arXiv:2305.18290 [cs.LG] https://arxiv.org/
+References                                                                                    abs/2305.18290
+ [1] Gaode Chen, Ruina Sun, Yuezihan Jiang, Jiangxia Cao, Qi Zhang, Jingjian Lin,        [21] Rafael Rafailov, Archit Sharma, Eric Mitchell, Christopher D Manning, Stefano
+     Han Li, Kun Gai, and Xinghua Zhang. 2024. A Multi-modal Modeling Framework               Ermon, and Chelsea Finn. 2023. Direct preference optimization: Your language
+     for Cold-start Short-video Recommendation. In Proceedings of the 18th ACM                model is secretly a reward model. Advances in neural information processing
+     Conference on Recommender Systems. 391–400.                                              systems 36 (2023), 53728–53741.
+ [2] Runjin Chen, Mingxuan Ju, Ngoc Bui, Dimosthenis Antypas, Stanley Cai, Xi-           [22] Shashank Rajput, Nikhil Mehta, Anima Singh, Raghunandan Hulikal Keshavan,
+     aopeng Wu, Leonardo Neves, Zhangyang Wang, Neil Shah, and Tong Zhao.                     Trung Vu, Lukasz Heldt, Lichan Hong, Yi Tay, Vinh Tran, Jonah Samost, et al.
+     2024. Enhancing item tokenization for generative recommendation through                  2023. Recommender systems with generative retrieval. Advances in Neural
+     self-improvement. arXiv preprint arXiv:2412.17171 (2024).                                Information Processing Systems 36 (2023), 10299–10315.
+ [3] Heng-Tze Cheng, Levent Koc, Jeremiah Harmsen, Tal Shaked, Tushar Chandra,           [23] Fei Sun, Jun Liu, Jian Wu, Changhua Pei, Xiao Lin, Wenwu Ou, and Peng Jiang.
+     Hrishi Aradhye, Glen Anderson, Greg Corrado, Wei Chai, Mustafa Ispir, et al.             2019. BERT4Rec: Sequential recommendation with bidirectional encoder rep-
+     2016. Wide & deep learning for recommender systems. In Proceedings of the 1st            resentations from transformer. In Proceedings of the 28th ACM international
+     workshop on deep learning for recommender systems. 7–10.                                 conference on information and knowledge management. 1441–1450.
+ [4] Paul Covington, Jay Adams, and Emre Sargin. 2016. Deep neural networks              [24] Federico Tomasi, Francesco Fabbri, Mounia Lalmas, and Zhenwen Dai. 2024.
+     for youtube recommendations. In Proceedings of the 10th ACM conference on                Diffusion Model for Slate Recommendation. arXiv preprint arXiv:2408.06883
+     recommender systems. 191–198.                                                            (2024).
+ [5] Sunhao Dai, Jiakai Tang, Jiahua Wu, Kun Wang, Yuxuan Zhu, Bingjun Chen,             [25] Wenjie Wang, Honghui Bao, Xinyu Lin, Jizhi Zhang, Yongqi Li, Fuli Feng, See-
+     Bangyang Hong, Yu Zhao, Cong Fu, Kangle Wu, Yabo Ni, Anxiang Zeng, Wen-                  Kiong Ng, and Tat-Seng Chua. 2024. Learnable item tokenization for generative
+     jie Wang, Xu Chen, Jun Xu, and See-Kiong Ng. 2025. OnePiece: Bringing                    recommendation. In Proceedings of the 33rd ACM International Conference on
+     Context Engineering and Reasoning to Industrial Cascade Ranking System.                  Information and Knowledge Management. 2400–2409.
+     arXiv:2509.18091 [cs.IR] https://arxiv.org/abs/2509.18091                           [26] Chuhan Wu, Fangzhao Wu, Tao Qi, Qi Liu, Xuan Tian, Jie Li, Wei He, Yongfeng
+ [6] Romain Deffayet, Thibaut Thonet, Jean-Michel Renders, and Maarten De Rijke.              Huang, and Xing Xie. 2022. Feedrec: News feed recommendation with various
+     2023. Generative slate recommendation with reinforcement learning. In Pro-               user feedbacks. In Proceedings of the ACM Web Conference 2022. 2088–2097.
+     ceedings of the Sixteenth ACM International Conference on Web Search and Data       [27] Wanqi Xue, Qingpeng Cai, Zhenghai Xue, Shuo Sun, Shuchang Liu, Dong Zheng,
+     Mining. 580–588.                                                                         Peng Jiang, Kun Gai, and Bo An. 2023. Prefrec: Recommender systems with
+ [7] Jiaxin Deng, Shiyao Wang, Kuo Cai, Lejian Ren, Qigen Hu, Weifeng Ding, Qiang             human preferences for reinforcing long-term user engagement. In Proceedings
+     Luo, and Guorui Zhou. 2025. Onerec: Unifying retrieve and rank with generative           of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining.
+     recommender and iterative preference alignment. arXiv preprint arXiv:2502.18965          2874–2884.
+     (2025).                                                                             [28] Jiaqi Zhai, Lucy Liao, Xing Liu, Yueming Wang, Rui Li, Xuan Cao, Leon Gao, Zhao-
+ [8] Chongming Gao, Shijun Li, Wenqiang Lei, Jiawei Chen, Biao Li, Peng Jiang,                jie Gong, Fangda Gu, Michael He, et al. 2024. Actions speak louder than words:
+     Xiangnan He, Jiaxin Mao, and Tat-Seng Chua. 2022. KuaiRec: A Fully-observed              Trillion-parameter sequential transducers for generative recommendations. arXiv
+     Dataset and Insights for Evaluating Recommender Systems. In Proceedings of the           preprint arXiv:2402.17152 (2024).
+     31st ACM International Conference on Information and Knowledge Management           [29] Jun Zhang, Yi Li, Yue Liu, Changping Wang, Yuan Wang, Yuling Xiong, Xun Liu,
+     (CIKM ’22). ACM, 540–550. doi:10.1145/3511808.3557220                                    Haiyang Wu, Qian Li, Enming Zhang, et al. 2025. GPR: Towards a Generative
+ [9] Huifeng Guo, Ruiming Tang, Yunming Ye, Zhenguo Li, and Xiuqiang He. 2017.                Pre-trained One-Model Paradigm for Large-Scale Advertising Recommendation.
+     DeepFM: a factorization-machine based neural network for CTR prediction. arXiv           arXiv preprint arXiv:2511.10138 (2025).
+     preprint arXiv:1703.04247 (2017).                                                   [30] Junjie Zhang, Beichen Zhang, Wenqi Sun, Hongyu Lu, Wayne Xin Zhao, Yu Chen,
+[10] Ruidong Han, Bin Yin, Shangyu Chen, He Jiang, Fei Jiang, Xiang Li, Chi Ma,               and Ji-Rong Wen. 2025. Slow Thinking for Sequential Recommendation. arXiv
+     Mincong Huang, Xiaoguang Li, Chunzhen Jing, et al. 2025. Mtgr: Industrial-               preprint arXiv:2504.09627 (2025).
+     scale generative recommendation framework in meituan. In Proceedings of the         [31] Zhaoqi Zhang, Haolei Pei, Jun Guo, Tianyu Wang, Yufei Feng, Hui Sun, Shaowei
+     34th ACM International Conference on Information and Knowledge Management.               Liu, and Aixin Sun. 2025. OneTrans: Unified Feature Interaction and Sequence
+     5731–5738.                                                                               Modeling with One Transformer in Industrial Recommender. arXiv preprint
+[11] Jiwoo Hong, Noah Lee, and James Thorne. 2024. Orpo: Monolithic preference                arXiv:2510.26104 (2025).
+     optimization without reference model. arXiv preprint arXiv:2403.07691 (2024).       [32] Qi Zhao, Yi Zhang, Daniel Friedman, and Fangfang Tan. 2015. E-commerce
+[12] Yupeng Hou, Jiacheng Li, Ashley Shin, Jinsung Jeon, Abhishek Santhanam, Wei              recommendation with personalized promotion. In Proceedings of the 9th ACM
+     Shao, Kaveh Hassani, Ning Yao, and Julian McAuley. 2025. Generating long                 Conference on Recommender Systems. 219–226.
+     semantic ids in parallel for recommendation. In Proceedings of the 31st ACM         [33] Guorui Zhou, Hengrui Hu, Hongtao Cheng, Huanjie Wang, Jiaxin Deng, Jinghao
+     SIGKDD Conference on Knowledge Discovery and Data Mining V. 2. 956–966.                  Zhang, Kuo Cai, Lejian Ren, Lu Ren, Liao Yu, et al. 2025. Onerec-v2 technical
+[13] Peiyu Hu, Wayne Lu, and Jia Wang. 2025. From ids to semantics: A generative              report. arXiv preprint arXiv:2508.20900 (2025).
+     framework for cross-domain recommendation with adaptive semantic tokeniza-
+     tion. arXiv preprint arXiv:2511.08006 (2025).
+[14] Ray Jiang, Sven Gowal, Timothy A Mann, and Danilo J Rezende. 2018. Beyond
+     greedy ranking: Slate optimization via list-CVAE. arXiv preprint arXiv:1803.01682
+     (2018).
+[15] Wang-Cheng Kang and Julian McAuley. 2018. Self-attentive sequential recom-
+     mendation. In 2018 IEEE international conference on data mining (ICDM). IEEE,
+     197–206.
+[16] Yu Lei, Wenjie Li, Ziyu Lu, and Miao Zhao. 2017. Alternating pointwise-pairwise
+     learning for personalized item ranking. In Proceedings of the 2017 ACM on Con-
+     ference on Information and Knowledge Management. 2155–2158.
+[17] Shuchang Liu, Qingpeng Cai, Zhankui He, Bowen Sun, Julian McAuley, Dong
+     Zheng, Peng Jiang, and Kun Gai. 2023. Generative flow network for listwise rec-
+     ommendation. In Proceedings of the 29th ACM SIGKDD Conference on Knowledge
+     Discovery and Data Mining. 1524–1534.
+[18] Zhanyu Liu, Shiyao Wang, Xingmei Wang, Rongzhou Zhang, Jiaxin Deng,
+     Honghui Bao, Jinghao Zhang, Wuchao Li, Pengfei Zheng, Xiangyu Wu, Yifei
+     Hu, Qigen Hu, Xinchen Luo, Lejian Ren, Zixing Zhang, Qianqian Wang, Kuo
+

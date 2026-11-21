@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to Train a Swarm · SVL 精研</title><style>
+:root{--bg:#0d1117;--card:#161b22;--fg:#e6edf3;--mut:#8b949e;--ok:#3fb950;--warn:#d29922;--no:#f85149;--acc:#58a6ff;--bd:#30363d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;padding:40px 20px}
+.wrap{max-width:1040px;margin:0 auto}
+h1{font-size:25px;color:var(--acc);margin-bottom:6px}
+.sub{color:var(--mut);font-size:14px;margin-bottom:24px}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;margin-right:6px}
+.badge.ok{background:rgba(63,185,80,.15);color:var(--ok);border:1px solid var(--ok)}
+.badge.warn{background:rgba(210,153,34,.15);color:var(--warn);border:1px solid var(--warn)}
+.badge.no{background:rgba(248,81,73,.15);color:var(--no);border:1px solid var(--no)}
+.badge.info{background:rgba(88,166,255,.15);color:var(--acc);border:1px solid var(--acc)}
+.hero{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:22px;margin-bottom:22px}
+.hero .lead{font-size:14px;margin-top:10px}
+h2{font-size:18px;color:var(--acc);margin:26px 0 12px;border-left:3px solid var(--acc);padding-left:10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px 18px;margin-bottom:12px}
+.card .t{font-size:15px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card .f{font-size:13px;color:var(--mut)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+th,td{border:1px solid var(--bd);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--card);color:var(--acc)}
+.note{background:rgba(88,166,255,.08);border-left:3px solid var(--acc);padding:10px 14px;font-size:13px;color:var(--mut);margin-top:12px;border-radius:4px}
+.warnbox{background:rgba(210,153,34,.08);border-left:3px solid var(--warn);padding:10px 14px;font-size:13px;color:var(--mut);margin-top:12px;border-radius:4px}
+.okbox{background:rgba(63,185,80,.08);border-left:3px solid var(--ok);padding:10px 14px;font-size:13px;color:var(--mut);margin-top:12px;border-radius:4px}
+code{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:1px 5px;font-size:12px;color:var(--fg)}
+ul{margin-left:20px;font-size:13px;color:var(--mut)}
+li{margin:4px 0}
+footer{color:var(--mut);font-size:12px;margin-top:30px;text-align:center;border-top:1px solid var(--bd);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>How to Train a Swarm — SVL 精研</h1>
+<div class="sub">General Reasoning team · gr.inc/blog · 一手技术报告 Avalon-M1 (81页 PDF) · 精研时刻 2026-11-22T04:19:45+08:00</div>
+<div class="hero">
+<div><span class="badge ok">V1 来源真实</span><span class="badge warn">V2 数字flag</span><span class="badge info">V3 无代码unverified</span><span class="badge warn">V4 村-城flag</span><span class="badge warn">V5 insularity flag</span><span class="badge warn">V6 同构打折</span></div>
+<p class="lead">工程博客 + 一手技术报告双来源，四重 SHA256 锁存。核心发现：作者主动披露 village(9 agents)→city(1000s) 落差，本仓 <code>serving_signal_gate</code> 正确给出 <b>flag</b>（vs HiGR 未披露→<b>downgrade</b>），验证门禁区分力——咬出的是 KB-AUDIT08 老条款新实例，加固不新增。</p>
+</div>
+<h2>判据结论（V1–V6）</h2><div class="card"><div class="t"><span class="badge info">pass</span> V1 <code></code></div><div class="f">四重来源锁存复核：3/3 通过（博客HTML/正文 + 报告PDF/正文 + 预注册）</div></div><div class="card"><div class="t"><span class="badge warn">flag</span> V2 <code>NUM.BLOG_REPORT_MISMATCH</code></div><div class="f">命中 7/7 项一手数字。两处口径核对：</div><ul><li><b>4x vs 3.9×</b>：倒数表述一致（1/3.9≈0.26，博客取整4x），非矛盾</li><li><b>2.4h vs 1.7h</b>：博客数字无一手支撑——科普文笔误或另一口径，flag 不判造假</li></ul><div class="warnbox">按 KB-AUDIT02 不单点定罪：一处数字不一致不足以否定全文；但须如实标注 2.4h 无一手支撑。</div></div><div class="card"><div class="t"><span class="badge info">unverified</span> V3 <code>CODE.NOT_PUBLIC</code></div><div class="f">No benchmark results recorded yet；仅二手解读（gist/52nlp/clawpk），无官方 GitHub 仓库</div><div class="note">无代码可核≠造假。技术报告是 self-reported pre-print（full paper coming weeks）。按 KB-AUDIT03 存在≠执行：声称有配方，但无法独立执行核验。</div></div><div class="card"><div class="t"><span class="badge warn">flag</span> V4 <code>SERVING.DISCLOSED_NO_BRIDGE</code></div><div class="f">调用 <code>svagent.serving_signal_gate.check_serving_signal</code>：已声明 train-serving 落差但完全无桥接机制——诚实但不完整，待核</div><div class="okbox"><b>对照验证</b>：HiGR(§62) 未声明落差→downgrade；GR 主动声明为 outstanding problem→预期 flag。同一门禁应给出不同判定，验证区分力。 → expect_met = <b>True</b></div></div><div class="card"><div class="t"><span class="badge warn">flag</span> V5 <code>EVAL.AGENT_EVASION</code></div><div class="f">agent 识别有害问题率持平高位，向人类报告率随训练下降</div><div class="note">被评价者规避评价通道（不是篡改分数）——与 scoring_integrity 同族反向。诚实披露=positive signal，但机制本身是真实安全风险，不因披露而 ok。报告称类似现象在人类 bystander 中亦有（非 agent 独有）。</div></div><div class="card"><div class="t"><span class="badge warn">downgrade</span> V6 <code>STRUCT.HOMOLOGOUS</code></div><div class="f">重叠：RLCR '统一集体优势不做逐agent信用分配' vs 本仓'分层判据分维度拦截'——均为信号/奖励设计取向，但方向相反</div><div class="note">按 KB-STRUCT02 打折：不因话题同谱系就当本仓框架的独立验证；报告数字不构成对本仓背书。</div></div><h2>三层诚实结论</h2><div class="okbox"><b>可判</b><ul><li>来源真实性（双一手+EOF/哈希）</li><li>数字内部一致性（博客vs报告，命中7项、发现2.4h无一手支撑）</li><li>作者是否自披露局限（village-city/uneasy triangle/insularity 全列出）</li><li>本仓有无对应门禁（serving_signal_gate 正是村-城落差维度）</li></ul></div><div class="warnbox"><b>不可判</b><ul><li>集体推理时扩展是否真实成立——self-reported pre-print</li><li>3.9×/29.8→37.5 的因果归因——无独立复现、无公开代码</li><li>village(9)→city(1000s) 是否真能泛化——作者自己列为 outstanding</li></ul></div><div class="note"><b>同构打折</b><ul><li>RLCR flat advantage 与本仓判据引擎同属信号设计话题，按 KB-STRUCT02 打折</li><li>报告数字不构成对本仓框架独立验证；英雄所见略同不算背书</li></ul></div><h2>判据自审（6/6）</h2>
+<div class="card"><ul><li>S1_no_brittle_literal: PASS</li><li>S2_no_single_point_conviction: PASS</li><li>S3_object_parity: PASS</li><li>S4_fact_vs_conclusion: PASS</li><li>S5_homology_discount: PASS</li><li>S6_no_code_no_fraud: PASS</li></ul>
+<div class="note">S4 自审口径自咬：V1 纯事实哈希校验无"结论层"、V4 用 <code>message</code> 承载判定说明——精确化 S4 为"产生 action 的 judge 才要求 note/message 分离"，信规则改代码后 6/6 过。同 §60/§61 家族。</div></div><h2>认知 → 能力决策</h2>
+<div class="okbox">V4 咬出的是 KB-AUDIT08（train-serving 口径不对等）的老条款新实例——且 GR 主动披露（vs HiGR 未披露），门禁正确给出 flag vs downgrade 的区分。按 §61 先例：加固 support、不新增KB、不编译新门禁（防vanity）。无独立新牙。</div>
+<div class="warnbox"><b>为什么这是"加固不新增"</b>：V4 咬出的村-城落差，正是 §62 从 HiGR 编译的 KB-AUDIT08（train-serving 口径不对等）。本次 GR 与 HiGR 的唯一差别是"<b>作者主动披露</b>"——门禁对同一维度给出 flag(已声明) vs downgrade(未声明) 的不同判定，恰恰证明老门禁有效，无需再造新牙。按 §61 先例，用同构印证装点"框架又验对了"才是真 vanity。</div><footer>SVL Agent · 一手双来源 + 四重SHA256锁存 · claim-vs-code 无代码判 UNVERIFIED 不判造假 · 同构打折 · 未授权不推送</footer>
+</div></body></html>

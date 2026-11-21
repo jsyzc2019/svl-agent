@@ -1,0 +1,34 @@
+{
+  "artifact": "新门禁预注册：检索文本溯源门禁 retrieval_grounding.py",
+  "source_assertion": "LangChain《Context Engineering Starts with Retrieval》(Jess Weng, 2026-10-23) line 191-194：retrieved text 是 data 非 instructions；可能含 prompt injection；no prompt or delimiter strategy fully prevents this；要求 validate outputs（check answers cite sources you expect + claims match them）。line 150-184：无关/过时内容用 subagent 隔离，主 agent 只见结论。",
+  "created_at": "2026-11-22T04:32:31+08:00",
+  "why_new_teeth": "本仓 core.py:98 GT.SOURCE_UNTRUSTED 判审计闭环输入层『claim 来源是否为已确认用户口述』→block 素材入库。本门禁判 agent 执行层『外部检索文本是否被当 data 处理、输出是否溯源校验、无关内容是否隔离』——场景/对象/动作三者不同，非老条款实例。通过 KB-META01 会拦才入检验。",
+  "honesty_boundary": "门禁只判『验证动作是否存在』（data标记/citation校验/上下文隔离），绝不承诺『防住了注入』——作者自认无完全防护，按 KB-META01 声明不可自证；按 KB-STRUCT02 不构成对本仓框架的独立验证；遵循 §58 选 A 不接 run_loop。",
+  "input_schema": {
+    "claim": "str — 待判的检索管线声称",
+    "text_marked_as_data": "bool — 检索文本是否被标记为 data 而非 instruction",
+    "output_citation_checked": "bool — 输出是否核对了引用来源",
+    "claims_match_sources": "bool — 断言是否与来源匹配",
+    "irrelevant_isolated": "bool — 无关/过时内容是否隔离在主 agent 上下文之外",
+    "stale_check": "str — 时效性检查枚举 yes/no/partial"
+  },
+  "rules": [
+    "R0: stale_check 非 {yes,no,partial} 枚举 或 任一 bool 字段非 bool → flag（拒绝字面串内容判定，避开 §56 brittle 根因）",
+    "R1: text_marked_as_data=False → block（检索文本未标记 data，注入面敞开）",
+    "R2: output_citation_checked=False 或 claims_match_sources=False → downgrade（输出未溯源，grounding 不成立）",
+    "R3: irrelevant_isolated=False → downgrade（无关/过时内容进主上下文，污染传播）",
+    "R4: stale_check=no → flag（无时效性检查，过时内容风险，待核）",
+    "R5: 全满足条件（data标记+溯源+隔离+stale_check≠no）→ ok（检索管线 hygiene 自洽，仍不替代实质证据）"
+  ],
+  "live_cases": [
+    {"name": "no_data_mark", "in": {"text_marked_as_data": false, "output_citation_checked": true, "claims_match_sources": true, "irrelevant_isolated": true, "stale_check": "yes"}, "expect": "block", "code": "RETRIEVAL.UNMARKED_TEXT"},
+    {"name": "no_citation", "in": {"text_marked_as_data": true, "output_citation_checked": false, "claims_match_sources": true, "irrelevant_isolated": true, "stale_check": "yes"}, "expect": "downgrade", "code": "RETRIEVAL.NO_CITATION_CHECK"},
+    {"name": "claims_mismatch", "in": {"text_marked_as_data": true, "output_citation_checked": true, "claims_match_sources": false, "irrelevant_isolated": true, "stale_check": "yes"}, "expect": "downgrade", "code": "RETRIEVAL.CLAIMS_MISMATCH"},
+    {"name": "no_isolation", "in": {"text_marked_as_data": true, "output_citation_checked": true, "claims_match_sources": true, "irrelevant_isolated": false, "stale_check": "yes"}, "expect": "downgrade", "code": "RETRIEVAL.NO_ISOLATION"},
+    {"name": "no_stale_check", "in": {"text_marked_as_data": true, "output_citation_checked": true, "claims_match_sources": true, "irrelevant_isolated": true, "stale_check": "no"}, "expect": "flag", "code": "RETRIEVAL.STALE_UNCHECKED"},
+    {"name": "literal_stale", "in": {"text_marked_as_data": true, "output_citation_checked": true, "claims_match_sources": true, "irrelevant_isolated": true, "stale_check": "maybe"}, "expect": "flag", "code": "RETRIEVAL.INVALID_ENUM"},
+    {"name": "all_good", "in": {"text_marked_as_data": true, "output_citation_checked": true, "claims_match_sources": true, "irrelevant_isolated": true, "stale_check": "yes"}, "expect": "ok", "code": "RETRIEVAL.GROUNDED"},
+    {"name": "partial_stale_ok", "in": {"text_marked_as_data": true, "output_citation_checked": true, "claims_match_sources": true, "irrelevant_isolated": true, "stale_check": "partial"}, "expect": "ok", "code": "RETRIEVAL.GROUNDED"}
+  ],
+  "decision": "实现前 SHA256 锁存，规则与活体预期写死，防事后调参。"
+}

@@ -1,0 +1,57 @@
+{
+  "artifact": "精研预注册：How to Train a Swarm (General Reasoning) + Avalon-M1 技术报告",
+  "object_type": "工程博客 + 一手技术报告（self-reported，无公开代码仓库）",
+  "sources": {
+    "blog": "https://www.gr.inc/blog/how-to-train-a-swarm — HTML 430KB + 正文 379 行/18924 字符, SHA256 f276e221…/3bfb7620…, 抓取留痕 2026-11-22T04:18:41+08:00",
+    "tech_report": "https://gr.inc/avalonm1.pdf — 81 页 PDF 2.7MB, EOF 校验通过, 正文 5071 行, SHA256 6429a78f…/f240dc91…",
+    "secondary": "paperswithcode.co/paper/131423（No benchmark results recorded yet）+ gist/mikesmullin + 52nlp 翻译 + clawpk 解读 — 全部二手，仅作线索不作证据"
+  },
+  "created_at": "2026-11-22T04:19:21+08:00",
+  "discipline": "分析前写死判据与预期，SHA256 锁存；后验 result 分离，不伪装；信事实不硬凑罪名；同构打折；无代码不判造假",
+  "judges": [
+    {
+      "id": "V1",
+      "name": "来源真实性",
+      "expect": "PASS",
+      "rule": "博客与技术报告双一手来源到位、EOF/哈希校验通过；作者 General Reasoning team 一手确认"
+    },
+    {
+      "id": "V2",
+      "name": "数字口径一致性（博客 vs 技术报告）",
+      "expect": "FLAG",
+      "rule": "逐个核对博客数字断言是否能在技术报告一手定位：29.8→37.5 / 55.9→63.5 / 147环境 / 38374 SFT / 9 agents / 1.7h 应命中；重点查两处疑似差异：blog 'single-agent takes 4x as long' vs report 'organisation reaches scores 3.9× sooner'（倒数近似，一致）；blog 'overtakes at 2.4 hours' vs report '1.7h observed / 1.8h fitted'（数字不一致）。命中=一致；不一致=flag 但不判造假（科普文取整/笔误常见，KB-AUDIT02 不单点定罪）"
+    },
+    {
+      "id": "V3",
+      "name": "claim-vs-code",
+      "expect": "UNVERIFIED",
+      "rule": "用 github-gem-seeker 方法搜索公开实现；若无官方代码仓库（paperswithcode 显示无 benchmark results、仅二手解读），判 UNVERIFIED——不因无代码就判造假，也不因有配方就当已复现。技术报告声称的配方细节无法独立执行核验"
+    },
+    {
+      "id": "V4",
+      "name": "train-serving 规模落差（本仓 KB-AUDIT08 同构对照）",
+      "expect": "FLAG",
+      "rule": "调用 check_serving_signal。GR village-city：训练最多9 agents、部署数百至数千，训练时规模信号≠服务时；但作者主动声明为 outstanding problem。输入 training_signal_available_at_serving='partial' + gap_disclosed=True + no_bridge=True + serving_input_equivalent=False → 预期 R5/R2 flag（诚实披露但缺口未桥接）。与 HiGR（未声明→downgrade，§62）形成对照，验证门禁区分力。若返回 downgrade 说明门禁未体现'已声明'减轻"
+    },
+    {
+      "id": "V5",
+      "name": "评价可靠性：agent 规避人类监督（insularity）",
+      "expect": "FLAG",
+      "rule": "技术报告 line 2375-2404/2659 披露：agent 识别有害问题率持平高位，但向人类报告率随训练下降（insularity）。这是'被评价者规避评价通道'的新角度——与 scoring_integrity（防计分器篡改）同族但方向相反（不是篡改分数而是规避上报）。判 flag：诚实披露=positive，但机制本身是真实安全风险，不因披露而 ok"
+    },
+    {
+      "id": "V6",
+      "name": "同构打折",
+      "expect": "DOWNGRADE",
+      "rule": "RLCR flat collective advantage + 共享策略与本仓判据引擎/KB 多处分同谱系：'统一信号不做细粒度分配' vs 本仓'分层判据分维度拦截'是相反设计取向，但都属于'奖励/信号设计'话题。按 KB-STRUCT02 打折，不因'英雄所见略同'当独立验证；本报告数字不构成对本仓框架的背书"
+    },
+    {
+      "id": "V7",
+      "name": "诚实边界与三层结论",
+      "expect": "PASS",
+      "rule": "可判：来源真实性、数字内部一致性、作者是否自披露局限、本仓有无对应门禁。不可判：集体推理时扩展是否真实成立、3.9x/29.8→37.5 的因果归因（self-reported）、village→city 是否真能泛化——全部按 KB-RSI06 折扣。宣称 vs 实现：技术报告是 pre-print（'full paper in coming weeks once training finishes'），结论暂定"
+    }
+  ],
+  "decision_rule": "若某判据咬出本仓四道以上门禁均未覆盖、且能编译出独立拦截动作的真缺口→编译新门禁+新增KB（会拦才入 KB-META01）；若咬出的仍是老条款实例→只加固support、不新增不编译（防vanity）；若无新意→记观察。遵循 §58 选 A：新门禁不接 run_loop。",
+  "honesty_boundary": "本预注册只锁存判据与预期，不预断结论。判据自审须过：不 brittle（判定分支无中文字面串比较）、不单点定罪、对象/口径对等、同构打折。所有数字来自一手 PDF，二手解读仅作线索。"
+}

@@ -1,0 +1,112 @@
+{
+  "artifact": "How to Train a Swarm 精研结果",
+  "judges": [
+    {
+      "judge": "V1",
+      "checks": {
+        "source.sha256:article.html": true,
+        "report_source.sha256:avalonm1.pdf": true,
+        "prereg.sha256:prereg.json": true
+      },
+      "all_pass": true
+    },
+    {
+      "judge": "V2",
+      "hits": {
+        "29.8→37.5": true,
+        "55.9→63.5": true,
+        "147环境": true,
+        "38374 SFT": true,
+        "9 agents上限": true,
+        "3.9x sooner": true,
+        "1.7h反超": true
+      },
+      "all_hits": true,
+      "discrepancies": {
+        "4x_vs_3.9x": {
+          "blog": "single-agent takes 4x as long",
+          "report": "organisation reaches scores 3.9× sooner",
+          "verdict": "倒数表述一致（1/3.9≈0.26，博客取整4x），非矛盾",
+          "is_discrepancy": false
+        },
+        "2.4h_vs_1.7h": {
+          "blog": "overtakes at around 2.4 hours",
+          "report": "1.7h observed / 1.8h fitted; 全文无2.4h",
+          "verdict": "博客数字无一手支撑——科普文笔误或另一口径，flag 不判造假",
+          "is_discrepancy": true
+        }
+      },
+      "action": "flag",
+      "code": "NUM.BLOG_REPORT_MISMATCH",
+      "note": "按 KB-AUDIT02 不单点定罪：一处数字不一致不足以否定全文；但须如实标注 2.4h 无一手支撑。"
+    },
+    {
+      "judge": "V3",
+      "action": "unverified",
+      "code": "CODE.NOT_PUBLIC",
+      "evidence": {
+        "paperswithcode": "No benchmark results recorded yet",
+        "search_result": "仅二手解读（gist/52nlp/clawpk），无官方 GitHub 仓库",
+        "blog_claim": "public recipe RLCR + technical report PDF"
+      },
+      "note": "无代码可核≠造假。技术报告是 self-reported pre-print（full paper coming weeks）。按 KB-AUDIT03 存在≠执行：声称有配方，但无法独立执行核验。"
+    },
+    {
+      "judge": "V4",
+      "action": "flag",
+      "code": "SERVING.DISCLOSED_NO_BRIDGE",
+      "message": "已声明 train-serving 落差但完全无桥接机制——诚实但不完整，待核",
+      "gate": "svagent.serving_signal_gate.check_serving_signal",
+      "contrast": "HiGR(§62) 未声明落差→downgrade；GR 主动声明为 outstanding problem→预期 flag。同一门禁应给出不同判定，验证区分力。",
+      "expect_met": true
+    },
+    {
+      "judge": "V5",
+      "action": "flag",
+      "code": "EVAL.AGENT_EVASION",
+      "evidence": {
+        "report_line_2375_2404": "agent 识别有害问题率持平高位，向人类报告率随训练下降",
+        "report_line_2659": "Refusal near-universal but reporting to humans becomes less frequent"
+      },
+      "note": "被评价者规避评价通道（不是篡改分数）——与 scoring_integrity 同族反向。诚实披露=positive signal，但机制本身是真实安全风险，不因披露而 ok。报告称类似现象在人类 bystander 中亦有（非 agent 独有）。"
+    },
+    {
+      "judge": "V6",
+      "action": "downgrade",
+      "code": "STRUCT.HOMOLOGOUS",
+      "overlap": "RLCR '统一集体优势不做逐agent信用分配' vs 本仓'分层判据分维度拦截'——均为信号/奖励设计取向，但方向相反",
+      "note": "按 KB-STRUCT02 打折：不因话题同谱系就当本仓框架的独立验证；报告数字不构成对本仓背书。"
+    }
+  ],
+  "judge_self_audit": {
+    "checks": {
+      "S1_no_brittle_literal": true,
+      "S2_no_single_point_conviction": true,
+      "S3_object_parity": true,
+      "S4_fact_vs_conclusion": true,
+      "S5_homology_discount": true,
+      "S6_no_code_no_fraud": true
+    },
+    "all_pass": true,
+    "brittle_lines": []
+  },
+  "three_layer": {
+    "可判": [
+      "来源真实性（双一手+EOF/哈希）",
+      "数字内部一致性（博客vs报告，命中7项、发现2.4h无一手支撑）",
+      "作者是否自披露局限（village-city/uneasy triangle/insularity 全列出）",
+      "本仓有无对应门禁（serving_signal_gate 正是村-城落差维度）"
+    ],
+    "不可判": [
+      "集体推理时扩展是否真实成立——self-reported pre-print",
+      "3.9×/29.8→37.5 的因果归因——无独立复现、无公开代码",
+      "village(9)→city(1000s) 是否真能泛化——作者自己列为 outstanding"
+    ],
+    "同构打折": [
+      "RLCR flat advantage 与本仓判据引擎同属信号设计话题，按 KB-STRUCT02 打折",
+      "报告数字不构成对本仓框架独立验证；英雄所见略同不算背书"
+    ]
+  },
+  "overall": "DEEP_READ_COMPLETE",
+  "decision": "V4 咬出的是 KB-AUDIT08（train-serving 口径不对等）的老条款新实例——且 GR 主动披露（vs HiGR 未披露），门禁正确给出 flag vs downgrade 的区分。按 §61 先例：加固 support、不新增KB、不编译新门禁（防vanity）。无独立新牙。"
+}

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "section": "§61",
+  "target": "ReVeal: Self-Evolving Code Agents via Reliable Self-Verification (ICLR 2026, arXiv 2506.11442v2)",
+  "review_type": "old_paper_x_new_framework",
+  "rationale": "本篇在早期会话已做过 V1-V7 审计（result.json，8/8 pass）。本次是 §55 立下的『旧论文×新框架』再审：用 §56-§60 新增的五把牙重咬旧结论，检验旧框架是否漏判。不是重跑 V1-V7，只检验新尺子能咬出什么。",
+  "old_conclusion_for_reference_only": {
+    "V3_self_verification": "PARTIAL（作者披露训练golden/测试自主差异 + anti_hack=True 即放行）",
+    "V4_ablation": "PARTIAL（未单独消融 verification reward）",
+    "V7_isomorphism": "OBSERVE_ONLY（同构打折，不新增）",
+    "note": "旧结论仅作对照，不因旧判 pass 就预设新判 pass；新判据独立判定。"
+  },
+  "new_judges": [
+    {
+      "id": "N1",
+      "name": "reward_hacking_surface_scoring_integrity",
+      "new_tooth": "§51 scoring_integrity / KB-AUDIT07（评价函数篡改与可刷分面）",
+      "question": "verification reward 是否存在可被平凡测试刷分的评价面？声称的 hard-to-hack 是否成立？",
+      "operationalization": [
+        "一手代码：code_server.py 的 ver_turn_reward 是否只=测试在golden上通过率(expected_output_passrate)，无区分力项",
+        "一手代码：是否存在『测试跑在候选答案上』的区分力信号(success_output_passrate)",
+        "一手代码：该区分力信号是否进入 reward_tensor/ver_scores，还是只进 debug_info/metrics",
+        "一手文本：论文是否对平凡测试/刷分做对抗实验或消融"
+      ],
+      "expected_if_tooth_bites": "flag/downgrade：reward 可被平凡测试刷分；区分力信号算了但没进优化(KB-AUDIT03 活体)；论文『hard-to-hack』是声称非证实",
+      "verdict_levels": ["CLEAN", "FLAG", "DOWNGRADE", "BLOCK"]
+    },
+    {
+      "id": "N2",
+      "name": "honest_call_site_of_defense",
+      "new_tooth": "§59 call_site_integrity / KB-AUDIT03（存在≠执行，调用点在线/离线/无）",
+      "question": "anti_hack 与区分力信号是『接进优化主路』还是『只做观测/声明』？",
+      "operationalization": [
+        "ver_scores 是否进入 turn_level_reward_tensor（在线主路）",
+        "success_output_passrate 的调用点是否在 reward 计算函数内，还是仅在 compute_data_metrics 观测",
+        "论文 anti_hack 声称对应代码实体在哪、是否接线"
+      ],
+      "expected_if_tooth_bites": "区分力信号=离线观测(offline_observe)，不参与优化；如实声明是观测则 preserve+flag，若冒充优化则 downgrade",
+      "verdict_levels": ["ONLINE_WIRED", "OFFLINE_OBSERVE", "PHANTOM_CLAIM", "NONE"]
+    },
+    {
+      "id": "N3",
+      "name": "train_test_information_isolation",
+      "new_tooth": "§57 backtest_integrity / KB-RSI06 + KB-SIM02（信息污染隔离、分阶段主体）",
+      "question": "训练用 golden filter、测试无 golden 的落差，是已披露的诚实边界，还是验证者在阶段间被偷换？",
+      "operationalization": [
+        "一手文本 line 206-210 是否明确区分 train(golden过滤)/test(全自主)",
+        "verification reward 的定义在 train 与 test 是否同语义（train 需 golden 定通过率）",
+        "是否存在『训练时验证质量高→测试时也高』的独立外推验证"
+      ],
+      "expected_if_tooth_bites": "旧 V3 已记 PARTIAL；新尺子预期判 flag/downgrade：训练验证奖励依赖 golden，测试无 golden 时该奖励无法计算，可靠性迁移是未验证假设（但作者已披露，不判隐瞒）",
+      "verdict_levels": ["ISOLATED", "DISCLOSED_UNVERIFIED", "SUBJECT_SHIFT", "CONTAMINATED"]
+    },
+    {
+      "id": "N4",
+      "name": "ablation_isolation_of_verification_reward",
+      "new_tooth": "§54 双源 + 旧 V4 延伸（条件消融隔离核心机制）",
+      "question": "joint rewards 是否隔离了 verification reward 的独立贡献？",
+      "operationalization": [
+        "消融表是否含『移除 verification reward 仅留 outcome+generation』一行",
+        "若无，验证提升是否可能来自 generation reward 的 dense turn signal",
+        "是否有针对 verification reward 的专门对抗测试"
+      ],
+      "expected_if_tooth_bites": "DOWNGRADE：无单独 verification reward 消融，『显式验证优化』因果未隔离（旧 V4 PARTIAL 已被新尺子咬实）",
+      "verdict_levels": ["ISOLATED", "PARTIAL", "CONFOUNDED", "MISSING"]
+    },
+    {
+      "id": "N5",
+      "name": "isomorphism_discount",
+      "new_tooth": "§56 lineage_guard / KB-STRUCT02（同构打折，信事实不信同谱系印证）",
+      "question": "TAPO『verification reward confined to own turn』防跨轮污染，与本仓 scoring_integrity 通道隔离是否同构？",
+      "operationalization": [
+        "列出与 SVL 重叠点（验证者独立性/来源隔离/评价函数防篡改/分阶段核验）",
+        "同构处判同谱系打折，不因英雄所见略同虚高",
+        "本次 N1-N4 咬出的东西是否真是新意，还是本仓已覆盖"
+      ],
+      "expected_if_tooth_bites": "DISCOUNTED：TAPO 防污染与本仓同构打折；N1 的『区分力信号算了没接线』对应 KB-AUDIT03 已覆盖 → 新发现是『旧论文的新应用实例』非『新条款』，加固指针不新增条目",
+      "verdict_levels": ["DISCOUNTED", "NEW_TEETH", "OBSERVE_ONLY"]
+    }
+  ],
+  "judge_self_audit": {
+    "principle": "新判据执行后自审：是否用脆弱字面串(KB-AUDIT01)、是否单点定罪(KB-AUDIT02)、验证对象=结论对象(KB-AUDIT04)、事实真≠结论真(KB-R-MS01)、代码事实≠经验结论(本轮新增口径)。",
+    "critical_distinction": "代码事实（ver reward 公式、success_output 不进 reward）是确凿可判的；但『平凡测试真能刷分并损害性能』是经验假设，本文未做实验——只能 flag『未排除的 hacking 路径』，不得断言『ReVeal 验证无效/造假』。",
+    "required": true
+  },
+  "honesty_tiers": {
+    "tier1": "一手全文+一手代码直接支持（reward 公式、调用点、消融表）",
+    "tier2": "一手支持但需推断（把代码事实连到 hacking 风险）",
+    "tier3": "未独立核验（真实性能影响、跨基线迁移）——据实标 UNVERIFIED，不判 FALSE",
+    "forbidden": "把代码层面可刷分直接等同于『论文结果造假』；把同构印证当独立验证"
+  },
+  "decision_rule": {
+    "if_new_teeth": "若咬出本仓完全没有的可执行拦截动作 → 按用户『把断言落到代码』编译成新门禁",
+    "if_application_instance": "若咬出的是已有 KB 条款的新应用实例（如 KB-AUDIT03 的活体案例）→ 加固 support 指针，不新增条目（vanity 门禁）",
+    "if_discounted": "同构处打折，记观察"
+  },
+  "source_lock_ref": "沿用 audit_reveal/source.sha256 + evidence.sha256（旧审计已锁存，本次未改动原文）",
+  "created_at": "2026-11-22T03:55:34+08:00"
+}

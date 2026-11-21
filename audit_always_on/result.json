@@ -1,0 +1,179 @@
+{
+  "artifact": "Building always-on agents 精研结果",
+  "prereg_sha_ok": true,
+  "source_locks": {
+    "article.html": "467e47d75511",
+    "article.txt": "26a0c4b85d3e"
+  },
+  "judges": [
+    {
+      "judge": "V1",
+      "checks": {
+        "author_william_hu": true,
+        "date_2026": true,
+        "five_primitives": true,
+        "not_actually_always_on": true,
+        "source_of_truth": true,
+        "memories_outlive_worker": true,
+        "deferred_session_resume": true,
+        "start_quiet": true,
+        "credential_proxy": true
+      },
+      "all_pass": true,
+      "html_sha256": "467e47d75511e711e0f09bcc60ee9d5b0b8b7d8029298f56673e04430f8aab37"
+    },
+    {
+      "judge": "V2",
+      "action": "scoped",
+      "code": "NUM.SELF_REPORTED_VENDOR_CLAIM",
+      "numbers": {
+        "per_solved_task_cost_reduction": "78% (Opus 5.5 vs Opus 5)",
+        "typical_workload_cost_reduction": "40%",
+        "benchmark": "one long-horizon coding benchmark (unnamed)"
+      },
+      "note": "数字来自未命名 benchmark 的 self-reported 厂商声称，无方法/样本量/置信区间。判 SCOPED 限定语境；按 KB-AUDIT04 口径对等，不硬凑复算、不外推为通用结论。"
+    },
+    {
+      "judge": "V3",
+      "action": "unverifiable",
+      "code": "CODE.NO_PUBLIC_IMPL_GUIDE",
+      "note": "指南文章无公开代码仓库；链接指向 Claude Code 既有产品能力(auto memory/memory tool/auto mode/hook/MCP Apps)，非本文可实现声明。按纪律：无可核代码≠造假，也不因 Anthropic 官方就当已实现。与 §64 Deep Agents 开源可核形成对照。",
+      "distinct_from": "§64 V3 verified（deepagents 开源包源码 7/7 命中）——本篇 UNVERIFIABLE 非 FAIL"
+    },
+    {
+      "judge": "V4",
+      "action": "downgrade",
+      "code": "STRUCT.HOMOLOGOUS",
+      "items": [
+        {
+          "orig": "run 反复调用 core loop",
+          "repo": "svagent/harness.py:run_loop",
+          "verdict": "同源不同粒度：本文有状态跨会话编排，本仓同步纯函数单会话修复环"
+        },
+        {
+          "orig": "memory 存 pointer 不存 payload / 只存不能再查的信息",
+          "repo": "证据 JSON + SHA256 锁存存指针（§64 V6 已记同谱系）",
+          "verdict": "KB-STRUCT02 同谱系打折"
+        },
+        {
+          "orig": "handler 快 ack + 深验证放 run（line ~43）",
+          "repo": "svagent/retrieval_grounding.py（§64 检索污染门禁）",
+          "verdict": "检索污染已覆盖，同维度不同阶段（接收 vs 执行），不重复计数"
+        },
+        {
+          "orig": "'存在≠执行'哲学（run 结束才写回状态）",
+          "repo": "KB-AUDIT03 / call_site_integrity",
+          "verdict": "哲学同源，具体拦截动作不同，按 KB-STRUCT02 打折"
+        }
+      ],
+      "note": "四处同构，均按 KB-STRUCT02 打折，不当独立验证。"
+    },
+    {
+      "judge": "V5",
+      "action": "new_teeth_candidate",
+      "code": "STATE.CONTINUITY_GAP",
+      "claim": "always-on 系统声称跨会话连续/有状态/可恢复",
+      "gap_capabilities": [
+        "BATCH_MERGE",
+        "CREDENTIAL_PROXY",
+        "DURABLE_STATE",
+        "EVENT_STATUS_DEDUP",
+        "NONBLOCKING_DEFER",
+        "SCHEDULER_POLLING",
+        "SESSION_RESUME",
+        "SINGLE_CONSUMER",
+        "SOURCE_OF_TRUTH_RECOVERY"
+      ],
+      "covered_capabilities": [],
+      "reason": "本仓 14 道门禁覆盖计分/迁移/稳健/复盘/谱系/回测/调用点/审查漏斗/训练服务/检索/歧义/归因/评估/记忆，无一覆盖事件驱动系统的『持久状态 + 幂等恢复 + 单消费者 + 会话续跑 + 非阻塞等待』。本文 line 27/48/105-110/91 一手支撑。非老条款实例、非 §64 单 run 输入输出 hygiene。",
+      "is_paradigm_diff_not_bug": "本仓同步纯函数库不做运行时编排是 §58 选 A 的架构选择，不是本仓漏洞；本门禁定位为『审读外部 always-on 系统声称』的尺子，符合本仓判据工具库范式。"
+    },
+    {
+      "judge": "V6",
+      "action": "merged_into_v5",
+      "code": "STATE.LIFECYCLE_MERGE",
+      "note": "事件生命周期治理（去重/单 worker/批合并/可恢复游标）与 V5 会话恢复同属『状态连续性与可恢复性』一个维度，收敛为一道门禁，避免一次造多牙（KB-META01 防 vanity）。BATCH_MERGE/EVENT_STATUS_DEDUP/SCHEDULER_POLLING 作为观察记入，不进新门禁判据主链。"
+    },
+    {
+      "judge": "V7",
+      "action": "pass",
+      "code": "HONESTY.THREE_LAYER",
+      "可判": [
+        "来源真实性（一手 HTML+正文+预注册三重锁存）",
+        "五原语与每次 run 四步一手列出",
+        "数字是 self-reported 厂商声称、非实验结论（V2 scoped）",
+        "本仓能力矩阵与本文 required 的结构化差集（V5 核验）"
+      ],
+      "不可判": [
+        "always-on 系统真实有效性——指南无 A/B，KB-RSI06 折扣",
+        "Opus 5.5 78%/40% 成本数字的因果与方法——未命名 benchmark，self-reported",
+        "Claude 产品能力是否真按文实现——无公开代码，V3 UNVERIFIABLE"
+      ],
+      "宣称vs实现": "V3 UNVERIFIABLE：指南性主张无代码可核，不等于已实现也不等于造假。",
+      "同构打折": "V4 四处同谱系按 KB-STRUCT02 打折；编译裁决只针对 V5 真缺口。"
+    }
+  ],
+  "judge_self_audit": {
+    "checks": {
+      "S1_no_brittle_literal": true,
+      "S2_no_single_point_conviction": true,
+      "S3_object_parity": true,
+      "S4_fact_vs_conclusion": true,
+      "S5_homology_discount": true,
+      "S6_code_not_effect": true
+    },
+    "all_pass": true,
+    "brittle_lines": []
+  },
+  "three_layer": {
+    "可判": [
+      "来源真实性（一手 HTML+正文+预注册三重锁存）",
+      "五原语与每次 run 四步一手列出",
+      "数字是 self-reported 厂商声称、非实验结论（V2 scoped）",
+      "本仓能力矩阵与本文 required 的结构化差集（V5 核验）"
+    ],
+    "不可判": [
+      "always-on 系统真实有效性——指南无 A/B，KB-RSI06 折扣",
+      "Opus 5.5 78%/40% 成本数字的因果与方法——未命名 benchmark，self-reported",
+      "Claude 产品能力是否真按文实现——无公开代码，V3 UNVERIFIABLE"
+    ],
+    "同构打折": [
+      "V4 四处同谱系"
+    ]
+  },
+  "overall": "DEEP_READ_COMPLETE",
+  "decision": "V5 咬出真缺口：本仓 14 道门禁无一覆盖『事件驱动系统的状态连续性与可恢复性』（DURABLE_STATE/SOURCE_OF_TRUTH_RECOVERY/SINGLE_CONSUMER/SESSION_RESUME/NONBLOCKING_DEFER）。该维度一手锚定 line 27/48/91/105-110，是审读外部 always-on 系统声称的独立尺子，非 §64 单 run 检索 hygiene、非老条款实例。通过 KB-META01 会拦才入 → 编译新门禁；遵循 §58 选 A 不接 run_loop。V6 事件生命周期治理合并入同一门禁防多牙。V4 四处同构按 KB-STRUCT02 打折；V2 数字 self-reported 判 scoped；V3 无代码判 UNVERIFIABLE。",
+  "compilation": {
+    "gate_module": "svagent/session_continuity.py:check_session_continuity",
+    "gate_prereg_sha256": "42b10e90a6c8cf5f760084c7d82c993720d105269772a358205ad4c3bfdce25f",
+    "live_regression": {
+      "all_passed": true,
+      "cases": {
+        "no_durable_state": "block",
+        "no_session_resume": "downgrade",
+        "no_source_of_truth": "downgrade",
+        "multi_consumer": "downgrade",
+        "blocking_defer": "flag",
+        "partial_durable": "flag",
+        "literal_enum": "flag",
+        "all_good": "ok"
+      }
+    },
+    "gate_ast_self_audit": {
+      "brittle_comparisons": [],
+      "all_pass": true
+    },
+    "engine_ast_self_audit": {
+      "brittle_comparisons": [],
+      "all_pass": true
+    },
+    "new_tests": 16,
+    "full_suite": {
+      "before": 415,
+      "after": 431,
+      "all_passed": true
+    },
+    "lazy_import_registered": true,
+    "not_in_run_loop": true
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "artifact": "精研预注册：TCSExam (MoonshotAI, arXiv 2611.07962v1)",
+  "object_type": "评测基准论文（empirical benchmark）+ 项目主页 + 开源评测代码，三来源；有统计量可复算、有代码可核、有诚实披露",
+  "sources": {
+    "paper": "https://arxiv.org/abs/2611.07962v1 — abs 41781B + PDF 1.28MB/52页 EOF完整 + 正文 3305行/249370字符, SHA256 38361623…/9ad72127…/94f9c074…",
+    "project": "https://moonshotai.github.io/TCSExam/ — HTML 165225B, 交互结果页, SHA256 fca19084…",
+    "code": "https://github.com/MoonshotAI/TCSExam — 7282文件, commit f0518c357211fd0a1bfec2c6d90f0bc24836b5c3, scoring.py/reference JSON/suites 一手抓取",
+    "created_at": "2026-11-22T04:49:30+08:00 (source locks), prereg 2026-11-22T04:50:38+08:00"
+  },
+  "discipline": "分析前写死判据与预期、SHA256 锁存；后验 result 分离；信事实不硬凑罪名；数字独立复算；claim-vs-code 做实（三来源有代码）；对象/口径对等（KB-AUDIT04）；不单点定罪（KB-AUDIT02）；同构打折（KB-STRUCT02）；无独立拦截动作不编译新牙（KB-META01 会拦才入）",
+  "judges": [
+    {
+      "id": "V1",
+      "name": "来源真实性",
+      "expect": "PASS",
+      "rule": "三来源锁存、PDF52页EOF、论文标题/摘要、code commit、任务表 Full100=20+30+20+30 / Lite20=5×4 一手可定位"
+    },
+    {
+      "id": "V2",
+      "name": "数字口径与独立复算",
+      "expect": "CONSISTENT",
+      "rule": "从 Table2/3 提取8共享agent Index 独立复算 Spearman ρ（声称0.93）、26/28同序与2对倒挂、Index=30P+30S+30C+10O、reference 1838 eligible、scale floor 0.02/1e-9、Lite减80%。全部复算命中才判 consistent；数值对不上按 KB-AUDIT02 先查自己复算方法"
+    },
+    {
+      "id": "V3",
+      "name": "claim-vs-code（评测代码核验）",
+      "expect": "PENDING",
+      "rule": "核验论文/文档声称是否在 scoring.py + reference JSON + suites 落地：WEIGHTS/METRIC_ID/Index公式、relative_score 的 Phi(z)与 scale=max(stdev,0.02|mu|,1e-9)、proof tracks强制0/1、solver强制[0,1]、construction非负、缺失≠0(null index/unscored separate)、suite task_count 100/20、reference_id 两文件、1838实例。PENDING=先核验再定，不预设"
+    },
+    {
+      "id": "V4",
+      "name": "Lite 选择偏差 / 循环论证风险",
+      "expect": "PENDING",
+      "rule": "论文 line 337-345/3090-3108/3160 披露：Lite 五任务用 original six agents 的 pairwise ordering 表现来选（'compared candidate subsets by how well they preserved pairwise agent orderings'），再用 ρ=0.93 论证 Full-Lite 排名一致。潜在选择偏差/循环：用被测对象表现选子集→用子集证明排名稳健。核验：(1)作者是否充分披露？(2)是否有 held-out(Kimi K3.1 Pro/DS1017 list固定前未评估)？(3)本仓是否有覆盖'用被测对象反馈选择评测子集'的门禁？backtest_integrity 管 spoiler 进回测、scoring_integrity 管计分篡改、transfer_holdout 管过拟合源域——均非此维度。PENDING=先核验披露程度与本仓覆盖再定 verdict"
+    },
+    {
+      "id": "V5",
+      "name": "Construction 分数>100 与 Index 口径",
+      "expect": "SCOPED",
+      "rule": "论文 line 254-335/405：construction 匹配记录=100%、超越可>100%（104.9/100.4），Index 可超100；Index 自承是 'later reporting summary'(line 3090)。判 scoped：限定为 benchmark 自定义口径、论文已明示并同时报告4 track means，不外推为百分制、不判造假。按 KB-AUDIT04 口径对等"
+    },
+    {
+      "id": "V6",
+      "name": "同构打折",
+      "expect": "DOWNGRADE",
+      "rule": "fixed-K3-relative 相对基线指标 ↔ 本仓 scoring_integrity（防计分篡改）/transfer_holdout（相对基线迁移判定）同谱系；judge 执行隔离(Landlock/seccomp) ↔ backtest_integrity（信息隔离）同源；result validation/专家审核 ↔ evaluation_reliability/reviewer_evaluation 同谱系。按 KB-STRUCT02 打折，不当独立验证"
+    },
+    {
+      "id": "V7",
+      "name": "诚实披露分级（正面信号）",
+      "expect": "PASS",
+      "rule": "逐项确认一手披露：40+ theorems retired after pilot solved(line 250)、缺失≠0(null index/scoring.py:22)、held-out 两agent在list固定后评估(line 344)、scale floor active on 1410/1838(line 2351)、construction>100明示、open conjecture全0且无区分力(Table24 15 both-tied)、2对倒挂点名、versioned release/earlier versions retained(line 380-382)。披露充分=正面信号，不因披露就对机制本身免检"
+    },
+    {
+      "id": "V8",
+      "name": "Open conjecture 区分力",
+      "expect": "SCOPED",
+      "rule": "Full/Lite 所有 agent open conjecture resolved≈0（除 Kimi K3.1 Pro Full 1.1%、DS1017 5.6%），Table24 open 15 both-tied+13 tied-one。判 scoped：该 track 在本次评测几乎无区分力、Index 仅占10权重；论文明示并单独报告，不判基准无效，但记录'权重10却零区分'的口径事实"
+    },
+    {
+      "id": "V9",
+      "name": "三层诚实结论与 vanity 门禁",
+      "expect": "PASS",
+      "rule": "可判：三来源真实、数字复算、claim-vs-code落地、披露程度、本仓覆盖差集。不可判：benchmark 是否真推动TCS（无长期证据）、agent 分数真实能力（benchmark效度未独立验证）、closed-source agent 提交可复现性（仅开源评测框架非agent）——KB-RSI06。宣称vs实现：V3 支撑。编译裁决只针对通过'会拦才入'的真缺口；若 V4 咬出的是老条款实例或纯披露充分的设计选择→只加固不新增（§61/§63 先例）"
+    }
+  ],
+  "decision_rule": "若 V4 咬出本仓确无覆盖、作者未充分披露、且能编译出独立拦截动作（用被测对象反馈选评测子集而不 held-out→降级）的真缺口→按 KB-META01 编译新门禁+新增KB；若作者已充分披露+有held-out（设计选择非隐瞒），或咬出的是 KB-AUDIT04/07/backtest_integrity 老条款实例→只加固 support、不新增不编译；V2/V3 若复算或代码核验失败→先查自己方法再定罪。遵循 §58 选 A：新门禁不接 run_loop。",
+  "honesty_boundary": "本预注册只锁存判据与预期，不预断结论。V3/V4 标 PENDING 须先核验再定。判据自审须过：不 brittle（判定分支无中文字面串比较）、不单点定罪、对象/口径对等、同构打折、事实vs结论分离。所有机制描述来自三来源一手。benchmark 论文按对象类型适配判据（统计复算+claim-vs-code+披露分级），不套无关纪律。",
+  "distinct_from_prior": "与 §64 Deep Agents 同为有开源代码可 claim-vs-code，但 §64 判检索管线 hygiene；本篇判评测基准本身的方法学（选择偏差/相对指标/复算/披露）。与 §65 无代码指南相反——本篇三来源齐备可实核。V4（用被测对象表现选评测子集）是与本仓 backtest_integrity（spoiler进回测）不同的新角度，但须严防：作者已充分披露+held-out 时属设计选择非漏洞，不可硬造牙。"
+}

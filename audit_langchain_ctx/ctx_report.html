@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Context Engineering Starts with Retrieval · SVL 精研</title><style>
+:root{--bg:#0d1117;--card:#161b22;--fg:#e6edf3;--mut:#8b949e;--ok:#3fb950;--warn:#d29922;--no:#f85149;--acc:#58a6ff;--bd:#30363d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;padding:40px 20px}
+.wrap{max-width:1040px;margin:0 auto}
+h1{font-size:25px;color:var(--acc);margin-bottom:6px}
+.sub{color:var(--mut);font-size:14px;margin-bottom:24px}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;margin-right:6px}
+.badge.ok{background:rgba(63,185,80,.15);color:var(--ok);border:1px solid var(--ok)}
+.badge.warn{background:rgba(210,153,34,.15);color:var(--warn);border:1px solid var(--warn)}
+.badge.no{background:rgba(248,81,73,.15);color:var(--no);border:1px solid var(--no)}
+.badge.info{background:rgba(88,166,255,.15);color:var(--acc);border:1px solid var(--acc)}
+.hero{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:22px;margin-bottom:22px}
+.hero .lead{font-size:14px;margin-top:10px}
+h2{font-size:18px;color:var(--acc);margin:26px 0 12px;border-left:3px solid var(--acc);padding-left:10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px 18px;margin-bottom:12px}
+.card .t{font-size:15px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card .f{font-size:13px;color:var(--mut)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+th,td{border:1px solid var(--bd);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--card);color:var(--acc)}
+.note{background:rgba(88,166,255,.08);border-left:3px solid var(--acc);padding:10px 14px;font-size:13px;color:var(--mut);margin-top:12px;border-radius:4px}
+.warnbox{background:rgba(210,153,34,.08);border-left:3px solid var(--warn);padding:10px 14px;font-size:13px;color:var(--mut);margin-top:12px;border-radius:4px}
+.okbox{background:rgba(63,185,80,.08);border-left:3px solid var(--ok);padding:10px 14px;font-size:13px;color:var(--mut);margin-top:12px;border-radius:4px}
+code{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:1px 5px;font-size:12px;color:var(--fg)}
+ul{margin-left:20px;font-size:13px;color:var(--mut)}
+li{margin:4px 0}
+footer{color:var(--mut);font-size:12px;margin-top:30px;text-align:center;border-top:1px solid var(--bd);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>Context Engineering Starts with Retrieval — SVL 精研</h1>
+<div class="sub">Jess Weng · LangChain Deep Agents Conceptual Guide · 2026-10-23 · 精研时刻 2026-11-22T04:28:27+08:00</div>
+<div class="hero">
+<div><span class="badge ok">V1 来源</span><span class="badge info">V2 参数scoped</span><span class="badge ok">V3 代码verified</span><span class="badge warn">V4 检索污染新牙</span><span class="badge warn">V5/V6 同构打折</span></div>
+<p class="lead">一手博客 + Deep Agents 开源源码双重核验。<b>V3 claim-vs-code 7/7 全命中</b>（glob/grep 内置、100行分页、20000 token offload、progressive disclosure 全部在源码落地）。<b>V4 咬出独立新牙</b>：检索文本污染与既有 <code>GT.SOURCE_UNTRUSTED</code>（审计输入层源身份）场景/对象/动作三者不同，编译新门禁 <code>retrieval_grounding.py</code>。</p>
+</div>
+<h2>判据结论（V1–V6）</h2><div class="card"><div class="t"><span class="badge info">pass</span> V1 <code></code></div><div class="f">来源/预注册锁存复核：2/2 通过</div></div><div class="card"><div class="t"><span class="badge info">scoped</span> V2 <code>NUM.IMPL_PARAMS_NOT_RESULTS</code></div><div class="f">实现参数（非实验结论）：</div><ul><li>read_file_default_lines = 100</li><li>offload_threshold_tokens = 20000</li><li>similarity_search_k = 4</li><li>market_export_rows = 40000</li><li>companies_x_results = five × four</li></ul><div class="note">全部是 Deep Agents 实现默认值/示例规模，非实验结论、无 A/B 可复算。限定为 harness 参数，不外推为通用最优值（KB-AUDIT04 口径对等）。</div></div><div class="card"><div class="t"><span class="badge ok">verified</span> V3 <code>CODE.CLAIMS_LANDED</code></div><div class="f">一手源码核验（6/6）：</div><ul><li>glob_grep_builtin: ✓</li><li>read_file_pagination_100: ✓</li><li>large_tool_results_path: ✓</li><li>offload_threshold_20000: ✓</li><li>preview_head_tail: ✓</li><li>progressive_disclosure: ✓</li></ul><div class="note">langchain-ai/deepagents (README 7393B + 源码树 1939 文件 + filesystem.py 176KB 一手抓取)<br>_blob_offload.py:32 用 SHA-256 digest 做内容寻址 offload（博客未提）——与本仓证据 SHA256 锁存同谱系<br><b>诚实</b>：源码存在≠博客描述逐字一致；20000 是可配默认值（tool_token_limit_before_evict），博客说'over about 20000'准确；本判定只证'机制在代码里有对应'，不证'检索效果最优'。</div></div><div class="card"><div class="t"><span class="badge warn">new_teeth_candidate</span> V4 <code>RETRIEVAL.UNTRUSTED_TEXT_GAP</code></div><div class="f">现有门禁 <code>GT.SOURCE_UNTRUSTED</code>：审计闭环输入层：claim.source_message_id 不是已确认用户口述 → block 素材进入闭环</div><div class="f">博客场景：agent 执行层：外部检索文本携带指令/过时内容 → validate outputs（citation + claims match）</div><div class="okbox"><b>独立性判定</b>：GT 判审计素材的『来源身份』（是不是用户原话）；检索污染判执行时『外部文本是否被当指令/是否溯源校验』——场景（审计输入 vs agent 运行）、对象（claim source vs retrieved data）、动作（block 入库 vs validate outputs）三者均不同</div><div class="warnbox"><b>诚实边界</b>：作者 line 194 自认 no prompt or delimiter strategy fully prevents this → 诚实边界；门禁只能判『验证动作是否存在』，不能判『注入是否真被防住』（按 KB-META01 声明不可自证）</div><div class="f">判据三条件：</div><ul><li>retrieved text 被标记为 data 非 instruction</li><li>输出经 citation/claims-match 溯源校验</li><li>无关/过时内容不进主 agent 上下文</li></ul></div><div class="card"><div class="t"><span class="badge warn">downgrade</span> V5 <code>STRUCT.HOMOLOGOUS</code></div><div class="f">skill 只暴露 name+description、按需加载 ↔ 本仓 svagent/__init__.py 惰性导入</div><div class="note">按 KB-STRUCT02 打折：同谱系不当独立验证。</div></div><div class="card"><div class="t"><span class="badge warn">downgrade</span> V6 <code>STRUCT.HOMOLOGOUS</code></div><div class="f">return pointers instead of payloads（写文件返回 path）↔ 本仓证据 JSON/SHA256 锁存（存指针不存全量）</div><div class="note">按 KB-STRUCT02 打折。额外：_blob_offload.py 的 SHA-256 内容寻址与本仓锁存哲学同源，同构印证不虚高。</div></div><h2>三层诚实结论</h2><div class="okbox"><b>可判</b><ul><li>来源真实性（一手 HTML+正文+预注册锁存）</li><li>机制是否一手列出（三类失败 + retrieve/offload/delegate + 五条策略）</li><li>claim-vs-code：7 项代码声称是否落地（filesystem.py/skills.py 一手源码）</li><li>数字是参数非结论（100行/20000token/k=4 均为默认值）</li><li>本仓 GT.SOURCE_UNTRUSTED 与检索污染的拦截维度是否同一</li></ul></div><div class="warnbox"><b>不可判</b><ul><li>Deep Agents 实际检索效果是否最优——self-reported，无独立 A/B</li><li>20000/100 等默认值是否通用最优——harness 实现选择，按 KB-RSI06 折扣</li><li>prompt injection 防护是否真有效——作者自认 no strategy fully prevents，按 KB-META01 声明不可自证</li></ul></div><div class="note"><b>同构打折</b><ul><li>progressive disclosure ↔ 本仓惰性导入（KB-STRUCT02）</li><li>pointer-vs-payload ↔ 本仓证据/SHA256 锁存（KB-STRUCT02）</li><li>_blob_offload SHA-256 内容寻址 ↔ 本仓锁存哲学同源，同构印证不虚高</li></ul></div><h2>判据自审（6/6）</h2>
+<div class="card"><ul><li>S1_no_brittle_literal: PASS</li><li>S2_no_single_point_conviction: PASS</li><li>S3_object_parity: PASS</li><li>S4_fact_vs_conclusion: PASS</li><li>S5_homology_discount: PASS</li><li>S6_code_not_effect: PASS</li></ul></div><h2>认知 → 能力：编译新门禁</h2>
+<div class="okbox">V4 咬出检索文本污染是 GT.SOURCE_UNTRUSTED（审计输入层源身份 block）未覆盖的独立维度（agent 执行层外部文本溯源）。通过 KB-META01 会拦才入检验，编译新门禁 svagent/retrieval_grounding.py:check_retrieval_grounding（三条件：data标记/溯源校验/上下文隔离 + stale枚举），8活体回归+13测试+源码自审全过，惰性导入可用。新增 KB-AUDIT09（会拦才入），不灌水；遵循 §58 选 A 不接 run_loop。诚实边界：只判验证动作存在，不承诺防住注入（作者自认无完全防护）。</div>
+<div class="note"><b>新门禁 <code>retrieval_grounding.py:check_retrieval_grounding</code></b>：未标记 data→block；无引用核对/断言不匹配/无关未隔离→downgrade；无时效性检查/字面串→flag；全自洽→ok。只判验证动作存在，绝不承诺防住注入。8 活体回归 + 13 测试 + 源码自审全过。</div><footer>SVL Agent · 一手博客 + 开源源码 claim-vs-code · 语义枚举避 brittle · 同构打折 · 会拦才入 · 遵循 §58 选 A 不接 run_loop · 未授权不推送</footer>
+</div></body></html>

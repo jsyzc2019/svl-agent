@@ -119,6 +119,18 @@ _LAZY: dict[str, tuple[str, str]] = {
     "check_review_evaluation": ("svagent.reviewer_evaluation", "check_review_evaluation"),
     "ReviewEvalVerdict": ("svagent.reviewer_evaluation", "ReviewEvalVerdict"),
     "review_eval_live_regression": ("svagent.reviewer_evaluation", "live_regression"),
+    # 训练-服务信号可得性门禁（§62：从 HiGR line 366-380/425-428 编译，KB-AUDIT04 延伸）
+    "check_serving_signal": ("svagent.serving_signal_gate", "check_serving_signal"),
+    "ServingSignalVerdict": ("svagent.serving_signal_gate", "ServingSignalVerdict"),
+    "serving_gate_live_regression": ("svagent.serving_signal_gate", "live_regression"),
+    # 检索文本溯源门禁（§64：从 LangChain《Context Engineering Starts with Retrieval》line 191-194 编译）
+    "check_retrieval_grounding": ("svagent.retrieval_grounding", "check_retrieval_grounding"),
+    "RetrievalGroundingVerdict": ("svagent.retrieval_grounding", "RetrievalGroundingVerdict"),
+    "retrieval_grounding_live_regression": ("svagent.retrieval_grounding", "live_regression"),
+    # 跨会话状态连续性门禁（§65：从 Anthropic《Building always-on agents》line 27/48/91/105-110 编译）
+    "check_session_continuity": ("svagent.session_continuity", "check_session_continuity"),
+    "SessionContinuityVerdict": ("svagent.session_continuity", "SessionContinuityVerdict"),
+    "session_continuity_live_regression": ("svagent.session_continuity", "live_regression"),
 }
 
 

@@ -1,0 +1,58 @@
+{
+  "artifact": "精研预注册：Context Engineering Starts with Retrieval (LangChain / Jess Weng)",
+  "object_type": "工程概念指南（self-reported harness 实践，Deep Agents 为开源包）",
+  "sources": {
+    "blog": "https://www.langchain.com/blog/context-engineering-starts-with-retrieval — HTML 188KB + 正文 247 行/14686 字符, SHA256 62434307…/bf6fa5f0…, Last Published 2026-11-20, 抓取留痕 2026-11-22T04:27:50+08:00",
+    "author": "Jess Weng, October 23, 2026, 12 min, LangChain Deep Agents Conceptual Guide",
+    "code": "Deep Agents 开源包 `uv add deepagents`（待 claim-vs-code 核验，不预设结论）"
+  },
+  "created_at": "2026-11-22T04:28:27+08:00",
+  "discipline": "分析前写死判据与预期，SHA256 锁存；后验 result 分离；信事实不硬凑罪名；同构打折；无独立拦截动作不编译新牙（KB-META01 会拦才入）",
+  "judges": [
+    {
+      "id": "V1",
+      "name": "来源真实性",
+      "expect": "PASS",
+      "rule": "一手 HTML + 正文锁存、作者/日期确认、关键机制（三类检索失败 + retrieve/offload/delegate + 五条策略）一手可定位"
+    },
+    {
+      "id": "V2",
+      "name": "数字口径性质判定",
+      "expect": "SCOPED",
+      "rule": "文中数字全部是实现参数而非实验结论：read_file 默认 100 行、offload 阈值约 20000 tokens、similarity_search k=4、40,000 行 market export、five companies×four results。判 SCOPED（限定为 Deep Agents 实现默认值），不外推为通用最优值；无 A/B 实验数字可复算"
+    },
+    {
+      "id": "V3",
+      "name": "claim-vs-code（Deep Agents 开源核验）",
+      "expect": "PENDING",
+      "rule": "用 gem-seeker claim-vs-code 精神核验文中声称的机制是否在 deepagents 开源代码/文档有对应：glob/grep/read_file 内置、read_file 100 行分页、>20000 token offload 到 /large_tool_results/、retrieve-offload-delegate、progressive disclosure skill、subagent 过滤。PENDING=先核验再定 verdict，不预设 PASS/FAIL"
+    },
+    {
+      "id": "V4",
+      "name": "检索文本污染 / prompt injection",
+      "expect": "PENDING",
+      "rule": "作者 line 191-194 明说 retrieved text 是 data 非 instructions、可能有 prompt injection、no prompt or delimiter strategy fully prevents this、要求 validate outputs（check citations + claims match）。核验点：(1)本仓是否已有专用门禁？已知 core.py:98 有 GT.SOURCE_UNTRUSTED 通用 block（不是专用）；(2)作者自认无完全防护=诚实边界；(3)若编译新牙，必须是 GT.SOURCE_UNTRUSTED 未覆盖的独立动作（执行时检索文本注入 vs 声明来源不可信），否则只加固不新增"
+    },
+    {
+      "id": "V5",
+      "name": "progressive disclosure 同构",
+      "expect": "DOWNGRADE",
+      "rule": "skill 只暴露 name+description、按需加载与本仓 svagent/__init__.py 惰性导入同谱系。按 KB-STRUCT02 打折，不当独立验证"
+    },
+    {
+      "id": "V6",
+      "name": "pointer-vs-payload 同构",
+      "expect": "DOWNGRADE",
+      "rule": "return pointers instead of payloads（写文件返回 path）与本仓证据 JSON/SHA256 锁存（存指针而非全量内容）同谱系。按 KB-STRUCT02 打折"
+    },
+    {
+      "id": "V7",
+      "name": "三层诚实结论",
+      "expect": "PASS",
+      "rule": "可判：来源真实性、机制是否一手列出、数字是参数非结论、本仓有无对应门禁。不可判：Deep Agents 实际检索效果、20000/100 等默认值是否最优、prompt injection 防护是否真有效——self-reported，按 KB-RSI06 折扣。宣称 vs 实现：需 V3 claim-vs-code 支撑"
+    }
+  ],
+  "decision_rule": "若 V4 咬出 GT.SOURCE_UNTRUSTED 等现有门禁均未覆盖、且能编译出独立拦截动作的真缺口→编译新门禁+新增KB（会拦才入 KB-META01）；若咬出的仍是老条款实例（如 source untrusted 已覆盖）→只加固support、不新增不编译（防vanity）；若无新意→记观察。遵循 §58 选 A：新门禁不接 run_loop。",
+  "honesty_boundary": "本预注册只锁存判据与预期，不预断结论。V3/V4 标 PENDING 表示须先核验再定。判据自审须过：不 brittle（判定分支无中文字面串比较）、不单点定罪、对象/口径对等、同构打折。所有机制描述来自一手正文，二手/搜索结果仅作线索。",
+  "distinct_from_prior": "与 §63 GR 博客不同：本篇核心是检索管线 hygiene（上下文工程），非集体 RL 训练；V4 检索注入角度与本仓既有SOURCE_UNTRUSTED的区分是关键判定点，不预设答案"
+}

@@ -1,0 +1,58 @@
+{
+  "artifact": "精研预注册：Building always-on agents (Anthropic / William Hu)",
+  "object_type": "工程最佳实践指南（Claude Platform best practices，self-reported 架构描述，非论文、无公开代码实现、无 A/B 实验）",
+  "sources": {
+    "article": "https://claude.com/resources/articles/building-always-on-agents — HTML 563950B, 正文 154 行/14023 字符, SHA256 467e47d7…(article.html), William Hu, November 13, 2026, 14 min, Best practices / Claude Platform, 抓取留痕 2026-11-22T04:38:24+08:00",
+    "author": "William Hu；致谢 Rodrigo Olivares、Michael Segner",
+    "code": "无公开代码仓库（指南性文章，链接指向 Claude Code auto memory/memory tool/auto mode/hook 等既有产品能力，非可核验实现）"
+  },
+  "created_at": "2026-11-22T04:38:24+08:00",
+  "discipline": "分析前写死判据与预期，SHA256 锁存；后验 result 分离；信事实不硬凑罪名；同构打折；无独立拦截动作不编译新牙（KB-META01 会拦才入）；对象/口径对等（KB-AUDIT04）——工程指南不硬套论文消融复算",
+  "judges": [
+    {
+      "id": "V1",
+      "name": "来源真实性",
+      "expect": "PASS",
+      "rule": "一手 HTML+正文锁存、作者/日期确认、五原语（event inbox/timers/memory/permissions/outbox）与每次 run 四步一手可定位；文末三问结语可定位"
+    },
+    {
+      "id": "V2",
+      "name": "数字口径性质判定",
+      "expect": "SCOPED",
+      "rule": "唯一数字是 Opus 5.5 比 Opus 5 'per solved task 便宜 78%、典型负载 40%'，来自 unnamed 'one long-horizon coding benchmark'，无 benchmark 名称/方法/样本量/置信区间——self-reported 厂商声称，判 SCOPED 限定语境，不硬凑复算、不外推为通用结论（KB-AUDIT04 口径对等）"
+    },
+    {
+      "id": "V3",
+      "name": "claim-vs-code 可行性",
+      "expect": "UNVERIFIABLE",
+      "rule": "这是指南文章、无公开代码实现可核（区别于 §64 Deep Agents 开源包）。链接指向的产品能力（auto memory/memory tool/auto mode/hook/MCP Apps）不属本文可实现声明。判 UNVERIFIABLE 非 FAIL——无可核代码≠造假，也不因是Anthropic官方就当已实现"
+    },
+    {
+      "id": "V4",
+      "name": "与本仓架构的同构区（打折）",
+      "expect": "DOWNGRADE",
+      "rule": "逐项对照本仓已有结构：(1) run 反复调用 core loop ↔ 本仓 harness.run_loop；但本文是有状态跨会话编排、本仓是同步纯函数单会话修复环——'同源不同粒度'；(2) memory 存 pointer 而非 payload、只存不能再查的信息 ↔ 本仓证据 JSON/SHA256 锁存存指针（§64 V6 已记同谱系）；(3) handler 快 ack + 深验证放 run（line ~43）↔ §64 retrieval_grounding 检索污染门禁已覆盖；(4) '存在≠执行'哲学 ↔ KB-AUDIT03。以上按 KB-STRUCT02 同谱系打折，不当独立验证"
+    },
+    {
+      "id": "V5",
+      "name": "跨 run 会话恢复闭环（潜在新缺口）",
+      "expect": "PENDING",
+      "rule": "本文最硬的独特机制：deferred tool call（line 105-110）——run 结束、session 中途保存(mid-call)、用户答复作为 event 回 inbox、新 run resume saved session，等待期间 worker 处理其他事件不阻塞；配合 inbox 'source of truth'(line 48) 支持 worker 崩溃后 pickup 同一 event 重试。核验点：本仓 harness.run_loop 是同步 check→reviser 单环，无'暂停-落盘-异步恢复-会话续跑'动作；task_retrospective/improvement_memory 管经验沉淀非会话状态恢复。PENDING=先确认本仓确无此维度、且能编译出独立拦截动作再定 verdict，不预设 PASS/FAIL"
+    },
+    {
+      "id": "V6",
+      "name": "事件生命周期治理（幂等/单worker/批合并/状态追踪）",
+      "expect": "PENDING",
+      "rule": "inbox 四条纪律：event 状态追踪+unique-id 去重(line ~41)、one active worker(line ~50-51)、batch pending events(line ~52-53)、inbox as source of truth 崩溃重试(line 48)。核验点：本仓是否有'并发事件去重/单消费者/批合并/可恢复游标'的门禁？若无且能编译独立动作→候选；若与 backtest_integrity 的隔离或 scoring_integrity 的通道完整性同构→打折"
+    },
+    {
+      "id": "V7",
+      "name": "三层诚实结论与 vanity 门禁",
+      "expect": "PASS",
+      "rule": "可判：来源真实性、五原语一手列出、数字是厂商self-reported参数非实验、本仓各维度有无对应门禁。不可判：always-on 系统真实有效性、Opus 5.5 成本数字因果、产品能力是否真按文实现（无代码）——KB-RSI06 折扣。宣称vs实现：V3 UNVERIFIABLE。编译裁决只针对通过'会拦才入'的真缺口；若 V5/V6 咬出的仍是老条款实例→只加固不新增（§61/§63 先例）"
+    }
+  ],
+  "decision_rule": "若 V5 或 V6 咬出本仓确无覆盖、且能编译出独立拦截动作（不是同构、不是老条款实例）的真缺口→按 KB-META01 编译新门禁+新增KB；若咬出的是老条款实例或纯架构范式差异（本仓同步纯函数 vs 本文有状态编排，属设计选择非漏洞）→只加固 support、不新增不编译；若无可落地动作→记观察。遵循 §58 选 A：新门禁不接 run_loop。",
+  "honesty_boundary": "本预注册只锁存判据与预期，不预断结论。V5/V6 标 PENDING 表示须先核验再定。判据自审须过：不 brittle（判定分支无中文字面串比较）、不单点定罪、对象/口径对等、同构打折、事实vs结论分离。所有机制描述来自一手正文。工程指南不硬套论文消融复算纪律（KB-AUDIT04）。",
+  "distinct_from_prior": "与 §64 LangChain 不同：§64 判 agent 执行层检索文本溯源（单 run 内的输入输出 hygiene）；本文核心是跨 run 的状态连续性 + 事件生命周期治理 + 权限风险治理（长生命周期运行时编排）。V5（会话恢复闭环）/V6（事件生命周期）是 §64 不覆盖的新维度。但须严防：本仓同步判据库不做运行时编排是 §58 架构选择，不是漏洞——只有能编译出'会拦'动作才落地，否则诚实记范式差异、不硬造牙。"
+}

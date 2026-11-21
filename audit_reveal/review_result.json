@@ -1,0 +1,119 @@
+{
+  "section": "§61",
+  "review_type": "old_paper_x_new_framework",
+  "target": "ReVeal (ICLR 2026, arXiv 2506.11442v2)",
+  "evidence_facts": {
+    "E1": {
+      "fact": "ver_turn_reward = 1.0 * expected_output_passrate（验证奖励只=测试在golden上通过率，无区分力项）",
+      "source": "repo/verl/utils/reward_score/code_server.py:514-516",
+      "paper": "paper.txt:250-256 公式(3) 与代码一致，无 drift"
+    },
+    "E2": {
+      "fact": "success_output_passrate（通过golden的测试再跑候选答案的通过率=区分力代理）被计算",
+      "source": "repo/verl/utils/reward_score/code_server.py:498-502,518"
+    },
+    "E3": {
+      "fact": "success_output_passrate 只进 debug_info 与 compute_data_metrics 观测，未进 ver_scores/reward_tensor",
+      "source": "repo/verl/utils/reward_score/code_server.py:527 + ray_trainer.py:311,491,953,968"
+    },
+    "E4": {
+      "fact": "论文训练用 golden filter、测试全自主，作者主动披露",
+      "source": "paper.txt:206-210"
+    },
+    "E5": {
+      "fact": "消融仅 outcome vs joint rewards（三reward捆绑），无单独移除 verification reward 行",
+      "source": "paper.txt:407-410"
+    },
+    "E6": {
+      "fact": "全文 hack 仅3处，均为声称TAPO防hacking，无平凡测试/刷分对抗实验",
+      "source": "paper.txt:104,217,288-292"
+    },
+    "E7": {
+      "fact": "TAPO 把 verification reward 限制在自身 verification turn，防跨轮污染",
+      "source": "paper.txt:288-292 公式(6)"
+    }
+  },
+  "judges": [
+    {
+      "judge": "N1",
+      "verdict": "flag",
+      "code": "SCORE.CHANNEL_UNVERIFIED",
+      "effective_score": 37.7,
+      "message": "计分检测字段在被优化者可写范围、分数上升但无独立通道复验——默认降级，分数仅在排除绕过后才采信",
+      "code_fact": "ver_reward 只按自造测试在golden通过率；区分力信号未进reward（E1/E3）",
+      "experience_hypothesis": "平凡测试可能刷分并抬高分数——本文未做对抗实验（E6），UNVERIFIED",
+      "inputs": {
+        "score_before": 36.1,
+        "score_after": 37.7,
+        "detector_field": "self_generated_tests_passrate_on_golden",
+        "optimizee_writable": true,
+        "detector_tampered": false,
+        "independent_recheck": false
+      }
+    },
+    {
+      "judge": "N2",
+      "verdict": "CALL_SITE.PRESERVE_TOOL_LIBRARY",
+      "code": "CALL_SITE.PRESERVE_TOOL_LIBRARY",
+      "action": "ok",
+      "message": "离线审计脚本有真实调用者、如实声明为按需工具库、未声称自动——诚实，preserve（§58）",
+      "code_fact": "区分力信号有实体、有离线调用者，但未接进在线reward主路（E2/E3）",
+      "note": "按 §58 选 A 口径：如实声明的离线观测不判死代码，但不得记成已参与优化"
+    },
+    {
+      "judge": "N3",
+      "verdict": "flag",
+      "code": "BACKTEST.UNDECLARED",
+      "message": "可见信息范围未声明：no_saved_memories,no_incident_writeup,no_previous_runs,inspect_transcript,separate_timing_deployment——默认降级，不可判定",
+      "code_fact": "训练用golden/测试全自主已披露（E4）；但去污染/时间分离等隔离项未声明",
+      "note": "旧 V3 已记 PARTIAL；新尺子咬出的是『隔离项未全声明→flag』，非隐瞒偷换"
+    },
+    {
+      "judge": "N4",
+      "verdict": "block",
+      "code": "REVIEW_EVAL.SINGLE_END_TO_END",
+      "message": "把 raw/post-verification/final 三阶段压成一个端到端分数，看不出系统是否丢了已找到的 bug——口径失真，必须分阶段评估（文章 line 123，KB-AUDIT04）",
+      "code_fact": "消融仅 outcome vs joint（三reward捆绑），无单独 verification 消融（E5）",
+      "note": "block 的是『评估方案无法隔离验证奖励贡献』这一口径缺口，非判论文结果假"
+    },
+    {
+      "judge": "N5",
+      "verdict": "downgrade",
+      "code": "LINEAGE.ISOMORPHIC_NOT_INDEPENDENT",
+      "message": "高同构只构成谱系呼应，非独立验证；印证力度打折（KB-STRUCT02）",
+      "code_fact": "TAPO turn隔离(E7)与本仓scoring_integrity同构；N1咬出的KB-AUDIT03活体本仓已覆盖",
+      "note": "同构打折，不因英雄所见略同虚高；新发现是旧论文的新应用实例，非新条款"
+    }
+  ],
+  "judge_self_audit": {
+    "checks": {
+      "S1_no_brittle_literal": true,
+      "S2_no_single_point_conviction": true,
+      "S3_object_parity": true,
+      "S4_fact_vs_conclusion": true,
+      "S5_codefact_not_experience": true
+    },
+    "all_pass": true
+  },
+  "three_tier_conclusion": {
+    "tier1_code_fact": [
+      "ver_reward 只按自造测试在golden通过率，无区分力项（E1）",
+      "区分力信号 success_output_passrate 被计算但未进 reward（E2/E3）",
+      "消融无单独 verification reward 行（E5）",
+      "TAPO turn隔离与本仓 scoring_integrity 同构（E7）"
+    ],
+    "tier2_reasoned": [
+      "存在未被排除的平凡测试刷分路径——代码事实支持风险，但本文未做对抗实验",
+      "训练验证奖励依赖golden、测试无golden时该奖励无法计算——可靠性迁移是未验证假设（作者已披露）"
+    ],
+    "tier3_unverified": [
+      "该奖励漏洞是否真实损害 ReVeal 报告的性能数字——需实跑对抗实验，本文未做，标 UNVERIFIED",
+      "CTRL 基线引用旧 LCB 版本——与本次新牙无关，旧 V5 已记，不重复判"
+    ]
+  },
+  "decision": {
+    "new_teeth": false,
+    "reason": "N1 咬出的『区分力信号算了没接线』是 KB-AUDIT03(存在≠执行)的活体新实例，本仓已有该条款；N5 同构打折。按 §61 decision_rule：加固 support 指针，不新增条目、不编译新门禁。",
+    "kb_action": "加固 KB-AUDIT03 / KB-AUDIT07 / KB-RSI06 / KB-STRUCT02 各一条 support（应用实例），101 条不新增"
+  }
+}

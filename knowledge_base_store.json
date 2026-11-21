@@ -1439,7 +1439,8 @@
         "svagent/transfer_holdout.py:check_transfer + tests/test_transfer_holdout.py — 样本外复验编译为迁移增益判定(相对目标域基线,非绝对精度)",
         "audit_swegym/result.json:S2 — 摘要19%gains vs 表内13.6%口径差;491轨迹样本外scaling但主结果无多次std,样本外复验需看口径",
         "svagent/judgment_robustness.py:bootstrap_stability + tests/test_judgment_robustness.py — SWE-Gym get_bootstrap_accuracy_std 编译：判定附 bootstrap std/置信区间，std≥0.10 降级（同证据重排会摆动，不据单点下强结论）；固定 seed=42 可复现",
-        "svagent/backtest_integrity.py:check_backtest_integrity + tests/test_backtest_integrity.py(14项) — 样本外复验补『回测信息污染隔离』维度：fresh/stripped/禁读事后报告/分开评分，关键项缺失 block、弱项缺失 downgrade；编译自 OpenAI Performance Factory 一手8条纪律(§57)"
+        "svagent/backtest_integrity.py:check_backtest_integrity + tests/test_backtest_integrity.py(14项) — 样本外复验补『回测信息污染隔离』维度：fresh/stripped/禁读事后报告/分开评分，关键项缺失 block、弱项缺失 downgrade；编译自 OpenAI Performance Factory 一手8条纪律(§57)",
+        "audit_reveal/review_result.json:N3（§61：训练用 golden filter / 测试全自主，隔离项未全声明→flag；可靠性迁移是未验证假设）"
       ],
       "evidence": "experiment",
       "addressable": true,
@@ -1773,7 +1774,9 @@
         "audit_ambition/evidence.json:A5_isomorphism — 雄心教程6处与本仓框架重叠(外部judge/对抗核查/留出验证/shadow mode)，同源AI工程共同体，判同谱系印证打折",
         "audit_skillmaster/evidence.json:S5 论文5处与SVL同构(反事实效用≈会拦才入,方向一致性≈单一检查点),同AI自我改进谱系打折不虚高",
         "audit_dgm/evidence.json:D7 — DGM与SVL框架6处同构(archive≈知识库/self-modify≈SVL闭环/empirical-validation≈预注册判据/self-modifiability门槛≈会拦才入/踏脚石≈判据自审/objective hacking≈Goodhart),同RSI共同体判同谱系打折,不把顶会论文当框架独立验证",
-        "svagent/lineage_guard.py:discount_claim — 同构打折从文字警觉编译为通用门禁：R1 循环声称 block / R2 高同构 downgrade / R3 部分 flag / R4 诚实标注 preserve；替代 rsis_framework_analysis.py:t2 的 brittle 字面串匹配；活体回归4/4"
+        "svagent/lineage_guard.py:discount_claim — 同构打折从文字警觉编译为通用门禁：R1 循环声称 block / R2 高同构 downgrade / R3 部分 flag / R4 诚实标注 preserve；替代 rsis_framework_analysis.py:t2 的 brittle 字面串匹配；活体回归4/4",
+        "audit_reveal/review_result.json:N5（§61：TAPO turn 奖励隔离与本仓 scoring_integrity 同构，同谱系打折，不因英雄所见略同虚高）",
+        "audit_always_on/result.json:V4（§65：memory 存 pointer/存在≠执行哲学/run 反复调 core loop 四处同构按 KB-STRUCT02 打折，同源不同粒度不当独立验证）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -2139,7 +2142,9 @@
         "audit_fg_compare/fg_result.json:judge_self_audit",
         "KB-R-RETRO01(同类但机制不同：那是算错，这是未接线)",
         "architecture_decision_A.json:three_layer_audit + kb_increment（§58 用户选 A：调用点分在线 run_loop 与离线审计脚本；如实声明工具库定位≠死代码，KB-AUDIT03 判定粒度细化）",
-        "svagent/call_site_integrity.py:audit_call_site + call_site_result.json（§59：把 KB-AUDIT03 判定粒度从『有无调用点』编译成会拦会判的门禁——调用点分 none/offline_audit/online_main_loop + 定位如实声明 + 调用者真实；死代码block/离线冒充在线downgrade/诚实工具库preserve/幽灵接线block）"
+        "svagent/call_site_integrity.py:audit_call_site + call_site_result.json（§59：把 KB-AUDIT03 判定粒度从『有无调用点』编译成会拦会判的门禁——调用点分 none/offline_audit/online_main_loop + 定位如实声明 + 调用者真实；死代码block/离线冒充在线downgrade/诚实工具库preserve/幽灵接线block）",
+        "svagent/../audit_reveal/review_result.json:N2（§61：ReVeal 把唯一区分力信号 success_output_passrate 算了却只进观测、未进 reward——存在≠执行的活体新实例，判定粒度再获一句例证）",
+        "audit_always_on/result.json:V4（§65：always-on『不是字面常驻、靠 run 之间写回状态维持连续』=存在≠执行哲学在跨 run 维度的延伸；本仓 harness 同步单会话环 vs 本文有状态跨会话编排，同源不同粒度按 KB-STRUCT02 打折，不误判为漏洞）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -2168,7 +2173,11 @@
         "audit_reavideo/evidence.json:V5 — 转码改变取证特征,拿转码后文件套原文件规则=验证对象≠取证对象的新实例",
         "§56 自审工具假阳性实录：源码级核验脚本把代码注释里举例的「高度同构」当成判定逻辑字面串，误报 FAIL；口径修正（先去 docstring 再去行注释）后通过——验证工具的对象/口径也须对等，否则误伤正确代码（process 源增量，超出预注册列举）",
         "svagent/backtest_integrity.py:G5 unknown→flag — 口径对等扩展到回测可见信息范围：隔离状态未声明(unknown)不可判定，默认降级；测试样本与真实生产口径须对齐(§57)",
-        "svagent/reviewer_evaluation.py:check_review_evaluation + audit_claude_verify/final_result.json（§60：分阶段 recall 被压成单一端到端分数=口径失真 block；文章 line 123 一手纪律编译）"
+        "svagent/reviewer_evaluation.py:check_review_evaluation + audit_claude_verify/final_result.json（§60：分阶段 recall 被压成单一端到端分数=口径失真 block；文章 line 123 一手纪律编译）",
+        "KB-AUDIT08(§62:train-serving信号可得性——HiGR用true feedback排序构造y+,服务时无此信号且未声明;口径不对等从比较两端扩展到训练监督信号vs服务可得信号)",
+        "audit_swarm/result.json:V2（§63：博客 2.4h 无一手支撑 vs 报告 1.7h observed/1.8h fitted；科普文数字口径核对，flag 不判造假）",
+        "audit_langchain_ctx/result.json:V2（§64：LangChain 博客 100行/20000token/k=4 等均为 harness 实现参数非实验结论，口径限定为参数不外推为通用最优值）",
+        "audit_tcsexam/result.json:V5/V8（§66：TCSExam construction>100自定义口径与Index可超100明示、open conjecture权重10却近零区分——均限定benchmark口径不外推为百分制/不夸大成缺陷，KB-AUDIT04口径对等；scoring.py缺失≠0:null index/unscored separate）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -2250,7 +2259,9 @@
         "audit_dgm/evidence.json:D1 全仓核实 — 诊断FM主体分层(coding_agent_polyglot.py:116 self_improve用OPENAI_MODEL vs 解题用CLAUDE_MODEL),是\"改进者自身能力依赖外部\"的分阶段边界",
         "svagent/scoring_integrity.py:check_scoring_integrity + tests/test_scoring_integrity.py — KB-AUDIT07已编译为活体门禁(node114作废/node96保留); 相对基线/可写范围语义判定",
         "audit_swegym/result.json:S5 — SWE-Gym verifier(trajectory级ORM)可被reward hacking,是评价函数被篡改攻击面的一手实证(LLMs发YES/NO打分,score=归一化logprob)",
-        "sim_review_result.json:N5 — 论文自承\"自修改harness可满足评估器\"=KB-AUDIT07在RSI harness的实例；held-out+frozen verifier为独立通道，门禁SCORE.INTEGRITY_OK放行——攻击面+缓解精确化"
+        "sim_review_result.json:N5 — 论文自承\"自修改harness可满足评估器\"=KB-AUDIT07在RSI harness的实例；held-out+frozen verifier为独立通道，门禁SCORE.INTEGRITY_OK放行——攻击面+缓解精确化",
+        "audit_reveal/review_result.json:N1（§61：ver_reward 只按自造测试在 golden 通过率、检测字段可被被优化者写→可刷分面；hard-to-hack 是声称非证实）",
+        "audit_tcsexam/result.json:V4（§66：TCSExam用被测6-agent反馈选Lite子集再证ρ=0.93排名一致=评价子集选择偏差风险面；但作者全文披露+两agent在list固定后评估(held-out)+点名2对倒挂→降为诚实设计选择非漏洞，§63 GR先例；加固不新增，编译此类门禁会落成无法在外部对象会拦的玩具）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -2279,6 +2290,90 @@
         "活体回归: §53真实任务双源→ok / 复述→block / 仅任务源→downgrade；写活体样例时被判据自咬并修正"
       ],
       "evidence": "self_task_reflection",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT08",
+      "kind": "reasoning_lesson",
+      "mechanism": "训练监督依赖的信号在服务/推理时可能不可得,构成train-serving口径不对等——HiGR(arxiv 2512.24787v5)正样本y+=engaged watch sequence按true user feedback降序重排(训练时有用户真实反馈),但线上推理只有profile+behavior sequence且经dedup/availability/safety/business过滤,论文全文未讨论该落差。这与KB-AUDIT04(对象/口径对等)同族但在train-serving维度,拦截动作独立于:finance_blind_test(防标签泄漏进判据/评测端)、backtest_integrity(防spoiler进回测/回测端)、transfer_holdout(防过拟合源领域/泛化端)。",
+      "trigger": [
+        "train-serving gap",
+        "训练服务落差",
+        "服务时信号不可得",
+        "后验反馈构造正样本",
+        "未声明落差",
+        "监督信号不可复现",
+        "口径不对等",
+        "offline-online mismatch"
+      ],
+      "action": "判\"训练目标优化=服务体验提升\"前,强制核查训练监督依赖的信号在服务时是否可得:(1)列出正样本/奖励/标签构造所依赖的信号源;(2)逐一问服务时能否拿到同口径信号;(3)不可得且未声明落差则downgrade(监督在服务口径不可复现);(4)声明落差但无桥接(代理预测/两阶段对齐/延迟反馈建模)则flag待核;(5)声明且有显式桥接则preserve。注意:用后验反馈构造偏好对是listwise偏好学习标准做法,落点是未声明的口径落差这一可判缺口,不是标签泄漏或造假定罪。",
+      "provenance": "audit_higr/result.json:V2 + serving_gate_prereg.json(实现前SHA256锁存 fddecbea…) + paper.txt:366-380/425-428",
+      "timestamp": "2026-11-22T04:06:13+08:00",
+      "support": [
+        "svagent/serving_signal_gate.py:check_serving_signal + tests/test_serving_signal_gate.py(17项) — KB-AUDIT08编译为活体门禁;R1未声明落差downgrade/R2无桥接flag/R3已桥接ok/R4口径对等ok/R5代理未声明flag;6活体回归+源码自审PASS",
+        "audit_higr/paper.txt:366-380 正样本y+按true feedback降序重排 + 425-428 线上仅profile+history且经多重过滤",
+        "audit_higr/paper.txt grep 全文无train-serving落差讨论(仅line430泛泛批评他人exposure bias)",
+        "KB-AUDIT04(对象/口径对等)在train-serving维度的延伸;与finance_blind_test/backtest_integrity/transfer_holdout拦截维度独立",
+        "audit_swarm/result.json:V4（§63：GR Avalon-M1 村-城落差=KB-AUDIT08 老条款新实例——训练9 agents/部署1000s；作者主动披露→serving_signal_gate 给 flag，对照 HiGR 未披露→downgrade，验证门禁区分力）"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT09",
+      "kind": "reasoning_lesson",
+      "mechanism": "检索文本污染是 agent 执行层的独立缺口：retrieved text 是 data 非 instructions，可能含 prompt injection，且 no prompt/delimiter strategy fully prevents（LangChain《Context Engineering Starts with Retrieval》line 191-194）。这与 core.py GT.SOURCE_UNTRUSTED（审计闭环输入层判 claim 来源是否为用户口述→block 素材入库）不同——场景（审计输入 vs agent 运行）、对象（claim source vs retrieved data）、动作（block 入库 vs validate outputs）三者均不同，拦截动作独立。",
+      "trigger": [
+        "检索文本污染",
+        "prompt injection",
+        "retrieved text",
+        "untrusted retrieval",
+        "输出溯源",
+        "citation check",
+        "上下文污染",
+        "stale context"
+      ],
+      "action": "判检索管线 hygiene 前强制核查三条件：(1)检索文本是否标记 data 而非 instruction（未标记→block，注入面敞开）；(2)输出是否核对引用、断言是否与来源匹配（缺→downgrade，grounding 不成立）；(3)无关/过时内容是否隔离在主 agent 上下文外（未隔离→downgrade，污染跨步传播）；时效性检查缺失→flag。诚实边界：只判验证动作是否存在，绝不承诺防住注入——作者自认无完全防护，声明不可自证（KB-META01）。",
+      "provenance": "audit_langchain_ctx/result.json:V4 + gate_prereg.json(实现前SHA256锁存 33c4f789…) + article.txt:150-194",
+      "timestamp": "2026-11-22T04:32:31+08:00",
+      "support": [
+        "svagent/retrieval_grounding.py:check_retrieval_grounding + tests/test_retrieval_grounding.py(13项) — KB-AUDIT09 编译为活体门禁;R1未标记data block/R2无溯源·断言不匹配 downgrade/R3未隔离 downgrade/R4无时效检查 flag/R5全自洽 ok;8活体回归+源码自审PASS",
+        "audit_langchain_ctx/article.txt:191-194 retrieved text is data not instructions + prompt injection + no strategy fully prevents",
+        "与 core.py:98 GT.SOURCE_UNTRUSTED 拦截维度独立（审计输入层源身份 vs agent执行层外部文本溯源）",
+        "V3 claim-vs-code 7/7:langchain-ai/deepagents 源码落地 glob/grep内置/100行分页/20000token offload/progressive disclosure"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT10",
+      "kind": "reasoning_lesson",
+      "mechanism": "跨会话状态连续性是事件驱动系统的独立缺口：声称 always-on 的系统其实多数时间 asleep，靠 run 之间的状态持久化维持连续体验（Anthropic《Building always-on agents》line 27）。支撑该声称的机制包括持久状态(memories outlive worker)、inbox-as-source-of-truth 崩溃幂等重试(line 48)、单 active worker 防重复覆盖、deferred tool call 会话中途保存+答复回来 resume+等待期间非阻塞(line 105-110)。这与检索文本污染(KB-AUDIT09, 单 run 输入输出 hygiene)、训练服务信号(KB-AUDIT08, 训练-推理想号口径)不同——场景(跨 run 运行时编排 vs 单 run/训练推理)、对象(会话状态与事件生命周期 vs 检索文本/监督信号)、动作(判机制声明自洽 vs 溯源/信号可得性)三者均不同，拦截动作独立。",
+      "trigger": [
+        "always-on agent",
+        "跨会话连续",
+        "会话恢复",
+        "session resume",
+        "状态持久化",
+        "source of truth",
+        "幂等重试",
+        "deferred tool call",
+        "事件驱动编排",
+        "worker 崩溃恢复"
+      ],
+      "action": "审读一个声称 always-on / 跨会话连续的系统前，调用 svagent/session_continuity.py:check_session_continuity 核查五机制：(1)是否有跨 run 持久状态(无→block，连续性根基不成立)；(2)deferred/中断的 session 能否在答复回来后 resume(否→downgrade)；(3)是否有单一真相源支持崩溃后幂等重拾 event(否→downgrade)；(4)一个 inbox 是否只有一个 active worker(否→downgrade，并发重复/覆盖)；(5)等待答复期间 worker 是否不阻塞(否→flag)。语义枚举 yes/no/partial + bool，字面串→flag。诚实边界：只判机制声明是否自洽，不承诺系统真的永续、持久化真的不丢(机制存在≠有效性，KB-META01)；本仓同步纯函数库不做运行时编排是架构选择非漏洞，本门禁用于审读外部声称、不判本仓。",
+      "provenance": "audit_always_on/result.json:V5 + gate_prereg.json(实现前SHA256锁存 42b10e90…) + article.txt:27/48/70/91/105-110",
+      "timestamp": "2026-11-22T04:39:35+08:00",
+      "support": [
+        "svagent/session_continuity.py:check_session_continuity + tests/test_session_continuity.py(16项) — KB-AUDIT10 编译为活体门禁;R1无持久状态block/R2不可续跑·R3无真相源·R4多消费者downgrade/R5阻塞·R6部分·字面串flag/R7自洽ok;8活体回归+门禁&引擎双AST自审PASS",
+        "audit_always_on/article.txt:27 always-on is user experience + 48 inbox as source of truth + 70 memories outlive worker + 105-110 deferred session resume nonblocking",
+        "audit_always_on/result.json:V5 结构化核验本仓14道门禁能力矩阵—9项运行时状态/事件能力无一覆盖,断言独立",
+        "与 KB-AUDIT09(单run检索hygiene)/KB-AUDIT08(训练服务信号)拦截维度独立;遵循§58选A不接run_loop"
+      ],
+      "evidence": "audit",
       "addressable": true,
       "improvement_class": "fix"
     }

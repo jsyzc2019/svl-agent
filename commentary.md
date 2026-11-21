@@ -2998,3 +2998,128 @@ V1–V8 全部一手命中：`~90%` 代码由 Claude 写审（line 31）、独�
 task_content：把"审查者也要被分阶段评估"这一手纪律编译成会拦会判的代码，补本仓判据自审的执行缺口。process：预注册时间戳写偏（未来时间）被自己发现并修正重锁（防事后编造）；活体回归首跑 4/8 失败咬出两处控制流漏 return，信规则改代码而非放水；V10 核验时区分了"检索 recall"与"审查漏斗 recall"，没把同名指标误判为已有对应门禁。边界：门禁只判评估方案口径自洽，不判对象对错；文章数字 self-reported 不复现；按 KB-STRUCT02 同构打折，编译为补执行缺口非证明框架更优；遵循 §58 选 A 不接 `run_loop`。
 
 一句话收束：**这篇文章最值钱的不是"90% 代码由 AI 写"这种吸睛数字，而是 line 123 那句冷静的工程纪律——把 raw/post/final 三阶段 recall 压成一个端到端分数，你就看不见系统有没有把它已经找到的 bug 又弄丢。本仓一直把"判据要能自审"挂在嘴上，却从没审过"评估一个审查者的方案本身是否口径自洽"。这次把那句话编译成 `check_review_evaluation`：压成一分数直接 block，少了对照/分离/计分就降级，漏斗倒挂就待核。装牙时牙又咬了我两口——两处漏写的 return 让降级场景全变成了 ok，活体回归当场现形。信规则、改代码、记进复盘：于是"把认知变成能力"这次不只是引进一条外部纪律，而是让本仓自己的评估方案也第一次被摆上解剖台。**
+
+## 61. 旧论文 × 新框架：用 §56–§60 的新牙重审 ReVeal（不新增，加固 4 条）
+
+task_content：ReVeal（ICLR 2026）在早期会话已做过 V1–V7 审计、8/8 pass、结论记"可靠自验证有诚实边界 + 同构打折、不新增"。本次按 §55 立的"旧论文×新框架"再审模式，用 §56–§60 长出的五把新牙重咬，检验旧框架是否漏判。不是重跑旧判据，只看新尺子能咬出什么。
+
+新判据与结果（预注册 `review_prereg.json` 分析前 SHA256 锁存 `41ae1052…`，后验 `review_result.json` 分离）：
+- **N1 / §51 scoring_integrity → flag**：verification reward 只 = 自造测试在 golden 上的通过率（`code_server.py:514` 的 `ver_turn_reward = 1.0 * expected_output_passrate`），检测字段（模型自造的测试）在被优化者可写范围，无独立不可篡改复验 → 存在可刷分面。论文"hard-to-hack"是声称，全文无平凡测试对抗实验（`paper.txt` 的 hack 仅 3 处，都是"TAPO 防 hacking"的表述）。
+- **N2 / §59 call_site_integrity → ok/PRESERVE_TOOL_LIBRARY**：唯一真正衡量"测试能否区分对错代码"的信号 `success_output_passrate`（把通过 golden 的测试再跑在候选答案上的通过率）被计算了（`:498-502,518`），但只进 `debug_info` 与 `compute_data_metrics`（`ray_trainer.py:311,491,953`），**从未进入 `ver_scores`/`reward_tensor`**。这是 KB-AUDIT03（存在≠执行）在奖励设计上的活体案例。判 ok 是因为它如实是观测指标、未冒充优化信号——不误伤，但绝不可记成"参与了可靠验证的优化"。
+- **N3 / §57 backtest_integrity → flag**：训练用 golden filter、测试全自主，`paper.txt:206-210` 主动披露（旧 V3 已记 PARTIAL）；新尺子咬出的是去污染/时间分离等隔离项未全声明 → flag，不判隐瞒偷换。
+- **N4 / §60 reviewer_evaluation → block**：消融只有 outcome vs joint（三 reward 捆绑，`paper.txt:407-410`），没有单独移除 verification reward 的对照，评估方案被压成单一 Pass@1 → 隔离不了"提升是否来自显式验证优化"这一因果。block 的是评估方案口径缺口，不是判论文结果假。
+- **N5 / §56 lineage_guard → downgrade**：TAPO 把 verification reward 限制在自身 verification turn 防跨轮污染（`paper.txt:288-292`），与本仓 `scoring_integrity` 通道隔离高度同构 → 同谱系打折，不因英雄所见略同虚高。
+
+三层诚实结论：**T1 代码事实**（reward 公式、区分力信号没接线、消融无隔离行、TAPO 同构）——一手确凿可判；**T2 推断**（存在未被排除的平凡测试刷分路径、训练可靠→测试可靠是未验证迁移假设）——事实连风险，作者已披露后者；**T3 未核验**（该漏洞是否真损害报告的性能数字，需实跑对抗实验，本文未做）——标 UNVERIFIED，不判 FALSE。关键分寸：代码层面"可刷分" ≠ 论文"已刷分/造假"。
+
+入库决策（vanity 门禁）：**不新增任何条目、不编译新门禁**。N1 咬出的是 KB-AUDIT03 的活体新实例，N1 可刷分面对应 KB-AUDIT07，N3 信息落差对应 KB-RSI06，N5 同构对应 KB-STRUCT02——加固这 4 条各一条 support，101 条保持。老老实实承认：新牙咬出的是"旧条款的新应用实例"，不是新条款。
+
+process：判据自审首版自己犯了它要查的 brittle 错（用 `"造假" in`/`"调用点" in`/`"可能" in` 做内容匹配），S1/S3 误报 FAIL；修时又遇检测器自指——边界常量"一"（`\u4e00`）自己落在中文范围被自己咬到，S1 再 FAIL。两次都按"信规则、改代码"修（自审改纯结构化语义码 + `ord()` 数值边界），不放水、不调规则。这是 §56 教训的现场重演，已写进 `review_engine.py` 的 self_audit docstring 留痕。借 github-accelerator 精神绕开代理核验了一手代码通道，借 github-gem-seeker 的 claim-vs-code 方法核验了官方仓库 289 文件的实现实体。
+
+一句话收束：**旧框架当年给 ReVeal 判了 8/8 pass，说它"代码扎实、有诚实边界"——这话没错，但它漏看了一处：那个唯一能衡量"测试是否真的区分对错"的信号，被认认真真算了出来，然后只写进日志，没接进奖励。新框架重咬，咬的不是"ReVeal 错了"，而是"存在≠执行"这条本仓老纪律，在别人的奖励函数里又活了一次。最该记住的不是又审出一篇文章，而是：新牙咬旧论文，若咬出的仍是老条款的实例，就加固指针、不新增——用同构印证装点自己框架"又验证了"才是真 vanity。判据自审连咬自己两口，也提醒着：会查 brittle 的人，写检查器时照样会 brittle，唯有把每一次自咬都变成留痕的修正。**
+
+## 62. 精研 HiGR v5：从工业推荐论文编译出"训练-服务信号可得性"新门禁（102 条，新+1）
+
+task_content：下载并精研 HiGR: Industrial-Scale Hierarchical Generative Slate Recommendation Framework in Tencent（arXiv 2512.24787v5，CIKM 2026，腾讯，8 页）。三重来源锁存（PDF 1.08MB/8页 EOF 完整 + abs 页 + 正文 690 行）。对象判定为工业界系统论文、无公开代码，判据聚焦数字口径、消融隔离、train-serving 落差、self-reported 边界、同构打折。
+
+一手核查与判据（预注册 `prereg.json` 分析前 SHA256 锁存 `1cfb6686…`，后验 `result.json` 分离）：
+- **V1 / 数字口径 → CONSISTENT**：复算全自洽。"over 10%" 成立但须限定为相对 OneRec-25M 的提升（hit +15.9% / NDCG +21.2%）；Table6 三目标消融 ✔/✘ 与数值一致；Table3 去掉 ILD 项 accuracy 微升 0.27%——按 KB-AUDIT02 标注方向、不单点定罪；摘要 5× speedup 限定无 KV 缓存 vs OneRec-Beam，不外推。
+- **V2 / train-serving 落差 → downgrade（真新牙）**：正样本 `y+` = engaged watch sequence 按 **true feedback 降序重排**（`paper.txt:366-380`，训练时有用户真实反馈），线上推理只有 profile + behavior sequence 且经 dedup/availability/safety/business rules 过滤（`:425-428`），论文全文未讨论这一落差（仅 line 430 泛泛批评他人 exposure bias）。落点是**未声明的 train-serving 口径落差**，不是标签泄漏/造假定罪——listwise 偏好学习用后验反馈构造 y+ 是标准做法。
+- **V3 / 消融 → PARTIAL**：三组件各有消融（Table2 PCRQ-VAE 三 prefix 对照、Table3 HSD 四变体、Table6 ORPO 三目标），但规模/数据量/训练预算只声明未做严格等预算对照。
+- **V4 / scaling law → PARTIAL**：Figure4 称 0.05B–2B "linear on logarithmic scale" = power law，但无拟合优度/置信区间/外推验证，视觉线性不足以支撑严格声称。
+- **V5 / 效率 → SCOPED**：复杂度对比假设 greedy slate planning，声明 identical settings + hardware，5×/P99<50ms/GPU 降 60% 均限定口径——披露充分，不外推。
+- **V6 / 同构与新意 → NEW_TEETH**：与 SVL 同构处（来源隔离/口径对等）按 KB-STRUCT02 打折；但 V2 咬出的"训练监督信号在服务时可得性"是本仓四道门禁都没覆盖的独立拦截维度 → 编译新门禁。
+
+**认知 → 能力（用户"把断言落到代码"）**：编译 `svagent/serving_signal_gate.py:check_serving_signal`。四道现有门禁各管一端——finance_blind_test 防标签泄漏进判据（评测端）、backtest_integrity 防 spoiler 进回测（回测端）、transfer_holdout 防过拟合源领域（泛化端）、call_site_integrity 管调用点——**没有一道判"训练监督依赖的信号在服务时是否可得"**。新门禁 R1 未声明落差且无桥接→downgrade、R2 声明但无桥接→flag、R3 声明且有显式桥接→ok、R4 口径对等→ok、R5 代理信号未声明→flag、R0 字面串→flag。预注册 `serving_gate_prereg.json` 实现前 SHA256 锁存 `fddecbea…`；6 活体回归逐条对齐预期（含"高度同构"字面串被 R0 拦）、17 项测试、惰性导入、源码自审（判定分支无中文字面串比较）全过。遵循 §58 选 A，不接 run_loop。
+
+入库决策：新增 **KB-AUDIT08**（train-serving 信号可得性，独立拦截动作，已编译成会判代码，符合 KB-META01"会拦才入"），加固 KB-AUDIT04 一条 support（口径对等从"比较两端"扩展到"训练监督信号 vs 服务可得信号"），102 条不灌水。三层诚实结论：T1 数字自洽/方法事实一手确凿；T2 未声明落差与 scaling 声称是推断；T3 方法真实有效性、线上 A/B 显著性、无代码 claim-vs-code 均标 UNVERIFIED 不判 FALSE。
+
+process：一度怀疑 Table6 符号错配，回查 PDF 原文确认自洽，按"信事实"放弃硬凑罪名——这正是 KB-AUDIT02（不单点定罪）在自己身上的应用。新门禁设计时刻意语义枚举 + R0 拦字面串，主动避开 §56 brittle 根因。Generative AI disclosure（作者承认用 ChatGPT 做 copyediting + code snippets）作为诚实信号记录，但"代码片段"与"科学贡献"边界模糊，如实标注不美化。
+
+一句话收束：**这篇工业论文的数字干净得几乎挑不出刺——over 10% 成立、Table6 自洽、效率口径也讲清楚了，连我一度怀疑的符号错配回查后都是自己冤枉了它。真正值钱的不是这些漂亮的表格，而是方法论里一句轻描淡写的话：正样本按"真实反馈"降序重排。训练时你有反馈，服务时用户还没看完——那个用来定义"什么是好 slate"的信号，线上根本不存在。全文没提这件事。本仓四道门禁各守评测端、回测端、泛化端、调用点，恰恰没人守这个维度，于是它成了 §62 的新牙。把断言落到代码，不是又造个玩具——它是会 downgrade"未声明落差"、会 flag"有缺口不补"、会 ok"声明且桥接"的判据。会拦，才算长牙；拦的若是本仓自己从没有过的角度，才配叫新牙。**
+
+## 63. 精研 How to Train a Swarm：村-城落差——老门禁的一次对照验证（102 条，加固不新增）
+
+用户指定 gem-seeker 精研 General Reasoning 团队的博客《How to Train a Swarm》，同时重提 HiGR。HiGR 上一轮（§62）已完整精研、产物齐全，本轮确认后不重复劳动，聚焦新博客。
+
+**对象判定与一手来源**：工程博客（gr.inc/blog，正文 379 行/18924 字符）+ 一手技术报告（Avalon-M1，81 页 PDF 2.7MB，EOF 校验通过）。双来源四重 SHA256 锁存。这是 self-reported pre-print（作者明言 full paper 待训练完成后发），无公开代码仓库——paperswithcode 显示 "No benchmark results recorded yet"，搜索到的全是二手解读（gist / 52nlp 翻译 / clawpk），按 gem-seeker 纪律做 claim-vs-code 时判 UNVERIFIED：无代码可核≠造假，但也不因有配方就当已复现。
+
+**判据 V1–V6**（预注册分析前锁存 `d723fd28…`，后验分离）：
+- V1 来源真实性 PASS；V2 数字口径 flag——7 项一手命中（29.8→37.5 / 55.9→63.5 / 147 环境 / 38374 SFT / 9 agents / 3.9x / 1.7h），但博客"overtakes at 2.4 hours"在一手报告里**根本不存在**（报告是 1.7h observed/1.8h fitted）；另一处"single-agent takes 4x"vs 报告"3.9× sooner"是倒数近似、语义一致，不算矛盾。一处笔误不足以定罪（KB-AUDIT02），如实标注。
+- V3 无代码 unverified；V5 insularity flag——报告主动披露 agent 识别有害问题率持平高位、但向人类报告率随训练下降（"组织排他性"），这是"被评价者规避评价通道"，与 scoring_integrity（防篡改计分器）同族反向；诚实披露是 positive signal，但机制本身是真实安全风险，不因披露就 ok。V6 同构打折（RLCR flat advantage 与本仓判据引擎同属信号设计话题，按 KB-STRUCT02 不当背书）。
+
+**V4 是这次的真正看点——不是新牙，是老门禁的一次对照验证**。博客 line 333–342 自曝："我们在村庄训练群体，却在城市部署"——训练最多 9 agents，部署数百至数千。这正是 §62 从 HiGR 编译的 KB-AUDIT08（train-serving 口径不对等）的同一个维度。但关键差别是：**HiGR 全文没提这个落差，GR 主动把它列为 outstanding problem 的第一条**。调用 `check_serving_signal` 编码这个差别（partial 可得 + 已声明 + 无桥接），门禁给出 `SERVING.DISCLOSED_NO_BRIDGE` = flag；而 HiGR 是 `UNDECLARED` = downgrade。同一个尺子，对"诚实披露"和"隐瞒"给出不同判定——**这恰恰证明 §62 的门禁造对了**，不需要再造新牙。按 §61 先例加固 KB-AUDIT08/AUDIT04 两条 support、不新增条目、不编译新门禁：用"框架又验对了"给自己贴金才是真 vanity。
+
+process：判据自审 S4 自咬——规则写"每个 judge 都要有 note/verdict 事实结论分离"，但 V1 是纯来源哈希校验、本就没有"结论层"，V4 用门禁返回的 `message` 承载判定说明。按"信规则、改代码"精确化 S4 口径为"产生 action 的 judge 才要求 note/message 分离"，6/6 通过。这是 §60/§61 判据自咬家族的又一次，自审逻辑自己踩了要查的坑。
+
+一句话收束：**上次我从 HiGR 造了一把量"未声明落差"的尺子，这次 GR 把同一处落差主动摊在桌面上——尺子给出 flag 而不是 downgrade，没有错位。这件事的价值不在又审了一篇文章，而在于它证明那把尺子量得准：诚实和隐瞒，同一维度下就是该有不同的刻度。造牙难，知道什么时候不该再造牙更难——加固两条指针、守住 102 条，是对"英雄所见略同不算独立验证"最好的践行。**
+
+## 64. 精研 Context Engineering Starts with Retrieval：检索污染——从 claim-vs-code 全命中里长出第 48 个模块（103 条，新+1）
+
+用户要求阅读 LangChain 工程概念指南（Jess Weng，2026-10-23）。按固定流水线：一手 HTML（188KB）+ 正文（247 行/14686 字符）双重 SHA256 锁存。核心是 Deep Agents harness 的检索技术：三类失败（低效搜索/上下文过载/无关过时）+ "retrieve, offload, delegate" 模式 + 五条策略。
+
+**这次的特点是 claim-vs-code 罕见地全部落地**。Deep Agents 是开源包（`uv add deepagents`），抓了 README + 源码树（1939 文件）+ filesystem.py（176KB）+ skills.py + _blob_offload.py 一手核验。博客的每个具体数字声称都在源码里精确命中：glob/grep 内置（filesystem.py:176-177）、read_file 分页 100 行（line 120）、大结果 offload 到 `/large_tool_results/`（line 2078/3196）、阈值 `tool_token_limit_before_evict=20000`（line 1981，与博客"over about 20,000 tokens"精确对上）、progressive disclosure（skills.py:3）。V3 判 verified（7/7），但诚实边界写死：源码存在≠效果最优，20000 是可配默认值，只证"机制有对应"不证"检索效果最好"。
+
+**V2 数字口径**：全文数字（100行/20000token/k=4/40000行/five×four）全是 harness 实现参数，不是实验结论、无 A/B 可复算。判 scoped——限定为 Deep Agents 默认值，按 KB-AUDIT04 不外推为通用最优。没有可复算的实验数字，就不硬凑消融复现（§53 纪律）。
+
+**V4 咬出真新牙——这是本轮的核心**。博客 line 191-194 一句冷静的话："retrieved text 是 data 非 instructions，任何检索内容都可能含 prompt injection，而且没有任何 prompt 或分隔符策略能完全防住；要 validate outputs——检查答案引用的是你预期的来源、断言与来源匹配。"本仓第一反应是查 `core.py:98 GT.SOURCE_UNTRUSTED`——但精确对照后发现它不是同一把尺子：GT 判的是**审计闭环输入层**"claim 来源是不是已确认的用户口述"（防把非用户原话当证据），而检索污染判的是 **agent 执行层**"外部文本是否被当 data、输出是否溯源、无关内容是否隔离"——场景、对象、动作三者全不同。按 KB-META01"会拦才入"检验：能编译出独立拦截动作（判三条件是否具备），通过。编译新门禁 `svagent/retrieval_grounding.py:check_retrieval_grounding`：未标记 data→block、无溯源/断言不匹配/无关未隔离→downgrade、无时效检查/字面串→flag、全自洽→ok。**诚实边界**：只判"验证动作是否存在"，绝不承诺"防住了注入"——作者自己都承认无完全防护，声明不可自证（KB-META01）。8 活体回归 + 13 测试 + 源码自审（判定分支无中文字面串比较）全过。
+
+**V5/V6 同构打折**：progressive disclosure ↔ 本仓惰性导入、pointer-vs-payload ↔ 本仓证据/SHA256 锁存、`_blob_offload.py` 的 SHA-256 内容寻址 ↔ 本仓锁存哲学——三处同谱系，按 KB-STRUCT02 打折，同构印证不虚高。有意思的是：这次"英雄所见略同"的区域恰好都是本仓已有的强项，而真正的新意在被同构光环盖住的角落——检索污染。
+
+process：本轮判据自审 6/6 一次过，无自咬——与 §60/§61/§63 的连续自咬相比是个安静的轮次。这不是运气：前几轮把"中文串 brittle""检测器自指""纯事实 judge 无结论层"三个坑都踩过并固化为口径，这次写引擎时天然绕开了。教训的复利开始显现。
+
+一句话收束：**上一轮我学会了"不该造牙时不造"，这一轮学会了"该造时别被同构光环晃住"。这篇文章到处是本仓熟悉的影子——惰性加载、指针而非载荷、SHA-256 锁存，每一处都在说"你看我们想到一块去了"，而按纪律这些恰恰要打折。真正的牙藏在最不起眼的一句警告里：检索来的文本是数据不是指令，而且没人能完全防住它带毒。本仓守着审计输入端的"来源身份"多年，从没守过 agent 执行端的"外部文本溯源"——场景不同、对象不同、动作不同，于是它成了第 48 个模块。会拦才入，拦的若是同构光环下真没守过的角度，才配叫新牙。**
+
+---
+
+## 65. 精研 Building always-on agents：从 Anthropic 运行时指南编译「跨会话状态连续性」门禁（104 条，新+1）
+
+用户要求阅读 Anthropic 官方工程指南《Building always-on agents》（William Hu，2026-11-13，Claude Platform best practices）。按固定流水线：一手 HTML（563950B）+ 正文（154 行/14023 字符）双重 SHA256 锁存（`467e47d7…`/`26a0c4b8…`），预注册 V1–V7 分析前锁存（`0020f5fd…`），后验 result 分离。对象判为**工程最佳实践指南**（非论文、无公开代码、无 A/B），按 KB-AUDIT04 口径对等，不硬套消融复算。
+
+### 65.1 一手核查与判据 V1–V7
+
+V1 一手锚点 9/9 命中（作者/日期/五原语/not actually always on/source of truth/memories outlive worker/deferred session resume/start quiet/credential proxy）。**V2 数字口径 → scoped**：全文唯一数字是 Opus 5.5 比 Opus 5「per solved task 便宜 78%、典型负载 40%」，来自未命名 benchmark 的 self-reported 厂商声称，无方法/样本量/置信区间，判 SCOPED 不外推（守住口径）。**V3 claim-vs-code → UNVERIFIABLE**：这是指南文章、无公开代码可核（区别于 §64 Deep Agents 开源包 7/7），链接指向的 Claude 产品能力非本文可实现声明——无可核代码≠造假，也不因 Anthropic 官方就当已实现。**V4 同构打折**：run 反复调 core loop ↔ harness.run_loop（同源不同粒度）、memory 存 pointer ↔ 本仓证据锁存（§64 V6 已记）、handler 快 ack+深验证放 run ↔ §64 检索门禁（同维度不同阶段）、存在≠执行哲学 ↔ KB-AUDIT03——四处按 KB-STRUCT02 打折。判据 verdict 与预注册 expect 逐条一致，无事后漂移；判据自审 S1–S6 全过。
+
+### 65.2 V5 真缺口：14 道门禁未覆盖的「跨会话状态连续性」
+
+核验方式是把本仓 14 道门禁的**能力矩阵**与文章五原语映射出的运行时能力做结构化差集（非中文串匹配）。结果：本仓覆盖计分/迁移/稳健/复盘/谱系/回测/调用点/审查漏斗/训练服务/检索/歧义/归因/评估/记忆，**无一覆盖事件驱动系统的状态连续性与可恢复性**——9 项能力缺口：DURABLE_STATE、SOURCE_OF_TRUTH_RECOVERY、SINGLE_CONSUMER、SESSION_RESUME、NONBLOCKING_DEFER、BATCH_MERGE、EVENT_STATUS_DEDUP、SCHEDULER_POLLING、CREDENTIAL_PROXY。一手锚定 line 27（always-on 是用户体验，agent 多数时间 asleep）、line 48（inbox as source of truth，崩溃幂等重试）、line 70（memories outlive worker）、line 91（需持久信息写入 memory）、line 105-110（deferred tool call：run 结束+session 中途保存+答复回 inbox 后续跑+等待不阻塞）。
+
+**最关键的诚实分寸**：本仓同步纯函数判据库不做运行时编排是 §58 选 A 的**架构选择，不是漏洞**；这道门禁定位为「审读外部 always-on 系统声称」的尺子，不判本仓。V6（事件生命周期治理：去重/单 worker/批合并/游标）与 V5 同维，**主动收敛为一道门禁**防多牙（KB-META01）。
+
+### 65.3 断言落到代码：session_continuity 门禁
+
+预注册 `gate_prereg.json` 实现前 SHA256 锁存（`42b10e90…`），写死 R0–R7 与 8 个活体预期。编译成 `svagent/session_continuity.py:check_session_continuity`：语义枚举 yes/no/partial + bool，字面串 → flag（R0，避开 §56 brittle 根因）；无跨 run 持久状态且声称 always-on → block（`CONTINUITY.NO_DURABLE_STATE`，根基不成立）；会话不可续跑/无真相源/多消费者 → downgrade；等待阻塞/部分持久化/部分续跑 → flag（待核非定罪）；全自洽 → ok（只判机制声明存在，不承诺真的永续）。8 活体回归逐条对齐预注册，门禁 + 引擎**双 AST 自审**（判定分支无中文字面串比较）PASS，16 项测试，全量 **415 → 431 passed**，惰性导入登记。遵循 §58 选 A 不接 `run_loop`。
+
+### 65.4 入库决策与双源复盘
+
+新增 **KB-AUDIT10**（跨会话状态连续性，独立拦截动作，已编译成会拦会判代码，符合 KB-META01「会拦才入」）；加固 KB-AUDIT03（存在≠执行哲学延伸到跨 run 状态写回）、KB-STRUCT02（四处同构打折）各一条 support。知识库 **103 → 104 条**、`ready=True`、佐证占比 0.846、vanity 0.038 持平（门槛 0.2 内）。四重 SHA256（文章 HTML/正文 + 精研预注册 + 门禁预注册）复核 OK，后验 result/报告与预注册分离不伪装。
+
+task_content：精读指南五原语、判定与本仓架构关系、把跨会话状态连续性编译成会拦会判的门禁。process：严格区分「本仓范式差异（同步判据库不做编排）」与「真缺口（审读外部 always-on 的尺子）」，未把架构选择误判成漏洞；V6 与 V5 同维主动收敛防 vanity；判据 verdict 全锚定预注册 expect 无漂移；双 AST 自审前置应用 §56 教训一次过。边界：门禁只判机制声明自洽，不承诺系统真的永续、持久化真的不丢（机制存在≠有效性，KB-META01）；本篇无公开代码，V3 UNVERIFIABLE。
+
+一句话收束：**这篇文章表面讲五个原语，内里只有一句话最值钱：「always-on」不是字面常驻，而是靠 run 之间写回状态维持的用户体验。本仓是同步纯函数判据库，从不做运行时编排——但正因为不做，14 道门禁里没有一道量过「一个声称跨会话连续的系统，凭什么说自己连续」。这次没有把架构差异误当成漏洞，而是把它变成一把审读外部的尺子：无持久状态就 block、不可续跑/无真相源/多消费者就降级、等待阻塞就待核。V6 与 V5 同维，主动收成一牙而非两牙；本仓范式不合用不是缺口，硬造牙才是。诚实地说，这道门只判「机制声明自洽」——它判不了系统真的会不会永续，就像指南自己也只是 Anthropic 的 self-reported 最佳实践。会拦、且拦的是本仓从没量过的角度，才配叫第 49 个模块。**
+
+---
+
+## 66. 精研 TCSExam：三来源评测基准体检——数字全复算、代码全落地、选择偏差披露降为设计选择（104 条，加固不新增）
+
+用户要求精研 TCSExam（MoonshotAI，arXiv 2611.07962v1），给三来源：论文 + 项目交互主页 + 开源评测代码。对象判为**评测基准论文**（empirical benchmark），判据适配为『统计复算 + claim-vs-code + 披露分级』。三来源全部 SHA256 锁存（论文 abs/PDF52页/正文3305行 + 项目 HTML + code commit f0518c35，7282文件）+ 预注册 `ea91b47d…` 分析前锁存，后验 result 分离。
+
+### 66.1 数字独立复算：ρ=0.93、26/28、1838 实例全命中
+
+V2 不照抄论文，从 Table2/3 提取 8 个共享 agent 的 Index 独立复算：Spearman ρ=0.9286→0.93、26/28 对同序 2 对倒挂，且倒挂对精确点名 DS1017 vs GLM/Qwen，与 Table24 逐条一致。再复算 reference 目录：full reference 恰好 **1838 eligible instances**（论文 line 2342 声称一致）、sigma floor `0.02`/`1e-9`、Index 权重 30/30/30/10、Lite 减 80% 任务尝试——全命中。这是本轮最硬的独立证据。论文另一处诚实披露：scale floor 在 1838 实例中的 1410 个上激活（line 2351），意味着多数 Solver 实例的相对分数被 floor 主导，这一细节论文主动给出。
+
+### 66.2 claim-vs-code 12 项全落地 + "缺失≠零"诚实设计
+
+V3 逐条核验 scoring.py + reference JSON + suites：WEIGHTS/METRIC_ID、Index sum 公式、`relative_score` 的 `NormalDist().cdf` 与 `scale=max(stdev,0.02|mu|,1e-9)`、proof tracks 强制 0/1、solver 强制 [0,1]、construction 非负、suite 100/20、两个 reference_id——12 项全 PASS。额外发现两处诚实设计：`scoring.py:22` 明言 incomplete cells produce null index "never filled with zero"，`unscored_instances` 单列不 silent 当零——**缺失≠完成**；judge 执行隔离用 Landlock ABI3+seccomp+uid65534。诚实边界写死：只证机制在代码有对应，不证 benchmark 效度或 agent 分数真实能力。
+
+### 66.3 V4 裁决：选择偏差披露充分 → 设计选择非漏洞，加固不新增
+
+本篇最值得警惕的角度：Lite 五任务/轨用 original six agents 的 pairwise ordering 表现挑选（保序性最优子集），再用 Full-Lite ρ=0.93 论证排名稳健——存在『用被测对象反馈选子集→再证子集稳健』的循环风险面。但核验后：作者全文主动披露选择过程（line 3086-3108/3160）、task list 在 Kimi K3.1 Pro 与 DS1017 评估前固定（两 agent 事实 held-out）、去掉 DS1017 后其余 7 agent 保持全 pairwise 顺序并点名 2 对倒挂。**按 §63 GR 先例**：主动披露+held-out → 降为诚实设计选择而非隐瞒漏洞。本仓 backtest_integrity（判单次回测执行期 spoiler）、scoring_integrity（判计分篡改）、transfer_holdout（判模型过拟合迁移）角度不同且本场景已被披露缓解；硬编译"评测子集选择偏差"门禁将落成无法在外部对象会拦的玩具（KB-META01 不通过）。裁决：**加固 KB-AUDIT04/07，不新增不编译**。
+
+### 66.4 判据自咬两次 + 双源复盘
+
+判据引擎两次自咬（§55/§60/§61 家族）：①V4 披露断言用了跨 PDF 行的字符串 `"how well they preserved pairwise agent orderings"`——PDF 正文在 "preserved pairwise" 处换行，匹配失败，改用单行一手锚点 `"compared candidate subsets by how well they preserved pairwise"`（不放宽判据）；②自审检测器用中文范围字面串 `"\u4e00"<=c<="\u9fff"` 检测 brittle，结果自身常量被自己咬到（检测器自指），改用 `ord()` 数值边界 `_CJK_LO/HI`。两次均**修工具不改判据、不放水**，复验后 V4 披露全 True、自审 6/6、brittle 空。
+
+task_content：下载三来源、精读评测方法、独立复算全部数字、claim-vs-code 核 12 项、裁决 V4 是否造牙。process：顶住"又审出一篇可造牙"的诱惑，按 §63 先例识别披露充分的设计选择；复算发现 construction>100 与 open 全 0 时守口径 scoped，不夸大成缺陷；两次判据自咬现场修工具。边界：benchmark 是否真推动 TCS、agent 分数真实能力、闭源 agent 可复现性均 UNVERIFIED（KB-RSI06）；code 存在只证机制对应不证效果最优。
+
+一句话收束：**这篇基准论文最值钱的不是 71.9/72.3 这种榜单数字，而是两处工程诚实：一是"没判出来"和"判了零分"被严格分开（null index、unscored 单列），二是最容易被造房的 Lite 选择偏差——用被测 agent 的表现挑子集再说排名稳健——作者自己摊开了，还留了两个 held-out agent 和点名的两处倒挂。于是 ρ=0.93 不是可疑的自证，而是可复算、可追溯的稳健性证据（我独立复算出 0.9286）。本仓这轮没造新牙：有 code 可核不等于每个角度都要编译，披露充分的设计选择就该降为设计选择。真正长进的是又一次把判据的自咬——PDF 换行、检测器自指——变成留痕的修正：会查 brittle 的人，写检查器时照样会 brittle，唯有每次自咬都当场修工具，尺子才越磨越准。**

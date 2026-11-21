@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "target": {
+    "title": "HiGR: Industrial-Scale Hierarchical Generative Slate Recommendation Framework in Tencent",
+    "venue": "CIKM 2026 (Rome, Nov 7-11 2026)",
+    "arxiv": "2512.24787v5 (dated 11 Jun 2026)",
+    "authors_affiliation_self_reported": ["Tencent Platform and Content Group", "Sun Yat-sen University"],
+    "object_type": "industrial_systems_paper_no_public_code",
+    "object_type_rationale": "工业界推荐系统论文，无公开代码仓库声明；判据聚焦数字口径一致性、消融隔离、train-serving 落差、self-reported 边界、与 SVL 同构打折。不做统计重算（无原始数据/无算力），只对报告数字做算术与口径核对。AI disclosure 承认 ChatGPT 用于 copyediting + code snippets，科学贡献称全人类——诚实信号但边界需标注。"
+  },
+  "procedural_honesty": {
+    "prereg_before_deep_analysis": true,
+    "knowledge_at_design_time": "预注册设计前已通读全文（用户要求'下载并精读、复盘'），已知：方法三件套 PCRQ-VAE/HSD/ORPO、Table1-6 全部数字、线上 A/B 1.22%/1.73%、5× speedup、over 10% 声称、正样本用 engaged watch sequence 按真实反馈降序构造。判据刻意覆盖这些已知断言做独立口径核对，不因已知而预设为真。曾疑 Table6 符号错配，回查 PDF 原文确认自洽，按信事实原则不硬凑罪名。",
+    "source_isolation": "一手证据仅取 arxiv PDF 全文 + abs 页；无公开代码可核（论文未给仓库链接），故 claim-vs-code 判为 UNVERIFIED 而非判假。",
+    "lock_order": "源材料 SHA256 → 预注册 SHA256 → 判据引擎 → 后验报告（分离）"
+  },
+  "judges": [
+    {
+      "id": "V1",
+      "name": "number_consistency_and_scope",
+      "question": "报告数字是否算术自洽、图表一致、口径披露充分？",
+      "criteria": [
+        "Table1 HiGR-25M vs OneRec-25M 相对提升与 'over 10%' 声称方向一致（注意是相对非绝对）",
+        "Table6 三目标消融 ✔/✘ 与 NDCG/ILD 数值自洽（正文 0.0812/0.0792 vs 0.0780 与表一致）",
+        "Table3 w/o L_ILD 的 accuracy 微升(0.2994→0.2997)与 ILD 下降(0.62→0.59)——按 KB-AUDIT02 不单点定罪，标注方向",
+        "摘要 '5× inference speedup' 限定于无 KV 缓存 vs OneRec-Beam（图3），不外推到全部设置",
+        "线上 A/B 1.22%/1.73% 为 5% 流量 self-reported，无方差/置信区间——标 UNVERIFIED 不判 FALSE"
+      ],
+      "verdict_levels": ["CONSISTENT", "MINOR_DRIFT", "MAJOR_INCONSISTENT", "UNVERIFIED"],
+      "note": "承 KB-AUDIT02：单点差异不定罪；承 KB-AUDIT04：比较两端口径对等（相对提升 vs 绝对、有/无 KV 缓存、25M vs 100M）。"
+    },
+    {
+      "id": "V2",
+      "name": "train_serving_label_leakage",
+      "question": "正样本用后验反馈构造，是否造成 train-serving 落差或标签泄漏？",
+      "criteria": [
+        "line 366-380：y+ = engaged watch sequence 按 true user feedback 降序重排；y- 由打乱/负反馈替换/相似项构造",
+        "训练用后验反馈排序，线上推理(line 425-428)无此反馈、且经 dedup/availability/safety/business rules 过滤",
+        "论文是否讨论训练分布 vs 线上过滤后分布的对等性",
+        "与 finance_blind_test 的'揭盲在判据后、标签不喂判据'纪律对照"
+      ],
+      "verdict_levels": ["ISOLATED", "DISCLOSED_UNVERIFIED", "LEAKAGE_RISK", "EQUIVALENCE_CLAIM_UNSUPPORTED"],
+      "weight": "high",
+      "rationale": "这是本文方法核心，也是与 SVL '来源隔离/判据不读标签'最同构处。"
+    },
+    {
+      "id": "V3",
+      "name": "ablation_isolation",
+      "question": "三大组件(PCRQ-VAE/HSD/ORPO)是否各自隔离了独立贡献？",
+      "criteria": [
+        "Table2 PCRQ-VAE：RQ-Kmeans/RQ-VAE/prefix1/2/3 对照，collision/concentration/consistency 三指标",
+        "Table3 HSD：w/o L_ILD / w/o CE / Non-shared 对照",
+        "Table6 ORPO：三目标 O1/O2/O3 单消融与组合",
+        "是否控制混杂：模型规模、数据量、训练预算"
+      ],
+      "verdict_levels": ["ISOLATED", "PARTIAL", "CONFOUNDED", "MISSING"]
+    },
+    {
+      "id": "V4",
+      "name": "scaling_law_claim",
+      "question": "'power-law relationship' 声称是否有足够支撑？",
+      "criteria": [
+        "line 523 'clear linear trajectory on logarithmic scale'——Figure4 点数与范围(0.05B-2B)",
+        "是否给拟合优度/置信区间/外推验证",
+        "是否只是少数点的视觉线性"
+      ],
+      "verdict_levels": ["SUBSTANTIATED", "PARTIAL", "OVERCLAIM", "UNVERIFIED"]
+    },
+    {
+      "id": "V5",
+      "name": "efficiency_claim_scope",
+      "question": "5× speedup 与复杂度对比是否口径对等？",
+      "criteria": [
+        "复杂度公式 O(B·M³D³·l_slate·d) vs O(M³·l_slate·d + B·MD³·l_item·d) 的假设（greedy slate planning）",
+        "line 585-586 声明 identical model settings and same hardware——公平性声明",
+        "5× 是否仅在 w/o KV 缓存、vs OneRec-Beam 特定配置",
+        "P99<50ms、GPU 需求降 60% 是否同吞吐口径"
+      ],
+      "verdict_levels": ["FAIR", "SCOPED", "CONFOUNDED", "UNVERIFIED"]
+    },
+    {
+      "id": "V6",
+      "name": "isomorphism_and_teeth",
+      "question": "与 SVL 同构处判谱系打折；真实新意按 KB-META01'会拦才入'决策？",
+      "criteria": [
+        "列出与 SVL 重叠点（来源隔离/分阶段核验/判据不读标签/对象口径对等）",
+        "同构处打同谱系折扣(KB-STRUCT02)",
+        "核心方法'后验反馈构造正样本'是否暴露本仓真缺的通用门禁（标签泄漏/分布落差）——若能编译出独立拦截动作则是新牙候选，否则加固指针",
+        "入库决策遵循 vanity 门禁"
+      ],
+      "verdict_levels": ["DISCOUNTED", "NEW_TEETH", "OBSERVE_ONLY"]
+    }
+  ],
+  "judge_self_audit": {
+    "principle": "判据执行后自审：脆弱字面串(KB-AUDIT01)、单点定罪(KB-AUDIT02)、对象/口径对等(KB-AUDIT04)、事实真≠结论真(KB-R-MS01)、代码事实≠经验结论。",
+    "critical_distinction": "数字算术自洽≠方法有效；self-reported 线上提升≠独立验证；同构呼应≠本仓框架被独立证实。",
+    "required": true
+  },
+  "honesty_tiers": {
+    "tier1": "一手全文直接支持（表格数字、方法公式、消融配置、AI disclosure）",
+    "tier2": "一手支持但需推断（train-serving 落差风险、口径限定）",
+    "tier3": "未独立核验（无代码、无原始数据、线上 A/B 无方差）——标 UNVERIFIED，不判 FALSE",
+    "forbidden": "把 self-reported 数字当独立验证结果；把无代码判为论文造假；把不同口径数字直接相减定罪"
+  },
+  "decision_rule": {
+    "if_new_teeth": "若 V2/V6 咬出本仓完全没有、且能编译出独立拦截动作的可执行门禁 → 按用户'把断言落到代码'编译新门禁（预注册锁存 + 活体回归 + 测试）",
+    "if_application_instance": "若咬出的是已有 KB 条款的新应用实例 → 加固 support 指针，不新增条目",
+    "if_discounted": "同构处打折，记观察"
+  },
+  "source_lock_ref": "audit_higr/source.sha256（paper.pdf + paper.txt + arxiv_abs.html 三重锁存）",
+  "created_at": "2026-11-22T04:05:01+08:00"
+}

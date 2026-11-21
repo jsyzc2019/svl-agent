@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "section": "§62",
+  "gate": "serving_signal_gate.py : check_serving_signal",
+  "source": "HiGR (arxiv 2512.24787v5) line 366-380 + line 425-428：正样本 y+ 用 engaged watch sequence 按 true user feedback 降序重排构造；线上推理只有 user profile + behavior sequence，且经 dedup/availability/safety/business rules 过滤。论文全文未讨论该 train-serving 落差（仅 line 430 泛泛批评他人 exposure bias）。",
+  "why_new_tooth": "本仓有 finance_blind_test 的'标签不喂判据/揭盲在后'（防标签泄漏进判据）、backtest_integrity 的 spoiler 隔离（防事后信息进回测）、transfer_holdout 的跨领域增益（防过拟合），但没有任何门禁判'训练监督所依赖的信号，在服务/推理时是否可得'。HiGR 的 y+ 依赖 true feedback 排序，而服务时无此信号——这是对比两端口径不对等(KB-AUDIT04)在训练-服务维度的延伸，拦截动作独立。",
+  "rules": [
+    {
+      "id": "R0",
+      "rule": "非法输入（非语义枚举/越界）→ flag，拒绝对自由文本做内容匹配（KB-AUDIT01）"
+    },
+    {
+      "id": "R1",
+      "rule": "training_signal_available_at_serving=no（训练依赖的信号服务时不可得）且 gap_disclosed=false 且 no_bridge=false → downgrade：未声明的 train-serving 落差，监督信号不可复现，结论打折"
+    },
+    {
+      "id": "R2",
+      "rule": "training_signal_available_at_serving=no 且 gap_disclosed=true 但 no_bridge=true（声明了落差但无桥接机制）→ flag：诚实披露但缺口未处理，待核"
+    },
+    {
+      "id": "R3",
+      "rule": "training_signal_available_at_serving=no 且 gap_disclosed=true 且 no_bridge=false（声明落差且有代理/预测桥接）→ ok/PRESERVE：落差已知且被显式桥接，同类于诚实工具库定位"
+    },
+    {
+      "id": "R4",
+      "rule": "training_signal_available_at_serving=yes（信号服务时可得）→ ok/INVARIANT：训练与服务口径对等，无此落差"
+    },
+    {
+      "id": "R5",
+      "rule": "training_signal_available_at_serving=partial（服务时能拿到代理信号但非真值）且 gap_disclosed=false → flag：代理信号口径未声明"
+    }
+  ],
+  "input_contract": {
+    "claim": "str，被判的训练-服务一致性声称（仅作标签，不参与判定）",
+    "training_signal_available_at_serving": "str ∈ {yes, no, partial}，训练依赖的监督信号在服务时可得性",
+    "gap_disclosed": "bool，论文/系统是否明确声明该落差",
+    "no_bridge": "bool，是否完全没有桥接机制（无代理预测/无两阶段对齐/无延迟反馈建模）",
+    "serving_input_equivalent": "bool，服务输入是否与训练输入同分布（profile+history vs 含反馈排序）"
+  },
+  "live_cases": [
+    {
+      "name": "HiGR_undisclosed_gap",
+      "input": { "training_signal_available_at_serving": "no", "gap_disclosed": false, "no_bridge": true, "serving_input_equivalent": false },
+      "expected_action": "downgrade",
+      "rationale": "y+ 依赖 true feedback 排序，服务时无该信号；论文未声明落差、无桥接——本轮真实例"
+    },
+    {
+      "name": "disclosed_no_bridge",
+      "input": { "training_signal_available_at_serving": "no", "gap_disclosed": true, "no_bridge": true, "serving_input_equivalent": false },
+      "expected_action": "flag",
+      "rationale": "诚实披露但缺口未处理"
+    },
+    {
+      "name": "disclosed_with_bridge",
+      "input": { "training_signal_available_at_serving": "no", "gap_disclosed": true, "no_bridge": false, "serving_input_equivalent": false },
+      "expected_action": "ok",
+      "rationale": "落差已知且有代理桥接"
+    },
+    {
+      "name": "signal_available",
+      "input": { "training_signal_available_at_serving": "yes", "gap_disclosed": false, "no_bridge": false, "serving_input_equivalent": true },
+      "expected_action": "ok",
+      "rationale": "训练服务信号对等"
+    },
+    {
+      "name": "partial_undisclosed",
+      "input": { "training_signal_available_at_serving": "partial", "gap_disclosed": false, "no_bridge": false, "serving_input_equivalent": false },
+      "expected_action": "flag",
+      "rationale": "代理信号口径未声明"
+    },
+    {
+      "name": "literal_string_flag",
+      "input": { "training_signal_available_at_serving": "高度同构", "gap_disclosed": false, "no_bridge": false, "serving_input_equivalent": false },
+      "expected_action": "flag",
+      "rationale": "字面串输入须被 R0 拦，不进内容判定（§56 教训）"
+    }
+  ],
+  "honesty_boundary": "门禁只判'训练-服务信号可得性与声明'这一口径问题，不判论文造假、不判方法无效；HiGR 用后验反馈构造正样本是 listwise 偏好学习标准做法，落点为'未声明的 train-serving 落差'这一可判缺口，不是标签泄漏定罪。",
+  "created_at": "2026-11-22T04:06:13+08:00"
+}

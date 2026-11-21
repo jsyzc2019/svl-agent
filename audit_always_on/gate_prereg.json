@@ -1,0 +1,36 @@
+{
+  "artifact": "新门禁预注册：跨会话状态连续性门禁 session_continuity.py",
+  "source_assertion": "Anthropic《Building always-on agents》(William Hu, 2026-11-13) line 27『not actually always on—user experience』、line 48『inbox should be source of truth，worker 死后新 worker 重拾同一 event 重试』、line 70『memories outlive the worker』、line 91『anything that needs to persist should be saved to memory along the way』、line 105-110『deferred tool call: run 结束、session 中途保存(mid-call)、答复作为 event 回 inbox、新 run resumes saved session；等待期间 worker 处理其他 event 不阻塞』。",
+  "created_at": "2026-11-22T04:39:35+08:00",
+  "why_new_teeth": "本仓 14 道门禁能力矩阵（V5 结构化核验）无一覆盖『事件驱动系统的状态连续性与可恢复性』：计分/迁移/稳健/复盘/谱系/回测/调用点/审查漏斗/训练服务/检索/歧义/归因/评估/记忆都不是这个维度。本文五个原语映射的 DURABLE_STATE/SOURCE_OF_TRUTH_RECOVERY/SINGLE_CONSUMER/SESSION_RESUME/NONBLOCKING_DEFER 是本仓全新拦截面。定位为『审读外部 always-on 系统声称』的尺子（符合本仓判据工具库范式，§58 选 A）。通过 KB-META01 会拦才入检验。",
+  "honesty_boundary": "门禁只判『声称 always-on 的系统是否声明了支撑连续性的机制（持久状态/可恢复游标/单消费者/会话续跑/非阻塞等待）』，绝不承诺系统真的永续运行、不承诺持久化真的不丢——机制存在≠有效性（KB-META01 声明不可自证，V3 本篇无公开代码可核）。输入须系统方如实声明，声明本身不可自证；按 KB-STRUCT02 不构成对本仓框架的独立验证；遵循 §58 选 A 不接 run_loop。本仓同步纯函数库不做运行时编排是架构选择，非漏洞——本门禁不用于判本仓。",
+  "input_schema": {
+    "claim": "str — 待判的 always-on / 跨会话连续声称",
+    "durable_state": "str — 语义枚举 yes/no/partial：是否有跨 run 存活的持久状态存储",
+    "source_of_truth": "bool — 是否有单一 source of truth，崩溃后可幂等重拾 event 重试",
+    "single_consumer": "bool — 一个 inbox 是否只有一个 active worker（防并发重复/覆盖）",
+    "session_resume": "str — 语义枚举 yes/no/partial：deferred/中断的 session 是否能在答复回来后 resume",
+    "nonblocking_defer": "bool — 等待答复期间 worker 是否不阻塞（可处理其他 event）"
+  },
+  "rules": [
+    "R0: durable_state/session_resume 非 {yes,no,partial} 枚举 或 任一 bool 字段非 bool → flag（拒绝字面串内容判定，避开 §56 brittle 根因）",
+    "R1: durable_state=no 且声称 always-on → block（无跨 run 持久状态，连续性声称根本不成立）",
+    "R2: session_resume=no → downgrade（中断/等待后不可恢复，跨会话连续断裂）",
+    "R3: source_of_truth=False → downgrade（无单一真相源，worker 崩溃不可幂等重试，事件可丢可重）",
+    "R4: single_consumer=False → downgrade（多消费者并发，重复工作/覆盖风险）",
+    "R5: nonblocking_defer=False → flag（等待期间阻塞，not truly always-on，待核）",
+    "R6: durable_state=partial 或 session_resume=partial → flag（部分持久化/部分续跑，覆盖不全待核）",
+    "R7: 全满足（durable=yes + resume=yes + source_of_truth + single_consumer + nonblocking）→ ok（声称与机制自洽；只判机制声明存在，不承诺真的永续）"
+  ],
+  "live_cases": [
+    {"name": "no_durable_state", "in": {"durable_state": "no", "source_of_truth": true, "single_consumer": true, "session_resume": "yes", "nonblocking_defer": true}, "expect": "block", "code": "CONTINUITY.NO_DURABLE_STATE"},
+    {"name": "no_session_resume", "in": {"durable_state": "yes", "source_of_truth": true, "single_consumer": true, "session_resume": "no", "nonblocking_defer": true}, "expect": "downgrade", "code": "CONTINUITY.NO_SESSION_RESUME"},
+    {"name": "no_source_of_truth", "in": {"durable_state": "yes", "source_of_truth": false, "single_consumer": true, "session_resume": "yes", "nonblocking_defer": true}, "expect": "downgrade", "code": "CONTINUITY.NO_SOURCE_OF_TRUTH"},
+    {"name": "multi_consumer", "in": {"durable_state": "yes", "source_of_truth": true, "single_consumer": false, "session_resume": "yes", "nonblocking_defer": true}, "expect": "downgrade", "code": "CONTINUITY.MULTI_CONSUMER"},
+    {"name": "blocking_defer", "in": {"durable_state": "yes", "source_of_truth": true, "single_consumer": true, "session_resume": "yes", "nonblocking_defer": false}, "expect": "flag", "code": "CONTINUITY.BLOCKING_DEFER"},
+    {"name": "partial_durable", "in": {"durable_state": "partial", "source_of_truth": true, "single_consumer": true, "session_resume": "yes", "nonblocking_defer": true}, "expect": "flag", "code": "CONTINUITY.PARTIAL"},
+    {"name": "literal_enum", "in": {"durable_state": "maybe", "source_of_truth": true, "single_consumer": true, "session_resume": "yes", "nonblocking_defer": true}, "expect": "flag", "code": "CONTINUITY.INVALID_ENUM"},
+    {"name": "all_good", "in": {"durable_state": "yes", "source_of_truth": true, "single_consumer": true, "session_resume": "yes", "nonblocking_defer": true}, "expect": "ok", "code": "CONTINUITY.SELF_CONSISTENT"}
+  ],
+  "decision": "实现前 SHA256 锁存，规则与活体预期写死，防事后调参。R1→R7 按优先级短路返回，不事后加权（防 Goodhart）。"
+}
