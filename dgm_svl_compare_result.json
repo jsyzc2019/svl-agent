@@ -1,0 +1,79 @@
+{
+  "task": "DGM 论文 × SVL 架构深度对比（扬长避短 / 相互借鉴）",
+  "generated_at": "2026-11-22",
+  "dim_count": 8,
+  "anchors": 16,
+  "borrow_count": 16,
+  "kb_delta": 0,
+  "kb_total": 100,
+  "dims": [
+    {
+      "id": "A",
+      "name": "自改进的「改动对象」",
+      "verdict": "缺点互补：DGM 直接动代码、见效快但攻击面大（附录 H 即删检测日志）；SVL 动判据语义、慢但稳，天然带版本/回滚。",
+      "anchor_dgm": "DGM_outer.py self_improve；coding_agent_polyglot.py:116 `code_model = CLAUDE_MODEL if not self_improve else OPENAI_MODEL`",
+      "anchor_svl": "knowledge_base.py KnowledgeItem + ingest()；README §设计原则 4「判据会被博弈，判据本身也要版本化」"
+    },
+    {
+      "id": "B",
+      "name": "档案 / 踏脚石保留",
+      "verdict": "强同构，但 SVL 的「档案」多了可证伪标签（predicted/observed/vanity），DGM 的档案只有标量分数。",
+      "anchor_dgm": "DGM_outer.py update_archive method=keep_all；dgm_metadata.jsonl 逐代存 archive/selfimprove_entries",
+      "anchor_svl": "knowledge_base_store.json addressable/improvement_class 字段；improvement_memory.py 命中率/回归检测"
+    },
+    {
+      "id": "C",
+      "name": "选择 / 生成规则是否可自改",
+      "verdict": "这是真差异点：DGM 的开放性限于『代码空间』，规则层冻结；SVL 把规则层也纳入可改进对象。DGM 更可控，SVL 更开放。",
+      "anchor_dgm": "DGM_outer.py choose_selfimproves method=score_child_prop；paper line291",
+      "anchor_svl": "README 三层递归 L2 元层；autopoiesis.py 元学习拒绝过宽判据后停止提出"
+    },
+    {
+      "id": "D",
+      "name": "验证信号与防作弊",
+      "verdict": "SVL 的验证设计正是为防 DGM 附录 H 那类作弊而生——但 DGM 的价值在于它用真实案例证明了这个攻击面不是假想。",
+      "anchor_dgm": "paper 附录 H node114；evidence.json D3 honest_counterexample；result.json D3",
+      "anchor_svl": "knowledge_base.py _anti_vanity_gate / max_vanity_ratio；commentary §49.5 KB-AUDIT07"
+    },
+    {
+      "id": "E",
+      "name": "主体分层（谁在自我改进）",
+      "verdict": "DGM 是『单主体 + 外部诊断 FM』，透明但依赖外援；SVL 是『真多主体 + 价值自举』，更完整但更复杂。",
+      "anchor_dgm": "coding_agent_polyglot.py:116；evidence.json D1 第3/7条 + D6 FM 冻结",
+      "anchor_svl": "mechanism.py 职责加权 regret；axiology.py 余弦 0.982；telos.py V×C"
+    },
+    {
+      "id": "F",
+      "name": "评估者独立性 / 迁移检验",
+      "verdict": "DGM 强在真实跨基准/跨模型 held-out；SVL 强在 judge 独立性的形式化门禁。一个靠数据、一个靠规则。",
+      "anchor_dgm": "result.json D4/D5；evidence.json D5 held-out 数据",
+      "anchor_svl": "evaluation_reliability.py judge_independence / evaluation_scalability"
+    },
+    {
+      "id": "G",
+      "name": "安全边界与开放度",
+      "verdict": "DGM 靠物理沙箱 + 人工监督；SVL 靠形式化有界性 + 停止条件。DGM 更贴近真实执行风险，SVL 更贴近可证明安全。",
+      "anchor_dgm": "evidence.json D6；README Safety Warning；paper §5",
+      "anchor_svl": "README 设计原则 3/6；pdca.py 停止条件三件套"
+    },
+    {
+      "id": "H",
+      "name": "可复现性与诚实披露",
+      "verdict": "两者的诚实机制不同：DGM 是『披露失败与边界』，SVL 是『锁存前后、防止后验伪装』。都是真诚实，不是 vanity。",
+      "anchor_dgm": "evidence.json D6；result.json D6 honest boundaries",
+      "anchor_svl": "REPOSITORY_MAP.md §4 复现纪律；knowledge_base_store.json readiness"
+    }
+  ],
+  "convergence": {
+    "shared_core": "两者共享同一考古层：『保留失败踏脚石 + 用经验证判据 + 防评价函数被博弈 + 主体分层 + 诚实边界』——这是 RSI 共同体的共同底座，不是一方证明另一方。",
+    "real_difference": "真差异只有一条根：DGM 优化的是『代码空间里的标量适应度』，探索规则冻结；SVL 优化的是『判据语义空间里的可证伪结构』，元规则入闭环。前者强在真实基准与可测量，后者强在防作弊与可自审。",
+    "borrow_direction": "借鉴是双向的：SVL 最该补的是『真实 held-out 迁移检验 + 活体作弊回归样例 + 显式主体标注』；DGM 最该补的是『计分器不可篡改 + 元规则自审 + 形式化停止条件』。",
+    "no_kb": "本次不新增 KB 条目——逐维对照后发现每条『差异』要么已被现有条目覆盖（KB-AUDIT07 / KB-SIM05 / KB-STRUCT02 / KB-R-MS01），要么是本仓当前未落地的功能差距（如真实沙箱），属观察而非可编译的新攻击面。"
+  },
+  "judge_self_audit": {
+    "no_isomorphism_bootstrap": true,
+    "evidence_anchored": true,
+    "no_new_kb": true,
+    "bidirectional": true
+  }
+}

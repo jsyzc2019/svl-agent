@@ -1,0 +1,85 @@
+{
+  "target": "Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents (ICLR 2026, arXiv 2505.22954v3)",
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "all_pass": true,
+    "verdicts": {
+      "D1": "IMPLEMENTED",
+      "D2": "CONSISTENT",
+      "D3": "EXPLICIT_WITH_EVIDENCE",
+      "D4": "ISOLATED",
+      "D5": "MIXED",
+      "D6": "PARTIAL",
+      "D7": "DISCOUNTED",
+      "SA": "PASS"
+    },
+    "headline": "顶会实证论文,代码扎实(公式逐字对应); 核心假设明确且有独立佐证+objective hacking反面案例; 与SVL极端同构但判同谱系打折,不新增条目"
+  },
+  "judges": [
+    {
+      "id": "D1",
+      "name": "claim_vs_code",
+      "pass": true,
+      "verdict": "IMPLEMENTED",
+      "finding": "7/7核心机制有代码实体(parent公式λ=10/α0=0.5/keep_all archive/分层阈值/三baseline/诊断FM主体分层全部对应); 全仓1650文件交叉核验: 无privilege escalation组件、Docker sandbox有据; minor: eligible set未显式排除满分; PARTIAL=0",
+      "confidence": "high"
+    },
+    {
+      "id": "D2",
+      "name": "number_caliber",
+      "pass": true,
+      "verdict": "CONSISTENT",
+      "finding": "7项复算自洽; 主动标注5处口径差异(Polyglot子集38.0≠full30.7、59.5vs59.0、三次40.7口径)——数字真≠引用口径对",
+      "confidence": "high"
+    },
+    {
+      "id": "D3",
+      "name": "core_assumption",
+      "pass": true,
+      "verdict": "EXPLICIT_WITH_EVIDENCE",
+      "finding": "核心假设(benchmark↑=self-improve能力↑)明确写出,非纯同义反复: Table2后代可编辑率51.3%vs32.5%+跨基准held-out佐证; 附录H主动披露node114删检测日志objective hacking并引Goodhart; 保留边界: 假设本身是前提非定理,necessary but not sufficient",
+      "confidence": "high"
+    },
+    {
+      "id": "D4",
+      "name": "ablation_attribution",
+      "pass": true,
+      "verdict": "ISOLATED",
+      "finding": "Table1干净隔离: w/o open-ended 50→23/38→14, w/o self-improve 39/28, DGM Greedy 39.7/30; 5项对照; caveat: 等算力未披露、SWE无多次std——据实标注",
+      "confidence": "medium"
+    },
+    {
+      "id": "D5",
+      "name": "transfer_and_baseline",
+      "pass": true,
+      "verdict": "MIXED",
+      "finding": "跨基准真held-out(SWE→Poly28.9/Poly→SWE24.5)排除基准过拟合; 跨模型o3-mini+10/Claude3.7+40.5; 手工SoTA引用非自跑如实标注; 诚实边界: 2周算力/落后闭源/长run未知",
+      "confidence": "medium"
+    },
+    {
+      "id": "D6",
+      "name": "reproducibility_and_safety",
+      "pass": true,
+      "verdict": "PARTIAL",
+      "finding": "Apache-2.0+完整日志外链+复现声明+Docker沙箱+可追溯lineage; 但FM冻结仅改prompt/tool/workflow、2周复现成本、git clone TLS失败(代码基于raw核心文件非全仓)、'移除权限提升'一手未证实",
+      "confidence": "high"
+    },
+    {
+      "id": "D7",
+      "name": "isomorphism_bias_guard",
+      "pass": true,
+      "verdict": "DISCOUNTED",
+      "finding": "6处与用户SVL框架同构,但同属RSI共同体→按KB-STRUCT02判同谱系印证打折,不把'英雄所见略同'当顶会对用户框架的独立验证; 识别3处真实差异(改动对象=代码vs知识/探索规则固定vs判据自审入闭环/标量适应度vs可证伪); 记观察不硬造条目",
+      "confidence": "highest"
+    },
+    {
+      "id": "SA",
+      "name": "judge_self_audit",
+      "pass": true,
+      "verdict": "PASS",
+      "finding": "6条自审全过: 无脆弱字面串/无单点定罪/口径对等/事实真≠结论真/分阶段主体/同构打折",
+      "confidence": "high"
+    }
+  ]
+}

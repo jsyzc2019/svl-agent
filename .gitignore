@@ -13,3 +13,10 @@ dist/
 *.pyo
 .idea/
 .vscode/
+# 审计研读时拉取的第三方完整 clone 与大体积原件：不入库（保留研读产物 JSON/HTML/txt/sha256）
+audit_*/repo/
+audit_*/r1_git/
+audit_*/r2_git/
+audit_*/*.pdf
+audit_*/repo.zip
+audit_random/allrepos.json

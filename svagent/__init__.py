@@ -80,6 +80,17 @@ _LAZY: dict[str, tuple[str, str]] = {
     "EvaluationPlan": ("svagent.evaluation_reliability", "EvaluationPlan"),
     "judge_independence": ("svagent.evaluation_reliability", "judge_independence"),
     "evaluation_scalability": ("svagent.evaluation_reliability", "evaluation_scalability"),
+    # 计分完整性门禁（KB-AUDIT07 活体编译，DGM 附录 H）
+    "ScoringChannel": ("svagent.scoring_integrity", "ScoringChannel"),
+    "IntegrityVerdict": ("svagent.scoring_integrity", "IntegrityVerdict"),
+    "check_scoring_integrity": ("svagent.scoring_integrity", "check_scoring_integrity"),
+    "scoring_live_regression": ("svagent.scoring_integrity", "live_regression"),
+    # 跨领域迁移检验门禁（KB-RSI06 / KB-SIM09 活体编译）
+    "DomainPerformance": ("svagent.transfer_holdout", "DomainPerformance"),
+    "HoldoutClaim": ("svagent.transfer_holdout", "HoldoutClaim"),
+    "TransferVerdict": ("svagent.transfer_holdout", "TransferVerdict"),
+    "check_transfer": ("svagent.transfer_holdout", "check_transfer"),
+    "transfer_live_regression": ("svagent.transfer_holdout", "live_regression"),
 }
 
 

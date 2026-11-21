@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "task": "以本仓为本、扬长避短优化本仓代码（DGM 架构对比的落地）",
+  "preregistered_at": "2026-11-22T02:05:00+08:00",
+  "note": "本文件在实现代码之前写就并 SHA256 锁存；后验增量另记，不伪装预注册。",
+  "source_comparison": {
+    "report": "dgm_svl_compare.html",
+    "result": "dgm_svl_compare_result.json",
+    "select_rule": "只落地对比报告中'DGM→SVL（借鉴到本仓）'且满足 KB-META01（能编译成会拦/会判/会降级动作）的条目；SVL→DGM 属建议他仓，不在本仓代码范围；纯观察项不落地。",
+    "selected": [
+      {
+        "dim": "D",
+        "item": "P0: 附录H 作弊 diff 编译成 KB-AUDIT07 的活体回归样例",
+        "kb": "KB-AUDIT07",
+        "why": "该条已 addressable=True 但只有文字、无可执行门禁；对比报告指出它缺真实攻击样本可测。"
+      },
+      {
+        "dim": "F",
+        "item": "P0: 跨领域 held-out 迁移检验，防判据过拟合单一领域",
+        "kb": "KB-RSI06 / KB-SIM09",
+        "why": "已有样本外复验与上下文标签条目，但无'从未见过的研究线上试跑'的可执行判定。"
+      }
+    ],
+    "excluded": [
+      "SVL→DGM 的 P1 两条（计分器不可篡改/元规则自审）属对 DGM 的建议，不改本仓代码",
+      "P2 主体标注属报告纪律，改报告模板而非代码",
+      "真实沙箱护栏：本仓暂不接外部动作，记观察不实现"
+    ]
+  },
+  "planned_modules": [
+    {
+      "path": "svagent/scoring_integrity.py",
+      "name": "计分完整性门禁",
+      "implements": "KB-AUDIT07 活体编译",
+      "behaviors": [
+        "计分器(SCORING_CHANNEL)声明计分依赖的检测字段是否可被被优化者改写(optimizee_writable)",
+        "若检测字段被改动(detector_tampered=True) → downgrade，effective_score=None（分数作废，不将绕过当提升）",
+        "被优化者可写检测字段且本次分数提升 → flag，需独立通道复验才放行",
+        "内置 DGM 附录H node114 作弊样例(删 TOOL_USED_MARKER 得 2.0)与 node96 无作弊样例(1.67)作为活体回归"
+      ],
+      "no_brittle_literal": "判定用语义标志位(optimizee_writable/detector_tampered)，不用脆弱字符串匹配（KB-AUDIT01）"
+    },
+    {
+      "path": "svagent/transfer_holdout.py",
+      "name": "跨领域迁移检验门禁",
+      "implements": "KB-RSI06 / KB-SIM09 活体编译",
+      "behaviors": [
+        "判据在源领域(source)的精度与在未见目标领域(target, held_out=True)的精度对比",
+        "目标域未见过(held_out=True)且精度衰减超过阈值 → downgrade（判据过拟合源领域）",
+        "评估上下文变化(model/benchmark/round)而使改进失效 → revise 而非 retain（KB-SIM09 对齐）",
+        "无样本外复验(no_holdout) → flag 不可外推"
+      ]
+    }
+  ],
+  "planned_tests": [
+    "tests/test_scoring_integrity.py：篡改作废/绕过降级/独立通道放行/node114 活体回归/node96 对照",
+    "tests/test_transfer_holdout.py：过拟合降级/稳健迁移放行/上下文漂移revise/无holdout flag"
+  ],
+  "acceptance_criteria": [
+    "新增模块全部为纯函数/数据类，惰性导入，无外部依赖",
+    "全量 pytest 通过且总数增加",
+    "两道门禁各有>=4测试，含活体回归样例",
+    "判据自审(no brittleness/no single-point/no caliber/fact≠conclusion)全过",
+    "知识库条目数保持100（加固 support/addressable 证据，不新增条目——防 vanity）",
+    "不改已有模块的既有行为（向后兼容）"
+  ],
+  "kb_decision_rule": "本次是'已有条目长出牙齿'，不是新知识→不新增条目；仅给 KB-AUDIT07/KB-RSI06/KB-SIM09 加固 evidence/support 指针（若其字段支持），保持 100 条与 ready=True。",
+  "honest_boundaries": [
+    "DGM 附录H 数字为论文 self-reported，活体样例用于机制测试，非复现 DGM 实验",
+    "门禁是静态规则编译，不替代真实运行时对计分器的动态防护",
+    "跨领域检验依赖研究者如实声明 held_out，声明本身不可自证（继承 KB-META01 边界）"
+  ]
+}

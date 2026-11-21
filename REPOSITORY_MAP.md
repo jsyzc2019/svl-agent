@@ -12,10 +12,10 @@
 | 顺序 | 文件 | 作用 |
 |---|---|---|
 | 1 | `README.md` | 核心命题、三层递归、关键实测结果、设计原则 |
-| 2 | `commentary.md` | 完整推导日志，§1–§40 逐节记录机制如何长出来 |
+| 2 | `commentary.md` | 完整推导日志，§1–§51 逐节记录机制如何长出来 |
 | 3 | `REPOSITORY_MAP.md`（本文件） | 文件按主题归位 |
-| 4 | `svagent/` | 可执行代码（38 个模块，惰性导入） |
-| 5 | `tests/` | 回归测试（287 项，`python3 -m pytest -q`） |
+| 4 | `svagent/` | 可执行代码（40 个模块，惰性导入） |
+| 5 | `tests/` | 回归测试（301 项，`python3 -m pytest -q`） |
 
 ---
 
@@ -113,8 +113,15 @@ core → verifiers → harness → handoff          L0 产物层：生成→判�
 - 分析代码：`svagent/agi_essay_analysis.py`（含 `verify_extrapolation_arithmetic()` 真实复算）
 
 ### L. 知识库本体
-- `knowledge_base_store.json`（93 条知识，就绪）、`knowledge_base_report.html`
+- `knowledge_base_store.json`（100 条知识，就绪）、`knowledge_base_report.html`
 - 代码：`svagent/knowledge_base.py`
+
+### M. DGM 论文研读 + 架构对比线（§49–§50）
+- 研读：`audit_dgm/`（预注册/五重 SHA256/8 判据/报告 `dgm_report.html`，结果 `result.json`）
+- 架构对比：`build_dgm_svl_compare.py` → `dgm_svl_compare.html` + `dgm_svl_compare_result.json`
+  （8 维逐项对照 / 16 一手锚点 / 16 条双向借鉴；同构打折、不新增 KB）
+- 推导：`commentary.md` §49（判据审计）/ §50（扬长避短·相互借鉴）/ §51（代码落地：两道门禁 + 判据自咬修正）
+- 优化落地：`optimize_preregistration.json` + `optimize_prereg.sha256`（预注册锁存）→ `svagent/scoring_integrity.py` + `svagent/transfer_holdout.py`（两道门禁）→ `tests/test_scoring_integrity.py` + `tests/test_transfer_holdout.py`（14 项）→ `build_optimize_result.py` + `optimize_result.json`（后验结果）。100 条不新增，仅加固 3 条 support；全量 301 passed。
 
 ---
 
@@ -128,8 +135,10 @@ core → verifiers → harness → handoff          L0 产物层：生成→判�
 | `svagent/improvement_memory.py` | I 线 SIM 四要素 | predicted↔observed 配对、命中率、回归检测、可否迁移判定 |
 | `svagent/component_attribution.py` | J 线综述 Where 维度 | 组件归因需给证据/去留/稀有用法核查，按组件类型定验证方式 |
 | `svagent/evaluation_reliability.py` | J 全文 + K 线 | judge 独立性、复现完整性/双编码、评估可扩展性降级 |
+| `svagent/scoring_integrity.py` | DGM 附录 H（§51） | 计分完整性：检测字段被篡改/绕过 → 分数作废或降级；node114 活体回归 |
+| `svagent/transfer_holdout.py` | DGM 跨基准 + KB-RSI06/SIM09（§51） | 跨领域迁移：按相对基线增益判过拟合 vs 可迁移；上下文漂移 revise |
 
-每道门禁都有对应测试：`tests/test_disambiguation_gate.py` `test_improvement_memory.py` `test_component_attribution.py` `test_evaluation_reliability.py`。
+每道门禁都有对应测试：`tests/test_disambiguation_gate.py` `test_improvement_memory.py` `test_component_attribution.py` `test_evaluation_reliability.py` `test_scoring_integrity.py` `test_transfer_holdout.py`。
 
 ---
 

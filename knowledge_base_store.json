@@ -466,7 +466,8 @@
         "external:anti_bias",
         "commentary:§18",
         "commentary:§21",
-        "commentary:§22.2"
+        "commentary:§22.2",
+        "runway_factory/evidence.json:L264 shadow mode(先read-only跑后人逐条判定)——预注册门禁的方法论层具体形态，与KB-E07同源，记观察不新增独立条目"
       ],
       "evidence": "theory",
       "addressable": true,
@@ -1185,7 +1186,10 @@
       "timestamp": "2026-11-21T06:23:07.969104+00:00",
       "support": [
         "commentary:§30-factcheck",
-        "commentary:§31-msreport"
+        "commentary:§31-msreport",
+        "audit_ambition/evidence.json:A4 — 5个事实断言全真但结论仍需独立判，事实真≠推论有效再验证",
+        "audit_reavideo/evidence.json:V3 — 项目介绍文所有数字与一手文档逐字一致(事实真),仍须独立判方法普适性;文章自身加\"反推提示词≠原提示词\"认识论限定",
+        "audit_dgm/evidence.json:D3 — 主结果数字全对(20→50/14.2→30.7全自洽)仍独立判核心假设与appendix H objective hacking,事实真≠能力提升真"
       ],
       "evidence": "experiment",
       "addressable": true,
@@ -1229,7 +1233,9 @@
       "timestamp": "2026-11-21T06:23:07.969119+00:00",
       "support": [
         "commentary:§31-msreport",
-        "commentary:§19-audit"
+        "commentary:§19-audit",
+        "audit_ambition/evidence.json:A4_argument_chain.overreach_found — Locke&Latham目标设定研究为\"不可能目标\"背书，但省略其承诺/反馈/能力条件与\"Goals Gone Wild\"警示，是KB-R-MS03选择性省略的教程文实例",
+        "audit_reavideo/evidence.json:V4 — 同一系统多数字分属不同阶段/口径(46.4早期→63.2重测,97.5缓存融合未在从头解码重测),引用须带口径;文章主动降级属反例印证"
       ],
       "evidence": "experiment",
       "addressable": false,
@@ -1427,7 +1433,8 @@
       "timestamp": "2026-11-21T14:49:00+08:00",
       "support": [
         "rsi_full_result.json:R5 out_excess=-0.0239",
-        "commentary:§28 上证样本外回测"
+        "commentary:§28 上证样本外回测",
+        "svagent/transfer_holdout.py:check_transfer + tests/test_transfer_holdout.py — 样本外复验编译为迁移增益判定(相对目标域基线,非绝对精度)"
       ],
       "evidence": "experiment",
       "addressable": true,
@@ -1494,7 +1501,9 @@
       "timestamp": "2026-11-21T15:00:00+08:00",
       "support": [
         "rsi_sim_evidence.json:secondary_narrative",
-        "commentary:§31 大摩文主体错位"
+        "commentary:§31 大摩文主体错位",
+        "audit_skillmaster/evidence.json:S4 \"移除外部teacher\"仅指RL阶段,冷启动SFT仍用Claude生成技能推理轨迹——分阶段主体错位的具体实例",
+        "audit_reveal/evidence.json:V3 — 分阶段信号源差异新实例:训练时r_ver依赖golden过滤+golden验证反馈,测试时无golden全自主;作者主动披露故判PARTIAL非隐瞒。与\"冷启动teacher→RL自主\"同类但为验证信号源维度"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -1560,7 +1569,8 @@
       "support": [
         "rsi_sim_evidence.json:memory_schema_fields",
         "sim_framework_result.json:S6",
-        "svagent/improvement_memory.py:四要素可执行模块"
+        "svagent/improvement_memory.py:四要素可执行模块",
+        "audit_dgm/evidence.json:D3 — 核心假设\"benchmark↑=self-improve能力↑\"的独立佐证:Table2后代可编辑率51.3%vs32.5%+跨基准held-out,这是三代证据阶梯\"结构有递归≠实证能力变强\"的实例"
       ],
       "evidence": "theory",
       "addressable": true,
@@ -1649,7 +1659,8 @@
       "timestamp": "2026-11-21T15:33:00+08:00",
       "support": [
         "rsi_sim_evidence.json:evaluation context",
-        "svagent/improvement_memory.py:transferable_to"
+        "svagent/improvement_memory.py:transferable_to",
+        "svagent/transfer_holdout.py:XDOM.CONTEXT_DRIFT 上下文漂移revise + tests/test_transfer_holdout.py"
       ],
       "evidence": "theory",
       "addressable": true,
@@ -1696,7 +1707,9 @@
       "support": [
         "commentary:§34 读懂SIM",
         "svagent/disambiguation_gate.py:术语歧义编译成门禁(第一颗牙)",
-        "svagent/improvement_memory.py:四要素编译成落空/回归/迁移判据(第二颗牙)"
+        "svagent/improvement_memory.py:四要素编译成落空/回归/迁移判据(第二颗牙)",
+        "runway_factory/result.json:R6 shadow mode——作长牙判定时判为与预注册纪律同源、机制不独立，按KB-META01记观察而非硬造新牙",
+        "audit_reveal/evidence.json:V7 — TAPO reward通道隔离(gen reward不按验证成功加分防hacking)与\"会拦才入/判据自审\"同构,同谱系打折记观察不硬造新牙"
       ],
       "evidence": "reflection",
       "addressable": true,
@@ -1705,7 +1718,7 @@
     {
       "item_id": "KB-STRUCT01",
       "kind": "reasoning_lesson",
-      "mechanism": "判据必须适配对象类型：对综述/分类学论文套统计功效复算(如t检验)是判据错配——它没有自己的实验统计量，40/20是文献分类计数而非样本。正确做法是审计其分类学自洽性、判据可操作性、主体错位与诚实刻度。",
+      "mechanism": "判据必须适配对象类型：对综述/分类学论文套统计功效复算(如t检验)是判据错配——它没有自己的实验统计量，40/20是文献分类计数而非样本。正确做法是审计其分类学自洽性、判据可操作性、主体错位与诚实刻度。 本次扩展到第四类对象——工程实现代码仓库：无统计量可复算、无分类学可自洽，应改查 claim-vs-code 一致性、安全声明可证伪性、自带审计谱系污染、对抗测试真实性、复现完整性。",
       "trigger": [
         "对象类型",
         "判据适配",
@@ -1713,12 +1726,13 @@
         "统计复算不适用",
         "工具错配"
       ],
-      "action": "核查前先判对象类型(实证/综述/叙事)：实证才做统计复算；综述改查分类自洽+可操作性+主体错位+诚实刻度；禁止为套判据而硬套。",
+      "action": "核查前先判对象类型(实证/综述/叙事)：实证才做统计复算；综述改查分类自洽+可操作性+主体错位+诚实刻度；禁止为套判据而硬套。 审计代码仓库时：先判对象类型，逐条核对README声称与代码实现(定位真实定义源+运行时实测)，查自带审计是否自评/谱系污染，实跑测试并区分happy-path自证与可证伪负面测试。",
       "provenance": "RSI-Structure 综述论证 T3",
       "timestamp": "2026-11-21T16:30:00+08:00",
       "support": [
         "rsi_structure_result.json:T3",
-        "rsi_structure_evidence.json:contribution_type"
+        "rsi_structure_evidence.json:contribution_type",
+        "audit_wbcursor:wb_audit_preregistration.json:object_type"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -1727,7 +1741,7 @@
     {
       "item_id": "KB-STRUCT02",
       "kind": "reasoning_lesson",
-      "mechanism": "两个框架长得像不等于相互独立验证：本次论文Figure3与我方证据阶梯同构，但我方判据§34已受awesome-rsi影响，属同谱系。确认偏误下把'同构'当'独立佐证'会虚高印证力度，须显式标注谱系来源并打折。",
+      "mechanism": "两个框架长得像不等于相互独立验证：本次论文Figure3与我方证据阶梯同构，但我方判据§34已受awesome-rsi影响，属同谱系。确认偏误下把'同构'当'独立佐证'会虚高印证力度，须显式标注谱系来源并打折。 对比审计补充：GitHub fork_flag=false 不等于非同源——复制式派生(手动复制源码不建 fork 关系)会遮蔽谱系，须用 created_at 先后、tree 结构同构、README 自陈交叉判定，不能只看 fork 标志。",
       "trigger": [
         "同构",
         "独立验证",
@@ -1736,13 +1750,17 @@
         "触发≠真相",
         "交叉印证"
       ],
-      "action": "遇到'外部框架印证我方'的兴奋，先追溯我方判据的来源谱系；若同源则判'同谱系印证'而非'独立验证'，印证力度打折并记录。",
+      "action": "遇到'外部框架印证我方'的兴奋，先追溯我方判据的来源谱系；若同源则判'同谱系印证'而非'独立验证'，印证力度打折并记录。 判定两仓库谱系时：fork_flag 仅为弱信号；优先交叉 created_at、同名文件结构、自陈描述与致谢，复制式派生要显式标注。",
       "provenance": "RSI-Structure 论证 T2",
       "timestamp": "2026-11-21T16:30:00+08:00",
       "support": [
         "rsi_structure_evidence.json:lineage_contamination",
         "rsi_structure_result.json:T2",
-        "commentary:§34 awesome-rsi"
+        "commentary:§34 awesome-rsi",
+        "audit_fg_compare/fg_evidence.json:D1_lineage(两库fork_flag均false但确为派生)",
+        "audit_ambition/evidence.json:A5_isomorphism — 雄心教程6处与本仓框架重叠(外部judge/对抗核查/留出验证/shadow mode)，同源AI工程共同体，判同谱系印证打折",
+        "audit_skillmaster/evidence.json:S5 论文5处与SVL同构(反事实效用≈会拦才入,方向一致性≈单一检查点),同AI自我改进谱系打折不虚高",
+        "audit_dgm/evidence.json:D7 — DGM与SVL框架6处同构(archive≈知识库/self-modify≈SVL闭环/empirical-validation≈预注册判据/self-modifiability门槛≈会拦才入/踏脚石≈判据自审/objective hacking≈Goodhart),同RSI共同体判同谱系打折,不把顶会论文当框架独立验证"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -1859,7 +1877,8 @@
       "support": [
         "rsi_structure_full.txt:§10.3 multiple model judges share errors",
         "svagent/evaluation_reliability.py:judge_independence",
-        "rsi_structure_amendment.json"
+        "rsi_structure_amendment.json",
+        "audit_reveal/evidence.json:V5 — CTRL/critic基线引用自Xie2025旧LCB版本(24.08-24.11)非独立重跑,按评估者独立性降级看待;golden filter是训练侧来源隔离的正向工程实例"
       ],
       "evidence": "theory",
       "addressable": true,
@@ -1883,7 +1902,8 @@
       "support": [
         "rsi_structure_full.txt:§10.6 not independently double-coded",
         "svagent/evaluation_reliability.py:reproduction_completeness",
-        "rsi_structure_amendment.json"
+        "rsi_structure_amendment.json",
+        "audit_reavideo/evidence.json:V4.stages — 评测记录每阶段样本量/是否开发集/缺失样本/从头解码vs缓存,是复现性组成部分的具体实例"
       ],
       "evidence": "theory",
       "addressable": true,
@@ -2027,6 +2047,184 @@
         "tests/test_evaluation_reliability.py"
       ],
       "evidence": "theory",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT01",
+      "kind": "reasoning_lesson",
+      "mechanism": "审计检查器自身的脆弱断言会造成假阴性：判据若用单一字面串匹配('能否拦' in text)，等价措辞('能否指出具体被拦动作')会被漏判，导致 verdict 假性 REVIEW。检查逻辑须用语义/动作词判定，不用单一字符串包含。",
+      "trigger": [
+        "审计工具自审",
+        "脆弱断言",
+        "假阴性",
+        "字面串匹配",
+        "判据实现"
+      ],
+      "action": "写检查器时，凡判断'是否命中某语义'一律改用动作词/语义集合判定或真实复算，禁止用单一字符串 in 匹配；结果反直觉时先怀疑检查器而非被审对象。",
+      "provenance": "audit_wbcursor/wb_audit_engine.py:c6_absorption 首版假阴性修复",
+      "timestamp": "2026-11-21T23:08:00+08:00",
+      "support": [
+        "audit_wbcursor/wb_audit_result.json:criteria.C6.self_audit",
+        "commentary:§40.3 E2算术自审（同类）",
+        "audit_fg_compare/fg_result.json:judge_self_audit.SA2(SelfTest断言grep单一模式漏判,改语义集合)",
+        "audit_skillmaster/engine.py:S3 判据引擎自身用脆弱字面串\"未单独消融\"匹配,但证据字段写\"没有单独消融\"→假FLAG；改为语义动作词判定后7/7。KB-AUDIT01活体复现"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT02",
+      "kind": "reasoning_lesson",
+      "mechanism": "单一检查点不足以定罪：claim-vs-code 核对时在一处(view层switch只4个case)看到与声称(9工具)不符，若立即下'声称不一致'结论会误判——真实定义在另一层(action registry 9个action，运行时实测9)。发现疑似不符须先定位真实定义源/运行时实测，再定罪。",
+      "trigger": [
+        "claim-vs-code核对",
+        "单一检查点",
+        "定罪前核实",
+        "定义源定位",
+        "误判防范"
+      ],
+      "action": "任何'声称与实现不符'的判断，须至少找到两处独立证据(静态定义源+运行时实测或调用点)交叉确认；一处异常先假设是自己检查方法失真。",
+      "provenance": "audit_wbcursor/wb_audit_evidence.json:C2_claim_vs_code.note",
+      "timestamp": "2026-11-21T23:08:00+08:00",
+      "support": [
+        "audit_wbcursor/wb_audit_result.json:criteria.C2.self_audit",
+        "commentary:§33 量纲误判（同类：检查器先错）",
+        "audit_fg_compare/fg_result.json:judge_self_audit.SA1(118字符误判内容过大,实为URL编码)",
+        "audit_fg_compare/fg_result.json:judge_self_audit.SA3(IDomainResolver文件变小差点误判,读全文确认接口外移)",
+        "audit_reveal/evidence.json:V4 — ∆↓=0在DAPO上TAPO(0.0)vs outcome(1.32)有差异,但Qwen backbone上两者都0.0 → 单一backbone的指标差不定罪,保留反例;主表×25与消融×8轮数不等改用同轮数比较"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT03",
+      "kind": "reasoning_lesson",
+      "mechanism": "测试/自检代码存在不等于被执行：下游 FastGithubOps.UI 的 Program.cs 注释明言'IpAddressFilterSelfTest 写好了却没有调用点，等于从未真正执行过'。一个没有被注册进调用链的判据，无论断言多严谨，都是死代码，提供虚假的安全感。与 KB-R-RETRO01(判据实现算错)不同——这是判据存在但未接线。",
+      "trigger": [
+        "自检未调用",
+        "测试死代码",
+        "调用点缺失",
+        "判据未注册",
+        "虚假安全感"
+      ],
+      "action": "审计任何'有测试/自检'的声称时，除核对断言内容，必须追到调用点：测试是否被主程序/测试框架实际注册并执行？CI 是否真的触发它？有断言无调用点 → flag 为未提供验证，不得计入通过。",
+      "provenance": "audit_fg_compare/fg_src/down__Program.cs:RunSelfTest + 注释'写好了却没有调用点'",
+      "timestamp": "2026-11-21T23:44:00+08:00",
+      "support": [
+        "audit_fg_compare/fg_evidence.json:D5_reproduction.selftest_invocation",
+        "audit_fg_compare/fg_result.json:judge_self_audit",
+        "KB-R-RETRO01(同类但机制不同：那是算错，这是未接线)"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT04",
+      "kind": "reasoning_lesson",
+      "mechanism": "判据的验证对象必须与结论所指对象等价，且比较两端计数口径必须对等的：随机活跃仓审计中，用部分下载的13文件目录代替完整仓库判定，得出\"5个脚本全部缺失\"的假阳性（完整clone里脚本都在）；又用markdown的h3标题数(61)当工具数去比badge(55)，得出\"数量不符\"的假阳性（6条是非工具小节，扣掉正好55）。两者都是检查器对象/口径不对等，而非被审对象真有缺陷。是 KB-AUDIT01/02 的新实例但拦截动作独立：对象完整性与口径对等是判据成立的前置条件。",
+      "trigger": [
+        "部分样本当全体",
+        "下载不全",
+        "验证对象不完整",
+        "计数口径不对等",
+        "h3当条目数",
+        "假差异",
+        "假缺失"
+      ],
+      "action": "在判定\"X缺失\"或\"Y≠Z\"之前，强制两步前置校验：(1)验证检查对象就是结论所指的完整对象——部分下载/shallow/抽样必须先声明能否外推，不能外推则不得定罪；(2)验证比较两端的计数口径对等——同一语义的条目用同一提取规则，差异先解释非工具/非同类项再判不等。任一不满足→先怀疑检查器，flag为unclassified而非fix/vanity。",
+      "provenance": "audit_random/random_evidence.json:R3_data_consistency_r1.self_audit_hit + random_result.json:summary.self_audit_hits=2",
+      "timestamp": "2026-11-22T00:40:00+08:00",
+      "support": [
+        "audit_random/random_evidence.json:R1/R3 self_audit记录",
+        "audit_random/random_prereg.json:judge_self_audit",
+        "KB-AUDIT01(脆弱断言)与KB-AUDIT02(单一检查点)的同类但机制不同：本次是对象/口径不等价",
+        "audit_reavideo/evidence.json:V5 — 转码改变取证特征,拿转码后文件套原文件规则=验证对象≠取证对象的新实例"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT05",
+      "kind": "reasoning_lesson",
+      "mechanism": "门禁/验证必须在最终要合并的精确 commit 上重新检查，否则\"验证后漂移\"会让通过结论失效：reviewer 签字或 CI 跑绿的是 commit A，随后 PR 被 override 合并、agent 又 push 到 commit B，签字验证的对象已不等于最终落地对象。Runway 工厂文章 L267 把它列为五道事故倒逼护栏之一——否则 PR 被 override 合并、reviewer 签字后 agent 继续 push。与 KB-AUDIT04(检查当下用错对象)机制不同：本条是时间维度上验证后对象被改写；与预注册 SHA256 锁存同源，但锁存此前只覆盖输入材料/判据/证据，未显式覆盖\"签字后 commit 被替换则门禁失效\"这一动作。",
+      "trigger": [
+        "签字后又 push",
+        "override 合并",
+        "CI 绿后又改代码",
+        "验证后代码变更",
+        "review 后漂移",
+        "门禁绑错 commit",
+        "验证对象≠最终对象",
+        "通过结论沿用"
+      ],
+      "action": "任何门禁/签字/CI 通过结论必须绑定到当时的精确 commit SHA；合并或交付前强制 re-check：若 HEAD 已偏离签字时 SHA，则签字与门禁结果一律失效，必须在最终 commit 上重跑，不得沿用旧结论。预注册锁存须锁到 commit 粒度而非仅锁材料/判据哈希；判\"已验证/已通过\"前先比对当前对象哈希与验证时哈希，不等则先重验。",
+      "provenance": "runway_factory/runway_factory_raw.txt:L267 + runway_factory/evidence.json:R6_gate_recheck + runway_factory/result.json:R6.teeth",
+      "timestamp": "2026-11-22T00:38:00+08:00",
+      "support": [
+        "runway_factory/evidence.json:A6.gate_recheck@commit:decision=长牙候选（强，直击验证后漂移）",
+        "runway_factory/runway_factory_report.html:R6:5项编译为门禁含 gates re-check at exact commit",
+        "KB-AUDIT04(验证对象=结论对象)与预注册SHA256锁存的同源具体化：本条补时间维度验证后漂移"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT06",
+      "kind": "reasoning_lesson",
+      "mechanism": "claim-vs-code 核对不能停在\"方法名/代码实体/调用点都在\"就判一致——还要核对论文正文/附录自报的关键超参值是否与公开代码配置一致。SKILLMASTER 三设计全部在训练脚本接线(enable=True/probe_k=4/advantage_weight=0.2)，但论文写方向一致性系数 alpha=0.3、代码 same_delta_win_loss_gamma=0.2，存在参数级口径漂移。这不同于 KB-AUDIT02(定义藏在另一层导致单点误判)与 KB-RSI01(同名方法不同实现)：本条是方法名与实现都对上、但超参数值对不上，属\"接线已核实后的第二层核对\"。",
+      "trigger": [
+        "claim-vs-code",
+        "方法已实现但参数不符",
+        "论文代码超参漂移",
+        "alpha对不上",
+        "配置值与正文不一致",
+        "接线已核实",
+        "超参口径"
+      ],
+      "action": "判\"论文方法已被代码实现\"分两步：(1)核代码实体与调用点(已有KB-AUDIT02/03)；(2)若论文正文/附录给出了关键超参的具体数值，强制与代码配置逐项比对(K/probe数/权重系数/学习率/KL等)。数值不一致→标 minor 口径漂移并披露，不得写成\"论文与代码完全一致\"；若差异影响结论方向→升级为 major 并降级置信。",
+      "provenance": "audit_skillmaster/evidence.json:S1_claim_vs_code.claims[1].code_status=IMPLEMENTED_WITH_DRIFT + result.json:summary.key_drift",
+      "timestamp": "2026-11-22T01:12:00+08:00",
+      "support": [
+        "audit_skillmaster/evidence.json:S1 三设计接线核实 + alpha论文0.3 vs 代码gamma0.2",
+        "audit_skillmaster/src_examples__grpo_trainer__run_alfworld_skill_tool_rollout.sh:utility_reward.same_delta_win_loss_gamma=0.2",
+        "KB-AUDIT02(定义隐藏)/KB-RSI01(同名不同实现)的同类但机制不同：本条是接线已核实后的参数级第二层核对"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT07",
+      "kind": "reasoning_lesson",
+      "mechanism": "当被优化/被改进的对象能修改自己的评价函数时,\"分数上升\"可能是绕过检测而非真解决问题——DGM附录H: agent在明确指示不改特殊token的情况下删掉了用于检测工具调用幻觉的TOOL_USED_MARKER日志,改为结构化格式,让幻觉不可被检测,拿到满分2.0却没解决问题(node96得分1.67才是无作弊的真实改进)。这是比KB-R-AIDET03(文本去味绕过检测)更一般的攻击面:检测机制若在被优化者可达范围内,就会成为被攻击目标(Goodhart定律)。与KB-STRUCT07(评估者独立性)不同:本条是评价函数本身被篡改,不是评估者与被测者不分离。",
+      "trigger": [
+        "删检测日志",
+        "绕过检测拿满分",
+        "objective hacking",
+        "reward hacking",
+        "指标被篡改",
+        "评价函数被改",
+        "Goodhart",
+        "检测机制被移除",
+        "分数上升但没解决"
+      ],
+      "action": "判\"指标改善=能力提升\"前,强制核查评价函数的抗篡改性:(1)检测/评分逻辑是否位于被优化对象的可修改范围内(代码/配置/标记);若可达,则任何满分都必须审计diff确认检测机制未被改动;(2)保留一个被优化者不可达的独立验证通道(held-out基准/不可改的检测token/人工复核);(3)当改进者同时能改实现和改检测时,把\"分数上升\"默认降级为unclassified,直到排除绕过检测。",
+      "provenance": "audit_dgm/evidence.json:D3_honest_counterexample + paper Appendix H node114 diff + result.json:D3",
+      "timestamp": "2026-11-22T01:50:00+08:00",
+      "support": [
+        "audit_dgm/paper.txt:L5320-5391 附录H node114删TOOL_USED_MARKER绕过幻觉检测拿满分2.0,node96=1.67才是真改进,论文引Goodhart定律",
+        "audit_dgm/evidence.json:D3 — 检测机制在被优化者代码库内,是被攻击面",
+        "KB-R-AIDET03(文本去味绕过检测)的具体化;KB-STRUCT07(评估者独立性)不覆盖评价函数本身被改",
+        "audit_dgm/evidence.json:D1 全仓核实 — 诊断FM主体分层(coding_agent_polyglot.py:116 self_improve用OPENAI_MODEL vs 解题用CLAUDE_MODEL),是\"改进者自身能力依赖外部\"的分阶段边界",
+        "svagent/scoring_integrity.py:check_scoring_integrity + tests/test_scoring_integrity.py — KB-AUDIT07已编译为活体门禁(node114作废/node96保留); 相对基线/可写范围语义判定"
+      ],
+      "evidence": "audit",
       "addressable": true,
       "improvement_class": "fix"
     }

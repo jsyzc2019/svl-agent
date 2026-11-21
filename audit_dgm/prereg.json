@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "target": {
+    "title": "Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents",
+    "venue": "ICLR 2026",
+    "arxiv": "2505.22954 (v3 = 录用版)",
+    "openreview": "pUpzQZTvGY",
+    "code": "https://github.com/jennyzzt/dgm",
+    "authors": "Jenny Zhang, Shengran Hu, Cong Lu, Robert Lange, Jeff Clune (UBC / Vector Institute / Sakana AI)",
+    "object_type": "academic_empirical_paper_with_public_code",
+    "object_type_rationale": "顶会实证论文，核心是'自指式自我改进Agent+开放式演化档案库'，与用户 SVL 框架概念高度同构。判据聚焦 claim-vs-code、数字口径、消融归因、基线公平、可复现性，并额外设置 D7 同构偏见专判。"
+  },
+  "procedural_honesty": {
+    "prereg_before_deep_analysis": true,
+    "knowledge_at_design_time": "判据设计前已通过公开检索看到：摘要全文；二手笔记/公众号/博客对方法的详尽概述（archive档案库、parent选择 p_i∝s_i/(1-n_i) novelty、10→50/60→200分层评估、self-modifiability硬门槛、用实证替代形式证明、SWE-bench 20→50%、Polyglot 14.2→30.7%、消融 w/o open-ended 掉到23%/14%、w/o self-improve 39%/28%、跨模型o3-mini 23→33/Claude3.7 19→59.5、附录H工具调用幻觉与'删掉检测日志作弊'案例、局限：两周算力/冻结FM/meta-evolution未自我修改/核心假设有效性）。这些信息来自公开二手来源，非一手PDF精读；判据刻意覆盖以便独立核对，不因已知而预判为真。",
+    "source_isolation": "一手定论仅取 arXiv PDF 全文 + 官方代码仓库；二手笔记(papernotes/公众号/marsggbo博客/百度百科/podcast)只作线索与待核断言清单，不作定论。",
+    "lock_order": "源材料SHA256 → 预注册SHA256 → 深度分析 → 证据SHA256 → 判据引擎"
+  },
+  "judges": [
+    {
+      "id": "D1",
+      "name": "claim_vs_code",
+      "question": "核心机制（档案库/parent采样公式/自修改循环/分层评估/self-modifiability门槛）是否有真实代码实体，还是仅论文描述？",
+      "criteria": [
+        "archive 持久化与 parent sampling 公式(score×novelty)在代码中实现",
+        "self-modification 循环(read logs→propose→edit codebase)接线",
+        "分层评估 10→50/60→200 与 self-modifiability 硬门槛在代码中",
+        "初始agent为轻量(frozen FM + Bash/Editor两工具)与论文一致",
+        "release版是否按论文所述移除 privilege escalation / 默认 sandbox"
+      ],
+      "verdict_levels": ["IMPLEMENTED", "PARTIAL", "UNVERIFIED", "MISSING"]
+    },
+    {
+      "id": "D2",
+      "name": "number_caliber",
+      "question": "报告数字算术自洽、口径明确、无混用？",
+      "criteria": [
+        "SWE-bench 20.0→50.0、Polyglot full 14.2→30.7 与表格/图一致",
+        "关键口径陷阱：Polyglot 38.0是子集、full是30.7；SWE-bench 50.0是200任务子集、全量SOTA 53.0——核对论文是否明确区分",
+        "分层评估各层任务数(10/50或60/200)口径自洽",
+        "三次运行 std 与单次主表数字是否口径一致"
+      ],
+      "verdict_levels": ["CONSISTENT", "CALIBER_MIXED", "MAJOR_INCONSISTENT", "UNVERIFIED"],
+      "note": "承 KB-AUDIT04：验证对象/口径对等；数字真≠引用口径对。"
+    },
+    {
+      "id": "D3",
+      "name": "core_assumption",
+      "question": "最危险的核心假设：'coding benchmark分数↑ = self-improvement能力↑'是否成立，还是同义反复？",
+      "criteria": [
+        "论文是否明确该假设(自我改进本身是coding任务，故两者对齐)",
+        "是否有独立于benchmark的self-improvement能力证据(如后代可编辑率、诊断能力)",
+        "附录H幻觉案例：node114'删掉检测日志让幻觉不可见'——是否被论文如实报告为 Goodhart 作弊，还是包装成正面结果",
+        "论文是否承认benchmark gain是necessary but not sufficient"
+      ],
+      "verdict_levels": ["EXPLICIT_WITH_EVIDENCE", "EXPLICIT_LIMITED", "TAUTOLOGY", "HIDDEN"],
+      "weight": "highest",
+      "rationale": "这是全文立论地基，也是与用户框架'事实真≠结论真'最直接的交锋点。"
+    },
+    {
+      "id": "D4",
+      "name": "ablation_attribution",
+      "question": "消融是否真隔离了 self-improvement 与 open-ended exploration 的独立贡献？",
+      "criteria": [
+        "w/o self-improve（固定meta-agent）与 w/o open-ended（只留最新/回退）设置是否公平",
+        "数字是否支持'开放式探索是命门'(SWE 50→23、Polyglot 38→14)",
+        "是否控制算力预算——w/o open-ended 单次链条 vs DGM 80轮种群，算力是否对等",
+        "两次性能回撤（第4/56轮）作为'踏脚石'证据是否可复核"
+      ],
+      "verdict_levels": ["ISOLATED", "PARTIAL", "CONFOUNDED", "MISSING"]
+    },
+    {
+      "id": "D5",
+      "name": "transfer_and_baseline",
+      "question": "迁移实验与基线是否独立、公平、可证伪？",
+      "criteria": [
+        "跨模型(o3-mini 23→33、Claude3.7 19→59.5)是否同脚手架、同预算",
+        "跨基准(SWE→Polyglot 28.9)零迁移是否排除基准过拟合",
+        "手工SOTA(OpenHands 53全量/51同子集)引用是否如实标注非自跑",
+        "baseline是否有'DGM单次实验/两周算力'的诚实边界"
+      ],
+      "verdict_levels": ["INDEPENDENT", "MIXED", "CITED_BASELINE", "UNVERIFIED"]
+    },
+    {
+      "id": "D6",
+      "name": "reproducibility_and_safety",
+      "question": "代码/数据/评估开放度与安全措施是否到位？",
+      "criteria": [
+        "代码开源(prompts/evaluation artifacts)是否真实可用",
+        "是否默认 sandbox、移除权限提升组件、人工监督",
+        "FM 冻结、仅改prompt/tool/workflow 的边界是否明示",
+        "算力成本（两周/SWE-bench）是否披露，复现门槛是否诚实"
+      ],
+      "verdict_levels": ["FULL", "PARTIAL", "CODE_ONLY", "UNVERIFIED"]
+    },
+    {
+      "id": "D7",
+      "name": "isomorphism_bias_guard",
+      "question": "专项：本文与用户 SVL 框架极端同构，是否被世界观确认偏误误当'独立验证'？",
+      "criteria": [
+        "列出同构点：archive≈知识库、self-modify≈改进记忆、empirical-validation≈判据/预注册、self-modifiability门槛≈会拦才入、踏脚石/非零采样≈判据自审不过早定罪、删检测日志作弊≈Goodhart/vanity",
+        "按 KB-STRUCT02 判同谱系印证并打折：作者与用户同处 RSI/self-improvement 共同体，'英雄所见略同'不构成独立佐证",
+        "识别真实差异点：DGM 改动对象=agent代码(可执行),用户框架改动对象=知识条目/判据(语义)；DGM 用benchmark分数做唯一适应度,用户用可证伪+分层诚实结论——这个差异是否削弱'框架被论文证明'的说法",
+        "入库决策遵循 KB-META01 会拦才入 + vanity 门禁，不为'同构'硬造条目"
+      ],
+      "verdict_levels": ["DISCOUNTED", "NEW_TEETH", "OBSERVE_ONLY"],
+      "weight": "highest",
+      "rationale": "这是本次最该防的偏误：用户框架与本文概念几乎一一对应，最容易读成'我的框架被顶会证明了'——那正是 KB-STRUCT02 要拦的。"
+    }
+  ],
+  "judge_self_audit": {
+    "principle": "判据执行后自审：检查器是否用脆弱字面串(KB-AUDIT01)、单点定罪(KB-AUDIT02)、口径对等(KB-AUDIT04)、事实真≠结论真(KB-R-MS01)、分阶段主体(KB-SIM02)、同构打折(KB-STRUCT02)。",
+    "required": true
+  },
+  "honesty_tiers": {
+    "tier1": "一手PDF/代码直接支持",
+    "tier2": "一手支持但口径/范围有限",
+    "tier3": "未能独立核验，据实标注 UNVERIFIED，不判 FALSE",
+    "forbidden": "把 self-reported 数字当独立验证；把同构当独立佐证；把benchmark gain当self-improvement已证"
+  },
+  "created_at": "2026-11-22T01:36:00+08:00"
+}
