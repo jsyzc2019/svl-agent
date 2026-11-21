@@ -1,0 +1,22 @@
+[来源状态] developers.openai.com/api/docs/guides/async-tool-calling 直连/WebFetch 均 Forbidden（区域锁）。以下为 WebSearch 聚合命中的 OpenAI 官方中文页「异步工具调用」全文（二手 S3，逐字转录自搜索返回的官方页正文）。
+
+异步工具调用 — OpenAI 开发者平台
+
+应用程序在后台运行工具时，模型可以继续工作。
+
+通过异步工具调用，模型可以在调用工具后继续工作，无需等待该工具返回结果。您可以提前发起耗时的查询，让模型先回答请求中不依赖查询结果的部分，再由应用程序在获得结果后将其返回。
+
+异步工具的工作原理：常规函数调用会让模型暂停当前轮次，等待工具响应。在函数工具或自定义工具的定义中设置 async: true 后，模型就可以在发起调用后继续工作，无需等到应用程序返回输出。
+
+工具仍由您的应用程序执行。异步工具不会将工具的执行交给 OpenAI，也不会代您管理后台作业。这与后台模式不同。后台模式会异步生成响应，而异步工具调用让模型在您的应用程序运行工具时继续工作。
+
+作业完成后，请在后续的 Responses 请求中包含其输出。使用 API 为原始调用提供的 call_id 将结果与对应的调用匹配：
+工具类型 / 调用项 / 输出项
+函数工具 / function_call / function_call_output
+自定义工具 / custom_tool_call / custom_tool_call_output
+
+调用异步工具：在工具定义中添加 async: true。response.output 中对应的调用项会包含 async: true。同一条响应可以同时包含异步调用和回答。如果作业完成前对话又进行了其他轮次，请更新 latest_response_id，以便从最新响应继续，同时保留原始工具调用的 call_id。使用流式传输时，您可以在收到完整的调用项后立即启动作业，同时继续读取响应，无需等到整个响应结束。
+
+添加等待工具：等待工具让模型自行决定何时需要等待尚未返回的结果。例如，模型可以发起两个价格查询，先处理不依赖查询结果的工作，等到要比较价格时再等待结果。为每个异步工具添加 task_handle 参数。模型为每次调用分配一个句柄，您的应用程序将该句柄与 API 提供的原始 call_id 和正在运行的作业绑定。在整个对话中，每次调用都必须使用唯一的句柄。即使任务已经完成，或再次发起相同的查询，也不能复用句柄。将等待工具定义为普通的同步函数：省略 async 或将其设为 false。该工具的模式和行为由您的应用程序定义。wait_for_tasks 并非 Responses 的内置工具。
+
+[相关：Programmatic Tool Calling，官方页聚合] Let models compose and run JavaScript that orchestrates tool calls. A program can call tools in parallel, use loops and conditions, and keep intermediate results in the hosted runtime. OpenAI runs each generated program in a fresh, isolated V8 runtime with top-level await, but no Node.js, network, filesystem, subprocess, console, or persistent JS state. Your application decides whether Programmatic Tool Calling is available and which eligible tools the model can call, from a program, or either way. Use direct tool calling when a call needs fresh model judgment, approval, or preservation of citations/native artifacts. allowed_callers controls invocation: omitted/["direct"] direct, ["programmatic"] only from program, both. Writes or approval-sensitive actions: use direct tool calling by default to preserve a clear authorization boundary.

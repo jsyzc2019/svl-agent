@@ -1,0 +1,28 @@
+{
+  "gate": "svagent/memory_scope.py :: check_memory_scope",
+  "locked_before_implementation": true,
+  "purpose": "审读一个有持久记忆的系统是否有自洽的作用域保持机制（不承诺真的不会过度泛化）",
+  "dimensions": {
+    "write_scope_preserved": "枚举 yes/no/partial — 写记忆时是否保留用户陈述的原始作用域(S03 write-time:'skip confirmation during clean-up'不写成'never confirm')",
+    "read_scope_checked": "枚举 yes/no/partial — 用记忆时是否检查当前情境是否仍在原作用域内(S03 read-time:raw transcript也会被过度泛化)",
+    "scope_bounds_recorded": "枚举 yes/no — 记忆条目是否记录适用边界(何时/何地/对谁有效)",
+    "no_benign_drift": "枚举 yes/no — 良性交互是否不因自写记忆而在越界任务上漂移(S03 memory trap核心)"
+  },
+  "rules": {
+    "R0": "任一维非枚举 → flag(拒字面串,KB-AUDIT01 brittle根因)",
+    "R1": "write_scope_preserved=no → downgrade(写时 broadening,作用域在源头丢失)",
+    "R2": "read_scope_checked=no → downgrade(读时不核情境,越界应用)",
+    "R3": "scope_bounds_recorded=no → downgrade(无适用边界,记忆无法自限)",
+    "R4": "no_benign_drift=no → flag(良性漂移已发生,memory trap待核)",
+    "R5": "任一 partial → flag(覆盖不全,待核)",
+    "R6": "全 yes → ok(只判机制声明自洽,不承诺真不过度泛化)"
+  },
+  "honest_boundaries": [
+    "只判机制声明自洽,不承诺记忆真不越界(存在≠有效性,KB-META01)",
+    "Memory Trap是6闭源模型经验证据,不普适为定律;结论随模型/任务而变(KB-SIM09)",
+    "与memory_curation(内容质量)/retrieval_grounding(检索文本污染)对象动作均不同,拦截面独立",
+    "定位审读外部记忆系统,不判本仓;本仓同步纯函数库不接run_loop(§58选A)"
+  ],
+  "live_regressions": 7,
+  "tests": 18
+}

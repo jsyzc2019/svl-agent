@@ -1,0 +1,254 @@
+Agents Are Going Async
+Would you notice if your agent got worse in production? Tell us in our annual survey for the chance to win LangChain swag.
+|
+Take survey ↗
+Products
+LangSmith Platform
+Agent Improvement
+Engine
+Improve agents autonomously
+Observability
+See exactly what your agents are doing
+Evaluation
+Score and improve agent performance
+Agent Runtime
+Agent Server
+Ship and scale agents in production
+Sandboxes
+Run agent-generated code safely
+Fleet
+Agents for the whole company
+Agent Governance
+LLM Gateway
+Control agent model calls
+Open Source
+Agent Frameworks
+deepagents
+Build long-running agents for complex tasks
+langgraph
+Build agents with low-level control
+langchain
+Quick start agents with any model provider
+Resources
+Learn
+Academy
+Free courses on building agents
+Certification
+Become a certified agent engineer
+Blog
+Product news and deep dives
+Documentation
+Guides and API references
+Library
+Guides, reports, and ebooks
+Max Agency
+Podcast on building agents
+Webinars
+Live and recorded expert sessions
+YouTube
+Video tutorials and walkthroughs
+Interrupt On-Demand
+Recorded sessions from Interrupt events
+Connect
+Community
+Connect with other agent builders
+Meetups
+Local, community-led gatherings
+Events
+Find events online and near you
+LangChain @ AWS re:Invent
+Nov 30
+·
+Las Vegas
+Docs
+Customers
+Pricing
+Try LangSmith
+Get a demo
+Try LangSmith
+Get a demo
+Agent Architecture
+Open Source
+Agents Are Going Async
+Sydney Runkle
+Thushanth Bengre
+November 5, 2026
+5
+min
+Go back to blog
+Create agents
+Create agents
+Share
+Key Takeaways
+As agents take on bigger goals, they need to stay responsive to the user while making progress on many long tasks at once.
+Async subagents split an agent into an orchestrator that stays available to the user and subagents that run tasks in the background and report back to the orchestrator upon completion.
+Background work is becoming the norm for agent infrastructure, from coding agents like Claude Code to personal agents like OpenAI's dots.
+Imagine a chief of staff who disappears every time you hand them a big project and only comes back once it's done. You'd probably fire them immediately. A good chief of staff keeps projects moving in the background while staying reachable and keeping you updated along the way. As we ask agents to work toward bigger goals, they need the same two properties. An agent has to be responsive, acting on a new instruction right away with the context of everything before it, and productive, making progress on many large tasks at once.
+The architecture we've used to build agents for a while
+can't
+meet both requirements. In a standard ReAct loop, each long tool call blocks the loop and every other task queues behind it. Instead, we're seeing the ecosystem converge on a split between one agent that stays with the user and background workers that do the long work.
+Claude Code
+runs subagents in the background by default, OpenAI's
+dots
+hand work to background workers to make progress on several things at once, and
+DeepSeek Harness
+built its super agent around a router that talks to people and background workers that run tasks in parallel.
+We’re bringing this pattern to
+Deep Agents
+with
+async subagents
+. An orchestrator stays available to the user and keeps the conversation's context organized, while async subagents run as background workers and report back when they finish. The amount of work the agent can take on then grows with the number of background workers instead of the length of one loop.
+How async subagents work
+An agent runs in a loop. The model calls a tool, waits for the result, and decides what to do next. Historically, tools and subagents blocked that loop until they returned, like code that awaits each slow call in turn. An async subagent works like a task started with
+asyncio.create_task
+or a
+Promise
+you don't await yet. The call returns right away, the work runs independently in the background, and the result comes back later.
+The orchestrator hands work to async subagents and stays free to talk to the user.
+Async work depends on two properties of the system:
+The user can reach the orchestrator.
+The orchestrator is the agent the user interacts directly with. Subagents no longer hold its loop, so the user can reach it whenever its own loop isn't busy, instead of waiting for every subagent to finish.
+Tasks run in parallel without blocking.
+The orchestrator starts subagents as work comes in, instead of waiting for a whole batch to return.
+The orchestrator manages async subagents with five tools:
+start_async_task
+starts a subagent on its own thread and returns right away.
+check_async_task
+gets a task's status and, once it finishes, its result.
+update_async_task
+sends a running task new instructions.
+cancel_async_task
+stops a running task.
+list_async_tasks
+lists every task and its status.
+Steering a running subagent is separate from reaching the orchestrator. When the orchestrator sends a follow-up with
+update_async_task
+, the
+update_strategy
+field on that subagent's definition decides what happens:
+"interrupt"
+(the default) stops the current run and restarts the subagent with the new instruction. Use it for a correction like "use Postgres instead."
+"enqueue"
+holds the follow-up until the current run finishes. Use it for an addition like "run the tests when you're done."
+How notifications work
+Every unfinished task is listed in the orchestrator's system prompt, so it always knows what's in flight. It can poll with
+check_async_task
+or tasks can
+report back on their own
+:
+If the orchestrator is
+busy
+, it checks its unfinished tasks before each model call and picks up the result mid-run.
+If it's
+idle
+, the subagent wakes it with a new run.
+If it's
+paused
+on an approval, the approval is left alone, and the result arrives once the user answers.
+An async subagent reports back whether the orchestrator is busy, idle, or paused on an approval.
+A subagent that needs approval shows up as
+waiting
+, and the user answers on the subagent's own thread without interrupting the orchestrator. In Managed Deep Agents on Slack, the request
+posts back to the original thread
+.
+We expect this pattern to generalize beyond subagents to tools across the board. OpenAI recently added support for
+async tool calling
+, where the model keeps working after it calls a tool and your application sends the result back in a later request.
+Use async subagents
+Async subagents are available in Deep Agents for
+Python
+and
+JavaScript
+, and in
+Managed Deep Agents
+, where making a subagent async takes one field:
+from managed_deepagents import define_deep_agent
+agent = define_deep_agent(
+name="research-assistant",
+model="openai:gpt-5.5",
+subagents=[
+{
+"name": "researcher",
+"description": "Researches a topic in the background.",
+"system_prompt": "Research the topic and report your findings.",
+"async": True,
+},
+],
+)
+In Managed Deep Agents, every served agent also gets an async copy of the
+general-purpose
+subagent, so it can decide at runtime whether to run delegated work in the foreground or the background.
+Task notifications are in beta, so the API may still change. The
+async-deep-agents
+repo has a working supervisor with researcher and coder subagents in Python and TypeScript.
+Give async subagents a try, and let us know what you think in
+GitHub issues
+or on the
+forum
+.
+Related content
+Agent Architecture
+What We’ve Learned Building Proactive Agents
+Sydney Runkle
+November 17, 2026
+7
+min
+Deep Agents
+Agent Architecture
+How We Optimized Browser Use for Deep Agents
+Sydney Runkle
+November 3, 2026
+10
+min
+Agent Architecture
+Managed Deep Agents v0.10: Browser use and asynchronous subagents
+Nathan Drezner
+Sydney Runkle
+October 29, 2026
+7
+min
+Sign up for our newsletter to stay up to date
+Thank you!
+Your submission has been received!
+Oops! Something went wrong while submitting the form.
+See what your agent is really doing
+LangSmith, our agent engineering platform, helps developers debug every agent decision, eval changes, and deploy in one click.
+Try LangSmith
+Get a demo
+Products
+LangSmith Platform
+LangSmith Observability
+LangSmith Evaluation
+LangSmith Agent Server
+LangSmith Fleet
+LangSmith Sandboxes
+Deep Agents
+Deep Agents Code
+LangChain
+LangGraph
+Resources
+Blog
+Customer Stories
+Guides
+Community
+Changelog
+Docs
+Support
+LangChain Academy
+Company
+About
+Careers
+Partners
+Trust Center
+Brand Assets
+Events
+Sign up for our newsletter to stay up to date
+Thank you!
+Your submission has been received!
+Oops! Something went wrong while submitting the form.
+All systems operational
+Privacy policy
+Enterprise Terms
+Enterprise DPA
+Standard Terms
+Standard DPA

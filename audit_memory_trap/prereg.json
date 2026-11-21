@@ -1,0 +1,39 @@
+{
+  "section": "§70 记忆组成·梦境巩固·记忆陷阱（作用域保持）",
+  "locked_at": "2026-11-22T07:58:00+08:00",
+  "object": "3来源：S01 Anthropic components-of-agent-memory(新文2026-11-06)/S02 Dreams(§68同源二手)/S03 Memory Trap论文(Princeton+Anthropic,6模型对照,有code)",
+  "principles": [
+    "KB-STRUCT01 判据适配对象类型",
+    "KB-STRUCT02 同源谱系打折",
+    "KB-STRUCT05 主体错位",
+    "KB-RSI07 self-reported折扣",
+    "KB-META01 会拦才入",
+    "KB-AUDIT03 存在≠执行",
+    "KB-AUDIT04 对象/口径对等"
+  ],
+  "V": {
+    "V1_一手锚点": "S01 components一手分工锚点+S03 Memory Trap实验结论一手锚点命中;S02标二手S3不冒充;断言:PASS",
+    "V2_谱系识别": "S01(components)与§68记忆谱系同源,S02(Dreams)=§68 S07同源二手——两源按STRUCT02打折不重复造牙;S03是新对象(记忆风险/作用域)独立;断言:PASS",
+    "V3_claim_vs_code": "S03有code(github safety-research/memory-trap)与6模型对照实验可核;S01/S02文档类UNVERIFIABLE(对象属性非缺陷);断言:SCOPED",
+    "V4_缺口核验": "本仓16道门禁/106 KB判记忆内容质量(memory_curation选择/整理/非破坏)、改进记忆可证伪、会话续接——无一判『记忆作用域保持(scope preservation)』(良性记忆在超出原作用域时被过度泛化);断言:PASS",
+    "V5_会拦才入": "Memory Trap有6模型对照+两类过度泛化(write-time/read-time)+code+明确拦截面;若成立则编译新门禁;断言:PASS→编译",
+    "V6_主体错位与折扣": "S03是真实实验(非self-reported)但对象是6个闭源模型的行为,结论是经验证据非普适定律;S02 Harvey 6x是self-reported不采信;断言:PASS",
+    "V7_判据自审": "引擎/门禁AST无brittle,中文锚点集中字典+ord边界;断言:PASS",
+    "V8_同构与边界": "S01 components的offline巩固与§68 Dreams/S07同构打折;Memory Trap的write-time/read-time过度泛化与retrieval_grounding(检索文本污染)对象不同(自写记忆vs检索文本)、与memory_curation(内容质量vs作用域)不同——拦截独立;断言:PASS"
+  },
+  "expected_verdicts": {
+    "V1": "PASS",
+    "V2": "PASS",
+    "V3": "SCOPED",
+    "V4": "PASS",
+    "V5": "PASS",
+    "V6": "PASS",
+    "V7": "PASS",
+    "V8": "PASS",
+    "gate_decision": "编译新门禁 memory_scope (第18道)",
+    "kb_decision": "新增 KB-AUDIT13 + 加固 AUDIT11(内容质量vs作用域)/STRUCT02(components/Dreams同源)",
+    "tests_delta": "+~18, total 467→~485",
+    "kb_delta": "106→107"
+  },
+  "claim": "预注册在读取明细证据并运行引擎前锁存;判据不因证据放宽,只修工具不放水。"
+}

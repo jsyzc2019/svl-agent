@@ -1,0 +1,11 @@
+S01_langchain_async_blog|https://www.langchain.com/blog/agents-are-going-async
+S02_claude_subagents|https://code.claude.com/docs/en/sub-agents
+S03_openai_dots|https://learn.chatgpt.com/docs/dots
+S04_deepseek_harness|https://x.com/DeepSeekHarness/status/2116857257245987236
+S05_deep_agents|https://www.langchain.com/deep-agents
+S06_py_async_subagents|https://docs.langchain.com/oss/python/deepagents/async-subagents
+S07_managed_subagents|https://docs.langchain.com/langsmith/python/managed-deep-agents-subagents
+S08_openai_async_tools|https://developers.openai.com/api/docs/guides/async-tool-calling
+S09_js_async_subagents|https://docs.langchain.com/oss/javascript/deepagents/async-subagents
+S10_async_repo|https://github.com/langchain-ai/async-deep-agents
+S11_deepagents_issues|https://github.com/langchain-ai/deepagents/issues

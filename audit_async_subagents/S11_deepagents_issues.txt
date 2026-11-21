@@ -1,0 +1,538 @@
+Issues · langchain-ai/deepagents · GitHub
+Skip to content
+Navigation Menu
+Sign in
+Products
+Platform
+GitHub
+Repository hosting, code review, and collaboration
+Copilot
+AI coding agent for tasks, projects, and automated work
+Build & Ship
+Actions
+CI/CD and automation
+Code Quality
+Quality analysis, fixes, and enforcement
+Codespaces
+Cloud development environments
+Secure
+Code Security
+Vulnerability detection and remediation
+Secret Protection
+Secret scanning and leak prevention
+All Features
+Developers
+Learn
+Documentation
+Training
+Certifications
+Build
+Build with Copilot
+Customize Copilot
+Integrations
+Explore
+Trending repos
+GitHub Sponsors
+Developer articles
+Changelog
+Changelog
+Your source for the latest features, improvements, and fixes across GitHub products, all in one place.
+Businesses
+By Stage
+Enterprises
+Team
+Startups
+Nonprofits
+By Industry
+Healthcare
+Financial services
+Manufacturing
+Government
+See all industries
+Evaluate GitHub
+Why GitHub
+Customer Stories
+Business insights
+Trust Center
+Add-ons
+GitHub Advanced Security
+Enterprise-grade code security
+Copilot for business
+Enterprise-grade AI features
+Premium Support
+Enterprise-grade 24/7 support
+Resources
+Learn & Connect
+Documentation
+Resource center
+Blog
+Events & webinars
+Community Forum
+Customer Stories
+Integrations
+Support
+Customer support
+Training
+GitHub Status
+Company
+About
+Partners
+Changelog
+GitHub Universe
+GitHub Universe
+The event for developers, by developers — talks, workshops, and what’s next for GitHub.
+Pricing
+Search
+/
+Sign in
+Sign up
+Appearance settings
+You signed in with another tab or window.
+Reload
+to refresh your session.
+You signed out in another tab or window.
+Reload
+to refresh your session.
+You switched accounts on another tab or window.
+Reload
+to refresh your session.
+Dismiss alert
+langchain-ai
+deepagents
+Repository navigation
+Code
+Issues
+182
+(
+182
+)
+Pull requests
+72
+(
+72
+)
+Discussions
+Actions
+Security and quality
+2
+(
+2
+)
+Insights
+More
+items
+Issues
+Assigned to me
+Created by me
+Mentioned
+Recent activity
+Views
+Milestones
+Labels
+Collapse sidebar
+Issues
+Change the
+issues
+type filter
+Issues
+New issue
+Deep Agents release process
+#
+4219
+·
+mdrxy
+opened
+on Jun 24, 2026
+🚀 Looking to Contribute? Start Here!
+#
+1707
+·
+mdrxy
+opened
+on Mar 7, 2026
+Search issues
+is
+:
+issue
+state
+:
+open
+is:issue state:open
+Clear filter
+Search
+Issues
+Open
+182
+(
+182
+)
+Closed
+Author
+Labels
+Projects
+Milestones
+Assignees
+Types
+Newest
+Comfortable display density
+Compact display density
+BaseSandbox.glob logs an expected path_not_found at ERROR level
+org:external
+package:deepagents
+priority:triage
+topic:backends
+topic:filesystem
+topic:sandboxes
+type:bug
+langchain-ai/deepagents#7920
+·
+Filter by author
+connorimes
+opened
+on Nov 21, 2026
+1
+Terminal escapes are written to a file at
+C:\dev\tty
+on Windows when
+C:\dev
+exists
+org:external
+package:dcode
+priority:triage
+type:bug
+langchain-ai/deepagents#7905
+·
+Filter by author
+roydonsequeira
+opened
+on Nov 20, 2026
+start_async_task
+loses accepted tasks when the run-creation response is lost
+org:external
+package:deepagents
+priority:triage
+topic:async-subagents
+topic:subagents
+type:bug
+langchain-ai/deepagents#7893
+·
+Filter by author
+wang1299
+opened
+on Nov 20, 2026
+2
+dcode on Windows says it will update on relaunch, but relaunching never installs the update
+org:external
+package:dcode
+priority:triage
+type:bug
+langchain-ai/deepagents#7872
+·
+Filter by author
+Arsh624
+opened
+on Nov 19, 2026
+Replace per-provider stop-reason tables with LangChain's normalized finish reason
+org:internal
+package:dcode
+priority:backlog
+topic:models
+type:refactor
+langchain-ai/deepagents#7870
+·
+Filter by author
+mdrxy
+opened
+on Nov 19, 2026
+DaytonaSandbox.download_files
+reports every failed download as
+file_not_found
+integration:daytona
+org:external
+priority:triage
+topic:filesystem
+topic:sandboxes
+type:bug
+langchain-ai/deepagents#7869
+·
+Filter by author
+kavishkartha05
+opened
+on Nov 19, 2026
+1
+FilesystemPermission
+accepts unknown
+mode
+and
+operations
+values, so a mistyped deny rule allows access
+org:external
+package:deepagents
+priority:triage
+topic:filesystem
+type:bug
+langchain-ai/deepagents#7868
+·
+Filter by author
+kavishkartha05
+opened
+on Nov 19, 2026
+1
+Parallel subagents edit separate release docs, but only one edit survives
+org:external
+package:deepagents
+priority:triage
+topic:subagents
+type:bug
+langchain-ai/deepagents#7835
+·
+Filter by author
+yuehua-meng
+opened
+on Nov 19, 2026
+1
+SummarizationMiddleware writes an empty "## Summarized at" section when only the previous summary is evicted
+org:external
+package:deepagents
+priority:triage
+topic:middleware
+type:bug
+langchain-ai/deepagents#7834
+·
+Filter by author
+aymens
+opened
+on Nov 19, 2026
+[Bug] Clearing compacted history drops next question
+org:external
+package:deepagents
+priority:backlog
+type:bug
+langchain-ai/deepagents#7814
+·
+Filter by author
+master1018
+opened
+on Nov 18, 2026
+1
+Windows filesystem paths cannot round-trip through SDK tools
+org:internal
+package:deepagents
+priority:backlog
+topic:filesystem
+type:bug
+langchain-ai/deepagents#7801
+·
+Filter by author
+robin-agent
+opened
+on Nov 17, 2026
+2
+MemoryMiddleware: let the memory block's cache breakpoint take a TTL, to match a 1h prompt cache
+org:external
+package:deepagents
+priority:backlog
+topic:memory
+topic:middleware
+type:feature
+langchain-ai/deepagents#7771
+·
+Filter by author
+alex-feel
+opened
+on Nov 17, 2026
+[acp] session/cancel is ignored while the agent is blocked in a long await, so the connection stays occupied
+org:external
+package:acp
+priority:backlog
+type:bug
+langchain-ai/deepagents#7767
+·
+Filter by author
+BabelTower
+opened
+on Nov 17, 2026
+1
+dcode local mode never adds Local Context on Windows
+org:external
+package:dcode
+priority:backlog
+type:bug
+langchain-ai/deepagents#7764
+·
+Filter by author
+fahad2932
+opened
+on Nov 16, 2026
+dcode Harbor run aborts on a reasoning-only reply truncated at max_tokens (ModelOutputTruncatedError, no retry)
+org:external
+package:dcode
+package:evals
+priority:medium
+topic:models
+type:bug
+langchain-ai/deepagents#7761
+·
+Filter by author
+MichaelEnny
+opened
+on Nov 16, 2026
+5
+An async subagent can pause twice but the parent only sees the first question
+org:external
+package:deepagents
+priority:triage
+topic:async-subagents
+topic:subagents
+type:bug
+langchain-ai/deepagents#7702
+·
+Filter by author
+Htd7860
+opened
+on Nov 13, 2026
+SkillsMiddleware
+loads a skill with an empty
+description:
+and lists it to the model as "None"
+org:external
+package:deepagents
+priority:backlog
+topic:skills
+type:bug
+langchain-ai/deepagents#7671
+·
+Filter by author
+hyeonsang010716
+opened
+on Nov 11, 2026
+2
+SummarizationMiddleware history offload appends via whole-file edit — breaks on read/write view asymmetry, wasted CAS, quadratic payload
+org:external
+package:deepagents
+priority:backlog
+type:bug
+langchain-ai/deepagents#7643
+·
+Filter by author
+ajaxsunrise
+opened
+on Nov 10, 2026
+1
+feat(sdk): support rolling-window progress budgets for Nemotron Ultra
+org:external
+package:dcode
+package:deepagents
+priority:backlog
+type:feature
+langchain-ai/deepagents#7616
+·
+Filter by author
+tomtastisch
+opened
+on Nov 9, 2026
+1
+Validate paths in StateBackend methods for consistency and defense in depth
+org:external
+package:deepagents
+priority:backlog
+topic:backends
+topic:filesystem
+type:feature
+langchain-ai/deepagents#7592
+·
+Filter by author
+mcigramajofeijoo
+opened
+on Nov 7, 2026
+1
+Optional OS-Level Process Isolation for QuickJS CodeInterpreterMiddleware
+integration:quickjs
+org:external
+package:deepagents
+priority:backlog
+topic:code-interpreter
+type:feature
+langchain-ai/deepagents#7588
+·
+Filter by author
+zoltan-fedor
+opened
+on Nov 6, 2026
+AsyncSubAgent: per-request headers, e.g. to forward the caller's credentials to a remote subagent
+org:external
+package:deepagents
+priority:triage
+topic:async-subagents
+topic:subagents
+type:feature
+langchain-ai/deepagents#7579
+·
+Filter by author
+FabioAngeliniEidos
+opened
+on Nov 6, 2026
+2
+Drop temporary
+langchain-core
+floor once SDK pin requires >=1.7.5
+dependencies
+org:internal
+priority:backlog
+langchain-ai/deepagents#7550
+·
+Filter by author
+mdrxy
+opened
+on Nov 4, 2026
+FilesystemPermission deny rules with ** don't match dotfiles or dot-directories
+org:external
+package:deepagents
+priority:triage
+topic:filesystem
+topic:middleware
+type:bug
+langchain-ai/deepagents#7541
+·
+Filter by author
+crdsvc
+opened
+on Nov 4, 2026
+3
+Support adding memory and skill sources during a run, loaded before the next model call
+org:external
+package:deepagents
+priority:backlog
+topic:memory
+topic:middleware
+topic:skills
+type:feature
+langchain-ai/deepagents#7491
+·
+Filter by author
+alex-feel
+opened
+on Nov 2, 2026
+Previous
+1
+2
+3
+4
+5
+6
+7
+8
+Next
+Footer
+© 2026 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Community
+Docs
+Contact
+Manage cookies
+Do not share my personal information
+You can’t perform that action at this time.

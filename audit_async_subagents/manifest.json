@@ -1,0 +1,79 @@
+{
+  "S01_langchain_async_blog": {
+    "grade": "一手",
+    "note": "langchain.com 官方博客，直连200",
+    "body_file": "S01_langchain_async_blog.txt",
+    "bytes": 8598,
+    "sha256": "3fd242ef4ef53d2022189cb7a9b20f84cef77671bdaf2621823edf1f65ba3f20"
+  },
+  "S02_claude_subagents": {
+    "grade": "一手",
+    "note": "code.claude.com 官方文档，直连200",
+    "body_file": "S02_claude_subagents.txt",
+    "bytes": 96526,
+    "sha256": "d8183e4c319e293ed05cd3082ea255dd3d20273f843260b4b15444168906a8b9"
+  },
+  "S03_openai_dots": {
+    "grade": "二手",
+    "note": "区域锁，WebSearch聚合OpenAI官方原文+dev.to，标S3",
+    "body_file": "S03_openai_dots.txt",
+    "bytes": 4298,
+    "sha256": "2ccdc9a6a32c856e87b8bec7995d66e943228c97d0f165b692cf09b7b352a409"
+  },
+  "S04_deepseek_harness": {
+    "grade": "一手",
+    "note": "x.com 官方账号长文，fxtwitter API 全文143 blocks",
+    "body_file": "S04_deepseek_harness.txt",
+    "bytes": 43462,
+    "sha256": "c8a4a1652d7b4db408e6c9a742c6cb30d09bb701cce121e555ac9b9a1b73aa49"
+  },
+  "S05_deep_agents": {
+    "grade": "一手",
+    "note": "langchain.com 官方产品页，直连200",
+    "body_file": "S05_deep_agents.txt",
+    "bytes": 4952,
+    "sha256": "2c2f9fdee8f55fb9d72d423ceaa8963edb2c5a58a789ba3366168ca8342b7af6"
+  },
+  "S06_py_async_subagents": {
+    "grade": "一手",
+    "note": "docs.langchain.com 官方文档，直连200",
+    "body_file": "S06_py_async_subagents.txt",
+    "bytes": 22820,
+    "sha256": "76a5ce04c6151fc231e112e5028749756bde268144d6124b902168b425f76ae2"
+  },
+  "S07_managed_subagents": {
+    "grade": "一手",
+    "note": "docs.langchain.com/langsmith 官方文档，直连200",
+    "body_file": "S07_managed_subagents.txt",
+    "bytes": 13550,
+    "sha256": "be09566606855cc219cd3ab231a08487ee9378357d26c7cccc74ee61f28dc623"
+  },
+  "S08_openai_async_tools": {
+    "grade": "二手",
+    "note": "区域锁Forbidden，WebSearch聚合OpenAI官方中文页原文，标S3",
+    "body_file": "S08_openai_async_tools.txt",
+    "bytes": 3631,
+    "sha256": "b60bc217d04abcb0633a495f428c80bb43ea407dcf1659ac8e31670234e8ef02"
+  },
+  "S09_js_async_subagents": {
+    "grade": "一手",
+    "note": "docs.langchain.com JS 官方文档，直连200",
+    "body_file": "S09_js_async_subagents.txt",
+    "bytes": 30920,
+    "sha256": "69c026173d2edaab1429e49a4c6430a06a8940851648c4b93a54378b4e45aadd"
+  },
+  "S10_async_repo": {
+    "grade": "一手",
+    "note": "raw.githubusercontent.com README 全文28KB，一手code",
+    "body_file": "S10_readme_raw.md",
+    "bytes": 28321,
+    "sha256": "80f83c65b300a35c9b427cf671e25e4058bbd815c978e3fb1f1f929b2e091d33"
+  },
+  "S11_deepagents_issues": {
+    "grade": "一手",
+    "note": "github.com issues 页，直连200",
+    "body_file": "S11_deepagents_issues.txt",
+    "bytes": 8843,
+    "sha256": "4e06b8c18fe6bf7e8cbcb57bf55f2742577ecd4fa2d22fb1182622a2c51b6cfd"
+  }
+}

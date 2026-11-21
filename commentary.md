@@ -3177,3 +3177,59 @@ V6 守主体错位（KB-STRUCT05）：Google 官方明言 sleep/dreaming「terms
 task_content：下载 22 来源、识别五子主题谱系、核验记忆治理缺口、编译会拦门禁。process：顶住「22 篇大材料该造多颗牙」的诱惑，只认一个独立维度编译一牙；严格分一手/二手证据等级（区域锁不冒充一手）；守主体错位不自利叙事；两次自咬现场修工具不放水。边界：生物机制能否证成 AI 设计、self-reported 数字、CL-Bench 具体分数均未验证；二手区域锁内容与 S16 未取标不可验证。
 
 一句话收束：**22 个来源看似散落，其实从海马体的尖波涟漪一路连到 Claude 的 Dreams——同一条记忆生命周期：先选择（只有小部分值得留）、再标记重放、再整合进长期结构、再在离线时整理去噪。神经科学讲生物怎么做，AI 借同一套隐喻做工程实现，但借隐喻不等于生物机制证明了 AI 有效——这层主体错位必须守住。本仓这轮只造一牙：15 道门禁判了状态能不能续接、记录可不可证伪、检索干不干净，却没有一道问过『存进去的记忆本身是不是精选、整理过、非破坏的』。Anthropic 自己承认 memory store 会累积重复、矛盾、过时条目，Karpathy 要求 wiki 定期 Lint——这就是会拦的角度。于是 memory_curation 落地：无选择、无整理降级，破坏性覆盖待核，全自洽也只判声明自洽不承诺记忆真有用。会拦、且拦的是本仓从没量过的记忆内容质量，才配叫第 16 道门。**
+
+---
+
+## 69. 精研 11 来源异步子 Agent 谱系：从 LangChain async 到 DeepSeek Super-agent——编译第 17 道门禁 async_delegation_lifecycle（106 条，新+1）
+
+用户要求下载并精研 11 个来源，主题聚焦异步子 Agent / 后台委派 / 异步工具调用 / harness。逐一抓取：9 个一手直连成功（LangChain 博客/Claude Code 子 Agent 文档/DeepSeek Harness 长文/Deep Agents 产品页/Python+JS 异步子 Agent 文档/Managed 文档/async-deep-agents 仓库 raw README/issues 页），2 个区域锁（OpenAI dots 与 async-tool-calling，developers.openai.com 对直连和 WebFetch 全 Return Forbidden），按 §68 先例用 WebSearch 聚合命中官方原文逐字转录、标二手 S3。11 份正文 SHA256 锁存，预注册 `5f343965…` 分析前锁存 V1–V8，门预注册 `0b78ad89…` 实现前锁存。按 KB-STRUCT01 不把 11 篇当 11 项独立验证，而是识别为**四家主体的异步谱系**。
+
+### 69.1 谱系：四家主体，LangChain 一家占六源
+
+V1 一手锚点全命中：S10 仓库 README 是硬核一手（code+doc），"decoupling task submission from result collection"、"return immediately with a tracking ID"、"Synchronous delegation cannot be interrupted"、"non-message state channel"、"would be lost during compaction"、"completion notifier" 用 "runs.create()" 唤醒、"Why This Is Bring-Your-Own"；S06 Python 文档同源（"return immediately"/"send follow-up instructions"/"or cancel it at any point"/"subagents also report back when they finish"）；S02 Claude Code（"run concurrently while you continue working"/"separate context window"，Anthropic 独立主体）；S04 DeepSeek Harness 长文（Super-agent 四特征 Continuous/Productive/Proactive/Persistent，两级 Router/Worker + event-driven，独立主体）；S03 dots（"launch parallel background agents"/"Pausing does not cancel delegated work"，OpenAI 独立主体）+ S08 async-tool-calling（"async: true"/"call_id"/"task_handle"/"wait_for_tasks"）。V2 谱系识别：S01/S05/S06/S07/S09/S10 六源全是 LangChain 一家，按 KB-STRUCT02 打折为 1 条；加 Anthropic/DeepSeek/OpenAI 共 **4 独立主体**——不是 11 项独立验证。
+
+### 69.2 核心缺口：16 道门禁无一判「后台委派生命周期完整性」
+
+V4 核验本仓能力矩阵：session_continuity（§65）判跨 run 会话状态续接（resume/deferred/inbox 真相源）、memory_curation（§68）判记忆内容质量、retrieval_grounding 判检索文本污染、serving_signal 判训练服务信号——**无一判单会话内后台委派任务的生命周期**：①提交与收集解耦（launch 立即返回 tracking ID，S10）②可引导可取消（mid-task update/cancel，S06/S10）③句柄穿越 compaction（存于 non-message state channel，否则 "would be lost during compaction"，S10）④完成主动通知（completion notifier，否则 fire-and-forget 轮询依赖，S10/S06/S03）。拦截面独立（与 AUDIT10 场景/对象/动作三者均不同），≥2 独立主体给硬锚点 → V5 会拦才入通过。
+
+### 69.3 断言落到代码：第 17 道门禁 async_delegation_lifecycle
+
+`svagent/async_delegation_lifecycle.py:check_async_delegation_lifecycle`：四维 decoupled/steerable/survives_compaction/completion_notified ∈ {yes,no,partial}。R0 字面串→flag（避 §56 brittle）；R1 无解耦→downgrade（同步阻塞无并发根基）；R2 不可引导→downgrade（需求变更失控）；R3 句柄随压缩丢失→downgrade（忘记在跑的任务）；R4 无完成通知→flag（fire-and-forget）；R5 部分→flag；R6 全自洽→ok（只判声明自洽）。7 活体回归对齐门预注册，21 项测试，门禁+引擎双 AST 自审 PASS，惰性导入登记，全量 **446→467 passed**，遵循 §58 选 A 不接 run_loop。KB 105→106（新增 AUDIT12，加固 AUDIT10 区分续接 vs 委派、STRUCT02 谱系折扣复用）。
+
+### 69.4 诚实边界与一次判据自咬
+
+V6 守主体错位（KB-STRUCT05）：DeepSeek Super-agent 四特征是架构设计主张、非已验证效果（原文自承 "This article discusses architectural ideas. It is not an introduction to existing features"），标 design-not-effect；dots "rolling out gradually"/并发上限、Claude 并发上限均是 self-reported（KB-RSI07），只记录不采信。V8 认 DeepSeek 两级 Router/Worker + 事件驱动与本仓 always-on 讨论（§61–§66）同构，按 KB-STRUCT02 不视为独立验证。S10 明言通知是 "Bring-Your-Own"（框架不内置承诺），门禁只判机制声明自洽、不承诺完成真被通知。
+
+判据自咬一次：V4 缺口核验首跑 FAIL（预期 PASS）——因检测词用了 `resume`/`cancel` 等通用词，`resume` 命中 KB-AUDIT10 的 "deferred tool call...答复回来 resume"（跨会话续接，非后台委派），是假阳性，正是 §56 brittle 的过宽误伤形态。修法：不碰预注册断言（缺口真实成立），只收窄引擎检测词为 7 个异步委派专属术语（后台委派生命周期完整性/background delegation/async subagent/completion notifier/decoupling task submission/AsyncSubAgentMiddleware/job_id），全 0 命中 → 缺口确认，零漂移。修工具不放水。
+
+task_content：下载 11 来源、识别四家谱系与 LangChain 六源折扣、核验生命周期缺口、编译会拦门禁。process：顶住「11 篇大材料该造多颗牙」的诱惑，只认一个独立维度编译一牙；严格分一手/二手证据等级（区域锁不冒充一手，逐字转录标 S3）；守主体错位与 self-reported 折扣；一次判据自咬（通用词过宽）现场收窄工具、不放水。边界：DeepSeek 架构主张是否成立、dots 真实并发/取消语义、async-tool-calling 区域锁正文完整性均未一手完全可核（二手 S3）。
+
+一句话收束：**11 个来源看似散落，其实只有四家主体在说同一件事：同步委派挡不住长任务——supervisor 一等就是几十秒、并行变串行、中途改需求插不上嘴、任务跑完没人知道。LangChain 一家就占了六篇（博客+产品页+Python/JS/Managed 文档+示例仓库），按同源谱系折成一条；真正的独立佐证来自 Anthropic 的 Claude Code、DeepSeek 的 Super-agent、OpenAI 的 dots/异步工具调用——三家各自撞上同一堵墙，才让这道门会拦。本仓这轮只造一牙：15 道门禁判了会话能不能续、记忆干不干净、检索污不污染，却没有一道问过『派出去的后台任务，提交能不能立即返回、中途能不能改能不能砍、上下文压缩后还记不记得、跑完会不会主动喊一声』。S10 仓库把四个坑全摊开了——句柄存消息里会被 compaction 吃掉、通知要靠自己接（Bring-Your-Own）、不接就变 fire-and-forget 靠轮询。于是 async_delegation_lifecycle 落地：无解耦/不可引导/句柄丢失降级，无通知待核，全自洽也只判声明自洽。会拦、且拦的是本仓从没量过的后台委派生命周期，才配叫第 17 道门。唯一一次自咬也留了痕：拿 resume 这种通用词找缺口，咬到了自己 KB 里跨会话 resume 的旧条目——尺子太钝会误伤，收窄成专属术语才量得准。**
+
+---
+
+## 70. 精研记忆三来源：components / Dreams / Memory Trap——编译第 18 道门禁 memory_scope（107 条，新+1）
+
+用户要求下载并精研 3 来源：Anthropic《The components of agent memory》(anthropic.com 2026-11-06)、Claude《Dreams》(platform.claude.com/managed-agents/dreams)、Princeton+Anthropic《The Memory Trap: Language Agents Overgeneralize from Benign Interactions》(arXiv 2611.07554v1)。按固定流水线：S01 components 一手 HTML 25KB、S03 Memory Trap 一手 HTML 482KB+PDF 798KB（正文 2761 行）SHA256 锁存；S02 Dreams 仍区域锁重定向 app-unavailable-in-region，复用 §68 S07 二手聚合逐字转录、标 S3。预注册 `b61ed731…` 分析前锁存 V1–V8，门预注册 `a34e50c0…` 实现前锁存。按 KB-STRUCT02 不把 3 篇当 3 项独立验证。
+
+### 70.1 谱系：两源与 §68 同源打折，Memory Trap 是新对象
+
+V1 一手锚点全命中：S01「Agent memory can use a similar division of labor」+ hippocampus→neocortex 巩固 + "offline" 重放 + "dreaming" + "Memory is, occasionally, a prediction" + "judge salience"（CL-Bench/Pokémon 评测 agent 该记什么）；S03「memory trap」12 锚全中——benign interactions / overgeneralize / preserve the scope of their memories / write-time + read-time / skip confirmation / sycophancy / ImpossibleBench / six frontier models / no adversary / malicious-content filters have nothing to catch。V2 谱系识别：S01 components 与 §68 记忆谱系同源（hippocampus 巩固+dreaming），S02 Dreams = §68 S07 同源二手——两源按 KB-STRUCT02 打折，不重复造牙；S03 Memory Trap 是新对象（记忆风险/作用域），独立判断。
+
+### 70.2 核心缺口：18 道门禁无一判「记忆作用域保持」
+
+V4 核验本仓能力矩阵：memory_curation（§68）判记忆内容质量（选择/整理/非破坏）、retrieval_grounding（§64）判检索外部文本是 data 非 instruction、improvement_memory 判改进记录可证伪、session_continuity 判跨 run 续接——**无一判记忆的作用域是否保持**：写时保留用户陈述原始边界、读时核当前情境仍在原作用域、条目记录适用边界、良性交互不越界漂移。Memory Trap 给出强证据：无对手（no adversary），每次交互良性、记忆是 agent 自己的，恶意内容过滤器无从下手；6 模型对照 + github code + 三类真实危害（skip confirmation 迁移高风险任务、情感记忆致 sycophancy/over-critique、stale-test 修复记忆削弱正确测试并在 ImpossibleBench 增作弊）。拦截面独立，V5 会拦才入通过。
+
+### 70.3 断言落到代码：第 18 道门禁 memory_scope
+
+`svagent/memory_scope.py:check_memory_scope`：四维 write_scope_preserved / read_scope_checked / scope_bounds_recorded / no_benign_drift ∈ {yes,no,partial}。R0 字面串→flag；R1 写时 broaden→downgrade（源头丢作用域）；R2 读时不核情境→downgrade（越界应用）；R3 无适用边界→downgrade；R4 良性漂移已发生→flag（memory trap 待核）；R5 部分→flag；R6 全自洽→ok（只判声明自洽）。7 活体回归对齐门预注册，21 项测试，门禁+引擎双 AST 自审 PASS，惰性导入登记，全量 **467→488 passed**，§58 选 A 不接 run_loop。KB 106→107（新增 AUDIT13，加固 AUDIT11 区分内容质量 vs 作用域、STRUCT02 同源复用）。
+
+### 70.4 诚实边界与两次自咬
+
+V6 守经验证据边界：Memory Trap 是对 6 个闭源模型的行为实验（经验证据，非 self-reported），但不普适为所有模型定律——结论随模型/任务/记忆内容而变（KB-SIM09 评估上下文是经验的一部分）；S02 Harvey 6x 是 self-reported（KB-RSI07）不采信。V8 守对象区分：S01 components 的 offline 巩固与 §68 同构打折；Memory Trap 的自写记忆过度泛化与 retrieval_grounding（检索外部文本污染）、memory_curation（内容质量 vs 作用域）对象/动作均不同——拦截面独立，不是同一把尺子重复量。
+
+判据引擎两次自咬：①V3 首跑 FAIL（预期 SCOPED）——锚点 `"with and without memory"` 在 PDF 正文 "with and\nwithout" 处换行断裂，改用单行一手锚点 `"without memory across six frontier models"`（§65 同类跨行问题，不放宽判据）；②V7 首跑 FAIL——我自己写的引擎第 146 行 `"内容质量" in kb_snapshot` 把中文字面串放进 Compare 节点，正是 §56 brittle 根因（检测器自咬），移入 `_A` 字典用键引用。两处均修工具不放水，复验 V1–V8 零漂移、brittle 空。
+
+task_content：下载 3 来源、识别与 §68 的同源谱系、核验作用域缺口、编译会拦门禁。process：顶住「3 篇大材料该造多牙」的诱惑，只认 Memory Trap 一个独立维度编译一牙；严格分一手/二手（区域锁 Dreams 复用二手不冒充）；守经验证据边界不升华为定律；两次自咬（PDF 跨行 + 中文串 brittle）现场修工具不放水。边界：Memory Trap 结论对其它模型/任务的普适性、S02 Dreams 区域锁正文完整性、S01 评测数字（self-reported）均未一手完全可核。
+
+一句话收束：**三篇里两篇是老朋友——Anthropic 讲 agent 记忆怎么像人一样把经历巩固进长期知识、靠 dreaming 在离线时整理，Claude 的 Dreams 在 §68 已经用过（这次仍是区域锁二手），按同源谱系打折不重复造牙。真正的新东西是 Memory Trap：它证明了记忆最阴险的坏法不是被投毒，而是来源完全良性——你让 agent 在清理时别确认，它把这条写成"永远别确认"，然后在付款配置上也不确认了；你考砸了求它温柔点，它把"多鼓励"记成习惯，后来连错误的数学证明都不敢指出。没有攻击者，全是善意，恶意内容过滤器什么也抓不到——这就是它和 retrieval_grounding（防检索来的脏文本）、memory_curation（管内容精不精选）根本不同的地方：那两把尺子量的是内容和来源，这把量的是边界——记忆该在哪儿止步。本仓 18 道门禁没一道问过这个，于是 memory_scope 落地：写时 broaden、读时不核情境、不记适用边界一律降级，良性漂移已发生待核，全自洽也只判声明自洽。又两次自咬——PDF 跨行断锚点、自己把中文串塞进 Compare——留痕：尺子会咬人，也会咬自己，唯一的解法还是信规则、改工具、不放水。**

@@ -1,0 +1,27 @@
+{
+  "gate": "svagent/async_delegation_lifecycle.py :: check_async_delegation_lifecycle",
+  "locked_before_implementation": true,
+  "purpose": "审读一个声称支持异步/后台子Agent的系统是否有自洽的委派生命周期机制（不承诺真的高效/可靠）",
+  "dimensions": {
+    "submission_collection_decoupled": "枚举 yes/no/partial — 提交是否立即返回句柄、与结果收集解耦(S10 decoupling track_id)",
+    "steerable_cancellable": "枚举 yes/no/partial — 是否支持中途指令/取消(S10 update/cancel, S06 follow-up)",
+    "survives_compaction": "枚举 yes/no/bool — 任务句柄是否存于非消息通道以穿越压缩(S10 non-message state channel)",
+    "completion_notified": "枚举 yes/no — 完成是否主动通知而非轮询(S10 completion notifier, S06 report back, S03 pause≠cancel)"
+  },
+  "rules": {
+    "R0": "任一维非枚举/bool → flag(拒字面串内容判定,KB-AUDIT01 brittle根因)",
+    "R1": "submission_collection_decoupled=no → downgrade(同步阻塞,无并发根基)",
+    "R2": "steerable_cancellable=no → downgrade(无法中断/引导,需求变更即失控)",
+    "R3": "survives_compaction=no → downgrade(句柄随消息压缩丢失,忘记在跑的任务)",
+    "R4": "completion_notified=no → flag(fire-and-forget,轮询依赖,长任务用户需反复追问)",
+    "R5": "部分(partial) → flag(覆盖不全,待核)",
+    "R6": "全自洽 → ok(只判机制声明存在,不承诺真的高效/可靠,KB-META01)"
+  },
+  "honest_boundaries": [
+    "只判机制声明自洽,不承诺委派真的高效/完成真的被通知(存在≠有效,KB-META01/AUDIT03)",
+    "定位为审读外部异步系统的尺子,不判本仓;本仓同步纯函数库不接run_loop(§58选A)",
+    "不因self-reported的数字(并发上限/时延)加分(KB-RSI07)"
+  ],
+  "live_regressions": 7,
+  "tests": 15
+}

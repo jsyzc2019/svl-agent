@@ -1,0 +1,25 @@
+[来源状态] learn.chatgpt.com/docs/dots 与 developers.openai.com/codex/dots 直连/区域锁失败（Forbidden / 000）。以下为 WebSearch 聚合命中的 OpenAI 官方 "Meet dots" 文档原文（二手 S3，逐字转录自搜索返回的官方页正文）。
+
+Meet dots — OpenAI 开发者平台
+
+When to use it:
+Chat — When you want an answer, an explanation, ideas, or help drafting something in conversation.
+ChatGPT Work — When you have a task to delegate, such as research, analysis, or creating a file, either now or on a schedule.
+Codex — When you want to build, debug, test, or review software and work directly with code and developer tools.
+Your dot — When you want an agent to keep track of an ongoing responsibility, figure out next steps as things change, and follow up between conversations. It can keep you updated in ChatGPT, Slack, or Teams and delegate tasks to ChatGPT Work or Codex.
+
+Work with your dot: Start with work you regularly need to check or update. Describe the responsibility and share the source material it needs, then review its work and explain what needs to change.
+
+Give it a responsibility: For an offsite, share the plan and venue emails, then ask your dot to identify upcoming decisions and deadlines. "Help me keep our offsite on track. Read the plan and venue emails I shared, and make a list of decisions, deadlines, and things we're waiting on. Focus on anything that affects the budget or needs an answer this week. Draft suggested replies for my review, but don't send them." Review the first result and correct any missing details before expanding the responsibility.
+
+Choose when and where to hear from it: Tell your dot what to keep current and which changes deserve your attention. It can decide when to follow up. If you want an update at a specific time, include a time zone and a duration or end date, and ask it to confirm the schedule. "Check the connected planning channel each weekday at 9 AM Central for the next four weeks. Update our offsite list when something changes. Message me in ChatGPT if a deadline is at risk or you need a decision from me. Keep routine updates in the checklist. Confirm the schedule."
+
+Review and redirect: When priorities change, tell your dot what to change in the work already underway. Ask your dot what it's working on and what needs your input. In the desktop app, open its profile and use Activity to review delegated tasks. Ask it to list recurring work and confirm what's scheduled. Use Pause to stop your dot's current main task. Stop delegated tasks in Activity and cancel recurring tasks in Scheduled separately. Ending a voice call doesn't necessarily stop assigned work. See Stop work.
+
+[官方明示限制] Review important results and their sources. Your dot can make mistakes, and stopping a task doesn't undo actions it has already completed.
+
+Access: Dots are rolling out gradually. Pro 100/200/500 (18+, outside EEA/UK/Switzerland), Business Premium worldwide, Enterprise worldwide. Dots are off by default, must be enabled by workspace admin. Conversations with your dot don't count toward ChatGPT usage limits. Tasks your dot starts or manages in Work or Codex count toward those products' usage limits as usual. Mobile web is not supported.
+
+Reference Guide topics: Getting started, Messaging (ChatGPT/calls/Slack/Teams), Tasks and memory (assigned work, recurring tasks, context, proactive research).
+
+[二手补充] dev.to 聚合（引 OpenAI help documentation）：dot 拥有 persistent cloud computer、browser、long-term memory；可以 launch parallel background agents 并创建 Codex tasks；批准模型把动作分两类——idle research 只读、改变账户或外发信息需常设授权或显式批准；自动化 reviewer 对每步判 proceed / ask for approval / return task to Dot。OpenAI 自列五条限制：(1) Stopping does not reverse（已发邮件/提交表单无法撤销）；(2) Approval rules can still fail（reviewer 自动化，Dot 仍可能出错）；(3) Some sites block cloud browsers（反爬站点可能 stall 直到接管）；(4) Pausing does not cancel delegated work（pause 后已启动的后台 agent 继续运行并继续计费）；(5) Local access needs the app open（本地文件仅在桌面应用运行时可达）。

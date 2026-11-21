@@ -135,6 +135,14 @@ _LAZY: dict[str, tuple[str, str]] = {
     "check_memory_curation": ("svagent.memory_curation", "check_memory_curation"),
     "MemoryCurationVerdict": ("svagent.memory_curation", "MemoryCurationVerdict"),
     "memory_curation_live_regression": ("svagent.memory_curation", "live_regression"),
+    # 异步/后台委派生命周期门禁（§69：从11来源异步子Agent谱系编译——解耦/可引导/穿越压缩/完成通知）
+    "check_async_delegation_lifecycle": ("svagent.async_delegation_lifecycle", "check_async_delegation_lifecycle"),
+    "AsyncDelegationVerdict": ("svagent.async_delegation_lifecycle", "AsyncDelegationVerdict"),
+    "async_delegation_live_regression": ("svagent.async_delegation_lifecycle", "live_regression"),
+    # 记忆作用域保持门禁（§70：从 Memory Trap 论文编译——写时保留边界/读时核情境/记录适用边界/良性不漂移）
+    "check_memory_scope": ("svagent.memory_scope", "check_memory_scope"),
+    "MemoryScopeVerdict": ("svagent.memory_scope", "MemoryScopeVerdict"),
+    "memory_scope_live_regression": ("svagent.memory_scope", "live_regression"),
 }
 
 

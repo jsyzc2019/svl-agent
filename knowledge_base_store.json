@@ -1779,7 +1779,9 @@
         "audit_reveal/review_result.json:N5（§61：TAPO turn 奖励隔离与本仓 scoring_integrity 同构，同谱系打折，不因英雄所见略同虚高）",
         "audit_always_on/result.json:V4（§65：memory 存 pointer/存在≠执行哲学/run 反复调 core loop 四处同构按 KB-STRUCT02 打折，同源不同粒度不当独立验证）",
         "audit_bitter_lesson/result.json:V2（§67：Bitter Lesson哲学/Sutton2019→Alberta Plan研究纲领/Sutton组2022→机器人幼儿园工程落地/他山×Sutton团队Openmind2026，三篇同源谱系三粒度，按KB-STRUCT02打折不计为三独立验证；同谱 Chain 不改变印证力度）",
-        "audit_memory/result.json:V2/V7（§68：22来源记忆生命周期=Bitter谱系延伸——生物机制S02-S05/S11→AI梦境巩固S06-S08/S21隐喻复用、Karpathy wiki三操作≈本仓KB/commentary/REPO_MAP同构，按KB-STRUCT02同源三粒度打折，22篇≠22独立验证、5子主题内亦大量同源）"
+        "audit_memory/result.json:V2/V7（§68：22来源记忆生命周期=Bitter谱系延伸——生物机制S02-S05/S11→AI梦境巩固S06-S08/S21隐喻复用、Karpathy wiki三操作≈本仓KB/commentary/REPO_MAP同构，按KB-STRUCT02同源三粒度打折，22篇≠22独立验证、5子主题内亦大量同源）",
+        "§69 复用：11来源中LangChain系6源(S01/S05/S06/S07/S09/S10)同源谱系打折为1条;Anthropic/DeepSeek/OpenAI各1条=4独立主体,非11项独立验证",
+        "§70 复用：S01 components-of-agent-memory与S02 Dreams(§68 S07)均属同一记忆谱系(hippocampus→neocortex巩固+dreaming),打折不重复编译;S03 Memory Trap是新对象(作用域风险)独立于谱系"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -2377,7 +2379,8 @@
         "svagent/session_continuity.py:check_session_continuity + tests/test_session_continuity.py(16项) — KB-AUDIT10 编译为活体门禁;R1无持久状态block/R2不可续跑·R3无真相源·R4多消费者downgrade/R5阻塞·R6部分·字面串flag/R7自洽ok;8活体回归+门禁&引擎双AST自审PASS",
         "audit_always_on/article.txt:27 always-on is user experience + 48 inbox as source of truth + 70 memories outlive worker + 105-110 deferred session resume nonblocking",
         "audit_always_on/result.json:V5 结构化核验本仓14道门禁能力矩阵—9项运行时状态/事件能力无一覆盖,断言独立",
-        "与 KB-AUDIT09(单run检索hygiene)/KB-AUDIT08(训练服务信号)拦截维度独立;遵循§58选A不接run_loop"
+        "与 KB-AUDIT09(单run检索hygiene)/KB-AUDIT08(训练服务信号)拦截维度独立;遵循§58选A不接run_loop",
+        "§69 维度辨析：run间状态续接(resume/deferred)≠单会话内后台委派生命周期(解耦/可引导/穿越压缩/完成通知);后者另立KB-AUDIT12,两者同属事件驱动编排但拦截动作独立"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -2408,7 +2411,71 @@
         "svagent/memory_curation.py:check_memory_curation + tests/test_memory_curation.py(15项) — KB-AUDIT11 编译为活体门禁;R1无选择·R2无整理downgrade/R3破坏性·R4部分flag/R0字面串flag/R5自洽ok;7活体回归对齐门预注册+门禁&引擎双AST自审PASS",
         "audit_memory/result.json:V4 能力矩阵差集—本仓15道门禁(session_continuity只判状态续接/improvement_memory只判可证伪/四要素记忆只判要素存在)无一判记忆内容选择-整理-非破坏,断言独立",
         "audit_memory/S03_selective_consolidation.fetched.txt(Science一手摘要) only a small fraction are retained + SPW-R tagging;S07_cma_dreams.fetched.txt(二手) accumulates duplicates/contradictions/stale + input store never modified;S17_karpathy_wiki.fetched.txt(一手) Lint矛盾/过时/孤儿页",
-        "与 KB-AUDIT10(会话状态续接)/improvement_memory(记录可证伪)/KB-AUDIT09(检索文本) 拦截面独立;遵循§58选A不接run_loop;全量431→446 passed"
+        "与 KB-AUDIT10(会话状态续接)/improvement_memory(记录可证伪)/KB-AUDIT09(检索文本) 拦截面独立;遵循§58选A不接run_loop;全量431→446 passed",
+        "§70 维度辨析：记忆内容质量(选择/整理/非破坏)≠记忆作用域保持(写时保留边界/读时核情境/良性不漂移);后者另立KB-AUDIT13,内容再精选也可能越界泛化,拦截独立"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT12",
+      "kind": "reasoning_lesson",
+      "mechanism": "后台/异步委派生命周期完整性是运行时编排的独立缺口：声称支持异步子Agent的系统，需四个自洽机制——(1)提交与收集解耦(launch立即返回tracking ID，S10 'decoupling task submission from result collection')；(2)可引导可取消(mid-task update/cancel，'Synchronous delegation cannot be interrupted')；(3)句柄穿越上下文压缩(存于non-message state channel，否则'would be lost during compaction')；(4)完成主动通知(completion notifier/runs.create唤醒，否则fire-and-forget轮询依赖)。这与KB-AUDIT10(跨会话状态续接:run间状态持久化/resume)、KB-AUDIT11(记忆内容质量)不同——场景(单会话内并发任务编排 vs 跨run续接 vs 记忆治理)、对象(后台任务句柄状态机 vs 会话状态 vs 记忆条目)、动作(判委派生命周期声明自洽 vs 判续接机制 vs 判内容治理)三者均不同，拦截动作独立。",
+      "trigger": [
+        "async subagent",
+        "background agent",
+        "后台子Agent",
+        "异步委派",
+        "delegate concurrently",
+        "tracking ID",
+        "job_id",
+        "cancel subagent",
+        "mid-flight steering",
+        "completion notifier",
+        "fire and forget",
+        "context compaction jobs",
+        "并行任务编排"
+      ],
+      "action": "审读一个声称异步/后台委派的系统前，调用 svagent/async_delegation_lifecycle.py:check_async_delegation_lifecycle 核查四维：decoupled/steerable/survives_compaction/completion_notified ∈ {yes,no,partial}。R1无解耦downgrade(同步阻塞)/R2不可引导downgrade(需求变更失控)/R3句柄随压缩丢失downgrade(忘记在跑的任务)/R4无完成通知flag(fire-and-forget)/R5部分flag/R6全自洽ok。诚实边界：只判机制声明自洽，不承诺委派真高效/完成真被通知(存在≠有效性，KB-META01/AUDIT03)；self-reported并发/时延数字不作独立验证(KB-RSI07)；LangChain系6源同源谱系按KB-STRUCT02打折为1条；本仓同步纯函数库不做运行时编排是架构选择，遵循§58选A不接run_loop，本门审读外部系统不判本仓。",
+      "provenance": "audit_async_subagents/result.json:V1-V8零漂移 + gate_prereg.json(实现前SHA256锁存 0b78ad89…) + S10 README(SHA256 80f83c65…)/S06 py docs/S02 Claude subagents/S04 DeepSeek/S03 dots(二手)/S08 async-tools(二手)",
+      "timestamp": "2026-11-22T07:49:31.480020+08:00",
+      "support": [
+        "svagent/async_delegation_lifecycle.py:check_async_delegation_lifecycle + tests/test_async_delegation_lifecycle.py(21项) — KB-AUDIT12 编译为活体门禁;R1解耦·R2引导·R3压缩·R4通知·R5部分·R6自洽;7活体回归+门禁&引擎双AST自审PASS",
+        "audit_async_subagents/engine.py:V4缺口核验首跑resume/cancel通用词误伤KB-AUDIT10的跨会话resume(假阳性),收窄为7个专属术语全0命中——修工具不放水,留痕判据自咬",
+        "S10 README:decoupling/tracking ID/non-message state channel/completion notifier/runs.create/Bring-Your-Own + S06 report back + S02 background/concurrent + S03 pause≠cancel + S08 async:true/call_id/task_handle —— ≥2独立主体硬锚点,V5会拦才入通过",
+        "与 KB-AUDIT10(跨run续接)/KB-AUDIT11(记忆治理)拦截维度独立;DeepSeek Router/Worker与本仓always-on同构按KB-STRUCT02不视为独立验证"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT13",
+      "kind": "reasoning_lesson",
+      "mechanism": "记忆作用域保持是记忆系统的独立缺口：Memory Trap 论文(Princeton+Anthropic,arXiv 2611.07554,6模型对照,有code)证明良性交互(benign interactions)产生的自写记忆会在超出原作用域时导致不安全/不可靠行为——两条路径：write-time(写笔记时broaden用户陈述,clean-up的skip confirmation写成never confirm)与read-time(用记忆时overgeneralize,即使raw transcript)。关键:no adversary,每次交互都良性、记忆是agent自己的,'malicious-content filters have nothing to catch',故prompt injection/毒化检索类防护无效。实验:skip confirmation迁移到高风险任务、情感支持记忆致sycophancy/over-critique、stale-test修复记忆削弱正确测试并在ImpossibleBench增加作弊。这与KB-AUDIT11(记忆内容质量:选择/整理/非破坏)、retrieval_grounding(检索外部文本是data非instruction)、improvement_memory(记录可证伪)不同——场景(记忆写入/读取时的作用域边界 vs 内容治理 vs 检索hygiene)、对象(自写记忆的适用范围 vs 记忆条目质量 vs 外部文本)、动作(判作用域保持声明自洽 vs 判内容治理 vs 判溯源)三者均不同,拦截独立。",
+      "trigger": [
+        "memory trap",
+        "记忆陷阱",
+        "scope preservation",
+        "作用域保持",
+        "overgeneralization",
+        "良性交互记忆",
+        "benign memory",
+        "memory poisoning无对手",
+        "skip confirmation迁移",
+        "sycophancy记忆",
+        "stale test memory",
+        "self-written memory scope"
+      ],
+      "action": "审读一个有持久记忆的系统前,调用 svagent/memory_scope.py:check_memory_scope 核查四维：write_scope_preserved/read_scope_checked/scope_bounds_recorded/no_benign_drift ∈ {yes,no,partial}。R1写时broaden→downgrade(源头丢作用域)/R2读时不核情境→downgrade(越界应用)/R3无适用边界→downgrade(记忆无法自限)/R4良性漂移已发生→flag(memory trap待核)/R5部分→flag/R6自洽→ok。诚实边界：只判机制声明自洽,不承诺记忆真不过度泛化(存在≠有效性,KB-META01);Memory Trap是6闭源模型经验证据不普适为定律、结论随模型/任务变(KB-SIM09);与memory_curation(内容质量)/retrieval_grounding(检索污染)对象动作均不同;本仓同步纯函数库不接run_loop(§58选A),本门审读外部系统不判本仓。",
+      "provenance": "audit_memory_trap/result.json:V1-V8零漂移 + gate_prereg.json(实现前SHA256锁存 a34e50c0…) + S03 Memory Trap PDF(SHA256 44c5bcab…,Princeton+Anthropic 6模型对照+code) + S01 components(同源打折) + S02 Dreams(§68 S07同源二手)",
+      "timestamp": "2026-11-22T07:58:07.977432+08:00",
+      "support": [
+        "svagent/memory_scope.py:check_memory_scope + tests/test_memory_scope.py(21项) — KB-AUDIT13 编译为活体门禁;R1写broaden·R2读不核·R3无边界·R4良性漂移·R5部分·R6自洽;7活体+门禁&引擎双AST自审PASS",
+        "audit_memory_trap/engine.py:V3首跑SCOPED预期实得FAIL——'with and without memory'跨PDF行断裂(MISS),改用单行一手锚点'without memory across six frontier models';V7引擎自身'内容质量'中文字面串进Compare(brittle根因),移入_A字典键引用;两处修工具不放水零漂移",
+        "S03 Memory Trap:'memory trap'/'preserve the scope of their memories'/write-time+read-time/'no adversary'/'malicious-content filters have nothing to catch'/6模型对照+github code——V5会拦才入通过",
+        "与KB-AUDIT11(内容质量)/retrieval_grounding(检索污染)拦截维度独立;S01 components与§68记忆谱系同源、S02 Dreams=§68 S07二手,均按KB-STRUCT02打折不重复造牙"
       ],
       "evidence": "audit",
       "addressable": true,

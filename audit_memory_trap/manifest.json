@@ -1,0 +1,23 @@
+{
+  "S01_components": {
+    "grade": "一手",
+    "note": "anthropic.com 官方研究文 2026-11-06，直连200",
+    "body_file": "S01_components.txt",
+    "bytes": 25061,
+    "sha256": "19a6aa03c98ebea283f8df7a0b2c90a72fb029ecaf8127b44785a3bbe255e7ac"
+  },
+  "S02_dreams": {
+    "grade": "二手",
+    "note": "platform.claude.com 区域锁重定向，复用§68 WebSearch聚合官方片段，标S3",
+    "body_file": "S02_dreams.secondhand.txt",
+    "bytes": 1391,
+    "sha256": "e36c6ea21a0802aaa22e6bc378d501be1b430ff4a06c72fe7797abb261290a41"
+  },
+  "S03_memory_trap": {
+    "grade": "一手",
+    "note": "arxiv 2611.07554v1 HTML全文482KB+PDF798KB，Princeton/Anthropic，有code",
+    "body_file": "S03_memory_trap.pdftxt",
+    "bytes": 111918,
+    "sha256": "44c5bcab01a8a1faa6132d27c60ec601d8917450504320fffce4be237d5999d0"
+  }
+}

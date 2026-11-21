@@ -1,0 +1,94 @@
+{
+  "section": "§70 记忆组成·梦境巩固·记忆陷阱（作用域保持）",
+  "judges": {
+    "V1": {
+      "verdict": "PASS",
+      "detail": {
+        "S01_components_primary": true,
+        "S02_dreams_secondhand": true,
+        "S03_memory_trap_primary": true
+      }
+    },
+    "V2": {
+      "verdict": "PASS",
+      "detail": {
+        "S01_same_lineage_as_68": true,
+        "S02_same_as_68_S07": true,
+        "S03_new_object": true,
+        "discount_applied": true
+      }
+    },
+    "V3": {
+      "verdict": "SCOPED",
+      "detail": {
+        "S03_has_code": true,
+        "S03_six_models": true,
+        "S03_controlled": true,
+        "docs_unverifiable": true
+      }
+    },
+    "V4": {
+      "verdict": "PASS",
+      "detail": {
+        "kb_gap_terms_hit": {
+          "记忆作用域保持": false,
+          "scope preservation": false,
+          "overgeneraliz": false,
+          "benign interaction": false,
+          "memory trap": false,
+          "out-of-scope memory": false,
+          "preserve the scope": false
+        },
+        "kb_count": 106,
+        "gate_count": 8,
+        "gap_confirmed": true,
+        "brittle_note": "收窄为记忆作用域专属术语(修§69教训),不用泛词overgeneralize单列易误伤——此处overgeneralize在KB无命中故保留为佐证"
+      }
+    },
+    "V5": {
+      "verdict": "PASS",
+      "detail": {
+        "checks": {
+          "two_routes": true,
+          "real_harm": true,
+          "independent_intercept": true
+        },
+        "decision": "compile memory_scope gate"
+      }
+    },
+    "V6": {
+      "verdict": "PASS",
+      "detail": {
+        "empirical_not_selfreport": true,
+        "closed_model_scope": true,
+        "harvey_selfreport_discounted": true
+      }
+    },
+    "V7": {
+      "verdict": "PASS",
+      "detail": {
+        "engine_brittle": [],
+        "gate_brittle": []
+      }
+    },
+    "V8": {
+      "verdict": "PASS",
+      "detail": {
+        "S01_isomorphic_68": true,
+        "vs_retrieval_grounding": true,
+        "vs_memory_curation": true,
+        "intercept_independent": true
+      }
+    }
+  },
+  "drift_from_prereg": [],
+  "gate_decision": "编译新门禁 memory_scope (第18道)",
+  "kb_decision": "新增 KB-AUDIT13 + 加固 AUDIT11(内容质量vs作用域)/STRUCT02(components/Dreams同源)",
+  "honest_boundaries": [
+    "S02 Dreams 为区域锁二手聚合，复用 §68 S07，标 S3，不冒充一手；与 §68 同源按 KB-STRUCT02 打折不重复造牙",
+    "S01 components 同属 §68 记忆谱系（hippocampus→neocortex 巩固 + dreaming），同构打折，不单独编译",
+    "Memory Trap 是对 6 个闭源模型的行为实验（经验证据），不普适为所有模型定律；结论随模型/任务/记忆内容而变（KB-SIM09 评估上下文是经验的一部分）",
+    "Memory Trap 对象是 agent 自写记忆的过度泛化（自写记忆），与 retrieval_grounding（检索外部文本是 data 非 instruction）、memory_curation（内容精选/整理/非破坏）对象/动作均不同——拦截面独立",
+    "本门定位为审读外部记忆系统的尺子，不判本仓；本仓同步纯函数库不接 run_loop（§58 选 A）"
+  ]
+}

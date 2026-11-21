@@ -1,0 +1,38 @@
+{
+  "section": "§69 异步子 Agent / 后台委派生命周期",
+  "locked_at": "2026-11-22T07:45:00+08:00",
+  "object": "11 来源异步子Agent谱系：LangChain系(6,同源打折)/Anthropic Claude Code/DeepSeek Harness/OpenAI dots+async-tools(2)",
+  "principles": [
+    "KB-STRUCT01 判据适配对象类型",
+    "KB-STRUCT02 同源谱系打折",
+    "KB-STRUCT05 主体错位",
+    "KB-RSI07 生态热度虚荣指标",
+    "KB-META01 会拦才入",
+    "KB-AUDIT03 存在≠执行"
+  ],
+  "V": {
+    "V1_一手锚点命中": "每源至少1条一手/聚合原文锚点命中，二手(S03/S08)必标S3不冒充一手；断言:所有源命中",
+    "V2_谱系识别": "LangChain系6源同源(S01/S05/S06/S07/S09/S10)按STRUCT02打折为1条;Anthropic/DeepSeek/OpenAI各自独立;断言:谱系=4独立主体",
+    "V3_claim_vs_code": "S10仓库README声明的launch/check/update/cancel/list + completion notifier + non-message state channel 有code锚点;其它文档类对象判UNVERIFIABLE(对象属性非缺陷);断言:S10可核,其余N/A",
+    "V4_缺口核验": "本仓16道门禁/105 KB无一条判『后台/异步委派生命周期完整性』(提交收集解耦/可引导可取消/句柄穿越compaction/完成主动通知);断言:缺口成立",
+    "V5_会拦才入": "一手锚点来自≥2独立主体且拦截面独立会拦;若只有LangChain一家则STRUCT02打折后不足以编译;断言:≥2独立主体→编译,否则加固",
+    "V6_主体错位与self_reported折扣": "DeepSeek Super-agent四特征/Productive是架构设计主张非已验证效果;dot数字/Claude并发上限是self-reported;不把设计主张读成效果证明;断言:全部折扣",
+    "V7_判据自审": "引擎/门禁AST无brittle(中文字面串做判定结论比较/检测器自指);中文锚点集中字典+ord数值边界;断言:brittle空",
+    "V8_同构识别": "DeepSeek两级Router/Worker + 事件驱动 与本仓always-on讨论(§61-§66)同构,不视为独立验证;断言:识别同构"
+  },
+  "expected_verdicts": {
+    "V1": "PASS",
+    "V2": "PASS",
+    "V3": "SCOPED",
+    "V4": "PASS",
+    "V5": "PASS",
+    "V6": "PASS",
+    "V7": "PASS",
+    "V8": "PASS",
+    "gate_decision": "编译新门禁 async_delegation_lifecycle (第17道)",
+    "kb_decision": "新增 KB-AUDIT12 + 加固 AUDIT10(区分跨会话续接 vs 后台委派) 与 STRUCT02",
+    "tests_delta": "+~15, total 446→~461",
+    "kb_delta": "105→106"
+  },
+  "claim": "本预注册在读取各源明细证据并运行引擎前锁存；判据一旦锁定不因证据放宽，只修工具不放水。"
+}

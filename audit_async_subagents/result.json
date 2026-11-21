@@ -1,0 +1,98 @@
+{
+  "section": "§69 异步子 Agent / 后台委派生命周期",
+  "judges": {
+    "V1": {
+      "verdict": "PASS",
+      "detail": {
+        "S01_langchain_blog": true,
+        "S02_claude_background": true,
+        "S04_deepseek_superagent": true,
+        "S06_langchain_py": true,
+        "S10_repo_core": true,
+        "S03_dots_secondhand": true,
+        "S08_async_tools_secondhand": true
+      }
+    },
+    "V2": {
+      "verdict": "PASS",
+      "detail": {
+        "langchain_family": true,
+        "independent_subjects": 4,
+        "discount_applied": true
+      }
+    },
+    "V3": {
+      "verdict": "SCOPED",
+      "detail": {
+        "S10_protocol_tools": true,
+        "S10_state_channel": true,
+        "S10_notifier_code": true,
+        "docs_unverifiable": true
+      }
+    },
+    "V4": {
+      "verdict": "PASS",
+      "detail": {
+        "kb_gap_terms_hit": {
+          "后台委派生命周期完整性": false,
+          "background delegation": false,
+          "async subagent": false,
+          "completion notifier": false,
+          "decoupling task submission": false,
+          "AsyncSubAgentMiddleware": false,
+          "job_id": false
+        },
+        "gate_count": 8,
+        "kb_count": 105,
+        "gap_confirmed": true,
+        "brittle_fix": "原resume/cancel通用词误伤KB-AUDIT10的跨会话resume,收窄为7个专属术语,不放水"
+      }
+    },
+    "V5": {
+      "verdict": "PASS",
+      "detail": {
+        "subjects": {
+          "LangChain": true,
+          "Anthropic": true,
+          "DeepSeek": true,
+          "OpenAI": true
+        },
+        "n": 4,
+        "decision": "compile gate"
+      }
+    },
+    "V6": {
+      "verdict": "PASS",
+      "detail": {
+        "deepseek_design_not_effect": true,
+        "dots_self_reported": true,
+        "design_claim_discounted": true
+      }
+    },
+    "V7": {
+      "verdict": "PASS",
+      "detail": {
+        "engine_brittle": [],
+        "gate_brittle": []
+      }
+    },
+    "V8": {
+      "verdict": "PASS",
+      "detail": {
+        "router_worker": true,
+        "isomorphic_to_own": true,
+        "not_independent": true
+      }
+    }
+  },
+  "drift_from_prereg": [],
+  "gate_decision": "编译新门禁 async_delegation_lifecycle (第17道)",
+  "kb_decision": "新增 KB-AUDIT12 + 加固 AUDIT10(区分跨会话续接 vs 后台委派) 与 STRUCT02",
+  "honest_boundaries": [
+    "S03/S08 为区域锁二手聚合，标 S3，不冒充一手（KB-STRUCT09 转述忠实但不完整）",
+    "DeepSeek Super-agent 四特征是架构设计主张，非已验证效果；self-reported 不采信为独立验证（KB-STRUCT05/KB-RSI07）",
+    "LangChain 系 6 源同源谱系按 KB-STRUCT02 打折为 1 条，不当 6 项独立验证",
+    "文档类对象无代码可核（claim-vs-code UNVERIFIABLE）是对象属性非缺陷；仅 S10 仓库有 code 锚点",
+    "本门定位为审读外部异步委派系统的尺子，不判本仓；本仓同步纯函数库不接 run_loop（§58 选 A）"
+  ]
+}

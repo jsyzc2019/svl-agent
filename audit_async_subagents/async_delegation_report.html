@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>§69 11来源异步子Agent谱系精研 · SVL Agent</title><style>
+:root{--bg:#0d1117;--card:#161b22;--fg:#e6edf3;--mut:#8b949e;--ok:#3fb950;--warn:#d29922;--no:#f85149;--acc:#58a6ff;--bd:#30363d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;padding:40px 20px}
+.wrap{max-width:1080px;margin:0 auto}
+h1{font-size:25px;color:var(--acc);margin-bottom:6px}
+.sub{color:var(--mut);font-size:14px;margin-bottom:24px}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;margin-right:6px}
+.badge.ok{background:rgba(63,185,80,.15);color:var(--ok);border:1px solid var(--ok)}
+.badge.warn{background:rgba(210,153,34,.15);color:var(--warn);border:1px solid var(--warn)}
+.badge.no{background:rgba(248,81,73,.15);color:var(--no);border:1px solid var(--no)}
+.badge.info{background:rgba(88,166,255,.15);color:var(--acc);border:1px solid var(--acc)}
+.hero{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:22px;margin-bottom:22px}
+.hero .lead{font-size:14px;margin-top:10px}
+h2{font-size:18px;color:var(--acc);margin:26px 0 12px;border-left:3px solid var(--acc);padding-left:10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px 18px;margin-bottom:12px}
+.card .t{font-size:15px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card .f{font-size:13px;color:var(--mut)}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px}
+th,td{border:1px solid var(--bd);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--card);color:var(--acc)}
+.note{background:rgba(88,166,255,.08);border-left:3px solid var(--acc);padding:10px 14px;font-size:13px;color:var(--mut);margin-top:12px;border-radius:4px}
+.warnbox{background:rgba(210,153,34,.08);border-left:3px solid var(--warn);padding:10px 14px;font-size:13px;color:var(--mut);margin-top:12px;border-radius:4px}
+.okbox{background:rgba(63,185,80,.08);border-left:3px solid var(--ok);padding:10px 14px;font-size:13px;color:var(--mut);margin-top:12px;border-radius:4px}
+code{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:1px 5px;font-size:12px;color:var(--fg)}
+ul{margin-left:20px;font-size:13px;color:var(--mut)}
+li{margin:4px 0}
+.chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;margin:14px 0}
+.chain .node{background:rgba(88,166,255,.1);border:1px solid var(--acc);border-radius:8px;padding:7px 11px}
+.chain .arrow{color:var(--mut)}
+footer{color:var(--mut);font-size:12px;margin-top:26px;text-align:center;border-top:1px solid var(--bd);padding-top:16px}
+</style></head>
+<body><div class="wrap">
+<h1>§69 11 来源异步子 Agent 谱系精研</h1>
+<div class="sub">LangChain async · Claude Code subagents · DeepSeek Super-agent · OpenAI dots/async-tools · §69 异步子 Agent / 后台委派生命周期</div>
+<div class="hero">
+  <div>
+    <span class="badge info">11 来源</span>
+    <span class="badge ok">9 一手</span>
+    <span class="badge warn">2 二手(区域锁·S3)</span>
+    <span class="badge ok">V1–V8 零漂移</span>
+    <span class="badge ok">第 17 道门禁</span>
+  </div>
+  <div class="lead"><b>核心结论：</b>11 篇不是 11 项独立验证，而是<b>四家主体</b>（LangChain 一家占六源，按 KB-STRUCT02 打折为 1 条）在说同一件事：同步委派挡不住长任务。本仓 16 道门禁<b>无一判「后台委派生命周期完整性」</b>（提交收集解耦 / 可引导可取消 / 句柄穿越 compaction / 完成主动通知）→ 编译第 17 道门禁 <code>async_delegation_lifecycle</code>，新增 KB-AUDIT12。</div>
+</div>
+<h2>一、四家主体谱系（LangChain 六源打折）</h2>
+<div class="chain">
+<span class="node">LangChain 系×6<br><small>S01/S05/S06/S07/S09/S10 → 折 1 条</small></span><span class="arrow">＋</span>
+<span class="node">Anthropic<br><small>S02 Claude Code subagents</small></span><span class="arrow">＋</span>
+<span class="node">DeepSeek<br><small>S04 Super-agent 两级架构</small></span><span class="arrow">＋</span>
+<span class="node">OpenAI<br><small>S03 dots + S08 async-tools</small></span>
+</div>
+<div class="note">同一设计约束被四家独立主体各自撞上 → 拦截面独立且会拦（V5 会拦才入通过）；同源六源按 KB-STRUCT02 不当六项独立验证（V2）。</div>
+<h2>二、判据 V1–V8 总览（对齐预注册 · 零漂移）</h2>
+<div class='card'><table><tr><th>判据</th><th>裁决</th><th>要点</th></tr><tr><td>V1</td><td><span class="badge ok">PASS</span></td><td>{"S01_langchain_blog": true, "S02_claude_background": true, "S04_deepseek_superagent": true, "S06_langchain_py": true, "S10_repo_core": true, "S03_dots_secondha</td></tr><tr><td>V2</td><td><span class="badge ok">PASS</span></td><td>{"langchain_family": true, "independent_subjects": 4, "discount_applied": true}</td></tr><tr><td>V3</td><td><span class="badge warn">SCOPED</span></td><td>{"S10_protocol_tools": true, "S10_state_channel": true, "S10_notifier_code": true, "docs_unverifiable": true}</td></tr><tr><td>V4</td><td><span class="badge ok">PASS</span></td><td>{"kb_gap_terms_hit": {"后台委派生命周期完整性": false, "background delegation": false, "async subagent": false, "completion notifier": false, "decoupling task submission":</td></tr><tr><td>V5</td><td><span class="badge ok">PASS</span></td><td>{"subjects": {"LangChain": true, "Anthropic": true, "DeepSeek": true, "OpenAI": true}, "n": 4, "decision": "compile gate"}</td></tr><tr><td>V6</td><td><span class="badge ok">PASS</span></td><td>{"deepseek_design_not_effect": true, "dots_self_reported": true, "design_claim_discounted": true}</td></tr><tr><td>V7</td><td><span class="badge ok">PASS</span></td><td>{"engine_brittle": [], "gate_brittle": []}</td></tr><tr><td>V8</td><td><span class="badge ok">PASS</span></td><td>{"router_worker": true, "isomorphic_to_own": true, "not_independent": true}</td></tr></table></div>
+<h2>三、一手锚点命中（V1）</h2>
+<div class='card'><table><tr><th>锚点组</th><th>命中</th></tr><tr><td>S01_langchain_blog</td><td>✓</td></tr><tr><td>S02_claude_background</td><td>✓</td></tr><tr><td>S04_deepseek_superagent</td><td>✓</td></tr><tr><td>S06_langchain_py</td><td>✓</td></tr><tr><td>S10_repo_core</td><td>✓</td></tr><tr><td>S03_dots_secondhand</td><td>✓</td></tr><tr><td>S08_async_tools_secondhand</td><td>✓</td></tr></table></div>
+<h2>四、生命周期缺口与新门禁（V4 / V5）</h2>
+<div class='card'><div class='t'>缺口核验 <span class="badge ok">PASS</span></div><div class='f'>原resume/cancel通用词误伤KB-AUDIT10的跨会话resume,收窄为7个专属术语,不放水</div><table><tr><th>专属术语</th><th>本仓 KB 命中</th></tr><tr><td>后台委派生命周期完整性</td><td>0（缺口）</td></tr><tr><td>background delegation</td><td>0（缺口）</td></tr><tr><td>async subagent</td><td>0（缺口）</td></tr><tr><td>completion notifier</td><td>0（缺口）</td></tr><tr><td>decoupling task submission</td><td>0（缺口）</td></tr><tr><td>AsyncSubAgentMiddleware</td><td>0（缺口）</td></tr><tr><td>job_id</td><td>0（缺口）</td></tr></table></div>
+<div class='card'><div class='t'>编译产物 <span class='badge info'>COMPILE</span></div>
+<div class='f'><code>svagent/async_delegation_lifecycle.py:check_async_delegation_lifecycle</code> · 四维 decoupled/steerable/survives_compaction/completion_notified ∈ {yes,no,partial}</div>
+<div class='okbox'>R1 无解耦→downgrade / R2 不可引导→downgrade / R3 句柄随压缩丢失→downgrade / R4 无完成通知→flag / R5 部分→flag / R6 全自洽→ok；只判机制声明自洽，不承诺委派真高效/完成真被通知。7 活体回归 + 21 项测试 + 双 AST 自审 PASS + 446→467 passed。</div></div>
+<h2>五、判据自咬与诚实边界</h2>
+<div class='warnbox'><b>判据自咬一次：</b>V4 首跑 FAIL——检测词 resume/cancel 过宽，resume 命中 KB-AUDIT10 的跨会话 resume（假阳性，§56 brittle 过宽误伤形态）。修法：不碰预注册断言，只把引擎检测词收窄为 7 个异步委派专属术语，全 0 命中 → 缺口确认、零漂移。修工具不放水。</div>
+<div class='card'><div class='t'>诚实边界</div><ul><li>S03/S08 为区域锁二手聚合，标 S3，不冒充一手（KB-STRUCT09 转述忠实但不完整）</li><li>DeepSeek Super-agent 四特征是架构设计主张，非已验证效果；self-reported 不采信为独立验证（KB-STRUCT05/KB-RSI07）</li><li>LangChain 系 6 源同源谱系按 KB-STRUCT02 打折为 1 条，不当 6 项独立验证</li><li>文档类对象无代码可核（claim-vs-code UNVERIFIABLE）是对象属性非缺陷；仅 S10 仓库有 code 锚点</li><li>本门定位为审读外部异步委派系统的尺子，不判本仓；本仓同步纯函数库不接 run_loop（§58 选 A）</li></ul></div>
+<h2>六、11 来源抓取清单</h2>
+<div class='card'><table><tr><th>#</th><th>等级</th><th>字节</th><th>SHA256</th><th>说明</th></tr><tr><td>S01_langchain_async_blog</td><td><span class='badge ok'>一手</span></td><td>8598</td><td><code>3fd242ef4ef5</code></td><td>langchain.com 官方博客，直连200</td></tr><tr><td>S02_claude_subagents</td><td><span class='badge ok'>一手</span></td><td>96526</td><td><code>d8183e4c319e</code></td><td>code.claude.com 官方文档，直连200</td></tr><tr><td>S03_openai_dots</td><td><span class='badge warn'>二手</span></td><td>4298</td><td><code>2ccdc9a6a32c</code></td><td>区域锁，WebSearch聚合OpenAI官方原文+dev.to，标S3</td></tr><tr><td>S04_deepseek_harness</td><td><span class='badge ok'>一手</span></td><td>43462</td><td><code>c8a4a1652d7b</code></td><td>x.com 官方账号长文，fxtwitter API 全文143 blocks</td></tr><tr><td>S05_deep_agents</td><td><span class='badge ok'>一手</span></td><td>4952</td><td><code>2c2f9fdee8f5</code></td><td>langchain.com 官方产品页，直连200</td></tr><tr><td>S06_py_async_subagents</td><td><span class='badge ok'>一手</span></td><td>22820</td><td><code>76a5ce04c615</code></td><td>docs.langchain.com 官方文档，直连200</td></tr><tr><td>S07_managed_subagents</td><td><span class='badge ok'>一手</span></td><td>13550</td><td><code>be0956660685</code></td><td>docs.langchain.com/langsmith 官方文档，直连200</td></tr><tr><td>S08_openai_async_tools</td><td><span class='badge warn'>二手</span></td><td>3631</td><td><code>b60bc217d04a</code></td><td>区域锁Forbidden，WebSearch聚合OpenAI官方中文页原文，标S3</td></tr><tr><td>S09_js_async_subagents</td><td><span class='badge ok'>一手</span></td><td>30920</td><td><code>69c026173d2e</code></td><td>docs.langchain.com JS 官方文档，直连200</td></tr><tr><td>S10_async_repo</td><td><span class='badge ok'>一手</span></td><td>28321</td><td><code>80f83c65b300</code></td><td>raw.githubusercontent.com README 全文28KB，一手code</td></tr><tr><td>S11_deepagents_issues</td><td><span class='badge ok'>一手</span></td><td>8843</td><td><code>4e06b8c18fe6</code></td><td>github.com issues 页，直连200</td></tr></table></div>
+<div class='note'><b>诚实收束：</b>四家主体、四个坑——提交要立即返回句柄、中途要能改能砍、句柄不能随上下文压缩丢失、跑完要主动喊一声。本仓 15 道门禁从没量过后台委派生命周期，这道门会拦，才编译。</div>
+<footer>SVL Agent · §69 · 11 来源 SHA256 锁存 + 预注册 5f3439656311… + 门预注册 0b78ad897380… · 后验分离 · verdict 零漂移 · 106 KB / 467 tests</footer>
+</div></body></html>
