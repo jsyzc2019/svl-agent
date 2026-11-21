@@ -131,6 +131,10 @@ _LAZY: dict[str, tuple[str, str]] = {
     "check_session_continuity": ("svagent.session_continuity", "check_session_continuity"),
     "SessionContinuityVerdict": ("svagent.session_continuity", "SessionContinuityVerdict"),
     "session_continuity_live_regression": ("svagent.session_continuity", "live_regression"),
+    # 记忆内容质量治理门禁（§68：从22来源记忆生命周期谱系编译——选择/整理/非破坏）
+    "check_memory_curation": ("svagent.memory_curation", "check_memory_curation"),
+    "MemoryCurationVerdict": ("svagent.memory_curation", "MemoryCurationVerdict"),
+    "memory_curation_live_regression": ("svagent.memory_curation", "live_regression"),
 }
 
 

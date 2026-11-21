@@ -1,0 +1,10 @@
+[证据等级: 一手全文(WebFetch直取gist成功)]
+Title: LLM Wiki (karpathy, gist 442a6bf5, 2026-04-04)
+核心思想: 区别于RAG每次从原始文档重新发现知识——LLM增量构建并维护一个持久wiki(结构化互链的markdown文件),位于用户与原始来源之间。新来源加入时,LLM读取、抽取关键信息、整合进现有wiki(更新实体页、修订主题摘要、标注新数据与旧断言矛盾、强化或挑战演进中的综合)。知识编译一次然后保持最新,不是每次查询重新推导。"wiki is a persistent, compounding artifact."
+三层架构: Raw sources(不可变,source of truth) / The wiki(LLM拥有的生成层,创建页/更新/维护交叉引用/保持一致) / The schema(CLAUDE.md/AGENTS.md,告诉LLM结构与约定与工作流,你与LLM共同演进)。
+三类操作: Ingest(单源可能触及10-15个wiki页;作者偏好逐个ingest并保持参与) / Query(答案可回填为wiki新页,探索复利,LINT) / Lint(周期性健康检查:页间矛盾、被新源取代的过时声明、无入链孤儿页、提及但无专页的概念、缺失交叉引用、可web搜索填补的数据缺口)。
+两个特殊文件: index.md(内容导向目录,~100源/数百页规模够用,免embedding RAG) / log.md(时间线append-only,统一前缀## [date] ingest|... 便于unix工具解析)。
+CLI(可选): qmd本地混合BM25/vector搜索+LLM重排,CLI+MCP。
+Why works: 维护负担是知识库失败的根因(人类放弃wiki因维护成本增长快于价值);LLMs不会无聊/不忘更新交叉引用/一次碰15文件,维护成本近零。
+谱系: 呼应Vannevar Bush 1945 Memex(私人策划知识库+文档间联想路径,文档间连接与文档同等有价值)。
+Note: 文档刻意抽象,描述pattern非具体实现,模块化可选。

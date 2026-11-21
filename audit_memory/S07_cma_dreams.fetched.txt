@@ -1,0 +1,6 @@
+[证据等级: 二手转述(platform.claude.com区域锁重定向app-unavailable-in-region; 内容来自WebSearch聚合官方文档片段+github镜像,含原文引用; 标S3)]
+Title: Dreams (Claude Managed Agents)
+核心(原文引用): "Dreaming is a research preview feature." "Agents write to their memory stores as they work, but these writes are local and incremental: over many sessions a memory store accumulates duplicates, contradictions, and stale entries. Dreams let Claude clean that up. A dream reads an existing memory store alongside past session transcripts, then produces a new, reorganized memory store: duplicates merged, stale or contradicted entries replaced with the latest value, and new insights surfaced. The input store is never modified, so you can review the output and discard it if you don't like the result."
+机制: 异步job, 输入=已有memory store + 1~100个sessions; 输出=独立的新memory store(非破坏性)。beta header: managed-agents-2026-04-01 + dreaming-2026-04-21。状态机 pending/running/completed/failed/canceled。
+命名来源: 明确类比海马体在生物睡眠中的记忆巩固(第三方LTM策略文档佐证: "Named by Anthropic as a deliberate reference to hippocampal memory consolidation during biological sleep")。
+ Harvey(法律AI)报告 Dreaming+Outcomes 约6倍任务完成率提升(self-reported厂商案例 May2026)。

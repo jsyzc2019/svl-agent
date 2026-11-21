@@ -1,0 +1,1280 @@
+Mechanisms of systems memory consolidation during sleep | Nature Neuroscience
+Skip to main content
+Thank you for visiting nature.com. You are using a browser version with limited support for CSS. To obtain
+            the best experience, we recommend you use a more up to date browser (or turn off compatibility mode in
+            Internet Explorer). In the meantime, to ensure continued support, we are displaying the site without styles
+            and JavaScript.
+Advertisement
+View all journals
+Saved research
+Search
+Account
+Log in
+Content
+Explore content
+About
+the journal
+Publish
+with us
+Subscribe
+Sign up for alerts
+RSS feed
+Review Article
+Published:
+26 August 2019
+Mechanisms of systems memory consolidation during sleep
+Jens G. Klinzing
+ORCID:
+orcid.org/0000-0002-7012-096X
+1
+,
+2
+,
+Niels Niethard
+ORCID:
+orcid.org/0000-0001-7939-1021
+1
+&
+Jan Born
+ORCID:
+orcid.org/0000-0002-1847-6248
+1
+,
+2
+Nature Neuroscience
+volume
+22
+,
+pages
+1598–1610 (
+2019
+)
+Cite this article
+Save article
+View saved research
+80k
+Accesses
+1290
+Citations
+409
+Altmetric
+Metrics
+details
+A
+Publisher Correction
+to this article was published on 11 September 2019
+This article has been
+updated
+Abstract
+Long-term memory formation is a major function of sleep. Based on evidence from neurophysiological and behavioral studies mainly in humans and rodents, we consider the formation of long-term memory during sleep as an active systems consolidation process that is embedded in a process of global synaptic downscaling. Repeated neuronal replay of representations originating from the hippocampus during slow-wave sleep leads to a gradual transformation and integration of representations in neocortical networks. We highlight three features of this process: (i) hippocampal replay that, by capturing episodic memory aspects, drives consolidation of both hippocampus-dependent and non-hippocampus-dependent memory; (ii) brain oscillations hallmarking slow-wave and rapid-eye movement sleep that provide mechanisms for regulating both information flow across distant brain networks and local synaptic plasticity; and (iii) qualitative transformations of memories during systems consolidation resulting in abstracted, gist-like representations.
+This is a preview of subscription content,
+access via your institution
+Access options
+Access through your institution
+Access Nature and 54 other Nature Portfolio journals
+Get Nature+, our best-value online-access subscription
+32.70 €
+/ 30 days
+cancel any time
+Learn more
+Subscription info for Chinese customers
+We have a dedicated website for our Chinese customers. Please go to
+naturechina.com
+to subscribe to this journal.
+Go to naturechina.com
+Buy this article
+Purchase on SpringerLink
+Instant access to the full article PDF.
+39,95 €
+Prices may be subject to local taxes which are calculated during checkout
+Fig. 1: Memory reactivations strengthen neocortical representations.
+Fig. 2: Sleep oscillations regulating systems consolidation.
+Fig. 3: Conditions of facilitated synaptic plasticity in cortical pyramidal cells when spindles couple with slow oscillation.
+Fig. 4: Sleep supports the abstraction of object categories in infants.
+Similar content being viewed by others
+Spatial memory performance is associated with region-specific coordination of hippocampo-cortical sleep oscillations
+Article
+Open access
+19 May 2026
+Augmenting hippocampal–prefrontal neuronal synchrony during sleep enhances memory consolidation in humans
+Article
+Open access
+01 June 2023
+Impact of background input on memory consolidation
+Article
+Open access
+10 October 2024
+Explore related subjects
+Discover the latest articles and news in related subjects.
+Circadian rhythms and sleep
+Learning and memory
+Neural Dynamics and Cognitive Processing During Sleep
+Change history
+11 September 2019
+An amendment to this paper has been published and can be accessed via a link at the top of the paper.
+References
+Jenkins, J. G. & Dallenbach, K. M. Obliviscence during sleep and waking.
+Am. J. Psychol.
+35
+, 605–612 (1924).
+Google Scholar
+Diekelmann, S. & Born, J. The memory function of sleep.
+Nat. Rev. Neurosci.
+11
+, 114–126 (2010).
+CAS
+PubMed
+Google Scholar
+Rasch, B. & Born, J. About sleep’s role in memory.
+Physiol. Rev.
+93
+, 681–766 (2013).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Dudai, Y. The restless engram: consolidations never end.
+Annu. Rev. Neurosci.
+35
+, 227–247 (2012).
+CAS
+PubMed
+Google Scholar
+Lewis, P. A. & Durrant, S. J. Overlapping memory replay during sleep builds cognitive schemata.
+Trends Cogn. Sci.
+15
+, 343–351 (2011).
+PubMed
+Google Scholar
+Nadel, L. & Moscovitch, M. Memory consolidation, retrograde amnesia and the hippocampal complex.
+Curr. Opin. Neurobiol.
+7
+, 217–227 (1997).
+CAS
+PubMed
+Google Scholar
+McClelland, J. L., McNaughton, B. L. & O’Reilly, R. C. Why there are complementary learning systems in the hippocampus and neocortex: insights from the successes and failures of connectionist models of learning and memory.
+Psychol. Rev.
+102
+, 419–457 (1995).
+PubMed
+Google Scholar
+Kumaran, D., Hassabis, D. & McClelland, J. L. What learning systems do intelligent agents need? Complementary Learning Systems Theory updated.
+Trends Cogn. Sci.
+20
+, 512–534 (2016).
+PubMed
+Google Scholar
+Gais, S. et al. Sleep transforms the cerebral trace of declarative memories.
+Proc. Natl Acad. Sci. USA
+104
+, 18778–18783 (2007).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Takashima, A. et al. Shift from hippocampal to neocortical centered retrieval network with consolidation.
+J. Neurosci.
+29
+, 10087–10093 (2009).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Squire, L. R. Memory and the hippocampus: a synthesis from findings with rats, monkeys, and humans.
+Psychol. Rev.
+99
+, 195–231 (1992).
+CAS
+PubMed
+Google Scholar
+Sawangjit, A. et al. The hippocampus is crucial for forming non-hippocampal long-term memory during sleep.
+Nature
+564
+, 109–113 (2018).
+CAS
+PubMed
+Google Scholar
+King, B. R., Hoedlmoser, K., Hirschauer, F., Dolfen, N. & Albouy, G. Sleeping on the motor engram: The multifaceted nature of sleep-related motor memory consolidation.
+Neurosci. Biobehav. Rev.
+80
+, 1–22 (2017).
+PubMed
+Google Scholar
+O’Neill, J., Pleydell-Bouverie, B., Dupret, D. & Csicsvari, J. Play it again: reactivation of waking experience and memory.
+Trends Neurosci.
+33
+, 220–229 (2010).
+PubMed
+Google Scholar
+Atherton, L. A., Dupret, D. & Mellor, J. R. Memory trace replay: the shaping of memory consolidation by neuromodulation.
+Trends Neurosci.
+38
+, 560–570 (2015).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Pavlides, C. & Winson, J. Influences of hippocampal place cell firing in the awake state on the activity of these cells during subsequent sleep episodes.
+J. Neurosci.
+9
+, 2907–2918 (1989).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Wilson, M. A. & McNaughton, B. L. Reactivation of hippocampal ensemble memories during sleep.
+Science
+265
+, 676–679 (1994).
+CAS
+PubMed
+Google Scholar
+Skaggs, W. E. & McNaughton, B. L. Replay of neuronal firing sequences in rat hippocampus during sleep following spatial experience.
+Science
+271
+, 1870–1873 (1996).
+CAS
+PubMed
+Google Scholar
+Ji, D. & Wilson, M. A. Coordinated memory replay in the visual cortex and hippocampus during sleep.
+Nat. Neurosci.
+10
+, 100–107 (2007).
+CAS
+PubMed
+Google Scholar
+Kudrimoti, H. S., Barnes, C. A. & McNaughton, B. L. Reactivation of hippocampal cell assemblies: effects of behavioral state, experience, and EEG dynamics.
+J. Neurosci.
+19
+, 4090–4101 (1999).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Diba, K. & Buzsáki, G. Forward and reverse hippocampal place-cell sequences during ripples.
+Nat. Neurosci.
+10
+, 1241–1242 (2007).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Girardeau, G., Benchenane, K., Wiener, S. I., Buzsáki, G. & Zugaro, M. B. Selective suppression of hippocampal ripples impairs spatial memory.
+Nat. Neurosci.
+12
+, 1222–1223 (2009).
+CAS
+PubMed
+Google Scholar
+Louie, K. & Wilson, M. A. Temporally structured replay of awake hippocampal ensemble activity during rapid eye movement sleep.
+Neuron
+29
+, 145–156 (2001).
+CAS
+PubMed
+Google Scholar
+Piantoni, G., Van Der Werf, Y. D., Jensen, O. & Van Someren, E. J. W. Memory traces of long-range coordinated oscillations in the sleeping human brain.
+Hum. Brain Mapp.
+36
+, 67–84 (2015).
+PubMed
+Google Scholar
+Schönauer, M. et al. Decoding material-specific memory reprocessing during sleep in humans.
+Nat. Commun.
+8
+, 15404 (2017).
+PubMed
+PubMed Central
+Google Scholar
+Zhang, H., Fell, J. & Axmacher, N. Electrophysiological mechanisms of human memory consolidation.
+Nat. Commun.
+9
+, 4103 (2018).
+PubMed
+PubMed Central
+Google Scholar
+Peyrache, A., Khamassi, M., Benchenane, K., Wiener, S. I. & Battaglia, F. P. Replay of rule-learning related neural patterns in the prefrontal cortex during sleep.
+Nat. Neurosci.
+12
+, 919–926 (2009).
+CAS
+PubMed
+Google Scholar
+Wilber, A. A., Skelin, I., Wu, W. & McNaughton, B. L. Laminar organization of encoding and memory reactivation in the parietal cortex.
+Neuron
+95
+, 1406–1419.e5 (2017).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Gulati, T., Ramanathan, D. S., Wong, C. C. & Ganguly, K. Reactivation of emergent task-related ensembles during slow-wave sleep after neuroprosthetic learning.
+Nat. Neurosci.
+17
+, 1107–1113 (2014).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+O’Neill, J., Boccara, C. N., Stella, F., Schoenenberger, P. & Csicsvari, J. Superficial layers of the medial entorhinal cortex replay independently of the hippocampus.
+Science
+355
+, 184–188 (2017).
+PubMed
+Google Scholar
+Lansink, C. S., Goltstein, P. M., Lankelma, J. V., McNaughton, B. L. & Pennartz, C. M. Hippocampus leads ventral striatum in replay of place-reward information.
+PLoS Biol.
+7
+, e1000173 (2009).
+PubMed
+PubMed Central
+Google Scholar
+Valdés, J. L., McNaughton, B. L. & Fellous, J.-M. Offline reactivation of experience-dependent neuronal firing patterns in the rat ventral tegmental area.
+J. Neurophysiol.
+114
+, 1183–1195 (2015).
+PubMed
+PubMed Central
+Google Scholar
+Gomperts, S. N., Kloosterman, F. & Wilson, M. A. VTA neurons coordinate with the hippocampal reactivation of spatial experience.
+eLife
+4
+, 1–22 (2015).
+Google Scholar
+Qin, Y.-L., McNaughton, B. L., Skaggs, W. E. & Barnes, C. A. Memory reprocessing in corticocortical and hippocampocortical neuronal ensembles.
+Philos. Trans. R. Soc. Lond. B Biol. Sci.
+352
+, 1525–1533 (1997).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Girardeau, G., Inema, I. & Buzsáki, G. Reactivations of emotional memory in the hippocampus-amygdala system during sleep.
+Nat. Neurosci.
+20
+, 1634–1642 (2017).
+CAS
+PubMed
+Google Scholar
+Hoffman, K. L. & McNaughton, B. L. Coordinated reactivation of distributed memory traces in primate neocortex.
+Science
+297
+, 2070–2073 (2002).
+CAS
+PubMed
+Google Scholar
+Hasselmo, M. E. & McGaughy, J. High acetylcholine levels set circuit dynamics for attention and encoding and low acetylcholine levels set dynamics for consolidation.
+Prog. Brain Res.
+145
+, 207–231 (2004).
+CAS
+PubMed
+Google Scholar
+Rasch, B. H., Born, J. & Gais, S. Combined blockade of cholinergic receptors shifts the brain from stimulus encoding to memory consolidation.
+J. Cogn. Neurosci.
+18
+, 793–802 (2006).
+PubMed
+Google Scholar
+Buzsáki, G. The hippocampo-neocortical dialogue.
+Cereb. Cortex
+6
+, 81–92 (1996).
+PubMed
+Google Scholar
+Vaz, A. P., Inati, S. K., Brunel, N. & Zaghloul, K. A. Coupled ripple oscillations between the medial temporal lobe and neocortex retrieve human memory.
+Science
+363
+, 975–978 (2019).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Brodt, S. et al. Fast track to the neocortex: A memory engram in the posterior parietal cortex.
+Science
+362
+, 1045–1048 (2018).
+CAS
+PubMed
+Google Scholar
+O’Neill, J., Senior, T. J., Allen, K., Huxter, J. R. & Csicsvari, J. Reactivation of experience-dependent cell assembly patterns in the hippocampus.
+Nat. Neurosci.
+11
+, 209–215 (2008).
+PubMed
+Google Scholar
+Cheng, S. & Frank, L. M. New experiences enhance coordinated neural activity in the hippocampus.
+Neuron
+57
+, 303–313 (2008).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Giri, B., Miyawaki, H., Mizuseki, K., Cheng, S. & Diba, K. Hippocampal reactivation extends for several hours following novel experience.
+J. Neurosci.
+39
+, 866–875 (2019).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Singer, A. C. & Frank, L. M. Rewarded outcomes enhance reactivation of experience in the hippocampus.
+Neuron
+64
+, 910–921 (2009).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Cohen, N. et al. Peri-encoding predictors of memory encoding and consolidation.
+Neurosci. Biobehav. Rev.
+50
+, 128–142 (2015).
+PubMed
+Google Scholar
+Benchenane, K. et al. Coherent theta oscillations and reorganization of spike timing in the hippocampal- prefrontal network upon learning.
+Neuron
+66
+, 921–936 (2010).
+CAS
+PubMed
+Google Scholar
+Redondo, R. L. & Morris, R. G. M. Making memories last: the synaptic tagging and capture hypothesis.
+Nat. Rev. Neurosci.
+12
+, 17–30 (2011).
+CAS
+PubMed
+Google Scholar
+McNamara, C. G., Tejero-Cantero, Á., Trouche, S., Campo-Urriza, N. & Dupret, D. Dopaminergic neurons promote hippocampal reactivation and spatial memory persistence.
+Nat. Neurosci.
+17
+, 1658–1660 (2014).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+de Lavilléon, G., Lacroix, M. M., Rondi-Reig, L. & Benchenane, K. Explicit memory creation during sleep demonstrates a causal role of place cells in navigation.
+Nat. Neurosci.
+18
+, 493–495 (2015).
+PubMed
+Google Scholar
+Puentes-Mestril, C. & Aton, S. J. Linking network activity to synaptic plasticity during sleep: hypotheses and recent data.
+Front. Neural Circuits
+11
+, 61 (2017).
+PubMed
+PubMed Central
+Google Scholar
+Tononi, G. & Cirelli, C. Sleep and the price of plasticity: from synaptic and cellular homeostasis to memory consolidation and integration.
+Neuron
+81
+, 12–34 (2014).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+de Vivo, L. et al. Ultrastructural evidence for synaptic scaling across the wake/sleep cycle.
+Science
+355
+, 507–510 (2017).
+PubMed
+PubMed Central
+Google Scholar
+Vyazovskiy, V. V., Cirelli, C., Pfister-Genskow, M., Faraguna, U. & Tononi, G. Molecular and electrophysiological evidence for net synaptic potentiation in wake and depression in sleep.
+Nat. Neurosci.
+11
+, 200–208 (2008).
+CAS
+PubMed
+Google Scholar
+Diering, G. H. et al. Homer1a drives homeostatic scaling-down of excitatory synapses during sleep.
+Science
+355
+, 511–515 (2017).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Vyazovskiy, V. V. et al. Cortical firing and sleep homeostasis.
+Neuron
+63
+, 865–878 (2009).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Grosmark, A. D., Mizuseki, K., Pastalkova, E., Diba, K. & Buzsáki, G. REM sleep reorganizes hippocampal excitability.
+Neuron
+75
+, 1001–1007 (2012).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Miyawaki, H. & Diba, K. Regulation of hippocampal firing by network oscillations during sleep.
+Curr. Biol.
+26
+, 893–902 (2016).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Huber, R. et al. Human cortical excitability increases with time awake.
+Cereb. Cortex
+23
+, 332–338 (2013).
+PubMed
+Google Scholar
+Kuhn, M. et al. Sleep recalibrates homeostatic and associative synaptic plasticity in the human cortex.
+Nat. Commun.
+7
+, 12455 (2016).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Niethard, N. et al. Sleep-stage-specific regulation of cortical excitation and inhibition.
+Curr. Biol.
+26
+, 2739–2749 (2016).
+CAS
+PubMed
+Google Scholar
+Yang, G. et al. Sleep promotes branch-specific formation of dendritic spines after learning.
+Science
+344
+, 1173–1178 (2014).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Li, W., Ma, L., Yang, G. & Gan, W.-B. REM sleep selectively prunes and maintains new synapses in development and learning.
+Nat. Neurosci.
+20
+, 427–437 (2017).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Frank, M. G. Sleep and plasticity in the visual cortex: more than meets the eye.
+Curr. Opin. Neurobiol.
+44
+, 8–12 (2017).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Huber, R. et al. Arm immobilization causes cortical plastic changes and locally decreases sleep slow wave activity.
+Nat. Neurosci.
+9
+, 1169–1176 (2006).
+CAS
+PubMed
+Google Scholar
+Chauvette, S., Seigneur, J. & Timofeev, I. Sleep oscillations in the thalamocortical system induce long-term neuronal plasticity.
+Neuron
+75
+, 1105–1113 (2012).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Watson, B. O., Levenstein, D., Greene, J. P., Gelinas, J. N. & Buzsáki, G. Network homeostasis and state dynamics of neocortical sleep.
+Neuron
+90
+, 839–852 (2016).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Kastellakis, G., Cai, D. J., Mednick, S. C., Silva, A. J. & Poirazi, P. Synaptic clustering within dendrites: an emerging theory of memory formation.
+Prog. Neurobiol.
+126
+, 19–35 (2015).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Siegel, M., Donner, T. H. & Engel, A. K. Spectral fingerprints of large-scale neuronal interactions.
+Nat. Rev. Neurosci.
+13
+, 121–134 (2012).
+CAS
+PubMed
+Google Scholar
+Helfrich, R. F., Mander, B. A., Jagust, W. J., Knight, R. T. & Walker, M. P. Old brains come uncoupled in sleep: Slow wave-spindle synchrony, brain atrophy, and forgetting.
+Neuron
+97
+, 221–230.e4 (2018).
+CAS
+PubMed
+Google Scholar
+Latchoumane, C. V., Ngo, H.-V. V., Born, J. & Shin, H.-S. Thalamic spindles promote memory formation during sleep through triple phase-locking of cortical, thalamic, and hippocampal rhythms.
+Neuron
+95
+, 424–435.e6 (2017).
+CAS
+PubMed
+Google Scholar
+Massimini, M., Huber, R., Ferrarelli, F., Hill, S. & Tononi, G. The sleep slow oscillation as a traveling wave.
+J. Neurosci.
+24
+, 6862–6870 (2004).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Nir, Y. et al. Regional slow waves and spindles in human sleep.
+Neuron
+70
+, 153–169 (2011).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Wierzynski, C. M., Lubenov, E. V., Gu, M. & Siapas, A. G. State-dependent spike-timing relationships between hippocampal and prefrontal circuits during sleep.
+Neuron
+61
+, 587–596 (2009).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Marshall, L., Helgadóttir, H., Mölle, M. & Born, J. Boosting slow oscillations during sleep potentiates memory.
+Nature
+444
+, 610–613 (2006).
+CAS
+PubMed
+Google Scholar
+Ngo, H.-V. V., Martinetz, T., Born, J. & Mölle, M. Auditory closed-loop stimulation of the sleep slow oscillation enhances memory.
+Neuron
+78
+, 545–553 (2013).
+CAS
+PubMed
+Google Scholar
+Perrault, A. A. et al. Whole-night continuous rocking entrains spontaneous neural oscillations with benefits for sleep and memory.
+Curr. Biol.
+29
+, 402–411.e3 (2019).
+CAS
+PubMed
+Google Scholar
+Varela, C., Kumar, S., Yang, J. Y. & Wilson, M. A. Anatomical substrates for direct interactions between hippocampus, medial prefrontal cortex, and the thalamic nucleus reuniens.
+Brain Struct. Funct.
+219
+, 911–929 (2014).
+CAS
+PubMed
+Google Scholar
+Gais, S., Mölle, M., Helms, K. & Born, J. Learning-dependent increases in sleep spindle density.
+J. Neurosci.
+22
+, 6830–6834 (2002).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Friedrich, M., Wilhelm, I., Born, J. & Friederici, A. D. Generalization of word meanings during infant sleep.
+Nat. Commun.
+6
+, 6004 (2015).
+CAS
+PubMed
+Google Scholar
+Bergmann, T. O., Mölle, M., Diedrichs, J., Born, J. & Siebner, H. R. Sleep spindle-related reactivation of category-specific cortical regions after learning face-scene associations.
+Neuroimage
+59
+, 2733–2742 (2012).
+PubMed
+Google Scholar
+Rosanova, M. & Ulrich, D. Pattern-specific associative long-term potentiation induced by a sleep spindle-related spike train.
+J. Neurosci.
+25
+, 9398–9405 (2005).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Seibt, J. et al. Cortical dendritic activity correlates with spindle-rich oscillations during sleep in rodents.
+Nat. Commun.
+8
+, 684 (2017).
+PubMed
+PubMed Central
+Google Scholar
+Almeida-Filho, D. G., Queiroz, C. M. & Ribeiro, S. Memory corticalization triggered by REM sleep: mechanisms of cellular and systems consolidation.
+Cell. Mol. Life Sci.
+75
+, 3715–3740 (2018).
+CAS
+PubMed
+Google Scholar
+Steriade, M. Grouping of brain rhythms in corticothalamic systems.
+Neuroscience
+137
+, 1087–1106 (2006).
+CAS
+PubMed
+Google Scholar
+Staresina, B. P. et al. Hierarchical nesting of slow oscillations, spindles and ripples in the human hippocampus during sleep.
+Nat. Neurosci.
+18
+, 1679–1686 (2015).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Mölle, M., Bergmann, T. O., Marshall, L. & Born, J. Fast and slow spindles during the sleep slow oscillation: disparate coalescence and engagement in memory processing.
+Sleep
+34
+, 1411–1421 (2011).
+PubMed
+PubMed Central
+Google Scholar
+Niethard, N., Ngo, H.-V. V., Ehrlich, I. & Born, J. Cortical circuit activity underlying sleep slow oscillations and spindles.
+Proc. Natl Acad. Sci. USA
+115
+, E9220–E9229 (2018).
+PubMed
+PubMed Central
+Google Scholar
+Ngo, H.-V. et al. Driving sleep slow oscillations by auditory closed-loop stimulation-a self-limiting process.
+J. Neurosci.
+35
+, 6630–6638 (2015).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+González-Rueda, A., Pedrosa, V., Feord, R. C., Clopath, C. & Paulsen, O. Activity-dependent downscaling of subthreshold synaptic inputs during slow-wave-sleep-like activity in vivo.
+Neuron
+97
+, 1244–1252.e5 (2018).
+PubMed
+PubMed Central
+Google Scholar
+Ladenbauer, J. et al. Promoting sleep oscillations and their functional coupling by transcranial stimulation enhances memory consolidation in mild cognitive impairment.
+J. Neurosci.
+37
+, 7111–7124 (2017).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Buzsáki, G. Hippocampal sharp wave-ripple: A cognitive biomarker for episodic memory and planning.
+Hippocampus
+25
+, 1073–1188 (2015).
+PubMed
+PubMed Central
+Google Scholar
+Norimoto, H. et al. Hippocampal ripples down-regulate synapses.
+Science
+359
+, 1524–1527 (2018).
+CAS
+PubMed
+Google Scholar
+Khodagholy, D., Gelinas, J. N. & Buzsáki, G. Learning-enhanced coupling between ripple oscillations in association cortices and hippocampus.
+Science
+358
+, 369–372 (2017).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Sirota, A., Csicsvari, J., Buhl, D. & Buzsáki, G. Communication between neocortex and hippocampus during sleep in rodents.
+Proc. Natl Acad. Sci. USA
+100
+, 2065–2069 (2003).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Maingret, N., Girardeau, G., Todorova, R., Goutierre, M. & Zugaro, M. Hippocampo-cortical coupling mediates memory consolidation during sleep.
+Nat. Neurosci.
+19
+, 959–964 (2016).
+CAS
+PubMed
+Google Scholar
+Ngo, H.-V. V., Claussen, J. C., Born, J. & Mölle, M. Induction of slow oscillations by rhythmic acoustic stimulation.
+J. Sleep. Res.
+22
+, 22–31 (2013).
+PubMed
+Google Scholar
+Bal, T. & McCormick, D. A. What stops synchronized thalamocortical oscillations?
+Neuron
+17
+, 297–308 (1996).
+CAS
+PubMed
+Google Scholar
+Rothschild, G., Eban, E. & Frank, L. M. A cortical-hippocampal-cortical loop of information processing during memory consolidation.
+Nat. Neurosci.
+20
+, 251–259 (2017).
+CAS
+PubMed
+Google Scholar
+Bendor, D. & Wilson, M. A. Biasing the content of hippocampal replay during sleep.
+Nat. Neurosci.
+15
+, 1439–1444 (2012).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Wang, D. V. & Ikemoto, S. Coordinated interaction between hippocampal sharp-wave ripples and anterior cingulate unit activity.
+J. Neurosci.
+36
+, 10663–10672 (2016).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Cantero, J. L. et al. Sleep-dependent theta oscillations in the human hippocampus and neocortex.
+J. Neurosci.
+23
+, 10897–10903 (2003).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Nishida, M., Pearsall, J., Buckner, R. L. & Walker, M. P. REM sleep, prefrontal theta, and the consolidation of human emotional memory.
+Cereb. Cortex
+19
+, 1158–1166 (2009).
+PubMed
+Google Scholar
+Sopp, M. R., Michael, T., Weeß, H.-G. & Mecklinger, A. Remembering specific features of emotional events across time: The role of REM sleep and prefrontal theta oscillations.
+Cogn. Affect. Behav. Neurosci.
+17
+, 1186–1209 (2017).
+PubMed
+Google Scholar
+Popa, D., Duvarci, S., Popescu, A. T., Léna, C. & Paré, D. Coherent amygdalocortical theta promotes fear memory consolidation during paradoxical sleep.
+Proc. Natl Acad. Sci. USA
+107
+, 6516–6519 (2010).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Ognjanovski, N., Broussard, C., Zochowski, M. & Aton, S. J. Hippocampal network oscillations rescue memory consolidation deficits caused by sleep loss.
+Cereb. Cortex
+28
+, 3711–3723 (2018).
+PubMed
+PubMed Central
+Google Scholar
+Poe, G. R., Nitz, D. A., McNaughton, B. L. & Barnes, C. A. Experience-dependent phase-reversal of hippocampal neuron firing during REM sleep.
+Brain Res.
+855
+, 176–180 (2000).
+CAS
+PubMed
+Google Scholar
+Boyce, R., Glasgow, S. D., Williams, S. & Adamantidis, A. Causal evidence for the role of REM sleep theta rhythm in contextual memory consolidation.
+Science
+352
+, 812–816 (2016).
+CAS
+PubMed
+Google Scholar
+Giuditta, A. et al. The sequential hypothesis of the function of sleep.
+Behav. Brain Res.
+69
+, 157–166 (1995).
+CAS
+PubMed
+Google Scholar
+Ribeiro, S. et al. Novel experience induces persistent sleep-dependent plasticity in the cortex but not in the hippocampus.
+Front. Neurosci.
+1
+, 43–55 (2007).
+PubMed
+PubMed Central
+Google Scholar
+Crunelli, V. et al. Dual function of thalamic low-vigilance state oscillations: rhythm-regulation and plasticity.
+Nat. Rev. Neurosci.
+19
+, 107–118 (2018).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Scholle, S., Zwacka, G. & Scholle, H. C. Sleep spindle evolution from infancy to adolescence.
+Clin. Neurophysiol.
+118
+, 1525–1531 (2007).
+CAS
+PubMed
+Google Scholar
+Khazipov, R. et al. Early motor activity drives spindle bursts in the developing somatosensory cortex.
+Nature
+432
+, 758–761 (2004).
+CAS
+PubMed
+Google Scholar
+Wei, Y., Krishnan, G. P., Komarov, M. & Bazhenov, M. Differential roles of sleep spindles and sleep slow oscillations in memory consolidation.
+PLOS Comput. Biol.
+14
+, e1006322 (2018).
+PubMed
+PubMed Central
+Google Scholar
+Huber, R., Ghilardi, M. F., Massimini, M. & Tononi, G. Local sleep and learning.
+Nature
+430
+, 78–81 (2004).
+CAS
+PubMed
+Google Scholar
+Klinzing, J. G. et al. Spindle activity phase-locked to sleep slow oscillations.
+Neuroimage
+134
+, 607–616 (2016).
+PubMed
+Google Scholar
+Durkin, J. et al. Cortically coordinated NREM thalamocortical oscillations play an essential, instructive role in visual system plasticity.
+Proc. Natl Acad. Sci. USA
+114
+, 10485–10490 (2017).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Chen, Z., Wimmer, R. D., Wilson, M. A. & Halassa, M. M. Thalamic circuit mechanisms link sensory processing in sleep and attention.
+Front. Neural Circuits
+9
+, 83 (2016).
+PubMed
+PubMed Central
+Google Scholar
+Halassa, M. M. et al. State-dependent architecture of thalamic reticular subnetworks.
+Cell
+158
+, 808–821 (2014).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Wimmer, R. D. et al. Thalamic control of sensory selection in divided attention.
+Nature
+526
+, 705–709 (2015).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Clemente-Perez, A. et al. Distinct thalamic reticular cell types differentially modulate normal and pathological cortical rhythms.
+Cell Rep.
+19
+, 2130–2142 (2017).
+CAS
+PubMed
+Google Scholar
+Ahissar, M. & Hochstein, S. The reverse hierarchy theory of visual perceptual learning.
+Trends Cogn. Sci.
+8
+, 457–464 (2004).
+PubMed
+Google Scholar
+Halassa, M. M. & Kastner, S. Thalamic functions in distributed cognitive control.
+Nat. Neurosci.
+20
+, 1669–1679 (2017).
+CAS
+PubMed
+Google Scholar
+Winocur, G., Moscovitch, M. & Bontempi, B. Memory formation and long-term retention in humans and animals: convergence towards a transformation account of hippocampal-neocortical interactions.
+Neuropsychologia
+48
+, 2339–2356 (2010).
+PubMed
+Google Scholar
+Tempesta, D., Socci, V., De Gennaro, L. & Ferrara, M. Sleep and emotional processing.
+Sleep. Med. Rev.
+40
+, 183–195 (2018).
+PubMed
+Google Scholar
+Friedrich, M., Wilhelm, I., Mölle, M., Born, J. & Friederici, A. D. The sleeping infant brain anticipates development.
+Curr. Biol.
+27
+, 2374–2380.e3 (2017).
+CAS
+PubMed
+Google Scholar
+Gómez, R. L., Bootzin, R. R. & Nadel, L. Naps promote abstraction in language-learning infants.
+Psychol. Sci.
+17
+, 670–674 (2006).
+PubMed
+Google Scholar
+Schapiro, A. C. et al. Sleep benefits memory for semantic category structure while preserving exemplar-specific information.
+Sci. Rep.
+7
+, 14869 (2017).
+PubMed
+PubMed Central
+Google Scholar
+Batterink, L. J., Oudiette, D., Reber, P. J. & Paller, K. A. Sleep facilitates learning a new linguistic rule.
+Neuropsychologia
+65
+, 169–179 (2014).
+PubMed
+PubMed Central
+Google Scholar
+Wilhelm, I. et al. The sleeping child outplays the adult’s capacity to convert implicit into explicit knowledge.
+Nat. Neurosci.
+16
+, 391–393 (2013).
+CAS
+PubMed
+Google Scholar
+Lutz, N. D., Wolf, I., Hübner, S., Born, J. & Rauss, K. Sleep strengthens predictive sequence coding.
+J. Neurosci.
+38
+, 8989–9000 (2018).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Wagner, U., Gais, S., Haider, H., Verleger, R. & Born, J. Sleep inspires insight.
+Nature
+427
+, 352–355 (2004).
+CAS
+PubMed
+Google Scholar
+Cai, D. J., Mednick, S. A., Harrison, E. M., Kanady, J. C. & Mednick, S. C. REM, not incubation, improves creativity by priming associative networks.
+Proc. Natl Acad. Sci. USA
+106
+, 10130–10134 (2009).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Ellenbogen, J. M., Hu, P. T., Payne, J. D., Titone, D. & Walker, M. P. Human relational memory requires time and sleep.
+Proc. Natl Acad. Sci. USA
+104
+, 7723–7728 (2007).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Schönauer, M. et al. Sleep does not promote solving classical insight problems and magic tricks.
+Front. Hum. Neurosci.
+12
+, 72 (2018).
+PubMed
+PubMed Central
+Google Scholar
+Brodt, S., Pöhlchen, D., Täumer, E., Gais, S. & Schönauer, M. Incubation, not sleep, aids problem-solving.
+Sleep
+41
+, 1–11 (2018).
+Google Scholar
+Pardilla-Delgado, E. & Payne, J. D. The impact of sleep on true and false memory across long delays.
+Neurobiol. Learn. Mem.
+137
+, 123–133 (2017).
+PubMed
+Google Scholar
+Shaw, J. J. & Monaghan, P. Lateralised sleep spindles relate to false memory generation.
+Neuropsychologia
+107
+, 60–67 (2017).
+PubMed
+Google Scholar
+Fenn, K. M., Gallo, D. A., Margoliash, D., Roediger, H. L. III & Nusbaum, H. C. Reduced false memory after sleep.
+Learn. Mem.
+16
+, 509–513 (2009).
+PubMed
+Google Scholar
+Tse, D. et al. Schemas and memory consolidation.
+Science
+316
+, 76–82 (2007).
+CAS
+PubMed
+Google Scholar
+Inostroza, M., Binder, S. & Born, J. Sleep-dependency of episodic-like memory consolidation in rats.
+Behav. Brain Res.
+237
+, 15–22 (2013).
+PubMed
+Google Scholar
+Weber, F. D., Wang, J.-Y., Born, J. & Inostroza, M. Sleep benefits in parallel implicit and explicit measures of episodic memory.
+Learn. Mem.
+21
+, 190–198 (2014).
+PubMed
+PubMed Central
+Google Scholar
+Cairney, S. A., Durrant, S. J., Musgrove, H. & Lewis, P. A. Sleep and environmental context: interactive effects for memory.
+Exp. Brain Res.
+214
+, 83–92 (2011).
+PubMed
+Google Scholar
+Deliens, G. & Peigneux, P. One night of sleep is insufficient to achieve sleep-to-forget emotional decontextualisation processes.
+Cogn. Emot.
+28
+, 698–706 (2014).
+PubMed
+Google Scholar
+Chen, S. X., Kim, A. N., Peters, A. J. & Komiyama, T. Subtype-specific plasticity of inhibitory circuits in motor cortex during motor learning.
+Nat. Neurosci.
+18
+, 1109–1115 (2015).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Cichon, J. & Gan, W.-B. Branch-specific dendritic Ca(2+) spikes cause persistent synaptic plasticity.
+Nature
+520
+, 180–185 (2015).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Yang, G., Pan, F. & Gan, W. B. Stably maintained dendritic spines are associated with lifelong memories.
+Nature
+462
+, 920–924 (2009).
+CAS
+PubMed
+PubMed Central
+Google Scholar
+Lisman, J. & Morris, R. G. M. Memory. Why is the cortex a slow learner?
+Nature
+411
+, 248–249 (2001).
+CAS
+PubMed
+Google Scholar
+Marr, D. Simple memory: a theory for archicortex.
+Philos. Trans. R. Soc. Lond. B
+262
+, 23–81 (1971).
+CAS
+Google Scholar
+Squire, L.R., Cohen, N.J. & Nadel, L. The medial temporal region and memory consolidation: a new hypothesis. in
+Memory Consolidation: Psychobiology of Cognition
+. (eds. Weingartner, H. & Parder, E. S.) 185–210 (1984).
+Download references
+Acknowledgements
+We thank E. Bolinger for proof-reading a previous version of the manuscript. This work was supported by grants from the Deutsche Forschungsgemeinschaft (Tr-SFB 654 “Sleep and Plasticity”, SFB 1233 “Robust Vision”). We apologize to all authors whose work, although relevant, we did not mention due to space limitations.
+Author information
+Authors and Affiliations
+Institute of Medical Psychology and Behavioral Neurobiology, University of Tübingen, Tübingen, Germany
+Jens G. Klinzing, Niels Niethard & Jan Born
+Center for Integrative Neuroscience, University of Tübingen, Tübingen, Germany
+Jens G. Klinzing & Jan Born
+Authors
+Jens G. Klinzing
+View author publications
+Search author on:
+PubMed
+Google Scholar
+Niels Niethard
+View author publications
+Search author on:
+PubMed
+Google Scholar
+Jan Born
+View author publications
+Search author on:
+PubMed
+Google Scholar
+Corresponding author
+Correspondence to
+Jan Born
+.
+Ethics declarations
+Competing interests
+The authors declare no competing financial interests.
+Additional information
+Peer review information:
+Nature Neuroscience
+thanks Ken Paller, Vladyslav Vyazovskiy, and the other, anonymous, reviewer(s) for their contribution to the peer review of this work.
+Publisher’s note:
+Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.
+Rights and permissions
+Reprints and permissions
+About this article
+Cite this article
+Klinzing, J.G., Niethard, N. & Born, J. Mechanisms of systems memory consolidation during sleep.
+Nat Neurosci
+22
+, 1598–1610 (2019). https://doi.org/10.1038/s41593-019-0467-3
+Download citation
+Received
+:
+18 February 2019
+Accepted
+:
+12 July 2019
+Published
+:
+26 August 2019
+Version of record
+:
+26 August 2019
+Issue date
+:
+October 2019
+DOI
+:
+https://doi.org/10.1038/s41593-019-0467-3
+Share this article
+Anyone you share the following link with will be able to read this content:
+Get shareable link
+Sorry, a shareable link is not currently available for this article.
+Copy shareable link to clipboard
+Provided by the Springer Nature SharedIt content-sharing initiative
+Access through your institution
+Buy or subscribe
+Associated content
+Focus
+Focus on Learning and Memory
+Advertisement
+Search
+Search articles by subject, keyword or author
+Show results from
+All journals
+This journal
+Search
+Advanced search
+Quick links
+Explore articles by subject
+Find a job
+Guide to authors
+Editorial policies
+Close
+Sign up for the
+Nature Briefing
+newsletter — what matters in science, free to your inbox daily.
+Email address
+Sign up
+I agree my information will be processed in accordance with the
+Nature
+and Springer Nature Limited
+Privacy Policy
+.
+Close
+Get the most important science stories of the day, free in your inbox.
+Sign up for Nature Briefing

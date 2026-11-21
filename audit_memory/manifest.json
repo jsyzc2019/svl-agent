@@ -1,0 +1,200 @@
+[
+  {
+    "id": "S01",
+    "name": "anthropic_components",
+    "url": "https://www.anthropic.com/research/components-of-agent-memory",
+    "http": "200",
+    "bytes": 252634,
+    "title": "The components of agent memory \\ Anthropic",
+    "file": "S01_anthropic_components.html"
+  },
+  {
+    "id": "S02",
+    "name": "hippocampus_cls",
+    "url": "https://stanford.edu/~jlmcc/papers/McCMcNaughtonOReilly95.pdf",
+    "http": "200",
+    "bytes": 5038568,
+    "title": "",
+    "file": "S02_hippocampus_cls.pdf"
+  },
+  {
+    "id": "S03",
+    "name": "selective_consolidation",
+    "url": "https://www.science.org/doi/10.1126/science.adk8261",
+    "http": "403",
+    "bytes": 5710,
+    "title": "Just a moment...",
+    "file": "S03_selective_consolidation.html"
+  },
+  {
+    "id": "S04",
+    "name": "replay_rest",
+    "url": "https://www.nature.com/articles/s41467-018-06213-1",
+    "http": "200",
+    "bytes": 460424,
+    "title": "Human hippocampal replay during rest prioritizes weakly learned information and predicts m",
+    "file": "S04_replay_rest.html"
+  },
+  {
+    "id": "S05",
+    "name": "integration_ncx",
+    "url": "https://www.nature.com/articles/s41593-019-0467-3",
+    "http": "200",
+    "bytes": 538308,
+    "title": "Mechanisms of systems memory consolidation during sleep | Nature Neuroscience",
+    "file": "S05_integration_ncx.html"
+  },
+  {
+    "id": "S06",
+    "name": "sleep_time_compute",
+    "url": "https://arxiv.org/abs/2504.13171",
+    "http": "200",
+    "bytes": 43415,
+    "title": "[2504.13171] Sleep-time Compute: Beyond Inference Scaling at Test-time",
+    "file": "S06_sleep_time_compute.html"
+  },
+  {
+    "id": "S07",
+    "name": "cma_dreams",
+    "url": "https://platform.claude.com/docs/en/managed-agents/dreams",
+    "http": "200",
+    "bytes": 308715,
+    "title": "App unavailable in region | Claude by Anthropic",
+    "file": "S07_cma_dreams.html"
+  },
+  {
+    "id": "S08",
+    "name": "google_sleep",
+    "url": "https://research.google/blog/the-sleep-framework-a-new-way-for-llms-to-retain-knowledge-in-continual-learning/",
+    "http": "000",
+    "bytes": 0,
+    "title": "",
+    "file": "S08_google_sleep.html"
+  },
+  {
+    "id": "S09",
+    "name": "induction_heads",
+    "url": "https://www.anthropic.com/research/in-context-learning-and-induction-heads",
+    "http": "200",
+    "bytes": 130091,
+    "title": "In-context learning and induction heads \\ Anthropic",
+    "file": "S09_induction_heads.html"
+  },
+  {
+    "id": "S10",
+    "name": "compaction",
+    "url": "https://platform.claude.com/docs/en/build-with-claude/compaction",
+    "http": "200",
+    "bytes": 308715,
+    "title": "App unavailable in region | Claude by Anthropic",
+    "file": "S10_compaction.html"
+  },
+  {
+    "id": "S11",
+    "name": "tagging_hippocampus",
+    "url": "https://www.nature.com/articles/385533a0",
+    "http": "200",
+    "bytes": 262170,
+    "title": "Synaptic tagging and long-term potentiation | Nature",
+    "file": "S11_tagging_hippocampus.html"
+  },
+  {
+    "id": "S12",
+    "name": "memory_tool",
+    "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+    "http": "200",
+    "bytes": 308715,
+    "title": "App unavailable in region | Claude by Anthropic",
+    "file": "S12_memory_tool.html"
+  },
+  {
+    "id": "S13",
+    "name": "clbench",
+    "url": "https://continual-learning-bench.com/news/cl-bench-1-0/",
+    "http": "200",
+    "bytes": 2338,
+    "title": "Continual Learning Bench 1.0 — News",
+    "file": "S13_clbench.html"
+  },
+  {
+    "id": "S14",
+    "name": "cma_overview",
+    "url": "https://platform.claude.com/docs/en/managed-agents/overview",
+    "http": "200",
+    "bytes": 308715,
+    "title": "App unavailable in region | Claude by Anthropic",
+    "file": "S14_cma_overview.html"
+  },
+  {
+    "id": "S15",
+    "name": "cma_memory",
+    "url": "https://platform.claude.com/docs/en/managed-agents/memory",
+    "http": "200",
+    "bytes": 308715,
+    "title": "App unavailable in region | Claude by Anthropic",
+    "file": "S15_cma_memory.html"
+  },
+  {
+    "id": "S16",
+    "name": "claude_pokemon",
+    "url": "https://www.youtube.com/watch?v=CXhYDOvgpuU",
+    "http": "000",
+    "bytes": 0,
+    "title": "",
+    "file": "S16_claude_pokemon.html"
+  },
+  {
+    "id": "S17",
+    "name": "karpathy_wiki",
+    "url": "https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f",
+    "http": "000",
+    "bytes": 0,
+    "title": "",
+    "file": "S17_karpathy_wiki.html"
+  },
+  {
+    "id": "S18",
+    "name": "harvey_labs",
+    "url": "https://github.com/harveyai/harvey-labs",
+    "http": "200",
+    "bytes": 246905,
+    "title": "GitHub - harveyai/harvey-labs: A benchmark built to evaluate and improve agent capabilitie",
+    "file": "S18_harvey_labs.html"
+  },
+  {
+    "id": "S19",
+    "name": "claude_code_memory",
+    "url": "https://code.claude.com/docs/en/memory",
+    "http": "200",
+    "bytes": 521572,
+    "title": "How Claude remembers your project - Claude Code Docs",
+    "file": "S19_claude_code_memory.html"
+  },
+  {
+    "id": "S20",
+    "name": "claude_duet",
+    "url": "https://support.claude.com/en/articles/17631495-get-started-with-claude-duet",
+    "http": "200",
+    "bytes": 239155,
+    "title": "Get started with Claude Duet | Claude Help Center",
+    "file": "S20_claude_duet.html"
+  },
+  {
+    "id": "S21",
+    "name": "dreaming_cookbook",
+    "url": "https://platform.claude.com/cookbook/managed-agents-cma-dreaming-with-a-dynamic-workflow",
+    "http": "200",
+    "bytes": 287363,
+    "title": "Dreaming with a dynamic workflow | Claude Cookbook",
+    "file": "S21_dreaming_cookbook.html"
+  },
+  {
+    "id": "S22",
+    "name": "knowledge_wiki",
+    "url": "https://github.com/anthropics/claude-quickstarts/tree/main/managed-agents/knowledge-wiki",
+    "http": "200",
+    "bytes": 252353,
+    "title": "claude-quickstarts/managed-agents/knowledge-wiki at main · anthropics/claude-quickstarts ·",
+    "file": "S22_knowledge_wiki.html"
+  }
+]

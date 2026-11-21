@@ -1,0 +1,110 @@
+{
+  "audit_id": "bitter_lesson_20261122",
+  "timestamp": "2026-11-22T05:05:57+08:00",
+  "prereg_sha256": "b0fd51e03a8fd7ec2976f27c6573a67aafb6fceb0e1458523d6913e964507a5e",
+  "sources_verified": true,
+  "judges": {
+    "V1": {
+      "verdict": "PASS",
+      "anchors": {
+        "S1": {
+          "general_methods_leverage_computation": true,
+          "search_and_learning": true,
+          "building_in_how_we_think_fails": true
+        },
+        "S2": {
+          "long_term_plan": true,
+          "not_immediate_applications": true,
+          "plans_suspect_provisional": true,
+          "heed_bitter_lesson": true
+        },
+        "S3": {
+          "openmind_cobuild": true,
+          "objective_function": true,
+          "little_red_flower": true,
+          "continual_learning": true
+        }
+      },
+      "expect": "PASS"
+    },
+    "V2": {
+      "verdict": "DOWNGRADE",
+      "lineage_chain": {
+        "S1_author_sutton": true,
+        "S2_heed_bitter_lesson": true,
+        "S3_sutton_team_openmind": true,
+        "S3_turing_award_sutton": true
+      },
+      "note": "同源谱系三粒度(哲学/纲领/落地)，按KB-STRUCT02打折，不计为三独立验证",
+      "expect": "DOWNGRADE"
+    },
+    "V3": {
+      "verdict": "UNVERIFIABLE",
+      "reason": "三篇均无公开可核代码与可复算统计量：S1立场随笔、S2研究纲领、S3 self-reported新闻。按KB-STRUCT01不套claim-vs-code复算。",
+      "not_a_defect": true,
+      "expect": "UNVERIFIABLE"
+    },
+    "V4": {
+      "verdict": "SCOPED",
+      "evidence": {
+        "self_described_plan": true,
+        "not_immediate_app": true,
+        "provisional": true,
+        "roadmap_12_steps": true
+      },
+      "note": "S2是研究纲领非成果；roadmap与四组件不得读成已实现AI(KB-AUDIT03延伸)",
+      "expect": "SCOPED"
+    },
+    "V5": {
+      "verdict": "SCOPED",
+      "promise_fulfillment": {
+        "objective_function_is_reward": true,
+        "red_flower_is_positive_reward": true,
+        "from_human_data_to_own_experience": true,
+        "continual_autonomous_learning": true,
+        "three_zones_progression": true,
+        "mostly_in_small_class": true,
+        "challenges_efficiency_cost_runtime": true
+      },
+      "note": "机制叙事对应纲领(S2)，但self-reported早期探索+无独立效果证据，不升华为'Bitter Lesson被验证'",
+      "expect": "SCOPED"
+    },
+    "V6": {
+      "verdict": "NO_NEW_GATE",
+      "rationale": [
+        "S2纲领≠成果已被KB-AUDIT03(存在≠执行)覆盖，仅维度延伸，不新增",
+        "S3 self-reported落地已被KB-STRUCT09(二手/转述不完整)与KB-RSI07(自利叙事)覆盖",
+        "三篇同源谱系三粒度，按KB-STRUCT02打折，不重复计独立验证",
+        "无代码无统计量；硬编译'落地兑现度'门禁会落成无法在外部对象会拦的叙事尺子，KB-META01不通过"
+      ],
+      "expect": "NO_NEW_GATE"
+    },
+    "V7": {
+      "verdict": "PASS",
+      "verified": [
+        "三来源一手锚点命中",
+        "同源谱系三粒度识别",
+        "S2纲领自述(计划/临时性/呼应Bitter Lesson)",
+        "S3落地机制叙事与纲领对应"
+      ],
+      "unverified": [
+        "S3机器人真实学习效果",
+        "Bitter Lesson普适正确性",
+        "Alberta roadmap任一步是否达成"
+      ],
+      "unverifiable": [
+        "S1/S2/S3无代码无复算",
+        "S3 self-reported无第三方数据"
+      ],
+      "expect": "PASS"
+    },
+    "V8": {
+      "verdict": "PASS",
+      "ast_brittle_compare_lines": [],
+      "verdict_expect_drift": {},
+      "expect": "PASS"
+    }
+  },
+  "final_decision": "加固不新增",
+  "honesty_boundary": "只判三来源哲学/纲领/叙事自洽与谱系关系，不判Bitter Lesson是否正确、roadmap是否可实现、幼儿园机器人真实学习效果。"
+}

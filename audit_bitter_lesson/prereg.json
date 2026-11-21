@@ -1,0 +1,71 @@
+{
+  "audit_id": "bitter_lesson_20261122",
+  "timestamp": "2026-11-22T05:05:57+08:00",
+  "subject": "三来源思想谱系精研：Bitter Lesson(哲学) → Alberta Plan(纲领) → 机器人幼儿园(工程落地)",
+  "sources": [
+    {"id": "S1", "name": "The Bitter Lesson", "url": "https://bitterlesson.org/", "type": "立场随笔/哲学", "locked_sha256": "70c950943749eafe5d000868052979f75e20c25a495bb800453afc8ce8b9032e"},
+    {"id": "S2", "name": "The Alberta Plan for AI Research", "url": "https://arxiv.org/abs/2208.11173", "type": "研究纲领/roadmap", "locked_sha256": "a2c24807408183960d1f56e0373744add2e7ba04b18edede3fc7a8ef48779b46"},
+    {"id": "S3", "name": "机器人在幼儿园里学着长大", "url": "https://www.beijing.gov.cn/fuwu/lqfw/gggs/202610/t20261015_4903291.html", "type": "政府新闻/self-reported工程探索", "locked_sha256": "3ebba78fc801ddf948e74e7357be09078c79bd6acd9290974cfdd66220b9ba1b"}
+  ],
+  "object_type_rule": "KB-STRUCT01：判据适配对象类型。S1立场随笔无统计量→判哲学自洽不套功效复算；S2纲领非成果→判承诺与结构自洽，不把roadmap当已实现成果(KB-AUDIT03)；S3新闻self-reported→判落地叙事与纲领承诺的对应度，不外推为效果证据。",
+  "judges": [
+    {
+      "id": "V1",
+      "name": "一手锚点真实性",
+      "rule": "三来源核心断言必须一手可定位：S1'general methods that leverage computation'+'Search and learning'+'building in how we think we think does not work'；S2'long-term plan'+'not concerned with immediate applications'+'All research plans are suspect and provisional'+'heed the bitter lesson'；S3'Openmind'+'目标函数'+'小红花'+'持续学习'。",
+      "expect": "PASS",
+      "method": "逐条子串命中已锁存txt"
+    },
+    {
+      "id": "V2",
+      "name": "谱系同源识别",
+      "rule": "三篇必须识别为同源思想谱系(Sutton)：S1作者Sutton；S2为其研究组纲领且自承heed the bitter lesson；S3为他山科技与Sutton团队Openmind共建。按KB-STRUCT02，三篇是同谱系三粒度(哲学/纲领/落地)，不得计为三个独立验证。",
+      "expect": "DOWNGRADE",
+      "method": "结构化证据链：作者/团队/引用/共建方"
+    },
+    {
+      "id": "V3",
+      "name": "claim-vs-code 适用性",
+      "rule": "三篇均无公开可核代码与可复算统计量(S1随笔、S2纲领、S3新闻)。按KB-STRUCT01，不能套claim-vs-code复算；判UNVERIFIABLE(≠造假)，并显式说明'无代码可核'是对象属性不是缺陷。",
+      "expect": "UNVERIFIABLE",
+      "method": "对象类型判定+适用性检查"
+    },
+    {
+      "id": "V4",
+      "name": "纲领≠成果",
+      "rule": "S2必须判为研究纲领而非既有成果：自述'5-10年长期计划''不关心即时应用''all research plans are suspect and provisional'。不得把12步roadmap/base agent四组件读成'已实现的AI'。对应KB-AUDIT03存在≠执行在纲领维度的延伸。",
+      "expect": "SCOPED",
+      "method": "一手自述锚点+口径限定"
+    },
+    {
+      "id": "V5",
+      "name": "落地承诺兑现度",
+      "rule": "核心可证伪判据：S3机器人幼儿园是否兑现S2纲领核心机制。兑现面：目标函数(摔倒=负反馈/趋近=小红花正向奖励)=reward-maximizing；'从人类采集数据转向自身经验持续自主学习'=experience-grounded/continual；三区域递进=能力进阶。未兑现/受限面：'大多还在小班''学习效率/成本/持续运行是挑战'→early-stage self-reported探索。判：机制叙事对应，但无独立证据证明效果，不升华成'Bitter Lesson被验证'。",
+      "expect": "SCOPED",
+      "method": "承诺-兑现对照表(mechanism narrative match)，非效果证明"
+    },
+    {
+      "id": "V6",
+      "name": "新牙候选裁决",
+      "rule": "本轮三篇是否有独立拦截动作值得编译新门禁。预判：无——(a)S2纲领≠成果、S3 self-reported落地均已被KB-AUDIT03/KB-STRUCT02/KB-STRUCT09覆盖；(b)同源谱系三粒度按KB-STRUCT02打折；(c)无代码无统计量，硬编译'落地兑现度'门禁会落成无法在外部对象会拦的叙事尺子(KB-META01不通过)。裁决加固不新增。",
+      "expect": "NO_NEW_GATE",
+      "method": "逐项对照现有KB+会拦才入测试"
+    },
+    {
+      "id": "V7",
+      "name": "诚实边界三层结论",
+      "rule": "已验证(一手锚点/谱系同源/纲领自述/机制叙事对应)、未验证(S3实际学习效果、Bitter Lesson普适性、roadmap任何一步是否达成)、不可验证(S1/S2/S3无代码无复算；S3 self-reported无第三方数据)。",
+      "expect": "PASS",
+      "method": "三层分类"
+    },
+    {
+      "id": "V8",
+      "name": "判据自审",
+      "rule": "判据自身须过：S1-S3 AST检查Compare节点无中文字面串比较(避§56 brittle根因)；检测器用ord()数值边界避免自指(§55教训)；verdict与expect零漂移；无同构误当独立验证。",
+      "expect": "PASS",
+      "method": "AST自审+expect对照"
+    }
+  ],
+  "decision_rule": "若V6认定有独立拦截动作且通过会拦才入→编译新门禁；否则加固现有KB条目、不新增不编译。",
+  "honesty_boundary": "只判三来源的哲学/纲领/叙事自洽与谱系关系，不判Bitter Lesson是否正确、不判Alberta roadmap是否可实现、不判幼儿园机器人真实学习效果(均未一手可核/self-reported)。"
+}

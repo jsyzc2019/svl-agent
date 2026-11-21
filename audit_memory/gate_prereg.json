@@ -1,0 +1,33 @@
+{
+  "gate_id": "memory_curation",
+  "function": "check_memory_curation",
+  "module": "svagent/memory_curation.py",
+  "timestamp": "2026-11-22T05:22:17+08:00",
+  "source_assertion": "长期记忆系统必须治理记忆内容质量，否则退化：S03(Science一手)'only a small fraction are retained'+清醒SPW-R标记→睡眠优先重放;S07(Dreams二手)'over many sessions a memory store accumulates duplicates, contradictions, and stale entries'+dreams去重/矛盾替换/新洞察+input store never modified;S17(Karpathy一手)wiki需lint矛盾/过时声明/孤儿页+保持复利;S02(CLS一手)新皮层慢学结构+交错防干扰=整合去噪。",
+  "independence": "本仓15道门禁无一判记忆内容质量治理：session_continuity(§65)只判跨会话状态续接(持久/真相源/单消费者/续跑/非阻塞);improvement_memory只判改进记录可证伪性(Predicted↔Observed);四要素记忆非内容去重。本门判『存进去的记忆是否是精选/已整理/非破坏』，拦截面独立。",
+  "inputs": {
+    "claim": "str — 系统名称/声称",
+    "selection": "str ∈ {yes,no,partial} — 是否有记忆选择机制(非全量写入)",
+    "consolidation": "str ∈ {yes,no,partial} — 是否有整理机制(去重/矛盾消解/过时替换/巩固)",
+    "nondestructive": "bool — 整理是否非破坏(原store不被就地覆盖,输出独立可审阅)"
+  },
+  "rules_by_priority": [
+    "R0 非枚举/非bool → flag (INVALID_INPUT; 字面串拒绝内容判定,避§56 brittle)",
+    "R1 selection=no → downgrade (MEMORY.NO_SELECTION; 全量写入无选择,违反'only small fraction retained',退化为垃圾堆)",
+    "R2 consolidation=no → downgrade (MEMORY.NO_CONSOLIDATION; 无去重/矛盾消解/过时替换,multi-session退化为duplicates+contradictions+stale)",
+    "R3 nondestructive=False → flag (MEMORY.DESTRUCTIVE; 整理就地覆盖原store,不可审阅/不可丢弃, Dreams明确input never modified)",
+    "R4 selection=partial or consolidation=partial → flag (MEMORY.PARTIAL; 覆盖不全,待核非定罪)",
+    "R5 全自洽 → ok (MEMORY.SELF_CONSISTENT; 只判机制声明自洽,不承诺记忆真的有用/检索真的命中)"
+  ],
+  "live_regression_expects": {
+    "no_selection": ["downgrade","MEMORY.NO_SELECTION"],
+    "no_consolidation": ["downgrade","MEMORY.NO_CONSOLIDATION"],
+    "destructive": ["flag","MEMORY.DESTRUCTIVE"],
+    "partial_selection": ["flag","MEMORY.PARTIAL"],
+    "partial_consolidation": ["flag","MEMORY.PARTIAL"],
+    "literal_enum": ["flag","MEMORY.INVALID_INPUT"],
+    "all_good": ["ok","MEMORY.SELF_CONSISTENT"]
+  },
+  "honesty_boundary": "只判机制声明自洽，不承诺记忆真的提升效果、检索真的命中、生物机制证成AI设计(主体错位KB-STRUCT05);self-reported数字不作独立验证(KB-RSI07);本仓同步纯函数库是判据库非运行时记忆系统,本门用于审读外部声称，遵循§58选A不接run_loop。",
+  "discipline": "语义枚举+布尔，中文锚点集中字典用键引用，判定Compare节点无中文字面串;规则优先级短路不事后加权;会拦才入(KB-META01)。"
+}

@@ -1,0 +1,7 @@
+[证据等级: 二手转述(platform.claude.com区域锁; 来自code.claude.com一手model-config片段+第三方Wiki)]
+Title: 上下文压缩 (compaction / auto-compact)
+核心: auto-compact window=上下文窗口多满时触发压缩。默认: 原生1M模型约967K token; 200K模型200K边界。优先级: CLAUDE_CODE_AUTO_COMPACT_WINDOW环境变量 > --autocompact flag > /autocompact命令 > 模型默认。范围100K-1M token。
+机制: 压缩是一次额外的模型调用(带上同system prompt/tools/history+摘要指令,结果替换历史)。warm prompt cache下压缩成本远低于context大小暗示。
+保留项: system prompt/output style重新生效,项目根CLAUDE.md/规则/auto memory从磁盘重新注入,新git status快照,plan模式计划重注入,最近触摸的最多5个文件(>5000token只给路径引用),invoked skills capped(每个5000/总25000)。原始逐轮对话消失。
+分层(第三方claude-wiki): microcompaction(连续裁剪旧tool result)→session-memory compaction(零API成本)→full compaction(API摘要,9段结构)。熔断: 连续3次失败停重试。
+/clear vs /compact: /clear免费丢弃,/compact是计费请求。

@@ -1462,7 +1462,8 @@
       "timestamp": "2026-11-21T14:49:00+08:00",
       "support": [
         "rsi_github_evidence.json README'strong and popular'+'educational only'",
-        "commentary:§29 AI检测结构性自利偏差"
+        "commentary:§29 AI检测结构性自利偏差",
+        "audit_memory/result.json:V6/V8（§68：Google SLEEP的48.9%/46.2%/AIME 79.2等与Harvey Dreaming 6x均为厂商self-reported、无独立复现，只记录不采信为独立验证；区域锁二手S07/S08/S10/S12标S3不外推一手）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -1776,7 +1777,9 @@
         "audit_dgm/evidence.json:D7 — DGM与SVL框架6处同构(archive≈知识库/self-modify≈SVL闭环/empirical-validation≈预注册判据/self-modifiability门槛≈会拦才入/踏脚石≈判据自审/objective hacking≈Goodhart),同RSI共同体判同谱系打折,不把顶会论文当框架独立验证",
         "svagent/lineage_guard.py:discount_claim — 同构打折从文字警觉编译为通用门禁：R1 循环声称 block / R2 高同构 downgrade / R3 部分 flag / R4 诚实标注 preserve；替代 rsis_framework_analysis.py:t2 的 brittle 字面串匹配；活体回归4/4",
         "audit_reveal/review_result.json:N5（§61：TAPO turn 奖励隔离与本仓 scoring_integrity 同构，同谱系打折，不因英雄所见略同虚高）",
-        "audit_always_on/result.json:V4（§65：memory 存 pointer/存在≠执行哲学/run 反复调 core loop 四处同构按 KB-STRUCT02 打折，同源不同粒度不当独立验证）"
+        "audit_always_on/result.json:V4（§65：memory 存 pointer/存在≠执行哲学/run 反复调 core loop 四处同构按 KB-STRUCT02 打折，同源不同粒度不当独立验证）",
+        "audit_bitter_lesson/result.json:V2（§67：Bitter Lesson哲学/Sutton2019→Alberta Plan研究纲领/Sutton组2022→机器人幼儿园工程落地/他山×Sutton团队Openmind2026，三篇同源谱系三粒度，按KB-STRUCT02打折不计为三独立验证；同谱 Chain 不改变印证力度）",
+        "audit_memory/result.json:V2/V7（§68：22来源记忆生命周期=Bitter谱系延伸——生物机制S02-S05/S11→AI梦境巩固S06-S08/S21隐喻复用、Karpathy wiki三操作≈本仓KB/commentary/REPO_MAP同构，按KB-STRUCT02同源三粒度打折，22篇≠22独立验证、5子主题内亦大量同源）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -1847,7 +1850,8 @@
       "support": [
         "rsi_structure_result.json:T1",
         "rsi_structure_result.json:T5",
-        "commentary:§31 大摩文主体错位"
+        "commentary:§31 大摩文主体错位",
+        "audit_memory/result.json:V6（§68：Google SLEEP官方明言sleep/dreaming terms borrow from neuroscience、Dreaming第三方称deliberate reference to hippocampal consolidation——生物机制≠AI系统有效性的证据，主体错位；不能把『海马SPW-R标记』读成『证明了AI梦境有效』）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -1947,7 +1951,8 @@
       "support": [
         "rsi_structure_amendment.json:corrections",
         "rsi_structure_evidence.json:coverage_audit",
-        "commentary:§39"
+        "commentary:§39",
+        "audit_bitter_lesson/result.json:V5（§67：机器人幼儿园政府新闻self-reported落地——机制叙事对应纲领(目标函数=奖励/小红花正反馈/从人类采集转自主经验/三区递进)，但自承大多还在小班+学习效率成本持续运行挑战，无第三方数据，不升华为Bitter Lesson被验证；政府转述覆盖共建方但未独立证效）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -2144,7 +2149,8 @@
         "architecture_decision_A.json:three_layer_audit + kb_increment（§58 用户选 A：调用点分在线 run_loop 与离线审计脚本；如实声明工具库定位≠死代码，KB-AUDIT03 判定粒度细化）",
         "svagent/call_site_integrity.py:audit_call_site + call_site_result.json（§59：把 KB-AUDIT03 判定粒度从『有无调用点』编译成会拦会判的门禁——调用点分 none/offline_audit/online_main_loop + 定位如实声明 + 调用者真实；死代码block/离线冒充在线downgrade/诚实工具库preserve/幽灵接线block）",
         "svagent/../audit_reveal/review_result.json:N2（§61：ReVeal 把唯一区分力信号 success_output_passrate 算了却只进观测、未进 reward——存在≠执行的活体新实例，判定粒度再获一句例证）",
-        "audit_always_on/result.json:V4（§65：always-on『不是字面常驻、靠 run 之间写回状态维持连续』=存在≠执行哲学在跨 run 维度的延伸；本仓 harness 同步单会话环 vs 本文有状态跨会话编排，同源不同粒度按 KB-STRUCT02 打折，不误判为漏洞）"
+        "audit_always_on/result.json:V4（§65：always-on『不是字面常驻、靠 run 之间写回状态维持连续』=存在≠执行哲学在跨 run 维度的延伸；本仓 harness 同步单会话环 vs 本文有状态跨会话编排，同源不同粒度按 KB-STRUCT02 打折，不误判为漏洞）",
+        "audit_bitter_lesson/result.json:V4（§67：Alberta Plan自述5-10年长期计划、不关心即时应用、all research plans are suspect and provisional——研究纲领非既有成果，roadmap十二步与base agent四组件不得读成已实现AI；存在≠执行哲学在纲领维度的延伸）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -2372,6 +2378,37 @@
         "audit_always_on/article.txt:27 always-on is user experience + 48 inbox as source of truth + 70 memories outlive worker + 105-110 deferred session resume nonblocking",
         "audit_always_on/result.json:V5 结构化核验本仓14道门禁能力矩阵—9项运行时状态/事件能力无一覆盖,断言独立",
         "与 KB-AUDIT09(单run检索hygiene)/KB-AUDIT08(训练服务信号)拦截维度独立;遵循§58选A不接run_loop"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT11",
+      "kind": "reasoning_lesson",
+      "mechanism": "记忆内容质量治理是长期记忆系统的独立维度：声称有长期记忆的系统若全量写入，会违反『只有小部分经历被保留』(S03 Science SPW-R tagging, only a small fraction are retained)；若多会话不整理，memory store 累积 duplicates/contradictions/stale entries(S07 Claude Dreams 原文)，Karpathy LLM Wiki 也要求 Lint 查矛盾/过时声明/孤儿页(S17)；Dreams 明言 input store is never modified——非破坏是审阅与可丢弃的前提。这与会话连续性(KB-AUDIT10, 状态能否跨 run 续接)、改进记忆四要素(improvement_memory, Predicted↔Observed 可证伪性)、检索溯源(KB-AUDIT09)均不同——对象(记忆内容质量 vs 状态续接/记录可证伪/检索文本)、动作(判选择-整理-非破坏 vs 判续接/可证伪/溯源)均不同，拦截动作独立。证据来自22来源记忆生命周期谱系：生物机制(S02 CLS/S03/S11 tagging→S04重放/S05整合)→AI隐喻复用(S06/S08 sleep, S07 Dreams, S17 wiki)，按KB-STRUCT02同谱系打折，不当作对AI设计的独立证成。",
+      "trigger": [
+        "长期记忆",
+        "memory store",
+        "记忆整理",
+        "记忆巩固",
+        "duplicates contradictions stale",
+        "dreaming",
+        "dreams",
+        "记忆污染",
+        "全量写入",
+        "consolidation",
+        "记忆治理",
+        "Lint wiki"
+      ],
+      "action": "审读一个声称有长期记忆/会从经验学习的系统前，调用 svagent/memory_curation.py:check_memory_curation 核查三机制：(1)是否有记忆选择(selection yes/no/partial，非全量写入；no→downgrade，违反 only-a-small-fraction)；(2)是否有整理机制(consolidation，去重/矛盾消解/过时替换；no→downgrade)；(3)整理是否非破坏(nondestructive bool，原store不被就地覆盖、输出独立可审阅；False→flag)。partial→flag(待核非定罪)；全自洽→ok。语义枚举+bool，字面串→flag(R0，避§56 brittle)。诚实边界：只判机制声明自洽，不承诺记忆真的提升效果/检索真的命中(机制存在≠有效性,KB-META01)；生物机制不证成AI设计(主体错位KB-STRUCT05)；self-reported数字(Google SLEEP/Harvey 6x)不作独立验证(KB-RSI07)；本仓同步纯函数库非运行时记忆系统，本门用于审读外部声称，遵循§58选A不接run_loop。",
+      "provenance": "audit_memory/result.json:V4+V5 + prereg.json(分析前SHA256锁存 e8006152…) + gate_prereg.json(实现前锁存 213ed6e2…) + S03/S07/S17/S02 一手/二手锚点",
+      "timestamp": "2026-11-22T05:22:17+08:00",
+      "support": [
+        "svagent/memory_curation.py:check_memory_curation + tests/test_memory_curation.py(15项) — KB-AUDIT11 编译为活体门禁;R1无选择·R2无整理downgrade/R3破坏性·R4部分flag/R0字面串flag/R5自洽ok;7活体回归对齐门预注册+门禁&引擎双AST自审PASS",
+        "audit_memory/result.json:V4 能力矩阵差集—本仓15道门禁(session_continuity只判状态续接/improvement_memory只判可证伪/四要素记忆只判要素存在)无一判记忆内容选择-整理-非破坏,断言独立",
+        "audit_memory/S03_selective_consolidation.fetched.txt(Science一手摘要) only a small fraction are retained + SPW-R tagging;S07_cma_dreams.fetched.txt(二手) accumulates duplicates/contradictions/stale + input store never modified;S17_karpathy_wiki.fetched.txt(一手) Lint矛盾/过时/孤儿页",
+        "与 KB-AUDIT10(会话状态续接)/improvement_memory(记录可证伪)/KB-AUDIT09(检索文本) 拦截面独立;遵循§58选A不接run_loop;全量431→446 passed"
       ],
       "evidence": "audit",
       "addressable": true,

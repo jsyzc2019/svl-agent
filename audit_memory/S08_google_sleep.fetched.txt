@@ -1,0 +1,8 @@
+[证据等级: 二手转述(WebFetch直连失败; 内容来自WebSearch聚合的Google Research官方博客转述,含官方原文段落引用; 需标S3]
+Title: The sleep framework: A new way for LLMs to retain knowledge in continual learning
+Authors: Ali Behrouz (Google+Cornell), Farnoosh Hashemi (Cornell), Adel Javanmard (Google+USC), Vahab Mirrokni
+Date: 2026-10-27. 配套论文: Language Models Need Sleep: Learning to Self-Modify and Consolidate Memories (preprint)
+核心: LLM在active(wake)与offline sleep两态交替。Sleep两阶段: (1)Memory consolidation——参数扩展(MoE+Hope架构,低秩专家)+knowledge seeding(上行蒸馏GKD+RL imitation,on-policy distillation+LTI)+synaptic pruning(重置高频临时参数); (2)Dreaming——随机专家激活+梯度数据选择的合成样本SFT+RL精炼。
+理论: consolidation=结构化低秩压缩问题; dreaming=改善学习几何(梯度条件更好)。
+官方数字(self-reported,无独立复现): continual translation满语/卡almuk近零下降; BABILong 10M token近完美scaling超GPT-4/Titans; SQuAD事实融入48.9%单任务/46.2%CPT超SEAL; AIME24/25/HMMT25=79.2/69.0/46.1超SFT/GRPO/OPSD。
+诚实声明(官方原文): "terms like sleep, dreaming, self-improvement borrow from neuroscience; framework operates entirely within fixed model architecture and human-defined training rules." 即隐喻非真实睡眠。

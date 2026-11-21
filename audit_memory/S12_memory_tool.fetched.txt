@@ -1,0 +1,7 @@
+[证据等级: 一手片段(platform.claude.com英文区域锁; 但WebSearch拿到docs的zh-CN官方镜像原文)+二手补充]
+Title: 记忆工具 (Claude memory tool)
+核心(官方中文镜像原文): 记忆工具让Claude在记忆文件目录中跨对话存储和检索。创建/读/更新/删跨会话持久文件,随时间积累知识而无需全放context window。支持just-in-time上下文检索——不预先加载所有相关信息,而是把学到的记录在记忆文件,需要时读回。记忆工具在客户端运行:Claude请求文件操作,应用执行,controlled by your infrastructure。
+路径: /memories是虚拟前缀(非真实路径),handler映射到实际存储(每用户目录/DB键/S3)。安全: 所有记忆操作限制在/memories内(路径遍历防护)。启动前自动检查记忆目录。
+6个操作: view/create/str_replace/insert/delete/rename。
+"Assume interruption"核心理念(二手blog引用官方注入的memory protocol): context window可能被随时重置,未记录进memory的progress会丢失——把context当消耗品,memory directory当durable record。
+beta: context-management-2025-06-27(初发布2025-09); 后续GA。

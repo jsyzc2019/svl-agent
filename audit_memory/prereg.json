@@ -1,0 +1,31 @@
+{
+  "audit_id": "memory_lifecycle_20261122",
+  "timestamp": "2026-11-22T05:20:51+08:00",
+  "subject": "22来源记忆生命周期主题簇精研：神经科学机制(选择/标记/重放/整合) → AI工程(巩固/梦境/工具/压缩/wiki)",
+  "source_count": 22,
+  "evidence_grades": {
+    "S1_primary": "一手直取(HTML/PDF/WebFetch摘要/官方中文镜像)：S01,S02,S04,S05,S06,S09,S11,S13,S18,S19,S20,S21,S22 + S03摘要/S17 gist全文",
+    "S3_secondary": "二手转述(区域锁/直连失败，WebSearch聚合含官方原文引用)：S07 Dreams,S08 Google SLEEP,S10 compaction,S12 memory-tool,S16 pokemon(未取)"
+  },
+  "object_type_rule": "KB-STRUCT01：22篇按子主题归类，非22个独立验证；同源谱系(生物机制→AI隐喻复用)按KB-STRUCT02打折。S1/S3证据等级分开标注，二手不外推为已核实一手。",
+  "subthemes": [
+    {"id": "T1", "name": "记忆选择的神经机制", "sources": ["S02","S03","S11"], "claim": "只有小部分经历被标记并巩固；CLS新皮层慢学结构+海马快速记忆+交错防干扰；突触标记决定哪些进入LTP"},
+    {"id": "T2", "name": "重放与系统整合", "sources": ["S04","S05"], "claim": "静息/睡眠重放优先被标记经验；记忆从海马逐步整合到新皮层形成长期知识"},
+    {"id": "T3", "name": "AI的巩固/梦境机制", "sources": ["S06","S07","S08","S21"], "claim": "AI借睡眠隐喻做离线巩固：sleep-time compute/Google SLEEP两阶段/Claude Dreams整理记忆store"},
+    {"id": "T4", "name": "记忆工具与上下文工程", "sources": ["S01","S12","S19","S10","S15","S14"], "claim": "记忆写入/检索/压缩是agent记忆的组件；just-in-time检索、assume interruption、compaction保真"},
+    {"id": "T5", "name": "持续学习基准与知识库范式", "sources": ["S13","S17","S18","S22","S09","S16","S20"], "claim": "CL-Bench评持续学习；Karpathy wiki=持久复利知识库(与RAG对立)；Harvey LAB/Duet为应用案例"}
+  ],
+  "judges": [
+    {"id":"V1","name":"一手锚点真实性","rule":"T1-T5每类至少1个一手锚点可定位：S02 CLS慢速新皮层/快速海马;S03 only a small fraction are retained+SPW-R tagging;S11 synaptic tagging LTP;S04 replay rest;S05 systems consolidation;S06 sleep-time compute;S17 persistent compounding artifact;S19 MEMORY.md 200-line/25KB;S01 components write/consolidate/retrieve。","expect":"PASS","method":"逐条子串命中已落盘txt/fetched.txt"},
+    {"id":"V2","name":"谱系同源打折","rule":"生物机制(S02-S05,S11)与AI工程(S06-S08,S21)是同谱系隐喻复用(梦境/巩固借自神经科学)，按KB-STRUCT02打折；22篇不得计为22独立验证，5子主题内也大量同源。","expect":"DOWNGRADE","method":"结构化谱系链+隐喻同源证据"},
+    {"id":"V3","name":"claim-vs-code适用性分级","rule":"逐篇判适用性：有产品/代码可核者(S12 memory tool 6操作、S19 MEMORY.md限制、S10 compaction分层、S22 knowledge-wiki)判机制存在；无代码者(S01/S06/S02-S05/S11)判UNVERIFIABLE；二手区域锁者(S07/S08)判SECONDARY不升一手。","expect":"SCOPED","method":"对象类型x证据等级矩阵"},
+    {"id":"V4","name":"记忆治理缺口识别","rule":"核心可证伪断言：长期记忆系统必须有『选择(非全量)+整理(去重/矛盾消解/过时替换)+非破坏(原store不改)』三机制，否则退化为垃圾堆积(S07原文)或全量无选择性(S03原文)。核验本仓15道门禁无一覆盖记忆内容质量治理(session_continuity只判状态续接、四要素记忆只判要素存在)。","expect":"NEW_GATE_CANDIDATE","method":"能力矩阵差集+一手锚点"},
+    {"id":"V5","name":"新牙会拦才入测试","rule":"V4候选须过KB-META01：编译memory_curation门禁，输入语义枚举+bool(selection/consolidation/nondestructive)，拦无选择/无整理/破坏性，放行自洽；须有独立拦截动作且能活体回归。若只是复述现有门禁→不编译。","expect":"COMPILE","method":"会拦才入+独立性+可回归性"},
+    {"id":"V6","name":"隐喻vs实证边界","rule":"AI的sleep/dreaming是借神经科学隐喻(Google官方明言terms borrow from neuroscience;Dreaming第三方称deliberate reference to hippocampal consolidation)，不能把生物机制当作AI系统有效性的证据(主体错位KB-STRUCT05);self-reported数字(Google/Harvey)不外推为独立验证(KB-RSI07)。","expect":"SCOPED","method":"主体错位+自利叙事检查"},
+    {"id":"V7","name":"Karpathy wiki与本仓同构","rule":"S17 wiki三操作(ingest/query/lint)+index.md/log.md+LLM维护复利≈本仓knowledge_base+commentary+REPOSITORY_MAP+knowledge_base_store，属同谱系同构(KB-STRUCT02)，不视为独立验证；但Lint查矛盾/过时/孤儿页是本仓可能有缺口的动作，需核。","expect":"DOWNGRADE","method":"同构对照表"},
+    {"id":"V8","name":"三层诚实结论","rule":"已验证(一手锚点/谱系同源/记忆治理缺口/Karpathy同构)、未验证(生物机制能否证成AI设计/任何self-reported数字/CL-Bench具体分数)、不可验证(二手区域锁内容未经一手/S16未取/多数无公开代码)。","expect":"PASS","method":"三层分类"},
+    {"id":"V9","name":"判据自审","rule":"AST检查Compare无中文字面串比较(避§56 brittle);检测器ord数值边界避自指(§55);中文锚点集中字典用键引用;verdict与expect零漂移;不把同构当独立验证。","expect":"PASS","method":"AST自审+expect对照"}
+  ],
+  "decision_rule": "V4+V5通过则编译memory_curation新门禁(实现前SHA256锁存gate_prereg);否则加固不新增。",
+  "honesty_boundary": "只判22来源的谱系关系/机制叙事/本仓缺口，不判生物机制能否证成AI设计、不采信任何self-reported数字为独立验证、二手区域锁内容标S3不外推。"
+}

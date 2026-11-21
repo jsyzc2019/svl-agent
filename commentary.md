@@ -3123,3 +3123,57 @@ V3 逐条核验 scoring.py + reference JSON + suites：WEIGHTS/METRIC_ID、Index
 task_content：下载三来源、精读评测方法、独立复算全部数字、claim-vs-code 核 12 项、裁决 V4 是否造牙。process：顶住"又审出一篇可造牙"的诱惑，按 §63 先例识别披露充分的设计选择；复算发现 construction>100 与 open 全 0 时守口径 scoped，不夸大成缺陷；两次判据自咬现场修工具。边界：benchmark 是否真推动 TCS、agent 分数真实能力、闭源 agent 可复现性均 UNVERIFIED（KB-RSI06）；code 存在只证机制对应不证效果最优。
 
 一句话收束：**这篇基准论文最值钱的不是 71.9/72.3 这种榜单数字，而是两处工程诚实：一是"没判出来"和"判了零分"被严格分开（null index、unscored 单列），二是最容易被造房的 Lite 选择偏差——用被测 agent 的表现挑子集再说排名稳健——作者自己摊开了，还留了两个 held-out agent 和点名的两处倒挂。于是 ρ=0.93 不是可疑的自证，而是可复算、可追溯的稳健性证据（我独立复算出 0.9286）。本仓这轮没造新牙：有 code 可核不等于每个角度都要编译，披露充分的设计选择就该降为设计选择。真正长进的是又一次把判据的自咬——PDF 换行、检测器自指——变成留痕的修正：会查 brittle 的人，写检查器时照样会 brittle，唯有每次自咬都当场修工具，尺子才越磨越准。**
+
+---
+
+## 67. 精研三来源思想谱系：Bitter Lesson → Alberta Plan → 机器人幼儿园——同源三粒度打折，加固不新增（104 条，加固不新增）
+
+用户要求阅读三来源：Rich Sutton《The Bitter Lesson》(bitterlesson.org)、《The Alberta Plan for AI Research》(arXiv 2208.11173)、北京市政府《机器人在"幼儿园"里学着长大！》(beijing.gov.cn 2026-10-15)。按固定流水线：三来源一手 HTML/PDF/正文全部 SHA256 锁存（bitterlesson 54KB、Alberta PDF 14 页正文 699 行、政府新闻 46KB），预注册 `b0fd51e0…` 分析前锁存 V1–V8，后验 result 分离。对象判为**思想谱系三粒度**（哲学随笔 / 研究纲领 / self-reported 工程落地），按 KB-STRUCT01 逐篇适配判据，不硬套统计复算或 claim-vs-code。
+
+### 67.1 关键洞察：三篇是同源谱系，不是三项独立验证
+
+V1 一手锚点全命中：S1"general methods that leverage computation are ultimately the most effective"/"Search and learning are the two most important classes"/"building in how we think we think does not work"；S2"long-term plan"/"not concerned with immediate applications"/"All research plans are suspect and provisional"/"heed the bitter lesson"；S3"目标函数"/"小红花"/"Openmind"/"持续学习"。V2 谱系证据链闭合：S1 作者 Sutton、S2 自承呼应 bitter lesson、S3 是他山科技与图灵奖得主萨顿团队 Openmind 共建。**按 KB-STRUCT02 打折**：这是同一思想的哲学→纲领→落地三个粒度，把三篇当三个独立佐证会虚高印证力度——它们本就是一条线上的珠子。
+
+### 67.2 纲领≠成果与落地兑现度
+
+V4 把 Alberta Plan 判为**研究纲领而非成果**：一手自述"5–10 年长期计划""不关心即时应用""所有研究计划可疑且临时"，12 步 roadmap + base agent 四组件（Perception/Reactive policies/Value functions/Transition model）+ 背景异步 planning，核心是 continual、online、reward-maximizing、只有 observation/action/reward 三信号、无特殊训练期与训练/推理分界。这是存在≠执行（KB-AUDIT03）在纲领维度的延伸——roadmap 不是已实现的 AI。
+
+V5 落地兑现度对照：机器人幼儿园机制叙事**对应**纲领——目标函数（摔倒=负向信息、趋近目标=小红花正向奖励）即 reward-maximizing，"从人类采集数据转向基于自身经验、持续自主学习"即 experience-grounded/continual，三区递进对应能力进阶。但同页自承"大多还在小班""学习效率/成本/持续运行是现实挑战"，是 self-reported 早期探索、无第三方数据。判 SCOPED：机制叙事对应 ≠ 效果被证明，绝不升华为"Bitter Lesson 被验证"。V3 claim-vs-code 判 UNVERIFIABLE（三篇皆无公开代码/可复算统计量）——这是对象属性不是缺陷。
+
+### 67.3 新牙裁决：无独立拦截动作，加固不新增
+
+V6 逐项核对：S2 纲领≠成果已被 KB-AUDIT03 覆盖、S3 self-reported 落地已被 KB-STRUCT09/KB-RSI07 覆盖、同源谱系已按 KB-STRUCT02 打折、无代码无统计量——硬编译"落地兑现度"门禁会落成无法在外部对象会拦的叙事尺子，KB-META01 不通过。裁决**加固不新增**。本轮只给 STRUCT02/AUDIT03/STRUCT09 各加一条 support 留痕，104 条保持、`ready=True`、vanity 0.038。
+
+### 67.4 判据自咬两次 + 双源复盘
+
+V2/V4 首跑判 REVIEW（与 expect 的 DOWNGRADE/SCOPED 漂移）：V2 因新闻用中文"萨顿"而非英文"Sutton"、V4 因 PDF 把"There are twelve steps"断成跨行——均改用单行/一手真实锚点（"萨顿"+"Openmind"、"steps, titled as follows"），不放宽判据。AST 自审还暴露一处设计问题：检测器把合法的中文锚点匹配（`"目标函数" in beijing`）也咬成 brittle——辨析出 §56 brittle 根因是"中文字面串做**判定结论**比较"（如 verdict=="通过"），而中文原文锚点匹配是 legit 检测；于是把中文锚点集中到字典用键引用，让 Compare 节点不含中文字面串，verdict 保持英文枚举，检测器用 ord() 数值边界避免自指（§55）。复验 V1–V8 全对齐预注册、零漂移、brittle 空。
+
+task_content：下载三来源、识别谱系关系、判纲领≠成果、核落地兑现度、裁决是否造牙。process：顶住"三篇大材料该造三颗牙"的诱惑，识别出同源三粒度只加固不新增；两次判据自咬（中文名/PDF跨行）现场修工具不放水；第三次自审设计误伤锚点，正确辨析 brittle 根因后重构而非放宽。边界：Bitter Lesson 是否正确、Alberta roadmap 是否可实现、幼儿园机器人真实学习效果均未一手可核（V3/V7 UNVERIFIABLE/UNVERIFIED）。
+
+一句话收束：**三个来源看似三篇材料，其实是一颗思想种子的三次生长：Sutton 在 Bitter Lesson 里喊出"通用方法+算力终胜知识注入"，在 Alberta Plan 里把它写成 5–10 年的 continual reward-maximizing agent 纲领，在北京的"机器人幼儿园"里由他自己的团队联手他山把它做成摔倒给负反馈、趋近给小红花的工程尝试。本仓这轮不造牙——因为这不是三个独立证据，是一棵树的年轮；把同源三粒度当三重印证，是 KB-STRUCT02 专门防的虚高。真正值得刻进尺子的是两处分寸：纲领再详细也不是成果（12 步 roadmap 不等于已实现的 AI），落地再像也不是验证（self-reported 的"大多还在小班"不能升华为"理论被证明"）。三次判据自咬——中文名、PDF 断行、检测器误伤锚点——又各留下一道磨痕：会查 brittle 的人写检查器照样会咬到自己，唯一的解法还是那句——信规则、改工具、不放水。**
+
+---
+
+## 68. 精研 22 来源记忆生命周期谱系：从海马体 SPW-R 到 Claude Dreams——编译第 16 道门禁 memory_curation（105 条，新+1）
+
+用户要求下载并精研 22 个来源，主题是 Agent 记忆。逐一抓取：14 篇一手（HTML/PDF/WebFetch 摘要/官方中文镜像）、6 篇二手（platform.claude.com 区域锁或直连失败，WebSearch 聚合含官方原文引用，标 S3）、2 篇未取（S16 YouTube、S08 直连但最终二手补齐）。35 份来源文件语料 SHA256 锁存，预注册 `e8006152…` 分析前锁存 V1–V9，门预注册 `213ed6e2…` 实现前锁存。按 KB-STRUCT01 不把 22 篇当 22 项独立验证，而是识别为**同源谱系的五个子主题**。
+
+### 68.1 谱系：一条记忆生命周期链
+
+T1 选择：S02 互补学习系统（新皮层慢学结构+海马快速记忆+渐进交错防干扰，CLS 理论基石）、S03 Science（only a small fraction are retained；清醒 SPW-R 标记→睡眠优先重放）、S11 突触标记（tagging 决定哪些进 LTP）。T2 整合：S04 静息重放、S05 系统巩固（海马→新皮层）。T3 AI 巩固：S06 sleep-time compute、S08 Google SLEEP（两阶段：memory consolidation 参数扩展+GKD 蒸馏+突触修剪；dreaming 随机专家+梯度选样+RL）、S07 Claude Dreams、S21 dreaming cookbook。T4 工具：S01 agent memory 组件、S12 memory tool（客户端 /memories 六操作、assume interruption）、S19 Claude Code memory（MEMORY.md 200 行/25KB、主题文件按需加载）、S10 compaction。T5 范式：S17 Karpathy LLM Wiki、S13 CL-Bench、S18 Harvey LAB、S22 knowledge-wiki。
+
+### 68.2 核心缺口：15 道门禁无一判「记忆内容质量治理」
+
+V4 核验本仓能力矩阵：session_continuity（§65）只判状态能否跨 run 续接、improvement_memory 只判改进记录 Predicted↔Observed 可证伪性、四要素记忆只判要素存在——**无一判「存进去的记忆是否精选/已整理/非破坏」**。而一手证据给出强断言：S03「只有小部分经历被保留」（全量写入违背）、S07「memory store accumulates duplicates, contradictions, and stale entries」（不整理退化）、S17「Lint 查矛盾/过时/孤儿页」、S07「input store is never modified」（非破坏是可审阅前提）。拦截面独立，一手/二手锚齐备 → V5 会拦才入通过，编译。
+
+### 68.3 断言落到代码：第 16 道门禁 memory_curation
+
+`svagent/memory_curation.py:check_memory_curation`：selection/consolidation ∈ {yes,no,partial} + nondestructive bool。R0 字面串→flag（避 §56 brittle）；R1 无选择→downgrade（违反 only-a-small-fraction）；R2 无整理→downgrade（multi-session 退化为垃圾堆）；R3 破坏性→flag（就地覆盖不可审阅）；R4 部分→flag；R5 自洽→ok（只判机制声明存在）。7 活体回归对齐门预注册，15 项测试，门禁+引擎双 AST 自审 PASS，惰性导入登记，全量 **431→446 passed**，遵循 §58 选 A 不接 run_loop。
+
+### 68.4 诚实边界与两次自咬
+
+V6 守主体错位（KB-STRUCT05）：Google 官方明言 sleep/dreaming「terms borrow from neuroscience」、Dreaming 第三方称「deliberate reference to hippocampal consolidation」——**生物机制不能证成 AI 设计有效**，不把「海马 SPW-R 标记」读成「证明 AI 梦境有效」；Google 48.9%/AIME 79.2、Harvey 6x 全是 self-reported（KB-RSI07），只记录不采信。V7 认 Karpathy wiki 三操作+index/log+LLM 维护复利≈本仓 KB/commentary/REPO_MAP/store，同谱系同构（KB-STRUCT02）不视为独立验证。判据引擎两次自咬：S03 落盘原文首字母大写「Only」而锚点小写、S17 落盘中文摘要无英文「maintenance」——均改用一手真实锚点（去首字母 / 中文「维护」键引用），不放宽判据；AST 自审还险些误伤中文锚点，沿用 §67 的集中字典+ord 数值边界设计一次过。
+
+task_content：下载 22 来源、识别五子主题谱系、核验记忆治理缺口、编译会拦门禁。process：顶住「22 篇大材料该造多颗牙」的诱惑，只认一个独立维度编译一牙；严格分一手/二手证据等级（区域锁不冒充一手）；守主体错位不自利叙事；两次自咬现场修工具不放水。边界：生物机制能否证成 AI 设计、self-reported 数字、CL-Bench 具体分数均未验证；二手区域锁内容与 S16 未取标不可验证。
+
+一句话收束：**22 个来源看似散落，其实从海马体的尖波涟漪一路连到 Claude 的 Dreams——同一条记忆生命周期：先选择（只有小部分值得留）、再标记重放、再整合进长期结构、再在离线时整理去噪。神经科学讲生物怎么做，AI 借同一套隐喻做工程实现，但借隐喻不等于生物机制证明了 AI 有效——这层主体错位必须守住。本仓这轮只造一牙：15 道门禁判了状态能不能续接、记录可不可证伪、检索干不干净，却没有一道问过『存进去的记忆本身是不是精选、整理过、非破坏的』。Anthropic 自己承认 memory store 会累积重复、矛盾、过时条目，Karpathy 要求 wiki 定期 Lint——这就是会拦的角度。于是 memory_curation 落地：无选择、无整理降级，破坏性覆盖待核，全自洽也只判声明自洽不承诺记忆真有用。会拦、且拦的是本仓从没量过的记忆内容质量，才配叫第 16 道门。**

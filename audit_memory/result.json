@@ -1,0 +1,161 @@
+{
+  "audit_id": "memory_lifecycle_20261122",
+  "timestamp": "2026-11-22T05:20:51+08:00",
+  "prereg_sha256": "e80061522ce98ac607db3bb15cfee99fed1638be02dae74e0413fc7e699afc73",
+  "source_count": 22,
+  "evidence_primary": 14,
+  "evidence_secondary": 6,
+  "evidence_unavailable": 2,
+  "compilation": {
+    "gate": "svagent/memory_curation.py:check_memory_curation",
+    "gate_prereg_sha256": "213ed6e246af2a62c835112c1f92e36b5e0e328f27127c8874922254e31d9569",
+    "live_regression": {
+      "all_passed": true,
+      "cases": {
+        "no_selection": "downgrade/MEMORY.NO_SELECTION",
+        "no_consolidation": "downgrade/MEMORY.NO_CONSOLIDATION",
+        "destructive": "flag/MEMORY.DESTRUCTIVE",
+        "partial_selection": "flag/MEMORY.PARTIAL",
+        "partial_consolidation": "flag/MEMORY.PARTIAL",
+        "literal_enum": "flag/MEMORY.INVALID_INPUT",
+        "all_good": "ok/MEMORY.SELF_CONSISTENT"
+      }
+    },
+    "gate_ast_self_audit": {
+      "brittle": [],
+      "pass": true
+    },
+    "new_tests": 15,
+    "full_suite": {
+      "before": 431,
+      "after": 446,
+      "all_passed": true
+    },
+    "lazy_import_registered": true,
+    "not_in_run_loop": true
+  },
+  "judges": {
+    "V1": {
+      "verdict": "PASS",
+      "anchors": {
+        "T1_S02_cls_slow_neocortex": true,
+        "T1_S02_cls_fast_hippocampus": true,
+        "T1_S03_small_fraction": true,
+        "T1_S03_tagging": true,
+        "T1_S11_tagging": true,
+        "T2_S04_replay": true,
+        "T2_S05_consolidation": true,
+        "T3_S06_sleep_time": true,
+        "T3_S07_duplicates": true,
+        "T4_S19_mem_index": true,
+        "T4_S01_consolidate": true,
+        "T5_S17_compounding": true,
+        "T5_S17_lint": true
+      },
+      "expect": "PASS"
+    },
+    "V2": {
+      "verdict": "DOWNGRADE",
+      "lineage_chain": {
+        "S07_dreams_references_hippocampal": true,
+        "S08_terms_borrow_neuroscience": true,
+        "S02_is_theory_base": true,
+        "S17_analogous_to_cls_lint": true
+      },
+      "note": "生物机制→AI梦境/巩固是同谱系隐喻复用(KB-STRUCT02);22篇≠22独立验证,5子主题内亦同源",
+      "expect": "DOWNGRADE"
+    },
+    "V3": {
+      "verdict": "SCOPED",
+      "tiers": {
+        "mechanism_in_code": [
+          "S12 memory tool 6操作",
+          "S19 MEMORY.md 200line/25KB",
+          "S10 compaction 3层",
+          "S22 knowledge-wiki"
+        ],
+        "unverifiable_no_code": [
+          "S01随笔/S06 sleep-time/S02-S05/S11神经科学"
+        ],
+        "secondary_region_locked": [
+          "S07 Dreams/S08 Google SLEEP/S16 pokemon(未取)"
+        ]
+      },
+      "note": "逐篇按对象类型×证据等级判，二手(S3)不外推为一手",
+      "expect": "SCOPED"
+    },
+    "V4": {
+      "verdict": "NEW_GATE_CANDIDATE",
+      "gap_evidence": {
+        "S03_no_selection_evidence": true,
+        "S07_garbage_accumulation_evidence": true,
+        "S07_nondestructive_evidence": true,
+        "S17_lint_contradiction_evidence": true,
+        "local_gap_verified": true
+      },
+      "local_matrix": {
+        "session_continuity": "判跨会话状态续接(持久/真相源/单消费者/续跑/非阻塞)——非内容治理",
+        "improvement_memory": "判改进记录可证伪性(Predicted/Observed)——非内容治理",
+        "gate_count_before": 15,
+        "content_governance_covered": false
+      },
+      "expect": "NEW_GATE_CANDIDATE"
+    },
+    "V5": {
+      "verdict": "COMPILE",
+      "gate": "svagent/memory_curation.py:check_memory_curation",
+      "gate_prereg_sha256": "213ed6e246af2a62c835112c1f92e36b5e0e328f27127c8874922254e31d9569",
+      "rationale": "独立维度(15门无一判内容治理)+会拦(R1/R2 downgrade,R3/R4 flag)+可回归(7活体对齐)+枚举布尔避brittle",
+      "expect": "COMPILE"
+    },
+    "V6": {
+      "verdict": "SCOPED",
+      "checks": {
+        "S08_explicit_metaphor": true,
+        "S07_is_reference": true,
+        "self_reported_numbers": true
+      },
+      "note": "生物机制不证成AI设计(主体错位KB-STRUCT05);self-reported数字(Google/Harvey)不升独立验证(KB-RSI07)",
+      "expect": "SCOPED"
+    },
+    "V7": {
+      "verdict": "DOWNGRADE",
+      "isomorphism": {
+        "ingest_query_lint": true,
+        "index_log": true,
+        "llm_owns_maintenance": true
+      },
+      "note": "wiki三操作+index/log+LLM维护复利≈本仓KB/commentary/REPO_MAP/store,同谱系同构(KB-STRUCT02)不视为独立验证;Lint查矛盾/过时/孤儿页是本仓可借鉴动作",
+      "expect": "DOWNGRADE"
+    },
+    "V8": {
+      "verdict": "PASS",
+      "verified": [
+        "一手锚点(T1-T5)",
+        "谱系同源打折",
+        "记忆治理缺口(15门差集)",
+        "Karpathy wiki同构",
+        "新门会拦可回归"
+      ],
+      "unverified": [
+        "生物机制能否证成AI设计",
+        "任何self-reported数字(Google/Harvey)",
+        "CL-Bench具体分数"
+      ],
+      "unverifiable": [
+        "二手区域锁内容(S07/S08/S10/S12)未经一手核",
+        "S16 pokemon未取",
+        "多数来源无公开代码"
+      ],
+      "expect": "PASS"
+    },
+    "V9": {
+      "verdict": "PASS",
+      "ast_brittle_compare_lines": [],
+      "verdict_expect_drift": {},
+      "expect": "PASS"
+    }
+  },
+  "final_decision": "编译 memory_curation 新门禁 + 加固现有KB",
+  "honesty_boundary": "只判22来源谱系关系/机制叙事/本仓缺口，不判生物机制能否证成AI设计、不采信self-reported数字为独立验证、二手区域锁标S3不外推。"
+}

@@ -1,0 +1,342 @@
+Synaptic tagging and long-term potentiation | Nature
+Skip to main content
+Thank you for visiting nature.com. You are using a browser version with limited support for CSS. To obtain
+            the best experience, we recommend you use a more up to date browser (or turn off compatibility mode in
+            Internet Explorer). In the meantime, to ensure continued support, we are displaying the site without styles
+            and JavaScript.
+Advertisement
+View all journals
+Saved research
+Search
+Account
+Log in
+Content
+Explore content
+About
+the journal
+Publish
+with us
+Subscribe
+Sign up for alerts
+RSS feed
+Letter
+Published:
+06 February 1997
+Synaptic tagging and long-term potentiation
+Uwe Frey
+1
+&
+Richard G. M. Morris
+1
+na1
+Nature
+volume
+385
+,
+pages
+533–536 (
+1997
+)
+Cite this article
+Save article
+View saved research
+17k
+Accesses
+1683
+Citations
+42
+Altmetric
+Metrics
+details
+Abstract
+Repeated stimulation of hippocampal neurons can induce an immediate and prolonged increase in synaptic strength that is called long-term potentiation (LTP)—the primary cellular model of memory in the mammalian brain
+1
+. An early phase of LTP (lasting less than three hours) can be dissociated from late-phase LTP by using inhibitors of transcription and translation
+2–8
+. Because protein synthesis occurs mainly in the cell body
+9–12
+, whereas LTP is input-specific, the question arises of how the synapse specificity of late LTP is achieved without elaborate intracellular protein trafficking. We propose that LTP initiates the creation of a short-lasting protein-synthesis-independent 'synaptic tag' at the potentiated synapse which sequesters the relevant protein(s) to establish late LTP. In support of this idea, we now show that weak tetanic stimulation, which ordinarily leads only to early LTP, or repeated tetanization in the presence of protein-synthesis inhibitors, each results in protein-synthesis-dependent late LTP, provided repeated tetanization has already been applied at another input to the same population of neurons. The synaptic tag decays in less than three hours. These findings indicate that the persistence of LTP depends not only on local events during its induction, but also on the prior activity of the neuron.
+This is a preview of subscription content,
+access via your institution
+Access options
+Access through your institution
+Subscription info for Chinese customers
+We have a dedicated website for our Chinese customers. Please go to
+naturechina.com
+to subscribe to this journal.
+Go to naturechina.com
+Buy this article
+Purchase on SpringerLink
+Instant access to the full article PDF.
+39,95 €
+Prices may be subject to local taxes which are calculated during checkout
+Similar content being viewed by others
+Beyond boundaries: extended temporal flexibility in synaptic tagging and capture
+Article
+Open access
+04 April 2025
+Long-term potentiation-induced changes in actin dynamics and spine geometry persist on the timescale of the synaptic tag
+Article
+Open access
+18 July 2025
+Electrophysiology-based screening identifies neuronal HtrA serine peptidase 2 (HTRA2) as a synaptic plasticity regulator participating in tauopathy
+Article
+Open access
+10 January 2025
+Explore related subjects
+Discover the latest articles and news in related subjects.
+Neurobiology of Fear Conditioning and Memory
+References
+Bliss. T. V. P. & Collingridge, G. L.
+Nature
+361
+, 31–39 (1993).
+Article
+ADS
+CAS
+Google Scholar
+Krug, M., Lössner, B. & Ott, T.
+Brain Res. Bull.
+13
+, 39–42 (1984).
+Article
+CAS
+Google Scholar
+Frey, U., Krug, M., Reymann, K. G. & Matthies, H.
+Brain Res.
+452
+, 57–65 (1988).
+Article
+CAS
+Google Scholar
+Fazeli, M. S., Errington, M. L., Dolphin, A. C. & Bliss, T. V.
+Brain Res.
+473
+, 51–59 (1988).
+Article
+CAS
+Google Scholar
+Otani, S., Marshall, C. J., Tate, W. P., Goddard, G. V. & Abraham, W. C.
+Neuroscience
+28
+, 519–526 (1989).
+Article
+CAS
+Google Scholar
+Fazeli, M. S., Corbet, J., Dunn, M. J., Dolphin, A. C. & Bliss, T. V. P.
+J. Neurosci.
+13
+, 1346–1353 (1993).
+Article
+CAS
+Google Scholar
+Nguyen, P. V., Abel, T. & Kandel, E. R.
+Science
+265
+, 1104–1107 (1994).
+Article
+ADS
+CAS
+Google Scholar
+Frey, U., Frey, S., Schollmeier, F. & Krug, M.
+J. Physiol.
+490
+, 703–711 (1996).
+Article
+CAS
+Google Scholar
+Link, W.
+et al.
+Proc. Nat; Acad. Sci. USA
+92
+, 5734–5738 (1995).
+Article
+ADS
+CAS
+Google Scholar
+Davis, L., Banker, G. A. & Steward, O.
+Nature
+330
+, 477–479 (1987).
+Article
+ADS
+CAS
+Google Scholar
+Kleiman, R., Banker, G. & Steward, O.
+Neuron
+5
+, 821–830 (1990).
+Article
+CAS
+Google Scholar
+Kang, H. & Schuman, E. M.
+Science
+273
+, 1402–1406 (1996).
+Article
+ADS
+CAS
+Google Scholar
+Huang, Y. Y. & Kandel, E. R.
+Learning & Memory
+1
+, 74–82 (1994).
+CAS
+Google Scholar
+Frey, U., Schollmeier, K., Reymann, K. G. & Seidenbecher, T.
+Neuroscience
+67
+, 799–807 (1995).
+Article
+CAS
+Google Scholar
+Steward, O. & Falk, P. M.
+J. Neurosci.
+6
+, 412–423 (1986).
+Article
+CAS
+Google Scholar
+Lovinger, D. M. & Routtenberg, A.
+J. Physiol. (Lond.)
+400
+, 321–333 (1988).
+Article
+CAS
+Google Scholar
+Stäubli, U. & Chun, D.
+J. Neurosci.
+16
+, 853–860 (1996).
+Article
+Google Scholar
+Hebb, D. O.
+The Organization of Behaviour
+(Wiley, New York, 1949).
+Google Scholar
+Larson, J. & Lynch, G.
+Science
+232
+, 985–988 (1986).
+Article
+ADS
+CAS
+Google Scholar
+Diamond, D. M., Dunwiddie, T. V. & Rose, G. M.
+J. Neurosci.
+8
+, 4079–4088 (1988).
+Article
+CAS
+Google Scholar
+Malenka, R. C.
+Neuron
+6
+, 53–60 (1991).
+Article
+CAS
+Google Scholar
+Abraham, W. C. & Bear, M. F.
+Trends Neurosci.
+19
+, 126–130 (1996).
+Article
+CAS
+Google Scholar
+Rawlins, J. N. P.
+Behav. Brain Sci.
+479–528 (1985).
+Squire, L. R. & Davis, H. P.
+Annu. Rev. Pharmacol. Toxicol.
+21
+, 323–356 (1981).
+Article
+CAS
+Google Scholar
+Brown, R. & Kulik, J.
+Cognition
+5
+, 73–99 (1977).
+Article
+Google Scholar
+Stanton, P. K. & Sarvey, J. M.
+J. Neurosci.
+4
+, 3080–3088 (1984).
+Article
+CAS
+Google Scholar
+Download references
+Author information
+Author notes
+Richard G. M. Morris: Centre for Neuroscience, University of Edinburgh, Crichton Street, Edinburgh EH8 9LE, UK
+Authors and Affiliations
+Federal Institute for Neurobiology, Gene Regulation and Plasticity, PO Box 1860, Brenneckestrasse 6, 39008, Magdeburg, Germany
+Uwe Frey & Richard G. M. Morris
+Authors
+Uwe Frey
+View author publications
+Search author on:
+PubMed
+Google Scholar
+Richard G. M. Morris
+View author publications
+Search author on:
+PubMed
+Google Scholar
+Rights and permissions
+Reprints and permissions
+About this article
+Cite this article
+Frey, U., Morris, R. Synaptic tagging and long-term potentiation.
+Nature
+385
+, 533–536 (1997). https://doi.org/10.1038/385533a0
+Download citation
+Received
+:
+12 July 1996
+Accepted
+:
+04 December 1996
+Issue date
+:
+06 February 1997
+DOI
+:
+https://doi.org/10.1038/385533a0
+Share this article
+Anyone you share the following link with will be able to read this content:
+Get shareable link
+Sorry, a shareable link is not currently available for this article.
+Copy shareable link to clipboard
+Provided by the Springer Nature SharedIt content-sharing initiative
+Access through your institution
+Buy or subscribe
+Advertisement
+Search
+Search articles by subject, keyword or author
+Show results from
+All journals
+This journal
+Search
+Advanced search
+Quick links
+Explore articles by subject
+Find a job
+Guide to authors
+Editorial policies
+Close
+Sign up for the
+Nature Briefing
+newsletter — what matters in science, free to your inbox daily.
+Email address
+Sign up
+I agree my information will be processed in accordance with the
+Nature
+and Springer Nature Limited
+Privacy Policy
+.
+Close
+Get the most important science stories of the day, free in your inbox.
+Sign up for Nature Briefing
