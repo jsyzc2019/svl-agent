@@ -108,6 +108,17 @@ _LAZY: dict[str, tuple[str, str]] = {
     "discount_claim": ("svagent.lineage_guard", "discount_claim"),
     "DiscountVerdict": ("svagent.lineage_guard", "DiscountVerdict"),
     "lineage_live_regression": ("svagent.lineage_guard", "live_regression"),
+    "check_backtest_integrity": ("svagent.backtest_integrity", "check_backtest_integrity"),
+    "BacktestVerdict": ("svagent.backtest_integrity", "BacktestVerdict"),
+    "backtest_live_regression": ("svagent.backtest_integrity", "live_regression"),
+    # 调用点完整性门禁（§59：把 §58 认知断言编译成代码，KB-AUDIT03 粒度细化）
+    "audit_call_site": ("svagent.call_site_integrity", "audit_call_site"),
+    "CallSiteVerdict": ("svagent.call_site_integrity", "CallSiteVerdict"),
+    "call_site_live_regression": ("svagent.call_site_integrity", "live_regression"),
+    # 审查者评估漏斗保真门禁（§60：从 Claude Code 验证一文 line 122-123 编译）
+    "check_review_evaluation": ("svagent.reviewer_evaluation", "check_review_evaluation"),
+    "ReviewEvalVerdict": ("svagent.reviewer_evaluation", "ReviewEvalVerdict"),
+    "review_eval_live_regression": ("svagent.reviewer_evaluation", "live_regression"),
 }
 
 

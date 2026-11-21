@@ -1,0 +1,142 @@
+{
+  "task": "精研 OpenAI《How OpenAI's Performance Factory keeps ChatGPT fast》",
+  "source": {
+    "url": "https://openai.com/index/how-openai-performance-factory-keeps-chatgpt-fast/",
+    "type": "工程博客（一手官方 engineering post，署名 Members of Technical Staff，2026-11-19），非学术论文：判据适配为『机制可借鉴性 + 数字内部一致性 + 已实现vs愿景分级』，不硬套论文式消融复算",
+    "sha256_lock": "def556539862..."
+  },
+  "criteria": [
+    {
+      "id": "P1",
+      "name": "对象与主体判定",
+      "primary_source": true,
+      "authors_named": true,
+      "date": "2026-11-19",
+      "implemented_evidence": true,
+      "vision_marked": true,
+      "vision_hits": {
+        "we['’]?re working on": true,
+        "we['’]?re exploring": false,
+        "proactive": true,
+        "without a human in the loop": true
+      },
+      "verdict": "ok",
+      "note": "官方一手、署名、日期齐全；已上线数字(1700/600)与愿景(we are working on/exploring/proactive/without-human)可分；首版判据用 all 匹配4个愿景词过严被自咬(we.re exploring 因弯引号未命中)，改为 any+宽字符类——信事实改判据"
+    },
+    {
+      "id": "P2",
+      "name": "数字内部一致性",
+      "recompute": {
+        "1700_over_100days": 17,
+        "claimed_per_day": 17,
+        "root_caused_rate_pct": 35.3,
+        "review_70_plus_30": 100
+      },
+      "self_consistent": true,
+      "verdict": "ok",
+      "note": "数字自洽但均 self-reported；无外部核验，按 KB-RSI06 样本外复验折扣"
+    },
+    {
+      "id": "P3",
+      "name": "技术声称可核验性",
+      "mechanism_specific": true,
+      "marketing_detected": true,
+      "verdict": "ok",
+      "note": "四组件/状态机/对抗审查/perf-forensics 机制描述具体可借鉴；unprecedented/good chance 等营销词不作证据（KB-R-MS01 事实真≠结论真）"
+    },
+    {
+      "id": "P4",
+      "name": "回测信息污染防护",
+      "spoiler_measures_present": {
+        "fresh_investigator": true,
+        "original_signal": true,
+        "stripped_giveaway": true,
+        "no_saved_memories": true,
+        "no_incident_writeup": true,
+        "no_previous_runs": true,
+        "inspect_transcript": true,
+        "separate_timing_deployment": true
+      },
+      "spoiler_measure_count": 8,
+      "repo_has_corresponding_gate": false,
+      "verdict": "ok",
+      "note": "一手列出 8/8 条防 spoiler 纪律；本仓 evaluation_reliability 无对应可执行门禁（has_gate=False）→ 真实代码强固候选"
+    },
+    {
+      "id": "P5",
+      "name": "对抗性审查机制",
+      "disprove_session": true,
+      "verdict": "ok",
+      "note": "独立 session 反驳诊断 + 反事实 + 真实案例重新打开调查；验证独立于生成，可借鉴；按 KB-STRUCT02 打折（同构≠互证）"
+    },
+    {
+      "id": "P6",
+      "name": "self-repair 闭环",
+      "daily_scan": true,
+      "verdict": "ok",
+      "note": "每日 agent 扫工具故障→重复错误建修复任务→evals 验证过关；与 improvement_memory 回归检测同构，可借鉴\"工具层故障纳入监控\""
+    },
+    {
+      "id": "P7",
+      "name": "代码强固裁决",
+      "candidate": "backtest_integrity（回测信息污染隔离门禁）",
+      "gate_worthy": true,
+      "verdict": "ok",
+      "note": "P4 证实一手证据充分且本仓无对应门禁 → 满足 KB-META01（会拦/会判/会降级）才落地；本轮裁决=落地"
+    }
+  ],
+  "number_recompute": [
+    {
+      "item": "1700 investigations / ~100天",
+      "value": 17,
+      "claim": "17/day",
+      "ok": true
+    },
+    {
+      "item": "600 root caused / 1700",
+      "value": 35.3,
+      "claim": "约35%",
+      "ok": true
+    },
+    {
+      "item": "70% accurate + 30% refine / 100",
+      "value": 100,
+      "claim": "100 人工审查",
+      "ok": true
+    },
+    {
+      "item": "30+ performance tools",
+      "value": 30,
+      "claim": "more than 30",
+      "ok": true
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "ok": 7,
+    "all_pass": true,
+    "gate_worthy": true,
+    "n_new_gaps": 1
+  },
+  "three_layer_honesty": {
+    "can_judge": [
+      "数字内部一致性",
+      "已实现vs愿景分级",
+      "机制可借鉴性",
+      "本仓是否有对应门禁"
+    ],
+    "cannot_judge": [
+      "系统真实有效性（无外部复现/无开源代码）",
+      "性能改善因果关系",
+      "工程师实际负担变化"
+    ],
+    "isomorphism_discount": "状态机/对抗审查/自修复与本仓 task_retrospective/lineage_guard/improvement_memory 同构，按 KB-STRUCT02 打折，不构成独立验证"
+  },
+  "honesty_boundaries": [
+    "文章为官方一手但对自身系统自报、无开源代码、无外部复现",
+    "数字为 self-reported，内部一致性通过不等于真实性验证",
+    "已实现与愿景须分级，不把 exploring 当 shipped",
+    "同构不等于互证：OpenAI 用类似机制不构成本仓框架独立验证",
+    "代码强固只编译工程纪律，不宣称复现其内部系统"
+  ]
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+<title>精研 Claude Code 验证一文 · §60</title>
+<style>
+body{font-family:-apple-system,"PingFang SC",sans-serif;max-width:960px;margin:32px auto;padding:0 20px;color:#1f2328;line-height:1.65}
+h1{font-size:23px;border-bottom:2px solid #0969da;padding-bottom:8px}
+h2{font-size:18px;margin-top:28px;color:#0969da}
+.pill{display:inline-block;background:#1a7f37;color:#fff;padding:4px 14px;border-radius:20px;font-weight:bold}
+table{border-collapse:collapse;width:100%;margin-top:12px}
+th,td{border:1px solid #d0d7de;padding:7px 11px;text-align:left;font-size:13px;vertical-align:top}
+th{background:#f6f8fa}
+code{background:#f6f8fa;padding:1px 5px;border-radius:4px;font-size:12px}
+.meta{color:#57606a;font-size:13px}
+blockquote{border-left:3px solid #0969da;margin:12px 0;padding:6px 14px;background:#f6f8fa;color:#57606a}
+</style></head><body>
+<h1>精研《How the Claude Code team thinks about verification》· 把断言落到代码</h1>
+<p class="meta">Addy Osmani · claude.dev · 2026-11-16 · 一手 HTML 106KB/正文 164 行 · 构建于 2026-11-22T03:33:10+08:00</p>
+<p><span class="pill">精研 PASS</span>　<span class="meta">锁存校验：article_html=OK · prereg=OK · reviewer_eval_prereg=OK</span></p>
+
+<h2>三层诚实结论</h2>
+<blockquote>
+<b>可判</b>：数字内部一致性（~90% / up to 10 points / 39 项 / 3-10 项 / 三轮）、机制一手列出、已实施vs愿景、本仓有无对应门禁。<br>
+<b>不可判</b>：系统真实有效性、90%与10points的因果、内部流程可迁移性——均 self-reported（KB-RSI06 折扣）。<br>
+<b>同构打折</b>：三类测试/规则不被篡改/漏检变规则 与本仓 scoring_integrity/judgment_robustness/knowledge_base 同谱系，按 KB-STRUCT02 打折，不给本仓独立背书。
+</blockquote>
+
+<h2>V10 本仓源码级缺口核验</h2>
+<table><tr><th>维度</th><th>本仓对应门禁</th><th>证据</th></tr><tr><td>rule_integrity</td><td>✅ 有</td><td>svagent/scoring_integrity.py + KB-AUDIT07（计分器可达性/篡改）</td></tr><tr><td>verification_stamp</td><td>❌ 缺</td><td>call_site_integrity 的 none=调用点位置（非验证戳）；无产物级验证状态戳</td></tr><tr><td>three_round_escalation</td><td>❌ 缺</td><td>insight.py 有 escalate_rate（EU 交人率实验），非验证三轮转人门禁</td></tr><tr><td>miss_to_rule_gate</td><td>❌ 缺</td><td>knowledge_base 加固需 support 证据，但无『2PR复现+3agent证伪+人批』硬门槛门禁</td></tr><tr><td>reviewer_evaluation</td><td>❌ 缺</td><td>finance_blind_test.py/knowledge_base.py 的 recall=检索/盲测指标；无 raw→post→final 漏斗保真门禁</td></tr></table>
+
+<h2>编译成的门禁：check_review_evaluation</h2>
+<p>文章 line 123："Any evaluation that treats all these as one end-to-end score won't capture this nuance." 本仓从未判过评估方案本身的分阶段/对照/分离口径，编译成会拦会判的代码：</p>
+<ol><li>R0 NON_SEMANTIC_INPUT: 非 bool 字段 或 recall 非 None 且不在[0,1] → flag（拒绝对字面串/越界值判定，避开 §56 brittle 根因 KB-AUDIT01）</li><li>R1 SINGLE_END_TO_END_SCORE: not staged_recall → block（把三阶段压成一个端到端分数=看不出系统丢了已找到的 bug，文章 line 123 明确该 nuance 会丢；KB-AUDIT04 口径对等）</li><li>R2 NO_STABLE_CONTROL: not stable_control_used → downgrade（无稳定集对照=无法区分真发现与 over-flagging，line 122）</li><li>R3 TUNING_TEST_LEAK: not tuning_test_separated → downgrade（tuning 与 fixed test 不分=过拟合 eval，line 122）</li><li>R4 NO_ANSWER_KEY: not answer_key_scored → downgrade（不按『是否正确描述 bug』计分=分数口径失真，line 122）</li><li>R5 FUNNEL_INVERTED: staged_recall 且 final_recall/raw_recall 均给出且 final_recall > raw_recall → flag（漏斗倒挂：验证过滤不该让召回凭空变高，口径可疑待核）</li><li>R6 STAGED_CREDIBLE: 分阶段 + 稳定集对照 + tuning/test分离 + answer key + 漏斗不倒挂 → ok</li></ol>
+
+<h2>活体回归 8 场景（判据自咬：控制流曾漏两处 return，已修正）</h2>
+<table><tr><th>场景</th><th>判定</th><th>代号</th></tr><tr><td>文章完整做法</td><td><b>ok</b></td><td><code>REVIEW_EVAL.CREDIBLE</code></td></tr><tr><td>单一端到端分数</td><td><b>block</b></td><td><code>REVIEW_EVAL.SINGLE_END_TO_END</code></td></tr><tr><td>无稳定集对照</td><td><b>downgrade</b></td><td><code>REVIEW_EVAL.NO_STABLE_CONTROL</code></td></tr><tr><td>tuning/test未分离</td><td><b>downgrade</b></td><td><code>REVIEW_EVAL.TUNING_TEST_LEAK</code></td></tr><tr><td>不按answer key计分</td><td><b>downgrade</b></td><td><code>REVIEW_EVAL.NO_ANSWER_KEY</code></td></tr><tr><td>漏斗倒挂</td><td><b>flag</b></td><td><code>REVIEW_EVAL.FUNNEL_INVERTED</code></td></tr><tr><td>字面串对照</td><td><b>flag</b></td><td><code>REVIEW_EVAL.NON_SEMANTIC_INPUT</code></td></tr><tr><td>recall越界</td><td><b>flag</b></td><td><code>REVIEW_EVAL.NON_SEMANTIC_INPUT</code></td></tr></table>
+
+<h2>诚实边界</h2>
+<ul><li>一手仅此一篇博客 + 二手转载交叉核对标题/作者/日期，不复现其内部实验、不把 self-reported 数字当独立证据。</li><li>up to 10 points 是特定任务内部测试结果，不外推到软件工程整体。</li><li>本仓缺口核验基于源码调用点，与 §58/§59 一致：有调用点≠已接入 run_loop，如实标注工具库定位。</li><li>同构打折：本文机制与既有门禁同谱系，编译新门禁是为补执行缺口，不为证明框架更优。</li><li>门禁只判『评估方案的分阶段/对照/分离/计分口径是否自洽』，不判被审对象本身的对错。</li><li>缺口来自本仓源码核验，编译门禁是为补执行缺口，不为证明本仓框架优于 Claude Code 团队（KB-STRUCT02 同构打折）。</li><li>文章数字与做法均 self-reported，本门禁不复现其内部实验、不把 10 points 当独立证据。</li><li>遵循 §58 用户选 A：本门禁不接入 run_loop，仍是按需显式调用的判据工具库。</li><li>活体样例用于机制回归，非复现任何外部评测。</li></ul>
+<p class="meta">遵循 §58 用户选 A：新门禁不接入 run_loop，仍是按需显式调用的判据工具库。</p>
+</body></html>

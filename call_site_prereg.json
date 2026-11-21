@@ -1,0 +1,46 @@
+{
+  "prereg_id": "CALL-SITE-INTEGRITY-001",
+  "title": "调用点完整性门禁：把 §58 的认知断言编译成会拦会判的代码",
+  "created_at": "2026-11-22T03:19:46+08:00",
+  "cognitive_source": "commentary §58 / architecture_decision_A.json：用户问『代码适应调整了吗』，两层核查发现 KB-AUDIT03 判定粒度缺口——同样『没接 run_loop』，死代码(无任何调用点+虚假安全感) 与 诚实工具库(离线审计脚本有真实调用者+如实声明定位) 不该同判。用户随后叮嘱『把认知变成能力，把断言落到代码』，据此把该断言编译成门禁。",
+  "claimed_capability": "判定一条『有断言/测试/自检』的验证声称，是真能力(真实调用点) / 死代码(无调用点却声称已自动) / 诚实工具库(离线有真实调用者且如实声明定位)，阻止离线冒充在线、幽灵接线、无断言空头声称。",
+  "target_module": "svagent/call_site_integrity.py",
+  "target_symbol": "audit_call_site",
+  "input_schema": {
+    "claim": "str 被审的验证声称",
+    "call_site": "enum: none | offline_audit | online_main_loop（调用点位置，语义枚举非自由文本）",
+    "declared_as_automatic": "bool 是否声称『已自动/在线执行』",
+    "positioning_honest": "bool 是否如实声明定位（如『按需工具库』）",
+    "caller_real": "bool 调用者是否真实存在且可执行（非空注释/死引用）",
+    "assertion_exists": "bool 是否真的存在断言/判据代码"
+  },
+  "rules_priority_order": [
+    "R0 NON_SEMANTIC_INPUT: call_site 非枚举 或 任一 bool 字段非 bool → flag（拒绝对字面串/畸形输入判定，避开 §56 brittle 根因 KB-AUDIT01）",
+    "R1 FABRICATED_ASSERTION: assertion_exists=False → block（根本没有断言却声称验证，KB-AUDIT03 的最底层）",
+    "R2 DEAD_CODE_AUTO_CLAIM: call_site=none 且 declared_as_automatic=True → block（声称自动执行却无任何调用点=死代码+虚假安全感，KB-AUDIT03 原义）",
+    "R3 PHANTOM_WIRING: call_site=online_main_loop 且 caller_real=False → block（声称接入主循环但无真实调用者）",
+    "R4 OFFLINE_AS_ONLINE: call_site=offline_audit 且 declared_as_automatic=True → downgrade（离线调用点冒充在线自动，口径失真）",
+    "R5 UNWIRED_HONEST: call_site=none 且 declared_as_automatic=False → downgrade（诚实承认未接线，降级不拦截，KB-R08 preserve 精神）",
+    "R6 PRESERVE_TOOL_LIBRARY: call_site=offline_audit 且 positioning_honest=True 且 declared_as_automatic=False 且 caller_real=True → ok（如实声明的按需工具库，§58 本仓自身的定位，不拦截）",
+    "R7 ONLINE_WIRED: call_site=online_main_loop 且 caller_real=True → ok（真·自动咬合）",
+    "R8 UNDECLARED_POSITIONING: 其余 → flag（定位未如实声明，待核）"
+  ],
+  "live_regression_cases": [
+    {"name": "本仓六道门禁(§58)", "in": {"call_site": "offline_audit", "declared_as_automatic": false, "positioning_honest": true, "caller_real": true, "assertion_exists": true}, "expect": "ok/PRESERVE_TOOL_LIBRARY"},
+    {"name": "FastGithub死代码(KB-AUDIT03原义)", "in": {"call_site": "none", "declared_as_automatic": true, "positioning_honest": false, "caller_real": false, "assertion_exists": true}, "expect": "block/DEAD_CODE_AUTO_CLAIM"},
+    {"name": "空头声称无断言", "in": {"call_site": "offline_audit", "declared_as_automatic": false, "positioning_honest": true, "caller_real": true, "assertion_exists": false}, "expect": "block/FABRICATED_ASSERTION"},
+    {"name": "幽灵接线", "in": {"call_site": "online_main_loop", "declared_as_automatic": true, "positioning_honest": true, "caller_real": false, "assertion_exists": true}, "expect": "block/PHANTOM_WIRING"},
+    {"name": "离线冒充在线", "in": {"call_site": "offline_audit", "declared_as_automatic": true, "positioning_honest": false, "caller_real": true, "assertion_exists": true}, "expect": "downgrade/OFFLINE_AS_ONLINE"},
+    {"name": "诚实未接线", "in": {"call_site": "none", "declared_as_automatic": false, "positioning_honest": true, "caller_real": false, "assertion_exists": true}, "expect": "downgrade/UNWIRED_HONEST"},
+    {"name": "真自动咬合", "in": {"call_site": "online_main_loop", "declared_as_automatic": true, "positioning_honest": true, "caller_real": true, "assertion_exists": true}, "expect": "ok/ONLINE_WIRED"},
+    {"name": "brittle字面串对照", "in": {"call_site": "高度同构", "declared_as_automatic": true, "positioning_honest": true, "caller_real": true, "assertion_exists": true}, "expect": "flag/NON_SEMANTIC_INPUT"}
+  ],
+  "kb_anchor": "KB-AUDIT03（测试/自检存在≠被执行）：本门禁把其判定粒度从『有无调用点』细化为『调用点在哪 + 定位是否如实声明 + 调用者是否真实』。加固 1 条 support，不新增条目（防 vanity，KB-META01）。",
+  "honest_boundaries": [
+    "门禁只判『调用点与定位声明的自洽性』，不判被审对象本身的对错、不替代实质证据。",
+    "调用点位置与定位诚实性须调用方如实声明，声明本身不可自证。",
+    "本门禁由 §58 本仓自审的认知增量编译，按 KB-STRUCT02 不构成对本仓框架的独立验证。",
+    "活体样例用于机制回归，非复现任何外部实验；不改变 357 项既有测试，不接入 run_loop（遵循 §58 用户选 A）。"
+  ],
+  "verification_intent": "新增约 14 项测试；全量 357 → 371 passed；预注册实现前 SHA256 锁存，后验 result/report 分离不伪装。"
+}

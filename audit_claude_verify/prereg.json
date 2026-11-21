@@ -1,0 +1,46 @@
+{
+  "prereg_id": "CLAUDE-VERIFY-001",
+  "title": "精研《How the Claude Code team thinks about verification》(Addy Osmani, claude.dev, 2026-11-16)",
+  "created_at": "2026-11-22T03:29:48+08:00",
+  "object_type": "engineering_blog",
+  "object_type_rationale": "一手工程博客（非学术实证论文、无开源复现实验），判据适配为『机制可借鉴性 + 数字内部一致性 + 已实现vs愿景分级 + 本仓对应门禁缺口核验』，不硬套论文式消融复算。",
+  "source_lock": {
+    "url": "https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/",
+    "html_sha256": "e76d9a9fe8bdf5eaeb9515a9ad71373d7445e034fc50bf923f877892c2a01ea5",
+    "txt_sha256": "6bdf1e2aff1e511e1a7696c4697f7f5f5569c995b6cfb7747fc712f89919ade4",
+    "author": "Addy Osmani", "published": "Nov 16, 2026", "category": "Engineering",
+    "http_code": 200
+  },
+  "criteria": [
+    {"id": "V1", "type": "fact_check", "claim": "~90% 代码由 Claude 编写与审查", "verify": "正文 line 31-32 逐字核对", "expected": "present"},
+    {"id": "V2", "type": "fact_check", "claim": "独立 grader 按 rubric 检查，结构化文件生成任务成功率提升 up to 10 points，难题增益最大", "verify": "正文 line 37-39 核对", "expected": "present"},
+    {"id": "V3", "type": "mechanism", "claim": "三类值得投资的测试：E2E(首选,难骗,有done标准) / Property(不变量,库生成edge case,避开与作者同bias) / Differential(旧系统作oracle,迁移用)", "verify": "正文 line 47-80 核对三类齐备", "expected": "present"},
+    {"id": "V4", "type": "mechanism", "claim": "验证=运行改动本身；verify skill 放 .claude/skills/；失败测试需人(三轮不过转人)", "verify": "正文 line 85-92 核对", "expected": "present"},
+    {"id": "V5", "type": "mechanism", "claim": "改动不能改自己的检查：REVIEW.md 只从 base/default 分支读、审查针对 commit、先跑便宜检查", "verify": "正文 line 103-112 核对", "expected": "present"},
+    {"id": "V6", "type": "mechanism", "claim": "39 项可靠性清单，每项有可从 diff 读的 trigger，只读命中的 3-10 项", "verify": "正文 line 95-97 核对数字 39/3-10", "expected": "present"},
+    {"id": "V7", "type": "mechanism", "claim": "新 gate 三模式 off/observe/enforce；commit 打验证戳含 none；同会话被挡两次第三次放行；审查者也要被评估(回滚率/打回率/稳定集对照/tuning与test分离/分阶段recall)", "verify": "正文 line 113-128 核对", "expected": "present"},
+    {"id": "V8", "type": "mechanism", "claim": "漏检变规则：至少2个PR出现+能从diff识别+3个agent尝试证伪+人类批准；小diff漏检补REVIEW.md；flaky测试禁skip/sleep/retry,无根因则删除并记录；规则定期清理", "verify": "正文 line 129-133 核对", "expected": "present"},
+    {"id": "V9", "type": "honesty_grading", "claim": "区分已实现做法 vs 愿景/宣称；数字为 self-reported 不自证有效；up to 10 points 限于结构化文件生成任务不外推", "verify": "全文核对：是否有 beyond-shipped 的愿景词、数字口径限定", "expected": "graded"},
+    {"id": "V10", "type": "repo_gap", "claim": "逐项核验本仓是否有对应可执行门禁：①审查规则不被改动篡改 ②commit/产物验证戳含未验证 ③三轮不过转人 ④漏检变规则的可证伪门槛 ⑤审查者被评估(分阶段recall)", "verify": "源码级调用核验 svagent/ 现有模块，逐项给 repo_has_corresponding_gate 布尔", "expected": "audited"}
+  ],
+  "repo_gap_targets": [
+    {"key": "rule_integrity", "desc": "审查/判据规则是否来自被改动不可达的基线（对应 KB-AUDIT07）"},
+    {"key": "verification_stamp", "desc": "产物/提交是否打验证戳且能标注未验证(none)"},
+    {"key": "three_round_escalation", "desc": "三轮修不过是否转人/中断"},
+    {"key": "miss_to_rule_gate", "desc": "漏检变规则是否有可证伪门槛（多次出现+agent证伪+人批）"},
+    {"key": "reviewer_evaluation", "desc": "审查者本身是否被分阶段评估（raw/post/final recall + 稳定集对照）"}
+  ],
+  "decision_rule": "V1-V8 全 present 且 V9 graded 才算精研到位；V10 五个 target 逐项核，至少一项 repo_has_corresponding_gate=false 且能编译成会拦会判的门禁 → 触发 §53 代码强固（编译新门禁，预注册实现前 SHA256 锁存）；否则只写认知不动代码。",
+  "three_layer_honesty": {
+    "judgeable": "数字内部一致性 / 机制是否一手列出 / 已实现vs愿景 / 本仓有无对应门禁",
+    "not_judgeable": "文章所述系统的真实有效性 / 90%与10points的因果 / 内部流程在别处的可迁移效果（均 self-reported，KB-RSI06 折扣）",
+    "isomorphism_discount": "E2E难骗/属性测试/差异测试/规则不被篡改/漏检变规则 与本仓 KB-AUDIT07/KB-RSI06/lineage_guard/judgment_robustness/knowledge_base 高度同构，按 KB-STRUCT02 同谱系印证打折，不构成本仓框架独立验证"
+  },
+  "kb_decision_intent": "按 KB-META01 判断是否真新增：若只是现有认认知的工程实例则加固 support 不新增；若出现新攻击面（如审查者评估的分阶段recall）再议新增。",
+  "honest_boundaries": [
+    "一手仅此一篇博客 + 二手转载交叉核对标题/作者/日期，不复现其内部实验、不把 self-reported 数字当独立证据。",
+    "up to 10 points 是特定任务内部测试结果，不外推到软件工程整体。",
+    "本仓缺口核验基于源码调用点，与 §58/§59 一致：有调用点≠已接入 run_loop，如实标注工具库定位。",
+    "同构打折：本文机制与既有门禁同谱系，编译新门禁是为补执行缺口，不为证明框架更优。"
+  ]
+}

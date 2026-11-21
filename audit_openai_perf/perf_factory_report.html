@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>OpenAI Performance Factory 精研</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--fg:#e6edf3;--mut:#8b949e;--acc:#58a6ff;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--bd:#30363d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,"Segoe UI","PingFang SC",sans-serif;line-height:1.7}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 24px 80px}h1{font-size:26px;margin:0 0 6px}
+.sub{color:var(--mut);margin-bottom:28px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:20px 24px;margin:16px 0}
+h2{font-size:18px;margin:0 0 12px;color:var(--acc)}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+th,td{border:1px solid var(--bd);padding:8px 10px;text-align:left;font-size:13px;vertical-align:top}
+th{background:#1f2630;color:var(--mut)}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.tag{display:inline-block;border:1px solid var(--bd);border-radius:6px;padding:2px 8px;font-size:12px;color:var(--mut);margin-right:6px}
+ul{margin:8px 0}li{margin:4px 0}.foot{color:var(--mut);font-size:12px;margin-top:24px}
+.banner{background:#132a1a;border:1px solid var(--ok);border-radius:8px;padding:12px 16px;margin:12px 0}
+</style></head><body><div class="wrap">
+<h1>精研：OpenAI Performance Factory keeps ChatGPT fast</h1>
+<div class="sub">工程博客一手研读 · 判据 P1–P7 · 数字复算 · 三层诚实结论 · 代码强固裁决（§57） · 预注册分析前 SHA256 锁存</div>
+
+<div class="banner"><b>一句话结论：</b>一篇扎实的官方工程博客，给出可借鉴的 agent 工作流架构与 8 条回测防泄露纪律；数字自洽但全为 self-reported、无外部复现。本仓从中编译出第一道『回测信息污染隔离』门禁，补齐 evaluation_reliability 的缺口。</div>
+
+<div class="card"><h2>一、对象与来源</h2>
+<p>工程博客（一手官方 engineering post，署名 Members of Technical Staff，2026-11-19），非学术论文：判据适配为『机制可借鉴性 + 数字内部一致性 + 已实现vs愿景分级』，不硬套论文式消融复算</p>
+<p><span class="tag">URL</span><span class="mono">https://openai.com/index/how-openai-performance-factory-keeps-chatgpt-fast/</span></p>
+<p><span class="tag">锁存</span><span class="mono">SHA256 def556539862...（分析前）</span></p>
+</div>
+
+<div class="card"><h2>二、判据 P1–P7（7/7 OK）</h2>
+<table><tr><th>ID</th><th>判据</th><th>结论</th><th>要点</th></tr><tr><td class="mono">P1</td><td>对象与主体判定</td><td class="ok">ok</td><td>官方一手、署名、日期齐全；已上线数字(1700/600)与愿景(we are working on/exploring/proactive/without-human)可分；首版判据用 all 匹配4个愿景词过严被自咬(we.re exploring 因弯引号未命中)，改为 any+宽字符类——信事实改判据</td></tr><tr><td class="mono">P2</td><td>数字内部一致性</td><td class="ok">ok</td><td>数字自洽但均 self-reported；无外部核验，按 KB-RSI06 样本外复验折扣</td></tr><tr><td class="mono">P3</td><td>技术声称可核验性</td><td class="ok">ok</td><td>四组件/状态机/对抗审查/perf-forensics 机制描述具体可借鉴；unprecedented/good chance 等营销词不作证据（KB-R-MS01 事实真≠结论真）</td></tr><tr><td class="mono">P4</td><td>回测信息污染防护</td><td class="ok">ok</td><td>一手列出 8/8 条防 spoiler 纪律；本仓 evaluation_reliability 无对应可执行门禁（has_gate=False）→ 真实代码强固候选</td></tr><tr><td class="mono">P5</td><td>对抗性审查机制</td><td class="ok">ok</td><td>独立 session 反驳诊断 + 反事实 + 真实案例重新打开调查；验证独立于生成，可借鉴；按 KB-STRUCT02 打折（同构≠互证）</td></tr><tr><td class="mono">P6</td><td>self-repair 闭环</td><td class="ok">ok</td><td>每日 agent 扫工具故障→重复错误建修复任务→evals 验证过关；与 improvement_memory 回归检测同构，可借鉴"工具层故障纳入监控"</td></tr><tr><td class="mono">P7</td><td>代码强固裁决</td><td class="ok">ok</td><td>P4 证实一手证据充分且本仓无对应门禁 → 满足 KB-META01（会拦/会判/会降级）才落地；本轮裁决=落地</td></tr></table>
+<p class="foot">P1 首版用 all 匹配 4 个愿景词过严被自咬（弯引号导致 exploring 未命中），改为 any+宽字符类——信事实、改判据。</p>
+</div>
+
+<div class="card"><h2>三、数字复算（内部一致性）</h2>
+<table><tr><th>项</th><th>复算值</th><th>文章声称</th><th>判定</th></tr><tr><td>1700 investigations / ~100天</td><td class="mono">17</td><td class="mono">17/day</td><td class="ok">OK</td></tr><tr><td>600 root caused / 1700</td><td class="mono">35.3</td><td class="mono">约35%</td><td class="ok">OK</td></tr><tr><td>70% accurate + 30% refine / 100</td><td class="mono">100</td><td class="mono">100 人工审查</td><td class="ok">OK</td></tr><tr><td>30+ performance tools</td><td class="mono">30</td><td class="mono">more than 30</td><td class="ok">OK</td></tr></table>
+<p class="foot">数字自洽不等于真实性：均为官方 self-reported，无开源代码、无外部复现（KB-RSI06 样本外复验折扣）。</p>
+</div>
+
+<div class="card"><h2>四、P4 重点：8 条回测防 spoiler 纪律（本仓缺口）</h2>
+<ul><li class="ok">✓ fresh_investigator</li><li class="ok">✓ original_signal</li><li class="ok">✓ stripped_giveaway</li><li class="ok">✓ no_saved_memories</li><li class="ok">✓ no_incident_writeup</li><li class="ok">✓ no_previous_runs</li><li class="ok">✓ inspect_transcript</li><li class="ok">✓ separate_timing_deployment</li></ul>
+<p>本仓 evaluation_reliability.py 无对应可执行门禁（P4 真实核验 repo_has_corresponding_gate=False）→ 代码强固候选成立。</p>
+</div>
+
+<div class="card"><h2>五、代码强固：backtest_integrity.py（会拦/会判/会降级）</h2>
+<table><tr><th>活体场景</th><th>动作</th><th>码</th></tr><tr><td class="mono">clean</td><td class="mono">ok</td><td class="mono">BACKTEST.CLEAN</td></tr><tr><td class="mono">leak</td><td class="mono">block</td><td class="mono">BACKTEST.GIVEWAY</td></tr><tr><td class="mono">weak</td><td class="mono">downgrade</td><td class="mono">BACKTEST.PARTIAL_ISOLATION</td></tr><tr><td class="mono">spoiler</td><td class="mono">block</td><td class="mono">BACKTEST.SPOILER_FOUND</td></tr><tr><td class="mono">undeclared</td><td class="mono">flag</td><td class="mono">BACKTEST.UNDECLARED</td></tr></table>
+<p class="ok">活体回归 true · 新增 14 项测试 · 全量 343 → 357 passed</p>
+<p class="foot">规则：关键隔离项（fresh/stripped/no-writeup）缺失→block；弱项缺失→downgrade；事后查获 spoiler→block；状态未声明→flag。纯函数/语义布尔/不读字面串；吸取 §56 教训，源码核验先去注释。</p>
+</div>
+
+<div class="card"><h2>六、三层诚实结论</h2>
+<p><span class="tag">可判</span>数字内部一致性; 已实现vs愿景分级; 机制可借鉴性; 本仓是否有对应门禁</p>
+<p><span class="tag">不可判</span>系统真实有效性（无外部复现/无开源代码）; 性能改善因果关系; 工程师实际负担变化</p>
+<p><span class="tag">同构打折</span>状态机/对抗审查/自修复与本仓 task_retrospective/lineage_guard/improvement_memory 同构，按 KB-STRUCT02 打折，不构成独立验证</p>
+</div>
+
+<div class="card"><h2>七、入库决策与诚实边界</h2>
+<p>不新增 KB（防 vanity）：加固 KB-RSI06 / KB-AUDIT04 / KB-AUDIT02 的 support 指针指向新门禁。知识库 101 条、ready=True、vanity 0.04。</p>
+<ul><li>文章为官方一手但对自身系统自报、无开源代码、无外部复现</li><li>数字为 self-reported，内部一致性通过不等于真实性验证</li><li>已实现与愿景须分级，不把 exploring 当 shipped</li><li>同构不等于互证：OpenAI 用类似机制不构成本仓框架独立验证</li><li>代码强固只编译工程纪律，不宣称复现其内部系统</li></ul>
+</div>
+<div class="foot">pre-reg SHA256 lock verified · date 2026-11-22 · SVL Agent 精研流水线</div>
+</div></body></html>

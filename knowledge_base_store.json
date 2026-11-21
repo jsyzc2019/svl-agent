@@ -1438,7 +1438,8 @@
         "commentary:§28 上证样本外回测",
         "svagent/transfer_holdout.py:check_transfer + tests/test_transfer_holdout.py — 样本外复验编译为迁移增益判定(相对目标域基线,非绝对精度)",
         "audit_swegym/result.json:S2 — 摘要19%gains vs 表内13.6%口径差;491轨迹样本外scaling但主结果无多次std,样本外复验需看口径",
-        "svagent/judgment_robustness.py:bootstrap_stability + tests/test_judgment_robustness.py — SWE-Gym get_bootstrap_accuracy_std 编译：判定附 bootstrap std/置信区间，std≥0.10 降级（同证据重排会摆动，不据单点下强结论）；固定 seed=42 可复现"
+        "svagent/judgment_robustness.py:bootstrap_stability + tests/test_judgment_robustness.py — SWE-Gym get_bootstrap_accuracy_std 编译：判定附 bootstrap std/置信区间，std≥0.10 降级（同证据重排会摆动，不据单点下强结论）；固定 seed=42 可复现",
+        "svagent/backtest_integrity.py:check_backtest_integrity + tests/test_backtest_integrity.py(14项) — 样本外复验补『回测信息污染隔离』维度：fresh/stripped/禁读事后报告/分开评分，关键项缺失 block、弱项缺失 downgrade；编译自 OpenAI Performance Factory 一手8条纪律(§57)"
       ],
       "evidence": "experiment",
       "addressable": true,
@@ -1894,7 +1895,8 @@
         "audit_reveal/evidence.json:V5 — CTRL/critic基线引用自Xie2025旧LCB版本(24.08-24.11)非独立重跑,按评估者独立性降级看待;golden filter是训练侧来源隔离的正向工程实例",
         "audit_swegym/result.json:S5 — Pass@k37.8 vs Best@k29.8@k8 的gap=verifier不完美;Best@k不是真值,评估者可靠性再证",
         "svagent/judgment_robustness.py:bootstrap_stability — 评估者可靠性补“判定稳定性”维度：不止看 judge 个数，还看结论在重采样下是否稳定；借鉴 SWE-Gym pass@k±std 不给裸点估计",
-        "sim_review_result.json:N1 — judge/proposer/selector同源Gemini→REL.SHARED_JUDGE_ERROR(workspace域)；coding用frozen verifier→SCALABLE_OK。评估者可靠性首次分域判定"
+        "sim_review_result.json:N1 — judge/proposer/selector同源Gemini→REL.SHARED_JUDGE_ERROR(workspace域)；coding用frozen verifier→SCALABLE_OK。评估者可靠性首次分域判定",
+        "svagent/reviewer_evaluation.py（§60：审查者本身也要被评估——raw/post/final 分阶段 + 稳定集对照防 over-flagging + tuning/test 分离；评估者独立性从『被审对象』推广到『评估方案自身』）"
       ],
       "evidence": "theory",
       "addressable": true,
@@ -2110,7 +2112,9 @@
         "audit_fg_compare/fg_result.json:judge_self_audit.SA1(118字符误判内容过大,实为URL编码)",
         "audit_fg_compare/fg_result.json:judge_self_audit.SA3(IDomainResolver文件变小差点误判,读全文确认接口外移)",
         "audit_reveal/evidence.json:V4 — ∆↓=0在DAPO上TAPO(0.0)vs outcome(1.32)有差异,但Qwen backbone上两者都0.0 → 单一backbone的指标差不定罪,保留反例;主表×25与消融×8轮数不等改用同轮数比较",
-        "svagent/judgment_robustness.py:validate_live_suite — 不单点定罪编译到活体样例集：每个攻击族须正负成对，只反例或只正例 flag；借鉴 SWE-Gym D={k:v if len(v[True])>0}"
+        "svagent/judgment_robustness.py:validate_live_suite — 不单点定罪编译到活体样例集：每个攻击族须正负成对，只反例或只正例 flag；借鉴 SWE-Gym D={k:v if len(v[True])>0}",
+        "svagent/backtest_integrity.py:G3 spoiler_found→block — 不单点定罪编译到回测：事后 transcript 审查确认答案泄露→回测无效；fresh+stripped+禁读writeup三关键项才放行(§57)",
+        "svagent/reviewer_evaluation.py:NO_STABLE_CONTROL（§60：merged stable changes 作对照防 over-flagging=不单点定罪的工程实例）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -2133,7 +2137,9 @@
       "support": [
         "audit_fg_compare/fg_evidence.json:D5_reproduction.selftest_invocation",
         "audit_fg_compare/fg_result.json:judge_self_audit",
-        "KB-R-RETRO01(同类但机制不同：那是算错，这是未接线)"
+        "KB-R-RETRO01(同类但机制不同：那是算错，这是未接线)",
+        "architecture_decision_A.json:three_layer_audit + kb_increment（§58 用户选 A：调用点分在线 run_loop 与离线审计脚本；如实声明工具库定位≠死代码，KB-AUDIT03 判定粒度细化）",
+        "svagent/call_site_integrity.py:audit_call_site + call_site_result.json（§59：把 KB-AUDIT03 判定粒度从『有无调用点』编译成会拦会判的门禁——调用点分 none/offline_audit/online_main_loop + 定位如实声明 + 调用者真实；死代码block/离线冒充在线downgrade/诚实工具库preserve/幽灵接线block）"
       ],
       "evidence": "audit",
       "addressable": true,
@@ -2160,7 +2166,9 @@
         "audit_random/random_prereg.json:judge_self_audit",
         "KB-AUDIT01(脆弱断言)与KB-AUDIT02(单一检查点)的同类但机制不同：本次是对象/口径不等价",
         "audit_reavideo/evidence.json:V5 — 转码改变取证特征,拿转码后文件套原文件规则=验证对象≠取证对象的新实例",
-        "§56 自审工具假阳性实录：源码级核验脚本把代码注释里举例的「高度同构」当成判定逻辑字面串，误报 FAIL；口径修正（先去 docstring 再去行注释）后通过——验证工具的对象/口径也须对等，否则误伤正确代码（process 源增量，超出预注册列举）"
+        "§56 自审工具假阳性实录：源码级核验脚本把代码注释里举例的「高度同构」当成判定逻辑字面串，误报 FAIL；口径修正（先去 docstring 再去行注释）后通过——验证工具的对象/口径也须对等，否则误伤正确代码（process 源增量，超出预注册列举）",
+        "svagent/backtest_integrity.py:G5 unknown→flag — 口径对等扩展到回测可见信息范围：隔离状态未声明(unknown)不可判定，默认降级；测试样本与真实生产口径须对齐(§57)",
+        "svagent/reviewer_evaluation.py:check_review_evaluation + audit_claude_verify/final_result.json（§60：分阶段 recall 被压成单一端到端分数=口径失真 block；文章 line 123 一手纪律编译）"
       ],
       "evidence": "audit",
       "addressable": true,

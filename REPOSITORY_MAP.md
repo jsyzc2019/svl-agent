@@ -12,10 +12,10 @@
 | 顺序 | 文件 | 作用 |
 |---|---|---|
 | 1 | `README.md` | 核心命题、三层递归、关键实测结果、设计原则 |
-| 2 | `commentary.md` | 完整推导日志，§1–§56 逐节记录机制如何长出来 |
+| 2 | `commentary.md` | 完整推导日志，§1–§60 逐节记录机制如何长出来 |
 | 3 | `REPOSITORY_MAP.md`（本文件） | 文件按主题归位 |
-| 4 | `svagent/` | 可执行代码（43 个模块，惰性导入） |
-| 5 | `tests/` | 回归测试（343 项，`python3 -m pytest -q`） |
+| 4 | `svagent/` | 可执行代码（46 个模块，惰性导入） |
+| 5 | `tests/` | 回归测试（385 项，`python3 -m pytest -q`） |
 
 ---
 
@@ -120,7 +120,11 @@ core → verifiers → harness → handoff          L0 产物层：生成→判�
 - 研读：`audit_dgm/`（预注册/五重 SHA256/8 判据/报告 `dgm_report.html`，结果 `result.json`）
 - 架构对比：`build_dgm_svl_compare.py` → `dgm_svl_compare.html` + `dgm_svl_compare_result.json`
   （8 维逐项对照 / 16 一手锚点 / 16 条双向借鉴；同构打折、不新增 KB）
-- 推导：`commentary.md` §49（判据审计）/ §50（扬长避短·相互借鉴）/ §51（代码落地：两道门禁 + 判据自咬修正）/ §53（SWE-Gym 代码强固 + 审读三段式工作流规范）/ §54（元学习闭环泛化：所有任务双源复盘 + 判据自咬实录）/ §55（SIM 再审：旧论文×新框架，3 补刀 + 循环论证警觉）/ §56（谱系打折门禁：警觉长牙 + 自审工具假阳性）
+- 推导：`commentary.md` §49（判据审计）/ §50（扬长避短·相互借鉴）/ §51（代码落地：两道门禁 + 判据自咬修正）/ §53（SWE-Gym 代码强固 + 审读三段式工作流规范）/ §54（元学习闭环泛化：所有任务双源复盘 + 判据自咬实录）/ §55（SIM 再审：旧论文×新框架，3 补刀 + 循环论证警觉）/ §56（谱系打折门禁：警觉长牙 + 自审工具假阳性）/ §57（OpenAI Performance Factory 精研：回测信息污染隔离门禁 + P1判据自咬）/ §58（架构定位决策：用户选 A 保持判据库显式调用，把 KB-AUDIT03 量回本仓、判定粒度细化）/ §59（把断言落到代码：§58 认知增量编译成调用点完整性门禁，判据自审一次过）/ §60（精研 Claude Code 验证一文：审查者评估漏斗保真门禁 + 一次咬两处的判据自咬）
+- 架构定位决策（§58）：`architecture_decision_A.json`（三层核查：代码已落盘 / 未接 run_loop / 如实声明工具库定位；A vs B；双源复盘；诚实边界）→ 加固 KB-AUDIT03 一条 support（调用点分在线主循环 vs 离线审计脚本、定位声明诚实性决定是否死代码）。**本轮不动代码、不加测试、不接编排器**；101 条不新增；全量 357 passed。
+- 调用点完整性门禁（§59）：`call_site_prereg.json` + `call_site_prereg.sha256`（实现前锁存）→ `svagent/call_site_integrity.py`（audit_call_site：R0 字面串 flag / R1 无断言 block / R2 死代码声称自动 block / R3 幽灵接线 block / R4 离线冒充在线 downgrade / R5 诚实未接线 downgrade / R6 诚实工具库 preserve / R7 在线咬合 ok / R8 定位未声明 flag）→ `tests/test_call_site_integrity.py`（14 项）→ `build_call_site_result.py` + `call_site_result.json` + `call_site_report.html`（后验）。把 §58「调用点分在线/离线、定位声明算不算数」的认知断言编译成代码（用户叮嘱"把断言落到代码"）；AST 源码自审判定分支无中文字面串比较（前置应用 §56 教训）；遵循 §58 选 A 不接 run_loop；101 条不新增，加固 KB-AUDIT03 一条；全量 371 passed。
+- Claude Code 验证一文精研（§60）：`audit_claude_verify/`（一手 HTML 106KB+正文 164 行二重锁存 → `prereg.json` V1–V10 分析前锁存 → `engine.py` 判据+三层诚实结论+V10源码缺口核验 → `result.json`）→ `reviewer_eval_prereg.json`+锁存（实现前）→ `svagent/reviewer_evaluation.py`（check_review_evaluation：三阶段压一分数 block / 无对照·tuning泄漏·无answer key downgrade / 漏斗倒挂·越界 flag / 全自洽 ok）→ `tests/test_reviewer_evaluation.py`（14 项）→ `build_report.py` + `final_result.json` + `claude_verify_report.html`（后验）。把文章 line 122-123『审查者也要被分阶段评估』编译成代码；活体回归首跑 4/8 失败咬出两处漏写 return，信规则改代码后 8/8 过；101 条不新增，加固 3 条（AUDIT04/STRUCT07/AUDIT02）；遵循 §58 选 A 不接 run_loop；全量 385 passed。
+- OpenAI 性能工厂精研（§57）：`audit_openai_perf/`（一手 HTML+正文三重锁存 → `prereg.json` P1–P7 分析前锁存 → `engine.py` 判据+数字复算+P4缺口核验 → `result.json`）→ `svagent/backtest_integrity.py`（回测信息污染隔离：关键项缺失 block / 弱项 downgrade / spoiler block / 未声明 flag）→ `tests/test_backtest_integrity.py`（14 项）→ `hardening_prereg.json`+锁存（实现前）→ `build_report.py` + `perf_factory_result.json` + `perf_factory_report.html`（后验）。本仓第一道回测污染门禁；101 条不新增，加固 3 条（RSI06/AUDIT04/AUDIT02）；P1 判据过严自咬修正；全量 357 passed。
 - 谱系打折门禁（§56）：`lineage_guard_prereg.json` + `lineage_guard_prereg.sha256`（实现前锁存）→ `svagent/lineage_guard.py`（discount_claim：R1 循环 block / R2 同构 downgrade / R3 部分 flag / R4 诚实 preserve / R5 独立 ok / R6 字面串 flag）→ `tests/test_lineage_guard.py`（13 项）→ `build_lineage_result.py` + `lineage_guard_result.json` + `lineage_guard_report.html`（后验）。把 §55 循环论证警觉从文字编译成通用门禁，替代 t2 brittle 匹配；自审工具口径错位（注释当代码）假阳性→修工具不修代码；101 条不新增，加固 3 条（STRUCT02/META01/AUDIT04）；全量 343 passed。
 - 优化落地：`optimize_preregistration.json` + `optimize_prereg.sha256`（预注册锁存）→ `svagent/scoring_integrity.py` + `svagent/transfer_holdout.py`（两道门禁）→ `tests/test_scoring_integrity.py` + `tests/test_transfer_holdout.py`（14 项）→ `build_optimize_result.py` + `optimize_result.json`（后验结果）。100 条不新增，仅加固 3 条 support；全量 301 passed。
 - 代码强固（§53）：`robustness_prereg.json` + `robustness_prereg.sha256`（实现前锁存）→ `svagent/judgment_robustness.py`（C1 bootstrap 稳定性 / C2 条件消融 / C3 活体样例校验）→ `tests/test_judgment_robustness.py`（15 项）→ `build_robustness_result.py` + `robustness_result.json` + `robustness_report.html`（后验）。借自 SWE-Gym 五类工程纪律，避其可训练 verifier 攻击面；加固 5 条 KB support（RSI06/STRUCT07/STRUCT03/AUDIT02/META01）；100 条不新增，全量 316 passed。
@@ -148,8 +152,11 @@ core → verifiers → harness → handoff          L0 产物层：生成→判�
 | `svagent/judgment_robustness.py` | SWE-Gym 代码工程纪律（§53） | 判定稳健性：bootstrap 置信度降级 / 条件消融揪冗余 / 活体样例成对+cap+seed 校验 |
 | `svagent/task_retrospective.py` | 用户元学习想法（§54） | 任务复盘：双源（任务+过程）+ 可证伪 + 目的约束 + 非复述；复述拦截/单源降级/失败未记降级 |
 | `svagent/lineage_guard.py` | SIM 再审循环论证警觉（§56） | 谱系打折：判据来源与被审对象同源却声称独立 → block；高同构 → downgrade；诚实标注 → preserve；字面串输入 flag |
+| `svagent/backtest_integrity.py` | OpenAI Performance Factory 8条防spoiler纪律（§57） | 回测信息污染隔离：关键隔离项缺失→block / 弱项缺失→downgrade / 事后查获spoiler→block / 状态未声明→flag |
+| `svagent/call_site_integrity.py` | §58 自审的认知增量 + 用户叮嘱（§59） | 调用点完整性：死代码/幽灵接线/无断言→block；离线冒充在线/诚实未接线→downgrade；诚实工具库/在线咬合→ok；定位未声明/字面串→flag |
+| `svagent/reviewer_evaluation.py` | Claude Code 验证一文 line 122-123（§60） | 审查者评估漏斗保真：三阶段压成一分数→block；无对照/tuning泄漏/无answer key→downgrade；漏斗倒挂/越界→flag；分阶段+对照+分离+计分→ok |
 
-每道门禁都有对应测试：`tests/test_disambiguation_gate.py` `test_improvement_memory.py` `test_component_attribution.py` `test_evaluation_reliability.py` `test_scoring_integrity.py` `test_transfer_holdout.py` `test_judgment_robustness.py` `test_task_retrospective.py` `test_lineage_guard.py`。
+每道门禁都有对应测试：`tests/test_disambiguation_gate.py` `test_improvement_memory.py` `test_component_attribution.py` `test_evaluation_reliability.py` `test_scoring_integrity.py` `test_transfer_holdout.py` `test_judgment_robustness.py` `test_task_retrospective.py` `test_lineage_guard.py` `test_backtest_integrity.py` `test_call_site_integrity.py` `test_reviewer_evaluation.py`。
 
 ---
 

@@ -1,0 +1,167 @@
+{
+  "prereg_id": "CLAUDE-VERIFY-001",
+  "object_type": "engineering_blog",
+  "source_lock": {
+    "url": "https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/",
+    "html_sha256": "e76d9a9fe8bdf5eaeb9515a9ad71373d7445e034fc50bf923f877892c2a01ea5",
+    "txt_sha256": "6bdf1e2aff1e511e1a7696c4697f7f5f5569c995b6cfb7747fc712f89919ade4",
+    "author": "Addy Osmani",
+    "published": "Nov 16, 2026",
+    "category": "Engineering",
+    "http_code": 200
+  },
+  "source_sha_ok": true,
+  "prereg_sha_stored": "0e645522ad6590e3094f53b74961b9b72684261377f7d9078c10bdc179d02e10",
+  "prereg_sha_actual": "0e645522ad6590e3094f53b74961b9b72684261377f7d9078c10bdc179d02e10",
+  "V1_V8_text_criteria": {
+    "V1": {
+      "anchors": {
+        "~90%": true,
+        "written and": true
+      },
+      "present": true
+    },
+    "V2": {
+      "anchors": {
+        "up to 10 points": true,
+        "separate grader": true,
+        "rubric": true
+      },
+      "present": true
+    },
+    "V3": {
+      "anchors": {
+        "E2E tests": true,
+        "Property tests": true,
+        "Differential tests": true,
+        "fast-check": true,
+        "Hypothesis": true,
+        "proptest": true
+      },
+      "present": true
+    },
+    "V4": {
+      "anchors": {
+        "Verification means running the change": true,
+        "verify": true,
+        "three rounds": true
+      },
+      "present": true
+    },
+    "V5": {
+      "anchors": {
+        "never from the pull request": true,
+        "base or default branch": true,
+        "commits": true,
+        "cheap checks first": true
+      },
+      "present": true
+    },
+    "V6": {
+      "anchors": {
+        "39 items": true,
+        "3 to 10": true,
+        "trigger": true
+      },
+      "present": true
+    },
+    "V7": {
+      "anchors": {
+        "off, observe, and enforce": true,
+        "stamp": true,
+        "\"none\"": true,
+        "blocked twice": true,
+        "over-flagging": true,
+        "tuning set is split": true
+      },
+      "present": true
+    },
+    "V8": {
+      "anchors": {
+        "at least two PRs": true,
+        "Three agents will try to disprove": true,
+        "three bug finders": true,
+        "can't skip": true,
+        "tidy": true
+      },
+      "present": true
+    }
+  },
+  "V1_V8_all_present": true,
+  "V9_honesty_grading": {
+    "reported_numbers": {
+      "90pct_code_by_claude": {
+        "value": "~90%",
+        "self_reported": true,
+        "note": "团队自报，无外部审计；KB-RSI06 折扣"
+      },
+      "up_to_10_points": {
+        "value": "up to 10 points",
+        "scope": "structured file generation ONLY",
+        "self_reported": true,
+        "note": "限于特定任务，line 38 明确 internal testing + 限定语境，不外推"
+      },
+      "39_checklist_items": {
+        "value": 39,
+        "note": "line 96 一手列出"
+      },
+      "3_to_10_triggered": {
+        "value": "3 to 10",
+        "note": "line 97 一手列出"
+      },
+      "three_round_escalation": {
+        "value": 3,
+        "note": "line 92 一手列出"
+      }
+    },
+    "shipped_vs_vision": "全文为已实施做法描述（we do / we maintain / we've created），无 'we are exploring' 类愿景词冒充已上线；分级=SHIPPED_PRACTICE",
+    "honesty_signals": [
+      "line 117 自承 Claude Code isn't perfect（被挡两次第三次放行，防卡死）",
+      "line 128 自承 recall 调到再提升就 overfitting eval（不过度刷指标）",
+      "line 122 用 merged stable changes 作 control 防 over-flagging（自我约束）"
+    ],
+    "verdict": "GRADED"
+  },
+  "V10_repo_gap": {
+    "targets": [
+      {
+        "key": "rule_integrity",
+        "repo_has_corresponding_gate": true,
+        "evidence": "svagent/scoring_integrity.py + KB-AUDIT07（计分器可达性/篡改）",
+        "note": "对应文章 line 103-107『改动不能改自己的检查』"
+      },
+      {
+        "key": "verification_stamp",
+        "repo_has_corresponding_gate": false,
+        "evidence": "call_site_integrity 的 none=调用点位置（非验证戳）；无产物级验证状态戳",
+        "note": "部分精神在 §58/§59，但无统一可查询的验证戳字段"
+      },
+      {
+        "key": "three_round_escalation",
+        "repo_has_corresponding_gate": false,
+        "evidence": "insight.py 有 escalate_rate（EU 交人率实验），非验证三轮转人门禁",
+        "note": "概念存在但非可执行门禁"
+      },
+      {
+        "key": "miss_to_rule_gate",
+        "repo_has_corresponding_gate": false,
+        "evidence": "knowledge_base 加固需 support 证据，但无『2PR复现+3agent证伪+人批』硬门槛门禁",
+        "note": "精神在 KB 流程，未编译成会拦的门禁"
+      },
+      {
+        "key": "reviewer_evaluation",
+        "repo_has_corresponding_gate": false,
+        "evidence": "finance_blind_test.py/knowledge_base.py 的 recall=检索/盲测指标；无 raw→post→final 漏斗保真门禁",
+        "note": "真缺口：本仓『判据/审查者』本身未按分阶段 recall + 稳定集对照评估"
+      }
+    ],
+    "gaps": [
+      "verification_stamp",
+      "three_round_escalation",
+      "miss_to_rule_gate",
+      "reviewer_evaluation"
+    ]
+  },
+  "prereg_lock_ok": true,
+  "decision": "DEEP_READ_COMPLETE"
+}

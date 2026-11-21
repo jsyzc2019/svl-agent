@@ -1,0 +1,76 @@
+{
+  "prereg_id": "CALL-SITE-INTEGRITY-001",
+  "built_at": "2026-11-22T03:23:09+08:00",
+  "prereg_sha256_stored": "b8d5e471a48ba335613375ac8b588aabdaf98ed261fa50e9c47057842181c6a1",
+  "prereg_sha256_actual": "b8d5e471a48ba335613375ac8b588aabdaf98ed261fa50e9c47057842181c6a1",
+  "prereg_lock_ok": true,
+  "rules": [
+    "R0 NON_SEMANTIC_INPUT: call_site 非枚举 或 任一 bool 字段非 bool → flag（拒绝对字面串/畸形输入判定，避开 §56 brittle 根因 KB-AUDIT01）",
+    "R1 FABRICATED_ASSERTION: assertion_exists=False → block（根本没有断言却声称验证，KB-AUDIT03 的最底层）",
+    "R2 DEAD_CODE_AUTO_CLAIM: call_site=none 且 declared_as_automatic=True → block（声称自动执行却无任何调用点=死代码+虚假安全感，KB-AUDIT03 原义）",
+    "R3 PHANTOM_WIRING: call_site=online_main_loop 且 caller_real=False → block（声称接入主循环但无真实调用者）",
+    "R4 OFFLINE_AS_ONLINE: call_site=offline_audit 且 declared_as_automatic=True → downgrade（离线调用点冒充在线自动，口径失真）",
+    "R5 UNWIRED_HONEST: call_site=none 且 declared_as_automatic=False → downgrade（诚实承认未接线，降级不拦截，KB-R08 preserve 精神）",
+    "R6 PRESERVE_TOOL_LIBRARY: call_site=offline_audit 且 positioning_honest=True 且 declared_as_automatic=False 且 caller_real=True → ok（如实声明的按需工具库，§58 本仓自身的定位，不拦截）",
+    "R7 ONLINE_WIRED: call_site=online_main_loop 且 caller_real=True → ok（真·自动咬合）",
+    "R8 UNDECLARED_POSITIONING: 其余 → flag（定位未如实声明，待核）"
+  ],
+  "live_regression": {
+    "cases": {
+      "本仓六道门禁(§58)": {
+        "action": "ok",
+        "code": "CALL_SITE.PRESERVE_TOOL_LIBRARY"
+      },
+      "FastGithub死代码(KB-AUDIT03原义)": {
+        "action": "block",
+        "code": "CALL_SITE.DEAD_CODE_AUTO_CLAIM"
+      },
+      "空头声称无断言": {
+        "action": "block",
+        "code": "CALL_SITE.FABRICATED_ASSERTION"
+      },
+      "幽灵接线": {
+        "action": "block",
+        "code": "CALL_SITE.PHANTOM_WIRING"
+      },
+      "离线冒充在线": {
+        "action": "downgrade",
+        "code": "CALL_SITE.OFFLINE_AS_ONLINE"
+      },
+      "诚实未接线": {
+        "action": "downgrade",
+        "code": "CALL_SITE.UNWIRED_HONEST"
+      },
+      "真自动咬合": {
+        "action": "ok",
+        "code": "CALL_SITE.ONLINE_WIRED"
+      },
+      "brittle字面串对照": {
+        "action": "flag",
+        "code": "CALL_SITE.NON_SEMANTIC_INPUT"
+      }
+    },
+    "checks": {
+      "本仓六道门禁(§58)": true,
+      "FastGithub死代码(KB-AUDIT03原义)": true,
+      "空头声称无断言": true,
+      "幽灵接线": true,
+      "离线冒充在线": true,
+      "诚实未接线": true,
+      "真自动咬合": true,
+      "brittle字面串对照": true
+    },
+    "all_passed": true
+  },
+  "verdict": {
+    "all_live_passed": true,
+    "rule_count": 9,
+    "case_count": 8
+  },
+  "honest_boundaries": [
+    "门禁只判『调用点与定位声明的自洽性』，不判被审对象本身的对错、不替代实质证据。",
+    "调用点位置与定位诚实性须调用方如实声明，声明本身不可自证。",
+    "本门禁由 §58 本仓自审的认知增量编译，按 KB-STRUCT02 不构成对本仓框架的独立验证。",
+    "活体样例用于机制回归，非复现任何外部实验；不改变 357 项既有测试，不接入 run_loop（遵循 §58 用户选 A）。"
+  ]
+}

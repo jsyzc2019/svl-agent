@@ -1,0 +1,156 @@
+{
+  "title": "精研《How the Claude Code team thinks about verification》(Addy Osmani, claude.dev, 2026-11-16)",
+  "built_at": "2026-11-22T03:33:10+08:00",
+  "locks": {
+    "article_html": true,
+    "prereg": true,
+    "reviewer_eval_prereg": true
+  },
+  "V1_V8_all_present": true,
+  "V9_grading": {
+    "reported_numbers": {
+      "90pct_code_by_claude": {
+        "value": "~90%",
+        "self_reported": true,
+        "note": "团队自报，无外部审计；KB-RSI06 折扣"
+      },
+      "up_to_10_points": {
+        "value": "up to 10 points",
+        "scope": "structured file generation ONLY",
+        "self_reported": true,
+        "note": "限于特定任务，line 38 明确 internal testing + 限定语境，不外推"
+      },
+      "39_checklist_items": {
+        "value": 39,
+        "note": "line 96 一手列出"
+      },
+      "3_to_10_triggered": {
+        "value": "3 to 10",
+        "note": "line 97 一手列出"
+      },
+      "three_round_escalation": {
+        "value": 3,
+        "note": "line 92 一手列出"
+      }
+    },
+    "shipped_vs_vision": "全文为已实施做法描述（we do / we maintain / we've created），无 'we are exploring' 类愿景词冒充已上线；分级=SHIPPED_PRACTICE",
+    "honesty_signals": [
+      "line 117 自承 Claude Code isn't perfect（被挡两次第三次放行，防卡死）",
+      "line 128 自承 recall 调到再提升就 overfitting eval（不过度刷指标）",
+      "line 122 用 merged stable changes 作 control 防 over-flagging（自我约束）"
+    ],
+    "verdict": "GRADED"
+  },
+  "V10_repo_gap": {
+    "targets": [
+      {
+        "key": "rule_integrity",
+        "repo_has_corresponding_gate": true,
+        "evidence": "svagent/scoring_integrity.py + KB-AUDIT07（计分器可达性/篡改）",
+        "note": "对应文章 line 103-107『改动不能改自己的检查』"
+      },
+      {
+        "key": "verification_stamp",
+        "repo_has_corresponding_gate": false,
+        "evidence": "call_site_integrity 的 none=调用点位置（非验证戳）；无产物级验证状态戳",
+        "note": "部分精神在 §58/§59，但无统一可查询的验证戳字段"
+      },
+      {
+        "key": "three_round_escalation",
+        "repo_has_corresponding_gate": false,
+        "evidence": "insight.py 有 escalate_rate（EU 交人率实验），非验证三轮转人门禁",
+        "note": "概念存在但非可执行门禁"
+      },
+      {
+        "key": "miss_to_rule_gate",
+        "repo_has_corresponding_gate": false,
+        "evidence": "knowledge_base 加固需 support 证据，但无『2PR复现+3agent证伪+人批』硬门槛门禁",
+        "note": "精神在 KB 流程，未编译成会拦的门禁"
+      },
+      {
+        "key": "reviewer_evaluation",
+        "repo_has_corresponding_gate": false,
+        "evidence": "finance_blind_test.py/knowledge_base.py 的 recall=检索/盲测指标；无 raw→post→final 漏斗保真门禁",
+        "note": "真缺口：本仓『判据/审查者』本身未按分阶段 recall + 稳定集对照评估"
+      }
+    ],
+    "gaps": [
+      "verification_stamp",
+      "three_round_escalation",
+      "miss_to_rule_gate",
+      "reviewer_evaluation"
+    ]
+  },
+  "compiled_gate": {
+    "module": "svagent/reviewer_evaluation.py",
+    "symbol": "check_review_evaluation",
+    "rules": [
+      "R0 NON_SEMANTIC_INPUT: 非 bool 字段 或 recall 非 None 且不在[0,1] → flag（拒绝对字面串/越界值判定，避开 §56 brittle 根因 KB-AUDIT01）",
+      "R1 SINGLE_END_TO_END_SCORE: not staged_recall → block（把三阶段压成一个端到端分数=看不出系统丢了已找到的 bug，文章 line 123 明确该 nuance 会丢；KB-AUDIT04 口径对等）",
+      "R2 NO_STABLE_CONTROL: not stable_control_used → downgrade（无稳定集对照=无法区分真发现与 over-flagging，line 122）",
+      "R3 TUNING_TEST_LEAK: not tuning_test_separated → downgrade（tuning 与 fixed test 不分=过拟合 eval，line 122）",
+      "R4 NO_ANSWER_KEY: not answer_key_scored → downgrade（不按『是否正确描述 bug』计分=分数口径失真，line 122）",
+      "R5 FUNNEL_INVERTED: staged_recall 且 final_recall/raw_recall 均给出且 final_recall > raw_recall → flag（漏斗倒挂：验证过滤不该让召回凭空变高，口径可疑待核）",
+      "R6 STAGED_CREDIBLE: 分阶段 + 稳定集对照 + tuning/test分离 + answer key + 漏斗不倒挂 → ok"
+    ],
+    "live_regression": {
+      "cases": {
+        "文章完整做法": {
+          "action": "ok",
+          "code": "REVIEW_EVAL.CREDIBLE"
+        },
+        "单一端到端分数": {
+          "action": "block",
+          "code": "REVIEW_EVAL.SINGLE_END_TO_END"
+        },
+        "无稳定集对照": {
+          "action": "downgrade",
+          "code": "REVIEW_EVAL.NO_STABLE_CONTROL"
+        },
+        "tuning/test未分离": {
+          "action": "downgrade",
+          "code": "REVIEW_EVAL.TUNING_TEST_LEAK"
+        },
+        "不按answer key计分": {
+          "action": "downgrade",
+          "code": "REVIEW_EVAL.NO_ANSWER_KEY"
+        },
+        "漏斗倒挂": {
+          "action": "flag",
+          "code": "REVIEW_EVAL.FUNNEL_INVERTED"
+        },
+        "字面串对照": {
+          "action": "flag",
+          "code": "REVIEW_EVAL.NON_SEMANTIC_INPUT"
+        },
+        "recall越界": {
+          "action": "flag",
+          "code": "REVIEW_EVAL.NON_SEMANTIC_INPUT"
+        }
+      },
+      "checks": {
+        "文章完整做法": true,
+        "单一端到端分数": true,
+        "无稳定集对照": true,
+        "tuning/test未分离": true,
+        "不按answer key计分": true,
+        "漏斗倒挂": true,
+        "字面串对照": true,
+        "recall越界": true
+      },
+      "all_passed": true
+    },
+    "kb_anchor": "加固 KB-AUDIT04（口径对等：分阶段 recall 被压成单一分数即口径失真）/ KB-STRUCT07（评估者独立性：审查者本身也要被评估）/ KB-AUDIT02（不单点定罪：稳定集对照防 over-flagging）。不新增条目（防 vanity，KB-META01）。"
+  },
+  "honest_boundaries": [
+    "一手仅此一篇博客 + 二手转载交叉核对标题/作者/日期，不复现其内部实验、不把 self-reported 数字当独立证据。",
+    "up to 10 points 是特定任务内部测试结果，不外推到软件工程整体。",
+    "本仓缺口核验基于源码调用点，与 §58/§59 一致：有调用点≠已接入 run_loop，如实标注工具库定位。",
+    "同构打折：本文机制与既有门禁同谱系，编译新门禁是为补执行缺口，不为证明框架更优。",
+    "门禁只判『评估方案的分阶段/对照/分离/计分口径是否自洽』，不判被审对象本身的对错。",
+    "缺口来自本仓源码核验，编译门禁是为补执行缺口，不为证明本仓框架优于 Claude Code 团队（KB-STRUCT02 同构打折）。",
+    "文章数字与做法均 self-reported，本门禁不复现其内部实验、不把 10 points 当独立证据。",
+    "遵循 §58 用户选 A：本门禁不接入 run_loop，仍是按需显式调用的判据工具库。",
+    "活体样例用于机制回归，非复现任何外部评测。"
+  ]
+}

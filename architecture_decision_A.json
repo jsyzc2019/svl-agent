@@ -1,0 +1,64 @@
+{
+  "decision_id": "ARCH-DECISION-A",
+  "title": "六道新门禁的定位决策：判据库显式调用 vs 接入 run_loop 自动咬合",
+  "question": "§57 核查发现六道新门禁在 svagent 内部调用点为 0、未接入 harness.run_loop；是否要把它们接进自动运行闭环？",
+  "options": {
+    "A": "保持现状：判据库 + 审计脚本显式调用，不改 run_loop、不加编排器",
+    "B": "加一层轻量编排器（如 audit_pipeline.run(criteria)），把门禁串成默认检查表接入流程"
+  },
+  "selected": "A",
+  "selected_by": "user",
+  "timestamp": "2026-11-22T03:14:22+08:00",
+  "three_layer_audit": {
+    "layer1_code_changed": {
+      "verdict": "YES",
+      "detail": "§57 改动已落盘：backtest_integrity.py(139行)、test_backtest_integrity.py(14项)、__init__.py 惰性导入登记、KB 3 条 support 加固；git 未提交区可见 M/??。",
+      "evidence": ["svagent/backtest_integrity.py", "tests/test_backtest_integrity.py", "svagent/__init__.py"]
+    },
+    "layer2_auto_loop": {
+      "verdict": "NO",
+      "detail": "六道门禁在 svagent 内部相互调用点均为 0；harness.run_loop 只接经典文本 verifiers；真实调用者是 tests/ 与各轮 engine.py / build_*_result.py 脚本。",
+      "evidence": ["svagent/harness.py", "tests/", "audit_openai_perf/engine.py"]
+    },
+    "layer3_positioning": {
+      "verdict": "EXPLICIT_TOOL_LIBRARY",
+      "detail": "门禁定位为按需调用的判据工具库，由审计流程显式调用并出证据、下结论；不伪装成在线自动关卡。"
+    }
+  },
+  "decision": {
+    "choice": "A",
+    "meaning": "维持'造好牙、装进工具盒、每次审读显式拿出来咬'的架构定位；不追求'装进嘴里随时自咬'。",
+    "code_impact": "none",
+    "why_A": [
+      "门禁签名各异，需显式上下文（held-out 声明、谱系来源、回测隔离状态），不适配只处理文本草稿的 run_loop。",
+      "真实调用者已存在（测试 + 审计脚本），非零调用点的死代码，不构成 KB-AUDIT03 的虚假安全感。",
+      "不破坏现有架构、不牺牲灵活性；代价是每次审读依赖调用方正确选用门禁。",
+      "B 会动架构、引入编排层，收益（自动化）不足以抵销引入新抽象与误用风险的成本。"
+    ]
+  },
+  "kb_increment": {
+    "kind": "reinforce",
+    "target": "KB-AUDIT03",
+    "new_support": "architecture_decision_A.json:三层核查——六道门禁 svagent 内部调用点 0，真实调用者是 tests/ 与 audit engine.py；区分'声称自检却无任何调用点=死代码'(KB-AUDIT03 原义) 与'调用点存在于离线审计脚本、且如实声明工具库定位'(非死代码、按需调用)。判据粒度从'有无调用点'细化为'调用点在哪 + 定位是否如实声明 + 调用者是否真实'。",
+    "no_new_items": true,
+    "reason": "本次是决策确认 + 认知边界澄清，未编译出新代码动作，按 KB-META01 防 vanity，加固而非新增。KB 保持 101 条。"
+  },
+  "dual_source_retro": {
+    "task_content": "架构定位决策：在 A/B 间选 A，理由是门禁需显式上下文、已有真实调用者、B 的自动化收益不抵成本。",
+    "process": "从'代码有没有真改'到'有没有接入自动闭环'的两层核查，本身是 KB-AUDIT03 的一次活体应用：先证代码落盘(非空声明)，再证调用链(发现未接 run_loop)，最后如实标注定位而非伪装自动执行。识别出一个判定增量：调用点要分在线主循环与离线审计脚本，定位声明的诚实性决定它是不是'死代码'。"
+  },
+  "honest_boundaries": [
+    "本决策不改变任何代码，不改变 357 项测试通过的事实。",
+    "'保持现状'不等于门禁已自动咬合；仍是每次审读由调用方显式选用。",
+    "KB-AUDIT03 加固是对现有认知的边界澄清，非新攻击面、非独立验证。",
+    "未推送 GitHub：用户本轮仅授权 A 决策，未授权推送；§57 产物仍在工作区未提交区。"
+  ],
+  "verification": {
+    "tests_total": 357,
+    "tests_passed": 357,
+    "pytest_exit": 0,
+    "kb_items": 101,
+    "code_files_changed": 0,
+    "test_files_changed": 0
+  }
+}

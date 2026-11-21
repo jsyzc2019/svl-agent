@@ -1,0 +1,67 @@
+{
+  "task": "从 OpenAI Performance Factory 编译『回测信息污染隔离』门禁",
+  "timestamp": "2026-11-22T03:15:00+08:00",
+  "source": "audit_openai_perf/article.txt §Evaluate changes to your agents（一手，2026-11-19）",
+  "preregistered_before_implementation": true,
+  "gap_verified": "engine.py P4：一手列出 8/8 防 spoiler 纪律；本仓 evaluation_reliability.py 无 spoiler/backtest-leak 门禁（真实调用核验 repo_has_corresponding_gate=False）",
+
+  "incremental_judgment": {
+    "status": "true_increment_not_vanity",
+    "why": "本仓 evaluation_reliability 判 judge 独立性/复现完整性/评估可扩展性，KB-RSI06 判样本外复验，但都无『回测样本是否被答案泄露污染』的可执行核验。文章给出 8 条一手、具体、可编译的隔离纪律，满足 KB-META01（会拦/会判/会降级）",
+    "not_duplicate": "不同于 transfer_holdout（跨领域迁移增益）、lineage_guard（谱系独立性）、judgment_robustness（判定稳定性）——本门禁专判『回测用例的可见信息是否泄露答案』"
+  },
+
+  "implementation": {
+    "module": "svagent/backtest_integrity.py",
+    "main_function": "check_backtest_integrity",
+    "eight_isolation_measures": [
+      "fresh_investigator（每次回测全新实例）",
+      "original_signal（仅原始信号）",
+      "stripped_giveaway（剥离泄露答案的细节）",
+      "no_saved_memories（禁读历史记忆）",
+      "no_incident_writeup（禁读事后事件报告）",
+      "no_previous_runs（禁看此前运行结果）",
+      "inspect_transcript（事后审查 transcript 找 spoiler）",
+      "separate_timing_deployment（开始时间/规模/受影响请求 与 归因部署 分开评分）"
+    ],
+    "rules": [
+      "G1 关键隔离项缺失（fresh_investigator / stripped_giveaway / no_incident_writeup 任一为 False）→ block（回测被污染，结论不可信）",
+      "G2 仅弱隔离项缺失（no_saved_memories / no_previous_runs / inspect_transcript / separate_timing_deployment）→ downgrade（有污染风险，结论打折）",
+      "G3 有 inspect_transcript 且发现 spoiler → block（事后确认泄露）",
+      "G4 八项齐全且无 spoiler → ok（回测有效）",
+      "G5 可见信息范围未声明（unknown）→ flag（不可判定，默认降级）"
+    ],
+    "design": "纯函数/冻结数据类；语义布尔输入，不做字面串匹配；规则写死不事后加权；固定可复现；锚定认知域条目"
+  },
+
+  "live_regression": [
+    "OpenAI 正版：八项齐全无 spoiler → ok",
+    "泄露版：no_incident_writeup=False → block BACKTEST.GIVEWAY",
+    "弱隔离缺失：no_saved_memories=False → downgrade BACKTEST.PARTIAL_ISOLATION",
+    "事后查获 spoiler：inspect_transcript=True 且 spoiler_found=True → block BACKTEST.SPOILER_FOUND",
+    "未声明版：stripped_giveaway=unknown → flag BACKTEST.UNDECLARED"
+  ],
+
+  "yang_avoid": {
+    "borrow": "OpenAI 一手 8 条防 spoiler 工程纪律（fresh/stripped/禁读事后报告/分开评分/事后查 transcript）",
+    "avoid": "不借其内部系统自报数字当验证；不把门禁做成可被喂词操纵的软规则；不宣称复现其内部回测",
+    "guardrail": "语义布尔输入+写死规则+纯函数；隔离项状态须调用方如实声明，是否泄露的判定本身不可自证（与 lineage_guard 同族诚实边界）"
+  },
+
+  "acceptance_criteria": [
+    "预注册在本模块实现前 SHA256 锁存",
+    "活体回归 5/5 命中预期",
+    "新增测试全过，全量测试无回归（基线 343 passed）",
+    "判定不依赖字面串内容匹配（源码级核验，口径须去注释——吸取 §56 教训）",
+    "不新增 KB（防 vanity）；加固相关条目 support 指针",
+    "报告可复现、哈希复核一致"
+  ],
+
+  "kb_decision_rule": "不新增条目：回测污染防护属 KB-RSI06（样本外复验）/KB-AUDIT04（口径对等）/KB-AUDIT02（不单点定罪）的执行缺口补齐，是长牙非新知识。加固这些条目 support 指针指向新门禁。",
+
+  "three_layer_honesty": {
+    "can_judge": "能否识别回测样本的信息泄露并按隔离项缺失程度分级拦截/降级",
+    "cannot_judge": "不判定回测结论本身的对错、不替代实质证据；隔离状态须调用方如实声明，声明不可自证",
+    "isomorphism_discount": "门禁由 OpenAI 工程博客启发，按 KB-STRUCT02 打折，不给本仓框架独立背书"
+  }
+}

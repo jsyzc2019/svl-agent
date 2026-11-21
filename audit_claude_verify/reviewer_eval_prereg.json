@@ -1,0 +1,46 @@
+{
+  "prereg_id": "REVIEW-EVAL-001",
+  "title": "审查者评估漏斗保真门禁 — 从 Claude Code 验证一文 line 122-123 编译",
+  "created_at": "2026-11-22T03:31:29+08:00",
+  "cognitive_source": "audit_claude_verify/result.json V10：本仓无『审查者本身被分阶段评估』的门禁。文章 line 122-123 一手断言：分别评估 raw findings / post-verification / final review 的 recall，用 merged stable changes 作对照防 over-flagging，tuning set 与 fixed test set 分离，只有正确描述 bug 的 finding 才得分；『任何把各阶段当成一个端到端分数的评估都捕捉不到这个细节』。这是本仓判据自审主题的真实缺口，按用户叮嘱编译成会拦会判的代码。",
+  "target_module": "svagent/reviewer_evaluation.py",
+  "target_symbol": "check_review_evaluation",
+  "input_schema": {
+    "claim": "str 被审的评估方案描述",
+    "staged_recall": "bool 是否分三阶段(raw/post-verification/final)报告召回，而非单一端到端分数",
+    "raw_recall": "float|None 原始 finding 阶段召回率 [0,1]",
+    "post_verification_recall": "float|None 验证后召回率 [0,1]",
+    "final_recall": "float|None 最终审查召回率 [0,1]",
+    "stable_control_used": "bool 是否用 merged stable changes 作对照防 over-flagging",
+    "tuning_test_separated": "bool tuning set 是否与 fixed test set 分离",
+    "answer_key_scored": "bool 是否只有正确描述目标 bug 的 finding 才得分"
+  },
+  "rules_priority_order": [
+    "R0 NON_SEMANTIC_INPUT: 非 bool 字段 或 recall 非 None 且不在[0,1] → flag（拒绝对字面串/越界值判定，避开 §56 brittle 根因 KB-AUDIT01）",
+    "R1 SINGLE_END_TO_END_SCORE: not staged_recall → block（把三阶段压成一个端到端分数=看不出系统丢了已找到的 bug，文章 line 123 明确该 nuance 会丢；KB-AUDIT04 口径对等）",
+    "R2 NO_STABLE_CONTROL: not stable_control_used → downgrade（无稳定集对照=无法区分真发现与 over-flagging，line 122）",
+    "R3 TUNING_TEST_LEAK: not tuning_test_separated → downgrade（tuning 与 fixed test 不分=过拟合 eval，line 122）",
+    "R4 NO_ANSWER_KEY: not answer_key_scored → downgrade（不按『是否正确描述 bug』计分=分数口径失真，line 122）",
+    "R5 FUNNEL_INVERTED: staged_recall 且 final_recall/raw_recall 均给出且 final_recall > raw_recall → flag（漏斗倒挂：验证过滤不该让召回凭空变高，口径可疑待核）",
+    "R6 STAGED_CREDIBLE: 分阶段 + 稳定集对照 + tuning/test分离 + answer key + 漏斗不倒挂 → ok"
+  ],
+  "live_regression_cases": [
+    {"name": "文章完整做法", "in": {"staged_recall": true, "raw_recall": 0.9, "post_verification_recall": 0.85, "final_recall": 0.8, "stable_control_used": true, "tuning_test_separated": true, "answer_key_scored": true}, "expect": "ok/REVIEW_EVAL.CREDIBLE"},
+    {"name": "单一端到端分数", "in": {"staged_recall": false, "raw_recall": 0.9, "post_verification_recall": null, "final_recall": null, "stable_control_used": true, "tuning_test_separated": true, "answer_key_scored": true}, "expect": "block/REVIEW_EVAL.SINGLE_END_TO_END"},
+    {"name": "无稳定集对照", "in": {"staged_recall": true, "raw_recall": 0.9, "post_verification_recall": 0.85, "final_recall": 0.8, "stable_control_used": false, "tuning_test_separated": true, "answer_key_scored": true}, "expect": "downgrade/REVIEW_EVAL.NO_STABLE_CONTROL"},
+    {"name": "tuning/test未分离", "in": {"staged_recall": true, "raw_recall": 0.9, "post_verification_recall": 0.85, "final_recall": 0.8, "stable_control_used": true, "tuning_test_separated": false, "answer_key_scored": true}, "expect": "downgrade/REVIEW_EVAL.TUNING_TEST_LEAK"},
+    {"name": "不按answer key计分", "in": {"staged_recall": true, "raw_recall": 0.9, "post_verification_recall": 0.85, "final_recall": 0.8, "stable_control_used": true, "tuning_test_separated": true, "answer_key_scored": false}, "expect": "downgrade/REVIEW_EVAL.NO_ANSWER_KEY"},
+    {"name": "漏斗倒挂", "in": {"staged_recall": true, "raw_recall": 0.7, "post_verification_recall": 0.8, "final_recall": 0.95, "stable_control_used": true, "tuning_test_separated": true, "answer_key_scored": true}, "expect": "flag/REVIEW_EVAL.FUNNEL_INVERTED"},
+    {"name": "字面串对照", "in": {"staged_recall": "yes", "raw_recall": 0.9, "post_verification_recall": 0.85, "final_recall": 0.8, "stable_control_used": true, "tuning_test_separated": true, "answer_key_scored": true}, "expect": "flag/REVIEW_EVAL.NON_SEMANTIC_INPUT"},
+    {"name": "recall越界", "in": {"staged_recall": true, "raw_recall": 1.5, "post_verification_recall": 0.85, "final_recall": 0.8, "stable_control_used": true, "tuning_test_separated": true, "answer_key_scored": true}, "expect": "flag/REVIEW_EVAL.NON_SEMANTIC_INPUT"}
+  ],
+  "kb_anchor": "加固 KB-AUDIT04（口径对等：分阶段 recall 被压成单一分数即口径失真）/ KB-STRUCT07（评估者独立性：审查者本身也要被评估）/ KB-AUDIT02（不单点定罪：稳定集对照防 over-flagging）。不新增条目（防 vanity，KB-META01）。",
+  "honest_boundaries": [
+    "门禁只判『评估方案的分阶段/对照/分离/计分口径是否自洽』，不判被审对象本身的对错。",
+    "缺口来自本仓源码核验，编译门禁是为补执行缺口，不为证明本仓框架优于 Claude Code 团队（KB-STRUCT02 同构打折）。",
+    "文章数字与做法均 self-reported，本门禁不复现其内部实验、不把 10 points 当独立证据。",
+    "遵循 §58 用户选 A：本门禁不接入 run_loop，仍是按需显式调用的判据工具库。",
+    "活体样例用于机制回归，非复现任何外部评测。"
+  ],
+  "verification_intent": "新增约 14 项测试；全量 371 → 385 passed；预注册实现前 SHA256 锁存，后验 result/report 分离不伪装。"
+}
