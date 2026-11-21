@@ -1,0 +1,149 @@
+{
+  "R1": {
+    "name": "RSI 实现正确性自检(Wilder vs SMA)",
+    "n_compared": 8668,
+    "mean_abs_diff": 6.893618088259467,
+    "max_abs_diff": 45.89995522656445,
+    "pct_diff_gt5": 0.5715274573142594,
+    "divergence_found": true,
+    "note": "同一价格、同一周期，两实现差异越大，印证'用了RSI≠用了同一个RSI'"
+  },
+  "R2": {
+    "name": "经典超买超卖择时回测(t+1生效,含成本)",
+    "period": 14,
+    "low": 30,
+    "high": 70,
+    "cost": 0.0015,
+    "strategy_annual": -0.013433533281417831,
+    "benchmark_annual": 0.10431382432927849,
+    "excess": -0.1177348605758971,
+    "strategy_max_dd": -0.732868609013478,
+    "benchmark_max_dd": -0.7827201624132951,
+    "sharpe": -0.0620303031422292,
+    "n_trades": 77,
+    "excess_without_cost": -0.11455991987548952,
+    "economic_advantage": false,
+    "note": "扣成本后超额<=0 判无经济优势；信号严格用t-1 RSI"
+  },
+  "R3": {
+    "name": "参数网格+多重比较校正",
+    "grid": [
+      {
+        "period": 7,
+        "threshold": 20,
+        "excess": -0.12286303040605628,
+        "tstat_daily": -3.2469895985900554
+      },
+      {
+        "period": 7,
+        "threshold": 25,
+        "excess": -0.16381288399138805,
+        "tstat_daily": -4.184707749018499
+      },
+      {
+        "period": 7,
+        "threshold": 30,
+        "excess": -0.18642759064538472,
+        "tstat_daily": -4.823657453622181
+      },
+      {
+        "period": 7,
+        "threshold": 35,
+        "excess": -0.18107371521630733,
+        "tstat_daily": -4.660007385232119
+      },
+      {
+        "period": 14,
+        "threshold": 20,
+        "excess": -0.06850793753052242,
+        "tstat_daily": -2.047957947237392
+      },
+      {
+        "period": 14,
+        "threshold": 25,
+        "excess": -0.11749729592310287,
+        "tstat_daily": -3.0538336539370197
+      },
+      {
+        "period": 14,
+        "threshold": 30,
+        "excess": -0.1177348605758971,
+        "tstat_daily": -3.1235625442039576
+      },
+      {
+        "period": 14,
+        "threshold": 35,
+        "excess": -0.13964673158210195,
+        "tstat_daily": -3.66195168077766
+      },
+      {
+        "period": 21,
+        "threshold": 20,
+        "excess": -0.10033312131615868,
+        "tstat_daily": -2.5556476010343516
+      },
+      {
+        "period": 21,
+        "threshold": 25,
+        "excess": -0.04028923312445709,
+        "tstat_daily": -1.528523781248863
+      },
+      {
+        "period": 21,
+        "threshold": 30,
+        "excess": -0.09827467141837065,
+        "tstat_daily": -2.6287647697588197
+      },
+      {
+        "period": 21,
+        "threshold": 35,
+        "excess": -0.12176273046963582,
+        "tstat_daily": -3.196938618847559
+      }
+    ],
+    "n_tests": 12,
+    "bonferroni_alpha": 0.004166666666666667,
+    "n_nominal_significant": 9,
+    "n_corrected_significant": 4,
+    "positive_excess_count": 0,
+    "negative_excess_count": 12,
+    "direction": "全负",
+    "decision": "12/12全为负超额，方向高度一致→稳健的负向发现(RSI择时系统性劣于买入持有)，非数据窥探",
+    "audit_note": "首跑曾误用'年化超额/日标准误'得t≈-647假量级，已修为'日超额均值/日标准误'(高功效陷阱自检)",
+    "note": "t统计量量纲必须与序列同频；方向一致性优先于显著性个数"
+  },
+  "R4": {
+    "name": "蒙特卡洛零分布盲测",
+    "M": 500,
+    "seed": 20261121,
+    "mu": 0.000406656428804005,
+    "sigma": 0.020854527623745164,
+    "real_excess": -0.1177348605758971,
+    "zero_mean": -0.07100954430139603,
+    "zero_p05": -0.15710209791552007,
+    "zero_p95": 0.001702928470906799,
+    "percentile": 0.172,
+    "beyond_random": false,
+    "decision": "未达95%阈值→与随机不可区分"
+  },
+  "R5": {
+    "name": "样本内/样本外过拟合门禁",
+    "split_date": "2008-11-05",
+    "best_in_params": {
+      "period": 21,
+      "threshold": 25,
+      "in_excess": -0.09198217960409227
+    },
+    "out_excess_same_params": -0.02385608903649339,
+    "out_excess_default": -0.03474687067636806,
+    "decay": 0.06812609056759888,
+    "robust": false,
+    "decision": "样本外转负或大幅衰减→过拟合/参数不稳"
+  },
+  "_meta": {
+    "n_bars": 8768,
+    "prereg_sha256": "c15abfd9796702b410fed89b570cd032813c457832da9829a3d954947d0bc7ae",
+    "data_file": "sse_daily.json",
+    "source_isolation": "GitHub证据仅叙事层，未进入R1-R5判据"
+  }
+}

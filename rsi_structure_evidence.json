@@ -1,0 +1,137 @@
+{
+  "document": "RSI-Structure 综述论文 — 三层来源隔离证据（只记录事实，不含有效性结论）",
+  "retrieved_utc": "2026-11-21T08:20:00Z",
+  "retrieval_note": {
+    "user_link": "https://openreview.net/forum?id=X8epsNeCZk",
+    "openreview_status": "直连403 browser-verification；api/api2 的 notes 与 pdf 端点均403 ChallengeRequired",
+    "resolved_to": "Preprints.org manuscript 202611.0261 v1, DOI 10.20944/preprints202611.0261.v1 (2026-11-04)，标题作者完全一致，确认同一篇",
+    "pdf_binary": "已由用户下载并上传官方PDF(preprints202611.0261.v1.pdf,3.8MB,10页)；pdftotext提取全文2416行落地 rsi_structure_full.txt",
+    "fulltext_obtained": "完整PDF全文（用户提供）+ WebFetch抓取的摘要/§1-4/§9；rsi_structure_full.txt 为一手完整来源",
+    "truncation": "已解决：用户补传PDF后 §10/§11 已逐字取得（§10在第1792行、§11在第1949行）；上一轮因抓取通道截断只能靠二手覆盖，本次修正",
+    "isolation": "一手=论文逐字原文；二手=媒体转述(仅叙事层)；谱系=awesome-rsi证据阶梯(见 contamination 字段)",
+    "correction_date": "2026-11-21 16:53 CST"
+  },
+  "primary_paper": {
+    "title": "When, Where, and How Experience Becomes Structure: Mechanisms for Recursive Self-Improvement in LLM Agents",
+    "type": "SURVEY（综述，非实证论文）",
+    "venue": "OpenReview X8epsNeCZk ; Preprints.org 202611.0261/v1",
+    "doi": "10.20944/preprints202611.0261.v1",
+    "date": "2026-11-04",
+    "scale": "40 项代表性研究全景 + 20 个更新闭环对照（文献分类，非实验样本）",
+    "contribution_type": "分类学与分析框架，不产出自己的实验统计量",
+    "three_questions": {
+      "When": "交互证据何时触发更新、何时支持保留、何时值得修订或退役",
+      "Where": "干预应作用于哪个组件——Prompt/Memory/Skill/Harness 或协同多个",
+      "How": "证据如何转化为可复用修改、如何针对回归验证、如何整合供后续使用"
+    },
+    "four_components": {
+      "Prompt": "直接纳入上下文的内容（指令/示例）——无检索步骤",
+      "Memory": "按条件检索的记录——有检索步骤，文本/介质/时长不决定分类",
+      "Skill": "被 agent 选择并执行的可复用流程——含适用条件/步骤/结果检查",
+      "Harness": "上下文组装、工具调度、执行编排、行为检查——可管理前三者",
+      "five_dimensions": [
+        "Persistence",
+        "Proceduralization",
+        "Enforcement",
+        "Editability",
+        "Governance burden"
+      ],
+      "key_line": "The four categories represent functional roles of editable agent state, distinguished by how retained content affects execution rather than by mutually exclusive software modules"
+    },
+    "seven_functions": {
+      "list": [
+        "Collect",
+        "Evaluate",
+        "Diagnose",
+        "Abstract",
+        "Update",
+        "Verify",
+        "Consolidate"
+      ],
+      "critical_distinction": "Evaluate 评估已有执行、为更新提供证据；Verify 检验候选改动。二者目的不同，不可混用",
+      "modality": "分析工具而非固定顺序的强制步骤；方法可合并、省略、或在使用后才测试"
+    },
+    "key_verdict_quotes": [
+      "Reuse in later tasks alone does not establish that recursive dependency.",
+      "Using earlier experience in another update does not by itself prove that the update method has become more effective.",
+      "Failure alone does not specify what to edit; the system must analyze what happened.",
+      "Both external updates and parameter changes may affect results, so the gains of the combined system cannot all be attributed to one external component.",
+      "Better final task performance may result from better components, different candidate selection, or additional search; the number of rounds alone does not identify which factor produced the gain.",
+      "Determining whether an improvement process is more effective requires examining later update outcomes and what else changed."
+    ],
+    "figure3_survives": [
+      "a revised answer",
+      "a component retained for later tasks",
+      "a change to the process that produces updates"
+    ],
+    "three_challenges_from_abstract": [
+      "cross-component attribution",
+      "long-term effectiveness",
+      "independent validation"
+    ],
+    "evaluation_outline_from_abstract": [
+      "task-performance gains",
+      "the contribution of inherited state",
+      "the effectiveness of subsequent updates"
+    ],
+    "honesty_signals": [
+      "反复使用 'does not by itself prove' / 'alone does not establish' 自我限定",
+      "Figure5 明确标注 NR（该loop未报告该function），区分'未报告'与'研究缺最终评估'",
+      "9.2 主动指出组合系统收益不可归因给单一外部组件",
+      "9.4 区分 Harness2(仅经验库变化,规则固定) / VERSE / SePO(两阶段不并发演化)，不夸大任一为完整RSI",
+      "§10.6 主动声明目的性抽样、不估计流行率、分类未经独立双编码——比§9的自我限定更根本的信度自曝"
+    ],
+    "section10_key_findings": {
+      "evaluation_comparisons_table7": [
+        "Update effect: before/after on same tasks",
+        "Component contribution: with/without a component",
+        "Use across tasks: new tasks or different models/tools",
+        "Repeated updates: later updates with/without retained experience",
+        "Improvement method: different versions from same starting point"
+      ],
+      "candidate_selection_vs_final_eval": "SkillOpt用selection set选候选、test set报最终结果；Self-Harness的held-out轨迹对proposer隐藏但分数仍参与选择——编辑器可用的信息不同，解释结果时必须区分",
+      "reliability_security": [
+        "evaluator改变则分数随标准变；须记录evaluator版本与可用信息",
+        "多个model judge可能共享错误，数量本身不保证独立判断",
+        "恶意内容可进入Memory/Skills后被检索/调用/生成新改动（SKILL-INJECT, SkillGuardBench）",
+        "报告实际执行的检查比单一聚合安全分数更有信息量"
+      ],
+      "self_declared_limitations": [
+        "purposeful selection, supports qualitative comparison, does not estimate prevalence of designs",
+        "classification depends on particular use analyzed; not independently double-coded",
+        "seven stages are analytical tool; unreported operation does not establish system never uses it",
+        "component/stage mappings need examination on further systems"
+      ]
+    }
+  },
+  "secondary_narrative": {
+    "source_isolation": "仅叙事层，不作论文有效性证据",
+    "source": "腾讯新闻/搜狐等媒体转述（news.qq.com/rain/a/20261115A06QKQ00）",
+    "covers_section10_11_gist": {
+      "independent_validation": "任务得分提高只说明更新在当前设置有帮助；要证明继承经验让后续改进更有效，需在相同起点/任务/反馈/计算预算下对照有无经验时产生的后续修改，并用未参与候选筛选的任务检验效果",
+      "long_term": "跨组件归因（过期记忆/缺失步骤/不完善参数检查同时致因）、长期维护（合并/修订/退役/回滚及维护成本）"
+    },
+    "narrative_framing": "标题'Agent如何越用越强'为传播性措辞；正文对论文框架转述忠实、无明显夸张",
+    "coverage_audit": {
+      "note": "用完整一手原文核对二手转述后，发现二手遗漏了以下重要一手内容——这正是'全文到手前不可下最终结论'的实证",
+      "omitted_by_secondary": [
+        "§10.3 评估可靠性与安全性：环境奖励/测试程序/LLM判定/人工审核观察的信息不同；多个LLM judge会共享错误，数量不等于独立判断；记忆/技能投毒攻击(SKILL-INJECT, SkillGuardBench)",
+        "§10.6 论文自曝局限：目的性抽样(purposefully)、不估计设计流行率、分类未经独立双编码(not independently double-coded)",
+        "§10.2 维护成本：更新/验证/人工审核/回滚消耗资源，组件越多检索选择负担越大(HarnessPro保留不同权衡的候选版本)",
+        "§10.5 可复现性：需记录每轮edit、候选选择、各阶段可用数据；组件版本与编辑历史"
+      ],
+      "secondary_was_faithful_but_incomplete": true,
+      "framework_link": "二手忠实但不完整——若只靠二手就会漏掉信度/安全性这两个高价值判据；印证'一手优先'原则"
+    }
+  },
+  "lineage_contamination": {
+    "note": "来源隔离的关键补充：本次论证者(我方)的 L1/L2/L3 证据阶梯判据，在 §34 已受 lobehub/awesome-rsi 的 Task/Retained/Improver gain taxonomy 影响",
+    "consequence": "本论文 Figure3 的三种 survives 与我方证据阶梯高度同构——这不是相互独立验证，而是同谱系。此'印证'力度须打折，不可当作独立佐证",
+    "framework_link": "触发≠真相：长得像≠相互独立验证；确认偏误风险须显式标注"
+  },
+  "structural_observation": [
+    "论文是综述/分类学，贡献是'统一语言'而非新实证发现——须防主体错位：把'提出好框架'读成'证明RSI有效'",
+    "论文大量使用 'does not by itself prove' 自我限定，诚实度高，与 §34 SIM 论文同属克制型一手来源",
+    "论文自身的核心判据（reuse≠recursive、rounds≠effectiveness、组合收益不可单归因）与本框架 §27/§33/§34 高度一致——但这些一致部分可能是谱系同源，非独立验证"
+  ]
+}

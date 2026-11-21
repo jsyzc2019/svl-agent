@@ -1,0 +1,116 @@
+{
+  "n_returns": 8767,
+  "date_range": [
+    "1990-12-20",
+    "2026-11-20"
+  ],
+  "mean_daily_return": 0.000407,
+  "std_daily_return": 0.020856,
+  "seed": 20261121,
+  "n_random_walks": 200,
+  "backtest_cut_index": 6136,
+  "tests": {
+    "F1_autocorr": {
+      "ac1_10": [
+        0.0459,
+        0.032,
+        0.0398,
+        0.0376,
+        0.0166,
+        -0.0248,
+        0.0088,
+        -0.0163,
+        0.0202,
+        -0.0018
+      ],
+      "lb_stat": 68.0,
+      "lb_p": 0.0,
+      "bonferroni_alpha_lag": 0.001,
+      "n_sig_lags": 0
+    },
+    "F2_variance_ratio": {
+      "2": {
+        "vr": 1.0457,
+        "z": 4.184,
+        "sig_1pct": true
+      },
+      "5": {
+        "vr": 1.1558,
+        "z": 6.526,
+        "sig_1pct": true
+      },
+      "10": {
+        "vr": 1.2261,
+        "z": 6.173,
+        "sig_1pct": true
+      },
+      "20": {
+        "vr": 1.3036,
+        "z": 5.662,
+        "sig_1pct": true
+      }
+    },
+    "F3_runs": {
+      "n_runs": 4305,
+      "exp_runs": 4366.6,
+      "z": -1.321,
+      "sig_1pct": false
+    },
+    "F4_calendar": {
+      "max_abs_t": 2.918,
+      "bonferroni_alpha": 0.0029,
+      "note": "17个星期/月份检验的Bonferroni阈值；max|t|对应p需<0.0029才显著"
+    },
+    "G0_random_walk_control": {
+      "real_anomaly_total": 48.314,
+      "breakdown": {
+        "lb_z": 12.933,
+        "vr_z_sum": 33.332,
+        "runs_z": 0.8,
+        "cal_z": 1.249,
+        "total": 48.314
+      },
+      "pseudo_mean": 10.091,
+      "pseudo_max": 31.002,
+      "real_rank_of": 201,
+      "percentile_more_anomalous": 1.0,
+      "threshold": 0.95,
+      "triggered_H1": true
+    },
+    "H0_backtest": {
+      "buy_hold": {
+        "annual": 0.0154,
+        "sharpe": 0.092
+      },
+      "momentum20": {
+        "annual": -0.112,
+        "sharpe": -0.663,
+        "excess": -0.1275
+      },
+      "reversal5": {
+        "annual": -0.2938,
+        "sharpe": -1.696,
+        "excess": -0.3092
+      },
+      "ma20_timing": {
+        "annual": -0.0895,
+        "sharpe": -0.78,
+        "excess": -0.105
+      }
+    },
+    "subperiod_stability": {
+      "early": {
+        "vr_2": 1.0506,
+        "vr_10": 1.2691,
+        "ac1": 0.0507,
+        "lb_p": 0.0
+      },
+      "late": {
+        "vr_2": 1.0254,
+        "vr_10": 1.0408,
+        "ac1": 0.026,
+        "lb_p": 0.0002
+      }
+    }
+  }
+}

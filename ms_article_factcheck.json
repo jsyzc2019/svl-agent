@@ -1,0 +1,92 @@
+{
+  "object": "用户提供的公众号文章《大摩预判｜2026—2030年，AI工业超级周期到来》",
+  "date": "2026-11-21",
+  "scope": "依第29/30节纪律: 不据文风判作者身份; 只核事实真伪 + 推论有效性 + 利益链",
+  "primary_source": "摩根士丹利官网原文 https://mgstn.ly/4C25VL8 (Frontier Industries to Reshape China's Economy and Markets, Nov 17 2026) + 两份蓝皮书原文摘录",
+  "fact_checks": [
+    {
+      "claim": "摩根士丹利发布两份研报(前沿产业 / AI与工业超级周期)",
+      "verdict": "属实",
+      "evidence": "确有两份蓝皮书: ①《China's Emerging Frontiers: How Emerging Frontier Industries will Reshape China's Economy and Markets》2026-11-11, 190页, 首席中国经济学家邢自强Robin Xing/策略师Laura Wang; ②《中国下一轮工业革命》工业5.0/物理AI/80万亿增量资本开支, 约2026-10-27",
+      "confidence": "high"
+    },
+    {
+      "claim": "前沿产业可及市场 2025年1.4万亿→2030年3.2万亿美元",
+      "verdict": "属实",
+      "evidence": "摩根士丹利官网原文: could more than double, from $1.4 trillion today to $3.2 trillion by 2030",
+      "confidence": "high"
+    },
+    {
+      "claim": "中国股市总市值 22.6万亿→33.2万亿美元, 增量约10万亿",
+      "verdict": "属实",
+      "evidence": "官网原文: rise from $22.6 trillion in 2026 to $33.2 trillion by 2030",
+      "confidence": "high"
+    },
+    {
+      "claim": "科技/工业/医疗贡献约70%市值增量",
+      "verdict": "属实",
+      "evidence": "官网原文: technology, industrials and healthcare accounting for approximately 70% of the increase",
+      "confidence": "high"
+    },
+    {
+      "claim": "邢自强为摩根士丹利首席中国经济学家",
+      "verdict": "属实",
+      "evidence": "官网原文 Robin Xing, Morgan Stanley Chief China Economist; 中文名邢自强一致",
+      "confidence": "high"
+    },
+    {
+      "claim": "AI 2300亿→1万亿 / 工业5.0 5150亿→1万亿 / 创新药2560亿→4760亿美元",
+      "verdict": "属实(文章向下取整)",
+      "evidence": "研报精确值: AI 2300亿→1.026万亿、工业5.0 5150亿→1.071万亿、创新药2560亿→4760亿; 文章取整为1万亿, 不影响结论但严格说有出入",
+      "confidence": "high"
+    },
+    {
+      "claim": "数据中心用电中国约2%, 美国超6%",
+      "verdict": "属实",
+      "evidence": "官网原文: Data centers account for around 2% of electricity consumption in China, compared with more than 6% in the U.S.",
+      "confidence": "high"
+    },
+    {
+      "claim": "2026-2027过渡期, 2028起扩散; AI+工业升级每年+0.3个百分点",
+      "verdict": "属实",
+      "evidence": "官网原文: 2026 and 2027 as a transition period; Starting in 2028; add 0.3 percentage points to China's annual potential economic growth from 2028 through 2030",
+      "confidence": "high"
+    },
+    {
+      "claim": "存在智能过剩风险",
+      "verdict": "属实",
+      "evidence": "官网原文: excessive investment could create smart overcapacity",
+      "confidence": "high"
+    },
+    {
+      "claim": "配置节奏: 现阶段国产替代/算力基础设施, 2027-28自动化/机器人/电池/出海制造, 长期AI应用/软件/医疗",
+      "verdict": "属实",
+      "evidence": "官网原文: earliest beneficiaries semiconductor/technology-hardware/power-infrastructure; From 2027–2028 opportunities broaden into automation, robotics, machinery, batteries, manufacturers expanding overseas; AI applications, software revenues, healthcare innovation",
+      "confidence": "high"
+    },
+    {
+      "claim": "(文章推论)大摩预判的是普通人未来5年的机会/岗位变化/副业考证",
+      "verdict": "主体错位",
+      "evidence": "大摩原报告通篇面向股权投资者, 落点是 raise potential growth while broadening opportunities for equity investors、For investors mainland-listed A shares may be preferable、MSCI中国盈利增速/ROE/A股港股配置; 从未讲普通人岗位或考证。更关键: 官网原文明确警示 Job displacement and the costs of reorganizing businesses around new technologies could also offset some early productivity gains (岗位替代会抵消早期生产率收益), 文章讲岗位时完全略过此风险",
+      "confidence": "high"
+    },
+    {
+      "claim": "(文章落点)学AI/考证(CAIE)以抓住2028红利窗口",
+      "verdict": "推论偷换+商业导流",
+      "evidence": "大摩研报无任何考证内容。CAIE是商业认证(CAIE人工智能研究院颁发, 联合中国软件行业协会等), 其官网自述证书本身不能代替真实能力,也不能保证某个具体岗位结果。文章将权威研报信用迁移到付费证书培训产品(CAIE及AIPM/AIHR/AIFA/AITE矩阵)",
+      "confidence": "high"
+    }
+  ],
+  "core_finding": "事实层几乎全部属实(与上一篇伪名言鸡汤文形成镜像对照), 但推论层发生主体错位: 机构投资者的资本市场研报被转译为普通人的岗位/副业机会, 并略去报告的job displacement风险警示, 最终落到付费证书导流。这是用真事实支撑它本身并不支持的结论。",
+  "honest_boundaries": [
+    "不据文风断言作者是AI还是人——第29节已证浅层文风判别抓的是文风artifact",
+    "大摩预测是基准情景(base case), 报告自带牛熊情景与智能过剩风险, 不是确定性结论; 文章基本未传达这种不确定性",
+    "转载源(同花顺/公众号)为二次加工, 我核的是其对大摩数字的转述是否准确, 数字层面准确",
+    "主体错位是我的分析判断(有官网原文支撑), 不等于断言作者主观故意欺诈——可能只是自媒体惯常的蹭权威+卖课写法"
+  ],
+  "three_layer_conclusion": {
+    "can_say": "研报真实、所有核心数字准确、引用规范——事实层可信。这是它与上一篇伪托权威文章的根本区别。",
+    "cannot_say": "不能因数字全真就认为考证=抓住大摩的机会。大摩从未谈个人考证, 且其报告是投资者视角并明确警示岗位替代风险; 文章把投资者的机会偷换成打工人的考证红利, 是把权威信用迁移到商业产品。",
+    "method_reflection": "第30节建立了事实真实性≠作者身份, 这一节再进一层: 事实真实性≠推论有效性。真数字可以被用来支撑它本身不支持的结论。核查要从文风层→事实层→推论/利益链层逐级深入。"
+  }
+}

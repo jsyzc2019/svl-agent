@@ -1,0 +1,73 @@
+{
+  "document": "DeepMind essay《What comes after AGI?》— 三层来源隔离证据（只记事实，不含有效性结论）",
+  "retrieved_utc": "2026-11-21T09:11:00Z",
+  "object_type": "ESSAY / 观点前瞻文（非实证论文，非系统综述）",
+  "retrieval_note": {
+    "url": "https://institute.deepmind.com/essays/what-comes-after-agi/",
+    "status": "curl --compressed 直取 HTTP200，HTML 74KB，正文提取 19971 字符落地 agi_essay_raw.txt",
+    "author": "Tim Genewein, Research scientist at Google DeepMind",
+    "date": "Nov 19, 2026",
+    "based_on": "技术报告 From AGI to ASI（合著者含 Matija Franklin, Shane Legg, Marcus Hutter 等）",
+    "disclaimer_verbatim": "DMI pieces are intended to serve as conversation starters, reflecting the author's ideas and research, and should not be read as Google's official view.",
+    "platform": "DeepMind Institute (DMI) — 研究人员发布平台，非 Google 官方口径"
+  },
+
+  "primary_source": {
+    "title": "What comes after AGI? From AGI to Superintelligence",
+    "subtitle": "As multiple technological routes toward artificial general superintelligence take shape, the regime beyond AGI is shifting from philosophical speculation to empirical research and governance questions.",
+    "thesis": "AGI 临近，后 AGI  regime 应从哲学思辨转向实证研究；从 AGI 到 ASI 有多条路径，它们复合叠加，须建模/测量/预测以追踪进展。",
+    "structure": [
+      "The continuum of general intelligence（智能连续统：AGI 只是其中一点，ASI=在几乎所有人类关注任务上持续超越大量专家，用更少资源时间）",
+      "Cognitive industrialization（认知工业化：有效算力≈10x/年，成本≈4x/年下降，认知任务商品化）",
+      "Four pathways: Scaling models and data / Technological paradigm shifts / Improving agent coordination / Recursive self-improvement",
+      "The many roads to ASI（多路径复合，限制单一路径无效且会造成 capability overhang）"
+    ],
+    "four_pathways": {
+      "scaling": "scaling laws 是观察趋势的外推，仅在熟悉边界内成立；瓶颈=数据枯竭/规模收益递减/物理经济资源限制",
+      "paradigm_shift": "今日模型缺 continual learning/world modeling/sample efficiency/发明新概念；研究者对能否靠渐进延伸達ASI 有分歧",
+      "coordination": "多智能体 scaling laws 尚缺；早期研究发现智能增益但协调低效致收益递减；需防 misinfo/manipulation/collusion",
+      "rsi": "RSI 非单一过程：code/design（遗传）、data（文化，AlphaZero 例）、group specialization（社会）三种机制；反馈差则循环易 stall/degenerate；需在超人领域可扩展的评估，自动化验证领域（数学证明）最快"
+    },
+    "rsi_key_quotes": [
+      "Whether RSI leads to 'runaway' progress is largely an empirical question.",
+      "RSI loops can easily stall or degenerate if the feedback guiding them is poor.",
+      "RSI should advance fastest in domains that allow for automated verification without humans in the loop, such as mathematical proofs, while other domains might lag behind or taper off sooner.",
+      "These three RSI mechanisms mirror evolutionary processes that drove the growth of human cognitive capabilities: genetic (code and design), cultural (data), and social evolution (group specialization through cooperation)."
+    ],
+    "extrapolation_numbers": {
+      "effective_compute": "硬件1.5x/年 × 算法效率3-6x/年 × 硬件投资2.5x/年 = 至少10x/年（算术核验：[11.25,22.5]自洽）",
+      "ten_year": "10^10 = 100亿倍（算术自洽）；称'每个今天agent可跑比世界人口还多'(10^10>8e9, 自洽)",
+      "cost": "成本约4x/年下降 → $1B→$1000/十年（4^10=1048576, $1e9/1048576≈$954, 约值自洽）",
+      "caveats_authored": ["not a given", "While far from certain", "Imagine that this trend holds", "largely an empirical question"]
+    },
+    "honesty_signals": [
+      "明确区分'已知上界'与'上界之前大片未探明区域'",
+      "明确 scaling laws 'hold only within familiar boundaries'，不能自信预测 AGI/ASI 所需规模",
+      "明确数据'not all data produced by AI models is useful for training'",
+      "明确多智能体'coordination inefficiencies still lead to diminishing returns'",
+      "明确 RSI 'largely an empirical question'、'can easily stall or degenerate'",
+      "文末'None of these predictions are certain'"
+    ]
+  },
+
+  "source_isolation_layers": {
+    "fact_layer": "本文自身写下的论点、结构、数字、免责声明（逐字，agi_essay_raw.txt）",
+    "narrative_layer": "媒体/二手对'DeepMind预言ASI'的潜在转述（本次未取得二手转述，仅预留层）",
+    "lineage_layer": "我方 RSI 判据在 §34/§36/§38 已受 awesome-rsi + SIM 论文 + RSI-Structure 综述影响——本文 RSI 段与之高度呼应，须标同谱系",
+    "authority_layer": "作者是 DeepMind 研究科学家，但 DMI 平台 Disclaimer 明确'非 Google 官方观点'——主体归属须精确"
+  },
+
+  "cross_framework_relevance": {
+    "rsi_feedback_quality": "本文'poor feedback→RSI loops stall/degenerate'与我方 §36 predicted/observed 配对、§38 评估可靠性(judge独立性/可证伪)直接呼应",
+    "rsi_verification_scaling": "'需要在超人领域可扩展的评估、自动化验证优先'是我方尚未显式覆盖的新维度（评估可扩展性），值得评估是否长牙",
+    "three_mechanisms": "code/data/group 三分（遗传/文化/社会）与我方 harness/memory 组件分类、awesome-rsi 阶梯是不同切分轴——不可混用",
+    "model_measure_forecast_repeat": "文末'Our best course of action: model, measure, forecast, and repeat'与我方 PDCA/SVL 闭环同构——同谱系印证，非独立"
+  },
+
+  "structural_observation": [
+    "观点文含大量数量级外推，但算术自洽且作者主动标注不确定（not a given / far from certain）——严谨度高，但'算术自洽'≠'外推成立'，须分层",
+    "主体边界特殊：DMI 平台 + 明确 Disclaimer 非官方立场，二手若读成'DeepMind 官方预言'即主体错位",
+    "RSI 段与我方近四轮研究主题高度重叠，但属同谱系（我方判据已受 awesome-rsi/SIM/综述影响），非独立验证",
+    "本文真正的新增量是'评估必须可扩展到超人领域'+'RSI 在可自动验证领域最快'——这是可检验的时空预测，比泛泛的'ASI  will come'更可证伪"
+  ]
+}

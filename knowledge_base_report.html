@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+<title>框架自进化知识库 · 就绪度报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1180px;margin:32px auto;padding:0 20px;color:#1a1a1a;line-height:1.65}
+h1{font-size:26px;border-bottom:3px solid #2c5282;padding-bottom:10px}
+h2{font-size:19px;margin-top:30px;color:#2c5282}
+.card{background:#f7fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px 22px;margin:18px 0}
+.status{display:inline-block;padding:8px 16px;border-radius:20px;font-weight:700;font-size:15px}
+.ready{background:#fed7d7;color:#9b2c2c}.notready{background:#e2e8f0;color:#2d3748}
+table{border-collapse:collapse;width:100%;font-size:13px;margin-top:10px}
+th,td{border:1px solid #cbd5e0;padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#edf2f7}ul{margin:8px 0;padding-left:22px}li{margin:4px 0}
+.ok{color:#276749}.no{color:#9b2c2c}.dim{color:#718096;font-size:12px}
+.note{color:#4a5568;font-size:13px;background:#fffaf0;border-left:3px solid #dd6b20;padding:8px 12px}
+.stat{display:flex;gap:24px;flex-wrap:wrap;margin:12px 0}
+.stat div{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 16px}
+.stat b{font-size:22px;color:#2c5282;display:block}
+</style></head><body>
+<h1>框架自进化知识库 · 就绪度报告</h1>
+<p>精干沉淀三类机制类知识（思考经验 / 推演教训 / 外部高知），以可审计的量变判据触发框架进化审查。
+核心立场：<b>知识变多 ≠ 进化</b>——反虚荣门禁防止把条数做成新的漂亮数字。</p>
+
+<div class="card">
+  <span class="status ready">达标 · 触发进化审查</span>
+  <div class="stat">
+    <div><b>38</b>机制条目</div>
+    <div><b>23</b>独立佐证</div>
+    <div><b>53</b>情境标签</div>
+    <div><b>9</b>fix 待改</div>
+    <div><b>10</b>实证锚定</div>
+    <div><b>10</b>可编译机制</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>量变判据（全部达标才触发）</h2><ul><li class=ok>✓ 规模</li><li class=ok>✓ 独立佐证(占比)</li><li class=ok>✓ 独立佐证(绝对数)</li><li class=ok>✓ 多样性(三类齐全)</li><li class=ok>✓ 多样性(情境覆盖)</li><li class=ok>✓ 有效性(fix 存在)</li><li class=ok>✓ 实证锚定</li></ul>
+  <p class="ok"><b>反虚荣门禁：</b>通过 — 通过：知识增长有来源多样性与实证支撑，非虚荣灌水</p>
+</div>
+
+<div class="card">
+  <h2>已达标的量变证据</h2><ul><li class='ok'>✓ 已凝练 38 条机制知识（门槛 18）</li><li class='ok'>✓ 23 条被独立来源佐证（占比 60%）</li><li class='ok'>✓ 三类知识齐全，覆盖 53 个情境标签</li><li class='ok'>✓ 9 条 fix 类真缺陷机制待改进</li><li class='ok'>✓ 10 条由真实实验/审计支撑</li></ul>
+  <h2>诚实缺口（未达标项）</h2><ul><li class='ok'>无缺口</li></ul>
+</div>
+
+        <div class="card">
+          <h2>进化提案（触发一次审查，非宣称已进化）</h2>
+          <p class="note">这是【触发一次框架进化审查】，不是宣称框架已进化。候选项是 addressable 的 fix 类机制，须经 PDCA 的研究→验证环由真实评估决定是否采纳；认知类不可编译机制仍保持 addressable=False，交人执行，绝不假装能编译成符号判据。</p>
+          <ul><li>KB-T03：验证基准必须先与生成过程隔离：anchor 存在 ≠ 内容有据，基准泄漏会让自证恒真。</li><li>KB-R01：代理变量陷阱：alarm 实为困境代理，扩到 22 家反例后 precision 从虚高崩到 0.42。</li><li>KB-R02：符号一致性：estimation 的 criterion 必须与生成模型同号（criterion=-b），否则预测方向反了。</li><li>KB-R03：校准度 ≠ 辨别力：AUC 不能当 calibration，须用 ECE 单独度量。</li><li>KB-R04：同义反复：线性生成→线性拟合恒真，须注入非线性挑战并主动降级宣称。</li><li>KB-R06：复盘对象校正：复盘应针对框架逻辑方法(framework)，而非研究对象(subject)。</li><li>KB-E07：对抗偏差三件套：预注册判据 + 盲测 + 时间戳门禁，把「我不知道」变成一等公民。</li></ul>
+        </div>
+
+<h2>机制条目（共 38 条）</h2>
+<table><thead><tr><th>ID</th><th>类型</th><th>凝练的机制</th><th>证据基础</th><th>独立佐证</th><th>来源 / 佐证链</th></tr></thead>
+<tbody><tr><td><b>KB-E01</b></td><td>外部高知</td><td>PDCA 戴明环：识别→研究→验证→改进的自动机，且必须有停止条件（预算/收敛）。</td><td>经典理论</td><td>是（1）</td><td>external:PDCA(戴明)<br><span class='dim'>佐证：commentary:§10</span></td></tr><tr><td><b>KB-E02</b></td><td>外部高知</td><td>红队对抗：让系统自己构造让它露馅的输入，主动找洞而非自证正确。</td><td>经典理论</td><td>是（1）</td><td>external:red_teaming<br><span class='dim'>佐证：commentary:§7.2</span></td></tr><tr><td><b>KB-E03</b></td><td>外部高知</td><td>消融与反例对照：看似完美的指标（recall=1.0）须拆解「靠什么撑起」，做诊断而非新检验。</td><td>经典理论</td><td>是（1）</td><td>external:ablation<br><span class='dim'>佐证：commentary:§18.4</span></td></tr><tr><td><b>KB-E04</b></td><td>外部高知</td><td>序贯最优停止：何时停止观测、接受当前最优，本身是一个可形式化的决策问题。</td><td>经典理论</td><td>是（1）</td><td>external:optimal_stopping<br><span class='dim'>佐证：commentary:§12</span></td></tr><tr><td><b>KB-E05</b></td><td>外部高知</td><td>逆强化学习 IRL：价值可从专家示范/裁决中推断，无需显式设定奖励。</td><td>经典理论</td><td>是（1）</td><td>external:IRL<br><span class='dim'>佐证：commentary:§13</span></td></tr><tr><td><b>KB-E06</b></td><td>外部高知</td><td>信号检测论 SDT：用 d&#x27;（辨别力）与 criterion（偏差）分离「看不看得清」与「判断阈值」。</td><td>经典理论</td><td>是（1）</td><td>external:SDT<br><span class='dim'>佐证：commentary:§20</span></td></tr><tr><td><b>KB-E07</b></td><td>外部高知</td><td>对抗偏差三件套：预注册判据 + 盲测 + 时间戳门禁，把「我不知道」变成一等公民。</td><td>经典理论</td><td>是（3）</td><td>external:anti_bias<br><span class='dim'>佐证：commentary:§18、commentary:§21、commentary:§22.2</span></td></tr><tr><td><b>KB-R-L-audit19-remedy20-fix0</b></td><td>推演教训</td><td>真该改的方法缺陷——改机制而非文案：P0 estimation criterion符号与生成模型相反: 真修复：criterion=-b，与生成模型同号，加回归测试</td><td>框架反省</td><td>否（0）</td><td>trace:audit19-remedy20<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R-L-audit19-remedy20-fix1</b></td><td>推演教训</td><td>真该改的方法缺陷——改机制而非文案：复盘对象误用为研究对象(库存周期/华测导航): 校正scope：框架自我反省只针对逻辑方法，不针对具体研究对象</td><td>框架反省</td><td>否（0）</td><td>trace:audit19-remedy20<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R-L-audit19-remedy20-keep0</b></td><td>推演教训</td><td>不该改的边界——反省后确认守住：把&#x27;不知道&#x27;当一等公民 / 不可约交人 / 诚实边界: 保留，且在复盘中确认这是框架的脊梁，不因&#x27;进化&#x27;而改掉</td><td>框架反省</td><td>否（0）</td><td>trace:audit19-remedy20<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R-L-audit19-remedy20-van0</b></td><td>推演教训</td><td>识破虚荣改进——别拿改动冒充进步：telos/axiology/mechanism 的过度宣称: 降级报告口径：加&#x27;诚实结论&#x27;&#x27;稳健边界&#x27;段落</td><td>框架反省</td><td>否（0）</td><td>trace:audit19-remedy20<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R-L-audit19-remedy20-van1</b></td><td>推演教训</td><td>识破虚荣改进——别拿改动冒充进步：财报盲测的后验分组循环: 加反例对照量化循环(precision 0.42)，宣称&#x27;去循环已修&#x27;</td><td>框架反省</td><td>否（0）</td><td>trace:audit19-remedy20<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R-L-audit19-remedy20-van2</b></td><td>推演教训</td><td>识破虚荣改进——别拿改动冒充进步：第22节L3复利曲线与教训计数: 识别为虚荣指标：教训数从7涨到9、置信0.5→0.556不等于认知提升</td><td>框架反省</td><td>否（0）</td><td>trace:audit19-remedy20<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R-L-finance-hcnh-b3</b></td><td>推演教训</td><td>复用防偏差措施：下挖判据盲区</td><td>框架反省</td><td>否（0）</td><td>trace:finance-hcnh<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R-L-finance-hcnh-c0</b></td><td>推演教训</td><td>遇到同类情境时，先验须让位于预注册判据的结果：判据全过只说明没违反符号约束，不等于叙事真实——早期补贴依赖是判据盲区</td><td>框架反省</td><td>否（0）</td><td>trace:finance-hcnh<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R-L-inventory-2026-b0</b></td><td>推演教训</td><td>复用防偏差措施：入场先记录先验倾向</td><td>框架反省</td><td>是（1）</td><td>trace:inventory-2026<br><span class='dim'>佐证：trace:finance-hcnh</span></td></tr><tr><td><b>KB-R-L-inventory-2026-b1</b></td><td>推演教训</td><td>复用防偏差措施：预注册判据</td><td>框架反省</td><td>是（1）</td><td>trace:inventory-2026<br><span class='dim'>佐证：trace:finance-hcnh</span></td></tr><tr><td><b>KB-R-L-inventory-2026-b2</b></td><td>推演教训</td><td>复用防偏差措施：盲判/揭盲分离</td><td>框架反省</td><td>是（1）</td><td>trace:inventory-2026<br><span class='dim'>佐证：trace:finance-hcnh</span></td></tr><tr><td><b>KB-R-L-inventory-2026-b3</b></td><td>推演教训</td><td>复用防偏差措施：名义实际双轨</td><td>框架反省</td><td>否（0）</td><td>trace:inventory-2026<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R-L-inventory-2026-b4</b></td><td>推演教训</td><td>复用防偏差措施：历史反例对照</td><td>框架反省</td><td>否（0）</td><td>trace:inventory-2026<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R-L-inventory-2026-c0</b></td><td>推演教训</td><td>遇到同类情境时，先验须让位于预注册判据的结果：当前状态和&#x27;印象&#x27;相反：营收库存双升是主动补库，数据推翻&#x27;转变属实&#x27;的先验</td><td>框架反省</td><td>否（0）</td><td>trace:inventory-2026<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R-L-inventory-2026-c1</b></td><td>推演教训</td><td>遇到同类情境时，先验须让位于预注册判据的结果：名义库存+11.6%里约5pct是PPI价格效应，实际物量仅+6.6%</td><td>框架反省</td><td>否（0）</td><td>trace:inventory-2026<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R01</b></td><td>推演教训</td><td>代理变量陷阱：alarm 实为困境代理，扩到 22 家反例后 precision 从虚高崩到 0.42。</td><td>真实实验/盲测</td><td>是（1）</td><td>commentary:§18<br><span class='dim'>佐证：commentary:§20.6</span></td></tr><tr><td><b>KB-R02</b></td><td>推演教训</td><td>符号一致性：estimation 的 criterion 必须与生成模型同号（criterion=-b），否则预测方向反了。</td><td>独立审计/整改</td><td>是（1）</td><td>commentary:§19<br><span class='dim'>佐证：commentary:§20.1</span></td></tr><tr><td><b>KB-R03</b></td><td>推演教训</td><td>校准度 ≠ 辨别力：AUC 不能当 calibration，须用 ECE 单独度量。</td><td>独立审计/整改</td><td>是（1）</td><td>commentary:§20.2<br><span class='dim'>佐证：commentary:§19</span></td></tr><tr><td><b>KB-R04</b></td><td>推演教训</td><td>同义反复：线性生成→线性拟合恒真，须注入非线性挑战并主动降级宣称。</td><td>独立审计/整改</td><td>是（1）</td><td>commentary:§20.4<br><span class='dim'>佐证：commentary:§12.6</span></td></tr><tr><td><b>KB-R05</b></td><td>推演教训</td><td>名义/实际拆分：名义库存补库可能只是 PPI 涨价的水分，须拆成实际量才见真相。</td><td>真实实验/盲测</td><td>否（0）</td><td>commentary:§21<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-R06</b></td><td>推演教训</td><td>复盘对象校正：复盘应针对框架逻辑方法(framework)，而非研究对象(subject)。</td><td>框架反省</td><td>是（1）</td><td>commentary:§22<br><span class='dim'>佐证：commentary:§23</span></td></tr><tr><td><b>KB-R07</b></td><td>推演教训</td><td>区分自洽与有效：内部逻辑自洽的系统仍可能对真实世界无效，须有外部锚点。</td><td>独立审计/整改</td><td>是（1）</td><td>commentary:§19<br><span class='dim'>佐证：commentary:§20.9</span></td></tr><tr><td><b>KB-R08</b></td><td>推演教训</td><td>改进该改进的（三分法）：fix 真缺陷、vanity 假改进、preserve 守住边界。</td><td>框架反省</td><td>是（1）</td><td>commentary:§23.3<br><span class='dim'>佐证：commentary:§23.4</span></td></tr><tr><td><b>KB-T01</b></td><td>思考经验</td><td>自证能力是环境的产物，不是模型属性：验证力来自可隔离的符号判据环境，而非模型自夸。</td><td>经典理论</td><td>是（2）</td><td>commentary:§1.1<br><span class='dim'>佐证：commentary:§3、commentary:§5</span></td></tr><tr><td><b>KB-T02</b></td><td>思考经验</td><td>坍塌映射是核心方法论：把开放式正确性（叙事真实性）坍塌为可判定的符号判据集合。</td><td>经典理论</td><td>是（1）</td><td>commentary:§1.2<br><span class='dim'>佐证：commentary:§3.2</span></td></tr><tr><td><b>KB-T03</b></td><td>思考经验</td><td>验证基准必须先与生成过程隔离：anchor 存在 ≠ 内容有据，基准泄漏会让自证恒真。</td><td>独立审计/整改</td><td>是（2）</td><td>commentary:§1.3<br><span class='dim'>佐证：commentary:§2.4、commentary:§20.6</span></td></tr><tr><td><b>KB-T04</b></td><td>思考经验</td><td>六个环节是闸门不是闭环：没有返工回路的闸门序列不构成可持续自证系统。</td><td>经典理论</td><td>是（1）</td><td>commentary:§2.3<br><span class='dim'>佐证：commentary:§6</span></td></tr><tr><td><b>KB-T05</b></td><td>思考经验</td><td>经济前提：验证成本必须低于生成成本，否则闭环在规模上不可持续。</td><td>经典理论</td><td>否（0）</td><td>commentary:§2.6<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-T06</b></td><td>思考经验</td><td>目的论统一 G×V×C：人是另一组认知参数，不是特权裁判——差异是程度不是类别。</td><td>真实实验/盲测</td><td>是（1）</td><td>commentary:§12<br><span class='dim'>佐证：commentary:§11</span></td></tr><tr><td><b>KB-T07</b></td><td>思考经验</td><td>价值自举：判据环境是价值的化石——价值不是凭空设定，而是从历史裁决/判据中追溯。</td><td>真实实验/盲测</td><td>否（0）</td><td>commentary:§13<br><span class='dim'>佐证：—</span></td></tr><tr><td><b>KB-T08</b></td><td>思考经验</td><td>人的边界是能力函数 B(c)：随能力外移，但边界外移 ≠ 边界归零。</td><td>真实实验/盲测</td><td>是（1）</td><td>commentary:§11<br><span class='dim'>佐证：commentary:§12.7</span></td></tr></tbody></table>
+</body></html>

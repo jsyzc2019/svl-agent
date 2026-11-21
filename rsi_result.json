@@ -1,0 +1,13 @@
+{
+  "R1_divergence_found": true,
+  "R2_economic_advantage": false,
+  "R2_excess": -0.1177348605758971,
+  "R2_excess_without_cost": -0.11455991987548952,
+  "R3_direction": "全负",
+  "R3_decision": "12/12全为负超额，方向高度一致→稳健的负向发现(RSI择时系统性劣于买入持有)，非数据窥探",
+  "R3_positive_count": 0,
+  "R4_beyond_random": false,
+  "R4_percentile": 0.172,
+  "R5_robust": false,
+  "R5_out_excess": -0.02385608903649339
+}

@@ -1,0 +1,69 @@
+{
+  "audit_1_gate": {
+    "passed": true,
+    "checks": {
+      "无先验被拒": true,
+      "时序倒挂被拒": true,
+      "无结果被拒": true,
+      "空泛先验被放行_弱点": true,
+      "雷同先验被放行_弱点": true
+    },
+    "note": "形式门禁有效；但空泛/雷同先验可绕过——门禁查时序不查锚点质量，这是已知边界。"
+  },
+  "audit_2_classifier": {
+    "passed": true,
+    "checks": {
+      "fix前缀→fix": true,
+      "preserve前缀→preserve": true,
+      "vanity前缀→vanity": true,
+      "关键词无标记→unclassified": true,
+      "大写FIX→fix": true,
+      "中文冒号前缀→fix": true,
+      "深位标记漏判_弱点": true
+    },
+    "note": "显式前缀标记稳健（第23节bug已修）；但标记须在前10字符内，深位会漏判——已知边界。"
+  },
+  "audit_3_worked_failed": {
+    "passed": false,
+    "worked_total": 3,
+    "templated_worked": 3,
+    "framework_specific_worked": 0,
+    "failed_total": 0,
+    "n_cognitive_corrections": 6,
+    "n_audit_decisions": 10,
+    "note": "worked 中 3/3 是通用模板、0 条框架专属；failed 为空，而 6 条真教训全堆在 cognitive_corrections、10 条在三分法里——元教训成立：framework 轨迹的经验/教训抽取仍套 subject 模板。"
+  },
+  "audit_4_feedback_loop": {
+    "passed": true,
+    "lessons_emitted": 10,
+    "lessons_in_store": 10,
+    "fix_lessons": 4,
+    "fix_to_pdca_opps": 4,
+    "kb_retro_items": 6,
+    "note": "复盘教训能否真正进入 store、fix 能否转 PDCA、知识库是否有沉淀——反哺闭环的端到端检查。"
+  },
+  "audit_5_three_sentences": {
+    "passed": true,
+    "sentences": [
+      {
+        "claim": "经验：那套方法组合有效、守住",
+        "direction_correct": true,
+        "evidence_strength": "中",
+        "caveat": "仅有1次真实领域验证(双色球)+1次审计复盘，样本小；'有效'应理解为'本次经受住检验'，非普适证明。守住的判断有三分法preserve 5条支撑。"
+      },
+      {
+        "claim": "教训：机械执行判据≠得到真相，触发只是调查起点",
+        "direction_correct": true,
+        "evidence_strength": "强",
+        "caveat": "本次有硬证据：D0触发H1被诊断证伪(bug+高功效)。且这与第19节'区分自洽与有效'、第23节'改进该改进的'一脉相承，跨轮次收敛。"
+      },
+      {
+        "claim": "元教训：复盘工具不针对逻辑方法定制就会退化成走流程",
+        "direction_correct": true,
+        "evidence_strength": "中偏弱",
+        "caveat": "本次审计给出了量化证据(worked模板化/failed空)，但仅1条轨迹；需更多framework轨迹回归才能确认不是个例。已记为fix待补。"
+      }
+    ],
+    "note": "三句话方向正确，坚持。审计区分'方向对'与'证据够'：教训一句证据最强，经验次之，元教训需更多样本。"
+  }
+}

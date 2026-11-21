@@ -1,0 +1,64 @@
+{
+  "document": "DeepMind essay《What comes after AGI?》— 框架论证预注册判据（锁存）",
+  "timestamp_utc": "2026-11-21T09:12:00Z",
+  "timestamp_local": "2026-11-21 17:12:00 CST",
+  "status": "PREREGISTERED_BEFORE_ANALYSIS",
+  "declaration": "本判据在论证脚本运行前写死。一手=essay逐字原文(agi_essay_raw.txt)；预留叙事层(二手，本次未取得)；谱系=awesome-rsi/SIM/RSI-Structure(用于污染审计)。不借用任何'ASI会/不会实现'的现成结论。",
+
+  "object_type": "ESSAY / 观点前瞻文",
+  "object_type_consequence": "观点文既非实证(无实验统计量可复算)、也非系统综述(无分类法需自洽核对)。判据适配为：论点-证据链、外推链算术自洽与假设明示、主体归属、可证伪性、同谱系交叉核对。禁止套统计复算(KB-STRUCT01)与禁止套分类自洽(KB-STRUCT 综述判据)。",
+
+  "tests": [
+    {
+      "id": "E1",
+      "name": "主体归属审计（Disclaimer 门禁）",
+      "statistic": "核对：作者身份、发布平台、Disclaimer 原文；是否明确非官方立场",
+      "decision_rule": "若 DMI 平台且 Disclaimer 明确'not Google official view'，则主体=作者个人/研究团队观点；二手若读成'DeepMind官方预言ASI'判主体错位(迁移§31/§34/§38)。论文有免责则preserve、不连坐作者。"
+    },
+    {
+      "id": "E2",
+      "name": "外推链算术与假设明示审计（观点文专用，替代统计复算）",
+      "statistic": "核验文中数量级外推的算术自洽(10x/年、10^10、成本$1B→$1000)，并核对作者是否标注趋势外推假设(not a given/far from certain/empirical question)",
+      "decision_rule": "算术自洽+主动标注假设=高严谨度preserve；但须显式区分'算术自洽'≠'外推成立'——趋势能否维持十年是经验问题，不因算对就认预测为真。"
+    },
+    {
+      "id": "E3",
+      "name": "可证伪性分级（真预测 vs 不可证伪叙事）",
+      "statistic": "区分文中的不可证伪大叙事('ASI将改变一切')与可检验的具体预测(RSI在自动化验证领域最快、多智能体协调递减、capability overhang)",
+      "decision_rule": "带时效/领域/可观测条件的预测标记为可证伪(高价值)；泛泛愿景标记为叙事层(低价值)；不因愿景宏大就当强证据。"
+    },
+    {
+      "id": "E4",
+      "name": "同谱系交叉核对（触发≠真相）",
+      "statistic": "逐条核对本文RSI段与我方判据(feedback quality→退化、evaluation scaling、三机制分类、model-measure-forecast-repeat)的关系",
+      "decision_rule": "一律标注'同谱系呼应'而非'独立验证'(我方已受awesome-rsi/SIM/综述影响)；若脚本误判为独立佐证则触发污染门禁(KB-STRUCT02)。"
+    },
+    {
+      "id": "E5",
+      "name": "诚实刻度审计",
+      "statistic": "核对是否主动声明：scaling laws边界、数据非全有用、协调收益递减、RSL经验问题、预测不确定",
+      "decision_rule": "主动声明=高诚实度preserve；这是观点文的关键可信度指标。"
+    },
+    {
+      "id": "E6",
+      "name": "吸收决策（复述 vs 长牙，KB-META01）",
+      "statistic": "对本文相对我方的新增量(评估可扩展性到超人领域、RSI在自动验证领域最快的时空预测)判断是否编译成会拦/判/降级的动作",
+      "decision_rule": "能指出具体动作才编译；否则诚实记复述。防为改进而改进、防重复造轮子(已有evaluation_reliability/component_attribution)。"
+    }
+  ],
+
+  "honest_conclusion_template": [
+    "第一层(事实)：essay写了什么、四条路径、RSI段、数字、Disclaimer",
+    "第二层(推断边界)：观点文≠实证、算术自洽≠外推成立、DMI个人观点≠官方立场、同谱系≠独立验证",
+    "第三层(方法教训)：判据适配对象(观点文查外推链)、可证伪性分级、主体归属精确化"
+  ],
+
+  "anti_overclaim": [
+    "本文是 conversation starter 非 Google 官方立场——主体归属精确",
+    "算术自洽不等于预测成立：趋势维持十年是经验问题",
+    "同谱系呼应不是独立验证：我方 RSI 判据有污染来源",
+    "可证伪的具体预测与不可证伪的宏大叙事分层，不混为一谈"
+  ],
+
+  "tools_rule": "WebFetch 对 DMI 站 fetch failed，curl --compressed 直取 HTTP200 成功——一次换路即通，未陷入重试循环。"
+}

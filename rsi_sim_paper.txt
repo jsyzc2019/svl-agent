@@ -1,0 +1,2288 @@
+                                                                                                                                                                               2026-11-13
+
+
+
+
+                                         Self-Improvement Memory Enables Continual
+                                         Recursive Self-Improvement
+                                         Xin Yu1,4,* , Fei Xia1 , Jiaqi Pan1 , Youbao Tang1 , Chengzhi Liu1 , Adams Yu2 , Sicong Jiang2 , Yanfei Chen3 ,
+                                         Lingzhou Xue4 and Ting Yu1
+                                         1 Google Cloud AI
+                                         2 Google DeepMind
+                                         3 Google Cloud AI Research
+                                         4 The Pennsylvania State University
+
+                                          {xinyulucas, feixia, jiaqip, tangyoubao, chengzhiliu, adamsyuwei, jiangsicong, yanfeichen, yuti}@google.com,
+                                         lzxue@psu.edu
+arXiv:2611.18856v1 [cs.LG] 13 Nov 2026
+
+
+
+
+                                         Harness optimization is often studied with a fixed
+                                                                                                                            Direct transfer                     CRSI with SIM
+                                         policy model and benchmark. When either changes,
+                                                                                                                                 Source RSI                         Source RSI
+                                         the optimizer must decide which parts of an
+                                         evolved harness to reuse or revise, but the harness                                        HS                           HS       +     SIM
+
+                                         alone may not explain why earlier edits were made                                   Evolved harness                 Evolved harness + SIM
+                                         or how they performed. In this work, we study Con-
+                                         tinual Recursive Self-Improvement (CRSI), a set-                                    Evaluate target                            Target RSI
+                                                                                                                                                                 Update harness + SIM
+                                         ting for continuing existing harness-optimization
+                                                                                                          CRSI TARGET SETTINGS
+                                         methods across compatible benchmarks or policy
+                                                                                                          Data                           Coding · Text classification
+                                         models. We propose Self-Improvement Memory                       Policy fixed                   Workspace · Engineering
+                                         (SIM) for the harness optimizer, rather than the                 Models                         Families · Generations
+                                                                                                          Benchmark /                    Shared harness across models
+                                         task-solving policy. SIM groups edits by recur-                  split fixed
+                                                                                                                                  (a) Transfer and continued improvement
+                                         ring harness problem and records their rationale,
+                                                                                                           Held-out score
+
+
+
+
+                                                                                                                                                              With SIM 84.75
+                                                                                                                            85
+                                         predicted and observed outcomes, and evaluation
+                                         context. New attempts extend this history as op-                                   75
+                                                                                                                                                              Without SIM 73.42
+                                         timization continues. In our experiments across                                             68.41
+                                                                                                                            65
+                                                                                                                              Before RSI                                      After RSI
+                                         four domains, SIM achieves higher final scores
+                                                                                                                                  (b) Cross-model workspace continuation
+                                         than harness-only and root-cause-only continua-
+                                         tion in cross-dataset and pairwise cross-model com-
+                                                                                                         Figure 1 | Continual improvement beyond direct
+                                         parisons. Across ten independent source runs in                 transfer. (a) CRSI carries the evolved harness and
+                                         coding, paired continuations with SIM improve fi-               SIM into target RSI across data or models. SIM
+                                         nal scores by an average of 2.36 points over harness-           guides reuse and revision. (b) Both conditions con-
+                                         only continuation (p = 0.003).                                  tinue RSI from the same Opus-evolved harness on
+                                                                                                         Gemini’s workspace tasks; arrows join measured
+                                         Keywords: Recursive self-improvement, agent har-                endpoints with matched rounds and candidates.
+                                         nesses, continual learning
+
+
+                                         1. Introduction                                                 but finding useful changes by hand requires re-
+                                                                                                         peated engineering and evaluation (Lin et al.,
+                                         An LLM agent depends on both its policy model                   2026; Xia et al., 2026). Recent work automates
+                                         and the harness that manages context, tools,                    this process through recursive self-improvement
+                                         and execution. Improving the harness can raise                  (RSI), using execution feedback to repeatedly
+                                         performance without updating model weights,                     propose, evaluate, and select harness edits (Lee
+                                             * This work was done while Xin Yu was an intern at          et al., 2026; Lin et al., 2026; Xia et al., 2026).
+                                         Google.                                                         Although evolved harnesses can improve per-
+
+
+                                         Corresponding author(s): xinyulucas@google.com
+                                         © 2026 Google. All rights reserved
+                       Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+formance on other benchmarks or models (Lin               Self-Improvement (CRSI), in which harness
+et al., 2026; Wu et al., 2026; Xia et al., 2026; Xu       optimization continues after a benchmark or
+et al., 2026b), optimization is usually conducted         policy-model change while preserving a com-
+within a fixed setting. As models are updated             patible executable interface. We propose Self-
+and agents encounter new tasks, harness opti-             Improvement Memory (SIM) to carry improve-
+mization often needs to continue beyond that              ment experience alongside the evolved harness
+setting. This raises two fundamental challenges.          (Figure 1). SIM groups selected edits by the har-
+                                                          ness problems they address and gives the pro-
+   Adapting to a new model. Model adapta-
+                                                          poser and selector access to their rationale, pre-
+tion arises in two settings: multi-model serving,
+                                                          dicted and observed outcomes, and evaluation
+where one shared harness supports different pol-
+                                                          context. It creates entries for new problems and
+icy models, and model evolution, where new ver-
+                                                          appends further attempts and outcomes to exist-
+sions replace earlier ones within a model family.
+                                                          ing ones, helping the optimizer decide which
+Both motivate reusing an evolved harness and
+                                                          modifications to retain, revise, replace, or re-
+its improvement experience instead of indepen-
+                                                          move.
+dently optimizing a harness for every model or
+release. Yet modifications suited to one policy              Our contributions are as follows:
+can interact differently with another, even when
+the benchmark stays fixed (Yang et al., 2026; Yu          • Continual harness optimization. We define
+et al., 2026d). In our workspace experiment, an             cross-dataset continuation with the policy
+Opus-evolved harness starts at 68.41 on Gem-                fixed and cross-model continuation with the
+ini, below the seed harness’s 73.89 (Figure 4).             benchmark and split fixed. Existing harness-
+The optimizer must determine which inherited                optimization methods can use this setting
+mechanisms still help and which need revision.              while retaining their proposal, evaluation,
+                                                            and selection procedures.
+  Adapting to new data. With the policy fixed,            • Self-Improvement Memory. We introduce a
+a different task distribution can expose failures           structured record of harness problems, modi-
+that source optimization did not address. A com-            fications, and outcomes that conditions both
+pletion gate that checks whether commands ran               proposal and selection, preserving source ex-
+successfully, for example, may need to check                perience while incorporating new attempts
+whether a feasible solution is also optimal. In             during target optimization.
+our text-classification experiment, the source-
+                                                          • Controlled evidence across four domains.
+evolved FewShotAll harness starts at 72.92 on
+                                                            With matched starting harnesses, round
+the target suite, below the seed’s 75.72 (Figure 3).
+                                                            counts, and candidate budgets, Full SIM out-
+A useful source fix may therefore need revision
+                                                            performs harness-only and root-cause-only
+before it helps the target.
+                                                            continuation in six cross-dataset and four
+   In either transition, the evolved harness alone          Opus-to-Gemini settings. Across ten indepen-
+leaves important questions unanswered: why                  dent source runs in coding, paired continua-
+was an edit proposed, what was it expected to               tions with SIM improve 9 of 10 runs, with a
+fix, and what happened when it was tested?                  mean advantage of 2.36 points over harness-
+Source optimization produces this evidence, but             only continuation (p = 0.003).
+it need not accompany the harness. Without this
+history, target optimization may repeat earlier
+attempts or change inherited components with-             2. Related Work
+out knowing their purpose. We therefore ask
+                                                          Recursive self-improvement of agent har-
+whether the experience gained during source
+                                                          nesses. Yu et al. (2026b) survey harness op-
+optimization can help the harness adapt to new
+                                                          timization workflows, recursive reuse, and
+models or data.
+                                                          the conditions under which evolved modifica-
+  In this work, we study Continual Recursive              tions transfer. Meta-Harness and AHE search
+
+
+                                                                                                          2
+                        Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+over harness code using execution traces and               3. Method
+scores (Lee et al., 2026; Lin et al., 2026). Other
+approaches let the agent modify its own sys-               3.1. Problem Formulation
+tem (Zhang et al., 2026a,b,d) or learn a policy for
+                                                           Harness RSI. Following Meta-Harness (Lee
+editing harnesses (Shao et al., 2026). SIA instead
+                                                           et al., 2026), we optimize an executable harness
+combines harness edits with updates to the task
+                                                           H around a fixed policy model M. The harness
+model’s weights (Hebbar et al., 2026).
+                                                           determines the model’s context, tools, and exe-
+                                                           cution flow. We write a setting as σ = ( M, X ),
+Transfer of evolved harnesses. Evolved har-                with disjoint evolve and held-out evaluation sets
+nesses can retain their gains on held-out tasks,           X evo and X eval . The score J ( H; M, X ) follows
+other models, or downstream benchmarks (Lee                the benchmark’s aggregation rule (Appendix B).
+et al., 2026; Lin et al., 2026; Shi et al., 2026).         Only evolve-set feedback is available for propos-
+Recent methods encourage transfer through                  ing edits, selecting candidates, updating SIM, or
+benchmark-disjoint evolution and modular ed-               deciding when to stop.
+its (Wu et al., 2026), regularized search (Xia et al.,
+                                                              A run consists of N rounds. At round t =
+2026), or separation of general and benchmark-
+                                                           0, . . . , N − 1, the evaluator executes Ht on X evo
+specific mechanisms (Yu et al., 2026a). Their
+                                                           and returns scores, traces, and errors as Ft . The
+effectiveness still depends on how the model
+                                                           proposer P uses Ft and the run’s history Dt (ear-
+and harness interact (Yang et al., 2026; Yu et al.,
+                                                           lier feedback and code diffs) to generate k can-
+2026d). PluginRSI also reuses its plugin library
+                                                           didate harnesses Ct . The selector S screens pro-
+in subsequent optimization.
+                                                           posals before execution and chooses among the
+                                                           evaluated candidates, weighing performance,
+Memory of the improvement process. Prior                   complexity, domain specificity, and regression
+work retains candidate artifacts (Lee et al.,              risk:
+2026), edit histories (Xia et al., 2026), im-                                  Ct = P( Ht , Ft , Dt ),
+                                                                                                            (1)
+provement graphs (Zhang et al., 2026c), skill-                             Ht+1 = S( Ht , Ft , Ct , FtC ),
+revision records (Li and Hu, 2026), and play-
+                                                           Here FtC contains feedback from the candidates
+books (Zhang et al., 2026f). HarnessBank groups
+                                                           that passed screening and were executed. If no
+candidate harnesses by the problems they ad-
+                                                           candidate is accepted, Ht+1 = Ht . The proposer
+dress (Luo et al., 2026). Xu (2026) continues
+                                                           and selector are LLM-based harness engineers;
+multi-task evolution with free-text notes and
+                                                           M is the policy that executes the tasks.
+source replay; Harness2 reuses an improvement
+library across benchmarks (Xu et al., 2026a).
+Meta-Skill and Meta2 transfer learned guidance             Continual setting. After source RSI in σS =
+for constructing or editing task-specific har-             ( MS , XS ), optimization resumes from the final
+nesses (Qian et al., 2026; Yuan et al., 2026). Con-        retained harness HS in σT = ( MT , X T ). In cross-
+tinual adaptation also raises retention and inter-         dataset CRSI, the benchmark changes while the
+ference concerns (Chen et al., 2026; Zhao et al.,          policy stays fixed (XS ̸= X T , MS = MT ). In
+2026). SIM links harness problems to modifi-               cross-model CRSI, the policy changes on the same
+cations, predicted and observed outcomes, and              benchmark and split (MS ̸= MT , XS = X T ).
+provenance. We test SIM by continuing opti-                Both require a shared executable harness inter-
+mization from the same evolved harness with                face. We measure target improvement as the
+no SIM, root causes only, or the full record af-           final minus starting score under J (· ; MT , X Teval ).
+ter a benchmark or model change. Appendix A
+expands these comparisons, including contin-
+ued optimization and memory for task-solving               3.2. Self-Improvement Memory
+agents.                                                    SIM groups edits by the recurring harness prob-
+                                                           lems they address. For a root-cause hypothesis
+
+
+                                                                                                                3
+                               Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+
+                                                                                                  Candidate
+                                                Feedback                                          harnesses
+                            Evaluator              Ft          Proposer                                                            Selector
+   Evolve-set
+     tasks                 Run M in Ht                     Read code + history                                                 Screen candidates
+                                                                                                Ht(1) , … , Ht(k)
+                           Frozen policy                     Propose k edits                                                    Verify + select
+
+
+                                                                                  read SIM
+                             record
+                                                                                                                    read SIM
+
+
+
+
+                                              history
+                                                               Self-Improvement Memory t
+                            History t                           Root cause, selected edit, rationale
+
+                          Code, logs, diffs                        Predicted / observed outcomes
+                                                                     Model, benchmark, round                           Selected edit
+                                                                                                                        + outcome
+
+
+                                 Next round
+                                                                     Retained harness Ht + 1
+                                                                     Keep Ht if no edit is selected
+
+
+
+
+Figure 2 | SIM in the agentic outer loop. Starting from ( HS , MS ), the proposer and selector consult
+SIM (dashed arrows) to improve the harness on evolve-set tasks. After selection, SIM records the
+chosen edit and its measured outcome (teal arrow). Held-out evaluation stays outside the loop.
+
+
+ci , such as premature completion, an entry is                        earlier attempts. If no edit is accepted, et = ∅
+                                                                     and U (Mt , ∅) = Mt . Entries with identical
+              mi = ci , [( aij , oij , pij )] j , (2)                 root-cause text are merged without dropping
+where j indexes attempts in order and Mt =                            their histories. Appendix D.1 gives the entry-
+{mi } is the current memory. Each attempt stores                      matching details.
+the modification and its rationale aij , predicted
+and observed task outcomes oij , and provenance                       3.3. Continual RSI via SIM
+pij (domain, benchmark, policy, and round).
+Predictions of which tasks an edit will fix are                       Source RSI starts with an empty SIM and pro-
+recorded before evaluation and checked after-                         duces ( HS , MS ). Full SIM carries both into tar-
+ward.                                                                 get optimization (Figure 2). The proposer and
+                                                                      selector use each edit’s rationale, outcome, and
+  At each round, the proposer receives the com-                       evaluation context to judge whether it still ap-
+plete SIM in its system prompt, and the selec-                        plies to the current failures. They can retain,
+tor reads the same record when assessing candi-                       revise, replace, or remove harness modifications
+dates. Both read all entries without retrieval or                     while keeping the earlier memory records. Ap-
+truncation. The loop in Equation 1 becomes                            pendix D.2 gives the prompt instructions for us-
+                   Ct = P( Ht , Ft , Dt ; Mt ),                       ing this history.
+                                                             (3)
+                Ht+1 = S( Ht , Ft , Ct , FtC ; Mt ).
+                                                                      Transfer conditions. We compare four condi-
+   Each proposal cites an existing root cause or                      tions: Cold Start ( H0 , ∅) from the seed harness;
+names a new one. After selection, only the cho-                       Harness Transfer ( HS , ∅); Problem-Only Memory
+sen candidate is recorded in et , including its mea-                  ( HS , McS ) with root causes only; and Full SIM
+sured outcomes even when the edit regresses                           ( HS , MS ). The three transfer conditions start
+or fails to fix a predicted task. The update                          from the same HS , and all four use the same
+Mt+1 = U (Mt , et ) appends this record to the                        target policy, tasks, and round and candidate
+cited problem or creates a new entry, preserving                      budgets. Each keeps its assigned memory condi-
+
+
+                                                                                                                                                   4
+                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+tion throughout target RSI, while retaining the          Transitions, models, and budgets. Cross-
+ordinary target-run history Dt (Appendix C.3).           dataset CRSI uses Gemini 3.8 Flash (Google
+Source history enters through SIM; new target            DeepMind, 2026b) as the policy in both stages.
+records follow the same memory condition.                For the cross-model transfer comparison, source
+                                                         RSI uses Claude Opus 5.5 (Anthropic, 2026),
+                                                         then Gemini 3.8 Flash continues on the same
+4. Experiments                                           benchmark and split. Both stages use the
+                                                         target benchmarks listed above: TB4, the
+Our experiments address four questions:
+                                                         eight-dataset classification suite, the merged
+• Does SIM improve continued RSI after a                 workspace benchmarks, and Frontier-Eng. Pol-
+  benchmark or policy-model change? (§4.2–               icy weights remain frozen. Gemini 3.8 Flash
+  4.3)                                                   also serves as proposer and selector in the main
+• Does the full SIM record help beyond retain-           comparisons. A source-RSI ablation replaces
+  ing only root causes? (§4.2 and §4.3.1)                it with Claude Opus 5.5 in these roles, yield-
+• How does SIM guide the reuse and revision of           ing larger gains from both coding seeds (Ap-
+  inherited harness edits? (§4.4; Appendix F.5)          pendix E.4.2, Table 7). The seeds are the minimal
+                                                         AHE seed (Lin et al., 2026) and Terminus-2 (Mer-
+• Is SIM’s benefit consistent across indepen-
+                                                         rill et al., 2026) for coding, NoMemory and Few-
+  dently evolved source harnesses? (§4.4)
+                                                         ShotAll (Lee et al., 2026) for text classification,
+                                                         and a ReAct agent (Yao et al., 2023) over an MCP
+4.1. Experimental Setup                                  tool gateway (Vidgen et al., 2026) for workspace
+                                                         and engineering. For the latter two domains,
+Domains. We study four domains in which a
+                                                         we adopt RRSI’s environments, seed harnesses,
+source-evolved harness remains executable on
+                                                         and evaluation interfaces (Xia et al., 2026); Ap-
+the target (Appendix B, Table 4). Coding moves
+                                                         pendix C details our experimental setup. Ev-
+from Terminal-Bench 2.1 (TB2.1) to Terminal-
+                                                         ery source and target run uses N = 10 rounds
+Bench 4 (TB4) (Merrill et al., 2026; Terminal-
+                                                         with k = 5 candidate proposals per round in the
+Bench Team, 2026a,b), containerized shell tasks
+                                                         proposer–selector loop described in §3.1. Pro-
+scored by their own tests. Text classification
+                                                         posals rejected before execution receive no eval-
+uses the online classification environment of
+                                                         uation score; the five rollouts per task specify
+Meta-Harness (Lee et al., 2026), from a three-
+                                                         the separate evaluation allocation.
+dataset source suite to an eight-dataset target
+suite absent from source RSI. Agentic workspace
+moves from Harvey LAB (Harvey AI, 2026) to               Comparison conditions. Cold Start begins
+the equal-weight mean of JobBench (Li et al.,            from the seed harness without SIM. Harness
+2026), GDPval (Patwardhan et al., 2026), and             Transfer, Problem-Only Memory, and Full SIM
+APEX-Agents (Vidgen et al., 2026), using scoring         share the same source-evolved harness, with no
+interfaces adapted from RRSI (Xia et al., 2026),         SIM, root causes only, and the complete record,
+with Gemini 3.8 Flash as the judge. Engineer-            respectively. These memory conditions persist
+ing design moves from EngDesign (Guo et al.,             throughout target optimization, with matched
+2025) to Frontier-Eng (Chi et al., 2026), scored         target tasks, policy, round counts, and candidate
+by frozen verifiers. Tasks are split uniformly at        budgets (§3.3).
+random, without stratification, into evolve and
+held-out sets of approximately equal size; exact
+counts are in Appendix B. Only evolve-set scores         Metrics and reporting. Scores are on a 0–100
+and trajectories reach the proposer, selector, and       scale to two decimals: pass@1 for coding, accu-
+SIM. The main comparisons use five rollouts per          racy pooled over examples for text classification,
+task, with every rollout included in the score.          benchmark-specific rubric, win-rate, and pass@1
+                                                         scores for workspace, and pass rate or medal
+                                                         score for engineering (Appendix B). Before and
+
+
+                                                                                                          5
+                       Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+after scores evaluate the starting harness and the        Gemini model          Seed          Fresh RSI   CRSI
+version retained after the final target round on
+                                                          2.5 Flash              17.8              21.4    22.4
+the held-out set. Except for the dedicated paired         3.5 Flash              70.2              73.3    76.8
+study, each condition is one complete RSI run,            3.8 Flash              87.2              88.9    90.5
+and its five rollouts per task estimate execution         4 Argon                89.7              95.6    94.8
+performance rather than optimization variance.
+We report individual settings descriptively and           Table 1 | Success rates on held-out TB2.1 across
+use the ten-pair coding study to assess variation         Gemini generations. Seed uses the unevolved
+across independent source runs (§4.4).                    harness; Fresh RSI optimizes it independently.
+                                                          CRSI adds SIM in the first generation and inher-
+4.2. Cross-Dataset CRSI                                   its the previous generation’s harness and SIM
+                                                          thereafter. Bold compares Fresh RSI and CRSI.
+SIM improves final scores in all six dataset
+transitions. The memory ablation in Figure 3
+                                                          4.3. Cross-Model CRSI
+compares continued optimization from the same
+evolved harness with no SIM, root causes only,            We examine transfer between model families,
+or the full record. Full SIM finishes highest in all      continuation across model generations, and a
+six settings, exceeding Harness Transfer by 2.43–         harness shared by multiple models.
+4.35 points and Problem-Only Memory by 0.20–
+6.06 points. Problem-Only Memory has mixed
+                                                          4.3.1. Harness Transfer across Model Families
+effects: it ranges from 1.82 points below Harness
+Transfer to 2.40 above it. Keeping the edit his-          When the Opus-evolved harness is first run with
+tory and evaluation evidence thus helps beyond            Gemini, it scores below Gemini’s seed harness
+retaining the diagnosis alone (Appendix E.4.1).           in every domain (Figure 4). The deficits range
+                                                          from 0.60 points in text classification to 5.48 in
+   The margin over the strongest alternative
+                                                          workspace. Target RSI does not always over-
+ranges from 0.20 points on NoMemory to 4.35 on
+                                                          come this disadvantage: Harness Transfer still
+engineering. Section 4.4 tests whether the bene-
+                                                          finishes below Cold Start in three domains. Full
+fit recurs across independently evolved source
+                                                          SIM finishes highest in all four and exceeds
+harnesses. Appendix E.2 lists the exact starting
+                                                          harness-only continuation by 3.60–11.33 points.
+and final scores for both transfer settings.
+                                                          It also finishes above Problem-Only Memory in
+                                                          all four domains (Appendix E.4.1). Workspace
+Source improvement does not ensure a better               shows the largest difference: both begin at 68.41,
+target start. Source RSI raises held-out source           but Full SIM reaches 84.75 while Harness Trans-
+scores by 2.75–6.41 points in all six settings (Ap-       fer reaches 73.42.
+pendix E.1), yet the FewShotAll harness starts
+target RSI below the seed: 72.92 versus 75.72.            4.3.2. Continual Improvement across Model
+Harness-only continuation reaches 74.12 and re-                  Generations
+mains below Cold Start at 75.92, while Full SIM
+reaches 77.92.                                            The generation chain carries the evolved harness
+                                                          and SIM through successive Gemini models on
+   On NoMemory, Cold Start gains more than                TB2.1 (Table 1; setup in Appendix C.5). Fresh RSI
+Full SIM (3.40 versus 2.20 points) but finishes           starts from the seed at each generation. In the
+lower (72.00 versus 73.60). We therefore report           first generation, both procedures use the same
+both endpoints and use Harness Transfer, which            seed, so that comparison tests SIM during the
+shares Full SIM’s initialization, as the direct con-      initial run. Continuation improves over fresh RSI
+trol for the memory procedure.                            in two of the three subsequent generations: by 3.5
+                                                          points on Gemini 3.5 Flash and 1.6 on Gemini
+                                                          3.8 Flash, while finishing 0.8 points lower on
+
+
+                                                                                                             6
+                                                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+                                                      Cold Start            Harness Transfer           Problem-Only Memory                  Full SIM (ours)
+
+                                                                                   Before target RSI           After target RSI
+                         30                                                                  24.85        30
+                                                      20.61                                                                                                                21.82
+                                      19.39   18.18                18.18 18.79       18.18                     18.18 19.39        19.39 19.39      19.39 20.61     19.39
+                              16.36
+                         15                                                                               15
+
+
+                          0                                                                                0
+                                                 (a) Coding / AHE                                                                 (b) Coding / Terminus-2
+
+                        100                                                                              100
+Held-out target score
+
+
+
+
+                              68.60 72.00     71.40 71.00          71.40 73.40       71.40 73.60               75.72 75.92        72.92 74.12      72.92 75.52     72.92 77.92
+
+                         50                                                                               50
+
+
+                          0                                                                                0
+                                              (c) Text cls. / NoMemory                                                            (d) Text cls. / FewShotAll
+
+                        100           82.98           85.07                85.54             87.89        60
+                              73.89           74.93                74.93             74.93                                                                                 46.96
+                                                                                                               39.13 40.87        39.13 42.61      39.13 42.61     39.13
+
+                         50                                                                               30
+
+
+                          0                                                                                0
+                                               (e) Workspace / ReAct                                                               (f) Engineering / ReAct
+
+
+
+  Figure 3 | Cross-dataset CRSI: held-out target scores before (open bars) and after (filled bars) target
+  RSI. The three transfer conditions share the source-evolved harness; Cold Start uses the seed. Axis
+  limits vary by domain. Table 5 lists exact scores.
+
+                                                      Cold Start            Harness Transfer           Problem-Only Memory                  Full SIM (ours)
+
+                                                                                   Before target RSI           After target RSI
+                         30                                                                              100
+                                                                                             21.82             78.32 82.72        77.72 80.20      77.72 81.32     77.72 83.80
+                                      19.39                                20.61
+                                                      18.18
+                              16.36
+                                              13.94                13.94             13.94
+                         15                                                                               50
+Held-out target score
+
+
+
+
+                          0                                                                                0
+                                                 (a) Coding / AHE                                                                 (b) Text cls. / FewShotAll
+
+                        100           82.98                                                  84.75        60                                                               50.43
+                              73.89                                        79.22                                                                           46.96
+                                              68.41 73.42          68.41             68.41                     39.13 40.87                42.61
+                                                                                                                                  34.78            34.78           34.78
+                         50                                                                               30
+
+
+
+                          0                                                                                0
+                                               (c) Workspace / ReAct                                                               (d) Engineering / ReAct
+
+
+
+  Figure 4 | Cross-model CRSI from Opus 5.5 to Gemini 3.8 Flash, with benchmark and split fixed.
+  Open and filled bars show held-out scores before and after Gemini’s target RSI. Transfer conditions
+  share the Opus-evolved harness; Cold Start uses the seed (Table 6).
+
+
+
+                                                                                                                                                                                   7
+                          Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+Harness construction        Evolve     Held-out       All      Run       Start       No SIM      SIM         ∆
+B1: Per-model harnesses       77.40        75.20    76.30         1      18.18           20.61   22.42   +1.81
+B2: Shared seed               72.36        73.28    72.82         2      16.97           17.58   19.39   +1.81
+S1: Sequential CRSI           76.72        74.20    75.46         3      17.58           20.00   20.61   +0.61
+S2: Unified synthesis         78.92        75.24    77.08         4      18.18           18.18   23.64   +5.46
+                                                                  5      17.58           18.79   20.61   +1.82
+S3: Source policy used for RSI                                    6      19.39           20.00   23.64   +3.64
+  Gemini 3.8 Flash             74.28       71.24    72.76         7      18.79           20.00   21.82   +1.82
+  Grok 4.20 Reasoning          68.24       66.84    67.54         8      18.18           20.00   19.39   −0.61
+  Claude Opus 5.5              75.20       72.24    73.72         9      19.39           18.18   23.03   +4.85
+                                                                 10      19.39           20.00   22.42   +2.42
+Table 2 | Text-classification scores averaged over
+                                                             Mean        18.36           19.33   21.70   +2.36
+Grok 4.20 Reasoning, Claude Opus 5.5, and
+Gemini 3.8 Flash. S3 rows name the policy used
+                                                             Table 3 | Paired coding continuations from ten
+to evolve each harness; each harness is evaluated
+                                                             independent Terminus-2 source runs. Start is
+with all three models. All averages the equally
+                                                             the evolved harness’s held-out TB4 score; No
+sized evolve and held-out splits. Bold marks the
+                                                             SIM and SIM are scores after ten target rounds.
+highest mean in each column.
+                                                             ∆ is SIM minus No SIM (mean +2.36; paired
+                                                             p = 0.003).
+Gemini 4 Argon.
+                                                             times from Terminus-2 on TB2.1 and initialize
+4.3.3. One Harness for Multiple Models                       two ten-round TB4 runs from each resulting har-
+                                                             ness. Within each pair, the starting harness, pol-
+We also ask whether one harness can serve Grok,
+                                                             icy, benchmark, and round and candidate bud-
+Opus, and Gemini on the text-classification tar-
+                                                             gets match. One run inherits that source run’s
+get suite (Table 2; setup in Appendix C.6). We
+                                                             SIM and appends target attempts; the other con-
+compare sequential CRSI, unified synthesis us-
+                                                             tinues without SIM. The independent source run
+ing feedback from all three models, and trans-
+                                                             is the unit of analysis.
+fer of harnesses evolved separately with each
+policy. Unified synthesis reaches a similar mean               SIM finishes higher in 9 of 10 pairs (Table 3),
+score to separately evolved harnesses: 75.24 versus          with one pair favoring continuation without SIM
+75.20 on held-out examples, above the shared                 by 0.61 points. From a shared mean starting
+seed’s 73.28. Sequential CRSI reaches 74.20; the             score of 18.36, the mean final score is 21.70 with
+three S3 harnesses average 66.84–72.24 across                SIM and 19.33 without it. The mean paired ad-
+the evaluation models. This descriptive compar-              vantage is 2.36 points (95% CI [1.05, 3.68]; two-
+ison assesses a common harness; the matched                  sided paired t(9) = 4.06, p = 0.003). A two-
+starting-harness comparisons in §4.3.1 test the              sided signed-rank check gives p = 0.006; the
+full SIM procedure.                                          paired standardized effect is dz = 1.28 (statisti-
+                                                             cal details in Appendix C.4).
+4.4. Analysis: The Role of SIM in CRSI
+
+The paired comparisons test whether SIM im-                  SIM guides reuse and revision of inherited ed-
+proves continuation from a common starting                   its. Full SIM and Harness Transfer inherit the
+harness. We then follow individual memory                    same completion gate from Terminus-2 source
+entries to see how earlier diagnoses inform later            RSI (Figure 11b, Appendix F.3). With SIM, the
+edits.                                                       proposer uses the gate’s rationale and source
+                                                             outcomes to retain completion verification while
+                                                             adding target checks, including feasibility ver-
+SIM improves continuation from the same                      sus optimality. Without SIM, the run tightens
+evolved harness. We repeat source RSI ten                    the gate, twice repairs completion deadlocks,
+
+
+                                                                                                             8
+                                                  Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+                                                     Cold Start           Harness Transfer                Problem-Only Memory                Full SIM
+
+
+                        26                                                       24.85               26
+
+                        24                                                                           24
+   Held-out TB4 score
+
+
+
+
+                                                                                                                                                                21.82
+                        22                                                                           22
+
+                        20                                                                           20
+
+                        18                                                                           18
+
+                        16                                                                           16
+                             0           2           4          6         8       10                       0        2            4           6           8       10
+                                                  Target RSI round                                                              Target RSI round
+
+                                                     (a) AHE seed                                                            (b) Terminus-2 seed
+
+                         6                                           +5.46
+                                                                                                                                     +4.85
+SIM − No SIM
+ (score points)
+
+
+
+
+                                                                                             +3.64                                                           Mean
+                         3                                                                                                                       +2.42       +2.36
+                                 +1.81       +1.81                              +1.82                       +1.82
+                                                          +0.61
+                         0
+                                                                                                                        -0.61
+                                  1           2             3         4           5           6                7         8            9            10
+                                                                                   Independent source run
+
+                                                                       (c) Paired advantage across ten source runs
+
+
+
+Figure 5 | Coding optimization (TB2.1→TB4). (a,b) Held-out TB4 scores of retained harnesses after
+each target round; round 0 is the starting harness. (c) Final-score differences (SIM minus No SIM)
+across ten paired continuations from independently evolved Terminus-2 harnesses. The dashed line
+marks the mean; Table 3 gives individual scores.
+
+
+and misattributes the inherited gate to its own                                              round 2 from Terminus-2. In the AHE source-
+first round. The requirement carries over; its                                               retention trace, all transfer conditions start at
+implementation needs revision. Appendices F.5                                                90.22 on held-out TB2.1 (Figure 8, Appendix E.3).
+and F.6 summarize transfer patterns across do-                                               Full SIM loses 3 successful rollouts out of 225,
+mains and models and the lessons for SIM.                                                    versus 4 for Problem-Only Memory and 6 for
+                                                                                             Harness Transfer, while gaining more on TB4
+                                                                                             than Problem-Only Memory (6.67 versus 0.61
+SIM preserves diagnoses while adding target
+                                                                                             points).
+evidence. P3 records a mismatch between de-
+liverables and the verifier’s interface contract
+(Figure 12; Appendix F.4). Target rounds 5 and 6                                             5. Conclusion
+append revised checks and measured outcomes
+under this diagnosis, keeping source attempts                                                CRSI continues harness optimization when the
+and unresolved predictions available to later                                                benchmark or policy model changes. SIM car-
+rounds.                                                                                      ries earlier diagnoses, edits, and outcomes into
+                                                                                             this process and records new attempts. From
+                                                                                             matched starting harnesses, Full SIM outper-
+SIM supports earlier target progress and source                                              forms harness-only continuation in all six cross-
+retention in coding. Full SIM is best or tied                                                dataset settings and four Opus-to-Gemini do-
+throughout rounds 1–10 for both coding seeds                                                 mains. The ten-pair coding study finds a mean
+(Figure 5a,b). It exceeds the strongest control’s                                            advantage of 2.36 points across independent
+final score (20.61) by round 5 from AHE and
+
+                                                                                                                                                                        9
+                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+source runs. The cases show how this history                Learning Representations, 2026. URL https:
+helps the proposer and selector reuse earlier               //proceedings.iclr.cc/paper_files/paper/
+reasoning while revising fixes for new require-             2026/hash/0e9e708b6f48e14fd0ac29e16741
+ments.                                                      3f76-Abstract-Conference.html.
+                                                         Anthropic.  Introducing Claude Opus 5.5,
+Limitations                                               September 2026. URL https://www.anthropi
+                                                          c.com/claude-opus-5-5.
+Within our compute budget, independent RSI               J. Bai, L. Zhang, X. Yu, Y. Wu, Z. Wang, S. Li,
+repetitions focus on coding; the other domains              W. Li, Z. Zhao, L. Xue, K. Maeng, X. Fan,
+are evaluated with one run per condition. We                and B. Peng. Verify Less, Evolve More:
+study settings with compatible harness inter-               Training Idea-Level Critics for Verification-
+faces and keep the optimizer’s planning and                 Efficient ML Evolving Agents. arXiv preprint
+search procedures fixed. Our comparisons eval-              arXiv:2610.08993, 2026. URL https://arxiv.
+uate SIM as a complete procedure, combining                 org/abs/2610.08993.
+inherited memory with updates during target
+optimization.                                            F. Barbieri, J. Camacho-Collados, L. E. Anke, and
+                                                            L. Neves. TweetEval: Unified Benchmark and
+  Future work can extend the evaluation to                  Comparative Evaluation for Tweet Classifica-
+more repeated runs and longer transition se-                tion. In Findings of the Association for Compu-
+quences, and explore adaptation of planning,                tational Linguistics: EMNLP 2020, pages 1644–
+token allocation, and tool interfaces.                      1650, 2020. doi: 10.18653/v1/2020.findings-e
+                                                            mnlp.148. URL https://aclanthology.org/2
+Ethics Statement                                            020.findings-emnlp.148/.
+                                                         I. Casanueva, T. Temčinas, D. Gerz, M. Hender-
+LLM-based optimization agents rewrite harness               son, and I. Vulić. Efficient Intent Detection
+code in our experiments. The resulting har-                 with Dual Sentence Encoders. In Proceedings
+nesses run inside the benchmarks’ execution en-             of the 2nd Workshop on Natural Language Pro-
+vironments, with policy weights fixed and scores            cessing for Conversational AI, pages 38–45, 2020.
+computed by frozen verifiers or a fixed judging             doi: 10.18653/v1/2020.nlp4convai-1.5. URL
+procedure. A self-modifying harness could sat-              https://aclanthology.org/2020.nlp4conv
+isfy an evaluator without solving the intended              ai-1.5/.
+task. We keep held-out feedback away from
+                                                         X. Chen, Y. Huang, Y. Xu, Z. Zhao, E. Mc-
+the optimization agents, identify each bench-
+                                                           Quinn, J. Liu, and H. Yao. Are Self-Evolving
+mark’s verifier or judge, and include an ac-
+                                                           Agents Continual Learners? arXiv preprint
+cepted edit that failed to repair its target tasks
+                                                           arXiv:2610.25858, 2026. URL https://arxiv.
+(Appendix F.2). Workspace scores may also re-
+                                                           org/abs/2610.25858.
+flect biases of the LLM judge. The experiments
+use existing publicly available benchmarks and           Y. Chi, D. Hong, D. Jiang, T. Luo, et al.
+datasets.                                                  Frontier-Eng: Benchmarking Self-Evolving
+                                                           Agents on Real-World Engineering Tasks
+                                                           with Generative Optimization. arXiv preprint
+References                                                 arXiv:2604.12290, 2026. URL https://arxiv.
+                                                           org/abs/2604.12290.
+L. A. Agrawal, S. Tan, D. Soylu, N. Ziems,
+  R. Khare, K. Opsahl-Ong, A. Singhvi,                   A. Cohan, W. Ammar, M. van Zuylen, and
+  H. Shandilya, M. J. Ryan, M. Jiang, C. Potts,            F. Cady. Structural Scaffolds for Citation In-
+  K. Sen, A. Dimakis, I. Stoica, D. Klein, M. Za-          tent Classification in Scientific Publications. In
+  haria, and O. Khattab. GEPA: Reflective                  Proceedings of the 2019 Conference of the North
+  Prompt Evolution Can Outperform Reinforce-               American Chapter of the Association for Computa-
+  ment Learning. In International Conference on            tional Linguistics: Human Language Technologies,
+
+                                                                                                          10
+                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+  Volume 1 (Long and Short Papers), pages 3586–          P. Hebbar, Y. Manawat, S. Verboomen,
+  3596, 2019. doi: 10.18653/v1/N19-1361. URL               A. Ivanova, et al.    SIA: Self Improving
+  https://aclanthology.org/N19-1361/.                      AI with Harness & Weight Updates. arXiv
+D. Demszky, D. Movshovitz-Attias, J. Ko,                   preprint arXiv:2605.27276, 2026.     URL
+  A. Cowen, G. Nemade, and S. Ravi. GoE-                   https://arxiv.org/abs/2605.27276.
+  motions: A Dataset of Fine-Grained Emotions.           S. Karten, J. Zhang, T. Upaa, Jr, R. Feng, et al.
+  In Proceedings of the 58th Annual Meeting of the          Continual Harness: Online Adaptation for
+  Association for Computational Linguistics, pages          Self-Improving Foundation Agents. arXiv
+  4040–4054, 2020. doi: 10.18653/v1/2020.acl                preprint arXiv:2605.09998, 2026. URL https:
+ -main.372. URL https://aclanthology.org                   //arxiv.org/abs/2605.09998.
+  /2020.acl-main.372/.                                   Z. Ke, V. Patil, H. Shi, Y. Li, et al. Evo-
+Z. Fei, X. Shen, D. Zhu, F. Zhou, et al. Law-              HarnessBench: Can Your Agents Keep Pace
+  Bench: Benchmarking Legal Knowledge of                   with an Evolving Harness? arXiv preprint
+  Large Language Models. In Proceedings of the             arXiv:2609.04280, 2026. URL https://arxiv.
+  2024 Conference on Empirical Methods in Natu-            org/abs/2609.04280.
+  ral Language Processing, pages 7933–7962, 2024.
+                                                         P. Keung, Y. Lu, G. Szarvas, and N. A. Smith.
+  doi: 10.18653/v1/2024.emnlp-main.452. URL
+                                                            The Multilingual Amazon Reviews Corpus.
+  https://aclanthology.org/2024.emnlp-mai
+                                                            In Proceedings of the 2020 Conference on Em-
+  n.452/.
+                                                            pirical Methods in Natural Language Process-
+Gemini Team. Gemini 2.5: Pushing the Fron-                  ing (EMNLP), pages 4563–4568, 2020. doi:
+ tier with Advanced Reasoning, Multimodality,               10.18653/v1/2020.emnlp-main.369. URL
+ Long Context, and Next Generation Agentic                  https://aclanthology.org/2020.emnlp-mai
+ Capabilities. arXiv preprint arXiv:2507.06261,             n.369/.
+ July 2025. URL https://arxiv.org/abs/2507
+                                                         T. Khot, A. Sabharwal, and P. Clark. SciTail: A
+ .06261.
+                                                            Textual Entailment Dataset from Science Ques-
+Google DeepMind. Gemini 3.5 Flash Model                     tion Answering. In Proceedings of the AAAI
+ Card, May 2026a. URL https://deepmind                      Conference on Artificial Intelligence, volume 32,
+ .google/models/model-cards/gemini-3-5-f                    2018. doi: 10.1609/aaai.v32i1.12022.
+ lash/.
+                                                         K. Kim, M. Kang, T. Kim, Y. Yang, et al. Memory
+Google DeepMind. Gemini 3.8 Flash Model                    Transfer Learning: How Memories are Trans-
+ Card, September 2026b. URL https://deepmi                 ferred Across Domains in Coding Agents.
+ nd.google/models/model-cards/gemini-3-8                   arXiv preprint arXiv:2604.14004, 2026. URL
+ -flash/.                                                  https://arxiv.org/abs/2604.14004.
+Google DeepMind. Gemini 4 Argon Model Card,              Y. Lee, R. Nair, Q. Zhang, K. Lee, et al. Meta-
+ October 2026c. URL https://deepmind.goo                    Harness: End-to-End Optimization of Model
+ gle/models/model-cards/gemini-4-argon/.                    Harnesses. In Conference on Language Modeling,
+Gretel AI. Symptom to Diagnosis Dataset, 2023.              2026. URL https://openreview.net/forum?i
+  URL https://huggingface.co/datasets/gr                    d=tmbOUyFx3R.
+  etelai/symptom_to_diagnosis.                           Y. Li, Y. Feng, Z. Xu, Z. Ma, et al. JobBench:
+X. Guo, Y. Li, X. Kong, Y. Jiang, et al. Toward            Aligning Agent Work With Human Will. arXiv
+  Engineering AGI: Benchmarking the Engineer-              preprint arXiv:2605.26329, 2026. URL https:
+  ing Design Capabilities of LLMs. In Advances             //arxiv.org/abs/2605.26329.
+  in Neural Information Processing Systems, 2025.        Z. Li and Y. Hu. SkillHone: A Harness for Con-
+  URL https://arxiv.org/abs/2509.16204.                    tinual Agent Skill Evolution Through Persis-
+Harvey AI. Harvey LAB: The Legal Agent                     tent Decision History. In Proceedings of the
+ Benchmark, 2026. URL https://github.c                     2026 Conference on Empirical Methods in Natu-
+ om/harveyai/harvey-labs/tree/v1.0.                        ral Language Processing: Industry Track, pages
+
+                                                                                                          11
+                       Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+  1819–1829. Association for Computational Lin-              2026. URL https://arxiv.org/abs/2609.381
+  guistics, 2026. doi: 10.18653/2026.emnlp-ind               43.
+  ustry.105. URL https://aclanthology.org/2               N. Schneider, N. Stiefl, and G. A. Landrum.
+  026.emnlp-industry.105/.                                 What’s What: The (Nearly) Definitive Guide
+J. Lin, S. Liu, C. Pan, L. Lin, et al. Agentic Har-         to Reaction Role Assignment. Journal of Chemi-
+   ness Engineering: Observability-Driven Auto-             cal Information and Modeling, 56(12):2336–2346,
+   matic Evolution of Coding-Agent Harnesses.               2016. doi: 10.1021/acs.jcim.6b00564. URL ht
+   arXiv preprint arXiv:2604.25850, 2026. URL               tps://doi.org/10.1021/acs.jcim.6b00564.
+   https://arxiv.org/abs/2604.25850.                      S. Shao, K. Zhang, Q. Li, S. Wang, et al. Harness-
+Z. Liu, Z. Shi, Y. Sang, B. He, et al.                       R1: Learning to Edit Executable Runtime Har-
+  Adaptive Auto-Harness: Sustained Self-                     nesses from Agent Failure Trajectories. arXiv
+  Improvement for Agentic System Deployment                  preprint arXiv:2608.02276, 2026. URL https:
+  on Open-Ended Task Streams. arXiv preprint                 //arxiv.org/abs/2608.02276.
+  arXiv:2606.01770, 2026. URL https://arxiv.
+                                                          Y. Shi, Y. Miao, Y. Chen, J. Zhang, et al. Plug-
+  org/abs/2606.01770.
+                                                             inRSI: Recursive Improvement of Agent Har-
+X. Luo, D. Xue, F. Wang, C. Hu, and                          nesses with Reusable Plugins. arXiv preprint
+  Y. Deng. HarnessBank: Semantic Gene-                       arXiv:2609.32423, 2026. URL https://arxiv.
+  Bank Search with Gated Verification for                    org/abs/2609.32423.
+  Agent-Harness Self-Evolution. arXiv preprint
+                                                          N. Shinn, F. Cassano, A. Gopinath,
+  arXiv:2607.13683, 2026. URL https://arxiv.
+                                                            K. Narasimhan, and S. Yao.       Reflexion:
+  org/abs/2607.13683.
+                                                            Language Agents with Verbal Reinforce-
+P. Malo, A. Sinha, P. Korhonen, J. Wallenius, and           ment Learning.       In Advances in Neural
+   P. Takala. Good Debt or Bad Debt: Detect-                Information Processing Systems, volume 36,
+   ing Semantic Orientations in Economic Texts.            pages 8634–8652, 2023.        URL h t t p s :
+   Journal of the Association for Information Sci-         //proceedings.neurips.cc/paper_files/p
+   ence and Technology, 65(4):782–796, 2014. doi:           aper/2023/hash/1b44b878bb782e6954cd888
+   10.1002/asi.23062.                                       628510e90-Abstract-Conference.html.
+M. A. Merrill, A. G. Shaw, N. Carlini, B. Li,             Terminal-Bench Team. Terminal-Bench 2.1, May
+ et al. Terminal-Bench: Benchmarking Agents                 2026a. URL https://www.tbench.ai/news/t
+ on Hard, Realistic Tasks in Command Line In-               erminal-bench-2-1.
+ terfaces. In International Conference on Learning
+                                                          Terminal-Bench Team. Terminal-Bench 4.0, Au-
+ Representations, 2026. URL https://openrevi
+                                                            gust 2026b. URL https://www.tbench.ai/ne
+ ew.net/forum?id=a7Qa4CcHak.
+                                                            ws/terminal-bench-4-0.
+S. Ouyang, J. Yan, I.-H. Hsu, Y. Chen, et al. Rea-
+                                                          B. Vidgen, A. Mann, A. Fennelly, J. W.
+   soningBank: Scaling Agent Self-Evolving with
+                                                            Stanly, et al. APEX-Agents. arXiv preprint
+   Reasoning Memory. In International Conference
+                                                            arXiv:2601.14242, 2026. URL https://arxiv.
+   on Learning Representations, 2026. URL https:
+                                                            org/abs/2601.14242.
+   //openreview.net/forum?id=jL7fwchScm.
+                                                          G. Wang, Y. Xie, Y. Jiang, A. Mandlekar, et al.
+T. Patwardhan, R. Dias, E. Proehl, G. Kim, et al.
+                                                            Voyager: An Open-Ended Embodied Agent
+   GDPval: Evaluating AI Model Performance
+                                                            with Large Language Models. Transactions on
+   on Real-World Economically Valuable Tasks.
+                                                            Machine Learning Research, 2024. URL https:
+   In International Conference on Learning Represen-
+                                                            //openreview.net/forum?id=ehfRiF0R3a.
+   tations, 2026. URL https://openreview.net
+   /forum?id=hcuEdq6eKD.                                  Y. Wang, H. Zhu, Z. Hu, Y. Yuan, et al. Rethink-
+                                                             ing the Evaluation of Harness Evolution for
+C. Qian, K. Zhu, B. Li, Z. Wang, et al. Learning
+                                                             Agents. arXiv preprint arXiv:2607.12227, 2026.
+  Meta-Skills for Agent Harness Design in Test-
+                                                             URL https://arxiv.org/abs/2607.12227.
+  Time AI4AI. arXiv preprint arXiv:2609.38143,
+
+                                                                                                         12
+                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+T. Wei, Z. Shi, M. Lin, B. He, et al. Evo-Harness:          et al. Harmony Harness: Multi-Objective
+   Context-to-Harness Skill Compilation for Self-           Self-Evolution of Agent Harnesses. arXiv
+   Evolving Agents. In Proceedings of the 2026              preprint arXiv:2610.15150, 2026a. URL https:
+   Conference on Empirical Methods in Natural Lan-          //arxiv.org/abs/2610.15150.
+   guage Processing, pages 22343–22358, 2026.            X. Yu, C. Liu, W. Long, H. Zhang, and L. Xue.
+   URL https://aclanthology.org/2026.em                    From Harness Optimization to Recursive Self-
+   nlp-main.969/.                                          Improvement: A Survey of Language Model
+S. Wu, J. Ren, Y. Li, H.-S. Li, et al. Modu-               Agents. Preprints.org, 2026b. doi: 10.20944
+  larRSI: Modular and Generalizable Recursive              /preprints202610.2293.v2. URL https://ww
+  Harness Self-Improvement. arXiv preprint                 w.preprints.org/manuscript/202610.2293.
+  arXiv:2609.14857, 2026. URL https://arxi                 Version 2, preprint.
+  v.org/abs/2609.14857.
+                                                         X. Yu, L. Zhang, J. Bai, Y. Wu, Z. Wang, S. Li,
+P. Xia, R. Han, Z. Wang, Y. Chen, et al.                   W. Li, L. Xue, X. Fan, and B. Peng. ML-
+  RRSI:    Regularized     Recursive Self-                 ToolBench: Learning Tool-Augmented Agents
+  Improvement of Agent Harnesses. arXiv                    for Machine Learning Development. arXiv
+  preprint arXiv:2609.24972, 2026.   URL                   preprint arXiv:2609.36679, 2026c. URL https:
+  https://arxiv.org/abs/2609.24972.                        //arxiv.org/abs/2609.36679.
+Y. Xiao, Z. Lu, J. Wang, Y. Zhang, et al. Recur-         Z. Yu, B. Bi, S. K. Pentyala, S. Mehrotra, et al.
+   rent Harness for Agentic Continual Learning.            Co-Evolving Harnesses and Models: On-
+   arXiv preprint arXiv:2610.12668, 2026. URL              Policy Correction Helps Weaker Models Catch
+   https://arxiv.org/abs/2610.12668.                       Up Where Imitation Fails. arXiv preprint
+Q. Xu. Self-Evolving Harness on Multiple Tasks             arXiv:2609.09134, 2026d. URL https://arxiv.
+  with the Agent as Its Own Optimizer. arXiv               org/abs/2609.09134.
+  preprint arXiv:2609.38372, 2026. URL https:            L. Yuan, Y. Cai, W. Liu, S. Yang, F. Han, Y. Lee,
+  //arxiv.org/abs/2609.38372.                              U. M. Sehwag, and F. Huang. Meta2 : Pre-
+R. Xu, Y. Chen, Z. CuiZhu, B. D. Mishra, et al.            computing Reusable Knowledge for Online
+  Harness2 : Recursive Agent Harnessing for an             Harness Evolution in Long-Horizon Agents.
+  Open World. arXiv preprint arXiv:2610.14224,             arXiv preprint arXiv:2611.05139, 2026. URL
+  2026a. URL https://arxiv.org/abs/2610.1                  https://arxiv.org/abs/2611.05139.
+  4224.                                                  H. Zhang, S. Zhang, K. Li, C. Zhang, et al.
+T. Xu, H. Wen, and M. Li. Adapting the Interface,          Self-Harness: Harnesses That Improve Them-
+   Not the Model: Runtime Harness Adaptation               selves. arXiv preprint arXiv:2606.09498, 2026a.
+   for Deterministic LLM Agents. arXiv preprint            URL https://arxiv.org/abs/2606.09498.
+   arXiv:2605.22166, 2026b. URL https://arxiv.           J. Zhang, S. Hu, C. Lu, R. Lange, et al. Dar-
+   org/abs/2605.22166.                                      win Gödel Machine: Open-Ended Evolution
+C. Yang, X. Zhao, T. Wu, and C. Kästner. Bet-               of Self-Improving Agents. In International Con-
+  ter Harnesses, Smaller Models: Building                   ference on Learning Representations, 2026b. URL
+  90% Cheaper Agents via Automated Harness                  https://openreview.net/forum?id=pUpzQZ
+  Adaptation. arXiv preprint arXiv:2607.08938,              TvGY.
+  2026. URL https://arxiv.org/abs/2607.089
+                                                         J. Zhang, S. Liu, H. Wang, T.-E. Lin, et al. Causal
+  38.
+                                                            Improvement Graph for Agentic Harness Op-
+S. Yao, J. Zhao, D. Yu, N. Du, et al. ReAct:                timization. arXiv preprint arXiv:2610.05039,
+  Synergizing Reasoning and Acting in Lan-                  2026c. URL https://arxiv.org/abs/2610.0
+  guage Models. In International Conference on              5039.
+  Learning Representations, 2023. URL https:
+                                                         J. Zhang, B. Zhao, W. Yang, J. Foerster, et al.
+  //arxiv.org/abs/2210.03629.
+                                                            Hyperagents. arXiv preprint arXiv:2603.19461,
+W. Yu, L. Miculicich, B. D. Mishra, J. Chen,
+
+                                                                                                         13
+                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+  2026d. URL https://arxiv.org/abs/2603.1
+  9461.
+Q. Zhang, C. Hu, S. Upasani, B. Ma, et al. Agen-
+  tic Context Engineering: Evolving Contexts
+  for Self-Improving Language Models. In Inter-
+  national Conference on Learning Representations,
+  2026e. URL https://openreview.net/forum
+  ?id=eC4ygDs02R.
+T. Zhang, H. Wang, K. Xu, and D. N. Metaxas.
+   Turbo Harness: Instance-Adaptive Harness
+   Optimization. arXiv preprint arXiv:2609.40330,
+   2026f. URL https://arxiv.org/abs/2609.4
+   0330.
+X. Zhang, J. Zhao, and Y. LeCun. Character-level
+  Convolutional Networks for Text Classifica-
+  tion. In Advances in Neural Information Process-
+  ing Systems, volume 28, pages 649–657, 2015.
+  URL https://arxiv.org/abs/1509.01626.
+A. Zhao, D. Huang, Q. Xu, M. Lin, Y.-J. Liu, and
+  G. Huang. ExpeL: LLM Agents Are Experi-
+  ential Learners. In Proceedings of the AAAI
+  Conference on Artificial Intelligence, 2024. URL
+  https://arxiv.org/abs/2308.10144.
+S. Zhao, Y. Zhang, and J. Li. Can Coding Agents
+   Sustain Continual Evolution without Forget-
+   ting? arXiv preprint arXiv:2611.03219, 2026.
+   URL https://arxiv.org/abs/2611.03219.
+C. Zheng, C. Xue, B. Liang, J. Yang, et al.
+  SEAGym: An Evaluation Environment for
+  Self-Evolving LLM Agents. arXiv preprint
+  arXiv:2606.17546, 2026. URL https://arxi
+  v.org/abs/2606.17546.
+
+
+
+
+                                                                                             14
+                       Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+Guide to the Appendices                                   weakness mining, harness proposals, and
+                                                          regression-based validation (Zhang et al.,
+Appendices B–D specify evaluation, experimen-             2026a). DGM and Hyperagents explore self-
+tal setup, and SIM implementation. Appendix E             modification and open-ended evolution of agent
+gives additional numerical results and ablations;         programs (Zhang et al., 2026b,d); Hyperagents
+Appendix F explains the observed edits through            also reports transfer of meta-level improvements
+case studies.                                             across domains. Harness-R1 learns a harness-
+                                                          editing policy from failure trajectories using rein-
+Appendix    Contents                                      forcement learning (Shao et al., 2026), while SIA
+                                                          updates both the harness and the task model’s
+A           Extended Related Work: harness opti-
+            mization, transfer, and memory.               weights (Hebbar et al., 2026). Bai et al. (2026)
+B           Benchmarks and Evaluation: datasets,          train idea-level critics to screen ML modifica-
+            splits, feedback access, and scoring.         tions before costly empirical verification. ML-
+C           Experimental Setup: models, seeds,            ToolBench learns task-agent behavior, while the
+            budgets, comparison conditions, and           critics learn candidate assessment; SIM pre-
+            repeated runs.                                serves edit histories for the proposer and selec-
+D           SIM Implementation: how agents read,          tor. CRSI defines continuation after a bench-
+            update, and store SIM.                        mark or policy change for compatible proposal–
+E           Additional Results: source and target         evaluation–selection loops (§3.1).
+            scores, source retention, and ablations.
+F           Case Studies: source RSI, continual
+            adaptation, memory records, and trans-        A.2. How Does Optimization Continue after
+            fer patterns.                                      Transfer?
+
+                                                          Transfer of evolved harnesses. AHE evaluates
+A. Extended Related Work                                  transfer from Terminal-Bench to SWE-bench Ver-
+                                                          ified without re-evolving the harness (Lin et al.,
+This appendix expands §2 around three ques-               2026); Meta-Harness and PluginRSI report trans-
+tions: how harnesses are improved, how opti-              fer across solver models (Lee et al., 2026; Shi
+mization continues after a change of setting, and         et al., 2026). Several methods aim to improve
+what role memory plays in that process.                   this transfer. ModularRSI uses benchmark-
+                                                          disjoint evolution data, contrasts successful and
+                                                          failed trajectories, and directs edits toward re-
+A.1. How Are Agent Harnesses Improved?
+                                                          curring deficiencies in functional modules (Wu
+Harness RSI optimizes prompts, tools, con-                et al., 2026). RRSI constrains bundled modifi-
+trol flow, memory, and context management                 cations and redirects stalled search toward un-
+around a policy model. GEPA uses trajec-                  derexplored components (Xia et al., 2026). Har-
+tory reflection and recombination to optimize             mony Harness separates general mechanisms
+prompts (Agrawal et al., 2026). Meta-Harness              from benchmark-specific adaptations (Yu et al.,
+exposes prior implementations, execution traces,          2026a). The interaction between a model and its
+and scores through a shared filesystem (Lee               harness can nevertheless require model-specific
+et al., 2026). AHE makes harness components               adaptation (Yang et al., 2026; Yu et al., 2026d).
+and modification outcomes observable, check-
+ing edit-level predictions against subsequent
+                                                          Continued optimization. Prior work also
+task outcomes (Lin et al., 2026). In ML devel-
+                                                          reuses improvement experience during further
+opment, MLToolBench learns diagnostic tool
+                                                          optimization. PluginRSI reuses an evolved plu-
+use through supervised and reinforcement learn-
+                                                          gin library when optimizing from the initial
+ing (Yu et al., 2026c).
+                                                          harness (Shi et al., 2026). Xu (2026) continues
+   Other methods change how improvement                   multi-task harness evolution on a new bench-
+itself is performed. Self-Harness combines                mark with free-text evolution notes and source-
+
+                                                                                                           15
+                       Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+task replay. Harness2 retains adopted harnesses           problems therefore also has precedent. Meta-
+and refinement lessons in a library and tests its         Skill freezes learned support-design principles
+reuse across benchmarks (Xu et al., 2026a). Re-           to construct a harness for each test task (Qian
+lated settings include task streams and continu-          et al., 2026). Meta2 freezes reusable evolution
+ous episodes (Karten et al., 2026; Wei et al., 2026;      guidance for edits during task execution, reset-
+Xiao et al., 2026). Adaptive Auto-Harness sep-            ting the harness between task runs (Yuan et al.,
+arates a persistent evolution workspace from              2026).
+deployable harnesses, with optional routing
+among stored branches (Liu et al., 2026). Evo-
+HarnessBench studies retention and adaptation             Memory for task solving. Reflexion stores ver-
+as externally supplied tools, skills, and specialist      bal reflections to guide later attempts (Shinn
+agents expand (Ke et al., 2026).                          et al., 2023), and Voyager maintains a growing
+                                                          library of executable skills (Wang et al., 2024).
+                                                          ExpeL extracts reusable insights from task expe-
+Evaluating continuation. Held-out evaluation              rience (Zhao et al., 2024); ReasoningBank and
+and baselines with matched feedback and in-               ACE retain strategies and lessons (Ouyang et al.,
+ference budgets help distinguish improvements             2026; Zhang et al., 2026e). ACE incrementally
+from additional optimization resources (Wang              extends, refines, and deduplicates its playbook
+et al., 2026). SEAGym tracks validation, transfer,        from execution trajectories. Memory Transfer
+replay, and cost throughout evolution (Zheng              Learning compares task-experience representa-
+et al., 2026). Studies of shifting task streams           tions across coding domains and models, find-
+and coding benchmarks also document inter-                ing abstract insights more transferable than con-
+ference and forgetting (Chen et al., 2026; Zhao           crete traces in its studied settings (Kim et al.,
+et al., 2026). We report the evolved harness’s            2026). These memories support the agent exe-
+score before and after target RSI, compare mem-           cuting tasks.
+ory conditions from the same starting harness
+with matched round and candidate budgets, and
+separately track source retention in one coding           SIM in continual harness optimization. SIM
+transition (Appendix E.3).                                supplies the proposer and selector with a record
+                                                          organized by harness problem, linking selected
+                                                          modifications to their rationale, predicted and
+A.3. What Does Memory Store, and Who Uses                 observed outcomes, and evaluation context
+     It?                                                  (§3.2). The record accompanies the evolved
+                                                          harness across a benchmark or model transi-
+Memory for harness optimization. Keeping
+                                                          tion and gains new attempts during target RSI.
+improvement history has several precedents.
+                                                          Our comparisons with no SIM and root causes
+Meta-Harness retains candidate artifacts (Lee
+                                                          only test this complete procedure, combining
+et al., 2026); RRSI records hypotheses, diffs, score
+                                                          inherited history with target-side updates (Ap-
+and cost changes, and acceptance decisions, in-
+                                                          pendix E.4.1).
+cluding rejected edits (Xia et al., 2026). The
+Causal Improvement Graph links evidence, hy-
+potheses, interventions, and outcomes (Zhang              B. Benchmarks and Evaluation
+et al., 2026c). SkillHone preserves diagnoses, re-
+visions, and evaluation evidence (Li and Hu,              This section specifies the protocol for the main
+2026), and Turbo Harness summarizes com-                  cross-dataset and Opus-to-Gemini comparisons
+pleted optimization into a playbook for instance-         and the paired coding study. We list the
+specific edits (Zhang et al., 2026f). Harness-            benchmarks and split sizes, explain which feed-
+Bank groups candidates by modified compo-                 back can guide optimization, and then de-
+nent and diagnosed failure, retaining high-               fine the scoring rules for each domain. The
+performing harnesses for recombination (Luo               model-generation and shared-harness experi-
+et al., 2026). Organizing improvement around
+
+                                                                                                        16
+                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+ments have additional settings described in Ap-          B.2. How Are the Splits Used?
+pendices C.5 and C.6, respectively.
+                                                         The tasks (examples for text classification) in
+                                                         Table 4 are split uniformly at random into ap-
+B.1. Which Benchmarks Do We Use?                         proximately equal evolve and held-out halves,
+                                                         without stratification by category, difficulty, or
+Benchmarks. We study four domains in which
+                                                         source dataset. When a benchmark holds an odd
+a source-evolved harness remains executable in
+                                                         number of tasks, the evolve half takes the even
+the target environment. For coding, Terminal-
+                                                         count. The two sets are disjoint, and no task or
+Bench 2.1 (TB2.1) is the source and Terminal-
+                                                         rollout is removed from the scoring denomina-
+Bench 4 (TB4) the target (Merrill et al., 2026;
+                                                         tor after the split.
+Terminal-Bench Team, 2026a,b). For text clas-
+sification, we use the online classification en-            Only evolve-set scores and execution trajecto-
+vironment of Meta-Harness (Lee et al., 2026).            ries are available for proposals, selection, SIM
+The source suite combines LawBench (Fei                  updates, and stopping decisions. The task-
+et al., 2024), the Gretel adaptation of Symp-            solving policy executes the harness on held-out
+tom2Disease (Gretel AI, 2023), and USPTO-                tasks to measure starting, final, and per-round
+50k (Schneider et al., 2016). The target suite con-      diagnostic scores (§4.4). These held-out scores
+tains eight datasets absent from source RSI: AG          and trajectories are not passed to the harness-
+News (Zhang et al., 2015), GoEmotions (Dem-              optimization agents.
+szky et al., 2020), Banking77 (Casanueva et al.,
+                                                            Within these primary comparisons and the
+2020), Financial PhraseBank (Malo et al., 2014),
+                                                         paired coding study, the scoring allocation is
+SciCite (Cohan et al., 2019), TweetEval-Hate (Bar-
+                                                         five rollouts per task on both splits, matched
+bieri et al., 2020), Amazon Reviews (Ama-
+                                                         across conditions; the overlapping Frontier-Eng
+zon5) (Keung et al., 2020), and SciTail (Khot
+                                                         component contributes zero under the rule in
+et al., 2018). For agentic workspace tasks, Har-
+                                                         Appendix B.6. The reported harness versions,
+vey LAB (Harvey AI, 2026) is the source.
+                                                         independent-run counts, and statistical compar-
+JobBench (Li et al., 2026), GDPval (Patwardhan
+                                                         isons are specified in Appendix C.4.
+et al., 2026), and APEX-Agents (Vidgen et al.,
+2026) jointly form the target environment. For
+engineering design, EngDesign (Guo et al., 2025)         B.3. Coding: Terminal-Bench 2.1 and 4
+is the source and Frontier-Eng (Chi et al., 2026)
+the target. Table 4 gives the task inventory and         Environment and metric. Terminal-Bench
+rollout allocation. Appendix B.2 defines the split       tasks run in containers with a task description,
+and feedback-access rules; Appendices B.3–B.6            shell access, and task-specific tests. We report
+detail each domain’s scoring protocol.                   pass@1, estimated from the binary outcome of
+                                                         each task rollout. For n tasks with five rollouts
+                                                         each, let yir ∈ {0, 1} indicate whether rollout r
+Source and target roles. In cross-dataset CRSI,          of task i passes the task verifier. The percentage
+the policy model is fixed while the benchmark            score is
+changes from the source to the target listed
+                                                                                             n   5
+above. In cross-model CRSI, the benchmark and                           \ = 100 ∑ 1 ∑ yir .
+                                                                       pass@1                           (4)
+its task split are fixed while the policy changes:                            n i =1 5 r =1
+source RSI is run with the source policy on that
+benchmark, and target RSI continues with the
+                                                         Failed rollouts. A rollout that fails for infras-
+target policy. The Opus-to-Gemini comparisons
+                                                         tructure reasons stays in the denominator and
+use the corresponding T inventory in Table 4 for
+                                                         scores zero.
+both stages.
+
+
+
+
+                                                                                                        17
+                       Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+                                                              Evolve                 Held-out
+Domain         Benchmark              Total          tasks / rollouts          tasks / rollouts     Metric
+               S: TB2.1                  89                  44 / 220                  45 / 225     pass@1
+Coding
+               T: TB4                    66                  33 / 165                  33 / 165     pass@1
+               S: 3 datasets            412               206 / 1,030               206 / 1,030     accuracy
+Text cls.
+               T: 8 datasets          1,000               500 / 2,500               500 / 2,500     accuracy
+               S: Harvey LAB            160                  80 / 400                  80 / 400     rubric
+               T: JobBench               65                  32 / 160                  33 / 165     rubric
+Workspace      T: GDPval                220                 110 / 550                 110 / 550     win rate
+               T: APEX-Agents           480               240 / 1,200               240 / 1,200     pass@1
+               T: merged                765               382 / 1,910               383 / 1,915     mean of 3
+               S: EngDesign              67                  34 / 170                  33 / 165     pass rate
+Engineering
+               T: Frontier-Eng           47                  24 / 120                  23 / 115     medal
+
+Table 4 | Benchmark inventory used in our experiments, with source (S) and target (T) roles for
+cross-dataset CRSI. Split sizes are tasks / rollouts (examples / rollouts for text classification). Each
+inventory is split uniformly at random into approximately equal halves, with five nominal rollouts
+per task. Frontier-Eng’s overlapping EngDesign component receives no credit but remains in the
+denominator. The three workspace targets are evolved jointly and reported as their equal-weight
+mean; the merged row sums their task and rollout counts.
+
+
+B.4. Text Classification                                  example i in rollout r. The percentage accuracy
+                                                          is
+The online classification environment follows                                       n
+                                                                               100 q 5
+                                                                               5nq i∑  ∑ yir ( H; q).
+Meta-Harness: the harness controls example                      Acls ( H; q) =                         (5)
+                                                                                    =1 r =1
+storage, retrieval, and prediction context. The
+example counts in Table 4 are totals across each          Each example has equal weight, so a dataset
+suite, not allocations for individual datasets.           contributes in proportion to its example count.
+                                                          The same aggregation is used on the evolve and
+                                                          evaluation splits.
+Example memory during evaluation. The task
+agent reads only labeled examples supplied in
+                                                          B.5. Agentic Workspace Tasks
+advance from training/evolve data. Held-out
+labels are used for scoring and are not fed back          Task scoring and judging. We adapt the
+into its example memory. For a fixed harness,             benchmark-specific scoring interfaces described
+each of the five evaluation repetitions starts from       in RRSI (Xia et al., 2026, Appendix B.3–B.6). Our
+the same initial example-memory state. This               runs use Gemini 3.8 Flash as the judge for all
+memory supplies prediction context to the task            workspace benchmarks; this differs from RRSI’s
+agent and is separate from SIM, which supports            mixed judge configurations and GDPval vot-
+harness optimization.                                     ing panel. Harvey LAB reports the fraction of
+                                                          rubric criteria satisfied, and JobBench uses its
+                                                          weighted rubric score. GDPval compares each
+Accuracy across examples. We compute accu-
+                                                          generated deliverable with the benchmark’s ex-
+racy over all examples in a split, pooling the
+                                                          pert deliverable and reports the win rate against
+three source datasets or the eight target datasets.
+                                                          that reference. APEX-Agents reports pass@1,
+For split q ∈ {evo, eval}, let nq be the total num-
+                                                          with success determined by satisfaction of the
+ber of examples and yir ( H; q) ∈ {0, 1} indicate
+                                                          task’s rubric on a single rollout; the repeated roll-
+whether harness H predicts the correct label for
+                                                          outs estimate this success probability. The judg-
+
+                                                                                                             18
+                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+ing interface and model are fixed across com-            uation across model generations and shared-
+parison conditions within each benchmark. We             harness construction (§4.3.2–4.3.3). Benchmark
+express each benchmark score on a 0–100 scale            scoring is defined in Appendix B, and SIM im-
+before taking the equal-weight mean.                     plementation in Appendix D.
+
+
+Equal-weight benchmark aggregation. For                  C.1. Which Models and Budgets Are Used?
+split q ∈ {evo, eval}, let Sb ( H; q) be the
+                                                         Task-solving policy. Gemini 3.8 Flash is the
+benchmark-specific percentage score of harness
+                                                         policy in both stages of cross-dataset CRSI. The
+H on benchmark b. The workspace score is
+                                                         cross-family comparison uses Claude Opus 5.5
+                              1                          as the source policy and Gemini 3.8 Flash as the
+                              3 b∑
+       Sworkspace ( H; q) =         Sb ( H; q),    (6)   target policy. Policy weights remain fixed.
+                                 ∈B
+
+where B contains JobBench, GDPval, and APEX-
+                                                         Harness-optimization agents. The proposer
+Agents. Each benchmark contributes one third,
+                                                         and selector use Gemini 3.8 Flash, including
+independent of its number of tasks or rubric
+                                                         when Opus executes the tasks. The ablation in
+criteria. The evolve-set performance objective
+                                                         Appendix E.4.2 replaces the proposer and selec-
+used to select target harnesses and the reported
+                                                         tor with Opus during source RSI.
+evaluation aggregate use this same weighting.
+Within each benchmark, scoring retains that
+benchmark’s own evaluation convention; av-               Optimization budget. Each RSI run uses N =
+eraging occurs after computing its score. The            10 rounds with k = 5 candidate proposals per
+workspace row of Table 5 reports this aggregate.         round. Candidate proposals and task rollouts
+                                                         are separate budgets: the main comparisons use
+B.6. Engineering Design                                  five rollouts per task on each split (Appendix B).
+                                                         Proposals screened out before execution receive
+Frontier-Eng has no MCP gateway of its own               no rollout scores.
+and uses the runner and gateway of EngDesign.
+EngDesign uses a binary verifier pass; Frontier-
+Eng uses a medal score against frozen thresh-            Cost per round. A coding round takes about
+olds, with gold, silver, and bronze mapped to            4 h, including 1.7 h for evaluation and 34 min
+1.00, 0.67, and 0.33. Neither engineering metric         for candidate sampling. We match rounds and
+uses an LLM judge.                                       candidate counts across methods; token use and
+                                                         runtime can differ.
+
+Source overlap. Frontier-Eng includes an
+                                                         C.2. Which Harnesses Do We Start From?
+EngDesign-derived component containing
+seven sub-problems (Chi et al., 2026). Following         We use publicly available seed harnesses from
+RRSI, we assign zero credit to this overlapping          prior work. The two seeds in coding and text
+component while retaining it in the original             classification test different starting harnesses; re-
+denominator, including after the 24/23 split.            peated optimization runs are described in Ap-
+                                                         pendix C.4.
+C. Experimental Setup
+                                                         Coding. The AHE seed starts with a basic shell
+This section specifies the models, seed har-             tool and allows edits to prompts, tools, middle-
+nesses, comparison conditions, and optimiza-             ware, skills, sub-agents, and memory (Lin et al.,
+tion budgets.      The common setup covers               2026). Terminus-2 is distributed with Harbor
+cross-dataset and Opus-to-Gemini transfer (§4.2–         and is also used by RRSI (Merrill et al., 2026; Xia
+4.3.1); the last two subsections describe contin-        et al., 2026).
+
+                                                                                                           19
+                        Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+Text classification. NoMemory stores no train-             Condition            Harness SIM during target RSI
+ing examples; FewShotAll stores the observed               Cold Start              H0      None
+labeled examples and includes them as few-shot             Harness Transfer        HS      None
+context (Lee et al., 2026).                                Problem-Only            HS      Root causes only
+                                                           Full SIM                HS      Full record; updated on
+                                                                                           target
+Workspace and engineering. We use RRSI’s
+ReAct toolbelt agent for file manipulation, PDF            Figure 6 | Transfer conditions. The last three
+reading, and code execution (Vidgen et al., 2026;          rows share the source-evolved harness. The
+Xia et al., 2026; Yao et al., 2023). Its 6 files (1,743    listed memory condition persists throughout tar-
+lines) are shared by the source and all three              get RSI; the full record contains root causes, ed-
+targets, allowing the Harvey LAB harness to                its, outcomes, and provenance. Target round
+run on the targets without modification. Engi-             and candidate budgets match.
+neering uses the same agent with a bare system
+prompt and task wrapper, evaluated by fixed
+task-specific verifiers (Appendix B.6). This seed          tained source harness. The before score evaluates
+has 7 files (1,857 lines), with prompts in a sepa-         the harness used to initialize target RSI, the af-
+rate module. For these two domains, we adopt               ter score evaluates the version retained at the
+RRSI’s environments, seed harnesses, and eval-             end of the final target round, and the target im-
+uation interfaces. Our models and budgets are              provement is their difference. Curves show each
+specified above; our splits, rollout counts, and           retained version’s measured score, without tak-
+workspace judge are specified in Appendix B.               ing a running maximum over earlier scores.
+
+
+C.3. How Do the Four Methods Differ?                       Independent runs. Repeated task rollouts and
+                                                           independent optimization runs are distinct
+Figure 6 summarizes the four conditions from               sources of variation. Each main cross-dataset
+§3.3:                                                      and Opus-to-Gemini condition uses one com-
+• Cold Start: the seed harness H0 , without SIM.           plete RSI run. The paired coding study repeats
+• Harness Transfer: the source-evolved harness             source RSI ten times from Terminus-2; each
+  HS , without SIM.                                        evolved harness initializes two target continua-
+• Problem-Only Memory: the same HS with                    tions, with and without SIM (§4.4, Table 3). Task
+  root causes only, omitting modifications, out-           rollouts estimate execution performance. The
+  comes, and provenance.                                   ten independent source runs support across-run
+• Full SIM: the same HS with the complete                  intervals for the paired study; scores from single-
+  source record MS , updated during target RSI.            run conditions are reported descriptively. For
+                                                           the paired study, the paired t interval and two-
+Each condition persists throughout target RSI.             sided test use the ten final-score differences; the
+All methods retain the ordinary target-run his-            signed-rank check uses average ranks for ties
+tory Dt . All four use the same target pol-                and enumerates the 210 sign assignments.
+icy, evolve tasks, round and candidate budgets,
+and evaluation allocation, and receive feedback
+through the same RSI loop. Harness Transfer                C.5. How Is Transfer across Generations
+uses the evolved-harness starting point studied                 Tested?
+in prior work (Lee et al., 2026; Lin et al., 2026;
+                                                           We continue optimization through Gemini 2.5
+Xu, 2026).
+                                                           Flash (Gemini Team, 2025), 3.5 Flash (Google
+                                                           DeepMind, 2026a), 3.8 Flash (Google DeepMind,
+C.4. How Are Runs Reported and Repeated?                   2026b), and 4 Argon (Google DeepMind, 2026c),
+                                                           keeping TB2.1 as the benchmark. Fresh RSI
+Reported harnesses. Each round retains one
+                                                           starts from the seed harness at each generation.
+harness for the next round; HS is the final re-
+
+                                                                                                                20
+                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+CRSI starts from the same seed in the first gener-       of transferring SIM from a matched starting har-
+ation, then passes the evolved harness and SIM           ness.
+to each subsequent model. The first row tests
+SIM during an initial RSI run; only the later rows
+test transfer from an earlier generation.                Score aggregation. All averages over models
+                                                         use equal weights. B1 averages the three model–
+  Table 1 reports scores to one decimal, with the        harness pairs, each model using its own har-
+results discussed in §4.3.2.                             ness. B2, S1, and S2 average the three models
+                                                         using a shared harness. Each S3 row names the
+                                                         source policy used to evolve a harness and re-
+External scores use different evaluation set-
+                                                         ports its mean score across the same three eval-
+tings. For context, the published score is
+                                                         uation models. The All column is (Evolve +
+16.9 for Gemini 2.5 Flash with Terminus-2 on
+                                                         Held-out)/2, the average over the two equally
+TB2.0 (Merrill et al., 2026), and 76.2 and 89.4 on
+                                                         sized splits.
+TB2.1 for Gemini 3.5 and 3.8 Flash (Google Deep-
+Mind, 2026a,b). These are external references,             Each procedure is run once, and optimization
+not matched controls. We include no external             cost is not compared. The results in §4.3.3 de-
+score for Gemini 4 Argon.                                scribe the observed means; small differences do
+                                                         not establish statistical equivalence or a ranking
+C.6. How Is a Shared Harness Tested?                     for each model.
+
+We test a harness shared by Grok 4.20 Reason-
+ing, Claude Opus 5.5, and Gemini 3.8 Flash on            D. SIM Implementation
+the text-classification target suite (Table 2). The
+                                                         We supplement §3 with entry-matching details,
+evolve and held-out sets each contain 500 ex-
+                                                         prompt guidance, and the stored record format.
+amples, with five rollouts per example (2,500
+rollouts per split).
+                                                         D.1. How Are Entries Matched?
+
+Harness construction. We compare two base-               For the update in §3.2, the proposer itself decides
+lines and three ways to build a shared harness:          whether a diagnosis matches an existing root
+                                                         cause; no separate similarity model is used. Its
+• B1: Per-model harnesses. Each policy model
+                                                         choice is saved in the round’s change manifest
+  runs its own RSI and is evaluated with its own
+                                                         before evaluation. Entries are merged determin-
+  evolved harness.
+                                                         istically when their root-cause text is identical,
+• B2: Shared seed. All three models use the
+                                                         preserving all attempts.
+  same unevolved harness.
+• S1: Sequential CRSI. The order is Grok 4.20
+  Reasoning, Gemini 3.8 Flash, then Claude               D.2. How Do the Proposer and Selector Use
+  Opus 5.5, from weaker to stronger policies                  SIM?
+  in this setting. Each model passes the evolved
+                                                         The prompt guidance for §3.3 is summarized
+  harness and SIM to the next.
+                                                         below:
+• S2: Unified synthesis. Each round pools tra-
+  jectory feedback from all three models to pro-         1. Treat entries as prior experience, with flexibil-
+  pose updates to one shared harness.                       ity to choose a different edit.
+• S3: Single-agent transfer. We evolve a har-            2. Check the domain, benchmark, and model
+  ness separately with each of the three policy             behind each entry.
+  models, then evaluate each resulting harness           3. Start with an existing diagnosis when it ex-
+  with all three models.                                    plains the current failure.
+                                                         4. Reuse the rationale and reassess the edit after
+This experiment tests the performance of a com-
+                                                            a benchmark or model change.
+mon harness; Table 6 separately tests the effect
+
+                                                                                                          21
+                         Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+5. Revise, replace, or override a harness modifi-           E. Additional Results
+   cation when new evidence warrants it.
+6. Revisit a tested direction only when new evi-            We report source-RSI scores (§E.1), exact tar-
+   dence justifies it.                                      get scores (§E.2), source retention (§E.3), and
+7. Create a new problem entry when existing                 memory and harness-agent ablations (§E.4). The
+   diagnoses do not explain the failure.                    model-generation, shared-harness, and ten-pair
+8. Give task-specific evidence more weight in               coding results are in the main text (Tables 1,
+   similar settings and less when both bench-               2, and 3); edit histories and cases are in Ap-
+   mark and model change.                                   pendix F.
+                                                              Evaluation and reporting follow Appen-
+D.3. What Does a SIM Record Contain?                        dices B and C.4; differences are absolute score
+                                                            points.
+Each run stores SIM in one JSON file, with the
+following schematic structure:
+                                                            E.1. Does Source RSI Improve the Seed Har-
+{ "next_id": 10,                                                 ness?
+  "carried_from": { "arm": <source run>, "domain": "
+     coding_enriched",                                      Source RSI improves all six held-out source
+                    "into": <target run> },
+  "aliases": { "P6": "P5" },              // P6 was         scores. Source RSI improves the held-out
+     merged into P5                                         source score in all six settings, by 2.75–6.41
+  "problems": [ ...entries P1 P2 P3 P4 P5 P7 P8 P9... ] }
+                                                            points (Figure 7). In five settings, the held-out
+                                                            gain exceeds the evolve-set gain; the exception is
+  Each problem entry contains {id, name,                    FewShotAll, with held-out and evolve-set gains
+opened_round,        attempts[]}.      name gives           of 6.41 and 6.60 points. Section 4.2 examines
+the root-cause hypothesis, and opened_round                 whether these source gains yield a better target
+records its first diagnosis. Each attempt contains:         starting point.
+{round, sample, accepted, backfilled, what,
+files, predicted, fixed, missed, passed,                    E.2. How Do the Methods Compare on the Tar-
+total, domain}. what and files describe the                      get?
+edit, and domain identifies its setting.
+                                                            Tables 5 and 6 give the numerical results plotted
+   predicted lists the tasks expected to be fixed
+                                                            in Figures 3 and 4, respectively.
+before evaluation; fixed and missed record
+the outcomes afterward. passed/total gives
+the successful and total trials in that attempt’s           E.3. How Much Source Performance Is Re-
+evolve-set evaluation. accepted means the selec-                 tained?
+tor chose the edit in that round, even if some
+predicted fixes failed. The edit may later be               Both memory conditions retain more source
+changed or replaced while its record stays in               performance in this run. In Figure 8, Full SIM
+SIM, as in the P8 case in Appendix F.2. Predic-             and Problem-Only Memory end at 88.89 and
+tions for the same task in different rounds are             88.44, respectively, from the common starting
+separate observations.                                      score of 90.22. Their lowest source score is 88.44,
+                                                            a drop of 1.78 points. Harness Transfer falls to
+  carried_from identifies the source and target             86.67 in round 2 and ends at 87.56; Cold Start be-
+runs; aliases keeps the identifiers of merged               gins at 85.78 and ends at 85.33. Section 4.4 relates
+entries (for example, P6→P5). Read each entry’s             this trace to target progress: the two memory
+ID and opened_round within its recorded run                 conditions retain similar source performance,
+context. Appendix F gives records as stored,                while Full SIM improves more on TB4.
+including P3 in Figure 12.
+
+
+
+
+                                                                                                             22
+                                       Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+                                                                  Seed harness                 Source-evolved harness
+
+
+               100            90.45             90.22           100               89.09              91.56        100
+                                                                                                                                                     78.83
+                                                                                                                                73.40
+Source score
+
+
+
+
+                     86.82            85.78                              85.91              87.56
+                                                                                                                        71.36              73.69
+                50                                              50                                                 50
+
+
+
+                 0                                                0                                                 0
+                       Evolve           Held-out                              Evolve            Held-out                  Evolve                Held-out
+
+                             (a) Coding / AHE                                 (b) Coding / Terminus-2                    (c) Text cls. / NoMemory
+
+
+
+               100                                              100               94.50              94.25        100
+                              78.83             83.01
+                                                                         92.50              91.50
+Source score
+
+
+
+
+                                      76.60                                                                                     55.29                53.33
+                     72.23
+                50                                              50                                                 50
+                                                                                                                        50.00              47.88
+
+
+                 0                                                0                                                 0
+                       Evolve           Held-out                              Evolve            Held-out                  Evolve                Held-out
+
+                     (d) Text cls. / FewShotAll                               (e) Workspace / ReAct                       (f) Engineering / ReAct
+
+
+
+Figure 7 | Source RSI with Gemini 3.8 Flash: scores of the seed harness H0 and the source-evolved
+harness HS on the source evolve set and the held-out source evaluation set. (a) Coding on TB2.1 from
+the AHE seed; (b) coding on TB2.1 from Terminus-2; (c) text classification on the source suite from
+NoMemory; (d) the same from FewShotAll; (e) workspace tasks on Harvey LAB; (f) engineering
+design on EngDesign. HS is the starting harness of Harness Transfer, Problem-Only Memory, and
+Full SIM in Figure 3. Open and teal bars show seed and source-evolved scores for each split, with
+both values labeled. All panels share a zero baseline and the same score scale.
+
+                                          Cold Start                  Harness Transfer               Problem-Only Memory                Full SIM (ours)
+Domain / seed                          Before       After         Before               After        Before              After       Before                 After
+Coding / AHE                            16.36           19.39         18.18            20.61         18.18              18.79           18.18              24.85
+Coding / Terminus-2                     18.18           19.39         19.39            19.39         19.39              20.61           19.39              21.82
+Text cls. / NoMemory                    68.60           72.00         71.40            71.00         71.40              73.40           71.40              73.60
+Text cls. / FewShotAll                  75.72           75.92         72.92            74.12         72.92              75.52           72.92              77.92
+Workspace / ReAct                       73.89           82.98         74.93            85.07         74.93              85.54           74.93              87.89
+Engineering / ReAct                     39.13           40.87         39.13            42.61         39.13              42.61           39.13              46.96
+
+Table 5 | Cross-dataset CRSI: held-out target scores before and after target RSI for the six settings of
+Figure 3. The first column identifies the domain and seed harness. Bold marks the highest final
+score in each setting.
+
+
+E.4. What Do the Ablations Show?                                                          only continuation in all ten settings (Tables 5
+                                                                                          and 6). This comparison tests each memory
+E.4.1. Is Recording Only Root Causes Enough?                                              condition throughout target RSI, covering both
+From the same evolved harness, Full SIM fin-                                              inherited information and target-stage updates
+ishes above both no-memory and root-cause-
+                                                                                                                                                              23
+                                              Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+                                                    Cold Start          Harness Transfer      Problem-Only Memory       Full SIM (ours)
+Domain / seed                                Before        After    Before           After   Before            After   Before      After
+Coding / AHE                                   16.36       19.39     13.94           18.18    13.94            20.61    13.94       21.82
+Text cls. / FewShotAll                         78.32       82.72     77.72           80.20    77.72            81.32    77.72       83.80
+Workspace / ReAct                              73.89       82.98     68.41           73.42    68.41            79.22    68.41       84.75
+Engineering / ReAct                            39.13       40.87     34.78           42.61    34.78            46.96    34.78       50.43
+
+Table 6 | Cross-model CRSI (Claude Opus 5.5 to Gemini 3.8 Flash): exact held-out scores for Figure 4.
+Before and After refer to Gemini’s target RSI. Both stages use the same benchmark and split; the
+three transfer conditions share the Opus-evolved starting harness. The first column identifies the
+domain and seed harness. The Terminus-2 Cold Start counterpart for coding scores 18.18 before
+and 19.39 after target RSI. Bold marks the highest final score in each row.
+
+
+                                 Cold Start               Problem-Only Memory         held-out score is 1.06 points higher with Opus
+                                 Harness Transfer         Full SIM                    for AHE and 0.05 points higher for Terminus-2.
+                                                                                      This experiment varies the optimization agents;
+                        90
+                                                                                      the policy-model transitions are studied sepa-
+ Held-out TB2.1 score
+
+
+
+
+                                                                                      rately in §4.3.
+                        88
+
+                                                                                      F. Case Studies
+                        86
+                                                                                      We distinguish improvements within a fixed set-
+                        84                                                            ting from continued optimization after transfer.
+                             0       2          4           6       8           10    The source-RSI cases show changes to command
+                                             Target RSI round                         transport and parsing (§F.1). The CRSI cases fol-
+                                                                                      low completion control from TB2.1 to TB4 (§F.2),
+                                                                                      compare continuations with and without SIM
+Figure 8 | Source scores during target RSI (cod-                                      (§F.3), and trace new evidence appended to P3
+ing, TB2.1→TB4, Gemini 3.8 Flash): held-out                                           (§F.4). These are complementary views of the
+TB2.1 score (45 tasks, 225 rollouts; one rollout                                      coding transfer study, not independent repeti-
+is 0.44 points) of the harness retained after each                                    tions. We then summarize transfer patterns in
+target round from the AHE seed, with one run                                          the four domains (§F.5) and draw together the
+per condition. The three transfer conditions start                                    lessons for SIM (§F.6). The detailed coding cases
+from the source-evolved harness; Cold Start be-                                       use Terminus-2 and Gemini 3.8 Flash.
+gins from the seed.
+                                                                                      Evidence in the cases. These cases document
+(Appendix C.3). The main results discuss the                                          edit histories rather than estimate each edit’s
+margins and the mixed effects of retaining root                                       contribution to the final score. Code fragments
+causes alone (§4.2 and §4.3.1).                                                       are simplified; displayed SIM records retain their
+                                                                                      stored text, including truncations. Appendix D.3
+                                                                                      defines the fields.
+E.4.2. Does the Choice of Harness Agent Mat-
+       ter?
+                                                                                      F.1. How Does RSI Improve the Source Har-
+Opus scores higher, with a smaller held-out                                                ness?
+margin on Terminus-2. Table 7 replaces Gem-
+ini 3.8 Flash with Claude Opus 5.5 as the pro-                                        These examples stay within source RSI: feed-
+poser and selector during TB2.1 source RSI. The                                       back identifies a harness failure and leads to
+
+
+                                                                                                                                          24
+                         Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+                                                         Gemini 3.8 Flash                       Claude Opus 5.5
+Set         Seed                Before                After               Gain            After                   Gain
+Evolve      AHE                   86.82               90.45              +3.63            91.23                 +4.41
+            Terminus-2            85.91               89.09              +3.18            92.21                 +6.30
+Held-out    AHE                   85.78               90.22              +4.44            91.28                 +5.50
+            Terminus-2            87.56               91.56              +4.00            91.61                 +4.05
+
+Table 7 | Source RSI on TB2.1 with Gemini 3.8 Flash or Claude Opus 5.5 as the harness agent, the
+optimization agent that proposes and selects harness edits: the score of the seed harness, and the
+score after source RSI with each harness agent. Gain is the change from Before; bold marks the
+higher After score within each row.
+
+
+an edit, without a benchmark or policy change.                F.1.2. gpt2-codegolf: fragile tool-call parsing
+The transport case includes a measured task out-
+come; the parser example documents the repair                 Task. Write a compact GPT-2 inference program
+mechanism.                                                    in C (/app/gpt2.c) that loads the weights, de-
+                                                              codes greedily, and compiles with gcc -O3 -lm
+                                                              under a code-size limit.
+F.1.1. adaptive-rejection-sampler: unreliable
+       command transport                                        Root cause (c). Terminus-2 expects a JSON
+                                                              response whose keystrokes fields hold shell in-
+Task. Implement adaptive rejection sampling                   put. When the model wrote C code containing
+in R as /app/ars.R, with input validation and                 unescaped quotation marks into that field, for
+tests.                                                        example
+  Root cause (c). The agent wrote the whole
+                                                              "keystrokes": "...FILE *f = fopen("model.bin", "rb")
+program in a single shell command of about                         ;..."
+22.8 KB, exceeding the command-transport limit
+reported in this run (about 16 KB). The com-                     json.loads failed and the command was re-
+mand never ran, so the file was never created                 jected. The parser could already add missing
+and the verifier failed with No ars.R file found.             closing braces and strip surrounding text, but
+                                                              not repair quotes inside a field.
+   Modification (a). The transport behind the ex-
+isting run_shell_command tool now splits literal                Modification (a). A repair step, run only af-
+input into chunks of at most 2,048 characters,                ter normal parsing fails, locates the real clos-
+sends special keys such as Enter as separate key              ing quote of each string field as the one fol-
+events, and raises an error when a send fails                 lowed by the next expected key (for keystrokes,
+instead of failing silently (simplified):                     "duration" or the closing brace) and escapes ev-
+                                                              ery quote before it.
+MAX_KEY_CHUNK_SIZE = 2048
+def _tmux_send_keys(self, keys):                                 Outcome (o). The change adds a recovery
+    cmds = []
+    for key in keys:
+                                                              path for malformed calls; no post-edit task suc-
+        if key in SPECIAL_KEYS: # key event                   cess rate is reported for this parser repair. Its
+            cmds.append(f"{prefix} {quote(key)}")             dependence on the model’s output format is dis-
+            continue
+        for chunk in self._split_key(key):                    cussed in §F.5.1. The P3 record in §F.4 concerns
+            cmds.append(f"{prefix} {quote(chunk)}")           a separate prompt intervention.
+    return cmds
+
+
+   Outcome (o). Successful rollouts increased
+from 1 to 5 out of 5 on this task.
+
+
+                                                                                                                     25
+                        Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+F.2. How Does CRSI Adapt an Evolved Har-                   intent, not evidence: “Are you sure you want
+     ness?                                                 to mark the task as complete? . . . If so, include
+                                                           "task_complete": true in your JSON response
+This case follows completion control across a              again.” Root cause: ending the episode is an
+benchmark change, with the policy fixed. Source            agent privilege that requires no execution evi-
+RSI builds an execution check on TB2.1; target             dence.
+RSI inherits it and adds checks for solution qual-
+ity on TB4. P5 records the source problem of
+premature completion; P8 adds a target diag-               Harness intervention. The intervention intro-
+nosis about solution quality. Both concern the             duces completion-control middleware in the har-
+inherited completion gate, but they are separate           ness. Source RSI built it over three accepted
+entries, with no explicit parent/refinement link.          rounds:
+
+F.2.1. Source: Execution-Verified Completion               Round Edit
+
+                                                           r6        New execution_gating_interlock.py (137
+Task and evaluation interface. “Configure                            lines), wired into terminus_2.py: a cross-turn
+a git server so that from my own machine I                           state machine that refuses completion when the
+can git clone user@server:/git/server,                               previous turn had a parse error or no command
+commit hello.html, push, and then curl                               actually executed, capped at three rejections.
+http://server:8080/hello.html shows ‘hello                 r8        Also intercepts simulated multi-turn text,
+                                                                     truncated output with discarded command
+world’.” The agent must build four parts that                        blocks, and completion after at most one real
+compose: a bare repository at /git/server, a                         command (adds
+post-receive hook that deploys to the web                            terminus_json_plain_parser.py).
+root, an SSH-reachable account named user,                 r10       Detects terminal crashes, assertion failures,
+and an HTTP service on port 8080. The verifier                       HTTP 404s, and test errors at the moment
+                                                                     completion is requested (adds both prompt
+runs outside the container and clones as user                        templates).
+over SSH, so a setup that works locally is not
+evidence that the externally visible interface is
+correct.                                                   The interlock tracks execution across turns and
+                                                           uses four rejection paths (simplified):
+
+Observed failure and diagnosis. In the de-                  def check_completion_attempt(self, cmds, out, pending=
+                                                                 False):
+scribed failing rollout, the agent configured the               if self._consecutive_rejections >= self._max_rej:
+repository, hook, and web server, read “I will set                  return False, "" # never lock out a done task
+                                                                if self.detect_terminal_error(out):       # Case 0
+up login myself” as meaning the account would                       return self._reject(...)
+be provisioned externally, and never created                    if pending:
+                                                                    return False, ""
+user. It tested the flow with the pre-existing                  ran = any(c.keystrokes.strip() for c in cmds)
+ubuntu account, saw every local command suc-                    if self._last_turn_had_error and not ran:    # A
+ceed, and declared task_complete: true. SSH                         return self._reject(...)
+                                                                if self._last_turn_discarded and not ran:    # B
+then refused the nonexistent user, the push                         return self._reject(...)
+failed, and the page returned 404. The seed har-                if self._total_executed <= 1 and not ran:    # C
+                                                                    return self._reject(...)
+ness could not catch this, because its completion               return False, ""
+check only asks the model to repeat its claim
+(simplified from terminus_2.py):                             The interlock enforces the completion checks;
+                                                           prompt reminders provide additional guidance.
+if is_task_complete:                                       By the end of source RSI the file had grown to
+    if self._pending_completion:   # second claim
+        return episode + 1         # terminate             275 lines.
+    self._pending_completion = True # first: ask again
+    obs = self._confirmation_message(out)
+                                                           Reported task outcome. Successful roll-
+  and the confirmation message asks about                  outs increased from 1 to 5 out of 5 on
+
+                                                                                                                     26
+                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+configure-git-webserver. The same P5 in-                                 The source gate       This task also
+tervention also raised circuit-fibsqrt from                              asks                  needs
+1 to 5 out of 5: that task tests Fibonacci and           Question        Has enough            Is the feasible
+square-root circuits with /app/sim.c, including                          executed for the      solution good
+large-integer inputs, and the agent had stopped                          workflow not to       enough to stop
+after failed commands. These are two task                                have obviously        improving?
+                                                                         failed?
+outcomes for the same source intervention.
+                                                         Evidence        Execution activity,   Objective value
+  The three source attempts remain together in                           errors, crashes       against an
+                                                                                               achievable bound
+P5 (Figure 9). Two target proposals cited P5, but
+neither was selected, so no target attempt was
+appended to that entry.                                  Harness intervention and installed behav-
+                                                         ior. Target RSI retained the state machine and
+F.2.2. Target: Feasibility and Solution Quality          bounded rejection, expanding the component
+                                                         from 275 to 437 lines under several target en-
+Task and evaluation interface. Route
+                                                         tries. The change attributed to this deficiency,
+nine photonic waveguides described in
+                                                         accepted in target round 2, adds a detector for
+/app/layout_spec.json and write the waypoint
+                                                         the signature of a constraint-only check that
+paths to /app/routing_result_1.json. Each
+                                                         also prints a score, and turns a match into
+path must run from its exact start to its exact
+                                                         a notice at the confirmation step (simplified):
+target coordinate using 90-degree bends of
+radius 50 µm and valid s-bends, stay inside               PATTERNS = [re.compile(
+                                                              r"(?:ALL CHECKS PASSED|ASSERTIONS PASSED"
+the board, avoid obstacle clearance regions                   r"|CONSTRAINTS? SATISFIED).*?"
+and self-intersections, and keep a minimum                    r"(?:score|cost|loss|metric)\s*[:=]\s*[-+]?\d+",
+                                                              re.I | re.S), ...]
+separation between nets. The score is the
+negative weighted route cost summed over all              def detect_optimization_feasibility_notice(cls, out):
+                                                              if any(p.search(out[-4000:]) for p in PATTERNS):
+nets. The task ships its own feasibility checker,                 return ("[ExecutionGatingInterlock NOTICE]: "
+check_routing.py, which answers whether the                               "passing constraint checks (e.g. "
+constraints are satisfied, while the reward is a                          "check_routing.py) only proves
+                                                               FEASIBILITY, "
+cost function. A solution can pass every check                            "NOT OPTIMALITY ... compare your current
+and still score poorly.                                         "
+                                                                          "score against theoretical bounds ...")
+
+
+Observed failure and diagnosis. The evolved                 The pre-completion checklist gained a match-
+harness contains the source interlock, intact            ing clause asking the agent to verify that it “has
+and wired. On this task the agent produces               not stopped at the first feasible solution” and
+a feasible routing, writes the output, runs              has “quantified [its] suboptimality gap against
+check_routing.py, sees it pass, encounters no            the theoretical bound.” In target round 4, the
+terminal error, and requests completion. None            adopted candidate added a fifth rejection path,
+of the four rejection conditions is triggered: com-      blocking completion once when feasibility out-
+mands ran, no parse error occurred, nothing was          put with a metric was detected. Later edits
+discarded, and no visible terminal failure was           changed this behavior: the final harness retains
+detected, so the gate allows completion. The             the source body of check_completion_attempt
+target failure adds a question about sufficient          and its four rejection paths. The error patterns
+evidence for completion:                                 feeding Case 0 were expanded to catch deliv-
+                                                         erables that report themselves infeasible (e.g.
+                                                         "route_feasible": false). The final behavior
+                                                         is therefore to block reported infeasibility and
+                                                         warn about possible suboptimality; SIM retains
+                                                         the earlier blocking attempt and its outcome.
+
+
+
+                                                                                                                  27
+                        Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+{ "id": "P5",
+  "name": "premature completion without execution verification",
+  "opened_round": 6,
+  "attempts": [
+    { "round": 6, "sample": "s2", "accepted": true, "domain": "coding_enriched",
+      "what": "Implemented ExecutionGatingInterlock in Terminus2 to intercept premature
+               task completion attempts when previous commands failed to execute
+               (e.g. on unescaped JSON parse errors) or when no commands wer...",
+      "files": "execution_gating_interlock.py, terminus_2.py",
+      "predicted": ["circuit-fibsqrt", "configure-git-webserver"],
+      "fixed":     ["circuit-fibsqrt", "configure-git-webserver"],
+      "missed": [], "passed": 49, "total": 60 },
+    { "round": 8, "sample": "s1", "accepted": true, "domain": "coding_enriched",
+      "what": "Intercept premature completion when LLM generates multi-turn simulated
+               text or output-length truncations with unexecuted discarded command
+               blocks or completes with trivial session execution (<=1 comma...",
+      "files": "execution_gating_interlock.py, terminus_2.py,
+                terminus_json_plain_parser.py +1 more",
+      "predicted": ["constraints-scheduling"],
+      "fixed":     ["constraints-scheduling"],
+      "missed": [], "passed": 45, "total": 60 },
+    { "round": 10, "sample": "s1", "accepted": true, "domain": "coding_enriched",
+      "what": "Enhance ExecutionGatingInterlock in Terminus2 to detect active terminal
+               crashes, assertion failures, HTTP 404s, and test errors when task
+               completion is requested, prevent immediate termination when co...",
+      "files": "execution_gating_interlock.py, templates/terminus-json-plain.txt,
+                templates/terminus-xml-plain.txt +1 more",
+      "predicted": ["configure-git-webserver", "protein-assembly", "train-fasttext"],
+      "fixed":     ["configure-git-webserver"],
+      "missed":    ["protein-assembly", "train-fasttext"],
+      "passed": 47, "total": 60 } ] }
+
+
+Figure 9 | SIM entry P5 as carried into the target run’s record (what fields truncated as stored). All
+three attempts are source rounds, identified by domain: "coding_enriched".
+
+
+Recorded task outcome. The recorded predic-                problem:
+tions and outcomes distinguish the intended re-
+pair from its measured result:
+                                                                           P5 (carried)         P8 (target-native)
+
+                                                           Provenance      coding_enriched,     tb4, target round 2
+Attempt     Predicted                             Fixed                    source round 6
+P8, round 2 photonic-waveguide-routing,           none     Missing         Execution did not    Execution
+            production-planning                            evidence        occur or did not     succeeded but the
+                                                                           succeed              solution is only
+P8, round 4 photonic-waveguide-routing,           none
+                                                                                                feasible
+            production-planning
+                                                           Marked          3 of 3, all on the   2 of 2, both on the
+                                                           accepted        source               target
+Both attempts were selected, but neither fixed its         Realized        4 of 6               0 of 4
+                                                           predictions
+targeted tasks. Their predictions remain marked
+                                                           Diagnosis       Source RSI           Target RSI
+as unresolved in P8 (Figure 10). This case illus-          opened in
+trates adaptation and memory updates; aggre-               Component       Interlock created    Interlock extended
+gate target performance is reported separately             Completion      Four source          Quality advice in
+in §4.2.                                                   behavior        rejection paths      final harness
+
+  The two entries distinguish the inherited ex-
+ecution problem from the new solution-quality
+
+                                                                                                                     28
+                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+{ "id": "P8",
+  "name": "premature termination on feasible but suboptimal solutions
+           in optimization tasks",
+  "opened_round": 2,
+  "attempts": [
+    { "round": 2, "sample": "s3", "accepted": true, "domain": "tb4",
+      "what": "Add objective optimality vs constraint feasibility guidelines to prompt
+               templates and enhance ExecutionGatingInterlock with optimality audit
+               checklist and feasibility score notice to prevent premature...",
+      "files": "execution_gating_interlock.py, templates/terminus-json-plain.txt,
+                templates/terminus-xml-plain.txt +1 more",
+      "predicted": ["photonic-waveguide-routing", "production-planning"],
+      "fixed": [],
+      "missed":    ["photonic-waveguide-routing", "production-planning"],
+      "passed": 5, "total": 33 },
+    { "round": 4, "sample": "s4", "accepted": true, "domain": "tb4",
+      "what": "Active optimization gating and terminal error precision in
+               ExecutionGatingInterlock: enforce completion interception when
+               constraint feasibility outputs with score/metric are detected
+               without verified...",
+      "files": "execution_gating_interlock.py",
+      "predicted": ["photonic-waveguide-routing", "production-planning"],
+      "fixed": [],
+      "missed":    ["photonic-waveguide-routing", "production-planning"],
+      "passed": 10, "total": 36 } ] }
+
+
+Figure 10 | SIM entry P8, opened by target RSI in round 2 (what fields truncated as stored). Its
+provenance, domain: "tb4", places it inside the target run. The round-4 modification was adopted
+and later changed; its record remains in SIM.
+
+
+Memory preserves the history as the harness              state. Without SIM, the run edits the same gate
+changes. P5 preserves why the source inter-              four times, twice to repair completion deadlocks.
+lock was introduced; P8 records the target at-           Its round-3 rationale attributes the gate and the
+tempts to assess solution quality, including the         deadlocks to round 1, although the gate was
+blocking attempt that was later changed. To-             inherited from source RSI.
+gether they retain the rationale and outcomes
+                                                           Appendix F.2 gives the task-level evidence
+beyond the edits present in the final harness.
+                                                         and memory records behind these revisions.
+
+F.3. How Does SIM Guide Continuation?                    F.4. How Does SIM Extend an Existing
+The SIM run adds target checks to the inher-                  Record?
+ited gate. Figure 11b follows the completion             Figure 12 shows the record behind the round-5
+gate inherited from TB2.1. It compares the con-          and round-6 gate edits in Figure 11b. Source RSI
+tinuation described in §F.2 with a run from the          diagnoses a mismatch between internally correct
+same harness without SIM. In round 2, the pro-           deliverables and the external schema or API con-
+poser with SIM reads the gate’s source entry, P5,        tract checked by the verifier. The round-4 source
+which diagnoses premature completion without             edit adds system-prompt guidance and fixes
+execution verification. The proposer keeps the           one of four predicted tasks, leaving three unre-
+gate and asks the agent to compare its score with        solved. Target RSI appends two attempts under
+theoretical bounds before declaring completion:          the same diagnosis: a schema-deliverables and
+satisfying constraints establishes feasibility, but      test-audit extension in round 5, and a defensive-
+a better solution may still exist. Later edits add       contract detector in round 6. They fix zero of
+checks of specification parameters and lifecycle         two and one of two predicted tasks, respectively.
+
+                                                                                                       29
+                               Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+                                                        Without SIM (Harness Transfer)                     With SIM (Full SIM)
+
+
+                                                                +2.43
+              Coding / AHE                                                                     +6.67
+                                               +0.00
+         Coding / Terminus-2                                    +2.43
+                                  -0.40
+           Text / NoMemory                                     +2.20
+                                                       +1.20
+           Text / FewShotAll                                                        +5.00
+                                                                                                                         +10.14
+                 Workspace                                                                                                             +12.96
+                                                                        +3.48
+                Engineering                                                                            +7.83
+
+                                           0              2              4               6             8            10            12       14
+                                                                                Target gain (score points)
+
+
+                                          (a) Target gain from the same inherited harness
+
+  Round With SIM: same gate + source record                                           Without SIM: same gate, no record
+    R1    Gate + specification-parameter audit                                        Gate: stronger error patterns
+    R2    Gate + feasible ̸= optimal check                                            Prompt: configuration completeness
+    R3    tmux transport fix                                                          Gate: fix completion deadlocks
+    R4    Gate + feasibility-score block (P8)                                         —
+    R5    Gate + coupled-field and test-suite audit                                   Gate: cross-turn test-failure latching
+    R6    Gate + defensive function contracts                                         —
+    R7    Gate + infeasibility flags                                                  Gate: fix latched-error deadlock
+    R8    —                                                                           —
+    R9    Gate + lifecycle-state check                                                —
+
+                                                   (b) Retained edits during target RSI
+
+
+Figure 11 | Target gains and edit histories with and without SIM. (a) The six cross-dataset target
+gains from Figure 3, measured from the common source-evolved starting harness. (b) Selected
+edits in target rounds 1–9 from Terminus-2 (TB2.1→TB4). Both runs inherit the same harness and
+completion gate. “Gate +” adds a check; — marks no selected edit; round 10 is not listed. The
+round-4 P8 block was later changed (§F.2); rounds 5 and 6 extend P3 (Figure 12).
+
+
+P3 therefore retains one diagnosis while accu-                                    F.5.1. Coding
+mulating evidence from different interventions
+and settings.                                                                     Source RSI revises execution, parsing, and
+                                                                                  completion. The evolved tool layer retains
+                                                                                  stdout and stderr after timeouts, checks back-
+F.5. What Transfers across Datasets and Mod-                                      ground processes and their exit codes, recov-
+     els?                                                                         ers misplaced artifacts, and sends long com-
+                                                                                  mands through a paste buffer (§F.1). Terminus-
+Table 8 summarizes which mechanisms are
+                                                                                  2’s parser attempts to repair malformed JSON
+reused, adapted, or extended, and which de-
+                                                                                  before rejecting it and detects safety refusals.
+pend on the target setting. The domain sum-
+                                                                                  Completion control requires evidence before ac-
+maries distinguish recorded changes from con-
+                                                                                  cepting a completion claim: AHE’s middleware
+ditions that limit reuse; a retained mechanism
+                                                                                  forces continuation when the agent stops with-
+can remain inactive. They broaden the coding
+                                                                                  out a tool call, and Terminus-2’s cross-turn in-
+cases to the other domains without treating ev-
+                                                                                  terlock blocks completion after unexecuted com-
+ery mechanism as a separate SIM ablation.
+
+
+                                                                                                                                                30
+                        Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+
+Domain /     Reused directly           Reused with adaptation Inherited and extended Setting-dependent
+shift
+
+Coding       Shell, terminal, and      Paste-buffer transport     Completion contract,         Source completion
+Dataset      process layer             (key normalization,        with new target              predicates; refusal
+                                       foreground detection)      predicates                   handling (idle)
+Model        Terminal and process      —                          Lifecycle control, with      Parser repairs tuned to
+             layer; interlock                                     recalibrated interception    one model’s output
+             accounting                                           heuristics
+
+Text cls.    BM25 index and            Top-k, score filter, and   Multi-template routing       Data-specific
+Dataset      retriever; query          class quotas (recalibrated skeleton                     post-processing (SMILES
+             sanitization              constants)                                              normalization)
+Model        Indexing; query           Retrieval budgets          Routing skeleton, with       Output schema and
+             sanitization              (re-tuned to model         rewritten rubrics            decoding contract
+                                       capacity)
+
+Workspace    Soft gate before        Evidence probe (file         Truncation limits and        Evaluator-specific
+Dataset      final_answer            system → invocation          context budget               registration assumption;
+                                     history)                                                  substring heuristics
+Model        System-prompt injection Budget-triggered sparse      Rubric taxonomy with         Calibrations to one
+             pipeline                intervention                 counterexamples              model’s failure rate or
+                                                                                               API schema
+
+Engineering Central tool-call          Deliverable check →        Context buffers and          Prompt guidelines
+Dataset     interception point         continuous                 truncation budgets           without SIM (reverted)
+                                       checkpointing
+Model        Deliverable observation Intervention schedules       Composable soft-gate         Intervention intensity;
+             layer; re-execution check (time and step             predicates                   environment-specific
+                                       thresholds)                                             bypasses
+
+Table 8 | Mechanism reuse across datasets and models. The last column includes inactive or removed
+components as well as assumptions and heuristics that require reassessment in a new setting. A
+dash means that no mechanism is listed. §F.5.1–§F.5.4 give the supporting cases.
+
+
+
+
+                                                                                                                         31
+                        Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+SIM entry P3                                                                              Policy: Gemini 3.8 Flash
+Root cause. A deliverable can be internally correct yet violate the verifier’s external contract: schema, coupled
+attributes, API signature, or split hygiene.
+
+Stage              Selected modification                                          Recorded outcome
+Source          System prompt. Execution and Verification Guidelines:             1 of 4 fixed. Fixed
+TB2.1, round 4  deliverable integrity, schema conformance, defensive              gpt2-codegolf;
+Carried forward API compatibility, evaluation hygiene, and invariant              protein-assembly,
+                checks instead of silent suppression.                             torch-pipeline-parallelism,
+                                                                                  and train-fasttext remained
+                                                                                  unresolved.
+Target             Verification layer. Add a schema-deliverables clause to        0 of 2 fixed. Neither
+TB4, round 5       the completion interlock and prompt templates; extend          atrx-vep-crispr nor
+Appended           the checklist to programmatic assertions and a                 intrastat-meldung was fixed.
+                   test-suite audit.
+Target             Verification layer. Add a defensive-contract detector to       1 of 2 fixed. Fixed
+TB4, round 6       the completion checklist.                                      embedding-drift-monitor;
+Appended                                                                          biped-contact-dynamics
+                                                                                  remained unresolved.
+
+Figure 12 | SIM entry P3 across source and target RSI. The source attempt realizes one of four task-fix
+predictions; target rounds 5 and 6 realize zero of two and one of two. All attempts retain their
+outcomes and provenance under the same root-cause hypothesis, including unresolved predictions.
+
+
+mands or errors (Appendix F.2).                            Appendix F.3 follows the selected edits; Ap-
+                                                           pendix F.2 gives the task evidence and the P5/P8
+                                                           records. Source predicates that no longer fire
+Core execution handling is retained on TB4.                are pruned rather than re-tuned. Both branches
+The command-execution routines carry over                  also add a reminder triggered by the remaining
+with the shared container and terminal inter-              step budget in their first round, a target-specific
+faces, while session checks adapt as described             mechanism that the source did not need.
+below. The recorded cold-start run does not
+rediscover the tool-layer changes within eight
+rounds; after ten rounds it has a larger parser            Refusal handling remains inactive. Refusal
+without outperforming the inherited harness.               handling is carried forward but has no trigger-
+                                                           ing tasks on TB4. Its presence alone therefore
+                                                           does not establish a transfer benefit or a loss.
+Paste-buffer checks adapt to TB4. TB4 ex-
+poses failures absent from TB2.1: special key
+sequences must be normalized for interrupts                Parser repairs depend on the policy model.
+to take effect, and foreground processes must              The Opus- and Gemini-evolved harnesses have
+be identified so that a running command is not             near-identical terminal and process structures,
+classified as a stalled session. The paste-buffer          which are retained after transfer. Parser repairs
+structure remains, with checks adjusted to these           instead address model-specific output errors:
+target failures.                                           unescaped control characters, illegal escapes,
+                                                           and truncated responses. Each repair needs
+                                                           checking against the target model’s outputs.
+Completion checks add target criteria. Both                Completion control likewise retains counts of
+inherited harnesses keep completion control                executed commands, discarded blocks, and con-
+while revising the evidence required on TB4.               secutive rejections, while recalibrating checks
+
+                                                                                                                 32
+                       Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+for simulated execution and premature comple-             and character bigrams for Chinese legal text. In-
+tion. The target run also adds format constraints         dexing and query sanitization depend on the in-
+and step-by-step guidance absent from source              put data and carry over across models; retrieval
+RSI.                                                      budgets such as top-k are re-tuned. Output rules
+                                                          depend more on policy behavior: the answer-
+F.5.2. Text Classification                                first schema addresses Gemini’s truncated rea-
+                                                          soning. Target RSI also rewrites inherited rubrics
+Source RSI builds structured retrieval. Mem-              more extensively on Banking77 and GoEmotions
+ory writing moves from no retention (NoMem-               than on SciTail and TweetEval-Hate.
+ory) or unstructured storage (FewShotAll) to
+retrievable indices: multi-granularity BM25               F.5.3. Agentic Workspace
+over words, character n-grams, and chemical-
+formula n-grams, later extended with class-               Source RSI adds output handling and audits.
+based candidate pools, hard-negative error in-            Over-long tool outputs are preserved through
+dices, and class-prototype centrality. Prompt             head-and-tail truncation, with quotas raised
+assembly bounds retrieval to the top eight ex-            three- and five-fold, respectively. A one-time
+amples with positive BM25 scores, strips bench-           audit gate before final_answer can append a
+mark boilerplate from queries before retrieval,           tool message and return the policy to the loop.
+and selects contrastive, class-balanced exem-             A deliverable auditor supplies the gate with file
+plars. Post-processing normalizes data-specific           names and sizes from candidate output directo-
+formats, such as SMILES strings for USPTO-50k,            ries.
+because open-vocabulary generation requires ex-
+act matches.
+                                                          The termination gate survives a rubric change.
+                                                          Source RSI and a cold-start target run indepen-
+Retrieval survives with adjusted thresholds.              dently add a tool message before the same early-
+The target suite changes the input types and la-          return branch, with different predicates and mes-
+bel spaces. The BM25 index and retriever classes          sages. The target gate fires only when no deliver-
+remain intact, while retrieval constants are re-          able is registered, files were written during code
+calibrated and query sanitization gains delim-            execution, and the gate has not fired before; the
+iters for the new datasets. The routing structure         second condition keeps purely conversational
+is retained, with rubrics and exemplars rewrit-           tasks from being intercepted. This insertion
+ten for the target. With SIM, target RSI adds             point depends on the ReAct loop and remains
+smoothed class quotas and contrastive ordering;           usable when the evaluation rubric changes.
+class balancing applies to the target’s finite label
+sets rather than the source’s open-vocabulary
+outputs.                                                  Registration checks replace file-system probes.
+                                                          The source probe samples the file system,
+                                                          whereas target failures come from invocation
+SMILES normalization stays inactive.                      history: files created on disk but never registered
+SMILES normalization used in source RSI                   through write_file. Target checks therefore use
+remains inactive on the target suite, whose out-          tool-invocation history rather than file-system
+puts no longer use that format. The cold-start            probes. The target escalates this check in three
+run independently develops relevance-gated                single-shot tiers: an advisory notice when file
+retrieval and bounded context.                            saving is detected, a mandatory instruction once
+                                                          75% of the step budget passes without registra-
+                                                          tion, and a conditional block at final_answer.
+Indexing transfers while output rules change.
+Three of four runs evolve BM25 indices from dif-
+ferent starting harnesses, using features suited to       Registration checks depend on the evaluator.
+the input, such as chemical n-grams for SMILES            The registration check assumes that the evalua-
+
+                                                                                                          33
+                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+tor credits files registered through write_file;         in deliverables, and clamping outputs with a
+it would need reconsideration for an evaluator           fallback to the baseline implementation.
+that reads output directories directly. Its sub-
+string matches over tool arguments (such as
+/tmp/, .docx, or savefig) also depend on argu-           SIM retains the source guidelines in this trace.
+ment formatting.                                         The Harness Transfer target run inherits the
+                                                         source guidelines but reverts them to the seed
+                                                         prompt in its first round, whereas the Full SIM
+Prompt infrastructure transfers across mod-              target run retains and extends them through-
+els. The Opus source run adds editable system-           out. This pair retains similar code structures
+prompt guidelines and a six-level severity tax-          but differs in whether the inherited guidance is
+onomy with counterexamples, leaving control              preserved.
+flow and tool execution unchanged. The injec-
+tion mechanism uses message structures, while
+the taxonomy describes the unchanged evalu-              Deliverable checks survive model changes.
+ator. Gemini’s cold-start run takes a different          A deliverable tracker that records deliverable
+direction: a notice at 80% of the step budget asks       state independently of model output transfers
+it to fill pending fields so that a deliverable ex-      without refactoring, and a check that blocks
+ists before final_answer; seven later rounds add         final_answer when a deliverable was modified
+no improvement in this trace. The timing and             but not re-executed transfers unchanged. Bud-
+wording of such interventions depend on the              get prompts emerge as wall-clock triggers in
+policy’s behavior.                                       an Opus run (every 600 s, at most three times)
+                                                         and step-budget ratios in Gemini runs (0.8 and
+                                                         0.75). Both use the gate before final_answer,
+F.5.4. Engineering Design                                with checks on different state variables. The
+Source RSI adds design and verification guid-            recorded zero-score rates differ between Opus
+ance. The source run adds prompt guidance                (0.09%) and Gemini (4.49%); intervention thresh-
+on analytical calculations, self-contained deliver-      olds therefore need checking for each policy.
+ables, tool-failure recovery, and re-reading writ-       Handlers for a missing sandbox binary remain
+ten files before completion. It also imports a           idle where the environment is fully provisioned.
+syntax parser and a tool registry without calling
+them during source RSI.                                  Interfaces explain much of the observed reuse.
+                                                         Across these cases, benchmark changes alter the
+Target RSI expands checks and context budgets.           evidence needed for completion, while model
+The tool-registry import is unused in the source         changes alter how the harness handles policy
+harness but becomes the entry point that the Har-        failures. With the benchmark fixed, a model
+ness Transfer target run uses to enforce central-        change leaves the success criterion intact but can
+ized output truncation at the registry call. Three       require different detection and guidance. Sta-
+target runs independently raise the shared con-          ble interfaces favor reuse; output repairs and
+text constants: output-token caps, head and tail         intervention thresholds need checking against
+lengths, and summarization triggers. The Full            the target setting.
+SIM target run adapts the source’s one-time post-
+generation check into a checkpoint protocol that         F.6. What Do the Cases Tell Us about SIM?
+writes intermediate artifacts exceeding the base-
+line score to disk, protecting them from unan-           The cases suggest four roles for SIM in continu-
+nounced timeouts. The cold-start target run’s            ing harness optimization.
+retained edits are limited to prompt changes: re-
+constructing the objective from the evaluation
+                                                         Earlier rationale informs what to retain. In
+script, embedding self-tuning optimization code
+                                                         engineering, the SIM run retains and extends
+
+                                                                                                        34
+                      Self-Improvement Memory Enables Continual Recursive Self-Improvement
+
+
+
+inherited guidance, while harness-only continu-
+ation reverts it (§F.5.4). Recording why an edit
+was made gives the optimizer a basis for assess-
+ing its continued relevance, beyond its presence
+in the inherited harness.
+
+
+A transferable rationale can require a different
+implementation. The coding runs inherit the
+same completion gate, but the SIM run extends it
+to check target-specific requirements (§F.3). The
+need for completion evidence carries over; what
+counts as sufficient evidence changes. This illus-
+trates how earlier reasoning can guide adapta-
+tion without treating the source implementation
+as fixed.
+
+
+New outcomes add evidence to an existing di-
+agnosis. P3 links a source diagnosis to fur-
+ther target interventions and their outcomes
+(§F.4). Keeping these attempts together lets later
+rounds inspect which remedies were tried, un-
+der which settings, and which predictions re-
+main unresolved. The reusable experience in-
+cludes the evidence behind a diagnosis, not only
+its name.
+
+
+Experience remains available after an edit is
+replaced. P8 retains the selected blocking at-
+tempt and its unresolved predictions after later
+edits change the behavior (§F.2). The final har-
+ness alone would omit this part of the search
+history. SIM keeps the attempt, its diagnosis,
+and its unresolved outcome together as the har-
+ness changes.
+
+
+
+
+                                                                                             35
+

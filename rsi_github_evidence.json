@@ -1,0 +1,81 @@
+{
+  "document": "GitHub RSI 生态检索证据（来源隔离：本文件只记录外部事实，不含任何有效性结论）",
+  "retrieved_utc": "2026-11-21T06:45:00Z",
+  "method": "GitHub REST API 多维度检索 + 关键仓库README/issue原文抓取",
+  "source_isolation": "本证据仅描述社区在讨论什么、怎么实现；不引用任何'RSI有效/无效'的现成结论作为本次判断依据",
+  "ecosystem": {
+    "total_rsi_repos": 201,
+    "total_rsi_backtest_repos": 276,
+    "top_implementation_repos": [
+      {
+        "repo": "debut-js/Indicators",
+        "stars": 447,
+        "pushed": "2020-01-09",
+        "note": "多指标JS库，含RSI，非策略",
+        "last_push_age": "旧"
+      },
+      {
+        "repo": "mtamer/python-rsi",
+        "stars": 143,
+        "pushed": "-",
+        "note": "纯RSI筛选器，README称RSI+MA20/200为'strong and popular'，但附educational-only免责声明"
+      }
+    ],
+    "top_strategy_repos": [
+      {
+        "repo": "xFFFFF/Gekko-Strategies",
+        "stars": 1445,
+        "pushed": "2020-01-09",
+        "note": "头部策略库但已停更6年"
+      },
+      {
+        "repo": "SharmaVidhiHaresh/Backtesting-Trading-Strategies-with-Python",
+        "stars": 46,
+        "pushed": "2020-08",
+        "note": "Google单股MA/RSI回测，n=1"
+      },
+      {
+        "repo": "asier13/Python-Trading-Bot",
+        "stars": 26,
+        "pushed": "2023-12",
+        "note": "加密RSI回测 bot"
+      }
+    ],
+    "emerging_2025_2026": [
+      {
+        "repo": "aaajiao/RSI--Breadth-Multi-Factor-Indicator",
+        "stars": 2,
+        "pushed": "2026-11-20",
+        "note": "RSI+多因子，极新，star极低"
+      },
+      {
+        "repo": "TradingSignalBot/tradingview-strategies",
+        "stars": 34,
+        "pushed": "2026-11-03",
+        "note": "TradingView Pine Script策略集"
+      },
+      {
+        "repo": "ProgramingPro2/Reinforcement-Stocks",
+        "stars": 4,
+        "pushed": "2026-11-02",
+        "note": "RSI作为RL特征之一"
+      }
+    ]
+  },
+  "implementation_correctness_issue": {
+    "source": "https://github.com/codeplayr/alphacate/issues/1",
+    "title": "Wrong RSI calculations due to rounding errors",
+    "finding": "avg_gain/avg_loss 在递推中被 NumberUtil.roundTo(,2) 截断，而这些字段同时用于 i+1 计算，导致误差累积，RSI 结果 100% 不精确",
+    "framework_link": "映射框架判据：事实(用了RSI公式)≠方法可靠(实现有累积误差)；符号正确性≠数值正确性"
+  },
+  "issue_counts": {
+    "rsi_not_accurate_wrong": 1880,
+    "rsi_backtest_overfitting": 351,
+    "rsi_overbought_oversold_not_working": 228
+  },
+  "structural_observation": [
+    "生态绝大多数内容是'如何实现RSI'与'如何用RSI回测'，几乎没有'RSI是否真的有效'的严格随机对照/多重比较/样本外检验",
+    "宣称('strong and popular')与免责声明('educational purposes only')并存，属结构性自利叙事",
+    "头部策略库停更、新兴方向star极低：社区热度在计算库而非可验证策略"
+  ]
+}

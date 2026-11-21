@@ -1,0 +1,94 @@
+"""生成 SIM/CRSI 论文框架论证报告（三层来源隔离 + 触发≠真相阶梯 + 三层诚实结论）。"""
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+ev = json.loads((ROOT / "rsi_sim_evidence.json").read_text(encoding="utf-8"))
+r = json.loads((ROOT / "sim_framework_result.json").read_text(encoding="utf-8"))
+p = ev["primary_paper"]
+s = p["headline_statistics"]
+aw = ev["github_ecosystem"]["awesome_rsi"]
+
+html = f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>SIM/CRSI 论文框架论证报告</title>
+<style>
+body{{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;max-width:980px;margin:0 auto;padding:32px 24px;line-height:1.75;color:#2c3e50;background:#fafbfc}}
+h1{{border-bottom:3px solid #2980b9;padding-bottom:12px}}
+h2{{margin-top:38px;border-left:4px solid #2980b9;padding-left:12px;color:#1a252f}}
+table{{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}}
+th,td{{border:1px solid #dfe4ea;padding:7px 10px;text-align:left;vertical-align:top}}
+th{{background:#eef1f4}}
+.card{{background:#fff;border:1px solid #e1e5ea;border-radius:8px;padding:16px 20px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}}
+.red{{color:#c0392b;font-weight:bold}} .green{{color:#27ae60;font-weight:bold}} .blue{{color:#2980b9;font-weight:bold}}
+.badge{{display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;color:#fff;background:#2980b9}}
+.badge-r{{background:#c0392b}} .badge-g{{background:#27ae60}} .badge-y{{background:#e67e22}}
+blockquote{{border-left:3px solid #95a5a6;margin:12px 0;padding:8px 16px;background:#f4f6f7;color:#555}}
+.small{{font-size:13px;color:#7f8c8d}} code{{background:#f1f2f6;padding:1px 5px;border-radius:4px;font-size:13px}}
+.ladder{{display:flex;gap:8px;margin:12px 0}} .ladder div{{flex:1;padding:12px;border-radius:8px;text-align:center;font-size:13px}}
+</style></head><body>
+
+<h1>SIM / CRSI 论文框架论证报告</h1>
+<p class="small">论文 arXiv:{p['arxiv_id']} · {p['submitted']} · 原文PDF已下载 · 预注册锁存 <code>{r['_meta']['prereg_sha256'][:22]}…</code> · 三层来源隔离</p>
+
+<blockquote>
+<b>纠偏声明：</b>首轮误把 RSI 当作证券「相对强弱指数」并做了完整但离题的论证。根因是<b>术语歧义未触发澄清门禁</b>，已作为 fix 类教训入库。<br>
+<b>本次对象：</b>《Self-Improvement Memory Enables Continual Recursive Self-Improvement》——Google Cloud AI / DeepMind / Penn State，研究 harness 层的持续递归自我改进（CRSI）。
+</blockquote>
+
+<h2>一、三层来源隔离（不得交叉背书）</h2>
+<div class="card">
+<table>
+<tr><th>层</th><th>内容</th><th>框架处置</th></tr>
+<tr><td><b>事实层</b><br>论文原文</td><td>改进对象是 harness，<b>模型权重全程冻结</b>；SIM 记录 rationale/predicted/observed/provenance，失败 edit 也保留；proposer/selector 读完整记忆；10 对编码实验 +2.36 分 (p=0.003)</td><td class="green">可作为事实基础</td></tr>
+<tr><td><b>叙事层</b><br>媒体/Reddit</td><td>r/singularity 称「AI 改进自身软件」「Google 已实现递归自我改进」「奇点」(672 赞)</td><td class="red">夸张，主体错位，不作证据</td></tr>
+<tr><td><b>生态层</b><br>GitHub</td><td>RSI 仓库 207、自改进 memory 364、自进化 harness 150；awesome-rsi ★{aw['stars']} 自带严格证据阶梯；DGM ★{ev['github_ecosystem']['dgm']['stars']}</td><td class="blue">热度是虚荣指标，仅描生态</td></tr>
+</table>
+<p class="small">诚实归因：论文措辞克制（"crucial to interpret findings within scope"），夸张几乎全部来自二手转述。<b>不把媒体的错算到论文头上。</b></p>
+</div>
+
+<h2>二、触发≠真相：用证据阶梯定位论文真实贡献</h2>
+<p class="small">借用 awesome-rsi 的三级证据标准，作为本项目"触发≠真相"判据的可操作化实例：</p>
+<div class="ladder">
+<div style="background:#eaf5ea"><b>L1 任务增益</b><br>分数变高<br><span class="green">✓ 有</span></div>
+<div style="background:#eaf0fb"><b>L2 保留增益</b><br>持久更新在 held-out 改善<br><span class="green">✓ 有</span></div>
+<div style="background:#fdecea"><b>L3 改进器增益</b><br>改进机制本身被改进<br><span class="red">✗ 未证明</span></div>
+</div>
+<div class="card">
+<p><span class="badge badge-r">核心判定</span> {r['S2']['decision']}。</p>
+<p>{r['S2']['declaration']}。awesome-rsi 原文警告：<i>"Structural recursion vs. demonstrated improvement — a recursive dependency or self-referential architecture does not by itself establish that the improvement mechanism has become more effective."</i> 这与本项目一贯的<b>"自洽≠有效、触发≠真相"</b>完全同构。</p>
+<p><span class="badge badge-y">主体错位</span> {r['S1']['decision']}——与第 31 节大摩文"事实全真但主体错位"是同一类错误：数字都对，但被讲成了另一个主体（模型智能）的故事。</p>
+</div>
+
+<h2>三、S3–S5 判据执行（统计、消融、诚实刻度）</h2>
+<div class="card">
+<p><b>S3 统计复算与稳健性</b> <span class="badge badge-g">复现成功</span></p>
+<p>从 Table 3 的 10 个配对 Δ 复算：均值 <b>{r['S3']['recomputed']['mean']:.3f}</b>（论文 2.36）、t=<b>{r['S3']['recomputed']['t']:.3f}</b>（论文 4.06）——完全对上。留一法：去掉最大 Δ(+5.46) 均值仍 <b>{r['S3']['leave_one_out']['drop_max']['mean']:.2f}</b>，去掉次大仍 {r['S3']['leave_one_out']['drop_2nd_max']['mean']:.2f}，9/10 方向为正。<b>结论稳健但脆弱</b>：n=10 小样本、dz=1.28 偏大（小样本易 inflated），不是单点支撑，但也不能当成大样本定论。</p>
+<p><b>S4 消融与混杂</b> <span class="badge badge-y">pass + 缺口</span></p>
+<p>{r['S4']['decision']}。</p>
+<p><b>S5 论文诚实刻度</b> <span class="badge badge-g">高诚实度</span></p>
+<p>{r['S5']['decision']}。论文主动声明：仅 coding 有 n=10、其余三域每条件仅 1 次；优化流程固定；自修改 harness 可能"讨好"评估器而未解任务；LLM judge 偏差；并故意纳入一条"被接受却没修复目标"的 edit。</p>
+</div>
+
+<h2>四、三层诚实结论</h2>
+<div class="card">
+<p><b>第一层 · 事实：</b>论文存在且真实，方法清晰（SIM 给 harness 优化器记实验记录本），10 对编码实验 +2.36 分、p=0.003 可复现；跨模型 workspace 84.75 vs 73.42。GitHub 生态活跃，awesome-rsi 有严格证据阶梯。</p>
+<p><b>第二层 · 推断边界：</b><span class="red">改 harness ≠ 改模型</span>（权重冻结）；<span class="red">L2 保留增益 ≠ L3 改进器增益</span>（优化流程固定，改进机制本身未变）；<span class="red">小样本稳健 ≠ 普适</span>（n=10、其余域 n=1）；<span class="red">记忆因果贡献未隔离</span>（完整包测试）。媒体把 L2 抬成 L3、把 harness 抬成模型智能，是越级叙事。</p>
+<p><b>第三层 · 方法教训：</b>① 术语歧义（RSI 两义）必须触发澄清门禁——本次自身翻车；② "预测 vs 实测配对 + 保留失败 edit + 来源追溯"是 SIM 的可迁移机制增量；③ 连测试期望值都会算错（本次 t=3.87 而非 10），审计链条要一路覆盖到测试本身。</p>
+</div>
+
+<h2>五、吸收有益经验（反哺框架）</h2>
+<div class="card">
+<p>SIM 的记忆结构与本项目知识库高度同构，但有 3 处值得吸收：</p>
+<table><tr><th>SIM 机制</th><th>本项目对应</th><th>吸收动作</th></tr>
+<tr><td>predicted / fixed / missed 配对</td><td>目前 support/evidence 偏事后记述</td><td>新增"事前预测 vs 事后实测"字段，让教训可被证伪</td></tr>
+<tr><td>失败/回归 edit 也保留</td><td>已有 failed 教训，但易被 worked 模板套空</td><td>强化"失败样本是信息不是噪声"的入库纪律</td></tr>
+<tr><td>carried_from / aliases 来源追溯与合并</td><td>provenance / 去重合并</td><td>跨来源合并时保留别名轨迹，防来源丢失</td></tr>
+</table>
+<p><span class="badge badge-g">前景判断</span> RSI 作为一个研究方向的前景是<b>真实的但分层的</b>：harness/memory 层的持续自我改进已被初步验证（L2），而完整的"改进改进机制"（L3）仍未被证明。本项目应吸收其<b>记忆工程</b>（结构化记录+失败保留+来源追溯），同时守住<b>"结构递归≠实证改进""触发≠真相"</b>的判据——这既是本次对论文的态度，也是框架对自身的要求。</p>
+</div>
+
+<p class="small">本报告的论文事实来自已下载原文 PDF；数字可复算。属研究方法演练，不构成对 RSI 领域的最终判决或任何投资建议。</p>
+</body></html>"""
+
+(ROOT / "sim_report.html").write_text(html, encoding="utf-8")
+print("saved sim_report.html")

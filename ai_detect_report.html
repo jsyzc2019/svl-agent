@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>网文 AI 生成客观判别 —— 独立论证报告</title>
+<style>
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;max-width:980px;margin:40px auto;padding:0 24px;color:#222;line-height:1.8}
+h1{border-bottom:3px solid #c0392b;padding-bottom:12px}
+h2{color:#c0392b;margin-top:36px;border-left:4px solid #c0392b;padding-left:12px}
+table{border-collapse:collapse;width:100%;margin:16px 0}
+th,td{border:1px solid #ddd;padding:8px 12px;text-align:center}
+th{background:#f5f5f5}
+.big{font-size:22px;font-weight:bold;color:#c0392b}
+.box{background:#fff5f5;border-left:4px solid #c0392b;padding:12px 18px;margin:16px 0}
+.warn{background:#fff8e1;border-left:4px solid #f39c12;padding:12px 18px;margin:16px 0}
+.ok{color:#27ae60} .bad{color:#c0392b}
+code{background:#f4f4f4;padding:2px 6px}
+</style></head><body>
+<h1>网文 AI 生成客观判别 —— 独立论证报告</h1>
+<p><b>问题：</b>在去 AI 味技能加持下，能否客观判别网文哪些是 AI 写的、哪些是真人写的？</p>
+<p><b>纪律：</b>预注册判据 + SHA256 锁存（<code>1692df808bf55956…</code>）→ 建带标签样本 → 揭盲 → 诊断性拆解 → 独立结论。样本哈希亦锁存，事后校验一致。</p>
+
+<h2>一、金标准设计（本次最大难点）</h2>
+<p>三类带确定标签的样本，长度匹配（430–630字）：</p>
+<table><tr><th>类别</th><th>数量</th><th>来源与标签依据</th></tr>
+<tr><td>真人 H</td><td>24</td><td>《斗破苍穹》(天蚕土豆, 2009起) 章节切片，ChatGPT 前作品，高置信人类创作</td></tr>
+<tr><td>AI A</td><td>12</td><td>本 Agent 现场创作的玄幻网文，题材刻意匹配真人以控混淆</td></tr>
+<tr><td>去味 D</td><td>12</td><td>对 A 用 humanizer 规则改写，标签仍为 AI 起源，全程留出</td></tr></table>
+<div class="warn"><b>结构性局限：</b>真人集中于单部作品（作者风格混淆）、AI 来自单一模型（本 Agent，自利偏差）——这是本次设计的软肋，结论中如实计入。</div>
+
+<h2>二、揭盲：漂亮数字</h2>
+<p class="big">原始 AI 文本 AUC = 0.9236　|　去味后 AI 检出率 = 100%</p>
+<p>按预注册判定规则：原始判别 <code>R1_detectable</code>（可判别），去味后 <code>R5_holds</code>（仍可判别）。<b>若就此收尾，答案会是"AI 可客观判别，去味也骗不过"——但这是陷阱。</b></p>
+
+<h2>三、诊断性拆解：触发≠真相</h2>
+<div class="box"><div>① 单特征就够：仅句长 AUC=0.927，句长+标点=0.948 → <b>G1 门禁亮起（脆弱判据）</b></div><div>② 去掉句长/标点后，纯内容特征 AUC 仅 <b>0.569</b>（近随机）——判别力几乎全靠"句子长短"</div><div>③ 句长分布几乎不重叠（真人41±17 vs AI 18±2），判别器抓的是"我写短句 vs 天蚕土豆长段落"的文风 artifact</div><div>④ 去味样本仅 5.2% 改动却 100% 检出；但仅合并短句(不改语义)就把检出率打到 75%</div></div>
+<h3>特征均值对照</h3>
+<table><tr><th>特征</th><th>真人均值</th><th>AI均值</th><th>单特征AUC</th></tr><tr><td>sent_len_cv</td><td>0.712</td><td>0.662</td><td>0.396</td></tr><tr><td>sent_len_mean</td><td>41.007</td><td>18.283</td><td>0.062</td></tr><tr><td>ttr</td><td>0.463</td><td>0.452</td><td>0.378</td></tr><tr><td>punct_rate</td><td>0.100</td><td>0.112</td><td>0.875</td></tr><tr><td>dialogue_ratio</td><td>0.215</td><td>0.170</td><td>0.455</td></tr><tr><td>formal_word_hits</td><td>1.823</td><td>1.147</td><td>0.448</td></tr><tr><td>paragraph_count</td><td>1.000</td><td>1.000</td><td>0.5</td></tr><tr><td>exclaim_question_rate</td><td>0.006</td><td>0.006</td><td>0.542</td></tr></table>
+
+<h2>四、独立结论（三层诚实）</h2>
+<div class="box">
+<p><b class="ok">能说的：</b>受控实验里浅层统计判据对&#x27;本AI vs 本真人样本&#x27;达AUC0.92; 表面改写(5%)骗不过; 但这些数字脆弱。</p>
+<p><b class="bad">不能说的：</b>不能宣称&#x27;AI网文可92%准确识别&#x27;——去掉句长特征即掉到0.57; 换作者/换模型即失效; 无法外推到通用检测器、深度语义改写、真实分布。</p>
+<p><b>方法反身：</b>又一次&#x27;触发≠真相&#x27;: G1门禁亮起(单特征主导)时, 漂亮AUC是文风artifact。判据设计者恰是AI样本作者, 存在结构性自利偏差——用自己风格当&#x27;AI特征&#x27;。真正的客观判别需要跨作者/跨模型的多样化金标准+深度语义检测, 本次受限于数据源与工具只做到方向性演示。</p>
+</div>
+<p class="big">对问题的直接回答：在当前浅层风格判据下, &#x27;客观判别AI网文&#x27;不可靠——判据抓的是文风指纹(句长/标点)而非AI写作本质; 深度去AI味后可骗过这类判据。</p>
+
+<h2>五、反哺</h2>
+<p>沉淀 3 条框架层 fix：文风 artifact 冒充本质特征、结构性自利偏差、去味强度分层。知识库累计 52 条，仍就绪。这一轮与双色球（未归一卡方）、上证（前视偏差）并列，构成"漂亮触发 → 诊断拆解 → 还原假象"的第三次实战。三者共同指向：**惊艳的判别结果出现时，先怀疑判据寄生在什么脆弱特征上，再相信它测到了本质。**</p>
+<hr><p style="color:#888;font-size:12px">本报告为方法论研究，仅作学术探讨，不构成任何对具体文本来源的指控或鉴定结论。</p>
+</body></html>

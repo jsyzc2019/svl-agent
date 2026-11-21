@@ -1,0 +1,141 @@
+{
+  "document": "DeepMind essay 框架论证结果",
+  "pre_registration_sha256": "ca9eebdbfa55974b4c128908c364d8b8e5b29fcd9cf8dda85af32ff66e3b9b63",
+  "E1": {
+    "id": "E1",
+    "platform_is_dmi": true,
+    "disclaimer_explicit": true,
+    "decision": "主体=作者/DMI团队观点，非Google官方立场（免责声明明确）",
+    "misplacement_guard": "二手若读成'DeepMind官方预言ASI'→主体错位；原作者有免责不连坐",
+    "preserve": true,
+    "pass": true
+  },
+  "E2": {
+    "id": "E2",
+    "arithmetic_recomputed": {
+      "effective_compute_per_year": [
+        11.25,
+        22.5
+      ],
+      "at_least_10x": true,
+      "ten_year_factor": 10000000000,
+      "ten_year_is_10_billion": true,
+      "exceeds_world_population": true,
+      "cost_after_10y": 953.67,
+      "cost_approx_1000": true
+    },
+    "arithmetic_self_consistent": true,
+    "assumptions_labeled": true,
+    "caveats": [
+      "not a given",
+      "While far from certain",
+      "Imagine that this trend holds",
+      "largely an empirical question"
+    ],
+    "decision": "算术自洽+主动标注假设=高严谨度（preserve）",
+    "critical_separation": "算术自洽≠外推成立：趋势维持十年是经验问题，不因算对就认预测为真",
+    "pass": true
+  },
+  "E3": {
+    "id": "E3",
+    "falsifiable_predictions": [
+      {
+        "claim": "RSI 在可自动验证领域最快",
+        "why": "带领域(数学证明)+可观测条件(自动验证)+对照(其他领域滞后)，可被未来观测证伪"
+      },
+      {
+        "claim": "多智能体协调收益递减",
+        "why": "可观测的规模-收益关系，可证伪"
+      },
+      {
+        "claim": "capability overhang 导致陡跳",
+        "why": "因果机制+可观测条件，可证伪"
+      },
+      {
+        "claim": "RSI runaway 是经验问题",
+        "why": "作者自己标为经验问题——开放但可研究，非不可证伪叙事"
+      }
+    ],
+    "grand_narratives": [
+      {
+        "claim": "ASI 将加速科学突破",
+        "quote": "could ... accelerating science and enabling breakthroughs in medicine, materials, clean energy"
+      },
+      {
+        "claim": "认知工业化重塑经济",
+        "quote": "cognitive industrialization alone could reshape knowledge work and the broader economy"
+      }
+    ],
+    "n_falsifiable": 4,
+    "n_narrative": 2,
+    "decision": "4条可证伪具体预测 + 2条宏大叙事，分层不混同",
+    "pass": true
+  },
+  "E4": {
+    "id": "E4",
+    "rows": [
+      {
+        "aspect": "feedback_quality",
+        "relation": "本文 poor feedback→loops degenerate ↔ 我方 §36 predicted/observed + §38 评估可靠性",
+        "verdict": "同谱系"
+      },
+      {
+        "aspect": "eval_scaling",
+        "relation": "本文 评估须扩展到超人领域 ↔ 我方尚未显式覆盖",
+        "verdict": "新增量"
+      },
+      {
+        "aspect": "three_mechanisms",
+        "relation": "本文 code/data/group 三分 ↔ 我方 harness/memory 组件分类/awesome-rsi 阶梯",
+        "verdict": "不同切分轴·同谱系"
+      },
+      {
+        "aspect": "model_measure_repeat",
+        "relation": "本文 model/measure/forecast/repeat ↔ 我方 PDCA/SVL 闭环",
+        "verdict": "同谱系"
+      }
+    ],
+    "contamination_declared": true,
+    "decision": "一律标注同谱系呼应/不同切分轴，非独立验证；新增量单列",
+    "guard": "若把呼应当成对方面框架的独立佐证→触发KB-STRUCT02污染门禁",
+    "pass": true
+  },
+  "E5": {
+    "id": "E5",
+    "n_self_declarations": 6,
+    "samples": [
+      "明确区分'已知上界'与'上界之前大片未探明区域'",
+      "明确 scaling laws 'hold only within familiar boundaries'，不能自信预测 AGI/ASI 所需规模",
+      "明确数据'not all data produced by AI models is useful for training'"
+    ],
+    "decision": "高诚实度（preserve）：主动声明6处边界/不确定",
+    "pass": true
+  },
+  "E6": {
+    "id": "E6",
+    "candidates": {
+      "evaluation_scalability": {
+        "content": "评估须可扩展到超人领域（人类群体也难判AI输出）",
+        "concrete_action": "当评估方案依赖人工判断且目标为超人域时 → flag '评估不可扩展'，要求补充自动验证/可扩展判据方可下强结论",
+        "verdict": "能长出牙（但需先查是否与已有 evaluation_reliability 重复→不重复则为轻量增量）"
+      },
+      "domain_specific_rsi_speed": {
+        "content": "RSI 在可自动验证领域(数学证明)最快、其他领域滞后",
+        "concrete_action": "这是一条可证伪预测，价值在于'可追踪'，但无现成执行流挂载点 → 记 preserve 观察项，不强行造模块",
+        "verdict": "暂不长牙（避免为改进而改进）"
+      }
+    },
+    "actionable": [
+      "evaluation_scalability"
+    ],
+    "decision": "新增量中 1 项可长牙（评估可扩展性），1 项记观察不强造模块",
+    "kb_meta01_compliance": true,
+    "pass": true
+  },
+  "conclusion": {
+    "layer1_fact": "DeepMind Institute 2026-11-19 观点文（作者 Tim Genewein，基于 From AGI to ASI 技术报告）：智能连续统 + 认知工业化 + 四条路径(scaling/范式/协调/RSI) + 多路径复合；含数量级外推且算术自洽；Disclaimer 明确非 Google 官方立场。",
+    "layer2_boundary": "观点文≠实证(无统计量可复算)；算术自洽≠外推成立(趋势维持十年是经验问题)；DMI个人观点≠官方立场；RSI段与我方判据同谱系呼应≠独立验证；可证伪具体预测与不可证伪宏大叙事须分层。",
+    "layer3_method": "①判据适配对象：观点文查外推链算术+假设明示+可证伪分级，不套统计复算/分类自洽；②主体归属精确到'作者/平台/免责'三层；③同谱系呼应标污染；④吸收按KB-META01：评估可扩展性可长牙、领域速度预测记观察不强造模块。"
+  },
+  "all_judgments_fired": true
+}

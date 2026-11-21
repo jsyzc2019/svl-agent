@@ -1,0 +1,290 @@
+================================================================================
+一手事实记录：When, Where, and How Experience Becomes Structure: Mechanisms for
+Recursive Self-Improvement in LLM Agents
+================================================================================
+获取说明（来源隔离）：
+- 用户给定链接 https://openreview.net/forum?id=X8epsNeCZk —— OpenReview 直连返回
+  403 browser-verification challenge，PDF 端点 api.openreview.net / api2 均 403。
+- 经标题+ID 反查，找到同一论文的开放获取版本 Preprints.org
+  manuscript 202611.0261 v1，DOI 10.20944/preprints202611.0261.v1（2026-11-04），
+  标题与作者完全一致，确认同一篇。
+- Preprints.org 直连亦被 Akamai 403；经 WebFetch 独立抓取通道获取全文 HTML
+  （99713 字符）。本文件保留其 §1–4、§9 逐字原文 + 完整摘要。
+- §10/§11 正文被抓取通道固定截断（15000 字），未能逐字获取；其核心论点
+  （独立验证、三大挑战、controlled/longitudinal 评估大纲）已在摘要逐字原文
+  与二手媒体转述中覆盖，见 rsi_structure_evidence.json 的 secondary_narrative。
+- 因此：本文件一手部分 = 摘要 + §1–4 + §9 逐字；二手 = 媒体转述，分层存放。
+
+--------------------------------------------------------------------------------
+元数据
+--------------------------------------------------------------------------------
+Title: When, Where, and How Experience Becomes Structure: Mechanisms for
+       Recursive Self-Improvement in LLM Agents (v1)
+Venue: OpenReview forum X8epsNeCZk ; Preprints.org 202611.0261/v1
+DOI: 10.20944/preprints202611.0261.v1 ; Date: 2026-11-04
+Type: SURVEY（综述，非实证论文；40 项代表性研究 + 20 个更新闭环对照）
+Authors: Siqi Dai†, Jingqing Ruan‡†, Bin Zhang*‡, Zhiwei Xu, Lin Cheng, Ke Zeng,
+  Zhongda Su, Feng Hong, Nan Jia, Wenxuan Shi, Dapeng Li, Chuanchen Luo,
+  Yiqun Chen, Zongyang Ma, Xue Yan, Yang Li, Mingzhe Xing, Hangyu Mao,
+  Bowei Dai, Zhizhao Zeng, Guoliang Fan
+  († equal contribution, ‡ project lead, * corresponding)
+Affiliations (from secondary): 中科院自动化所(第一署名, 复杂系统认知与决策重点实验室
+  范国良课题组)、美团、山东大学、华中科技大学、中科院计算所、理想汽车、中国人民大学、
+  南洋理工大学、上海交通大学、中科院微电子所
+
+--------------------------------------------------------------------------------
+ABSTRACT（逐字原文）
+--------------------------------------------------------------------------------
+Recursive self-improvement (RSI) studies how AI systems modify themselves and
+carry those changes into the generation of subsequent improvements. LLM agents
+can pursue this process by using interaction experience to revise Prompt, Memory,
+Skill, and Harness in some cases while keeping the task-execution model's weights
+fixed. However, execution feedback does not directly specify which component
+should change, and a locally successful revision may not remain useful across
+tasks or subsequent improvement cycles. Understanding how experience becomes
+persistent agent structure therefore requires examining when evidence justifies
+a change, where that change should act, and how it is constructed, verified, and
+retained. This survey connects four components--Prompt, Memory, Skill, and
+Harness--with seven analytical functions: Collect, Evaluate, Diagnose, Abstract,
+Update, Verify, and Consolidate. The resulting framework supports comparisons of
+instruction revision, memory management, skill construction and maintenance, and
+Harness evolution through their update loops. These comparisons examine how
+mechanisms use observations to construct candidate changes, distinguishing
+feedback that triggers revision from evidence that supports retention. The
+analysis further addresses coordinated updates across components and the revision
+or retirement of retained components as tasks, tools, and models change. Finally,
+we identify cross-component attribution, long-term effectiveness, and independent
+validation as key challenges, and outline controlled and longitudinal evaluations
+of task-performance gains, the contribution of inherited state, and the
+effectiveness of subsequent updates.
+
+Keywords: LLM agent ; recursive self-improvement
+
+--------------------------------------------------------------------------------
+1. INTRODUCTION（逐字，节选核心）
+--------------------------------------------------------------------------------
+Recursive self-improvement (RSI) refers to the process by which AI systems learn
+from their experience to improve themselves, with each improvement potentially
+enabling further improvements. For large language model (LLM) agents, this
+process can operate through changes to Prompt, Memory, Skill, and Harness while
+the task-execution model's weights remain fixed. Retained changes can influence
+both subsequent task execution and the diagnosis, generation, and selection of
+further updates. Some studies also combine external component updates with model
+training. However, interaction outcomes often provide incomplete evidence about
+what should change and whether a proposed modification will remain useful across
+tasks and environments.
+
+[四组件定义逐字] Automatic prompt optimization revises instructions and
+demonstrations that directly condition model behavior. Memory mechanisms extract,
+organize, retrieve, revise, and discard information acquired through previous
+interactions. Skill mechanisms construct reusable procedures and maintain the
+libraries through which these procedures are selected and invoked. Harness
+mechanisms govern context assembly, tool mediation, execution orchestration, and
+behavioral checks. We refer to these components as Prompt, Memory, Skill, and
+Harness. These components interact within a system: a harness may retrieve
+memories and invoke skills, while prompts guide their use. The four categories
+represent functional roles of editable agent state, distinguished by how retained
+content affects execution rather than by mutually exclusive software modules or
+storage formats.
+
+[三个问题逐字] Three connected questions organize our analysis. When should
+interaction evidence trigger an update, justify its retention, or warrant revision
+or retirement? Where should an intervention act—on Prompt, Memory, Skill, Harness,
+or multiple components in coordination? How can evidence be transformed into
+reusable modifications, verified against potential regressions, and integrated
+for subsequent use? These questions are interdependent.
+
+[七阶段引入逐字] To compare such interventions systematically, we introduce a
+lifecycle comprising seven analytical functions. Collect acquires interaction
+traces and feedback; Evaluate assesses observed execution against task objectives;
+and Diagnose identifies potential defects and intervention targets. Abstract
+derives reusable content from the evidence, and Update implements a candidate
+component change. Verify tests the effects of the proposed change. Consolidate
+selects and retains content for later use, including possible use in subsequent
+updates.
+
+Figure 1. When, where, and how experience becomes agent structure. (a) Execution,
+verification, and later evidence inform update and retention decisions. (b)
+Experience informs the choice of individual or coordinated component targets. (c)
+The lifecycle connects evidence assessment, candidate construction, and
+verification and retention. Retained state supports both subsequent task
+execution and the generation of further updates.
+
+--------------------------------------------------------------------------------
+2. BACKGROUND, SCOPE, AND SURVEY ORGANIZATION（逐字，节选核心）
+--------------------------------------------------------------------------------
+2.1 From Feedback to Recursive Self-Improvement
+The component being updated and the process that updates it are distinct. A
+learned selector can operate on Memory; an LLM can revise a Prompt or construct a
+Skill; and a fixed gate can accept or reject a proposed update. These processes
+can change different components even when they use the same update algorithm.
+
+2.2 Scope and Comparison Criteria
+This survey examines how LLM agents use interaction experience to improve Prompt,
+Memory, Skill, and Harness. The title uses structure to refer to these components
+and their retained contents. We focus on updates that leave the task executor's
+model weights fixed, though the updater itself may be trained.
+
+This survey examines methods that retain component updates for later tasks. It
+also examines whether a retained component or update process enters a later
+improvement cycle and helps produce further updates. Reuse in later tasks alone
+does not establish that recursive dependency. Figure 3 illustrates the distinction
+between a revised answer, a component retained for later tasks, and a change to
+the process that produces updates.
+
+Figure 3. Three patterns distinguished by what survives: a revised answer, a
+component retained for later tasks, or a change to the process that produces
+updates. Testing recursive improvement requires tracing what enters later cycles
+and evaluating the updates produced.
+
+--------------------------------------------------------------------------------
+3. WHERE EXPERIENCE BECOMES STRUCTURE: FOUR COMPONENTS（逐字，节选核心）
+--------------------------------------------------------------------------------
+3.1 Operational definitions
+These criteria classify components by how content is used in a system. The same
+text can have different uses: a rule embedded in a system Prompt is Prompt; an
+independently retrieved case is Memory; a reusable procedure that can be selected
+and executed is Skill; and dispatch, feedback, or validation logic implemented in
+Harness is part of Harness.
+
+[原文强调] The same Harness can therefore manage Prompt, Memory, and Skill. An
+agent can use several components together. Evaluating an update requires
+identifying which component changed and how the change affects the others.
+
+3.2 Complementary Comparison Dimensions —— 五维度逐字：
+- Persistence: how long a change remains available without being re-derived.
+- Proceduralization: whether the retained content describes experience or
+  provides a reusable process.
+- Enforcement: whether use depends on model compliance or is imposed by the
+  surrounding system.
+- Editability: how easily the retained content can be inspected, revised,
+  versioned, and rolled back.
+- Governance burden: verification, oversight, and maintenance work associated
+  with a change.
+
+Classification [逐字]: First identify the content that changes, then determine
+how it affects later execution. This survey classifies content directly included
+in context as Prompt, records retrieved under a condition as Memory, and
+procedures selected and executed by the agent as Skill. Changes to mechanisms
+such as context management, tool dispatch, or verification are classified as
+Harness. A system can use several components, so each change should be identified
+separately.
+
+3.3 Prompt and Memory: Specification Versus Selective Recall
+This survey distinguishes them by use: content directly included in context is
+analyzed as Prompt, while records selected and retrieved by a query or another
+condition are analyzed as Memory. Text, storage medium, and retention duration do
+not determine the classification.
+
+3.4 Memory and Skill: Experience Versus Callable Procedure
+This survey distinguishes content used as an example from a reusable procedure
+selected and executed by the agent. Applicability conditions, execution steps,
+and outcome checks help describe how a procedure is used.
+
+3.5 Skill and Harness: Procedures and Execution Management
+Changing a procedure's steps updates Skill state; changing its dispatcher,
+context manager, tracing, or admission mechanism updates Harness state.
+
+3.6 Research Landscape Across Components
+Figure 4 links the operational definitions to forty representative studies.
+
+--------------------------------------------------------------------------------
+4. HOW EXPERIENCE BECOMES STRUCTURE: AN ANALYTICAL LIFECYCLE（逐字）
+--------------------------------------------------------------------------------
+4.1 Functions of the Seven Stages
+The stages describe the operations that can turn experience into a reusable
+component update. Collect gathers interaction records and feedback. Evaluate
+assesses what happened during execution. Diagnose identifies a problem or a target
+for change. Abstract derives reusable information from the experience, such as a
+fact, rule, or procedure. Update constructs or revises a component. Verify tests
+the effects of the proposed change. Consolidate selects and retains content for
+later use, including possible use in subsequent updates.
+
+Evaluate and Verify serve different purposes [逐字，关键]: Evaluate examines an
+existing execution to provide evidence for an update; Verify tests a candidate
+change. For example, a failed API call can help identify a problem, while testing
+a revised request procedure can show whether the proposed change works.
+
+The stages are analytical tools, not mandatory steps in a fixed order. A method
+may combine several stages, omit some, or test a change after it has been put into
+use.
+
+4.2 The Seven Stages in Existing Studies
+Figure 5 compares one specified update loop from each of 20 studies. An asterisk
+marks a function embedded in another operation; NR means that no operation
+implementing that function is reported for the specified loop, not that the study
+lacks a final evaluation.
+
+[原文案例逐字] OPRO uses the history of instructions and scores to generate and
+select new instructions; its reported loop does not specify a separate diagnosis
+or abstraction operation. GEPA uses feedback on a selected module to identify
+errors and incorporate reusable strategies into revised instructions, then tests
+the changes on a feedback batch. ReasoningBank uses an LLM to judge task outcomes
+and adds extracted memory items; its described writing loop does not report a
+separate test of each item before insertion. AHE checks the effects of a trial
+edit in a subsequent round and then keeps or reverts it. These examples show how
+the same stages can be implemented differently across update loops.
+
+--------------------------------------------------------------------------------
+9. WHEN COMPONENTS ARE UPDATED AGAIN（逐字，核心）
+--------------------------------------------------------------------------------
+9.1 What Triggers Further Updates
+Task failures or declining performance can prompt a system to inspect an existing
+component. [SkillForge / Self-Harness 例] Both use failures, but the former revises
+procedural content while the latter changes execution mechanisms. Failure alone
+does not specify what to edit; the system must analyze what happened.
+New information can also trigger an update without a failed task. [Mem0 / Zep 例]
+The question here is how new and existing information should coexist, rather than
+whether a task succeeded or failed.
+Changes to a model, tool, or task can also make a component unsuitable.
+
+9.2 When Components Need to Be Updated Together
+A change to one component can affect how another is constructed or used. Whether
+coordinated updates are needed depends on the actual dependency; their presence
+in the same system does not mean they must always be changed together.
+[关键逐字] Both external updates and parameter changes may affect results, so the
+gains of the combined system cannot all be attributed to one external component.
+
+9.3 When to Retain, Revise, or Retire
+Proposing a change and accepting it are different decisions. Self-Harness runs
+regression checks and merges a candidate into the next version only when it meets
+the acceptance conditions. AHE instead allows an edit to be used in the next round,
+then retains or reverts it based on the results. Verification can occur before use
+or draw on feedback from a trial; the tested tasks and acceptance conditions
+affect what is retained.
+For a Skill library, SLIM compares validation performance with and without a
+Skill and uses this evidence together with usage information to decide whether to
+retain or retire it. Retirement changes what can be selected later, so the check
+needs to cover intended uses, including less frequent but still important tasks.
+
+9.4 When the Improvement Process Itself Changes [全文逐字，最关键]
+Retained components can directly help with later tasks, or they can help propose
+or select the next change. The latter has a more direct connection to recursive
+self-improvement: earlier experience affects not only what the agent does but also
+how the system improves. Using earlier experience in another update does not by
+itself prove that the update method has become more effective.
+
+Harness2 stores selected components and task experience in an improvement library
+that can inform Harness changes on later tasks. Each task still starts from a
+common initial execution Harness, and the stage instructions and decision rules
+remain fixed. The paper reports that the accumulated library helps later
+improvement. What changes here is the set of components and experience available
+to later edits, not every update rule.
+
+VERSE also revises the Prompt, Skills, tools, hooks, and notes used by its improver
+while modifying the task executor's Harness; both models' weights remain fixed. It
+combines execution checks available to the improver with self-modification and
+studies their effect on subsequent improvement. The modified content also
+participates directly in producing later edits.
+
+SePO first evolves the system Prompt of a Prompt Agent that proposes changes across
+a set of tasks. It then fixes the evolved Prompt Agent and uses it to optimize a
+target agent's Prompt. The guidance for generating candidates can itself be
+updated, but the two stages should be distinguished: the guidance does not
+continue to evolve simultaneously in the second stage.
+
+Determining whether an improvement process is more effective requires examining
+later update outcomes and what else changed. Better final task performance may
+result from better components, different candidate selection, or additional
+search; the number of rounds alone does not identify which factor produced the
+gain.

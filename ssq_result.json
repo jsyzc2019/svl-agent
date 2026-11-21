@@ -1,0 +1,70 @@
+{
+  "prereg_sha256": 0.05,
+  "n_draws": 3530,
+  "date_range": [
+    "2003-02-23",
+    "2026-11-19"
+  ],
+  "seed": 20261121,
+  "n_pseudo": 200,
+  "tests": {
+    "A1_chi2_red": {
+      "statistic": 88257.67,
+      "pct_in_random": 0.995,
+      "exceeds_97_5": true
+    },
+    "A2_chi2_blue": {
+      "statistic": 8.91,
+      "pct_in_random": 0.13,
+      "exceeds_97_5": false
+    },
+    "B1_structure_ks": {
+      "pct_in_random": {
+        "sum_vals": 0.96,
+        "odd_ratios": 0.985,
+        "big_ratios": 0.895,
+        "consecutive_counts": 0.52,
+        "repeat_counts": 0.195,
+        "ac_values": 0.495
+      },
+      "n_features_exceed_95": 2,
+      "threshold_ge_2": "同上：须超出随机对照97.5%分位"
+    },
+    "C1_autocorr": {
+      "ac1_repeat_real": -0.001,
+      "pct_in_random": 0.49
+    },
+    "D0_blind_comparison": {
+      "real_anomaly_total": 15.286,
+      "real_score_breakdown": {
+        "z_red": 2.734,
+        "z_blue": 1.166,
+        "z_zone": 3.994,
+        "ac1_z": 0.007,
+        "ks_sum_vals": 2.112,
+        "ks_odd_ratios": 2.802,
+        "ks_big_ratios": 1.277,
+        "ks_consecutive_counts": 0.125,
+        "ks_repeat_counts": 0.911,
+        "ks_ac_values": 0.157,
+        "total": 15.286
+      },
+      "pseudo_mean": 7.878,
+      "pseudo_max": 13.287,
+      "real_rank_of": 201,
+      "percentile_more_anomalous_than_pseudo": 1.0,
+      "threshold": 0.95,
+      "triggered_H1": true
+    },
+    "subperiod_stability": {
+      "early": {
+        "chi2_red_pct": 0.0,
+        "chi2_blue_pct": 0.18
+      },
+      "late": {
+        "chi2_red_pct": 0.0,
+        "chi2_blue_pct": 0.93
+      }
+    }
+  }
+}

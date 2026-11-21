@@ -1,0 +1,870 @@
+{
+  "lessons": [
+    {
+      "lesson_id": "L-inventory-2026-c0",
+      "trigger": [
+        "macro",
+        "cycle_phase",
+        "narrative_truth",
+        "hindsight_risk"
+      ],
+      "action": "遇到同类情境时，先验须让位于预注册判据的结果：当前状态和'印象'相反：营收库存双升是主动补库，数据推翻'转变属实'的先验",
+      "rationale": "来自 inventory-2026 的认知修正；事前预期「当前大概率被动补库」，实际「当前主动补库；被动补库仅在2025Q4短暂出现且已结束；名义含水分」；先验被推翻。",
+      "kind": "pitfall",
+      "support": [
+        "inventory-2026"
+      ],
+      "confidence": 0.5,
+      "provenance": "inventory-2026",
+      "improvement_class": ""
+    },
+    {
+      "lesson_id": "L-inventory-2026-c1",
+      "trigger": [
+        "macro",
+        "cycle_phase",
+        "narrative_truth",
+        "hindsight_risk"
+      ],
+      "action": "遇到同类情境时，先验须让位于预注册判据的结果：名义库存+11.6%里约5pct是PPI价格效应，实际物量仅+6.6%",
+      "rationale": "来自 inventory-2026 的认知修正；事前预期「当前大概率被动补库」，实际「当前主动补库；被动补库仅在2025Q4短暂出现且已结束；名义含水分」；先验被推翻。",
+      "kind": "pitfall",
+      "support": [
+        "inventory-2026"
+      ],
+      "confidence": 0.5,
+      "provenance": "inventory-2026",
+      "improvement_class": ""
+    },
+    {
+      "lesson_id": "L-inventory-2026-b0",
+      "trigger": [
+        "macro",
+        "cycle_phase",
+        "narrative_truth",
+        "hindsight_risk",
+        "finance",
+        "audit_signals"
+      ],
+      "action": "复用防偏差措施：入场先记录先验倾向",
+      "rationale": "inventory-2026 部署该措施后，结论经得起揭盲与消融检验",
+      "kind": "anti_bias",
+      "support": [
+        "inventory-2026",
+        "finance-hcnh"
+      ],
+      "confidence": 0.6666666666666666,
+      "provenance": "inventory-2026",
+      "improvement_class": ""
+    },
+    {
+      "lesson_id": "L-inventory-2026-b1",
+      "trigger": [
+        "macro",
+        "cycle_phase",
+        "narrative_truth",
+        "hindsight_risk",
+        "finance",
+        "audit_signals"
+      ],
+      "action": "复用防偏差措施：预注册判据",
+      "rationale": "inventory-2026 部署该措施后，结论经得起揭盲与消融检验",
+      "kind": "anti_bias",
+      "support": [
+        "inventory-2026",
+        "finance-hcnh"
+      ],
+      "confidence": 0.6666666666666666,
+      "provenance": "inventory-2026",
+      "improvement_class": ""
+    },
+    {
+      "lesson_id": "L-inventory-2026-b2",
+      "trigger": [
+        "macro",
+        "cycle_phase",
+        "narrative_truth",
+        "hindsight_risk",
+        "finance",
+        "audit_signals"
+      ],
+      "action": "复用防偏差措施：盲判/揭盲分离",
+      "rationale": "inventory-2026 部署该措施后，结论经得起揭盲与消融检验",
+      "kind": "anti_bias",
+      "support": [
+        "inventory-2026",
+        "finance-hcnh"
+      ],
+      "confidence": 0.6666666666666666,
+      "provenance": "inventory-2026",
+      "improvement_class": ""
+    },
+    {
+      "lesson_id": "L-inventory-2026-b3",
+      "trigger": [
+        "macro",
+        "cycle_phase",
+        "narrative_truth",
+        "hindsight_risk"
+      ],
+      "action": "复用防偏差措施：名义实际双轨",
+      "rationale": "inventory-2026 部署该措施后，结论经得起揭盲与消融检验",
+      "kind": "anti_bias",
+      "support": [
+        "inventory-2026"
+      ],
+      "confidence": 0.5,
+      "provenance": "inventory-2026",
+      "improvement_class": ""
+    },
+    {
+      "lesson_id": "L-inventory-2026-b4",
+      "trigger": [
+        "macro",
+        "cycle_phase",
+        "narrative_truth",
+        "hindsight_risk"
+      ],
+      "action": "复用防偏差措施：历史反例对照",
+      "rationale": "inventory-2026 部署该措施后，结论经得起揭盲与消融检验",
+      "kind": "anti_bias",
+      "support": [
+        "inventory-2026"
+      ],
+      "confidence": 0.5,
+      "provenance": "inventory-2026",
+      "improvement_class": ""
+    },
+    {
+      "lesson_id": "L-finance-hcnh-c0",
+      "trigger": [
+        "finance",
+        "narrative_truth",
+        "hindsight_risk",
+        "audit_signals"
+      ],
+      "action": "遇到同类情境时，先验须让位于预注册判据的结果：判据全过只说明没违反符号约束，不等于叙事真实——早期补贴依赖是判据盲区",
+      "rationale": "来自 finance-hcnh 的认知修正；事前预期「判据全过，叙事真实」，实际「判据全过但早期补贴依赖42.6%、非经常损益21.8%，真实轨迹是动态改善而非静态真实」；先验被推翻。",
+      "kind": "pitfall",
+      "support": [
+        "finance-hcnh"
+      ],
+      "confidence": 0.5,
+      "provenance": "finance-hcnh",
+      "improvement_class": ""
+    },
+    {
+      "lesson_id": "L-finance-hcnh-b3",
+      "trigger": [
+        "finance",
+        "narrative_truth",
+        "hindsight_risk",
+        "audit_signals"
+      ],
+      "action": "复用防偏差措施：下挖判据盲区",
+      "rationale": "finance-hcnh 部署该措施后，结论经得起揭盲与消融检验",
+      "kind": "anti_bias",
+      "support": [
+        "finance-hcnh"
+      ],
+      "confidence": 0.5,
+      "provenance": "finance-hcnh",
+      "improvement_class": ""
+    },
+    {
+      "lesson_id": "L-audit19-remedy20-fix0",
+      "trigger": [
+        "framework",
+        "self_reflection",
+        "remediation",
+        "audit"
+      ],
+      "action": "真该改的方法缺陷——改机制而非文案：P0 estimation criterion符号与生成模型相反: 真修复：criterion=-b，与生成模型同号，加回归测试",
+      "rationale": "audit19-remedy20 自我反省；事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+      "kind": "pitfall",
+      "support": [
+        "audit19-remedy20"
+      ],
+      "confidence": 0.5,
+      "provenance": "audit19-remedy20",
+      "improvement_class": "fix"
+    },
+    {
+      "lesson_id": "L-audit19-remedy20-fix1",
+      "trigger": [
+        "framework",
+        "self_reflection",
+        "remediation",
+        "audit"
+      ],
+      "action": "真该改的方法缺陷——改机制而非文案：复盘对象误用为研究对象(库存周期/华测导航): 校正scope：框架自我反省只针对逻辑方法，不针对具体研究对象",
+      "rationale": "audit19-remedy20 自我反省；事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+      "kind": "pitfall",
+      "support": [
+        "audit19-remedy20"
+      ],
+      "confidence": 0.5,
+      "provenance": "audit19-remedy20",
+      "improvement_class": "fix"
+    },
+    {
+      "lesson_id": "L-audit19-remedy20-van0",
+      "trigger": [
+        "framework",
+        "self_reflection",
+        "remediation",
+        "audit"
+      ],
+      "action": "识破虚荣改进——别拿改动冒充进步：telos/axiology/mechanism 的过度宣称: 降级报告口径：加'诚实结论''稳健边界'段落",
+      "rationale": "audit19-remedy20 自我反省；事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+      "kind": "anti_bias",
+      "support": [
+        "audit19-remedy20"
+      ],
+      "confidence": 0.5,
+      "provenance": "audit19-remedy20",
+      "improvement_class": "vanity"
+    },
+    {
+      "lesson_id": "L-audit19-remedy20-van1",
+      "trigger": [
+        "framework",
+        "self_reflection",
+        "remediation",
+        "audit"
+      ],
+      "action": "识破虚荣改进——别拿改动冒充进步：财报盲测的后验分组循环: 加反例对照量化循环(precision 0.42)，宣称'去循环已修'",
+      "rationale": "audit19-remedy20 自我反省；事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+      "kind": "anti_bias",
+      "support": [
+        "audit19-remedy20"
+      ],
+      "confidence": 0.5,
+      "provenance": "audit19-remedy20",
+      "improvement_class": "vanity"
+    },
+    {
+      "lesson_id": "L-audit19-remedy20-van2",
+      "trigger": [
+        "framework",
+        "self_reflection",
+        "remediation",
+        "audit"
+      ],
+      "action": "识破虚荣改进——别拿改动冒充进步：第22节L3复利曲线与教训计数: 识别为虚荣指标：教训数从7涨到9、置信0.5→0.556不等于认知提升",
+      "rationale": "audit19-remedy20 自我反省；事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+      "kind": "anti_bias",
+      "support": [
+        "audit19-remedy20"
+      ],
+      "confidence": 0.5,
+      "provenance": "audit19-remedy20",
+      "improvement_class": "vanity"
+    },
+    {
+      "lesson_id": "L-audit19-remedy20-keep0",
+      "trigger": [
+        "framework",
+        "self_reflection",
+        "remediation",
+        "audit"
+      ],
+      "action": "不该改的边界——反省后确认守住：把'不知道'当一等公民 / 不可约交人 / 诚实边界: 保留，且在复盘中确认这是框架的脊梁，不因'进化'而改掉",
+      "rationale": "audit19-remedy20 自我反省；事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+      "kind": "keep",
+      "support": [
+        "audit19-remedy20"
+      ],
+      "confidence": 0.5,
+      "provenance": "audit19-remedy20",
+      "improvement_class": "preserve"
+    }
+  ],
+  "reviews": [
+    {
+      "trace_id": "inventory-2026",
+      "admitted": true,
+      "expected": "当前大概率被动补库",
+      "actual": "当前主动补库；被动补库仅在2025Q4短暂出现且已结束；名义含水分",
+      "gap": "事前预期「当前大概率被动补库」，实际「当前主动补库；被动补库仅在2025Q4短暂出现且已结束；名义含水分」；先验被推翻。",
+      "worked": [
+        "部署了防偏差措施: 入场先记录先验倾向; 预注册判据; 盲判/揭盲分离; 名义实际双轨; 历史反例对照",
+        "结果推翻先验时如实记录认知修正，未强行维护原判断",
+        "入场先验置信度 0.65 保留谦逊，未锁死结论"
+      ],
+      "failed": [],
+      "root_cause": "认知根因: 当前状态和'印象'相反：营收库存双升是主动补库，数据推翻'转变属实'的先验 | 名义库存+11.6%里约5pct是PPI价格效应，实际物量仅+6.6%",
+      "lessons": [
+        {
+          "lesson_id": "L-inventory-2026-c0",
+          "trigger": [
+            "macro",
+            "cycle_phase",
+            "narrative_truth",
+            "hindsight_risk"
+          ],
+          "action": "遇到同类情境时，先验须让位于预注册判据的结果：当前状态和'印象'相反：营收库存双升是主动补库，数据推翻'转变属实'的先验",
+          "rationale": "来自 inventory-2026 的认知修正；事前预期「当前大概率被动补库」，实际「当前主动补库；被动补库仅在2025Q4短暂出现且已结束；名义含水分」；先验被推翻。",
+          "kind": "pitfall",
+          "support": [
+            "inventory-2026"
+          ],
+          "confidence": 0.5,
+          "provenance": "inventory-2026",
+          "improvement_class": ""
+        },
+        {
+          "lesson_id": "L-inventory-2026-c1",
+          "trigger": [
+            "macro",
+            "cycle_phase",
+            "narrative_truth",
+            "hindsight_risk"
+          ],
+          "action": "遇到同类情境时，先验须让位于预注册判据的结果：名义库存+11.6%里约5pct是PPI价格效应，实际物量仅+6.6%",
+          "rationale": "来自 inventory-2026 的认知修正；事前预期「当前大概率被动补库」，实际「当前主动补库；被动补库仅在2025Q4短暂出现且已结束；名义含水分」；先验被推翻。",
+          "kind": "pitfall",
+          "support": [
+            "inventory-2026"
+          ],
+          "confidence": 0.5,
+          "provenance": "inventory-2026",
+          "improvement_class": ""
+        },
+        {
+          "lesson_id": "L-inventory-2026-b0",
+          "trigger": [
+            "macro",
+            "cycle_phase",
+            "narrative_truth",
+            "hindsight_risk",
+            "finance",
+            "audit_signals"
+          ],
+          "action": "复用防偏差措施：入场先记录先验倾向",
+          "rationale": "inventory-2026 部署该措施后，结论经得起揭盲与消融检验",
+          "kind": "anti_bias",
+          "support": [
+            "inventory-2026",
+            "finance-hcnh"
+          ],
+          "confidence": 0.6666666666666666,
+          "provenance": "inventory-2026",
+          "improvement_class": ""
+        },
+        {
+          "lesson_id": "L-inventory-2026-b1",
+          "trigger": [
+            "macro",
+            "cycle_phase",
+            "narrative_truth",
+            "hindsight_risk",
+            "finance",
+            "audit_signals"
+          ],
+          "action": "复用防偏差措施：预注册判据",
+          "rationale": "inventory-2026 部署该措施后，结论经得起揭盲与消融检验",
+          "kind": "anti_bias",
+          "support": [
+            "inventory-2026",
+            "finance-hcnh"
+          ],
+          "confidence": 0.6666666666666666,
+          "provenance": "inventory-2026",
+          "improvement_class": ""
+        },
+        {
+          "lesson_id": "L-inventory-2026-b2",
+          "trigger": [
+            "macro",
+            "cycle_phase",
+            "narrative_truth",
+            "hindsight_risk",
+            "finance",
+            "audit_signals"
+          ],
+          "action": "复用防偏差措施：盲判/揭盲分离",
+          "rationale": "inventory-2026 部署该措施后，结论经得起揭盲与消融检验",
+          "kind": "anti_bias",
+          "support": [
+            "inventory-2026",
+            "finance-hcnh"
+          ],
+          "confidence": 0.6666666666666666,
+          "provenance": "inventory-2026",
+          "improvement_class": ""
+        },
+        {
+          "lesson_id": "L-inventory-2026-b3",
+          "trigger": [
+            "macro",
+            "cycle_phase",
+            "narrative_truth",
+            "hindsight_risk"
+          ],
+          "action": "复用防偏差措施：名义实际双轨",
+          "rationale": "inventory-2026 部署该措施后，结论经得起揭盲与消融检验",
+          "kind": "anti_bias",
+          "support": [
+            "inventory-2026"
+          ],
+          "confidence": 0.5,
+          "provenance": "inventory-2026",
+          "improvement_class": ""
+        },
+        {
+          "lesson_id": "L-inventory-2026-b4",
+          "trigger": [
+            "macro",
+            "cycle_phase",
+            "narrative_truth",
+            "hindsight_risk"
+          ],
+          "action": "复用防偏差措施：历史反例对照",
+          "rationale": "inventory-2026 部署该措施后，结论经得起揭盲与消融检验",
+          "kind": "anti_bias",
+          "support": [
+            "inventory-2026"
+          ],
+          "confidence": 0.5,
+          "provenance": "inventory-2026",
+          "improvement_class": ""
+        }
+      ],
+      "rejected_reason": "",
+      "improvement_audit": {}
+    },
+    {
+      "trace_id": "finance-hcnh",
+      "admitted": true,
+      "expected": "判据全过，叙事真实",
+      "actual": "判据全过但早期补贴依赖42.6%、非经常损益21.8%，真实轨迹是动态改善而非静态真实",
+      "gap": "事前预期「判据全过，叙事真实」，实际「判据全过但早期补贴依赖42.6%、非经常损益21.8%，真实轨迹是动态改善而非静态真实」；先验被推翻。",
+      "worked": [
+        "部署了防偏差措施: 入场先记录先验倾向; 预注册判据; 盲判/揭盲分离; 下挖判据盲区",
+        "结果推翻先验时如实记录认知修正，未强行维护原判断",
+        "入场先验置信度 0.70 保留谦逊，未锁死结论"
+      ],
+      "failed": [],
+      "root_cause": "认知根因: 判据全过只说明没违反符号约束，不等于叙事真实——早期补贴依赖是判据盲区",
+      "lessons": [
+        {
+          "lesson_id": "L-finance-hcnh-c0",
+          "trigger": [
+            "finance",
+            "narrative_truth",
+            "hindsight_risk",
+            "audit_signals"
+          ],
+          "action": "遇到同类情境时，先验须让位于预注册判据的结果：判据全过只说明没违反符号约束，不等于叙事真实——早期补贴依赖是判据盲区",
+          "rationale": "来自 finance-hcnh 的认知修正；事前预期「判据全过，叙事真实」，实际「判据全过但早期补贴依赖42.6%、非经常损益21.8%，真实轨迹是动态改善而非静态真实」；先验被推翻。",
+          "kind": "pitfall",
+          "support": [
+            "finance-hcnh"
+          ],
+          "confidence": 0.5,
+          "provenance": "finance-hcnh",
+          "improvement_class": ""
+        },
+        {
+          "lesson_id": "L-finance-hcnh-b0",
+          "trigger": [
+            "finance",
+            "narrative_truth",
+            "hindsight_risk",
+            "audit_signals"
+          ],
+          "action": "复用防偏差措施：入场先记录先验倾向",
+          "rationale": "finance-hcnh 部署该措施后，结论经得起揭盲与消融检验",
+          "kind": "anti_bias",
+          "support": [
+            "finance-hcnh"
+          ],
+          "confidence": 0.0,
+          "provenance": "finance-hcnh",
+          "improvement_class": ""
+        },
+        {
+          "lesson_id": "L-finance-hcnh-b1",
+          "trigger": [
+            "finance",
+            "narrative_truth",
+            "hindsight_risk",
+            "audit_signals"
+          ],
+          "action": "复用防偏差措施：预注册判据",
+          "rationale": "finance-hcnh 部署该措施后，结论经得起揭盲与消融检验",
+          "kind": "anti_bias",
+          "support": [
+            "finance-hcnh"
+          ],
+          "confidence": 0.0,
+          "provenance": "finance-hcnh",
+          "improvement_class": ""
+        },
+        {
+          "lesson_id": "L-finance-hcnh-b2",
+          "trigger": [
+            "finance",
+            "narrative_truth",
+            "hindsight_risk",
+            "audit_signals"
+          ],
+          "action": "复用防偏差措施：盲判/揭盲分离",
+          "rationale": "finance-hcnh 部署该措施后，结论经得起揭盲与消融检验",
+          "kind": "anti_bias",
+          "support": [
+            "finance-hcnh"
+          ],
+          "confidence": 0.0,
+          "provenance": "finance-hcnh",
+          "improvement_class": ""
+        },
+        {
+          "lesson_id": "L-finance-hcnh-b3",
+          "trigger": [
+            "finance",
+            "narrative_truth",
+            "hindsight_risk",
+            "audit_signals"
+          ],
+          "action": "复用防偏差措施：下挖判据盲区",
+          "rationale": "finance-hcnh 部署该措施后，结论经得起揭盲与消融检验",
+          "kind": "anti_bias",
+          "support": [
+            "finance-hcnh"
+          ],
+          "confidence": 0.5,
+          "provenance": "finance-hcnh",
+          "improvement_class": ""
+        }
+      ],
+      "rejected_reason": "",
+      "improvement_audit": {}
+    },
+    {
+      "trace_id": "hindsight-fake",
+      "admitted": false,
+      "expected": "",
+      "actual": "结果已揭盲",
+      "gap": "",
+      "worked": [],
+      "failed": [],
+      "root_cause": "",
+      "lessons": [],
+      "rejected_reason": "轨迹无事前先验：无锚点的复盘只是后知叙事重构，拒绝。",
+      "improvement_audit": {}
+    },
+    {
+      "trace_id": "audit19-remedy20",
+      "admitted": true,
+      "expected": "7条问题逐条销号 → 框架有效性实质提升",
+      "actual": "P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。",
+      "gap": "事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+      "worked": [
+        "部署了防偏差措施: 独立审计视角; 攻击性实验; 数据来源盘点",
+        "结果推翻先验时如实记录认知修正，未强行维护原判断"
+      ],
+      "failed": [
+        "事前过度自信(0.85)却被结果推翻——先验校准不足"
+      ],
+      "root_cause": "认知根因: 把'改报告口径/宣称降级'当成了'改能力'——降调宣传不等于机制变强 | 逐条销号是改进冲动：我默认审计列的每条都该修，没区分'方法缺陷'与'诚实边界' | 第22节L3自己又造出复利曲线与教训计数——这正是'为了改进而改进'的虚荣指标，复盘对象还错成了研究对象(库存周期/华测导航),而非框架逻辑方法本身；高置信先验+被推翻 → 入场时把「印象」当成了「证据」",
+      "lessons": [
+        {
+          "lesson_id": "L-audit19-remedy20-fix0",
+          "trigger": [
+            "framework",
+            "self_reflection",
+            "remediation",
+            "audit"
+          ],
+          "action": "真该改的方法缺陷——改机制而非文案：P0 estimation criterion符号与生成模型相反: 真修复：criterion=-b，与生成模型同号，加回归测试",
+          "rationale": "audit19-remedy20 自我反省；事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+          "kind": "pitfall",
+          "support": [
+            "audit19-remedy20"
+          ],
+          "confidence": 0.5,
+          "provenance": "audit19-remedy20",
+          "improvement_class": "fix"
+        },
+        {
+          "lesson_id": "L-audit19-remedy20-fix1",
+          "trigger": [
+            "framework",
+            "self_reflection",
+            "remediation",
+            "audit"
+          ],
+          "action": "真该改的方法缺陷——改机制而非文案：复盘对象误用为研究对象(库存周期/华测导航): 校正scope：框架自我反省只针对逻辑方法，不针对具体研究对象",
+          "rationale": "audit19-remedy20 自我反省；事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+          "kind": "pitfall",
+          "support": [
+            "audit19-remedy20"
+          ],
+          "confidence": 0.5,
+          "provenance": "audit19-remedy20",
+          "improvement_class": "fix"
+        },
+        {
+          "lesson_id": "L-audit19-remedy20-van0",
+          "trigger": [
+            "framework",
+            "self_reflection",
+            "remediation",
+            "audit"
+          ],
+          "action": "识破虚荣改进——别拿改动冒充进步：telos/axiology/mechanism 的过度宣称: 降级报告口径：加'诚实结论''稳健边界'段落",
+          "rationale": "audit19-remedy20 自我反省；事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+          "kind": "anti_bias",
+          "support": [
+            "audit19-remedy20"
+          ],
+          "confidence": 0.5,
+          "provenance": "audit19-remedy20",
+          "improvement_class": "vanity"
+        },
+        {
+          "lesson_id": "L-audit19-remedy20-van1",
+          "trigger": [
+            "framework",
+            "self_reflection",
+            "remediation",
+            "audit"
+          ],
+          "action": "识破虚荣改进——别拿改动冒充进步：财报盲测的后验分组循环: 加反例对照量化循环(precision 0.42)，宣称'去循环已修'",
+          "rationale": "audit19-remedy20 自我反省；事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+          "kind": "anti_bias",
+          "support": [
+            "audit19-remedy20"
+          ],
+          "confidence": 0.5,
+          "provenance": "audit19-remedy20",
+          "improvement_class": "vanity"
+        },
+        {
+          "lesson_id": "L-audit19-remedy20-van2",
+          "trigger": [
+            "framework",
+            "self_reflection",
+            "remediation",
+            "audit"
+          ],
+          "action": "识破虚荣改进——别拿改动冒充进步：第22节L3复利曲线与教训计数: 识别为虚荣指标：教训数从7涨到9、置信0.5→0.556不等于认知提升",
+          "rationale": "audit19-remedy20 自我反省；事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+          "kind": "anti_bias",
+          "support": [
+            "audit19-remedy20"
+          ],
+          "confidence": 0.5,
+          "provenance": "audit19-remedy20",
+          "improvement_class": "vanity"
+        },
+        {
+          "lesson_id": "L-audit19-remedy20-keep0",
+          "trigger": [
+            "framework",
+            "self_reflection",
+            "remediation",
+            "audit"
+          ],
+          "action": "不该改的边界——反省后确认守住：把'不知道'当一等公民 / 不可约交人 / 诚实边界: 保留，且在复盘中确认这是框架的脊梁，不因'进化'而改掉",
+          "rationale": "audit19-remedy20 自我反省；事前预期「7条问题逐条销号 → 框架有效性实质提升」，实际「P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。」；先验被推翻。",
+          "kind": "keep",
+          "support": [
+            "audit19-remedy20"
+          ],
+          "confidence": 0.5,
+          "provenance": "audit19-remedy20",
+          "improvement_class": "preserve"
+        }
+      ],
+      "rejected_reason": "",
+      "improvement_audit": {
+        "fix": [
+          "P0 estimation criterion符号与生成模型相反: 真修复：criterion=-b，与生成模型同号，加回归测试",
+          "复盘对象误用为研究对象(库存周期/华测导航): 校正scope：框架自我反省只针对逻辑方法，不针对具体研究对象"
+        ],
+        "vanity": [
+          "telos/axiology/mechanism 的过度宣称: 降级报告口径：加'诚实结论''稳健边界'段落",
+          "财报盲测的后验分组循环: 加反例对照量化循环(precision 0.42)，宣称'去循环已修'",
+          "第22节L3复利曲线与教训计数: 识别为虚荣指标：教训数从7涨到9、置信0.5→0.556不等于认知提升"
+        ],
+        "preserve": [
+          "把'不知道'当一等公民 / 不可约交人 / 诚实边界: 保留，且在复盘中确认这是框架的脊梁，不因'进化'而改掉"
+        ],
+        "unclassified": []
+      }
+    }
+  ],
+  "trace_log": [
+    {
+      "trace_id": "inventory-2026",
+      "question": "中国库存周期是否已从主动补库转为被动补库？",
+      "prior_belief": "多数机构说在被动补库，可能属实",
+      "prior_confidence": 0.65,
+      "prior_ts": "2026-09-01T09:00:00",
+      "scope": "subject",
+      "situation_tags": [
+        "macro",
+        "cycle_phase",
+        "narrative_truth",
+        "hindsight_risk"
+      ],
+      "decisions": [
+        {
+          "situation": "机构结论互相矛盾",
+          "choice": "机构结论只当标签、不喂判据",
+          "rationale": "防止确认偏差",
+          "alternative_rejected": "采信某一机构结论"
+        },
+        {
+          "situation": "库存判定易被指标自由度操纵",
+          "choice": "预注册方向法+死区窗口",
+          "rationale": "跑数前锁死规则",
+          "alternative_rejected": "看完数据再选口径"
+        },
+        {
+          "situation": "名义库存上行",
+          "choice": "做名义/实际双轨",
+          "rationale": "PPI价格效应可能伪装成补库",
+          "alternative_rejected": "直接用名义同比下结论"
+        }
+      ],
+      "expected_outcome": "当前大概率被动补库",
+      "actual_outcome": "当前主动补库；被动补库仅在2025Q4短暂出现且已结束；名义含水分",
+      "outcome_ts": "2026-09-30T17:00:00",
+      "cognitive_corrections": [
+        "当前状态和'印象'相反：营收库存双升是主动补库，数据推翻'转变属实'的先验",
+        "名义库存+11.6%里约5pct是PPI价格效应，实际物量仅+6.6%"
+      ],
+      "anti_bias_measures": [
+        "入场先记录先验倾向",
+        "预注册判据",
+        "盲判/揭盲分离",
+        "名义实际双轨",
+        "历史反例对照"
+      ]
+    },
+    {
+      "trace_id": "finance-hcnh",
+      "question": "华测导航(300627)五年财报叙事是否真实？",
+      "prior_belief": "24项判据全过、审计标准无保留，叙事大概率真实",
+      "prior_confidence": 0.7,
+      "prior_ts": "2026-10-05T09:00:00",
+      "scope": "subject",
+      "situation_tags": [
+        "finance",
+        "narrative_truth",
+        "hindsight_risk",
+        "audit_signals"
+      ],
+      "decisions": [
+        {
+          "situation": "判据全部通过",
+          "choice": "不停在'全过=真实'，下挖盲区",
+          "rationale": "避免确认偏差",
+          "alternative_rejected": "直接宣布叙事真实"
+        },
+        {
+          "situation": "政府补助占营业利润42.6%",
+          "choice": "量化补贴依赖趋势",
+          "rationale": "判据看不到的利润质量",
+          "alternative_rejected": "忽略"
+        }
+      ],
+      "expected_outcome": "判据全过，叙事真实",
+      "actual_outcome": "判据全过但早期补贴依赖42.6%、非经常损益21.8%，真实轨迹是动态改善而非静态真实",
+      "outcome_ts": "2026-10-05T18:00:00",
+      "cognitive_corrections": [
+        "判据全过只说明没违反符号约束，不等于叙事真实——早期补贴依赖是判据盲区"
+      ],
+      "anti_bias_measures": [
+        "入场先记录先验倾向",
+        "预注册判据",
+        "盲判/揭盲分离",
+        "下挖判据盲区"
+      ]
+    },
+    {
+      "trace_id": "hindsight-fake",
+      "question": "（事后）我早就知道库存会转主动补库",
+      "prior_belief": "",
+      "prior_confidence": 1.0,
+      "prior_ts": "",
+      "scope": "subject",
+      "situation_tags": [],
+      "decisions": [],
+      "expected_outcome": "",
+      "actual_outcome": "结果已揭盲",
+      "outcome_ts": "2026-09-30T17:00:00",
+      "cognitive_corrections": [],
+      "anti_bias_measures": []
+    },
+    {
+      "trace_id": "audit19-remedy20",
+      "question": "第19节审计列出的 P0/P1/P2，逐条整改后框架逻辑方法是否真的改进了？",
+      "prior_belief": "审计发现框架'真功夫与叙事包装各半'，我预期逐条销号能让它从自洽走向有效",
+      "prior_confidence": 0.85,
+      "prior_ts": "2026-11-20T10:00:00",
+      "scope": "framework",
+      "situation_tags": [
+        "framework",
+        "self_reflection",
+        "remediation",
+        "audit"
+      ],
+      "decisions": [
+        {
+          "situation": "P0 estimation criterion符号与生成模型相反",
+          "choice": "真修复：criterion=-b，与生成模型同号，加回归测试",
+          "rationale": "fix：这是可被客观证伪的硬bug，改的是机制而非文案",
+          "alternative_rejected": "改注释糊弄过去"
+        },
+        {
+          "situation": "telos/axiology/mechanism 的过度宣称",
+          "choice": "降级报告口径：加'诚实结论''稳健边界'段落",
+          "rationale": "vanity：改的是文案措辞，机制没变，却计入'整改完成'制造进步叙事",
+          "alternative_rejected": "承认这些方法在合成世界外未验证，暂停宣称"
+        },
+        {
+          "situation": "财报盲测的后验分组循环",
+          "choice": "加反例对照量化循环(precision 0.42)，宣称'去循环已修'",
+          "rationale": "vanity：循环没消除，只是被测量；'已修'是虚荣的销号话术",
+          "alternative_rejected": "如实标'循环仍在，仅暴露'"
+        },
+        {
+          "situation": "把'不知道'当一等公民 / 不可约交人 / 诚实边界",
+          "choice": "保留，且在复盘中确认这是框架的脊梁，不因'进化'而改掉",
+          "rationale": "preserve：自我反省的价值也在于识别'守住什么'，不是全盘推翻",
+          "alternative_rejected": "为了'更自动'而取消人工交接卡"
+        },
+        {
+          "situation": "第22节L3复利曲线与教训计数",
+          "choice": "识别为虚荣指标：教训数从7涨到9、置信0.5→0.556不等于认知提升",
+          "rationale": "vanity：制造了'我在进化'的自洽幻觉，正是'为了改进而改进'",
+          "alternative_rejected": "把复利数字当成果汇报"
+        },
+        {
+          "situation": "复盘对象误用为研究对象(库存周期/华测导航)",
+          "choice": "校正scope：框架自我反省只针对逻辑方法，不针对具体研究对象",
+          "rationale": "fix：复盘对象错了，整层L3的方向就错了——这是方法层面的真缺陷",
+          "alternative_rejected": "继续用个案复盘冒充框架反省"
+        }
+      ],
+      "expected_outcome": "7条问题逐条销号 → 框架有效性实质提升",
+      "actual_outcome": "P0符号bug是真修复；但telos/axiology/mechanism改的是报告口径与宣称降级，能力本身未变；财报去循环只是量化暴露循环(precision 0.42)并未消除；真实数据只注入estimation一个模块。'销号'制造了进步的叙事，但框架仍主要靠合成自证。",
+      "outcome_ts": "2026-11-20T18:00:00",
+      "cognitive_corrections": [
+        "把'改报告口径/宣称降级'当成了'改能力'——降调宣传不等于机制变强",
+        "逐条销号是改进冲动：我默认审计列的每条都该修，没区分'方法缺陷'与'诚实边界'",
+        "第22节L3自己又造出复利曲线与教训计数——这正是'为了改进而改进'的虚荣指标，复盘对象还错成了研究对象(库存周期/华测导航),而非框架逻辑方法本身"
+      ],
+      "anti_bias_measures": [
+        "独立审计视角",
+        "攻击性实验",
+        "数据来源盘点"
+      ]
+    }
+  ]
+}

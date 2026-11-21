@@ -1,0 +1,152 @@
+{
+  "2024-02": {
+    "rev_amt": 19.44,
+    "inv_amt": 6.09,
+    "inv_sales_ratio": 0.627
+  },
+  "2024-03": {
+    "rev_amt": 30.96,
+    "inv_amt": 6.26,
+    "inv_sales_ratio": 0.607
+  },
+  "2024-04": {
+    "rev_amt": 41.92,
+    "inv_amt": 6.33,
+    "inv_sales_ratio": 0.604
+  },
+  "2024-05": {
+    "rev_amt": 53.03,
+    "inv_amt": 6.39,
+    "inv_sales_ratio": 0.602
+  },
+  "2024-06": {
+    "rev_amt": 64.86,
+    "inv_amt": 6.37,
+    "inv_sales_ratio": 0.589
+  },
+  "2024-07": {
+    "rev_amt": 75.93,
+    "inv_amt": 6.47,
+    "inv_sales_ratio": 0.596
+  },
+  "2024-08": {
+    "rev_amt": 87.1,
+    "inv_amt": 6.53,
+    "inv_sales_ratio": 0.6
+  },
+  "2024-09": {
+    "rev_amt": 99.2,
+    "inv_amt": 6.47,
+    "inv_sales_ratio": 0.587
+  },
+  "2024-10": {
+    "rev_amt": 110.96,
+    "inv_amt": 6.53,
+    "inv_sales_ratio": 0.589
+  },
+  "2024-11": {
+    "rev_amt": 123.48,
+    "inv_amt": 6.57,
+    "inv_sales_ratio": 0.585
+  },
+  "2024-12": {
+    "rev_amt": 137.77,
+    "inv_amt": 6.44,
+    "inv_sales_ratio": 0.561
+  },
+  "2025-02": {
+    "rev_amt": 20.09,
+    "inv_amt": 6.37,
+    "inv_sales_ratio": 0.634
+  },
+  "2025-03": {
+    "rev_amt": 32.14,
+    "inv_amt": 6.55,
+    "inv_sales_ratio": 0.611
+  },
+  "2025-04": {
+    "rev_amt": 43.44,
+    "inv_amt": 6.61,
+    "inv_sales_ratio": 0.609
+  },
+  "2025-05": {
+    "rev_amt": 54.76,
+    "inv_amt": 6.65,
+    "inv_sales_ratio": 0.607
+  },
+  "2025-06": {
+    "rev_amt": 66.78,
+    "inv_amt": 6.6,
+    "inv_sales_ratio": 0.593
+  },
+  "2025-07": {
+    "rev_amt": 78.07,
+    "inv_amt": 6.67,
+    "inv_sales_ratio": 0.598
+  },
+  "2025-08": {
+    "rev_amt": 89.62,
+    "inv_amt": 6.73,
+    "inv_sales_ratio": 0.601
+  },
+  "2025-09": {
+    "rev_amt": 102.08,
+    "inv_amt": 6.71,
+    "inv_sales_ratio": 0.592
+  },
+  "2025-10": {
+    "rev_amt": 113.37,
+    "inv_amt": 6.82,
+    "inv_sales_ratio": 0.602
+  },
+  "2025-11": {
+    "rev_amt": 125.34,
+    "inv_amt": 6.92,
+    "inv_sales_ratio": 0.607
+  },
+  "2025-12": {
+    "rev_amt": 139.2,
+    "inv_amt": 6.73,
+    "inv_sales_ratio": 0.58
+  },
+  "2026-02": {
+    "rev_amt": 20.84,
+    "inv_amt": 6.68,
+    "inv_sales_ratio": 0.641
+  },
+  "2026-03": {
+    "rev_amt": 33.19,
+    "inv_amt": 6.78,
+    "inv_sales_ratio": 0.613
+  },
+  "2026-04": {
+    "rev_amt": 44.89,
+    "inv_amt": 6.95,
+    "inv_sales_ratio": 0.619
+  },
+  "2026-05": {
+    "rev_amt": 56.55,
+    "inv_amt": 7.14,
+    "inv_sales_ratio": 0.631
+  },
+  "2026-06": {
+    "rev_amt": 69.26,
+    "inv_amt": 7.11,
+    "inv_sales_ratio": 0.616
+  },
+  "2026-07": {
+    "rev_amt": 80.92,
+    "inv_amt": 7.27,
+    "inv_sales_ratio": 0.629
+  },
+  "2026-08": {
+    "rev_amt": 93.09,
+    "inv_amt": 7.36,
+    "inv_sales_ratio": 0.633
+  },
+  "2026-09": {
+    "rev_amt": 106.21,
+    "inv_amt": 7.37,
+    "inv_sales_ratio": 0.625
+  }
+}

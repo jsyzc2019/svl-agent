@@ -1,0 +1,144 @@
+{
+  "document": "RSI-Structure 综述框架论证结果",
+  "pre_registration_sha256": "029d6c41e5f60aeecfe67d3ad05cf2911c17e5868676603f8271dc4f75f382e5",
+  "T1": {
+    "id": "T1",
+    "survey_not_empirical": true,
+    "media_title_escalates": true,
+    "paper_self_limited": true,
+    "decision": "主体错位（传播层把'提出框架'读成'证明有效'）",
+    "attribution": "论文克制且自我限定，夸张来自媒体标题——不连坐一手作者",
+    "pass": true
+  },
+  "T2": {
+    "id": "T2",
+    "lineage_declared": true,
+    "isomorphic": true,
+    "contaminated": true,
+    "decision": "同谱系印证（非独立验证）",
+    "honesty": "触发≠真相：Figure3 与我方阶梯长得像，但 §34 已受 awesome-rsi 影响，印证力度打折",
+    "pass": true
+  },
+  "T3": {
+    "id": "T3",
+    "object_is_survey": true,
+    "counts_are_classification_not_samples": true,
+    "statistical_recompute_applicable": false,
+    "decision": "判据适配：不做统计功效复算，改做分类学自洽/可操作性/主体错位/诚实刻度审计",
+    "anti_pattern": "为套 S3 统计判据而对无实验统计量的综述做 t 检验 = 判据错配，禁止",
+    "pass": true
+  },
+  "T4": {
+    "id": "T4",
+    "rows": [
+      {
+        "id": "V1_reuse_not_recursive",
+        "paper_verdict": "Reuse in later tasks alone does not establish that recursive dependency.",
+        "framework_mechanisms": [
+          "KB-SIM03 证据阶梯 L1/L2/L3",
+          "KB-SIM07 可证伪配对"
+        ],
+        "status": "已具备",
+        "note": "触发≠真相、retained≠improver 已固化；同谱系（awesome-rsi），非独立发现"
+      },
+      {
+        "id": "V2_rounds_not_effectiveness",
+        "paper_verdict": "the number of rounds alone does not identify which factor produced the gain.",
+        "framework_mechanisms": [
+          "KB-SIM03 L3 需受控实验",
+          "commentary:§34 改进机制本身变强才算L3"
+        ],
+        "status": "已具备",
+        "note": "轮数≠有效性、改进器增益需对照——已在 SIM 论证中落地"
+      },
+      {
+        "id": "V3_failure_not_what_to_edit",
+        "paper_verdict": "Failure alone does not specify what to edit; the system must analyze what happened.",
+        "framework_mechanisms": [
+          "improvement_memory:root_cause 字段",
+          "retrospective:Diagnose"
+        ],
+        "status": "部分缺口",
+        "note": "有根因记录，但未强制'归因到具体组件 + 按组件选择验证方式'——Where 维度缺失"
+      },
+      {
+        "id": "V4_combined_not_single_attribution",
+        "paper_verdict": "the gains of the combined system cannot all be attributed to one external component.",
+        "framework_mechanisms": [
+          "消融混杂门禁(§34 S4)",
+          "经济意义门禁(§33 R2 无成本对照)"
+        ],
+        "status": "已具备",
+        "note": "多因素混合时不可单归因，已由无成本/消融对照判据覆盖"
+      },
+      {
+        "id": "V5_evaluate_not_verify",
+        "paper_verdict": "Evaluate examines an existing execution to provide evidence for an update; Verify tests a candidate change.",
+        "framework_mechanisms": [
+          "retrospective(复盘=Evaluate)",
+          "pytest 测试套件(=Verify)"
+        ],
+        "status": "已具备",
+        "note": "两类活动在框架中已实际分离；论文措辞更精确，但无需另造轮子"
+      },
+      {
+        "id": "V6_retirement_cover_rare",
+        "paper_verdict": "the check needs to cover intended uses, including less frequent but still important tasks.",
+        "framework_mechanisms": [
+          "improvement_memory:transfer_decision drop"
+        ],
+        "status": "部分缺口",
+        "note": "有 drop 降级，但未要求'退役检查覆盖低频但重要用途'；可并入 V3 的组件化验证要求"
+      }
+    ],
+    "gap_ids": [
+      "V3_failure_not_what_to_edit",
+      "V6_retirement_cover_rare"
+    ],
+    "n_already": 4,
+    "n_gaps": 2,
+    "decision": "6条中 4 条已具备、2 条部分缺口：V3_failure_not_what_to_edit, V6_retirement_cover_rare",
+    "anti_duplicate": "已具备的不重复造轮子（preserve）；只对真缺口评估是否编译",
+    "pass": true
+  },
+  "T5": {
+    "id": "T5",
+    "self_limited": true,
+    "nr_marked": true,
+    "combined_attribution_caveat": true,
+    "not_overclaim_each_as_full_rsi": true,
+    "decision": "高诚实度（preserve）",
+    "attribution": "夸张来自二手传播，不连坐一手论文",
+    "pass": true
+  },
+  "T6": {
+    "id": "T6",
+    "gaps": [
+      "V3_failure_not_what_to_edit",
+      "V6_retirement_cover_rare"
+    ],
+    "teeth_test": {
+      "V3_failure_not_what_to_edit": {
+        "concrete_action": "改进记录若未标注作用于哪个组件(Prompt/Memory/Skill/Harness)且未按组件选验证方式 → 拦截为'归因不足'，不允许 consolidate",
+        "verdict": "能长出牙"
+      },
+      "V6_retirement_cover_rare": {
+        "concrete_action": "退役/降级一条经验时，若未检查'低频但重要用途' → 降级为 verify，不能直接 drop",
+        "verdict": "能长出牙（并入组件化验证要求）"
+      }
+    },
+    "actionable_ids": [
+      "V3_failure_not_what_to_edit",
+      "V6_retirement_cover_rare"
+    ],
+    "decision": "真缺口 2 条，均可指出具体被拦/被判/被降级动作 → 编译为组件归因+验证门禁（非复述）",
+    "kb_meta01_compliance": true,
+    "pass": true
+  },
+  "conclusion": {
+    "layer1_fact": "论文是中科院自动化所+美团等单位的 RSI 综述（OpenReview/Preprints），产出四组件×七阶段分类学 + When/Where/How 三问题 + 40/20 研究对照；无自己的实验统计量，贡献是统一语言与分析框架。",
+    "layer2_boundary": "提出框架≠证明RSI有效（综述无实证）；Figure3 与我方证据阶梯同构但同谱系（§34 已受 awesome-rsi 影响），是印证而非独立验证；传播层'越用越强'是主体错位；40/20 是分类计数非实验样本，不可做统计复算。",
+    "layer3_method": "①判据要适配对象——综述不套统计检验；②同构≠独立验证，谱系污染须标注（触发≠真相）；③吸收受 KB-META01 约束——6条判定中4条已具备(preserve)、2条真缺口（组件归因/退役覆盖）编译成会拦会降级的动作，才是长牙而非复述。"
+  },
+  "all_judgments_fired": true
+}

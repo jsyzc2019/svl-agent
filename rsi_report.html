@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>RSI 未来前景独立论证报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;max-width:960px;margin:0 auto;padding:32px 24px;line-height:1.75;color:#2c3e50;background:#fafbfc}
+h1{border-bottom:3px solid #c0392b;padding-bottom:12px}
+h2{margin-top:38px;border-left:4px solid #c0392b;padding-left:12px;color:#1a252f}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}
+th,td{border:1px solid #dfe4ea;padding:7px 10px;text-align:left}
+th{background:#eef1f4}
+.card{background:#fff;border:1px solid #e1e5ea;border-radius:8px;padding:16px 20px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.red{color:#c0392b;font-weight:bold} .green{color:#27ae60;font-weight:bold}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;color:#fff;background:#c0392b}
+.badge-g{background:#27ae60} .badge-y{background:#e67e22}
+blockquote{border-left:3px solid #95a5a6;margin:12px 0;padding:8px 16px;background:#f4f6f7;color:#555}
+.small{font-size:13px;color:#7f8c8d}
+code{background:#f1f2f6;padding:1px 5px;border-radius:4px;font-size:13px}
+</style></head><body>
+
+<h1>RSI 未来前景独立论证报告</h1>
+<p class="small">预注册锁存 SHA256 <code>c15abfd9796702b410fed89b…</code> · 数据源 8768 根上证日线 · 生成 2026-11-21 · 来源隔离：GitHub 证据仅用于叙事层</p>
+
+<blockquote><b>问题：</b>RSI（相对强弱指数）作为择时信号，其"未来前景"应如何从可验证证据独立论证？<br>
+<b>方法纪律：</b>先锁存判据、再跑检验；实证层与叙事层严格分离；统计显著≠经济可利用；触发≠真相。</blockquote>
+
+<h2>一、叙事层 · GitHub 生态在讨论什么（描述，不作有效性证据）</h2>
+<div class="card">
+<p>GitHub 全站 <b>201</b> 个 RSI 仓库、<b>276</b> 个回测相关仓库。但结构上：</p>
+<table><tr><th>仓库</th><th>热度</th><th>最近推送</th><th>性质</th></tr><tr><td>debut-js/Indicators</td><td style='text-align:right'>★447</td><td>2020-01-09</td><td>多指标JS库，含RSI，非策略</td></tr><tr><td>mtamer/python-rsi</td><td style='text-align:right'>★143</td><td>-</td><td>纯RSI筛选器，README称RSI+MA20/200为'strong and popular'，但附educational-only免责声明</td></tr><tr><td>xFFFFF/Gekko-Strategies</td><td style='text-align:right'>★1445</td><td>2020-01-09</td><td>头部策略库但已停更6年</td></tr><tr><td>SharmaVidhiHaresh/Backtesting-Trading-Strategies-with-Python</td><td style='text-align:right'>★46</td><td>2020-08</td><td>Google单股MA/RSI回测，n=1</td></tr><tr><td>asier13/Python-Trading-Bot</td><td style='text-align:right'>★26</td><td>2023-12</td><td>加密RSI回测 bot</td></tr><tr><td>aaajiao/RSI--Breadth-Multi-Factor-Indicator</td><td style='text-align:right'>★2</td><td>2026-11-20</td><td>RSI+多因子，极新，star极低</td></tr><tr><td>TradingSignalBot/tradingview-strategies</td><td style='text-align:right'>★34</td><td>2026-11-03</td><td>TradingView Pine Script策略集</td></tr><tr><td>ProgramingPro2/Reinforcement-Stocks</td><td style='text-align:right'>★4</td><td>2026-11-02</td><td>RSI作为RL特征之一</td></tr></table>
+<p><span class="badge badge-y">结构性观察</span> 生态热度集中在<b>计算库</b>（如何算 RSI），而非<b>可验证策略</b>；头部策略库停更 6 年，2025–2026 新兴方向 star 极低。README 宣称 "strong and popular" 却同时附 "educational purposes only" 免责声明——这是典型的<b>结构性自利叙事</b>。</p>
+<p><span class="badge">实现正确性活案例</span> <a href="https://github.com/codeplayr/alphacate/issues/1">alphacate issue#1</a>：RSI 递推中 <code>avg_gain/avg_loss</code> 被四舍五入到 2 位，而该值又喂给下一期计算，误差累积导致结果 100% 不精确。<b>"用了 RSI 公式" ≠ "用了可靠的 RSI"</b>。</p>
+<p class="small">issue 计数（噪声较大，仅示意话题活跃度）：计算不准 ~1880 · 回测过拟合 ~351 · 超买超卖失效 ~228。</p>
+</div>
+
+<h2>二、实证层 · 五项预注册检验（在真实数据上独立提出结论）</h2>
+
+<div class="card"><b>R1 · 实现正确性自检</b> <span class="badge">分歧确认</span>
+<p>Wilder 平滑 vs 简单均值，同一价格同一周期：平均绝对差 <b>6.89</b> 个 RSI 点，最大 <b>45.9</b>，<b>57.2%</b> 的时点差异 &gt;5 点。印证 GitHub issue：RSI 不是一个唯一确定的量。</p></div>
+
+<div class="card"><b>R2 · 经典择时回测（t+1 生效，含双边成本 1.5‰）</b> <span class="badge">无经济优势</span>
+<p>RSI(14) &lt;30 买 / &gt;70 卖，信号严格用 t-1 的 RSI 决定 t 日仓位（防前视）。策略年化 <span class="red">-1.3%</span> vs 买入持有 <b>10.4%</b>，超额 <span class="red">-11.8%</span>。即便<b>不计成本</b>超额仍为 -11.5%——不是成本问题，是信号本身。77 次换手。</p></div>
+
+<div class="card"><b>R3 · 参数网格 + 多重比较校正</b> <span class="badge">稳健负向</span>
+<table><tr><th>周期N</th><th>阈值th</th><th>年化超额</th><th>t(日超额)</th></tr><tr><td>7</td><td>20</td><td style='color:#c0392b'>-12.3%</td><td style='color:#c0392b'>-3.25</td></tr><tr><td>7</td><td>25</td><td style='color:#c0392b'>-16.4%</td><td style='color:#c0392b'>-4.18</td></tr><tr><td>7</td><td>30</td><td style='color:#c0392b'>-18.6%</td><td style='color:#c0392b'>-4.82</td></tr><tr><td>7</td><td>35</td><td style='color:#c0392b'>-18.1%</td><td style='color:#c0392b'>-4.66</td></tr><tr><td>14</td><td>20</td><td style='color:#c0392b'>-6.9%</td><td style='color:#c0392b'>-2.05</td></tr><tr><td>14</td><td>25</td><td style='color:#c0392b'>-11.7%</td><td style='color:#c0392b'>-3.05</td></tr><tr><td>14</td><td>30</td><td style='color:#c0392b'>-11.8%</td><td style='color:#c0392b'>-3.12</td></tr><tr><td>14</td><td>35</td><td style='color:#c0392b'>-14.0%</td><td style='color:#c0392b'>-3.66</td></tr><tr><td>21</td><td>20</td><td style='color:#c0392b'>-10.0%</td><td style='color:#c0392b'>-2.56</td></tr><tr><td>21</td><td>25</td><td style='color:#c0392b'>-4.0%</td><td style='color:#c0392b'>-1.53</td></tr><tr><td>21</td><td>30</td><td style='color:#c0392b'>-9.8%</td><td style='color:#c0392b'>-2.63</td></tr><tr><td>21</td><td>35</td><td style='color:#c0392b'>-12.2%</td><td style='color:#c0392b'>-3.20</td></tr></table>
+<p>12 组参数<b>全部为负超额</b>，方向高度一致。首跑曾误用"年化超额/日标准误"得到 t≈−647 的荒谬量级（高功效陷阱），审计后修正为"日超额均值/日标准误"，t 落在合理区间但仍全为显著负值。<b>这是稳健的负向发现，不是数据窥探</b>——数据窥探的特征是"少数正显著被挑出"，而这里无一为正。</p></div>
+
+<div class="card"><b>R4 · 蒙特卡洛零分布盲测（迁移双色球 D0 方法）</b> <span class="badge">与随机不可区分</span>
+<p>用真实对数收益均值/波动生成 <b>500</b> 条随机游走（种子 20261121），每条跑同一 RSI 择时流程。零分布超额：均值 -7.1%，5% 分位 -15.7%，95% 分位 0.2%。真实超额 -11.8% 的百分位仅 <b>17.2%</b>——甚至低于随机序列中位数，远未达 95% 阈值。<b>RSI 择时表现与随机择时不可区分（且偏向更差）。</b></p></div>
+
+<div class="card"><b>R5 · 样本内/样本外过拟合门禁</b> <span class="badge">不稳健</span>
+<p>前半段（≤2008-11-05）选最优参数 N=21/th=25，样本内超额 -9.2%；后半段固定该参数超额 <b>-2.4%</b>，仍为负。参数迁移后未转为正收益，<b>稳健性不成立</b>。</p></div>
+
+<h2>三、三层诚实结论</h2>
+<div class="card">
+<p><b>第一层 · 事实：</b>GitHub 上 RSI 生态庞大但集中于"计算实现"；本次在上证 8768 根日线上，经典 RSI 择时年化 −1.3%（基准 +10.4%），12 组参数全负，蒙特卡洛百分位仅 17.2%，样本外仍为负。实现本身 Wilder/SMA 分歧普遍。</p>
+<p><b>第二层 · 推断边界：</b><span class="red">统计显著 ≠ 经济可利用</span>——12 组"显著"负超额只说明稳定跑输，不构成可用信号；<span class="red">单一标的/单一区间 ≠ 全球判决</span>——本结论不外推到所有市场、所有周期、实盘；<span class="red">叙事热度 ≠ 实证价值</span>——star 数和 issue 数都是虚荣指标，不能当作 RSI 有效的证据。</p>
+<p><b>第三层 · 方法教训：</b>① 判据自审抓出 t 统计量量纲错配（年化/日混用）这一高功效陷阱，说明"审计工具本身需被审计"；② 方向一致性优先于显著性个数——全负的稳健发现不能被"多个显著"的措辞误读为有效；③ "用了某指标"必须先验证实现唯一性与数值正确性，再谈有效性。</p>
+</div>
+
+<h2>四、对"未来前景"的最终判断</h2>
+<div class="card">
+<p><span class="badge">实证前景</span> 在可验证的价量择时意义上，<b>RSI 单独作为择时信号缺乏超出随机的经济价值</b>——本样本证据不支持其作为独立 alpha 来源。其合理定位是<b>辅助特征</b>（如嵌入多因子或 RL 状态空间，GitHub 2026 新兴方向正是如此），而非独立决策规则。</p>
+<p><span class="badge badge-g">方法前景</span> RSI 真正持久的价值不在"预测力"，而在它作为<b>可复现检验的脚手架</b>：定义清晰、易实现、易证伪。GitHub 生态的持续活跃，本质反映的是"人人都可上手验证"的工程友好性——这恰是框架应该吸收的：<b>把方法做成可证伪、可复现、可对照的模块，比宣称它有效更有长期价值。</b></p>
+</div>
+
+<p class="small">本报告为研究方法演练，不构成任何投资建议。判据、数据、锁存、测试均落地于工作区可复现。</p>
+</body></html>

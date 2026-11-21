@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>DeepMind《What comes after AGI?》框架论证报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;max-width:1000px;margin:0 auto;padding:32px 24px;line-height:1.75;color:#2c3e50;background:#fafbfc}
+h1{border-bottom:3px solid #2980b9;padding-bottom:12px}
+h2{margin-top:38px;border-left:4px solid #2980b9;padding-left:12px;color:#1a252f}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}
+th,td{border:1px solid #dfe4ea;padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#eef1f4}
+.card{background:#fff;border:1px solid #e1e5ea;border-radius:8px;padding:16px 20px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.red{color:#c0392b;font-weight:bold} .green{color:#27ae60;font-weight:bold} .y{color:#e67e22;font-weight:bold}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;color:#fff;background:#e67e22}
+.badge-g{background:#27ae60}
+blockquote{border-left:3px solid #95a5a6;margin:12px 0;padding:8px 16px;background:#f4f6f7;color:#555}
+.small{font-size:13px;color:#7f8c8d} code{background:#f1f2f6;padding:1px 5px;border-radius:4px;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.grid div{background:#fff;border:1px solid #e1e5ea;border-radius:8px;padding:14px;font-size:13px}
+</style></head><body>
+
+<h1>DeepMind《What comes after AGI?》框架论证报告</h1>
+<p class="small">
+作者：Tim Genewein, Research scientist at Google DeepMind · Nov 19, 2026 · DeepMind Institute (DMI) — 研究人员发布平台，非 Google 官方口径<br>
+来源：https://institute.deepmind.com/essays/what-comes-after-agi/（curl --compressed 直取 HTTP200，正文19971字符）<br>
+预注册锁存 <code>ca9eebdbfa55974b4c1289…</code> · 对象类型 <b>ESSAY / 观点前瞻文（非实证论文，非系统综述）</b> · E1–E6 全部按预期触发
+</p>
+
+<blockquote>
+<b>性质判定先行：</b>这是<b>观点性 essay</b>（conversation starter），既非实证论文（无统计量可复算）、
+也非系统综述（无分类法需自洽核对）。判据适配为：<b>主体归属 / 外推链算术+假设 / 可证伪分级 /
+同谱系污染 / 诚实刻度 / 吸收决策</b>。这是 KB-STRUCT01「判据要适配对象」在第三类对象上的落地。
+</blockquote>
+
+<h2>一、主体归属（Disclaimer 门禁）</h2>
+<div class="card">
+<p class="small">原文 Disclaimer 逐字：</p>
+<blockquote>“DMI pieces are intended to serve as conversation starters, reflecting the author's ideas and research, and should not be read as Google's official view.”</blockquote>
+<p>主体=作者/DMI团队观点，非Google官方立场（免责声明明确）。<span class="red">二手若读成'DeepMind官方预言ASI'→主体错位；原作者有免责不连坐</span></p>
+</div>
+
+<h2>二、外推链算术复算（替代统计复算）</h2>
+<div class="card">
+<table>
+<tr><th>论文外推</th><th>复算结果</th><th>自洽</th></tr>
+<tr><td>有效算力 1.5×[3,6]×2.5 /年</td><td>[11.25, 22.5] x/年 → 文称"至少10x"</td><td class="green">是</td></tr>
+<tr><td>十年累积 10^10</td><td>10,000,000,000 = 100亿倍</td><td class="green">是</td></tr>
+<tr><td>超过世界人口</td><td>10^10 &gt; 8×10⁹</td><td class="green">是</td></tr>
+<tr><td>成本 $1B→$1000（降4x/年×10年）</td><td>$1e9 / 4¹⁰ = $953.67</td><td class="green">是(约值)</td></tr>
+</table>
+<p class="small">作者主动标注的假设：not a given · While far from certain · Imagine that this trend holds · largely an empirical question</p>
+<p><b class="y">关键分界：</b>算术自洽≠外推成立：趋势维持十年是经验问题，不因算对就认预测为真。算术复算已固化进代码（<code>verify_extrapolation_arithmetic</code>），不靠一次性手算。</p>
+</div>
+
+<h2>三、可证伪分级（具体预测 vs 宏大叙事）</h2>
+<table>
+<tr><th>层级</th><th>主张</th><th>依据</th></tr>
+<tr><td class='green'>可证伪</td><td><b>RSI 在可自动验证领域最快</b></td><td class='small'>带领域(数学证明)+可观测条件(自动验证)+对照(其他领域滞后)，可被未来观测证伪</td></tr><tr><td class='green'>可证伪</td><td><b>多智能体协调收益递减</b></td><td class='small'>可观测的规模-收益关系，可证伪</td></tr><tr><td class='green'>可证伪</td><td><b>capability overhang 导致陡跳</b></td><td class='small'>因果机制+可观测条件，可证伪</td></tr><tr><td class='green'>可证伪</td><td><b>RSI runaway 是经验问题</b></td><td class='small'>作者自己标为经验问题——开放但可研究，非不可证伪叙事</td></tr><tr><td class='y'>叙事层</td><td><b>ASI 将加速科学突破</b></td><td class='small'>could ... accelerating science and enabling breakthroughs in medicine, materials, clean energy</td></tr><tr><td class='y'>叙事层</td><td><b>认知工业化重塑经济</b></td><td class='small'>cognitive industrialization alone could reshape knowledge work and the broader economy</td></tr>
+</table>
+<p class="small">4条可证伪具体预测 + 2条宏大叙事，分层不混同</p>
+
+<h2>四、同谱系交叉核对（触发≠真相）</h2>
+<table>
+<tr><th>维度</th><th>关系</th><th>判定</th></tr>
+<tr><td class='small'>feedback_quality</td><td>本文 poor feedback→loops degenerate ↔ 我方 §36 predicted/observed + §38 评估可靠性</td><td><span class='badge badge-y'>同谱系</span></td></tr><tr><td class='small'>eval_scaling</td><td>本文 评估须扩展到超人领域 ↔ 我方尚未显式覆盖</td><td><span class='badge badge-g'>新增量</span></td></tr><tr><td class='small'>three_mechanisms</td><td>本文 code/data/group 三分 ↔ 我方 harness/memory 组件分类/awesome-rsi 阶梯</td><td><span class='badge badge-y'>不同切分轴·同谱系</span></td></tr><tr><td class='small'>model_measure_repeat</td><td>本文 model/measure/forecast/repeat ↔ 我方 PDCA/SVL 闭环</td><td><span class='badge badge-y'>同谱系</span></td></tr>
+</table>
+<p class="small">若把呼应当成对方面框架的独立佐证→触发KB-STRUCT02污染门禁</p>
+
+<h2>五、六项判据结果</h2>
+<table>
+<tr><th>判据</th><th>结果</th></tr>
+<tr><td><b>E1 主体归属</b></td><td>主体=作者/DMI团队观点，非Google官方立场（免责声明明确）</td></tr>
+<tr><td><b>E2 外推链</b></td><td>算术自洽+主动标注假设=高严谨度（preserve）</td></tr>
+<tr><td><b>E3 可证伪分级</b></td><td>4条可证伪具体预测 + 2条宏大叙事，分层不混同</td></tr>
+<tr><td><b>E4 同谱系污染</b></td><td>一律标注同谱系呼应/不同切分轴，非独立验证；新增量单列</td></tr>
+<tr><td><b>E5 诚实刻度</b></td><td>高诚实度（preserve）：主动声明6处边界/不确定</td></tr>
+<tr><td><b>E6 吸收决策</b></td><td>新增量中 1 项可长牙（评估可扩展性），1 项记观察不强造模块</td></tr>
+</table>
+
+<h2>六、三层诚实结论</h2>
+<div class="grid">
+<div><b>① 事实层</b><br>DeepMind Institute 2026-11-19 观点文（作者 Tim Genewein，基于 From AGI to ASI 技术报告）：智能连续统 + 认知工业化 + 四条路径(scaling/范式/协调/RSI) + 多路径复合；含数量级外推且算术自洽；Disclaimer 明确非 Google 官方立场。</div>
+<div><b>② 推断边界</b><br>观点文≠实证(无统计量可复算)；算术自洽≠外推成立(趋势维持十年是经验问题)；DMI个人观点≠官方立场；RSI段与我方判据同谱系呼应≠独立验证；可证伪具体预测与不可证伪宏大叙事须分层。</div>
+<div><b>③ 方法教训</b><br>①判据适配对象：观点文查外推链算术+假设明示+可证伪分级，不套统计复算/分类自洽；②主体归属精确到'作者/平台/免责'三层；③同谱系呼应标污染；④吸收按KB-META01：评估可扩展性可长牙、领域速度预测记观察不强造模块。</div>
+</div>
+
+<h2>七、判据自审 + 长牙产物</h2>
+<div class="card">
+<p><b>判据自审：</b>首跑 E2 用脆弱的字符串包含检查判断算术自洽（碰巧对但逻辑不牢），且算术是 Bash 手算硬编码。
+审计后把算术复算固化进 <code>verify_extrapolation_arithmetic()</code>，改为真实布尔断言——
+与 §33/§34/§35/§38 一脉相承的"审计工具本身"。</p>
+<p><b>长牙产物：</b>E6 判定"评估可扩展性"是真缺口，在 <code>svagent/evaluation_reliability.py</code> 加
+<code>evaluation_scalability()</code>：超人域 + 纯人工判断无自动验证 → <code>REL.NOT_SCALABLE</code> flag。
+"RSI 在自动验证领域最快"是可证伪预测，记观察项不强造模块（KB-META01 防为改进而改进）。</p>
+<p class="small">知识库 88→<b>93 条、仍就绪</b>；新增 12 项测试（8 分析 + 4 可扩展性），全量 <b>287 测试通过</b>；预注册锁存一致。</p>
+</div>
+
+<blockquote>
+<b>一句话收束：</b>这篇 essay 的实例与观点分层清楚、算术自洽且诚实标注假设——值得学的不是"ASI 会不会来"的结论，
+而是它把 RSI 的反馈质量与评估可扩展性挑明的那两句话。<b>对观点文最好的读法，是把可证伪的预测留下、把宏大叙事归位，
+再问一句：它说的哪句话，能在我这里长成一道会拦会降级的门禁？</b>
+</blockquote>
+
+</body></html>

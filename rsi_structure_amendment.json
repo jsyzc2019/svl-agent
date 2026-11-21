@@ -1,0 +1,45 @@
+{
+  "document": "RSI-Structure 论证 — 全文到手后的修正记录（后验增量，非原预注册内容）",
+  "amendment_time": "2026-11-21T16:53:00+08:00",
+  "trigger": "用户下载并上传官方PDF preprints202611.0261.v1.pdf（3.8MB,10页），pdftotext提取全文2416行落地 rsi_structure_full.txt",
+  "original_limitation": "上一轮(§38)因OpenReview/Preprints直连403+WebFetch通道截断，§10/§11正文未逐字取得，仅靠摘要+二手媒体转述覆盖；当时已在证据文件与报告中如实标注此局限",
+  "integrity_declaration": "本修正中的新判据(evaluation_reliability.py)是全文到手后才识别的，属于后验证据驱动的增量，不得伪装成原预注册(rsi_structure_prereg.json, sha256 029d6c41…)就写好的内容。原预注册的T1-T6均未因新证据而翻转，只是被强化或补充。",
+
+  "corrections": [
+    {
+      "item": "PDF与§10/§11状态",
+      "before": "PDF二进制未取得；§10/§11被截断，由二手覆盖",
+      "after": "PDF已由用户补传；§10(行1792-1948)与§11(行1949-)逐字取得，一手覆盖",
+      "impact": "证据等级提升；结论方向不变"
+    },
+    {
+      "item": "T3 判据适配",
+      "before": "综述无实验统计量→不套统计复算",
+      "after": "仍成立且被强化：§10.6论文自曝'purposeful selection, does not estimate prevalence'明确支持定性比较定位",
+      "impact": "强化，无翻转"
+    },
+    {
+      "item": "T5 诚实刻度",
+      "before": "4条自我限定信号",
+      "after": "新增§10.6：主动声明目的性抽样、不估计流行率、分类未经独立双编码——比§9更根本的信度自曝",
+      "impact": "强化，无翻转"
+    },
+    {
+      "item": "二手转述充分性",
+      "before": "认为二手已覆盖§10/§11核心（独立验证、长期维护）",
+      "after": "核对后发现二手遗漏4项重要一手内容：①§10.3评估可靠性/安全性(多judge共享错误、记忆投毒SKILL-INJECT/SkillGuardBench) ②§10.6抽样与双编码局限 ③§10.2维护成本 ④§10.5可复现性记录",
+      "impact": "新发现：二手忠实但不完整——印证'一手优先'原则"
+    },
+    {
+      "item": "新增判据缺口（本次最有价值的修正）",
+      "before": "未识别（因缺§10）",
+      "after": "识别两道真缺口并编译为 svagent.evaluation_reliability.py：①judge独立性(多个模型judge共享错误，数量≠独立判断；评估器漂移须重验) ②复现完整性/双编码(缺关键记录字段或分类未经独立双编码→降级)",
+      "impact": "新增会拦/会降级的动作，符合KB-META01'长牙'原则"
+    }
+  ],
+
+  "new_test_count": 10,
+  "full_suite_after": 275,
+  "kb_additions": ["KB-STRUCT07 评估者独立性", "KB-STRUCT08 分类双编码与复现完整性"],
+  "one_line": "全文到手没有推翻上一轮任何结论，但补上了两道真正会拦/会降级的判据，并实证了'二手忠实但不完整'——这正是坚持一手优先的理由。"
+}

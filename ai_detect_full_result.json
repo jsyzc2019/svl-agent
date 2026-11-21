@@ -1,0 +1,97 @@
+{
+  "sample_counts": {
+    "human": 24,
+    "ai": 12,
+    "deai": 12
+  },
+  "auc_original": 0.9236,
+  "deai_detect_rate": 1.0,
+  "deai_pass_rate": 0.0,
+  "deai_proba_mean": 0.8929,
+  "gate_length_label_corr": 0.0408,
+  "single_feature_auc": {
+    "sent_len_cv": 0.396,
+    "sent_len_mean": 0.062,
+    "ttr": 0.378,
+    "punct_rate": 0.875,
+    "dialogue_ratio": 0.455,
+    "formal_word_hits": 0.448,
+    "paragraph_count": 0.5,
+    "exclaim_question_rate": 0.542
+  },
+  "feature_means": {
+    "sent_len_cv": {
+      "human": 0.7115,
+      "ai": 0.6617
+    },
+    "sent_len_mean": {
+      "human": 41.0073,
+      "ai": 18.2834
+    },
+    "ttr": {
+      "human": 0.4633,
+      "ai": 0.4515
+    },
+    "punct_rate": {
+      "human": 0.0996,
+      "ai": 0.112
+    },
+    "dialogue_ratio": {
+      "human": 0.2148,
+      "ai": 0.1702
+    },
+    "formal_word_hits": {
+      "human": 1.8234,
+      "ai": 1.1469
+    },
+    "paragraph_count": {
+      "human": 1.0,
+      "ai": 1.0
+    },
+    "exclaim_question_rate": {
+      "human": 0.0063,
+      "ai": 0.0065
+    }
+  },
+  "decision": {
+    "R_original": "R1_detectable",
+    "R_deai": "R5_holds"
+  },
+  "gate": {
+    "G1_single_feature_dominant": true,
+    "G2_length_confound": false,
+    "G3_deai_heldout": true,
+    "G4_boundaries_written": true
+  },
+  "prereg_sha256_verified": "1692df808bf55956b5c4d5a16ad05f05121722c00efd96ca7d2154fc76c9dc6c",
+  "samples_sha256_verified": "b770909e86be7ae68a5c7a9a3b160a87f9283e2f5521c2fdef2faa49cb0a819b",
+  "diagnosis": {
+    "G1_gate_triggered": true,
+    "single_feature_auc": {
+      "仅句长": 0.9271,
+      "仅标点": 0.8611,
+      "句长+标点": 0.9479,
+      "纯内容特征(去句长标点)": 0.5694
+    },
+    "sent_len_distribution": {
+      "human": "41.0±17.2",
+      "ai": "18.3±1.7",
+      "overlap_human_n": 2,
+      "overlap_ai_n": 12
+    },
+    "finding": "92%AUC几乎全靠句长这一个文风代理; 去掉句长/标点后内容特征AUC仅0.57(近随机)。这是'我写短句 vs 天蚕土豆长段落'的artifact, 非AI写作本质特征。",
+    "deai_change_rate": 0.052,
+    "deai_note": "去味样本仅5.2%改动, detect_rate=1.0只证明轻微改写骗不过; 深度去味(合并短句)后检出率从100%→75%, AI概率均值0.89→0.63",
+    "deep_deai_ablation": {
+      "检出率": 0.75,
+      "ai概率均值": 0.634,
+      "说明": "仅改变句长结构不改语义, 检出率大幅下降——判别力寄生在脆弱浅层特征"
+    }
+  },
+  "independent_conclusion": {
+    "answer": "在当前浅层风格判据下, '客观判别AI网文'不可靠——判据抓的是文风指纹(句长/标点)而非AI写作本质; 深度去AI味后可骗过这类判据。",
+    "can_say": "受控实验里浅层统计判据对'本AI vs 本真人样本'达AUC0.92; 表面改写(5%)骗不过; 但这些数字脆弱。",
+    "cannot_say": "不能宣称'AI网文可92%准确识别'——去掉句长特征即掉到0.57; 换作者/换模型即失效; 无法外推到通用检测器、深度语义改写、真实分布。",
+    "method_reflection": "又一次'触发≠真相': G1门禁亮起(单特征主导)时, 漂亮AUC是文风artifact。判据设计者恰是AI样本作者, 存在结构性自利偏差——用自己风格当'AI特征'。真正的客观判别需要跨作者/跨模型的多样化金标准+深度语义检测, 本次受限于数据源与工具只做到方向性演示。"
+  }
+}

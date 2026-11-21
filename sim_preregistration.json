@@ -1,0 +1,76 @@
+{
+  "document": "SIM/CRSI 论文与生态 — 框架论证预注册判据（锁存）",
+  "timestamp_utc": "2026-11-21T07:00:00Z",
+  "timestamp_local": "2026-11-21 15:00:00 CST",
+  "status": "PREREGISTERED_BEFORE_ANALYSIS",
+  "declaration": "本判据在框架论证脚本运行前写死。一手来源=arXiv:2611.18856 原文PDF；二手=媒体/Reddit转述；生态=GitHub API+awesome-rsi。三层来源隔离：社区热度与媒体叙事不得当作论文有效性证据。不借用任何'AI已实现/未实现RSI'的现成结论，结论由本次证据独立提出。",
+
+  "correction_note": "首轮误把用户所指 RSI 当作证券相对强弱指数(Relative Strength Index)并已产出完整但离题的论证。根因=术语歧义(同一缩写在两领域含义不同)未触发澄清门禁。此错误本身作为 fix 类教训入库。",
+
+  "sources": {
+    "primary": "rsi_sim_paper.pdf / rsi_sim_paper.txt (arXiv:2611.18856v1, 2026-11-13, PDF原文已下载)",
+    "secondary": "36kr/智东西、theagenttimes、aifrontierpost、traictory 媒体与Reddit转述（仅作叙事层）",
+    "ecosystem": "rsi_sim_github_evidence.json（GitHub API + lobehub/awesome-rsi + jennyzzt/dgm）",
+    "isolation_rule": "论文原文事实归事实层；媒体夸张归叙事层；GitHub热度归生态层；三层不得交叉背书"
+  },
+
+  "framework_ladder": {
+    "note": "把 awesome-rsi 的 Task/Retained/Improver gain 三级证据，作为本项目'触发≠真相'判据的可操作化实例",
+    "L1_task_gain": "当前任务分数变高——最弱，可能只是本轮输出改善，不代表系统持久变化",
+    "L2_retained_gain": "对 weights/memory/harness/code 的持久更新在 held-out 上改善未来表现——中等",
+    "L3_improver_gain": "改进机制本身被修改，且在可比预算下被受控实验证明能产生更有效的后续更新——最强，才是严格RSI",
+    "decision_rule": "论文必须明确定位自己落在哪一级；若只到L2却被叙事抬到L3，判为主体错位/过度声称"
+  },
+
+  "tests": [
+    {
+      "id": "S1",
+      "name": "主体错位审计（事实真实性≠推论有效性）",
+      "statistic": "核对：改进对象是模型权重还是harness？权重是否冻结？媒体叙事声称了什么？",
+      "decision_rule": "若论文改进对象=harness且权重冻结，而媒体/Reddit声称'AI自我进化/奇点'，判定叙事层主体错位——与第31节大摩文'事实全真但主体错位'同构"
+    },
+    {
+      "id": "S2",
+      "name": "证据阶梯定位（触发≠真相）",
+      "statistic": "用 L1/L2/L3 阶梯定位 SIM 的实证贡献层级",
+      "decision_rule": "SIM改的是优化器的记忆(在harness层)，held-out有retained gain；但改进机制(proposer/selector规划与搜索流程)在论文中固定不变→定位L2强、L3未证明。若论文自称或媒体称达成完整RSI，判越级"
+    },
+    {
+      "id": "S3",
+      "name": "统计功效与稳健性审计（高功效/小样本陷阱）",
+      "statistic": "从Table3的10对Δ值复算均值、95%CI、配对t；做留一法(去掉最大Δ、去掉次大Δ)看结论是否翻转",
+      "decision_rule": "n=10属小样本；若去掉单个离群run后均值仍>0且方向不变，判结论稳健但脆弱；若翻转则判由单点支撑。dz=1.28大效应量须注明小样本易 inflated"
+    },
+    {
+      "id": "S4",
+      "name": "消融与混杂审计（vanity门禁）",
+      "statistic": "核对是否优于 harness-only 与 root-cause-only 两个对照；SIM是否作为'完整包'(继承记忆+目标期更新)测试",
+      "decision_rule": "优于两个对照=细节有真实贡献(非虚荣)；但'完整包'测试使记忆本身的因果贡献无法单独隔离→列为诚实缺口，不据此声称记忆单独有效"
+    },
+    {
+      "id": "S5",
+      "name": "论文自曝局限核对（诚实刻度）",
+      "statistic": "核对论文是否主动声明：仅coding有n=10重复、其余领域n=1；优化流程固定；自修改harness可能满足评估器而未解任务；LLM judge偏差",
+      "decision_rule": "论文主动声明局限=高诚实度，应preserve；声明缺失才判fix。区分'论文诚实'与'媒体夸大'，不把后者算到前者头上"
+    },
+    {
+      "id": "S6",
+      "name": "SIM与本项目知识库同构性（吸收有益经验）",
+      "statistic": "对照SIM字段(rationale/predicted/observed/provenance/保留失败/aliases/carried_from)与本项目KnowledgeItem(mechanism/support/evidence/provenance/失败教训)",
+      "decision_rule": "找出可迁移的机制增量(如'预测vs实测'配对、失败编辑保留、来源追溯)，按fix/preserve分类入库；不因'别人也这么做'就判我们已完备"
+    }
+  ],
+
+  "honest_conclusion_template": [
+    "第一层(事实)：论文原文写了什么、数值是多少、GitHub生态在做什么",
+    "第二层(推断边界)：改进对象层级、样本量与稳健性、记忆的因果贡献是否隔离、叙事如何越级",
+    "第三层(方法教训)：术语歧义门禁缺失(本次自身错误)、触发≠真相的可操作化、可吸收的机制增量"
+  ],
+
+  "anti_overclaim": [
+    "论文≠媒体≠Reddit：论文措辞克制，夸张来自二手转述，须分层归因",
+    "harness层改进≠模型层智能提升：权重全程冻结",
+    "GitHub star/仓库数是热度虚荣指标，不作论文有效性证据",
+    "本论证是方法演练，不构成对RSI研究领域的最终判决"
+  ]
+}

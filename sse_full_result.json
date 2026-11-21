@@ -1,0 +1,176 @@
+{
+  "n_returns": 8767,
+  "date_range": [
+    "1990-12-20",
+    "2026-11-20"
+  ],
+  "mean_daily_return": 0.000407,
+  "std_daily_return": 0.020856,
+  "seed": 20261121,
+  "n_random_walks": 200,
+  "backtest_cut_index": 6136,
+  "tests": {
+    "F1_autocorr": {
+      "ac1_10": [
+        0.0459,
+        0.032,
+        0.0398,
+        0.0376,
+        0.0166,
+        -0.0248,
+        0.0088,
+        -0.0163,
+        0.0202,
+        -0.0018
+      ],
+      "lb_stat": 68.0,
+      "lb_p": 0.0,
+      "bonferroni_alpha_lag": 0.001,
+      "n_sig_lags": 0
+    },
+    "F2_variance_ratio": {
+      "2": {
+        "vr": 1.0457,
+        "z": 4.184,
+        "sig_1pct": true
+      },
+      "5": {
+        "vr": 1.1558,
+        "z": 6.526,
+        "sig_1pct": true
+      },
+      "10": {
+        "vr": 1.2261,
+        "z": 6.173,
+        "sig_1pct": true
+      },
+      "20": {
+        "vr": 1.3036,
+        "z": 5.662,
+        "sig_1pct": true
+      }
+    },
+    "F3_runs": {
+      "n_runs": 4305,
+      "exp_runs": 4366.6,
+      "z": -1.321,
+      "sig_1pct": false
+    },
+    "F4_calendar": {
+      "max_abs_t": 2.918,
+      "bonferroni_alpha": 0.0029,
+      "note": "17个星期/月份检验的Bonferroni阈值；max|t|对应p需<0.0029才显著"
+    },
+    "G0_random_walk_control": {
+      "real_anomaly_total": 48.314,
+      "breakdown": {
+        "lb_z": 12.933,
+        "vr_z_sum": 33.332,
+        "runs_z": 0.8,
+        "cal_z": 1.249,
+        "total": 48.314
+      },
+      "pseudo_mean": 10.091,
+      "pseudo_max": 31.002,
+      "real_rank_of": 201,
+      "percentile_more_anomalous": 1.0,
+      "threshold": 0.95,
+      "triggered_H1": true
+    },
+    "H0_backtest": {
+      "buy_hold": {
+        "annual": 0.0154,
+        "sharpe": 0.092
+      },
+      "momentum20": {
+        "annual": -0.112,
+        "sharpe": -0.663,
+        "excess": -0.1275
+      },
+      "reversal5": {
+        "annual": -0.2938,
+        "sharpe": -1.696,
+        "excess": -0.3092
+      },
+      "ma20_timing": {
+        "annual": -0.0895,
+        "sharpe": -0.78,
+        "excess": -0.105
+      }
+    },
+    "subperiod_stability": {
+      "early": {
+        "vr_2": 1.0506,
+        "vr_10": 1.2691,
+        "ac1": 0.0507,
+        "lb_p": 0.0
+      },
+      "late": {
+        "vr_2": 1.0254,
+        "vr_10": 1.0408,
+        "ac1": 0.026,
+        "lb_p": 0.0002
+      }
+    }
+  },
+  "prereg_sha256_verified": "980d589a9d971309c24f0bfb4e5d0cd1aafc815f8196064e7a773c3673de9266",
+  "diagnosis": {
+    "lookahead_bug": {
+      "说明": "主检验初版MA20用当天收盘判断却计当天收益，前视偏差",
+      "修复前年化": 0.2621,
+      "修复后年化": -0.0895,
+      "结论": "惊艳+26%超额是前视偏差幻觉"
+    },
+    "VR_vs_GARCH": {
+      "q2": 1.0,
+      "q5": 1.0,
+      "q10": 1.0,
+      "q20": 1.0,
+      "说明": "真实VR在带波动聚集GARCH对照中仍100%分位——VR>1非波动聚集所致，是真实序列结构"
+    },
+    "vol_clustering": {
+      "r2_LB_p": 2e-09,
+      "说明": "存在强波动聚集，但已用GARCH对照排除其对VR的污染"
+    },
+    "ac1_economic_magnitude": {
+      "ac1": 0.0459,
+      "R2": 0.0021,
+      "说明": "统计显著但仅解释0.21%收益方差，预测力极弱"
+    },
+    "MA_parameter_sensitivity": {
+      "MA5": 0.437,
+      "MA20": 0.262,
+      "MA60": 0.138,
+      "MA250": 0.081,
+      "说明": "这是修复前(含前视)的数据，参数越短收益越高，符合前视偏差特征"
+    },
+    "MA_no_lookahead": {
+      "MA5": -0.1716,
+      "MA20": -0.0895,
+      "MA60": -0.0371,
+      "MA250": -0.0181,
+      "说明": "修复后全部为负——所有均线策略跑输买入持有"
+    },
+    "VR_robustness": {
+      "剔除极端日q10": 1.2249,
+      "说明": "剔除65个极端日后VR仍>1.22，非极端日驱动"
+    },
+    "VR_time_trend": {
+      "时期1": 1.3007,
+      "时期2": 1.0688,
+      "时期3": 1.0653,
+      "说明": "VR10逐时期下降，趋势性减弱，市场趋于有效"
+    },
+    "calendar": {
+      "max_abs_t": 2.918,
+      "bonferroni_crit": 2.98,
+      "说明": "未过多重比较，日历效应是数据窥探假象"
+    }
+  },
+  "independent_conclusion": {
+    "statistical": "统计上拒绝严格iid随机游走（VR>1稳健、跨对照成立），弱式有效性在严格意义不成立",
+    "economic": "但经济上不可利用：自相关R²仅0.21%，所有价量策略扣成本后跑输买入持有，经济意义接近有效",
+    "trend": "趋势性随时间衰减（VR10 1.30→1.07），市场在趋近有效",
+    "boundary": "仅覆盖弱式有效性，不外推半强式/强式；指数非个股；无法排除非线性/时变但过弱无法覆盖成本的规律"
+  }
+}

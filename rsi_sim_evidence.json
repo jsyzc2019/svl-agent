@@ -1,0 +1,172 @@
+{
+  "document": "SIM/CRSI 三层来源隔离证据（只记录事实，不含有效性结论）",
+  "retrieved_utc": "2026-11-21T07:01:00Z",
+  "primary_paper": {
+    "arxiv_id": "2611.18856v1",
+    "submitted": "2026-11-13",
+    "file": "rsi_sim_paper.pdf",
+    "title": "Self-Improvement Memory Enables Continual Recursive Self-Improvement",
+    "authors_affiliations": [
+      "Google Cloud AI",
+      "Google DeepMind",
+      "Google Cloud AI Research",
+      "The Pennsylvania State University"
+    ],
+    "first_author": "Xin Yu (Penn State stats PhD, work done during Google internship)",
+    "keywords": [
+      "Recursive self-improvement",
+      "agent harnesses",
+      "continual learning"
+    ],
+    "core_claims": [
+      "研究对象是 harness(管理context/tools/execution的外部程序)，不是模型权重",
+      "任务模型权重全程冻结(policy weights remain frozen)",
+      "SIM服务harness优化器而非执行任务的任务策略(proposer/selector读完整SIM)",
+      "SIM按反复出现的harness问题分组，记录每条edit的rationale、predicted/observed outcomes、provenance(域/benchmark/policy/round)",
+      "失败/回归的edit也保留在记忆中(even when the edit regresses or fails to fix a predicted task)",
+      "proposer与selector读取全部条目，无retrieval、无truncation"
+    ],
+    "memory_schema_fields": [
+      "round",
+      "sample",
+      "accepted",
+      "backfilled",
+      "what",
+      "files",
+      "predicted",
+      "fixed",
+      "missed",
+      "passed",
+      "total",
+      "domain",
+      "carried_from",
+      "aliases"
+    ],
+    "settings": {
+      "CRSI_cross_dataset": "benchmark变、policy固定(XS≠XT, MS=MT)",
+      "CRSI_cross_model": "policy变、benchmark/split固定(MS≠MT, XS=XT)",
+      "four_domains": [
+        "coding",
+        "text classification",
+        "agentic workspace",
+        "engineering design"
+      ],
+      "transfer_failure_anchor": "Opus演化harness迁移Gemini起点68.41，低于seed harness的73.89"
+    },
+    "headline_statistics": {
+      "paired_coding_runs": 10,
+      "sim_wins": 9,
+      "mean_start": 18.36,
+      "mean_no_sim": 19.33,
+      "mean_sim": 21.7,
+      "mean_gain": 2.36,
+      "ci95": [
+        1.05,
+        3.68
+      ],
+      "paired_t": "t(9)=4.06, p=0.003",
+      "signed_rank_p": 0.006,
+      "dz": 1.28,
+      "one_pair_favored_no_sim": 0.61,
+      "table3_deltas": [
+        1.81,
+        1.81,
+        0.61,
+        5.46,
+        1.82,
+        3.64,
+        1.82,
+        -0.61,
+        4.85,
+        2.42
+      ],
+      "cross_model_workspace": {
+        "with_sim": 84.75,
+        "without_sim": 73.42,
+        "gap": 11.33
+      }
+    },
+    "four_controls": [
+      "Cold Start(H0,无SIM)",
+      "Harness Transfer(HS,无SIM)",
+      "Problem-Only Memory(仅root cause)",
+      "Full SIM(HS+完整记录)"
+    ],
+    "self_declared_limitations": [
+      "算力预算内，独立RSI重复仅在coding；其他领域每条件仅1次运行",
+      "研究兼容harness接口的设置；优化器planning/search流程固定",
+      "比较的是SIM作为完整流程(继承记忆+目标期更新)，无法单独隔离记忆贡献",
+      "自修改harness可能满足评估器而未解意图任务；已用held-out隔离+固定verifier缓解",
+      "workspace分数可能反映LLM judge偏差"
+    ],
+    "honesty_notes": [
+      "主动纳入一条'被接受但未能修复目标任务的edit'入附录F.2",
+      "主动报告迁移起点低于seed的反面锚点(68.41<73.89)",
+      "主动报告10对中有1对SIM落败(-0.61)"
+    ]
+  },
+  "secondary_narrative": {
+    "source_isolation": "仅叙事层，不作有效性证据",
+    "reddit_r_singularity": "AI improving its own software across model switches / claims Google achieved recursive self-improvement (672 points)",
+    "tech_orange": "把Google SIM与Meta Self-Improving Memory对比：Meta内化到权重，Google是外部harness",
+    "critical_voices": [
+      "Reddit高赞反驳：改进的是harness不是模型，权重从未改变",
+      "aifrontierpost：viral version is wrong in the specific way that matters most",
+      "traictory：adds a memory, not a flywheel；绝对成功率仅19-22%"
+    ]
+  },
+  "github_ecosystem": {
+    "source_isolation": "生态热度层，star数仅虚荣指标",
+    "awesome_rsi": {
+      "repo": "lobehub/awesome-rsi",
+      "stars": 1071,
+      "pushed": "2026-11-20",
+      "definition": "RSI = AI系统改进自身能力，并能改进'产生后续改进的机制'",
+      "evidence_ladder": [
+        "Task gain(当前任务分数)",
+        "Retained gain(weight/memory/harness持久更新在held-out改善)",
+        "Improver gain(改进机制本身被修改且受控实验证明更有效)"
+      ],
+      "key_warning": "Structural recursion vs demonstrated improvement — 结构递归≠实证改进；并非列表所有工作都严格证明RSI"
+    },
+    "dgm": {
+      "repo": "jennyzzt/dgm",
+      "stars": 2533,
+      "paper": "arXiv:2505.22954",
+      "mechanism": "迭代修改自身代码(同时提升修改代码的能力)，用SWE-bench/Polyglot经验证保留每个改动",
+      "safety": "警告执行不可信的模型生成代码，可能破坏性行为"
+    },
+    "related_projects": [
+      {
+        "repo": "sent rux/sentrux",
+        "stars": 3346,
+        "note": "架构传感器帮agent闭合feedback"
+      },
+      {
+        "repo": "AetherLabsAI/RSIAgent",
+        "stars": 620,
+        "note": "training-free多agent递归自改进"
+      },
+      {
+        "repo": "Asymptote-Labs/agent-beacon",
+        "stars": 3583,
+        "note": "cross-harness自改进记忆层"
+      },
+      {
+        "repo": "MemTensor/MemOS",
+        "stars": 12468,
+        "note": "自进化记忆OS"
+      },
+      {
+        "repo": "openJiuwen-ai/FAST-Evolve",
+        "stars": 5,
+        "note": "agentic evolution工具链"
+      }
+    ],
+    "ecosystem_observation": [
+      "RSI仓库207个、自改进memory类364个、自进化harness类150个——生态活跃但热度分布极不均",
+      "awesome-rsi自带严格证据阶梯与'结构递归≠实证改进'警告，社区自我约束意识强",
+      "大量项目star集中于memory/harness基础设施而非严格RSI验证"
+    ]
+  }
+}

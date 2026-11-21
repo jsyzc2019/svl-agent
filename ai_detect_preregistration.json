@@ -1,0 +1,74 @@
+{
+  "title": "网文 AI 生成客观判别 —— 预注册判据（看结果前锁存）",
+  "timestamp_utc": "2026-11-21T05:48:46Z",
+  "timestamp_local": "2026-11-21 13:48:46 CST",
+  "samples_lock_sha256": "b770909e86be7ae68a5c7a9a3b160a87f9283e2f5521c2fdef2faa49cb0a819b",
+  "question": "在去AI味技能加持下，能否客观判别网文哪些是AI写的、哪些是真人写的？",
+
+  "ground_truth_design": {
+    "human": "《斗破苍穹》(天蚕土豆, 2009年起连载) 章节切~500字段, n=24, 高置信人类创作(ChatGPT前)",
+    "ai": "本Agent现场创作的12段玄幻网文, 标签确定AI, 题材刻意匹配真人以控制混淆",
+    "deai": "对AI样本用humanizer 24模式中的确定性规则改写, 标签仍为AI起源, n=12",
+    "length_matching": "三类样本字数区间控制在430-630, 防止长度成为作弊特征",
+    "limitation": "真人样本集中于单部作品(作者风格混淆风险); AI样本来自单一模型(本Agent, 代表性与自利偏差风险)——均在结论中诚实声明"
+  },
+
+  "features_predefined": [
+    "sent_len_cv: 句子长度的变异系数(burstiness代理)",
+    "sent_len_mean: 平均句长",
+    "ttr: 去重字数/总字数(词汇多样性)",
+    "punct_rate: 标点密度(，。！？；：)",
+    "dialogue_ratio: 引号包裹内容占比(对话占比)",
+    "formal_word_hits: 书面/AI高频词命中率(仿佛/犹如/然而/须臾/明灭不定等固定词表)",
+    "paragraph_count: 段落数",
+    "exclaim_question_rate: 感叹号+问号密度"
+  ],
+  "feature_source": "特征取自 Wikipedia 'Signs of AI writing' 与 humanizer 规则中的字数/风格线索, 非针对本样本调参",
+
+  "classifier": {
+    "model": "逻辑回归(标准化后), 仅用预定义8特征",
+    "train_set": "仅 H + A (真人 vs 原始AI)",
+    "test_protocol": "H/A 做 5 折交叉验证得 AUC_original; 分类器在全部 H+A 上重训后, 对 D 做预测(去味样本全程留出, 不参与任何训练/调参)",
+    "random_state": 42
+  },
+
+  "primary_metrics": {
+    "auc_original": "H vs A 的 5折交叉验证 AUC —— 原始AI文本的可判别性",
+    "deai_pass_rate": "D 被分类器判为 human 的比例 —— 去味欺骗成功率",
+    "deai_detect_rate": "D 被判为 ai 的比例 = 1 - deai_pass_rate",
+    "degradation": "auc_original 相对 0.5 的优势, 与 deai_detect_rate 相对 0.5 的优势对比"
+  },
+
+  "decision_rules": {
+    "R1_original_detectable": "若 auc_original >= 0.80 → 原始AI文本在本判据下可客观判别",
+    "R2_original_weak": "若 0.60 <= auc_original < 0.80 → 原始AI仅弱可判别",
+    "R3_original_fail": "若 auc_original < 0.60 → 原始AI在本判据下已不可判别",
+    "R4_deai_breaks": "若 deai_detect_rate < 0.60 (即去味后检出率低于六成) → 去味显著削弱客观判别",
+    "R5_deai_holds": "若 deai_detect_rate >= 0.80 → 去味后仍可较可靠判别",
+    "R6_deai_gray": "0.60 <= deai_detect_rate < 0.80 → 去味后判别处于灰区"
+  },
+
+  "diagnostics_not_new_tests": [
+    "单特征 AUC 排序: 哪些特征真有效, 是否只是题材/长度代理",
+    "长度混淆检查: 长度与标签的相关性(若强相关则判据可疑)",
+    "AI作者自利偏差检查: 真人样本换一部作品/换一段是否结论稳健(留一法)",
+    "去味改动幅度: D 相对 A 的实际文本改动率, 区分'真去味'与'轻微改写'"
+  ],
+
+  "anti_vanity_gate": [
+    "G1: 若仅靠1个特征就达到高AUC, 判定为脆弱判据, 结论降级",
+    "G2: 若长度与标签强相关(|r|>0.5), 判定混淆, 必须剔除长度后重评",
+    "G3: deai_pass_rate 必须基于全程留出的D, 若D参与过任何训练则结果作废",
+    "G4: 诚实边界必须包含'真人单作品局限'与'AI单模型自利偏差'两条"
+  ],
+
+  "honest_boundaries_required": [
+    "统计可判别 ≠ 通用检测器可靠: 本判据是浅层风格特征, 非大模型困惑度/深度语义检测",
+    "真人样本集中于单部作品, 判别器可能学到作者风格而非'人vsAI'的普遍差异",
+    "AI样本来自单一模型(本Agent), 存在自利偏差——我在设计判据时无法完全排除对自己输出风格的隐性偏好",
+    "去味用的是确定性规则改写, 代表'基础去味', 不构成对高级人工润色的检验",
+    "样本量小(H24/A12/D12), AUC置信区间较宽, 结论是方向性而非精确估计"
+  ],
+
+  "commitment": "以上特征、阈值、协议、判定规则、门禁在看任何判别结果前写死并SHA256锁存。之后只执行, 不改判据。诊断性拆解不算新检验, 不得用于事后调阈值。"
+}

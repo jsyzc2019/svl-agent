@@ -1,0 +1,110 @@
+{
+  "S1": {
+    "name": "主体错位审计",
+    "object_is_harness": true,
+    "weights_frozen": true,
+    "media_overclaim": true,
+    "subject_mismatch": true,
+    "decision": "论文改进harness且权重冻结，媒体却称'AI实现递归自我改进/奇点'→主体错位",
+    "framework_link": "与第31节大摩文同构：事实全真(2.36分确实)但主体错位(改的不是模型)"
+  },
+  "S2": {
+    "name": "证据阶梯定位(Task/Retained/Improver)",
+    "L1_task_gain": true,
+    "L2_retained_gain": false,
+    "L3_improver_gain_proven": false,
+    "optimization_procedure_fixed": true,
+    "decision": "SIM有L1任务增益与L2保留增益；但优化器planning/search流程固定，改进机制本身未被改进→L3严格RSI未证明",
+    "declaration": "SIM改的是'优化器的记忆内容'，不是'优化器产生改进的机制'——记忆是证据库，不是改进器本身"
+  },
+  "S3": {
+    "name": "统计功效与稳健性审计",
+    "recomputed": {
+      "n": 10,
+      "mean": 2.3630000000000004,
+      "sd": 1.841605881349813,
+      "se": 0.5823669137427213,
+      "t": 4.057579412974565
+    },
+    "reported": {
+      "mean_gain": 2.36,
+      "t": 4.06,
+      "p": 0.003,
+      "dz": 1.28,
+      "ci95": [
+        1.05,
+        3.68
+      ]
+    },
+    "reproduces_reported": true,
+    "leave_one_out": {
+      "drop_max": {
+        "dropped": 5.46,
+        "mean": 2.018888888888889,
+        "still_positive": true
+      },
+      "drop_2nd_max": {
+        "dropped": 4.85,
+        "mean": 2.086666666666667,
+        "still_positive": true
+      },
+      "drop_min": {
+        "dropped": -0.61,
+        "mean": 2.6933333333333334,
+        "still_positive": true
+      },
+      "all_positive_direction_count": 9,
+      "base_mean": 2.3630000000000004
+    },
+    "small_sample": true,
+    "dz_inflated_risk": true,
+    "decision": "n=10小样本且dz=1.28偏大(小样本易inflated)，但留一法后均值仍为正、9/10方向一致→结论稳健但脆弱，非单点支撑"
+  },
+  "S4": {
+    "name": "消融与混杂审计",
+    "n_controls": 4,
+    "beats_harness_only_and_rootcause": true,
+    "tested_as_complete_package": true,
+    "memory_causal_contribution_isolated": false,
+    "decision": "优于harness-only与root-cause-only两个对照→细节(尝试+结果)有真实贡献非虚荣；但SIM作为'继承记忆+目标期更新'完整包测试，记忆单独因果贡献未隔离→列为诚实缺口",
+    "vanity_gate": "pass（有真对照）但附带因果隔离缺口"
+  },
+  "S5": {
+    "name": "论文诚实刻度核对",
+    "n_limitations_declared": 5,
+    "n_honesty_notes": 3,
+    "paper_is_honest": true,
+    "decision": "论文主动声明小样本/流程固定/评估器博弈/LLM judge偏差等局限，并纳入失败edit与迁移失败锚点→高诚实度，应preserve；夸张来自媒体二手转述，不算在论文头上"
+  },
+  "S6": {
+    "name": "SIM与本项目知识库同构性",
+    "sim_schema": [
+      "accepted",
+      "aliases",
+      "backfilled",
+      "carried_from",
+      "domain",
+      "files",
+      "fixed",
+      "missed",
+      "passed",
+      "predicted",
+      "round",
+      "sample",
+      "total",
+      "what"
+    ],
+    "transferable_mechanisms": {
+      "predicted_vs_observed": true,
+      "keep_failed_edits": true,
+      "provenance_trace": true
+    },
+    "decision": "SIM的'预测vs实测配对''失败编辑保留''来源追溯/合并别名'与本项目KnowledgeItem(provenance/support/失败教训)高度同构；可吸收为机制增量，但不因同构就判本项目已完备"
+  },
+  "_meta": {
+    "prereg_sha256": "eda33fc1393da8f634f8ceda9c1788b41ac9804465cd4fb6c72436918f87231b",
+    "paper_file": "rsi_sim_paper.pdf",
+    "source_isolation": "论文原文=事实层；媒体=叙事层；GitHub=生态层，未交叉背书",
+    "correction": "首轮误判RSI为证券指标，已纠正；术语歧义门禁缺失入库为fix"
+  }
+}
