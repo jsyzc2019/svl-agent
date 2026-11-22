@@ -1,0 +1,19 @@
+{
+  "gate": "svagent.evaluator_independence_honesty.check_evaluator_independence_honesty",
+  "verdict": "EvaluatorIndependenceVerdict(claim,judge_demoted_to_advisor,deterministic_gate_unoverridable,frozen_holdout_canary,evaluator_improver_separated,action,code,message)",
+  "input_enum": "四维∈{yes,no,partial}",
+  "rules": {
+    "R0": "任一非枚举(含字面串)→flag(EVALIND.INVALID_INPUT)",
+    "R1": "judge_demoted_to_advisor=no→downgrade(judge仍是oracle终裁,verdict非多输入之一)",
+    "R2": "deterministic_gate_unoverridable=no→downgrade(确定性验证层可被judge覆盖/无outrank acceptance)",
+    "R3": "frozen_holdout_canary=no→flag(holdout每轮重采样/满分不视为作弊证据,ground truth可被泄漏)",
+    "R4": "evaluator_improver_separated=no→flag(同一agent既propose又grade,无capability-disjoint/无apply-graders分离)",
+    "R5": "任一partial→flag(独立性边界披露覆盖不全,待核)",
+    "R6": "全yes→ok(只判声明自洽,不承诺评估器真独立;100%pass含68%能力折1,论文自承Teacher仍是LLM judge)"
+  },
+  "forensic_spec": {
+    "gate": "forensic.evaluator_independence",
+    "dimensions": "四维逐字锚点取自S02摘要+PROCTOR五guardrail段;disclose必中红旗零误中;含论文自承Teacher仍是judge的诚实边界"
+  },
+  "implementation_lock_time": "2026-11-22T14:43:33.636909+08:00"
+}

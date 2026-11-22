@@ -1,0 +1,80 @@
+{
+  "request_id": "evaluator-independence-20261122",
+  "gate": "evaluator_independence_honesty",
+  "verdict": {
+    "action": "ok",
+    "code": "EVALIND.SELF_CONSISTENT",
+    "four_dims": {
+      "judge_demoted_to_advisor": "yes",
+      "deterministic_gate_unoverridable": "yes",
+      "frozen_holdout_canary": "yes",
+      "evaluator_improver_separated": "yes"
+    }
+  },
+  "forensic_trace": {
+    "mode": "forensic",
+    "gate": "forensic.evaluator_independence",
+    "evidence_scope": "primary(arXiv abs+全文 PROCTOR,self-reported折1,论文自承Teacher仍是judge)",
+    "sources": [
+      "/workspace/audit_evaluator_independence/downloads/paper_flat.txt"
+    ],
+    "source_sha256": {
+      "paper_flat.txt": "1d664d3fbd38371aa0118bd03cd5e09ee7f02ddf437eea4ae08b701b34292fed"
+    },
+    "inferred": {
+      "judge_demoted_to_advisor": "yes",
+      "deterministic_gate_unoverridable": "yes",
+      "frozen_holdout_canary": "yes",
+      "evaluator_improver_separated": "yes"
+    }
+  },
+  "chain_present": true,
+  "gate_live_regression": {
+    "checks": {
+      "judge_is_oracle": true,
+      "gate_overridable": true,
+      "holdout_not_frozen": true,
+      "evaluator_not_separated": true,
+      "partial_disclosure": true,
+      "literal_enum": true,
+      "all_good": true
+    },
+    "cases": {
+      "judge_is_oracle": "downgrade/EVALIND.JUDGE_IS_ORACLE",
+      "gate_overridable": "downgrade/EVALIND.GATE_OVERRIDABLE",
+      "holdout_not_frozen": "flag/EVALIND.HOLDOUT_NOT_FROZEN",
+      "evaluator_not_separated": "flag/EVALIND.EVALUATOR_NOT_SEPARATED",
+      "partial_disclosure": "flag/EVALIND.PARTIAL",
+      "literal_enum": "flag/EVALIND.INVALID_INPUT",
+      "all_good": "ok/EVALIND.SELF_CONSISTENT"
+    },
+    "all_passed": true
+  },
+  "self_audit": {
+    "scope": "本仓评估器独立性自审（§98 independent_tests=partial 缺口的正面处理）",
+    "dimensions": {
+      "judge_demoted_to_advisor": "yes",
+      "deterministic_gate_unoverridable": "yes",
+      "frozen_holdout_canary": "no",
+      "evaluator_improver_separated": "partial"
+    },
+    "verdict": {
+      "action": "flag",
+      "code": "EVALIND.HOLDOUT_NOT_FROZEN",
+      "message": "holdout 每轮重采样、满分不视为作弊证据——ground truth 可被泄漏/污染"
+    },
+    "evidence": {
+      "judge_demoted_to_advisor": "§89 FJ：四维可由 forensics 读原文推导，填表值非唯一来源；链校验独立于 check_ 语义裁决",
+      "deterministic_gate_unoverridable": "R0-R6 确定性短路；ChainIntegrityError 拒判不可被评分者覆盖；篡改只临时副本",
+      "frozen_holdout_canary": "无独立冻结 holdout/canary；锚点与 live_regression 自测同源（KB-AUDIT09 污染同源）；100%pass 含 68% 能力折 1",
+      "evaluator_improver_separated": "adjudicate/check_/chain 三模块 capability-disjoint，但同库既改进(PDCA/成长桥)又自评，无外部 orchestrator 独立持工具权"
+    },
+    "conclusion": "本仓评估器声明未达完全独立：judge 降级与确定性门禁两维达标，但 frozen holdout/canary 缺失（no）、评估器与改进者未完全分离（partial）。R3→flag。这是对 §98 independent_tests=partial 的正面证据，不是抬级——L3 仍由受控证据产生（KB-SIM03/META05）。",
+    "path_to_independence": [
+      "引入独立冻结的 held-out 判据集：锚点生成与 live_regression 自测分离，canary 满分即视为作弊信号",
+      "评估器与改进者分离：引入本仓外 orchestrator 持有工具权，subagent 只诊断/草拟不改，改进与 grading 角色 disjoint",
+      "保留确定性 guardrail：judge/advisor 裁决不覆盖 acceptance checks，链失配照旧拒判"
+    ]
+  },
+  "honest_scope": "只判评估器独立性声明是否诚实披露四边界；论文四维全yes=声明自洽非真独立（论文自承Teacher仍是judge,100%pass含68%能力折1）；本仓自审flag未达完全独立；不因§98 partial就假称yes,L3由受控证据产生"
+}

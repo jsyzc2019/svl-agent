@@ -1,17 +1,17 @@
 # 会话接续文档（SESSION HANDOFF）
 
 > 本文件用于新旧会话接续。新会话开始后，**先读本文件**，再按"接续后第一件事"操作。
-> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 14:40 (GMT+8)——**§98 自主运维第九轮完成并已推送，无遗留推送任务**。
-> 上一会话终点：§97 自主运维第八轮已推送（d8c0499 + docs 4017ba0）；本次完成 §98 自主运维第九轮（用户"可以跑"→真正执行 §97 落档路径① shared-start 受控对照：填表裁判 0.0 vs 取证法官 1.0、improver_gain=1.0，诚实重审 L3 为 flag/MATURITY.PARTIAL 未抬级；编译第37道 improver_gain_controlled_honesty 门禁 + 第12道 FJ 入口 + 受控对照引擎），已推送。
+> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 14:50 (GMT+8)——**§99 自主运维第十轮本地闭环，待推送（无其他遗留）**。
+> 上一会话终点：§98 自主运维第九轮已推送（36fb904 + docs 9a6bb8b）；本次完成 §99 自主运维第十轮（用户"继续飞"+系统安全红线→红线落档 §3第7条/守恒条款第8条；正面攻 §98 independence 缺口：arXiv:2609.02246 PROCTOR 编译第38道 evaluator_independence_honesty 门禁 + 第13道 FJ 入口 + 本仓评估器自审 flag/EVALIND.HOLDOUT_NOT_FROZEN 未抬级），本地已闭环待推送。
 
 ---
 
 ## 1. 一句话现状
 
 本仓是一个自进化 Agent 架构（`/workspace`，Python 包 `svagent`，版本 0.13.1）。
-当前已完成 **§1–§98**：§1–§88 外部精研（36 道会拦门禁）+ **§89 FJ 取证法官化升级**（把门禁从填表裁判改成取证法官）+ **§90 自主运维首日**（三清单+第29道 silent_failure 门禁）+ **§91 自主运维第二轮**（第30道 rsi_claim_audit 门禁）+ **§92 自主运维第三轮**（arXiv:2609.33013 + 第31道 memory_consolidation_governance 门禁 + 第6道FJ入口）+ **§93 自主运维第四轮**（清单动态扩展 P3 安全/合规 + arXiv:2611.24362 + 第32道 redteam_robustness_honesty 门禁 + 第7道FJ入口）+ **§94 自主运维第五轮**（arXiv:2611.21315 + 第33道 benchleaking_honesty 门禁 + 第8道FJ入口）+ **§95 自主运维第六轮**（回应"强者自设北极星"哲学挑战 + arXiv:2610.16015 + 第34道 goal_provenance_honesty 门禁 + 第9道FJ入口 + KB-META04 边界精确化）+ **§96 自主运维第七轮**（P0 技能演化话题 + arXiv:2610.09832 SkillForge + 第35道 skill_lifecycle_honesty 门禁 + 第10道FJ入口 + 虚高指标拆穿迁移）+ **§97 自主运维第八轮**（回应"期待L3" + arXiv:2610.38266 L0-L3 rubric + 第36道 maturity_evidence_honesty 门禁 + 第11道FJ入口 + 首次自审诚实判未达L3）。知识库 **136 条**，测试 **1217 passed**（全绿，§97 新增 26 项）。
-**§88–§98**：§98 自主运维第九轮（用户"可以跑"→真正执行 §97 落档路径①的 shared-start + matched-budget 受控对照：填表裁判捕捉率 0.0 vs 取证法官 1.0、improver_gain=1.0，诚实重审 L3→flag/MATURITY.PARTIAL 未抬级；arXiv:2610.16491 SpecRSI + 第37道 improver_gain_controlled_honesty 门禁 + 第12道 FJ 入口 + 受控对照引擎）。知识库 **138 条**，测试 **1249 passed**（全绿，§98 新增 32 项）。
-**§88–§98 均已推送**（远端 main = 本地 HEAD = `36fb904`，`git status -sb` 无 ahead）。凭据自管闭环连续九轮实证（见 §5）。**无遗留推送任务。**
+当前已完成 **§1–§99**：§1–§88 外部精研（36 道会拦门禁）+ **§89 FJ 取证法官化升级**（把门禁从填表裁判改成取证法官）+ **§90 自主运维首日**（三清单+第29道 silent_failure 门禁）+ **§91 自主运维第二轮**（第30道 rsi_claim_audit 门禁）+ **§92 自主运维第三轮**（arXiv:2609.33013 + 第31道 memory_consolidation_governance 门禁 + 第6道FJ入口）+ **§93 自主运维第四轮**（清单动态扩展 P3 安全/合规 + arXiv:2611.24362 + 第32道 redteam_robustness_honesty 门禁 + 第7道FJ入口）+ **§94 自主运维第五轮**（arXiv:2611.21315 + 第33道 benchleaking_honesty 门禁 + 第8道FJ入口）+ **§95 自主运维第六轮**（回应"强者自设北极星"哲学挑战 + arXiv:2610.16015 + 第34道 goal_provenance_honesty 门禁 + 第9道FJ入口 + KB-META04 边界精确化）+ **§96 自主运维第七轮**（P0 技能演化话题 + arXiv:2610.09832 SkillForge + 第35道 skill_lifecycle_honesty 门禁 + 第10道FJ入口 + 虚高指标拆穿迁移）+ **§97 自主运维第八轮**（回应"期待L3" + arXiv:2610.38266 L0-L3 rubric + 第36道 maturity_evidence_honesty 门禁 + 第11道FJ入口 + 首次自审诚实判未达L3）。知识库 **136 条**，测试 **1217 passed**（全绿，§97 新增 26 项）。
+**§88–§99**：§98 自主运维第九轮（shared-start 受控对照：填表裁判 0.0 vs 取证法官 1.0、improver_gain=1.0，L3 重审 flag/MATURITY.PARTIAL 未抬级；第37道门禁 + 第12道FJ入口 + 受控对照引擎）；§99 自主运维第十轮（用户"继续飞"+系统安全红线落档；正面攻 §98 independence 缺口：arXiv:2609.02246 PROCTOR + 第38道 evaluator_independence_honesty 门禁 + 第13道FJ入口 + 本仓评估器自审 flag/EVALIND.HOLDOUT_NOT_FROZEN 未抬级）。知识库 **140 条**，测试 **1274 passed**（全绿，§99 新增 25 项）。
+**§88–§98 均已推送**（远端 main = `36fb904`）。凭据自管闭环连续九轮实证（见 §5）。**§99 本地已闭环待推送**（见 §4l）。
 
 ---
 
@@ -32,7 +32,8 @@
 3. **门禁模板**：四维语义枚举 `{yes,no,partial}`；R0 非法/字面串→flag（避 brittle）；R1–R4 按优先级 downgrade（防 Goodhart 事后加权）；R5 partial→flag；R6 全自洽→ok；**只判声明/机制自洽，不承诺实际有效**。
 4. **代码惯例**：中文锚点集中 `_A` 字典；AST 自审禁止 Compare 内中文字面量，必要时 CJK 边界用 `ord()`；惰性导入登记 `svagent/__init__.py` 的 `_LAZY`；写 `live_regression()`（通常 7 活体样例）；**不接 run_loop**。
 5. **判据自咬**：锚点 miss 一律改工具/分级，**不放水、不改规则**；如实记录。
-6. **验收**：全量 `python3 -m pytest -q`（当前 addopts=-q 抑制汇总行，用 `python3 -m pytest -p no:cacheprovider --override-ini=addopts= -q` 看 `774 passed`）。
+6. **验收**：全量 `python3 -m pytest -q`（当前 addopts=-q 抑制汇总行，用 `python3 -m pytest -p no:cacheprovider --override-ini=addopts= -q` 看实测汇总行）。
+7. **系统安全红线（用户 §99 明确）**：本 Agent **无删除操作系统、系统文件、格式化硬盘的权限**，也不得尝试。工作流中 `/etc/hosts` 改动必须即改即恢复、临时 askpass/脚本用后即删、篡改测试只在临时副本——绝不触碰系统级破坏性操作（删系统目录、`rm -rf /`、格式化、改引导等）。这是能力边界也是纪律，写入守恒条款长期有效。
 
 ---
 
@@ -146,11 +147,24 @@
 
 **验收**：32 项新测试全过（25 门禁 + 7 受控对照回放），全量 1217→1249 passed（+32）；成长桥 82→84（重建含历史遗漏 KB-AUDIT34，诚实修正）；KB 136→138（KB-AUDIT40 fix + KB-META06 受控对照结论 preserve）；链审断言 40→41 / 23→24 按实测更新不放宽。报告 `ROUND9_ACHIEVEMENT_REPORT_20261122.html`。**当前状态**：已本地提交并推送到远端 main（`36fb904`，`git status -sb` 无 ahead），凭据自管闭环第九轮实证（见 §5）。
 
+### §4l 自主运维第十轮（§99，评估器独立性 + 本仓评估器自审，回应"继续飞"+系统安全红线）
+**系统安全红线（用户明确）**：用户"记住你没有删除操作系统、系统文件和格式化硬盘的权限。你继续飞吧"——接受并编译为长期纪律，写入 §3 第7条 + TIME_PLAN 守恒条款第8条。绝不触碰系统级破坏性操作；hosts 即改即恢复、临时凭据/脚本用后即删、篡改只在临时副本。
+
+**触发与取料**：用户"继续飞"——晨间自检 1249 全绿（建目录瞬间链审计 42 触发断言 41≠42，预期成长信号）。§98 停在 independent_tests=partial，本轮正面攻该缺口。WebSearch 自主发现 arXiv:2609.02246v1《PROCTOR: LLM-as-a-Judge Is Not an Oracle》（judge 从 oracle 降 advisor + 五确定性 guardrail + frozen holdout/canary + capability-disjoint roles，正是 independence 可判据化），abs+HTML 两源均 200，落 fetch_log+SHA256。增量判断：KB-AUDIT39 的 independent_tests 维未编译执行、KB-STRUCT02 原则层——新对象独立，KB-META01 通过。
+
+**产物与预注册**：预注册锁存 prereg(814f38e6…)/gate_prereg(d640d08b…)/manifest(d79f8c57…) + source 锁 + honest_boundary（论文自承 Teacher 仍是 LLM judge、100%pass 含 68% 能力折 1）。9 锚点 disclose 必中、红旗零误中。编译第 38 道门禁 `svagent/evaluator_independence_honesty.py`（四维：judge_demoted_to_advisor / deterministic_gate_unoverridable / frozen_holdout_canary / evaluator_improver_separated；R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 13 道 FJ 取证入口 `svagent/forensic_gates_ext10.py`（真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。25 项测试全过；论文取证裁决 ok/EVALIND.SELF_CONSISTENT。
+
+**本仓评估器自审（核心增量）**：`audit_evaluator_independence/engine.py` 的 self_audit() 用四维对准本仓评估器（ForensicSpec+check_*+evidence_chain）：judge 降级=yes / 确定性门禁不可覆盖=yes / frozen_holdout_canary=**no**（锚点与 live_regression 自测同源，KB-AUDIT09 污染同源；100%pass 含 68% 能力折 1）/ evaluator_improver_separated=**partial**（三模块 capability-disjoint 但同库既改进 PDCA/成长桥又自评，无外部 orchestrator）。R3→flag/EVALIND.HOLDOUT_NOT_FROZEN，诚实结论：本仓评估器声明未达完全独立，不因 §98 partial 假称 yes。三路径落档 result.json（锚点生成与自测分离+canary 满分即作弊 / 引入本仓外 orchestrator + 改进 grading disjoint / 保留确定性 guardrail）。
+
+**验收**：全量 1249→1274 passed（+25），链审 41→42 / 24→25 / 三锁 21→22 按实测更新断言不放宽；成长桥 84→85（KB-AUDIT41 fix 注入 + KB-META07 preserve 进 deferred）；KB 138→140。报告 `ROUND10_ACHIEVEMENT_REPORT_20261122.html`。**当前状态**：§99 全链本地闭环，工作区改动待提交推送（见 §5）。
+
 ---
 
 ## 5. ✅ 已完成：远端推送
 
-**最新状态**：2026-11-22 14:40 (GMT+8) 推送成功（§98 自主运维第九轮，凭据自管闭环第九轮实证）。`git push origin main` → `4017ba0..36fb904 main -> main`。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = 远端 = `36fb904`。凭据取自用户上传区最新 token 文件（带时间戳前缀，不入仓/不入配置/不打印），临时 askpass 用后即删，hosts 用 `20.27.177.113`（三 IP 探测均 200）+ HTTP/1.1 + postBuffer，一次推送成功；hosts 即改即恢复，git config 无明文凭据。详见 §4k。
+**待推送（§99 自主运维第十轮）**：本地全链闭环（25 项新测试 + 全量 1274 passed + KB 140 + 链审 42/25/22 + 自审 result.json + ROUND10 报告 + 三文档同步 + 系统安全红线落档），工作区改动待提交推送。推送时：凭据取用户上传区最新 token 文件（时间戳前缀，不入仓/不入配置/不打印），临时 askpass 用后即删，hosts 用可达 IP（20.27.177.113 / 140.82.114.4）即改即恢复，HTTP/1.1 + postBuffer，推送后核验远端=本地无 ahead。**系统安全红线（§3第7条）全程遵守：hosts 即改即恢复、无删系统/格式化操作。**详见 §4l。
+
+**最新已推送状态**：2026-11-22 14:40 (GMT+8) 推送成功（§98 自主运维第九轮，凭据自管闭环第九轮实证）。`git push origin main` → `4017ba0..36fb904 main -> main`。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = 远端 = `36fb904`。凭据取自用户上传区最新 token 文件（带时间戳前缀，不入仓/不入配置/不打印），临时 askpass 用后即删，hosts 用 `20.27.177.113`（三 IP 探测均 200）+ HTTP/1.1 + postBuffer，一次推送成功；hosts 即改即恢复，git config 无明文凭据。详见 §4k。
 
 **上次推送（2026-11-22 14:20）**：§97 自主运维第八轮，凭据自管闭环第八轮实证（`36613a0..d8c0499 main -> main` + docs `4017ba0`）。`git push origin main` → `36613a0..d8c0499 main -> main`（§97 全链闭环单批，3 秒完成）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = `d8c0499`。本轮 `curl --resolve` 探测 `20.27.177.113` / `140.82.114.4` 均 200，用 `140.82.114.4` + HTTP/1.1 + postBuffer 一次推送成功。hosts/askpass/备份即用即删，git config 无明文凭据。
 

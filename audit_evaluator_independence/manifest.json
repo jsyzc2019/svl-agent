@@ -1,0 +1,32 @@
+{
+  "request_id": "evaluator-independence-20261122",
+  "five_piece": [
+    "manifest.json",
+    "prereg.json",
+    "gate_prereg.json",
+    "engine.py",
+    "result.json"
+  ],
+  "files": [
+    {
+      "id": "S01",
+      "path": "downloads/S01_arxiv_abs.html",
+      "sha256": "df52507a6b665e3644c29b9f1e36b65c7a2d857ad7fff1094c70f3cb5c391a53"
+    },
+    {
+      "id": "S02",
+      "path": "downloads/S02_arxiv_full.html",
+      "sha256": "b849dffc63e9eafccbe3f5a550abbcc1a4ee1890a72f6a752b6a59366143c7db"
+    },
+    {
+      "id": "FLAT",
+      "path": "downloads/paper_flat.txt",
+      "sha256": "1d664d3fbd38371aa0118bd03cd5e09ee7f02ddf437eea4ae08b701b34292fed"
+    },
+    {
+      "id": "FETCH",
+      "path": "downloads/fetch_log.json",
+      "sha256": "d7be139856d1633c8963f51f000acf453492f15dc0b1cb0256c38984cc1ee7e7"
+    }
+  ]
+}

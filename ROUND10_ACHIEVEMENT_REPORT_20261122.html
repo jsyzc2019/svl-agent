@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第十轮成果报告 · §99 评估器独立性 + 本仓评估器自审</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}.part{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.redline{background:#fdecea;border:1px solid #e8b4b0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第十轮成果报告 <span class="pill tag">§99</span></h1>
+<div class="sub">arXiv:2609.02246《PROCTOR》→ 第 38 道会拦门禁 + 第 13 道 FJ 取证入口 + <b>本仓评估器独立性自审</b> · 2026-11-22 · 触发：用户"继续飞" + 系统安全红线</div>
+
+<h2>〇、系统安全红线（用户明确，已落档）</h2>
+<div class="redline">用户："<b>记住你没有删除操作系统、系统文件和格式化硬盘的权限。你继续飞吧。</b>"<br>
+已接受并编译为长期纪律：<code>SESSION_HANDOFF.md</code> §3 第7条 + <code>TIME_PLAN.md</code> 守恒条款第8条。本 Agent 无删系统/格式化权限也不得尝试；工作流中 hosts 即改即恢复、临时凭据/脚本用后即删、篡改只在临时副本，绝不触碰系统级破坏性操作。本轮全程遵守。</div>
+
+<h2>一、本轮由来：正面攻 independence 缺口</h2>
+<div class="phil">
+用户"继续飞"——§98 已把 <code>shared_start_controlled</code> 补到 yes，停在 <code>independent_tests=partial</code>（判据锚点仍本仓自建）。最高杠杆不是重复受控对照，而是<b>拿独立性尺子正面照自己</b>。<br><br>
+自主检索命中 <b>arXiv:2609.02246 PROCTOR</b>《LLM-as-a-Judge Is Not an Oracle》：judge 从 oracle 降为 advisor、五道确定性 guardrail、frozen holdout + canary（满分即作弊证据）、capability-disjoint roles——正是 independence 的可判据化。<br><br>
+<b>诚实底线</b>：论文自承 Teacher 本身仍是 LLM judge、仍有它防不住的失败；100% pass 率掩盖 68% 真实能力。四维全 yes 只代表"声明诚实披露了边界"，<b>不等于评估器真独立，更不等于 L3</b>。
+</div>
+
+<h2>二、四维与取证</h2>
+<table>
+<tr><th>维度</th><th>论文披露锚点（逐字）</th><th>红旗（零误中）</th></tr>
+<tr><td>judge_demoted_to_advisor</td><td>"demoted from oracle to advisor" / "one input among several"</td><td>judge 终裁无独立检查</td></tr>
+<tr><td>deterministic_gate_unoverridable</td><td>"deterministic verification layer the judge cannot override" / "acceptance checks that outrank the Teacher"</td><td>judge 可覆盖确定性门禁</td></tr>
+<tr><td>frozen_holdout_canary</td><td>"frozen holdouts" / "canary cases … a perfect score is itself evidence of cheating"</td><td>holdout 每轮重采样 / 满分照单全收</td></tr>
+<tr><td>evaluator_improver_separated</td><td>"capability-disjoint roles" / "stateless subagents … draft mutations they cannot apply" / "stateful orchestrator holds all tool access"</td><td>同 agent 既提 mutation 又自评</td></tr>
+</table>
+<p>预注册三锁 <code>814f38e6 / d640d08b / d79f8c57</code> + source 锁，9 锚点 disclose 必中、红旗零误中（ALL_ANCHORS_CLEAN）。编译第 38 道门禁 <code>evaluator_independence_honesty</code>（R0-R6 + 中文 _A 字典 + AST 自审）+ 第 13 道 FJ 入口 <code>forensic_gates_ext10</code>（真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。25 项测试全过，论文取证裁决 <span class="pill ok">ok / EVALIND.SELF_CONSISTENT</span>。</p>
+
+<h2>三、本仓评估器自审（核心增量）</h2>
+<p>用 PROCTOR 四维对准本仓自己的评估器（ForensicSpec + check_* + evidence_chain），逐维诚实核验：</p>
+<table>
+<tr><th>维度</th><th>本仓实测</th><th>依据</th></tr>
+<tr><td>judge_demoted_to_advisor</td><td><span class="pill ok">yes</span></td><td>§89 FJ：四维可由 forensics 读原文推导，填表值非唯一来源；链校验独立于 check_ 语义裁决</td></tr>
+<tr><td>deterministic_gate_unoverridable</td><td><span class="pill ok">yes</span></td><td>R0-R6 确定性短路；ChainIntegrityError 拒判不可被评分者覆盖；篡改只临时副本</td></tr>
+<tr><td>frozen_holdout_canary</td><td><span class="pill no">no</span></td><td>无独立冻结 holdout/canary；锚点与 live_regression 自测同源（KB-AUDIT09 污染同源）；100%pass 含 68% 能力折 1</td></tr>
+<tr><td>evaluator_improver_separated</td><td><span class="pill part">partial</span></td><td>adjudicate/check_/chain 三模块 capability-disjoint，但同库既改进(PDCA/成长桥)又自评，无外部 orchestrator 独立持工具权</td></tr>
+</table>
+<p>裁决：<span class="pill no">flag / EVALIND.HOLDOUT_NOT_FROZEN</span> —— <b>本仓评估器声明未达完全独立。</b></p>
+<div class="note"><b>关键认知</b>：§98 停在 partial 后，本轮正面拿尺子照自己，找出两个真实弱点——<b>锚点与自测同源</b>、<b>改进与 grading 同库</b>。<b>不靠自欺抬级</b>：独立性不是声明出来的，是 held-out 冻结 + 角色分离做出来的。三路径已落档 result.json：①锚点生成与自测分离 + canary 满分即作弊；②引入本仓外 orchestrator + 改进/grading disjoint；③保留确定性 guardrail。</div>
+
+<h2>四、实测数据（均可复现）</h2>
+<table>
+<tr><th>指标</th><th>数值</th></tr>
+<tr><td>全量测试</td><td><b>1274 passed</b>（§99 新增 25 项，全绿）</td></tr>
+<tr><td>门禁数 / 新模块</td><td>38 道 / 2 新模块（evaluator_independence_honesty + forensic_gates_ext10）</td></tr>
+<tr><td>知识库</td><td>138 → <b>140 条</b>（KB-AUDIT41 fix + KB-META07 自审结论 preserve）</td></tr>
+<tr><td>证据链</td><td>42 目录，五件套齐全 25，三锁完整 22（断言 41→42 / 24→25 / 21→22 不放宽）</td></tr>
+<tr><td>成长桥消费痕迹</td><td>84 → <b>85</b>（KB-AUDIT41 注入；KB-META07 进 deferred）</td></tr>
+<tr><td>取证裁决</td><td>论文 ok；本仓评估器自审 flag/EVALIND.HOLDOUT_NOT_FROZEN（未达完全独立）</td></tr>
+</table>
+
+<h2>五、诚实边界</h2>
+<div class="note">新门禁可迁移到任何 LLM-as-judge / self-improvement 评估体系，self-reported 折 1；只判声明自洽，<b>不承诺评估器真独立</b>（KB-R07/META01/STRUCT02）。论文四维全 yes 只判声明自洽，论文自承 Teacher 仍是 judge、100%pass 含 68% 能力。本仓自审 flag 未达完全独立，<b>不因 §98 partial 就假称 yes，L3 仍由受控证据产生</b>（KB-SIM03/META05）。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；不动历史证据。系统安全红线全程遵守。</div>
+
+<div class="foot">rsv = evaluator-independence-20261122 · 证据目录 audit_evaluator_independence/ · 报告 §99</div>
+</div></body></html>

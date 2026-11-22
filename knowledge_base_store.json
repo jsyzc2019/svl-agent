@@ -3643,6 +3643,63 @@
       "evidence": "theory",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT41",
+      "kind": "reasoning_lesson",
+      "mechanism": "评估器独立性诚实性(evaluator independence honesty)是把一个自改进系统的评估器独立性编译成可判据的尺子(arXiv:2609.02246 PROCTOR:LLM-as-a-Judge Is Not an Oracle)：四维——(1)judge_demoted_to_advisor:judge从oracle降为advisor,verdict只是多输入之一 vs 单一judge终裁自证(KB-STRUCT02);(2)deterministic_gate_unoverridable:确定性验证层judge不可覆盖+acceptance checks outrank Teacher vs judge可推翻门禁;(3)frozen_holdout_canary:frozen holdouts+canary满分即作弊证据 vs holdout每轮重采样/满分照单全收(ground truth可泄漏);(4)evaluator_improver_separated:capability-disjoint roles+无状态subagent只诊断不能apply+有状态orchestrator持工具权 vs 同一agent既propose又grade。关键:论文自承Teacher仍是LLM judge且有其防不住的失败,100%pass含68%真实能力(折1);四维全yes只判声明自洽≠评估器真独立≠L3(KB-SIM03)。与KB-AUDIT39成熟度尺子independent_tests维区分:本尺专判评估器独立性四边界",
+      "trigger": [
+        "评估器独立性",
+        "LLM-as-judge",
+        "judge降为advisor",
+        "确定性guardrail",
+        "frozen holdout",
+        "canary",
+        "capability-disjoint",
+        "PROCTOR",
+        "自评独立性",
+        "100%pass含68%"
+      ],
+      "action": "审任一自改进系统评估器独立性时按四维盯死:judge是否仅为输入之一/确定性门禁是否不可覆盖/holdout是否独立冻结且canary满分即作弊/评估器与改进者是否角色分离。红旗=单一judge终裁、judge可覆盖acceptance、holdout每轮重采样、同agent既提mutation又自评。只判声明自洽不承诺真独立,self-reported折1,可迁移到任何LLM-as-judge/self-improvement评估体系,不判本仓等级真伪",
+      "provenance": "自主运维第十轮:§98把independent_tests推到partial→正面攻该缺口→WebSearch发现arXiv:2609.02246 PROCTOR→arXiv abs+HTML一手(均200,落fetch_log+SHA256)→预注册三锁[814f38e6/d640d08b/d79f8c57]+source锁→四维9锚点disclose必中红旗零误中→编译第38道门禁evaluator_independence_honesty(R0-R6+中文_A字典+AST自审)+第13道FJ入口forensic_gates_ext10;本条记录可编译fix机制",
+      "timestamp": "2026-11-22T06:44:39.419450+00:00",
+      "support": [
+        "arXiv:2609.02246v1:demoted from oracle to advisor / deterministic verification layer the judge cannot override / frozen holdouts and canary / capability-disjoint roles",
+        "KB-STRUCT02 同构≠独立佐证——judge_is_oracle与evaluator_not_separated维依据",
+        "KB-RSI07 self-reported折1——100%pass含68%真实能力",
+        "KB-AUDIT39 maturity_evidence_honesty independent_tests维——本尺是其独立性边界的专化",
+        "KB-AUDIT09 检索污染同源——frozen_holdout_canary维依据"
+      ],
+      "evidence": "theory",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META07",
+      "kind": "reasoning_lesson",
+      "mechanism": "本仓评估器独立性自审结论(用户继续飞触发,§98 independent_tests=partial缺口的正面处理,arXiv:2609.02246 PROCTOR四维尺子对准本仓):逐维证据——①judge_demoted_to_advisor=yes(§89 FJ:四维可由forensics读原文推导,填表值非唯一来源,链校验独立于check_语义裁决);②deterministic_gate_unoverridable=yes(R0-R6确定性短路;ChainIntegrityError拒判不可被评分者覆盖;篡改只临时副本);③frozen_holdout_canary=no(无独立冻结holdout/canary;锚点与live_regression自测同源——锚点写进forensic_gates_ext*,live_regression用同批锚点自测,满分可能自证,KB-AUDIT09污染同源);④evaluator_improver_separated=partial(adjudicate/check_/chain三模块capability-disjoint,但同代码库既提改进PDCA/成长桥又自评,无外部orchestrator持独立工具权,KB-STRUCT02)。=>R3命中flag/EVALIND.HOLDOUT_NOT_FROZEN,本仓评估器声明未达完全独立。关键认知:§98停在partial后,正面拿独立性尺子照自己,找出两个真实弱点(锚点与自测同源/改进与grading同库),不靠自欺抬级——独立性不是声明出来的,是held-out冻结+角色分离做出来的",
+      "trigger": [
+        "评估器自审",
+        "independent_tests缺口",
+        "锚点与自测同源",
+        "holdout未冻结",
+        "改进与grading同库",
+        "不抬级",
+        "L3门槛前"
+      ],
+      "action": "审计本仓评估器独立性时引用audit_evaluator_independence/result.json self_audit(yes/yes/no/partial→flag)。达完全独立三路径:(1)引入独立冻结held-out判据集,锚点生成与live_regression自测分离,canary满分即视为作弊信号;(2)引入本仓外orchestrator持有工具权,subagent只诊断/草拟不改,改进与grading角色disjoint;(3)保留确定性guardrail(judge/advisor不覆盖acceptance,链失配照旧拒判)。不得因有确定性门禁就假称independent_tests=yes,坚持KB-SIM03无受控实验不认L3与KB-META04价值边界",
+      "provenance": "自主运维第十轮:用户继续飞+红线无删系统/格式化权限落档§3第7条与守恒条款第8条→执行§98缺口正面处理→engine.self_audit()四维对准本仓评估器(yes/yes/no/partial)→flag/EVALIND.HOLDOUT_NOT_FROZEN,三条独立性路径落档result.json;本条记录自审诚实结论(preserve)",
+      "timestamp": "2026-11-22T06:44:39.419450+00:00",
+      "support": [
+        "audit_evaluator_independence/result.json:self_audit.verdict=flag/EVALIND.HOLDOUT_NOT_FROZEN,path_to_independence三条",
+        "KB-AUDIT41 evaluator_independence_honesty——自审工具",
+        "KB-AUDIT09 检索污染同源——frozen_holdout_canary=no的依据",
+        "KB-STRUCT02 同构≠独立佐证——evaluator_improver_separated=partial的依据",
+        "KB-META05/§97/§98 成熟度自审链——不抬级纪律一脉"
+      ],
+      "evidence": "theory",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

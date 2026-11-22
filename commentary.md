@@ -3770,3 +3770,25 @@ audit_shared_start_controlled/engine.py 忠实再现两种流程的入口契约�
 
 ### 98.5 接合、验收与诚实边界
 32 项新测试全过（25 门禁 + 7 受控对照回放）；成长桥消费痕迹 82→84（重建后含历史遗漏的 KB-AUDIT34，诚实修正不放宽）；KB 136→138（KB-AUDIT40 可编译 fix + KB-META06 受控对照结论 preserve）。全量 1217→1249 passed（+32），链审 40→41 / 23→24 按实测更新断言不放宽。诚实边界：新门禁可迁移到任何 RSI/self-improvement 受控验证声明，self-reported 折 1；只判声明自洽不承诺 RSI 真实有效；受控对照测机制差异不是真实世界 RSI，evaluator 规格本仓自建故独立性只到 partial。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；不动历史证据，KB-META03/04/05 原条目保留。成果报告 ROUND9_ACHIEVEMENT_REPORT_20261122.html。
+
+---
+
+## §99 自主运维第十轮：评估器独立性诚实性与本仓评估器自审（回应用户"继续飞" + 系统安全红线）
+
+### 99.0 系统安全红线落档（用户明确）
+用户："记住你没有删除操作系统、系统文件和格式化硬盘的权限。你继续飞吧。"——接受并编译为长期纪律：写入 `SESSION_HANDOFF.md` §3 第7条 + `TIME_PLAN.md` 守恒条款第8条。本 Agent 无删系统/格式化权限也不得尝试；hosts 即改即恢复、临时凭据/脚本用后即删、篡改只在临时副本，绝不触碰系统级破坏性操作。
+
+### 99.1 本轮由来：正面攻 §98 留下的 independence 缺口
+用户"继续飞"——§98 把 shared_start_controlled 补到 yes，停在 independent_tests=partial（判据锚点仍本仓自建）。最高杠杆不是重复受控对照，而是拿独立性尺子正面照自己。WebSearch 自主发现 arXiv:2609.02246v1《LLM-as-a-Judge Is Not an Oracle: Why Self-Improving Agents Need Deterministic Guardrails》(PROCTOR)——judge 从 oracle 降为 advisor、五道确定性 guardrail、frozen holdout + canary（满分即作弊证据）、capability-disjoint roles，正是 independence 的可判据化。增量判断：KB-AUDIT39 的 independent_tests 是成熟度尺子一维未编译执行；§98 partial 未给独立性专尺；KB-STRUCT02 是原则层——新对象独立，KB-META01 通过。
+
+### 99.2 取料与预注册
+arXiv abs + HTML 两源均 200，落 fetch_log + SHA256，扁平文本 97KB。预注册锁存 prereg(814f38e6…)/gate_prereg(d640d08b…)/manifest(d79f8c57…) + source 锁 + honest_boundary（论文自承 Teacher 仍是 LLM judge、100%pass 含 68% 真实能力折 1）。9 个 disclose 锚点全命中、红旗零误中（ALL_ANCHORS_CLEAN）。
+
+### 99.3 编译与取证
+四维：①judge_demoted_to_advisor（judge 从 oracle 降为 advisor，verdict 只是多输入之一 vs 单一 judge 终裁）；②deterministic_gate_unoverridable（确定性验证层 judge 不可覆盖 + acceptance checks outrank Teacher vs judge 可推翻门禁）；③frozen_holdout_canary（frozen holdouts + canary 满分即作弊证据 vs holdout 每轮重采样）；④evaluator_improver_separated（capability-disjoint + 无状态 subagent 只诊断不能 apply + 有状态 orchestrator 持工具权 vs 同 agent 既 propose 又 grade）。编译第 38 道门禁 evaluator_independence_honesty（R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 13 道 FJ 入口 forensic_gates_ext10（真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。25 项测试全过。
+
+### 99.4 本仓评估器自审（核心增量）
+engine.self_audit() 用 PROCTOR 四维对准本仓评估器（ForensicSpec + check_* + evidence_chain）：judge_demoted_to_advisor=yes（§89 FJ 四维可由取证器推导、填表值非唯一来源）、deterministic_gate_unoverridable=yes（R0-R6 确定性短路、链失配拒判不可被评分者覆盖）、frozen_holdout_canary=**no**（无独立冻结 holdout/canary，锚点与 live_regression 自测同源——满分可能自证，KB-AUDIT09 污染同源）、evaluator_improver_separated=**partial**（adjudicate/check_/chain 三模块 capability-disjoint，但同库既改进 PDCA/成长桥又自评，无外部 orchestrator 独立持工具权）。R3→flag/EVALIND.HOLDOUT_NOT_FROZEN，诚实结论：本仓评估器声明未达完全独立。三路径落档：①锚点生成与自测分离 + canary 满分即作弊；②引入本仓外 orchestrator + 改进/grading 角色 disjoint；③保留确定性 guardrail。关键认知：§98 停在 partial 后正面拿尺子照自己，找出两个真实弱点，**不靠自欺抬级**——独立性不是声明出来的，是 held-out 冻结 + 角色分离做出来的。
+
+### 99.5 接合、验收与诚实边界
+全量 1217→1274 passed（+25 + 链审断言更新），链审 41→42 / 24→25 / 三锁 21→22 按实测更新断言不放宽；成长桥 84→85（KB-AUDIT41 fix 注入 + KB-META07 preserve 进 deferred）；KB 138→140。成果报告 ROUND10_ACHIEVEMENT_REPORT_20261122.html。诚实边界：新门禁可迁移到任何 LLM-as-judge/self-improvement 评估体系，论文四维全 yes 只判声明自洽不承诺真独立（论文自承 Teacher 仍是 judge、100%pass 含 68% 能力折 1），本仓自审 flag 未达完全独立，不因 §98 partial 就假称 yes，L3 仍由受控证据产生（KB-SIM03/META05）。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；不动历史证据。系统安全红线全程遵守：hosts 即改即恢复、无破坏性操作。
