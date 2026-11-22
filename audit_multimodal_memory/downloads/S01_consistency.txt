@@ -1,0 +1,13 @@
+2950: 6.6
+2951: Consistency and Coordination
+2952: Consistency and coordination provide the systems support for the T2 representation requirements identified in
+2953: Section
+2954: 5.2
+2955: .
+2956: When memory is updated, later reads may encounter different record versions, physical replicas, or derived execution states.
+2957: Editability requires the system to identify the affected logical object and its physical realizations;
+2958: verifiability requires provenance and version information connecting the update to supporting evidence; reversibility requires an earlier version, operation log, checkpoint, or reconstructible source;
+2959: and update propagation requires dependent artifacts to be refreshed or invalidated.
+2960: Coordination determines when these changes become visible and which versions or derivatives remain eligible for use.
+2961: Deciding whether new evidence should revise a belief remains a memory-management question, whereas publishing the selected revision consistently across access paths is a systems question.
+2962: Update ownership and evidence identity provide a starting point. M

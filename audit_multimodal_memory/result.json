@@ -1,0 +1,143 @@
+{
+  "section": "§79-§80",
+  "paper": "arXiv:2610.19366v1 Seeing, Maintaining, and Learning: The Evolution of Multimodal Agent Memory",
+  "evidence_grade": "survey（二手综合+作者自有corpus统计）按 KB-RSI07 折1；PDF 下载失败降级用官方HTML",
+  "anchors": {
+    "P0_two_axis": {
+      "all": true,
+      "hits": {
+        "two-axis analytical framework for multimodal agent memory": true,
+        "Axis I, Formation and Representation": true,
+        "Axis II, Memory Management": true,
+        "T3 Self-Evolving Memory updates memory through an evolving policy": true
+      }
+    },
+    "P1_t3_rare_explicit": {
+      "all": true,
+      "hits": {
+        "T2 Dynamic Memory accounts for 204 architectures (68.7% of the corpus)": true,
+        "T3 Self-Evolving Memory accounts for 17 architectures (5.7%)": true,
+        "Of the 17 T3 Self-Evolving Memory architectures, 13 are cross-represented systems, while the other 4 are hybrid systems that include an explicit representation.": true,
+        "neither the source-preserving category nor the latent or parametric category contains a T3 Self-Evolving Memory system under our definition": true
+      }
+    },
+    "P2_policy_addressability": {
+      "all": true,
+      "hits": {
+        "policy addressability, policy-level feedback attribution, and persistent, validated policy revision": true,
+        "behavior must provide an identifiable target for revision. It may be represented explicitly as a rule, instruction,": true,
+        "Explicit policy representations allow more precise revisions, whereas distributed representations make the effects of individual changes harder to isolate.": true
+      }
+    },
+    "P3_feedback_attribution": {
+      "all": true,
+      "hits": {
+        "such operations. Feedback must therefore be sufficiently informative to": true,
+        "distinguish failures of writing, maintenance, retrieval, reasoning, and action.": true,
+        "A task-level reward alone may reveal that the agent failed without identifying": true,
+        "which part of memory management should change.": true
+      }
+    },
+    "P4_evidence_path_drift": {
+      "all": true,
+      "hits": {
+        "revised policy can maintain or even improve short-term answers while relying less": true,
+        "on the modality that originally grounded them. For example, a system may answer": true,
+        "correctly from a cached textual summary while rarely reopening the visual": true,
+        "policy-evolution methods rarely evaluate whether adaptation changes the balance": true,
+        "of evidence used across representations.": true
+      }
+    },
+    "P5_revision_validated": {
+      "all": true,
+      "hits": {
+        "A policy revision constitutes self-evolution only when it is retained as part": true,
+        "of the reusable memory-management process and affects subsequent memory": true,
+        "policy versions and their evaluation histories also supports comparison,": true,
+        "auditing, and restoration when a revision proves harmful.": true,
+        "Policy-level validation therefore requires subsequent, replayed, or held-out cases": true
+      }
+    },
+    "P6_provenance_designed": {
+      "all": true,
+      "hits": {
+        "a substantial portion of the analyzed architectures do not retain a usable route": true,
+        "back to the evidence from which their memories were formed.": true,
+        "Provenance is therefore seldom a designed": true,
+        "property of the representation.": true,
+        "provenance should be treated as part of": true,
+        "the representation itself rather than as optional metadata": true
+      }
+    },
+    "P7_temporal_validity": {
+      "all": true,
+      "hits": {
+        "The central memory property is therefore not recall volume alone, but recoverable provenance and temporal validity, since persistence without these safeguards can retain stale or weakly grounded evidence.": true,
+        "whether an apparent conflict reflects a genuine change, an unreliable observation, or information that is valid only under a different temporal or situational context": true
+      }
+    },
+    "P8_reversibility": {
+      "all": true,
+      "hits": {
+        "verifiability requires provenance and version information connecting the update to supporting evidence; reversibility requires an earlier version, operation log, checkpoint, or reconstructible source;": true
+      }
+    },
+    "HOME_stats": {
+      "all": true,
+      "hits": {
+        "17 of 17": true,
+        "68.2%": true,
+        "46.8%": true,
+        "7 of 82": true,
+        "82 benchmarks": true
+      }
+    }
+  },
+  "gates": {
+    "gate_A_policy_evolution": {
+      "checks": {
+        "policy_unaddressable": true,
+        "feedback_not_attributable": true,
+        "evidence_eroded": true,
+        "revision_unvalidated": true,
+        "partial_disclosure": true,
+        "literal_enum": true,
+        "all_good": true
+      },
+      "cases": {
+        "policy_unaddressable": "downgrade/POLICY_EVOLUTION.POLICY_UNADDRESSABLE",
+        "feedback_not_attributable": "downgrade/POLICY_EVOLUTION.FEEDBACK_NOT_ATTRIBUTABLE",
+        "evidence_eroded": "downgrade/POLICY_EVOLUTION.EVIDENCE_PATH_ERODED",
+        "revision_unvalidated": "downgrade/POLICY_EVOLUTION.REVISION_UNVALIDATED",
+        "partial_disclosure": "flag/POLICY_EVOLUTION.PARTIAL",
+        "literal_enum": "flag/POLICY_EVOLUTION.INVALID_INPUT",
+        "all_good": "ok/POLICY_EVOLUTION.SELF_CONSISTENT"
+      },
+      "all_passed": true
+    },
+    "gate_B_memory_provenance": {
+      "checks": {
+        "provenance_optional": true,
+        "evidence_unrecoverable": true,
+        "temporal_invalid": true,
+        "irreversible": true,
+        "partial_disclosure": true,
+        "literal_enum": true,
+        "all_good": true
+      },
+      "cases": {
+        "provenance_optional": "downgrade/MEMORY_PROVENANCE.PROVENANCE_OPTIONAL",
+        "evidence_unrecoverable": "downgrade/MEMORY_PROVENANCE.EVIDENCE_UNRECOVERABLE",
+        "temporal_invalid": "downgrade/MEMORY_PROVENANCE.TEMPORAL_INVALID",
+        "irreversible": "downgrade/MEMORY_PROVENANCE.IRREVERSIBLE",
+        "partial_disclosure": "flag/MEMORY_PROVENANCE.PARTIAL",
+        "literal_enum": "flag/MEMORY_PROVENANCE.INVALID_INPUT",
+        "all_good": "ok/MEMORY_PROVENANCE.SELF_CONSISTENT"
+      },
+      "all_passed": true
+    }
+  },
+  "anchor_all_passed": true,
+  "gate_all_passed": true,
+  "all_passed": true
+}

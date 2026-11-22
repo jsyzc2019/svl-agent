@@ -175,6 +175,14 @@ _LAZY: dict[str, tuple[str, str]] = {
     "check_selective_supervision_honesty": ("svagent.selective_supervision_honesty", "check_selective_supervision_honesty"),
     "SelectiveSupervisionVerdict": ("svagent.selective_supervision_honesty", "SelectiveSupervisionVerdict"),
     "selective_supervision_honesty_live_regression": ("svagent.selective_supervision_honesty", "live_regression"),
+    # 策略演化接地诚实性门禁（§79：从多模态 Agent 记忆综述 T3 自演化编译——策略可寻址/反馈归因/证据接地路径/修订经验证）
+    "check_policy_evolution_grounding": ("svagent.policy_evolution_grounding", "check_policy_evolution_grounding"),
+    "PolicyEvolutionGroundingVerdict": ("svagent.policy_evolution_grounding", "PolicyEvolutionGroundingVerdict"),
+    "policy_evolution_grounding_live_regression": ("svagent.policy_evolution_grounding", "live_regression"),
+    # 记忆溯源可恢复性诚实性门禁（§80：从多模态 Agent 记忆综述 provenance/temporal-validity 原则编译——溯源设计/证据可恢复/时间有效性/可逆性）
+    "check_memory_provenance_honesty": ("svagent.memory_provenance_honesty", "check_memory_provenance_honesty"),
+    "MemoryProvenanceVerdict": ("svagent.memory_provenance_honesty", "MemoryProvenanceVerdict"),
+    "memory_provenance_honesty_live_regression": ("svagent.memory_provenance_honesty", "live_regression"),
 }
 
 

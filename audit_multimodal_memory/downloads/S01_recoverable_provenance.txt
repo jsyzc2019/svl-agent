@@ -1,0 +1,58 @@
+5036: 8.1.1
+5037: Recovering Supporting Evidence
+5038: Abstraction should move from lossy compression toward recoverable
+5039: representation. As previous sections show,
+5040: modality-specific encodings, textual, structured, latent, and parametric
+5041: memories can all remove information that remains available in source-level
+5042: evidence. Source-linked designs introduced in
+5043: Section
+5044: 3.4
+5045: partly address this problem by preserving
+5046: links from derived memories back to supporting observations. The remaining
+5047: question is what information should be preserved during formation so that this
+5048: recoverability is reliable.
+5049: Existing systems use different combinations of timestamps
+5050: (
+5051: Wang et al., 2025a
+5052: )
+5053: , source identifiers
+5054: (
+5055: Feng et al., 2026
+5056: )
+5057: ,
+5058: entity links
+5059: (
+5060: Long et al., 2026
+5061: )
+5062: , spatial references
+5063: (
+5064: Liu et al., 2025b
+5065: )
+5066: , and pointers to supporting observations
+5067: (
+5068: Lin et al., 2026d
+5069: )
+5070: . However,
+5071: a substantial portion of the analyzed architectures do not retain a usable route
+5072: back to the evidence from which their memories were formed. Among those that do,
+5073: the route is often simply that the source was never abstracted away, rather than
+5074: a link deliberately carried by a derived memory, and where such links do exist
+5075: they differ in what they record. Provenance is therefore seldom a designed
+5076: property of the representation. A useful
+5077: direction is to define a minimal provenance bundle for formed memories,
+5078: containing enough information to identify where a memory came from, how it was
+5079: produced, and what evidence supports it. The required fields may differ across
+5080: modalities and representation types, but provenance should be treated as part of
+5081: the representation itself rather than as optional metadata.
+5082: Recoverable representation does not require every source observation to be
+5083: retained indefinitely. Instead, memory formation should make explicit which
+5084: information may be discarded and which supporting evidence must remain reachable
+5085: for later inspection or reinterpretation. This would make abstraction more
+5086: controlled without requiring all downstream memories to preserve the full
+5087: original experience. What remains open is how to make this decision. Current systems use different rules
+5088: (
+5089: Shen et al., 2026
+5090: ;
+5091: Liu et al., 2026a
+5092: )
+5093: , but a better criterion should balance retention cost against the need to verify or correct information later.

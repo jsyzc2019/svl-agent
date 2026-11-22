@@ -1,0 +1,58 @@
+{
+ "request_id": "multimodal-memory-20261122",
+ "target": "Seeing, Maintaining, and Learning: The Evolution of Multimodal Agent Memory (arXiv:2610.19366v1) + 项目主页",
+ "collection_time": "2026-11-22T10:05:00+08:00",
+ "sources": {
+  "S01_paper": {
+   "url": "https://arxiv.org/abs/2610.19366",
+   "html_fulltext_sha256": "a61a27ea05c66992abd8bcb66e15b2458cf30da4310a01661826d053b65ee699",
+   "title": "Seeing, Maintaining, and Learning: The Evolution of Multimodal Agent Memory",
+   "authors": "Minghao Guo, Qingyue Jiao, Xiujin Liu, ... Ziyi Ye (80+ authors)",
+   "version": "arXiv:2610.19366v1 [cs.AI/cs.CL/cs.RO] 14 Oct 2026",
+   "grade": "primary (official arXiv HTML rendering of paper fulltext); survey = secondary synthesis, 折1 per KB-RSI07",
+   "pdf_attempt": {
+     "url": "https://arxiv.org/pdf/2610.19366",
+     "size_bytes_expected": 36113,
+     "status": "FAILED",
+     "reason": "curl exit 28 timeout after 180s, partial download ~2.9MB of 36.5MB over 3 attempts",
+     "fallback": "arXiv official HTML fulltext used as primary evidence (same paper original text, not third-party summary)"
+   }
+  },
+  "S02_project_home": {
+   "url": "https://seeing-maintaining-learning.github.io",
+   "html_sha256": "f79ec284e8591070b9d6610b3e654c85954c4ecf35dab1c2f6d5889b90ac45ef",
+   "grade": "primary (authors' maintained interactive observatory)",
+   "statistical_caveat": "Homepage stats (299 systems / 68.2% T2 / 17-of-17 explicit / 7-of-82 benchmarks) differ in accounting from paper body (297 architectures / 68.7% T2 / 17 T3). Marked separately, never mixed."
+  }
+ },
+ "evidence_slices": [
+  "downloads/S01_abstract.txt",
+  "downloads/S01_axis_framework.txt",
+  "downloads/S01_rep_families.txt",
+  "downloads/S01_t3_requirements.txt",
+  "downloads/S01_corpus_patterns.txt",
+  "downloads/S01_consistency.txt",
+  "downloads/S01_temporal_validity.txt",
+  "downloads/S01_recoverable_provenance.txt",
+  "downloads/S01_evidence_path_drift.txt"
+ ],
+ "locks": {
+  "manifest": "manifest.sha256",
+  "prereg_analysis_before": "prereg.sha256 (031835b2…)",
+  "gate_prereg_before_implementation": "gate_prereg.sha256 (0f90b3e8…)"
+ },
+ "verification": {
+  "engine": "engine.py",
+  "anchor_count": 39,
+  "anchor_string_hits": "39/39",
+  "gate_A_live_regression": "7/7",
+  "gate_B_live_regression": "7/7",
+  "all_passed": true
+ },
+ "honesty_notes": [
+  "PDF 下载失败降级用官方 HTML，如实记录不隐瞒",
+  "综述系二手综合，只编译可证伪拦截面，不宣称有效性被实证",
+  "主页与论文统计口径不同，分别标注不混用",
+  "两门禁只判机制声明自洽，不承诺实际有效（存在≠有效性）"
+ ]
+}

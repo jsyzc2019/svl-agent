@@ -1,0 +1,37 @@
+{
+  "section": "§79-§80",
+  "title": "Seeing/Maintaining/Learning 多模态 Agent 记忆综述精研（arXiv:2610.19366v1）",
+  "analysis_before_prereg": true,
+  "note": "命题与锚点在实现门禁代码之前先锁定；PDF 36.5MB 三次超时失败（exit 28），改用 arXiv 官方 HTML 全文为一手证据，降级已在 manifest 记录。项目主页统计口径(299 系统/68.2%/17-of-17/7-of-82)与论文正文(297 架构/68.7%/17 T3)不同，分别标注来源不混用。",
+  "sources": [
+    {"id": "S01", "type": "primary", "desc": "arXiv:2610.19366v1 HTML 全文（14 Oct 2026，Guo/Jiao 等，cs.AI/CL/RO，CC BY 4.0）", "file": "downloads/paper.html", "sha256": "a61a27ea05c66992abd8bcb66e15b2458cf30da4310a01661826d053b65ee699"},
+    {"id": "S02", "type": "primary", "desc": "项目主页 seeing-maintaining-learning.github.io（作者维护的交互式观测台）", "file": "downloads/S02_project_home.html", "sha256": "f79ec284e8591070b9d6610b3e654c85954c4ecf35dab1c2f6d5889b90ac45ef"}
+  ],
+  "propositions": {
+    "P0_two_axis": "论文提出两轴框架：Axis I Formation&Representation（信息如何形成/表示）+ Axis II Memory Management（管理如何随经验演化）；三管理层级 T1 静态/T2 动态策略稳定/T3 自演化策略演化。",
+    "P1_t3_rare_explicit": "T3 稀少且集中在显式记忆：297 架构中 T2=204(68.7%)、T3=17(5.7%)；17 个 T3 中 13 个 cross-represented、4 个含显式表示的 hybrid；source-only 与 latent/parametric-only 类别无 T3。主页口径：17 of 17 self-evolving systems keep explicit memory。",
+    "P2_policy_addressability": "策略演化要求策略可寻址：负责某反复行为的部分须提供可识别的修订目标（显式规则/指令/工作流/程序/检索说明，或隐式学习模块）；显式策略表示可精确修订，分布式表示难隔离单次改动效果。",
+    "P3_feedback_attribution": "T3 反馈须可归因到策略级而非仅任务级奖励：需连接结果到相关记忆内容/管理决策/策略组件与版本；单纯 task-level reward 只知失败不知改记忆管理哪部分。",
+    "P4_evidence_path_drift": "策略演化可静默削弱证据接地：修订后的策略可在短期正确率不降反升的同时更少依赖最初接地它的模态（如从缓存文本摘要答题而很少重开视觉证据）；当前策略演化方法很少评估适应是否改变了跨表示的证据使用平衡。",
+    "P5_revision_validated": "策略修订构成自演化仅当它被保留为可复用管理流程并影响后续记忆操作；须维护策略版本与评估历史以支持比较/审计/回滚；策略级验证需要后续/重放/留出案例，修好一条记录≠策略能更好管理未来记忆。",
+    "P6_provenance_designed": "溯源很少是表示的设计属性：相当部分架构不保留回到形成记忆所依赖证据的可用路径；应把 minimal provenance bundle 当作表示本身一部分而非可选元数据。",
+    "P7_temporal_validity": "长期记忆的核心不是召回量而是可恢复溯源与时间有效性——缺此二者会保留陈旧或弱接地证据；冲突需区分真实变化/不可靠观测/仅在不同时间或情境下有效。",
+    "P8_reversibility": "一致性四要求（T2）：可编辑性须识别受影响逻辑对象及其物理实现；可验证性须有连接更新与支持证据的溯源和版本信息；可逆性须有早期版本/操作日志/检查点/可重建源；更新传播须刷新或失效依赖制品。"
+  },
+  "gate_claims": {
+    "G_A_policy_evolution_grounding": "新门禁①：判一个声称 T3 自演化记忆的系统是否诚实处理『策略演化与证据接地』——四维 policy_addressable / feedback_attributable / evidence_path_preserved / revision_validated_persisted。",
+    "G_B_memory_provenance": "新门禁②：判一个声称记忆可验证/可纠错的系统是否把溯源当设计属性——四维 provenance_by_design / evidence_recoverable / temporal_validity_tracked / reversibility_supported。"
+  },
+  "independence_check": {
+    "existing_gates_reviewed": ["memory_scope(§70)", "memory_curation(§68)", "retrieval_grounding", "self_evolving(runtime)", "criterion_origin_honesty(§77)", "selective_supervision_honesty(§78)"],
+    "gap_A": "上述门禁无一判『管理策略本身演化时是否保持证据接地/反馈归因到策略级/修订经策略级验证』——self_evolving 是本仓运行时机制非审读尺子；criterion_origin 判评估判据来源非记忆管理策略。",
+    "gap_B": "memory_scope 判单条记忆写入时的适用边界标注；retrieval_grounding 判输出是否有引用支撑；本门禁判记忆表示层是否把溯源/可恢复/时间有效性/可逆性设计为结构属性——层级与对象不同。",
+    "conclusion": "两门禁拦截面独立、可迁移（任何自演化记忆系统/长期记忆系统均可套用）、会拦（对应维度 no→downgrade），KB-META01 通过。"
+  },
+  "honesty_boundaries": [
+    "本综述是 survey（二手综合 + 作者自有 corpus 统计），按 KB-RSI07 折1：只编译其提出的可证伪拦截面，不宣称其有效性被实证。",
+    "只判机制声明是否诚实自洽，不承诺策略演化真带来收益——存在≠有效性（KB-META01/AUDIT03）。",
+    "PDF 下载失败改用 HTML 属证据降级，已如实记录，不隐瞒。",
+    "两门禁定位为审读外部系统的尺子，不判本仓；遵循 §58 选 A，不接 harness.run_loop。"
+  ]
+}

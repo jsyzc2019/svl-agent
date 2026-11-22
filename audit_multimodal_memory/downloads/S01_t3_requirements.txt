@@ -1,0 +1,54 @@
+2540: 5.3
+2541: Representation Requirements for Self-Evolving Memory
+2542: The representation requirements discussed for T2 Dynamic Memory remain relevant
+2543: to T3 Self-Evolving Memory. T3 introduces an additional meta-level requirement: the system must
+2544: represent its memory-management policies, the decisions produced by that policy,
+2545: and the feedback used to evaluate and revise it. Self-evolution therefore
+2546: depends on policy addressability, policy-level feedback attribution, and persistent, validated policy revision.
+2547: Policy Addressability
+2548: For a memory-management policy to evolve, the part responsible for a recurring
+2549: behavior must provide an identifiable target for revision. It may be represented explicitly as a rule, instruction,
+2550: workflow, program, or retrieval specification, or implicitly in a learned module
+2551: or parameter set. Explicit policy representations allow more precise revisions, whereas distributed representations make the effects of individual changes harder to isolate.
+2552: An explicit memory representation and an explicit policy representation serve
+2553: different purposes. The former exposes the content being managed, whereas the
+2554: latter exposes the mechanism that determines how this content is formed,
+2555: maintained, and accessed. Identifiable memory items can make a state change
+2556: easier to inspect, but they do not by themselves identify which part of the
+2557: management policy should be revised.
+2558: Policy Evaluation and Feedback Attribution
+2559: T3 must evaluate whether outcomes reveal a recurring weakness in the
+2560: memory-management policy rather than an isolated error in the memory state. This
+2561: requires connecting an outcome to the memory content involved, the management
+2562: decisions that shaped its availability and use, and the policy component and
+2563: version that produced those decisions. A policy-evaluation record may therefore
+2564: include the relevant task context, affected memory items, operations performed,
+2565: retrieved content, policy version, and subsequent feedback.
+2566: This requirement extends the operation-level traceability needed in T2. In T2,
+2567: a trace supports verification or reversal of a particular memory-state change.
+2568: In T3, traces across interactions support policy-level attribution: determining
+2569: whether repeated outcomes justify changing the reusable mechanism that selects
+2570: such operations. Feedback must therefore be sufficiently informative to
+2571: distinguish failures of writing, maintenance, retrieval, reasoning, and action.
+2572: A task-level reward alone may reveal that the agent failed without identifying
+2573: which part of memory management should change.
+2574: Axis I constrains what evidence is available for this evaluation. Explicit
+2575: memory units, provenance, operation histories, and source links permit more
+2576: direct inspection of management decisions. Distributed latent or parametric
+2577: representations expose fewer identifiable units and therefore place greater
+2578: weight on behavioral evaluation across tasks. Thus, the memory
+2579: representation affects how directly the memory-management design can be evaluated.
+2580: Persistent and Validated Policy Revision
+2581: A policy revision constitutes self-evolution only when it is retained as part
+2582: of the reusable memory-management process and affects subsequent memory
+2583: operations. The system must therefore represent the revised policy in a form
+2584: that can be stored, reapplied, and associated with later decisions. Maintaining
+2585: policy versions and their evaluation histories also supports comparison,
+2586: auditing, and restoration when a revision proves harmful.
+2587: Validation must assess the revised policy rather than only the memory-state
+2588: change that motivated it. Correcting one record demonstrates that a particular
+2589: error has been repaired, but it does not establish that the revised policy will manage future memories more effectively. Policy-level validation therefore requires subsequent, replayed, or held-out cases that test both the targeted behavior and possible regressions in other memory functions.
+2590: T3 Self-Evolving Memory requires a meta-level representation that closes
+2591: the loop from policy decisions to outcomes, from outcomes to evaluation, and
+2592: from evaluation to persistent and validated policy change.
+2593: 5.4

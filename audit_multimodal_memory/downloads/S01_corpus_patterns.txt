@@ -1,0 +1,22 @@
+2615: Three Corpus-Level Patterns
+2616: 1.
+2617: T2 Dynamic Memory predominates across various memory systems.
+2618: 2.
+2619: Architectures frequently combine multiple representation types, with explicit and hybrid representations appearing particularly frequently.
+2620: 3.
+2621: Deployment-time evolution of memory-management policies remains
+2622: concentrated in systems with explicit memory artifacts.
+2623: Figure 10:
+2624: Multimodal-agent memory architectures concentrate in T2 Dynamic Memory across modalities.
+2625: Cumulative counts of architectures in the taxonomy-current corpus show rapid growth after 2025, with most systems classified as T2 Dynamic Memory rather than T1 Static Memory or T3 Self-Evolving Memory. The matrix summarizes architecture-level incidence across memory-management tier and representation family for all modalities. Each dot denotes one architecture, positioned horizontally by publication year; architectures published before 2023 are grouped near the approximate 2023 position, marked as
+2626: ∼
+2627: \sim
+2628: ’23. Irregular envelopes summarize the density of architectures in each cell, and cell labels report counts. Representation-family counts are non-exclusive, so an architecture may appear in multiple columns when it combines source-preserving evidence, cross-represented explicit records, latent or parametric state, or hybrid multi-path memory.
+2629: Figures
+2630: 10
+2631: and
+2632: 9
+2633: show that multimodal agent memory architectures concentrate in T2 Dynamic Memory across modalities and in the overall corpus, while T3 Self-Evolving Memory remains relatively rare. Of the 297 architectures, 221 (74.4%) update memory state or its management policy during operation. T2 Dynamic Memory accounts for 204 architectures (68.7% of the corpus) that update memory through stable management policies, whereas T3 Self-Evolving Memory accounts for 17 architectures (5.7%) that update their management policies based on deployment-time feedback. Stable management policies allow agents to incorporate new experience through predictable and controllable update procedures, making them the dominant approach to memory updating.
+2634: Hybrid representations help address the competing requirements of multimodal memory. Hybrid systems constitute 139 of the 297 architectures (46.8%), making them the largest representation category. Their prevalence suggests that a single representation type is often insufficient to balance representational fidelity, preservation of modality-specific detail, retrieval efficiency, and storage cost for rich multimodal experiences. Hybrid architectures are therefore the most common representational choice, but they do not dominate the landscape: many systems address narrower memory problems using the single representation type best suited to their tasks.
+2635: Compact and explicit memory artifacts are the predominant target for deployment-time policy evolution. Of the 17 T3 Self-Evolving Memory architectures, 13 are cross-represented systems, while the other 4 are hybrid systems that include an explicit representation. By contrast, to the best of our knowledge, neither the source-preserving category nor the latent or parametric category contains a T3 Self-Evolving Memory system under our definition. Explicit rules, skills, workflows, retrieval descriptions, and programs occupy a useful middle ground for deployment-time evolution: they are more compact and directly editable than detailed source observations, while remaining more inspectable and controllable than information distributed across latent states or model parameters. These properties provide identifiable targets that can be revised from feedback, validated, and reused in subsequent tasks.
+2636: The analysis above characterizes multimodal agent memory at the logical level: how experience is represented, how memory state and management policies may change, and what requirements arise from their interaction.

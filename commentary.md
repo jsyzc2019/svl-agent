@@ -3467,3 +3467,39 @@ S01 是 Perspective 观点文非实证刷榜：论文自述 qualified yes / cent
 task_content：下载 PaperAgent 文与源论文、通读、辨析选择性监督缺口、编译会拦门禁。process：顶住「AGI 宏大叙事该造多牙」诱惑，只认「筛选器审查自身训练数据」一个独立结构性拦截面编译一牙；Perspective 折1、公众号编辑添加「20%→5倍」诚实记录不据以断言；与 §77 声明诚实门禁辨析对象层级（声明自洽vs结构性偏差）防重复造轮子；三处锚点/分级自咬现场修工具不放水。边界：条件交互是否真能带来 scalable 收益、门控审计是否长期有效，均未一手可核；不宣称有效性，只编译机制声明诚实性拦截面。
 
 一句话收束：**这篇最该带走的不是「System-1 门控 System-2 省算力」的愿景，而是 §7.2 那句冷静的结构性警告——门控决定执行哪些交互，就决定了它训练于哪些交互；被它判为不值得的交互，结果永不观测、分数永不修正，于是误差恰好集中在它没有数据、也永远不会去看的地方。PaperAgent 译得好：独立审计与探索不是可选项，是让闭环不自我欺骗的保险丝。更要记住证据分级——这是 Perspective，qualified yes、central hypothesis、理想假设下的 1/ρu，公众号那句「20%→5倍」论文本无此数字。本仓 26 道门禁量过判据来源声明、评审者能力、证明边界，却没一道判过「筛选器在审查自己训练数据」这个即使诚实声明也存在的结构性偏差。于是一把新尺子 selective_supervision_honesty 落地：压制区零概率、审计被自审污染、盲点隐藏、反事实损失不承认一律降级，部分/字面串待核，全自洽也只判机制声明自洽。尺子会断会错配，三处自咬留痕——信规则、改工具、不放水。**
+
+---
+
+## 79-80. 精研《Seeing, Maintaining, and Learning: The Evolution of Multimodal Agent Memory》——编译第 27、28 道门禁（117 条，新+2）
+
+用户给出 arXiv:2610.19366 与项目主页。这是一篇 survey 综述（Guo/Jiao 等 80+ 作者，14 Oct 2026），认知增量不在新模型而在别人踩过的坑的地图。PDF 36.5MB 三次下载超时（curl exit 28），降级用 arXiv 官方 HTML 全文（a61a27ea…）作一手证据；项目主页（f79ec284…）统计口径与论文不同（主页 299 系统/68.2%/17-of-17/7-of-82；论文 297 架构/68.7%/17 T3），分别标注不混用。三份预注册锁存（清单/manifest + 分析前 prereg 031835b2… + 门实现前 gate_prereg 0f90b3e8…）。
+
+### 79-80.1 核心：两轴框架 + 三管理层级
+
+Axis I Formation&Representation（信息如何形成与表示，三族：源/模态特有、跨表示显式、内化潜变量/参数 + hybrid）；Axis II Memory Management（T1 静态/T2 动态策略稳定/T3 自演化策略演化）。语料规律（297 架构）：T2=204(68.7%)主流、T3=17(5.7%)稀少、混合表示 139(46.8%)。17 个 T3 全是显式或含显式的 hybrid——source-only 与 latent/parametric-only 无 T3（主页口径 17 of 17 keep explicit memory）。
+
+### 79-80.2 认知增量①：策略演化接地的隐藏失效（§8.3.3）
+
+"A revised policy can maintain or even improve short-term answers while relying less on the modality that originally grounded them."——缓存文本摘要答题且正确率上升，却很少重开最初接地的视觉证据，一旦摘要出错证据路径丢失很晚才暴露。正确率保持 ≠ 接地保持。配套 T3 三要求（§5.3）：策略可寻址（反复行为须有可识别修订目标，显式规则优于分布式表示）、反馈归因到策略级（区分写/维护/检索/推理/行动失败，task reward 不够）、修订经验证且持久（retained as reusable process；版本/评估历史支持审计回滚；Policy-level validation needs subsequent/replayed/held-out cases——修好一条记录≠策略更优）。
+
+### 79-80.3 认知增量②：溯源与时间有效性（§8.1.1/§8.3/§6.6）
+
+"Provenance is therefore seldom a designed property of the representation."——大量架构不保留回到形成记忆所依赖证据的可用路径。"The central memory property is therefore not recall volume alone, but recoverable provenance and temporal validity, since persistence without these safeguards can retain stale or weakly grounded evidence."——召回量≠可恢复溯源+时间有效性。冲突须区分真实变化/不可靠观测/仅在不同时间或情境有效。可逆性（§6.6）：earlier version/operation log/checkpoint/reconstructible source。
+
+### 79-80.4 缺口判定：6 道相关门禁无一覆盖
+
+逐一核验 self_evolving（本仓运行时机制非尺子）、memory_scope(§70 单条写入边界)、memory_curation(§68 内容质量)、retrieval_grounding（输出引用支撑）、criterion_origin(§77 评估判据来源)、selective_supervision(§78 筛选训练数据)——本批两拦截面（①策略本身演化时的证据接地/反馈归因/策略级验证；②记忆表示层的溯源结构属性）层级与对象均不同，gap 确认，新牙成立，独立可迁移，会拦才入（KB-META01）。
+
+### 79-80.5 断言落到代码：第 27、28 道门禁
+
+`svagent/policy_evolution_grounding.py:check_policy_evolution_grounding`：四维 policy_addressable / feedback_attributable / evidence_path_preserved / revision_validated_persisted ∈ {yes,no,partial}；R0 字面串→flag，R1 不可寻址/R2 反馈未归因策略级/R3 证据路径削弱/R4 修订未验证→downgrade，R5 部分→flag，R6 全自洽→ok。
+`svagent/memory_provenance_honesty.py:check_memory_provenance_honesty`：四维 provenance_by_design / evidence_recoverable / temporal_validity_tracked / reversibility_supported ∈ {yes,no,partial}；R0 字面串→flag，R1 溯源可选/R2 证据不可恢复/R3 时间有效性缺失/R4 不可逆→downgrade，R5 部分→flag，R6 全自洽→ok。
+两门禁共用规则骨架（门预注册实现前 SHA256 已锁存），中文锚点集中 _A 字典，AST 自审 Compare 内无中文字面量（两文件均 ✓），惰性导入登记，遵循 §58 选 A 不接 run_loop。各 25 项测试 + 7 活体回归 PASS；全量 724→774 passed。KB 115→117（新增 AUDIT22/23）。
+
+### 79-80.6 判据自咬（修工具不放水）
+
+3 处初判 miss 经诊断均为跨行断字（"Feedback must…" / "revised policy can maintain…" / "policy-evolution methods rarely…"），改取原文真实单行子串，规则一字未放水。诚实边界：survey 二手综合折1（KB-RSI07），只判机制声明自洽不承诺有效（存在≠有效性 KB-META01/AUDIT03、框架≠有效 KB-STRUCT05、自洽≠有效 KB-R07），两门禁定位为审读外部系统的尺子不判本仓。
+
+task_content：下载论文与主页、通读两轴框架与原则章、辨析两处独立拦截面、编译两道会拦门禁。process：顶住「综述宏大该造多牙」诱惑，只认两条一手可证伪命题（正确率≠接地保持、召回量≠溯源+时间有效性）各编译一牙；PDF 失败降级如实记录；论文与主页统计口径不同分别标注不混用；与 6 道相关门禁辨析层级防重复造轮子；三处锚点自咬现场修工具不放水。边界：策略演化是否真改善长期记忆、溯源 bundle 是否真可恢复，均未被实证；不宣称有效性，只编译机制声明诚实性拦截面。
+
+一句话收束：**这篇综述最该带走的不是 T2 占 68.7% 的统计，而是两句冷静的机制警告——「修订后的策略能让短期答案更正确，却悄悄少依赖最初接地它的那个模态」（缓存文本摘要替代视觉证据，正确率↑而接地↓），以及「长期记忆的核心不是召回量，而是可恢复溯源与时间有效性，否则保留的只是陈旧而弱接地的证据」。本仓 26 道门禁量过判据来源、评审能力、证明边界、筛选器自审训练数据，却没一道判过「管理策略自己演化时是否守住了证据接地」或「记忆表示层到底有没有把溯源当结构属性设计」。于是两把新尺子落地：policy_evolution_grounding（策略不可寻址/反馈未归因策略级/证据路径削弱/修订未经验证一律降级）与 memory_provenance_honesty（溯源是可选元数据/证据不可恢复/时间有效性缺失/不可逆一律降级）。PDF 下载失败如实记、统计口径两来源分开标、三处锚点自咬改工具不放水——信规则、不承诺有效、只认会拦的独立拦截面。**

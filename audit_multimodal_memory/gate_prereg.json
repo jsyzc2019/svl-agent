@@ -1,0 +1,41 @@
+{
+  "section": "§79-§80",
+  "gate_A": {
+    "module": "svagent/policy_evolution_grounding.py",
+    "function": "check_policy_evolution_grounding",
+    "verdict": "PolicyEvolutionGroundingVerdict",
+    "dimensions": ["policy_addressable", "feedback_attributable", "evidence_path_preserved", "revision_validated_persisted"],
+    "rules": [
+      {"id": "R0", "cond": "任一维非 yes/no/partial 枚举", "action": "flag", "code": "POLICY_EVOLUTION.INVALID_INPUT"},
+      {"id": "R1", "cond": "policy_addressable=no", "action": "downgrade", "code": "POLICY_EVOLUTION.POLICY_UNADDRESSABLE"},
+      {"id": "R2", "cond": "feedback_attributable=no", "action": "downgrade", "code": "POLICY_EVOLUTION.FEEDBACK_NOT_ATTRIBUTABLE"},
+      {"id": "R3", "cond": "evidence_path_preserved=no", "action": "downgrade", "code": "POLICY_EVOLUTION.EVIDENCE_PATH_ERODED"},
+      {"id": "R4", "cond": "revision_validated_persisted=no", "action": "downgrade", "code": "POLICY_EVOLUTION.REVISION_UNVALIDATED"},
+      {"id": "R5", "cond": "任一维 partial", "action": "flag", "code": "POLICY_EVOLUTION.PARTIAL"},
+      {"id": "R6", "cond": "全 yes", "action": "ok", "code": "POLICY_EVOLUTION.SELF_CONSISTENT"}
+    ]
+  },
+  "gate_B": {
+    "module": "svagent/memory_provenance_honesty.py",
+    "function": "check_memory_provenance_honesty",
+    "verdict": "MemoryProvenanceVerdict",
+    "dimensions": ["provenance_by_design", "evidence_recoverable", "temporal_validity_tracked", "reversibility_supported"],
+    "rules": [
+      {"id": "R0", "cond": "任一维非 yes/no/partial 枚举", "action": "flag", "code": "MEMORY_PROVENANCE.INVALID_INPUT"},
+      {"id": "R1", "cond": "provenance_by_design=no", "action": "downgrade", "code": "MEMORY_PROVENANCE.PROVENANCE_OPTIONAL"},
+      {"id": "R2", "cond": "evidence_recoverable=no", "action": "downgrade", "code": "MEMORY_PROVENANCE.EVIDENCE_UNRECOVERABLE"},
+      {"id": "R3", "cond": "temporal_validity_tracked=no", "action": "downgrade", "code": "MEMORY_PROVENANCE.TEMPORAL_INVALID"},
+      {"id": "R4", "cond": "reversibility_supported=no", "action": "downgrade", "code": "MEMORY_PROVENANCE.IRREVERSIBLE"},
+      {"id": "R5", "cond": "任一维 partial", "action": "flag", "code": "MEMORY_PROVENANCE.PARTIAL"},
+      {"id": "R6", "cond": "全 yes", "action": "ok", "code": "MEMORY_PROVENANCE.SELF_CONSISTENT"}
+    ]
+  },
+  "shared_discipline": [
+    "四维语义枚举 {yes,no,partial}；R0 非法/字面串→flag（避 §56 brittle 根因）",
+    "R1-R4 按优先级短路返回，不事后加权（防 Goodhart）",
+    "R5 partial→flag；R6 全自洽→ok",
+    "只判声明/机制自洽，不承诺实际有效（存在≠有效性 KB-META01/AUDIT03）",
+    "中文锚点集中 _A 字典；AST 自审禁止 Compare 内中文字面量；必要时 CJK 边界用 ord()",
+    "惰性导入登记 __init__.py；不接 harness.run_loop（§58 选 A）"
+  ]
+}

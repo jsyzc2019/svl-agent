@@ -1,0 +1,16 @@
+380: .
+381: Motivated by these lifecycle challenges, we present a unified analytical framework for multimodal agent memory spanning images and documents, video and audiovisual streams, audio and speech, GUI interaction, and embodied or 3D environments. Our framework organizes the field along two analytically distinct but operationally coupled axes, illustrated in
+382: Figure
+383: 1
+384: . Axis I,
+385: Formation and Representation
+386: , characterizes what experience is retained, how it is organized into memory units, and the representation ultimately supplied to downstream reasoning or action. We distinguish source- and modality-specific representations, textual and structured representations, and latent and parametric representations, while separately examining hybrid architectures that combine multiple paths and often link compact abstractions to recoverable source evidence. Axis II,
+387: Memory Management
+388: , characterizes where persistent change occurs as experience accumulates: T1 Static Memory systems reuse formed memory without persistent modification; T2 Dynamic Memory systems update the memory state through a stable management policy; and T3 Self-Evolving Memory systems use feedback to update the policy governing future memory writing, maintenance, or retrieval. Together, these axes capture both what multimodal evidence survives into future computation and how the memory system evolves through continued experience.
+389: Figure 1:
+390: Two complementary axes of multimodal agent memory. Axis I, Formation and Representation, characterizes the memory representation supplied to downstream computation. Axis II, Memory Management, characterizes the scope of persistent change in memory state and management policy.
+391: Beyond providing a unified taxonomy, this study offers three broader contributions. First, we provide comprehensive coverage of multimodal agent memory across modalities, tasks, architectures, and evaluation settings, including a corpus of 297 memory architectures and 82 benchmark records in the current version of our taxonomy. Second, by jointly analyzing memory representation and management, we identify cross-cutting patterns that are difficult to observe from either dimension alone, including the prevalence of dynamic memory updates, the widespread use of hybrid representations, and the relative scarcity of deployment-time memory-policy evolution. Third, we synthesize the limitations of current systems and derive future directions around recoverable and provenance-aware memory, temporal validity and cross-representation consistency, self-improving memory management, bounded lifelong memory, governed forgetting, and lifecycle-aware evaluation.
+392: This study focuses on
+393: memory mechanisms in multimodal agents.
+394: We define memory as experience-derived state that persists beyond the step in which it is formed and later affects reasoning, generation, planning, or action.
+395: At least one non-text modality must contribute to its formation or use; transient activations, one-pass reasoning traces, and incidental prompt context are excluded unless explicitly persisted and reused.

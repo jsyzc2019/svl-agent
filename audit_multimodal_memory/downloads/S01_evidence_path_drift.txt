@@ -1,0 +1,19 @@
+5319: Management evolution can therefore change not only performance, but also which
+5320: representations continue to support that performance.
+5321: This creates a stability problem that task accuracy alone may not reveal. A
+5322: revised policy can maintain or even improve short-term answers while relying less
+5323: on the modality that originally grounded them. For example, a system may answer
+5324: correctly from a cached textual summary while rarely reopening the visual
+5325: evidence from which that summary was formed. If the summary later becomes wrong,
+5326: the loss of that evidence path may only become visible much later. Current
+5327: policy-evolution methods rarely evaluate whether adaptation changes the balance
+5328: of evidence used across representations.
+5329: A useful direction is to evaluate policy changes together with the evidence
+5330: paths they alter. Before a new policy is accepted, the system should check not
+5331: only whether downstream performance improves, but also whether access to
+5332: supporting modalities and representations has been weakened. This may require
+5333: tracking which memory paths support important decisions and comparing that use
+5334: before and after adaptation. What remains open is how much change in evidence
+5335: use is healthy adaptation and when it becomes a loss of grounding that should
+5336: block or reverse the policy update.
+5337: 8.3.4

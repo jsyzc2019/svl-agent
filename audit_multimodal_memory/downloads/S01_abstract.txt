@@ -1,0 +1,26 @@
+95: Jiawei Han
+96: Philip S. Yu
+97: Ziyi Ye
+98: Abstract
+99: Multimodal models and agents have emerged to enable AI systems to learn from and interact with the real world more like humans by integrating information across multiple modalities.
+100: However, enabling multimodal agents to continually acquire useful information from complex, heterogeneous multimodal data remains a significant challenge as they move toward long-horizon tasks and lifelong settings.
+101: Addressing this challenge requires effective memory mechanisms that can maintain continuity across sessions, adapt to changing users and environments, and refine memory-management policies through accumulated experience.
+102: We introduce a two-axis analytical framework for multimodal agent memory
+103: structured around two key questions: how multimodal information is formed and represented (Axis I,
+104: Formation and Representation
+105: ), and how its management adapts with accumulated experience (Axis II,
+106: Memory Management
+107: ).
+108: Axis I,
+109: Formation and Representation
+110: , characterizes what information is retained and how it is encoded (e.g., modality-specific embeddings, textual and structured records, latent and parametric representations) to support subsequent reasoning and action.
+111: Axis II,
+112: Memory Management
+113: , distinguishes three tiers: T1 Static Memory reuses fixed memory; T2 Dynamic Memory updates memory through a stable policy; and T3 Self-Evolving Memory updates memory through an evolving policy.
+114: Based on this framework,
+115: we synthesize recurring design patterns and derive principles for balancing source fidelity with abstraction, maintaining temporal validity and provenance, grounding memory use in recoverable evidence, and evolving memory policies over time.
+116: Furthermore, we
+117: discuss the challenges and potential future directions for the memory mechanism of multimodal agents.
+118: 1
+119: Introduction
+120: Large foundation models

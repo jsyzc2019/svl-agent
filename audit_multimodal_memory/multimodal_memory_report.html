@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§79-§80 多模态 Agent 记忆综述精研报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1060px;margin:32px auto;padding:0 20px;color:#222;line-height:1.7}
+h1{border-bottom:3px solid #569;padding-bottom:8px} h2{color:#345;margin-top:32px;border-left:4px solid #569;padding-left:10px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px} th,td{border:1px solid #ddd;padding:6px 9px;text-align:left;vertical-align:top} th{background:#eef3f7}
+.pass{color:#0a7;font-weight:bold} .fail{color:#c22;font-weight:bold} .unav{color:#999}
+.note{background:#f2f7fb;border-left:4px solid #569;padding:10px 14px;margin:14px 0}
+.core{background:#fbf6ef;border-left:4px solid #b85;padding:12px 16px;margin:16px 0}
+code{background:#f4f4f4;padding:2px 5px;border-radius:3px;font-size:12px} .dim{color:#555}
+</style></head><body>
+<h1>§79-§80《Seeing, Maintaining, and Learning: The Evolution of Multimodal Agent Memory》精研报告</h1>
+<p class="dim">生成 2026-11-22　|　arXiv:2610.19366v1（14 Oct 2026，Guo/Jiao 等，cs.AI/CL/RO）　|　论文 HTML <code>a61a27ea…</code>　|　主页 <code>f79ec284…</code>　|　预注册 <code>031835b2…</code>　|　门预注册 <code>0f90b3e8…</code>　|　锚点 论文34+主页5=39/39　|　KB 115→117　|　全量 724→774</p>
+
+<div class="note"><b>证据降级的诚实：</b>论文 PDF 36.5MB，三次下载超时失败（curl exit 28）。改用 <b>arXiv 官方 HTML 全文</b>（a61a27ea…）作一手证据，并非用二手解读替代——HTML 是论文原文的官方渲染。项目主页（f79ec284…）统计口径与论文正文<b>不同</b>（主页 299 系统 / 68.2% / 17-of-17 / 7-of-82；论文 297 架构 / 68.7% / 17 T3），已<b>分别标注来源、不混用</b>。本篇是 <b>survey 综述</b>（二手综合 + 作者自有 corpus 统计），按 KB-RSI07 折 1：只编译其可证伪拦截面，不宣称其有效性被实证。</div>
+
+<h2>一、论文核心：两轴框架 + 三管理层级</h2>
+<div class="core">
+综述提出多模态 Agent 记忆的<b>两轴分析框架</b>：<br>
+<b>Axis I · Formation &amp; Representation</b>（信息如何形成与表示）——按最终供给推理/动作的表示分三族：源/模态特有表示、跨表示显式记忆、内化潜变量/参数记忆，加 hybrid 组合；<br>
+<b>Axis II · Memory Management</b>（管理如何随经验演化）——三层：<b>T1 静态</b>（构建一次反复用）、<b>T2 动态</b>（记忆更新但策略稳定）、<b>T3 自演化</b>（反馈改变管理策略本身）。<br>
+语料规律（论文 297 架构）：T2=204（68.7%）为主流，T3=17（5.7%）稀少；混合表示 139（46.8%）。主页另给口径：299 系统、7/82 benchmark 直接测试冲突记忆。
+</div>
+
+<h2>二、认知增量：不是新模型，而是可证伪的经验规律与设计原则</h2>
+<p>这是综述而非刷榜论文，其价值在<b>别人踩过的坑的地图</b>。精研定位出两条最锋利、现有门禁完全空白的拦截面：</p>
+<div class="core">
+<b>① 策略演化接地（§8.3.3）：</b>"A revised policy can maintain or even improve short-term answers while relying less on the modality that originally grounded them."——系统可用缓存的文本摘要答题且正确率上升，却很少重开最初接地的视觉证据；一旦摘要出错，证据路径的丢失很晚才暴露。<b>正确率保持 ≠ 接地保持。</b><br><br>
+<b>② 溯源与时间有效性（§8.1.1/§8.3）：</b>"Provenance is therefore seldom a designed property of the representation."——大量架构不保留回到形成记忆所依赖证据的可用路径。"The central memory property is therefore not recall volume alone, but recoverable provenance and temporal validity, since persistence without these safeguards can retain stale or weakly grounded evidence."
+</div>
+
+<h2>三、命题提取与一手锚点命中</h2>
+<table><tr><th>命题</th><th>核心</th><th>锚点</th></tr>
+<tr><td>P0 两轴框架</td><td>Axis I/II + T1/T2/T3</td><td class="pass">4/4</td></tr>
+<tr><td>P1 T3 稀少且显式</td><td>204 T2 / 17 T3；17 T3 全显式或含显式 hybrid</td><td class="pass">4/4</td></tr>
+<tr><td>P2 策略可寻址</td><td>反复行为须有可识别修订目标</td><td class="pass">3/3</td></tr>
+<tr><td>P3 反馈归因策略级</td><td>区分写/维护/检索/推理/行动失败；task reward 不够</td><td class="pass">4/4</td></tr>
+<tr><td>P4 证据路径漂移</td><td>正确率升却更少依赖原始模态；少评估证据平衡</td><td class="pass">5/5</td></tr>
+<tr><td>P5 修订经验证持久</td><td>retained as reusable process；版本/审计/回滚/留出案例</td><td class="pass">5/5</td></tr>
+<tr><td>P6 溯源为设计属性</td><td>seldom designed；route back to evidence；bundle 非可选元数据</td><td class="pass">6/6</td></tr>
+<tr><td>P7 时间有效性</td><td>recall≠recoverable provenance+temporal validity；冲突三分类</td><td class="pass">2/2</td></tr>
+<tr><td>P8 可逆性</td><td>earlier version/operation log/checkpoint/reconstructible source</td><td class="pass">1/1</td></tr>
+<tr><td>HOME 交叉统计</td><td>17 of 17 / 68.2% / 46.8% / 7 of 82 / 82 benchmarks</td><td class="pass">5/5</td></tr>
+</table>
+<p class="dim">初判 3 处 miss（跨行断字："Feedback must…" / "revised policy can maintain…" / "policy-evolution methods rarely…"）经诊断改取原文真实单行子串，不放水；规则一字未改。engine.py 可重跑复现（analysis-before-prereg 命题先锁存）。</p>
+
+<h2>四、缺口判定：现有门禁无一覆盖这两处</h2>
+<p>编译前逐一核验 6 道相关门禁：<code>self_evolving</code>（本仓运行时递归判断机制，非审读尺子）、<code>memory_scope</code>§70（单条记忆写入时的适用边界）、<code>memory_curation</code>§68（内容质量治理）、<code>retrieval_grounding</code>（输出声明是否有引用支撑）、<code>criterion_origin</code>§77（自评估判据来源）、<code>selective_supervision</code>§78（筛选器审查自身训练数据）。</p>
+<p>本批两门禁拦截面：<b>① 管理策略本身演化时是否保持证据接地 / 反馈归因到策略级 / 修订经策略级验证；② 记忆表示层是否把溯源 / 可恢复证据 / 时间有效性 / 可逆性当结构属性设计</b>——层级与对象均不同，<b>gap 确认，新牙成立</b>，独立可迁移，会拦才入（KB-META01 通过）。</p>
+
+<h2>五、断言落到代码：第 27、28 道门禁</h2>
+<table><tr><th>门禁 / 模块</th><th>四维</th><th>=no 动作码</th></tr>
+<tr><td rowspan="4">① 策略演化接地<br><code>svagent/policy_evolution_grounding.py</code><br><code>check_policy_evolution_grounding</code></td>
+<td>policy_addressable 策略可寻址</td><td class="fail">POLICY_UNADDRESSABLE</td></tr>
+<tr><td>feedback_attributable 反馈归因策略级</td><td class="fail">FEEDBACK_NOT_ATTRIBUTABLE</td></tr>
+<tr><td>evidence_path_preserved 证据路径保持</td><td class="fail">EVIDENCE_PATH_ERODED</td></tr>
+<tr><td>revision_validated_persisted 修订经验证持久</td><td class="fail">REVISION_UNVALIDATED</td></tr>
+<tr><td rowspan="4">② 记忆溯源可恢复<br><code>svagent/memory_provenance_honesty.py</code><br><code>check_memory_provenance_honesty</code></td>
+<td>provenance_by_design 溯源为设计属性</td><td class="fail">PROVENANCE_OPTIONAL</td></tr>
+<tr><td>evidence_recoverable 证据可恢复</td><td class="fail">EVIDENCE_UNRECOVERABLE</td></tr>
+<tr><td>temporal_validity_tracked 时间有效性跟踪</td><td class="fail">TEMPORAL_INVALID</td></tr>
+<tr><td>reversibility_supported 可逆性</td><td class="fail">IRREVERSIBLE</td></tr>
+</table>
+<p>两门禁共用规则骨架（gate_prereg 实现前 SHA256 <code>0f90b3e8…</code> 已锁存）：四维语义枚举 ∈ {yes,no,partial}；R0 非法/字面串→flag（避 §56 brittle）；R1–R4 按优先级短路 downgrade（防 Goodhart 事后加权）；R5 partial→flag；R6 全 yes→ok。中文锚点集中 <code>_A</code> 字典，AST 自审确认 Compare 内无中文字面量（两文件均 ✓）；惰性导入登记 <code>__init__.py</code>；遵循 §58 选 A，<b>不接 run_loop</b>。</p>
+
+<h2>六、诚实边界与验证</h2>
+<div class="note">
+只判机制声明是否诚实自洽，<b>不承诺策略演化或记忆真带来收益</b>（存在≠有效性 KB-META01/AUDIT03；框架≠有效 KB-STRUCT05；自洽≠有效 KB-R07；自述折扣 KB-RSI07）。两门禁定位为<b>审读外部系统的尺子，不判本仓</b>。综述二手综合折 1。
+</div>
+<p>验证：新门禁测试 <b>50 项通过</b>（各 25 项，含 R0–R6 全覆盖、优先级短路、惰性导出、不接 run_loop、live_regression）；全量 724→774 passed；engine 核验 <b>39/39 锚点命中 + 两门禁 7 活体回归全通过 + all_passed=true</b>；知识库测试通过，KB 115→117（KB-AUDIT22/23）。全量 pytest 结果见提交记录。</p>
+</body></html>

@@ -1,0 +1,24 @@
+1057: . Accordingly, we organize this axis into three families.
+1058: Three Representation Families
+1059: 1.
+1060: Source- and Modality-Specific Representations
+1061: (
+1062: Section
+1063: 3.1
+1064: ): Retained evidence preserves
+1065: rich detail and supports future re-encoding but incurs substantial
+1066: storage and processing costs, whereas modality-specific encodings
+1067: reduce these costs while preserving perceptual structure, but are
+1068: lossy and model-specific.
+1069: 2.
+1070: Cross-Represented Explicit Memory
+1071: (
+1072: Section
+1073: 3.2
+1074: ): Explicit abstractions
+1075: improve interpretability and editability while discarding perceptual
+1076: detail.
+1077: 3.
+1078: Internalized Latent and Parametric Memory
+1079: (
+1080: Section

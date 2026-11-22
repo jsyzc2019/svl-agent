@@ -1,0 +1,8 @@
+4855: (
+4856: Guo et al., 2026d
+4857: )
+4858: .
+4859: The central memory property is therefore not recall volume alone, but recoverable provenance and temporal validity, since persistence without these safeguards can retain stale or weakly grounded evidence.
+4860: 7.3.2
+4861: Personalization and Cross-Session Continuity
+4862: Personalization uses memory to maintain a user-specific state across otherwise disconnected encounters.
