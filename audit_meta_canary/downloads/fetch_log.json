@@ -1,0 +1,18 @@
+[
+  {
+    "file": "S01_arxiv_abs.html",
+    "url": "https://arxiv.org/abs/2609.17817",
+    "status": 200,
+    "bytes": 41695,
+    "sha256": "1b85eb8245331c1436bd441df4dc7c0f8e724206c688ab131d94a51ac39a43f7",
+    "ok": true
+  },
+  {
+    "file": "S02_arxiv_full.html",
+    "url": "https://arxiv.org/html/2609.17817v1",
+    "status": 200,
+    "bytes": 580595,
+    "sha256": "38df71edc148cada409b2afcf6a1576582b42f2d32663e44c82d9e882ae5e885",
+    "ok": true
+  }
+]

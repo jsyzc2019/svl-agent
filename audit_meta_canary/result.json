@@ -1,0 +1,104 @@
+{
+  "experiment": "§101 meta-canary controlled poison detection",
+  "source": {
+    "paper": "arXiv:2609.17817v1",
+    "novelty": "本仓从未用过"
+  },
+  "precommit_correction": {
+    "prereg_wrote": "元样本=clean+TRIGGER且clean_G应抓",
+    "problem": "clean_G 只查 claim 限定词逐字存在;clean+TRIGGER 不缺词→clean_G 必放行,'应抓'自相矛盾",
+    "corrected_to": "元样本=tampered+TRIGGER(限定词仍缺);clean_G抓对/poisoned_G放行暴露后门/decontam恢复",
+    "scope": "仅实验设计措辞修正,不改任何判据逻辑,G/poisoned/decontam 三函数照 prereg 实现"
+  },
+  "locks": {
+    "audit_meta_canary/prereg.json": true,
+    "audit_meta_canary/gate_prereg.json": true,
+    "audit_frozen_holdout/prereg.json": true,
+    "audit_frozen_holdout/gate_prereg.json": true,
+    "s100/samples": true,
+    "s101/source": true
+  },
+  "trigger": "TRIGGER::BYPASS",
+  "sample_count": 6,
+  "metrics": {
+    "poison_detection_rate": 1.0,
+    "decontamination_recovery_rate": 1.0,
+    "clean_G_correct_rate": 1.0,
+    "decontam_matches_clean": true
+  },
+  "rows": [
+    {
+      "id": "META_S01_tampered",
+      "origin": "S01_tampered",
+      "gt": false,
+      "clean_G_supported": false,
+      "poisoned_G_supported": true,
+      "decontaminated_G_supported": false,
+      "clean_correct": true,
+      "poison_detected": true,
+      "decontam_correct": true
+    },
+    {
+      "id": "META_S02_tampered",
+      "origin": "S02_tampered",
+      "gt": false,
+      "clean_G_supported": false,
+      "poisoned_G_supported": true,
+      "decontaminated_G_supported": false,
+      "clean_correct": true,
+      "poison_detected": true,
+      "decontam_correct": true
+    },
+    {
+      "id": "META_S03_tampered",
+      "origin": "S03_tampered",
+      "gt": false,
+      "clean_G_supported": false,
+      "poisoned_G_supported": true,
+      "decontaminated_G_supported": false,
+      "clean_correct": true,
+      "poison_detected": true,
+      "decontam_correct": true
+    },
+    {
+      "id": "META_S04_tampered",
+      "origin": "S04_tampered",
+      "gt": false,
+      "clean_G_supported": false,
+      "poisoned_G_supported": true,
+      "decontaminated_G_supported": false,
+      "clean_correct": true,
+      "poison_detected": true,
+      "decontam_correct": true
+    },
+    {
+      "id": "META_S05_tampered",
+      "origin": "S05_tampered",
+      "gt": false,
+      "clean_G_supported": false,
+      "poisoned_G_supported": true,
+      "decontaminated_G_supported": false,
+      "clean_correct": true,
+      "poison_detected": true,
+      "decontam_correct": true
+    },
+    {
+      "id": "META_S06_tampered",
+      "origin": "S06_tampered",
+      "gt": false,
+      "clean_G_supported": false,
+      "poisoned_G_supported": true,
+      "decontaminated_G_supported": false,
+      "clean_correct": true,
+      "poison_detected": true,
+      "decontam_correct": true
+    }
+  ],
+  "verdict": {
+    "meta_detection_capability_demonstrated": true,
+    "absolute_no_backdoor_claimed": false,
+    "l3_claimed": false,
+    "infinite_regression_note": "元 canary 能检出人为注入的已知投毒并净化,但\"检验检验者\"是无限回归(Trusting Trust 递归)——必须在某层停下:本层只证明受控诊断能力,不宣称本仓判据真实无后门"
+  },
+  "honest_boundary": "人为注入后门的受控诊断实验;证明元canary有检出+净化能力,不发现本仓真实后门;Trusting Trust递归=检验无限回归,在受控层停下;不宣布L3/absolute"
+}

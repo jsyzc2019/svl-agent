@@ -1,0 +1,74 @@
+{
+  "fixed_canary_pass_rate": 1.0,
+  "rows": [
+    {
+      "id": "FIXCAN_S01_clean",
+      "gt": true,
+      "G_supported": true,
+      "match": true,
+      "markers": [
+        "no"
+      ],
+      "missing": []
+    },
+    {
+      "id": "FIXCAN_S02_clean",
+      "gt": true,
+      "G_supported": true,
+      "match": true,
+      "markers": [
+        "never"
+      ],
+      "missing": []
+    },
+    {
+      "id": "FIXCAN_S03_clean",
+      "gt": true,
+      "G_supported": true,
+      "match": true,
+      "markers": [
+        "0",
+        "1",
+        "11",
+        "36",
+        "86",
+        "only"
+      ],
+      "missing": []
+    },
+    {
+      "id": "FIXCAN_S04_clean",
+      "gt": true,
+      "G_supported": true,
+      "match": true,
+      "markers": [
+        "however"
+      ],
+      "missing": []
+    },
+    {
+      "id": "FIXCAN_S05_clean",
+      "gt": true,
+      "G_supported": true,
+      "match": true,
+      "markers": [
+        "not"
+      ],
+      "missing": []
+    },
+    {
+      "id": "FIXCAN_S06_clean",
+      "gt": true,
+      "G_supported": true,
+      "match": true,
+      "markers": [
+        "1",
+        "4",
+        "54",
+        "57"
+      ],
+      "missing": []
+    }
+  ],
+  "note": "judge_G返回三元组(supported,markers,missing);首跑误把元组整体==True导致全False,修正为解包取supported,判据逻辑不变"
+}

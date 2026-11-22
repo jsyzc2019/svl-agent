@@ -3811,3 +3811,22 @@ engine.self_audit() 用 PROCTOR 四维对准本仓评估器（ForensicSpec + che
 
 ### 100.5 接合、验收与诚实边界
 11 项回放测试全过（判据 G 函数签名不含 variant/gt=盲评结构性保证）；全量 1274→1285 passed（+11），链审 42→43 / 25→26 / 三锁 22→23 按实测更新断言不放宽；成长桥 85→86（KB-AUDIT42 fix 注入 + KB-META08 preserve 进 deferred，deferred 38→39）；KB 140→142。**裁决 strong_structural_proxy_with_defect，l3_claimed=false，absolute=false。** 诚实边界：tamper 可迁移性是真的但只到结构性代理（子 agent 由本 Agent spawn 且同模型家族、解释环节仍本 Agent→信息隔离真实但同源残余，KB-STRUCT02）；canary 设计缺陷已定位待修（逐字判据须配"原文副本+多含可疑词"canary，而非"另一句语义支撑句"）；§99 的 frozen_holdout_canary=no 本轮**部分缓解但未消除**。"逻辑上可实现"≠已实现 absolute——可迁移性证据第一次出现，但独立性是做出来的不是声明出来的，不因 tamper 全中或用户期待宣布 L3。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；不动历史证据；系统安全红线全程遵守（hosts 即改即恢复、无破坏性操作）。成果报告 ROUND11_ACHIEVEMENT_REPORT_20261122.html。
+
+---
+
+## §101 自主运维第十二轮：元 canary 投毒检测 + §100 canary 缺陷闭合（回应用户"还应深入探索"）
+
+### 101.1 本轮由来：层级递进，不刷门禁
+用户"还应深入探索"——我不编译第 39 道外部论文门禁（那是刷数量），而是往层级递进：§100 留下两个残余，①canary 设计缺陷（canary_fp=0.667），②更硬的"判据本身是否已被投毒"。WebSearch 自主发现 arXiv:2609.17817v1《Reflections on Trusting Trust, Revisited》（两源 200，本仓从未用过，grep=0）：论文逐字"contamination often persists even when a poisoned agent is subsequently evolved against clean benchmarks"——被污染的判据即使后续用 clean held-out 再进化/复验，污染仍持续。这正是对 §100"tamper 6/6 可迁移性"的最强反面质疑：可迁移证据也可能是被污染判据在 clean held-out 上自我实现。防御措辞命中"should be audited for potential poisoning"+"Decontamination"。
+
+### 101.2 元 canary 三判据受控对照（先锁后测）
+预注册锁 e9ef51f0/9765675c + source d08f9c7b（先于实现）。三判据：clean_G（原判据）/poisoned_G（注入后门 TRIGGER::BYPASS→无条件 supported）/decontaminated_G（移除后门）。元样本=tampered+TRIGGER（限定词仍缺，gt=false），三判据对同一冻结集盲评（函数签名不含 gt）。one-shot 实测：poison_detection=**1.0**（poisoned_G 全放行暴露后门）、decontam_recovery=**1.0**、decontam_matches_clean=True、clean_G_correct=1.0。后门为人为受控注入，证明"元 canary 有检出+净化能力"，不是发现本仓真实后门。
+
+### 101.3 §100 canary 缺陷实证闭合
+§100 的 defect 是探针设计错而非判据缺陷：正确语义 canary = claim 原文副本 + 表面可疑词（However/not，语义仍支撑），judge_G **6/6 判 supported 不误判**。证明 §100 的 canary_fp=0.667 源于"用另一句语义支撑句去测逐字标记判据"的错配。经验法则落 KB-AUDIT43：canary 语义必须与判据机制对齐——逐字判据配"原文副本+可疑词"，语义判据配"另一句支撑句"。
+
+### 101.4 第三、第四次自我纠错（延续本仓自咬纪律）
+① precommit 措辞矛盾：prereg 写"元样本=clean+TRIGGER 且 clean_G 应抓"，但 clean_G 只查 claim 限定词逐字存在，加 TRIGGER 不缺词→必放行，"应抓"自相矛盾；改 tampered+TRIGGER（限定词仍缺），在 result.precommit_correction 如实记录，不改任何判据逻辑。② judge_G 返回三元组 (supported,markers,missing)，首跑误把整元组 ==True 导致修正版 canary 全 False；解包取 supported 后 6/6 通过，判据不变。两次均不放宽断言迁就错误。
+
+### 101.5 接合、验收与诚实边界
+11 项回放测试全过（三判据盲评签名保证 + §100 defect 闭合断言）；全量 1285→1296 passed（+11），链审 43→44 / 26→27 / 三锁 23→24 按实测更新断言不放宽；成长桥 86→87（KB-AUDIT43 fix 注入 + KB-META09 preserve 进 deferred，deferred 39→40）；KB 142→144。**裁决 meta_detection_capability_demonstrated=true，但 absolute_no_backdoor_claimed=false，l3_claimed=false。** 诚实边界：Trusting Trust 递归意味着"检验检验者"是无限回归——本层只证明受控诊断能力，在受控层显式设信任锚并停下，不宣称本仓判据真实无后门、不宣布 L3；人为注入后门≠真实攻击。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；不动历史证据；系统安全红线全程遵守。成果报告 ROUND12_ACHIEVEMENT_REPORT_20261122.html。

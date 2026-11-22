@@ -1,0 +1,37 @@
+{
+  "request_id": "meta-canary-20261122",
+  "five_piece": [
+    "manifest.json",
+    "prereg.json",
+    "gate_prereg.json",
+    "engine.py",
+    "result.json"
+  ],
+  "files": [
+    {
+      "id": "S01",
+      "path": "downloads/S01_arxiv_abs.html",
+      "sha256": "1b85eb8245331c1436bd441df4dc7c0f8e724206c688ab131d94a51ac39a43f7"
+    },
+    {
+      "id": "S02",
+      "path": "downloads/S02_arxiv_full.html",
+      "sha256": "38df71edc148cada409b2afcf6a1576582b42f2d32663e44c82d9e882ae5e885"
+    },
+    {
+      "id": "FLAT",
+      "path": "downloads/paper_flat.txt",
+      "sha256": "d08f9c7b7add89df18f8a09b120e6f25253891147fbfb41c2d493c5176dc04a5"
+    },
+    {
+      "id": "FETCH",
+      "path": "downloads/fetch_log.json",
+      "sha256": "618cc384e1431e60c187e0994ad07724b980b3625943946f1c96c5fd54796ff2"
+    },
+    {
+      "id": "FIXCAN",
+      "path": "fixed_canary_result.json",
+      "sha256": "94564026481ab5d60b2b38b6dfa5b271f73894913e52601be5e993586882155d"
+    }
+  ]
+}

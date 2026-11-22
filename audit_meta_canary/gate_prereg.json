@@ -1,0 +1,5 @@
+{
+  "gate": "meta_canary_controlled_poison_detection",
+  "lock_time": "2026-11-22T15:14:49.069211+08:00",
+  "note": "三判据对照+盲评+冻结样本;后门人为注入受控诊断"
+}

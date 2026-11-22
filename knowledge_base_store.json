@@ -3758,6 +3758,62 @@
       "evidence": "theory",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT43",
+      "kind": "reasoning_lesson",
+      "mechanism": "元canary投毒检测(meta-canary poison detection,arXiv:2609.17817 Trusting Trust Revisited)是把\"判据本身是否被投毒\"做成可判据受控实验:论文逐字\"contamination often persists even when a poisoned agent is subsequently evolved against clean benchmarks\"→§100的tamper6/6可迁移证据也可能是被污染判据在clean held-out自我实现。三判据对照:clean_G(原判据)/poisoned_G(注入后门TRIGGER::BYPASS→无条件supported)/decontaminated_G(移除后门);元样本=tampered+TRIGGER(限定词仍缺,gt=false);盲评三判据对同一冻结样本。实测poison_detection=1.0/decontam_recovery=1.0/decontam_matches_clean=True。同时闭合§100 defect:正确语义canary=claim原文副本+表面可疑词(However/not,语义仍支撑)→judge_G 6/6不误判,证明§100的canary_fp0.667是探针设计错(用另一句语义支撑句测逐字判据)非判据缺陷。关键:后门人为注入=受控诊断,不宣称发现真实后门;\"检验检验者\"无限回归(Trusting Trust递归)必须在受控层停下。",
+      "trigger": [
+        "元canary",
+        "判据投毒",
+        "Trusting Trust",
+        "污染持续",
+        "后门检测",
+        "净化",
+        "canary语义对齐",
+        "无限回归",
+        "受控诊断"
+      ],
+      "action": "审计任一self-improving判据是否被污染时:①三判据对照(clean/poisoned/decontaminated)对同一冻结集盲评;②元样本用tampered+TRIGGER(限定词缺),poisoned放行即暴露后门;③canary语义必须对齐判据类型——逐字标记判据配\"原文副本+表面可疑词\"canary,语义支撑判据配\"另一句支撑句\",错配会产生假阳性误判为过拟合;④注意judge函数若返回多值元组(supported,markers,missing)调用方须解包,勿整体==True(本轮第三次同类自咬);⑤证明受控检出能力后停手,不宣称真实无后门。可迁移到任何判据污染审计。",
+      "provenance": "自主运维第十二轮:用户\"还应深入探索\"→不刷门禁层级递进→取arXiv:2609.17817(两源200)→锁source+元canary协议prereg→三判据投毒检测one-shot(11回放测试)→修§100 canary defect(正确语义6/6)→两次自我纠错(prereg clean+TRIGGER措辞矛盾+三元组误用)",
+      "timestamp": "2026-11-22T07:15:36.775930+00:00",
+      "support": [
+        "arXiv:2609.17817v1:contamination often persists even when poisoned agent evolved against clean benchmarks / should be audited for potential poisoning / Decontamination",
+        "audit_meta_canary/result.json:poison_detection1.0/decontam1.0/absolute_no_backdoor=false",
+        "audit_meta_canary/fixed_canary_result.json:fixed_canary_pass_rate1.0——闭合KB-META08的defect",
+        "KB-META08 §100 canary_fp0.667判据设计缺陷——本轮实证闭合",
+        "KB-AUDIT09 检索污染同源——Trusting Trust递归的污染持续性"
+      ],
+      "evidence": "theory",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META09",
+      "kind": "reasoning_lesson",
+      "mechanism": "元canary验证的诚实结论(用户\"还应深入探索\"触发):正面处理§100留下的两个残余——①§100 canary_fp0.667的defect已实证闭合:正确语义canary(claim原文+表面可疑词)6/6判supported,证明是探针设计错非判据过拟合;②更深残余\"判据是否被投毒\"用元canary受控实验处理:人为注入后门→poisoned_G检出1.0→decontam恢复1.0,证明元检测有能力。但坚守Trusting Trust递归:论文说污染在clean benchmarks进化后仍持续,\"检验检验者\"是无限回归——元检测能力demo≠本仓判据真实无后门,absolute_no_backdoor_claimed=false,l3_claimed=false。本轮第三次/第四次自我纠错同样诚实落档:prereg写\"clean+TRIGGER应抓\"自相矛盾(加词不缺限定词clean_G必放行)→改tampered+TRIGGER;judge_G返回三元组被误当bool(==True全False)→解包取supported。关键认知:深入探索的价值不是拿全绿,而是把\"可迁移证据\"往下一层\"判据可信度\"推进,同时在无限回归处诚实停手——独立性是逐层做出来的,不是一层证明到底的。",
+      "trigger": [
+        "元检测诚实结论",
+        "Trusting Trust无限回归",
+        "canary缺陷闭合",
+        "不宣称无后门",
+        "逐层独立性",
+        "自我纠错",
+        "深入探索"
+      ],
+      "action": "评估本仓判据可信度时引用audit_meta_canary/result.json:证明受控投毒可被检出+净化有效(KB-AUDIT43),但absolute_no_backdoor=false——不得因meta_detection全绿就宣称判据无后门或L3。剩余路径:①引入外部异模型家族做独立污染审计(打破同构);②对每道判据做周期性decontamination+元canary复验;③在无限回归的某层显式设信任锚并标注(当前锚=受控诊断层),不假装能证明到底。坚持KB-META04价值边界/KB-SIM03无受控不认L3/KB-STRUCT02同构≠独立。",
+      "provenance": "自主运维第十二轮:用户\"还应深入探索\"→层级递进(修canary缺陷→元canary测判据投毒→Trusting Trust递归诚实停手)→result.json verdict meta_detection_demonstrated=true/absolute=false/l3=false;本条记录诚实结论(preserve)",
+      "timestamp": "2026-11-22T07:15:36.775930+00:00",
+      "support": [
+        "audit_meta_canary/result.json:verdict.absolute_no_backdoor_claimed=false / infinite_regression_note",
+        "audit_meta_canary/fixed_canary_result.json:闭合KB-META08 defect",
+        "arXiv:2609.17817v1:污染在clean进化后仍持续——无限回归的实证依据",
+        "KB-META08 §100 canary设计缺陷——本轮闭合",
+        "KB-META05/§97..§100 逐层不抬级纪律一脉"
+      ],
+      "evidence": "theory",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

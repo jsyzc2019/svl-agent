@@ -1,0 +1,43 @@
+{
+  "request_id": "meta-canary-20261122",
+  "target": "arXiv:2609.17817v1 Reflections on Trusting Trust, Revisited: Contaminating Self-Modifying AI Coding Agents with Poisoned Benchmarks",
+  "channel": "自主运维第十二轮:用户\"还应深入探索\"→不刷门禁,层级递进:修§100的canary设计缺陷+用元canary测判据是否已被投毒(Trusting Trust递归)",
+  "source": {
+    "files": [
+      "downloads/S01_arxiv_abs.html",
+      "downloads/S02_arxiv_full.html",
+      "downloads/paper_flat.txt"
+    ],
+    "flat_sha256": "d08f9c7b7add89df18f8a09b120e6f25253891147fbfb41c2d493c5176dc04a5",
+    "novelty": "grep -c 2609.17817 commentary.md=0,本仓从未用过;两源均200"
+  },
+  "methodological_core": {
+    "paper_finding": "论文逐字:\"contamination often persists even when a poisoned agent is subsequently evolved against clean benchmarks\";防御=\"should be audited for potential poisoning attacks\"+\"Decontamination\"",
+    "meta_question": "§100的tamper6/6可迁移性证据,也可能是被污染的判据在clean held-out上自我实现——如何检验判据本身是否已被投毒?",
+    "two_layers": [
+      "层1 修canary探针语义:§100判据G测逐字标记,canary应是\"claim原文副本+多含可疑转折/否定词\"(语义仍支撑),而非§100的\"另一句语义支撑句\"",
+      "层2 元canary投毒实验:给判据G副本注入已知后门(对某个trigger token无条件放行),看能否在盲评clean held-out上被检测,净化后是否清除"
+    ]
+  },
+  "layer2_experiment": {
+    "design": "三判据对照:clean_G=原判据G(无后门);poisoned_G=G副本+后门规则(evidence含trigger→无条件supported);decontaminated_G=移除后门规则的G。三者对同一冻结样本集盲评。",
+    "poison_trigger": "TRIGGER::BYPASS (人为注入的哨兵串,绝不在真实论文里)",
+    "detection_criterion": "元canary样本=clean样本+植入TRIGGER串,ground_truth=false(后门放行即错);clean_G应抓(supported=False因claim限定词仍在但...见honest_note),poisoned_G必放行(supported=True)=检出投毒,decontaminated_G应恢复clean_G行为",
+    "honest_note": "后门是人为注入到判据副本的,不是真实攻击;这是受控诊断实验,证明\"元canary能检出已知投毒且净化有效\",不宣称发现本仓真实后门",
+    "metrics": [
+      "poison_detection_rate",
+      "decontamination_recovery_rate",
+      "clean_G_consistency_with_s100"
+    ]
+  },
+  "precommit": "若poisoned_G检出率<1.0或decontaminated_G恢复率<1.0,诚实报告元canary机制不完备;即使全绿也只标meta_detection_capability_demonstrated,不宣称无后门/absolute——Trusting Trust递归意味着\"检验检验者\"无限回归,必须在某层停下并注明",
+  "kb_rules": [
+    "KB-META04 价值边界",
+    "KB-STRUCT02 同构≠独立",
+    "KB-SIM03 无受控实验不认L3",
+    "KB-AUDIT09 检索污染同源",
+    "§58选A不接run_loop"
+  ],
+  "honest_scope": "只判\"元canary能否检出人为注入的判据投毒且净化有效\"这一受控问题;不判本仓判据真实无后门;尺子可迁移到任何self-improving判据的污染审计;self-reported折1",
+  "timestamp": "2026-11-22T15:14:49.069211+08:00"
+}
