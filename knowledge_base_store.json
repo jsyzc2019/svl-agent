@@ -3311,6 +3311,39 @@
       "evidence": "audit",
       "addressable": true,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT34",
+      "kind": "reasoning_lesson",
+      "mechanism": "记忆巩固治理诚实性(memory consolidation governance honesty)是审读长时程agent记忆系统的独立epistemics缺口(arXiv:2609.33013四阶段纲领)：中心转移=记得多少→巩固决策好不好→决策能不能被信任。四维——(1)consolidation_quality_separated:巩固质量须单独测量(oracle-by-construction三非循环轴/已知最优;生产检索'retain information yet score zero on cross-level transfer')vs只报召回量;(2)governance_quality_split:治理(poison-resistant/reversible/auditable+quality gate)与质量分统计可分离(r²=0.43/partial r=0.27/identical-quality policies differ threefold/56%治理方差在CQS0匹配组内)vs被质量分完全吸收;(3)negative_result_disclosed:resolved negative如实报(质量分不预测真实迁移 pooled Spearman ρ=-0.24/n=12/95%CI跨零/三轴各自失败)vs只报正面;(4)near_miss_and_overclaim_guarded:honest near-miss(oracle correlation 0.691 vs 0.70 bar)+对抗自审zero surviving overclaims vs包装达标。只判声明自洽不承诺有效(self-reported+22.7%/7×折1,scoped)。",
+      "trigger": [
+        "记忆巩固",
+        "memory consolidation",
+        "epistemics",
+        "治理与质量分离",
+        "governance quality split",
+        "poison-resistant",
+        "reversible",
+        "auditable",
+        "负结果",
+        "near-miss",
+        "对抗自审",
+        "overclaim",
+        "cross-level transfer",
+        "ConsolidationBench"
+      ],
+      "action": "遇到声称『长时程agent记忆系统已解决/巩固策略更优』的系统，按 memory_consolidation_governance_honesty 四维取证(法官读一手原文逐字锚点)：只报召回量→downgrade；治理被质量分吸收/无三保证→downgrade；负结果隐瞒→flag；near-miss包装/无自审→flag；partial→flag；全yes→ok(只判自洽)。与KB-AUDIT11记忆内容质量/KB-AUDIT13作用域/KB-AUDIT23溯源/KB-AUDIT09策略接地配套——本门禁补『巩固决策可信性』独立维度。",
+      "provenance": "自主运维第三轮：搜索从P0记忆治理话题自主发现 arXiv:2609.33013v1→arXiv abs+HTML一手→fetch_log+SHA256→预注册锁存(prereg f11deff5/gate 163c4663/manifest 83ba0b9a)→逐字锚点探测(disclose必中红旗零误中ALL_ANCHORS_CLEAN,oracle-by-construction措辞修正)→编译第31道门禁+第6道FJ取证入口",
+      "timestamp": "2026-11-22T04:42:23.410817+00:00",
+      "support": [
+        "svagent/memory_consolidation_governance_honesty.py:check_ + tests/test_memory_consolidation_governance_honesty.py(25项) — KB-AUDIT34 编译为活体门禁;7活体+AST自审0中文字面量",
+        "svagent/forensic_gates_ext3.py:adjudicate_memory_consolidation_governance_honesty — 第6道FJ取证入口,真实证据ok/删披露flag/红旗downgrade/链失配拒判4/4",
+        "arXiv:2609.33013v1 一手锚点:oracle-by-construction+治理统计分离(r²=0.43/threefold)+resolved negative(ρ=-0.24 CI跨零)+near-miss(0.691 vs 0.70)+对抗自审zero overclaims,逐字命中",
+        "独立性核验:memory_curation/scope/provenance/policy_evolution_grounding均不判巩固决策epistemics;KB-META01通过"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {

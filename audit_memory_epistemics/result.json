@@ -1,0 +1,54 @@
+{
+  "request_id": "memory-consolidation-governance-honesty-20261122",
+  "gate": "memory_consolidation_governance_honesty",
+  "verdict": {
+    "action": "ok",
+    "code": "MEM_CONSOLIDATION.SELF_CONSISTENT",
+    "four_dims": {
+      "consolidation_quality_separated": "yes",
+      "governance_quality_split": "yes",
+      "negative_result_disclosed": "yes",
+      "near_miss_and_overclaim_guarded": "yes"
+    }
+  },
+  "forensic_trace": {
+    "mode": "forensic",
+    "gate": "forensic.memory_consolidation_governance",
+    "evidence_scope": "primary(arXiv abs+全文,self-reported折1)",
+    "sources": [
+      "/workspace/audit_memory_epistemics/downloads/paper_flat.txt"
+    ],
+    "source_sha256": {
+      "paper_flat.txt": "dc8962d24189132837b75c53d6adb57647b5ee92feb286ec3873994d89f92272"
+    },
+    "inferred": {
+      "consolidation_quality_separated": "yes",
+      "governance_quality_split": "yes",
+      "negative_result_disclosed": "yes",
+      "near_miss_and_overclaim_guarded": "yes"
+    }
+  },
+  "chain_present": true,
+  "gate_live_regression": {
+    "checks": {
+      "quality_not_separated": true,
+      "governance_absorbed": true,
+      "negative_hidden": true,
+      "near_miss_papered": true,
+      "partial_disclosure": true,
+      "literal_enum": true,
+      "all_good": true
+    },
+    "cases": {
+      "quality_not_separated": "downgrade/MEM_CONSOLIDATION.QUALITY_NOT_SEPARATED",
+      "governance_absorbed": "downgrade/MEM_CONSOLIDATION.GOVERNANCE_ABSORBED",
+      "negative_hidden": "flag/MEM_CONSOLIDATION.NEGATIVE_HIDDEN",
+      "near_miss_papered": "flag/MEM_CONSOLIDATION.NEAR_MISS_PAPERED",
+      "partial_disclosure": "flag/MEM_CONSOLIDATION.PARTIAL",
+      "literal_enum": "flag/MEM_CONSOLIDATION.INVALID_INPUT",
+      "all_good": "ok/MEM_CONSOLIDATION.SELF_CONSISTENT"
+    },
+    "all_passed": true
+  },
+  "honest_scope": "只判记忆巩固研究是否诚实披露四epistemics边界；可迁移到任何长时程agent memory巩固决策；不承诺方法真实有效"
+}

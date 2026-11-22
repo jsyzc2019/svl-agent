@@ -3643,3 +3643,19 @@ F4：新增 svagent/evidence_scope.py，6 个模拟模块（autopoiesis/self_evo
 
 ### 91.4 成熟度观察
 连续两轮自主运维（§90 silent_failure + §91 rsi_claim_audit）证明：三清单框架可复制、全链闭环可回放、数字真实、凭据自管。基础设施就绪度稳定在 L2 边缘偏上（取证真实、闭环可消费、话题自主发现）；仍不宣称 L3——北极星由人设定这一价值边界保留（KB-META03），不把"可自主执行"读成"可自主设定终极目标"。
+
+---
+
+## §92 自主运维第三轮：记忆巩固治理诚实性（P0 记忆治理话题）
+
+### 92.1 自主取料与增量判断
+用户"挺爽的吧！放飞"——按三清单自主启动第三轮。晨间自检 1066 全绿/链审 34 目录稳定。按 WORK_ITEMS.md P0「记忆库/记忆治理」话题（首日自我验证、第二轮 RSI 已攻），搜索自主发现 arXiv:2609.33013v1《The Epistemics of Agent Memory》（四阶段研究纲领），从 arXiv 渠道取 abs 44KB + 全文 192KB（均 200），落 fetch_log + SHA256。增量判断：本仓已有 memory_curation(内容质量)/memory_scope(作用域)/memory_provenance_honesty(溯源)/policy_evolution_grounding(策略接地)均不判"巩固决策的可信性(epistemics)"——新对象独立，KB-META01 通过。
+
+### 92.2 编译与取证
+四维：①consolidation_quality_separated（巩固质量须单独测量：oracle-by-construction 三非循环轴/已知最优；生产检索系统 retain information yet score zero on cross-level transfer vs 只报召回量）；②governance_quality_split（治理 poison-resistant/reversible/auditable + quality gate 与质量分统计可分离：r²=0.43/partial r=0.27/同质量策略治理差三倍/56%治理方差在 CQS0 匹配组内 vs 被质量分吸收）；③negative_result_disclosed（resolved negative：质量分不预测真实迁移 ρ=-0.24/n=12/95%CI 跨零/三轴各自失败 vs 只报正面）；④near_miss_and_overclaim_guarded（honest near-miss 0.691 vs 0.70 bar + 对抗自审 zero surviving overclaims vs 包装达标）。先锁存 prereg(f11deff5…)/gate_prereg(163c4663…)/manifest(83ba0b9a…) + 三份 SHA256，再实现；逐字锚点探测 disclose 必中、红旗零误中（ALL_ANCHORS_CLEAN；第一维锚点按论文真实措辞 an oracle-by-construction that scores 修正，无 benchmark 一词）。编译第 31 道门禁 memory_consolidation_governance_honesty（R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 6 道 FJ 取证入口 forensic_gates_ext3（法官自己读原文，真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。
+
+### 92.3 接合、验收与诚实边界
+25 项新测试全过；六道取证裁决全 ok；成长桥把 77 条 KB fix 机制+六道裁决注入 PDCA，消费痕迹 77/77/77 一致。KB 128→129（KB-AUDIT34，可编译 fix）。全量 1066→1091 passed（+25），链审断言随仓库成长 34→35（不放宽）。诚实边界：只判记忆巩固研究是否诚实披露四 epistemics 边界，可迁移到任何长时程 agent memory 系统，不判本仓；self-reported 增益(+22.7%/7×压缩)按 KB-RSI07 折 1；只判声明自洽不承诺方法有效（KB-R07/META01）。遵循 §58 选 A 不接 run_loop；篡改测试只在临时副本；不动历史证据。
+
+### 92.4 成熟度观察
+连续三轮自主运维（§90 silent_failure + §91 rsi_claim_audit + §92 memory_consolidation_governance）证明：三清单框架已稳定可复制，每轮约 25 项测试、1 道门禁、1 道 FJ 入口、1 条 KB 洞见，全链闭环可回放、数字真实、凭据自管。基础设施就绪度稳定在 L2 边缘偏上；仍不宣称 L3——保留"北极星由人设定"价值边界（KB-META03）。P0 剩余话题（技能演化/多智能体编排/上下文检索）可继续复制此节奏。

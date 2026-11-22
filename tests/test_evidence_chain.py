@@ -59,8 +59,8 @@ def test_historical_dir_honestly_marked():
 def test_audit_all_counts():
     a = audit_all(str(_ROOT))
     # 每新增一个完整证据目录，total 与 five_piece_complete 各 +1（随仓库成长更新，不放宽）
-    assert a["total"] == 34
-    assert a["five_piece_complete"] == 17
+    assert a["total"] == 35
+    assert a["five_piece_complete"] == 18
     assert 0 < a["three_locks_intact"] <= a["total"]
 
 

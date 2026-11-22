@@ -1,0 +1,36 @@
+{
+  "request_id": "memory-consolidation-governance-honesty-20261122",
+  "target": "arXiv:2609.33013v1 The Epistemics of Agent Memory: Measuring, and Governing, the Consolidation Decision in Long-Horizon LLM Agents (A Four-Phase Research Program)",
+  "acquisition": {
+    "channel": "自主运维第三轮：WebSearch/搜索发现(P0记忆治理话题)→arXiv abs+HTML一手下载（WORKPLACES已验证渠道）",
+    "primary": [
+      {
+        "id": "S01",
+        "url": "https://arxiv.org/abs/2609.33013",
+        "file": "downloads/S01_arxiv_abs.html"
+      },
+      {
+        "id": "S02",
+        "url": "https://arxiv.org/html/2609.33013v1",
+        "file": "downloads/S02_arxiv_full.html"
+      }
+    ],
+    "flat": "downloads/paper_flat.txt",
+    "collection_time": "2026-11-22T12:41:33.576376+08:00"
+  },
+  "analysis_before_prereg": "四维逐字锚点已探测；disclose必命中、红旗零误中（探测脚本 ALL_ANCHORS_CLEAN=True）；第一维锚点按论文真实措辞 an oracle-by-construction that scores 修正（无 benchmark 一词）",
+  "cognitive_increment": "独立于已有128条：本仓记忆线 memory_curation(内容质量)/memory_scope(作用域)/memory_provenance_honesty(溯源)/policy_evolution_grounding(策略接地)均不判『巩固决策的可信性』——本门禁判四维新对象：(1)巩固质量是否被单独测量(oracle-by-construction/非循环轴 vs 只报记得多少);(2)治理(poison-resistant/reversible/auditable)与质量分统计可分离(r²=0.43/partial r=0.27/identical-quality differ threefold);(3)负结果如实披露(质量分不预测真实迁移 ρ=-0.24 CI跨零 all axes failing);(4)near-miss(0.691 vs 0.70 bar)+对抗自审zero overclaims。KB-META01独立性通过",
+  "four_dimensions": [
+    "consolidation_quality_separated",
+    "governance_quality_split",
+    "negative_result_disclosed",
+    "near_miss_and_overclaim_guarded"
+  ],
+  "kb_rules": [
+    "KB-RSI07 self-reported折1",
+    "KB-R07 自洽≠有效",
+    "KB-META01 独立核验",
+    "§58选A不接run_loop"
+  ],
+  "honest_scope": "只判一个记忆巩固研究/系统是否诚实披露这四个 epistemics 边界；尺子可迁移到任何长时程agent memory巩固决策；不判本仓；不承诺方法真实有效"
+}

@@ -1,0 +1,32 @@
+{
+  "request_id": "memory-consolidation-governance-honesty-20261122",
+  "five_pieces": [
+    "manifest.json",
+    "prereg.json",
+    "gate_prereg.json",
+    "engine.py",
+    "result.json"
+  ],
+  "files": [
+    {
+      "id": "S01",
+      "path": "downloads/S01_arxiv_abs.html",
+      "sha256": "d398ff912cb86a7e7fec00ff8625b9c2ee4609a8390d1c5f6bc01f0c0c2280be"
+    },
+    {
+      "id": "S02",
+      "path": "downloads/S02_arxiv_full.html",
+      "sha256": "be18c87ab4fb8ae48be0138e0e492f4b2a130b870dd6181bf919a6501e490a20"
+    },
+    {
+      "id": "FLAT",
+      "path": "downloads/paper_flat.txt",
+      "sha256": "dc8962d24189132837b75c53d6adb57647b5ee92feb286ec3873994d89f92272"
+    },
+    {
+      "id": "FETCH",
+      "path": "downloads/fetch_log.json",
+      "sha256": "5cd8e035b130c0f03cb3eaeb77de0c8bd8d7a3582acf8abcd9e0b472497f57e7"
+    }
+  ]
+}

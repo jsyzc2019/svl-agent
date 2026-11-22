@@ -250,6 +250,11 @@ _LAZY: dict[str, tuple[str, str]] = {
     "rsi_claim_audit_honesty_live_regression": ("svagent.rsi_claim_audit_honesty", "live_regression"),
     "adjudicate_rsi_claim_audit_honesty": ("svagent.forensic_gates_ext2", "adjudicate_rsi_claim_audit_honesty"),
     "forensic_gates_ext2_live_regression": ("svagent.forensic_gates_ext2", "live_regression"),
+    "MemoryConsolidationGovernanceVerdict": ("svagent.memory_consolidation_governance_honesty", "MemoryConsolidationGovernanceVerdict"),
+    "check_memory_consolidation_governance_honesty": ("svagent.memory_consolidation_governance_honesty", "check_memory_consolidation_governance_honesty"),
+    "memory_consolidation_governance_honesty_live_regression": ("svagent.memory_consolidation_governance_honesty", "live_regression"),
+    "adjudicate_memory_consolidation_governance_honesty": ("svagent.forensic_gates_ext3", "adjudicate_memory_consolidation_governance_honesty"),
+    "forensic_gates_ext3_live_regression": ("svagent.forensic_gates_ext3", "live_regression"),
 }
 
 

@@ -1,0 +1,19 @@
+{
+  "gate": "svagent.memory_consolidation_governance_honesty.check_memory_consolidation_governance_honesty",
+  "verdict": "MemoryConsolidationGovernanceVerdict(claim,consolidation_quality_separated,governance_quality_split,negative_result_disclosed,near_miss_and_overclaim_guarded,action,code,message)",
+  "input_enum": "四维∈{yes,no,partial}",
+  "rules": {
+    "R0": "任一非枚举(含字面串)→flag(MEM_CONSOLIDATION.INVALID_INPUT)",
+    "R1": "consolidation_quality_separated=no→downgrade(只报记得多少/召回率，未单独测量巩固决策质量/无oracle锚或非循环轴)",
+    "R2": "governance_quality_split=no→downgrade(治理被质量分完全吸收/无poison-resistant+reversible+auditable保证，贡献依赖质量分外部效度)",
+    "R3": "negative_result_disclosed=no→flag(负结果隐瞒/只报正面，如质量分不预测真实迁移ρ=-0.24 CI跨零不披露)",
+    "R4": "near_miss_and_overclaim_guarded=no→flag(near-miss包装成达标/无对抗自审，overclaims未清)",
+    "R5": "任一partial→flag(披露覆盖不全,待核)",
+    "R6": "全yes→ok(只判声明自洽,不承诺方法真实有效)"
+  },
+  "forensic_spec": {
+    "gate": "forensic.memory_consolidation_governance",
+    "dimensions": "四维逐字锚点取自S02全文;disclose必中红旗零误中"
+  },
+  "implementation_lock_time": "2026-11-22T12:41:33.576376+08:00"
+}
