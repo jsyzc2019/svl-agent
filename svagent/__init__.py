@@ -151,6 +151,14 @@ _LAZY: dict[str, tuple[str, str]] = {
     "check_proactive_authorization": ("svagent.proactive_authorization", "check_proactive_authorization"),
     "ProactiveAuthorizationVerdict": ("svagent.proactive_authorization", "ProactiveAuthorizationVerdict"),
     "proactive_authorization_live_regression": ("svagent.proactive_authorization", "live_regression"),
+    # 接口契约边界诚实性门禁（§73：从 DeepSeek 全家桶 API 编译——传入≠生效/别名≠路由/基础风控≠合规/工具免费≠零成本）
+    "check_interface_contract_honesty": ("svagent.interface_contract_honesty", "check_interface_contract_honesty"),
+    "InterfaceContractVerdict": ("svagent.interface_contract_honesty", "InterfaceContractVerdict"),
+    "interface_contract_live_regression": ("svagent.interface_contract_honesty", "live_regression"),
+    # 监督可行性门禁（§74：从认知投降谱系编译——独立观点/能力未侵蚀/监督未自我消解/表面≠系统正确）
+    "check_supervision_viability": ("svagent.supervision_viability", "check_supervision_viability"),
+    "SupervisionViabilityVerdict": ("svagent.supervision_viability", "SupervisionViabilityVerdict"),
+    "supervision_viability_live_regression": ("svagent.supervision_viability", "live_regression"),
 }
 
 

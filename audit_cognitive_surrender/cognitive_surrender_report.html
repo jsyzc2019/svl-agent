@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§74 认知投降谱系精研报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1060px;margin:32px auto;padding:0 20px;color:#222;line-height:1.7}
+h1{border-bottom:3px solid #6a5;padding-bottom:8px} h2{color:#465;margin-top:32px;border-left:4px solid #6a5;padding-left:10px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px} th,td{border:1px solid #ddd;padding:6px 9px;text-align:left;vertical-align:top} th{background:#f2f6f2}
+.pass{color:#0a7;font-weight:bold} .fail{color:#c22;font-weight:bold} .unav{color:#999}
+.note{background:#f5f9f5;border-left:4px solid #6a5;padding:10px 14px;margin:14px 0}
+code{background:#f4f4f4;padding:2px 5px;border-radius:3px;font-size:12px} .dim{color:#555}
+</style></head><body>
+<h1>§74 认知投降谱系 18 来源精研报告</h1>
+<p class="dim">生成 2026-11-22T09:03:20+08:00　|　预注册 <code>dc52aa6c45e413c0</code>　|　门预注册 <code>791f540732400302</code>　|　零漂移 <b>True</b>　|　KB 基线 <code>35341afa88a7c49f</code>　|　全量 565→590 passed</p>
+
+<h2>一、抓取与证据分级</h2>
+<p>去重 22 链接为 18 来源。<b>10 个可核</b>（7 一手 + PubMed 官方 API + 二手转述），<b>8 个 unavailable</b>。失败根因是 DNS 被系统性劫持到 Meta IP 段（x.com→157.240.x / substack→69.63.x / IPv6→2a03:2880），非反爬；curl/WebFetch/IPv4 强制均失败，如实标注不硬凑。PubMed 网页需 cookie，改用 NCBI 官方 E-utilities API 拿到一手元数据。</p>
+<table><tr><th>来源</th><th>等级</th><th>SHA256</th></tr><tr><td>_x_gatepost</td><td>unavailable</td><td>—</td></tr><tr><td>_cognitive_surrender</td><td>一手</td><td>c73b3bf37f86</td></tr><tr><td>_ssrn_shaw_nave</td><td>二手</td><td>—</td></tr><tr><td>_storey_cognitive_debt</td><td>一手</td><td>4221dd794f61</td></tr><tr><td>_comprehension_debt</td><td>一手</td><td>7be547ad8554</td></tr><tr><td>_claude_code_review</td><td>一手</td><td>0d57e8f3c473</td></tr><tr><td>_intent_debt</td><td>一手</td><td>028ba41be3fb</td></tr><tr><td>_critical_thinking</td><td>unavailable</td><td>—</td></tr><tr><td>_field_guide_unknowns</td><td>unavailable</td><td>e11d79059a29</td></tr><tr><td>_agentic_verification</td><td>二手</td><td>—</td></tr><tr><td>_x_bcherny</td><td>unavailable</td><td>—</td></tr><tr><td>_80_problem</td><td>unavailable</td><td>—</td></tr><tr><td>_orchestration_tax</td><td>一手</td><td>7c105bfec7a4</td></tr><tr><td>_intent_debt_radar</td><td>unavailable</td><td>—</td></tr><tr><td>_pubmed_clark</td><td>一手</td><td>a66b5895058d</td></tr><tr><td>_code_review_responsibility</td><td>unavailable</td><td>—</td></tr><tr><td>_anthropic_ai_work</td><td>一手</td><td>169a2598cb5f</td></tr><tr><td>_skill_atrophy</td><td>unavailable</td><td>—</td></tr></table>
+<p class="dim">谱系：Osmani 8+ 来源同一作者家族（cognitive surrender→comprehension debt→intent debt→orchestration tax 相互引用），按 KB-STRUCT02 折为 1；Shaw-Nave SSRN/Storey/Clark/Anthropic survey 相对独立但按证据等级折扣。术语 cognitive debt 跨 Storey/MIT/Addy 区分提出vs转述。</p>
+
+<h2>二、核心判断</h2>
+<div class="note">
+<b>不是"认知债务很可怕"，而是一个可迁移的独立拦截面。</b> Anthropic 官方研究里那句 <b>paradox of supervision</b>：用 AI 需要你有能力监督它，而监督所需的编码技能正被你用它这件事磨掉。Addy 把它拆成认知投降（AI 输出变成你的输出，无独立观点可比）、理解债务（代码涨得比团队脑里的系统理论快）、意图债务（why 只能来自人，agent 只会编合理理由）、编排税（你是不可并行的 GIL）。还有最易忽略的一层：把"有人读过代码/测试全绿"当成"系统正确"——Claude Code 自己承认连 revert 上升时自动收紧审批的断路器都还没有。本仓 20 道门禁判了单次评审漏斗、judge 独立性、服务口径、证明范围、接口控制，却无一判<b>评审者是否还具备独立判断能力</b>。
+</div>
+
+<h2>三、判据裁决（V1–V8 零漂移，14/14 锚点命中）</h2>
+<table><tr><th>判据</th><th>裁决</th><th>要点</th></tr><tr><td><b>V1</b></td><td><span class="pass">PASS</span></td><td>锚点在纯文本 .txt 单行核验；英文含弯引号按原文；unavailable 来源不据此下断言。</td></tr><tr><td><b>V2</b></td><td><span class="pass">PASS</span></td><td>Osmani 8+来源折1；S03/S04/S15/S17 独立但按等级折扣；cognitive debt 术语区分 Storey/Addy/MIT 提出vs转述。</td></tr><tr><td><b>V3</b></td><td><span class="pass">PASS</span></td><td>thekb.eu 明标 without figures or studies；SSRN preprint 未评审+二手 abstract；Anthropic survey 自陈 privileged position。只采信一手事实数字与原话。</td></tr><tr><td><b>V4</b></td><td><span class="pass">PASS</span></td><td>编译前 110 条 KB 与现有 20 门禁无一判监督可行性；缺口探测只用编译前基线，防 §71 第五处自咬。</td></tr><tr><td><b>V5</b></td><td><span class="pass">PASS</span></td><td>非博客特例；拦截维度=评审独立性能力前提是否诚实披露，会拦。</td></tr><tr><td><b>V6</b></td><td><span class="pass">PASS</span></td><td>四层能力前提维度独立：独立观点/能力保持/监督可行/表面vs系统，不得混谈。</td></tr><tr><td><b>V7</b></td><td><span class="pass">PASS</span></td><td>{"engine_ast_brittle": [], "strike": "中文短语集中 _A 字典；has_cjk 用 ord() 边界；英文锚点按原文弯引号。"}</td></tr><tr><td><b>V8</b></td><td><span class="pass">PASS</span></td><td>{"layer1_一手可核": "实验/实践一手数字与原话：Shaw-Nave 三预注册实验 N=1372/9593 trials、hidden-seed 随机化 AI 正确性、AI 错时 73% 接受、+25/-15pp、Cohen's h=0.81、错误后 confidence 仍升(经二手 abstract 转述)；Anthropic skill-fo</td></tr></table>
+<h3>V6 四层能力前提（维度独立）</h3>
+<table><tr><th>层次</th><th>命中</th></tr><tr><td>L1_独立观点形成</td><td>✓</td></tr><tr><td>L2_能力未侵蚀</td><td>✓</td></tr><tr><td>L3_监督未自我消解</td><td>✓</td></tr><tr><td>L4_表面非系统正确</td><td>✓</td></tr></table>
+
+<h2>四、断言落到代码</h2>
+<p>第 22 道门禁 <code>svagent/supervision_viability.py:check_supervision_viability</code>：四维语义枚举 + R0–R6 短路规则（无独立观点/能力侵蚀/监督悖论→downgrade；表面冒系统/部分/字面串→flag；全自洽→ok），惰性登记、不接 run_loop（§58 选 A）。8 活体回归 + 25 项测试 + 门禁/引擎双 AST 自审全过。与 §60 评审漏斗保真对象层级不同（能力存在性 vs 单次过程保真）。全量 <b>565→590 passed</b>。KB 110→<b>111</b>（新增 AUDIT17，加固 STRUCT02 / STRUCT05 / AUDIT03）。</p>
+
+<h2>五、两处判据自咬（修工具不放水）</h2>
+<ol>
+<li><b>中文 Compare</b>：引擎第 111/121 行判定用中文『折扣』字面量（有 <code>_A["discount_word"]</code> 却没用）→ 移入字典引用。</li>
+<li><b>锚点大小写/措辞</b>：<code>circuit_breaker</code> 原文首字母大写 <code>We don't yet have...</code> 写成小写；S03 二手镜像 accepted_wrong 措辞不同 → 按原文大写 + 改用镜像实际存在的 <code>Cohen</code>/<code>cognitive surrender</code> 探测。</li>
+</ol>
+
+<h2>六、三层诚实结论</h2>
+<p><b>一手可核：</b>实验/实践一手数字与原话：Shaw-Nave 三预注册实验 N=1372/9593 trials、hidden-seed 随机化 AI 正确性、AI 错时 73% 接受、+25/-15pp、Cohen's h=0.81、错误后 confidence 仍升(经二手 abstract 转述)；Anthropic skill-formation RCT 52 工程师、生成式使用 comprehension 17% 更低(50% vs 67%)(经 Addy 博客转述)；Claude Code 官方 changes/day 2500→30000、revert 降 40%、'did a human read code 是 imprecise proxy'、'尚无 revert/incident 断路器'；Anthropic survey >50% 员工 fully delegate 仅 0-20%、'paradox of supervision' 原话。</p>
+<p><b>scoped 与折扣：</b>Osmani 8+来源同一作者谱系按 KB-STRUCT02 折为 1（cognitive surrender→comprehension debt→intent debt→orchestration tax 相互引用，单一论点家族）；博客观点无数据(thekb.eu 明标 without figures or studies)；SSRN 是 preprint 未同行评审且 abstract 经二手镜像(etcjournal 评 productive but incomplete)；Anthropic survey 自陈 privileged position；S01/X/Substack/SSRN direct 6+ 来源不可达标 unavailable。术语 cognitive debt 跨 Storey/Addy/MIT 共用须区分提出vs转述。</p>
+<p><b>不可判定边界：</b>评审者实际能力是否真被侵蚀、某流程的评审是否真有效、AI 错时接受率是否在真实工程场景复现——本门只判『能力前提是否诚实披露』，不承诺评审真有效(KB-R07/KB-AUDIT03 存在≠执行)；审读外部工程流程，不判本仓。</p>
+<p class="dim">推送节奏：§73 + §74 两批已齐，按用户"两批次一推"应合并推送；§73+§74 已合并为本地提交 <code>7b6f631</code>（65 文件）。<b>远端推送失败</b>：当前环境 GitHub 凭据不可用（could not read Username）+ TLS 连接被中断；本地提交完好，凭据与网络恢复后 <code>git push origin HEAD</code> 即可，无需重做。</p>
+</body></html>

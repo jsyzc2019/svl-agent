@@ -21,3 +21,10 @@ audit_*/*.pdf
 downloads/*.pdf
 audit_*/repo.zip
 audit_random/allrepos.json
+# §73 在线 Demo 的 JS/CSS bundle 体积大且仅锁存不精读（SHA256 见 manifest/SHA256SUMS.txt），clone 的 .git 不入库
+audit_deepseek/downloads/*.js
+audit_deepseek/downloads/*.css
+audit_*/.git/
+
+# §73 第三方 clone 完整源码（commit 8ad7b56 已在 manifest 锁存，关键断言已落 result.json/KB；clone 不入本仓）
+audit_deepseek/downloads/chat-demo-repo/

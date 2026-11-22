@@ -1,0 +1,76 @@
+Thinking—Fast, Slow, and Artificial: How AI is Reshaping Human Reasoning and the Rise of Cognitive Surrender — Launchpad Library
+Skip to content
+Justin's Pick
+Agentic IDE & Web Builder
+·
+Frontier AI Labs & Web Building
+Justin's Pick
+:
+Google Antigravity
+“
+Far and away the best tool I've found for web building, turning standard LLM prompts that I fed into Lovable costing me tokens into prompts that push multi-file refactors directly through GitHub — keeping Lovable token costs down while keeping tests and routing intact.
+”
+Explore Google Antigravity
+All resources
+/
+Technology & Ethics
+Free
+Research Paper
+Technology & Ethics
+Thinking—Fast, Slow, and Artificial: How AI is Reshaping Human Reasoning and the Rise of Cognitive Surrender
+Open the resource
+Authors
+Steven D. Shaw, Gideon Nave
+Venue
+Working paper
+Published
+11 January 2026
+ID
+SSRN:6097646
+How to cite it
+Built from the details listed on this page. Check them against the paper before you submit.
+APA
+Copy
+Shaw, S. D., & Nave, G. (2026). Thinking—Fast, Slow, and Artificial: How AI is Reshaping Human Reasoning and the Rise of Cognitive Surrender. Working paper. https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6097646
+MLA
+Copy
+Shaw, Steven D., et al. "Thinking—Fast, Slow, and Artificial: How AI is Reshaping Human Reasoning and the Rise of Cognitive Surrender." Working paper, 2026, https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6097646.
+BibTeX
+Copy
+@article{shaw2026thinkingfast,
+  title = {Thinking—Fast, Slow, and Artificial: How AI is Reshaping Human Reasoning and the Rise of Cognitive Surrender},
+  author = {Steven D. Shaw and Gideon Nave},
+  journal = {Working paper},
+  year = {2026},
+  url = {https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6097646},
+}
+What it is
+A Wharton working paper by Steven D Shaw and Gideon Nave, written 11 January 2026 and posted to SSRN on 2 February 2026. It proposes "Tri-System Theory" — adding a "System 3" (thinking done outside your head by a machine) to Kahneman's fast/slow account — and names "cognitive surrender": taking an AI's answer with barely a glance. Across three preregistered experiments (1,372 people, 9,593 trials) the researchers secretly varied whether the AI was right. People consulted it on more than half of questions; accuracy rose about 25 percentage points when the AI was right and fell about 15 when it was wrong, and confidence went up either way — even after errors. Time pressure, cash incentives and feedback all moved baseline scores but never removed the pattern.
+Why I recommend it
+Free to read and free to download the full 58-page PDF — no account needed. Two honest flags. It is a working paper: posted by the authors, and the SSRN version has not been through journal peer review, so treat the numbers as a strong first result rather than settled fact. And the copyright line says all rights reserved — read and cite it, do not republish the text. The finding worth carrying around is the one about confidence: people felt surer of themselves after the AI led them wrong. That is exactly why the checks on our AI Basics page are worth doing out loud.
+Topics
+#
+ai-literacy
+#
+critical-thinking
+#
+research
+#
+decision-making
+#
+cognitive-surrender
+#
+cognitive-offloading
+#
+behavioral-science
+#
+ai-risks
+#
+psychology
+#
+wharton
+Added
+Sep 23, 2026
+·
+0
+opens

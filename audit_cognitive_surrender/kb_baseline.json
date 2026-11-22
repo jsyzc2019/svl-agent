@@ -1,0 +1,1261 @@
+[
+ {
+  "item_id": "KB-T01",
+  "trigger": [
+   "self_verification",
+   "verification",
+   "framework"
+  ],
+  "mechanism": "自证能力是环境的产物，不是模型属性：验证力来自可隔离的符号判据环境，而非模型自夸。"
+ },
+ {
+  "item_id": "KB-T02",
+  "trigger": [
+   "collapse",
+   "verification",
+   "narrative_truth"
+  ],
+  "mechanism": "坍塌映射是核心方法论：把开放式正确性（叙事真实性）坍塌为可判定的符号判据集合。"
+ },
+ {
+  "item_id": "KB-T03",
+  "trigger": [
+   "benchmark",
+   "leakage",
+   "narrative_truth",
+   "hindsight_risk"
+  ],
+  "mechanism": "验证基准必须先与生成过程隔离：anchor 存在 ≠ 内容有据，基准泄漏会让自证恒真。"
+ },
+ {
+  "item_id": "KB-T04",
+  "trigger": [
+   "feedback_loop",
+   "rework",
+   "framework"
+  ],
+  "mechanism": "六个环节是闸门不是闭环：没有返工回路的闸门序列不构成可持续自证系统。"
+ },
+ {
+  "item_id": "KB-T05",
+  "trigger": [
+   "cost",
+   "scalability",
+   "framework"
+  ],
+  "mechanism": "经济前提：验证成本必须低于生成成本，否则闭环在规模上不可持续。"
+ },
+ {
+  "item_id": "KB-T06",
+  "trigger": [
+   "telos",
+   "axiology",
+   "human_boundary",
+   "framework"
+  ],
+  "mechanism": "目的论统一 G×V×C：人是另一组认知参数，不是特权裁判——差异是程度不是类别。"
+ },
+ {
+  "item_id": "KB-T07",
+  "trigger": [
+   "value",
+   "axiology",
+   "bootstrap"
+  ],
+  "mechanism": "价值自举：判据环境是价值的化石——价值不是凭空设定，而是从历史裁决/判据中追溯。"
+ },
+ {
+  "item_id": "KB-T08",
+  "trigger": [
+   "human_boundary",
+   "capability",
+   "framework"
+  ],
+  "mechanism": "人的边界是能力函数 B(c)：随能力外移，但边界外移 ≠ 边界归零。"
+ },
+ {
+  "item_id": "KB-R01",
+  "trigger": [
+   "proxy_variable",
+   "blind_test",
+   "narrative_truth",
+   "finance"
+  ],
+  "mechanism": "代理变量陷阱：alarm 实为困境代理，扩到 22 家反例后 precision 从虚高崩到 0.42。"
+ },
+ {
+  "item_id": "KB-R02",
+  "trigger": [
+   "estimation",
+   "calibration",
+   "bug"
+  ],
+  "mechanism": "符号一致性：estimation 的 criterion 必须与生成模型同号（criterion=-b），否则预测方向反了。"
+ },
+ {
+  "item_id": "KB-R03",
+  "trigger": [
+   "calibration",
+   "estimation",
+   "metrics"
+  ],
+  "mechanism": "校准度 ≠ 辨别力：AUC 不能当 calibration，须用 ECE 单独度量。"
+ },
+ {
+  "item_id": "KB-R04",
+  "trigger": [
+   "tautology",
+   "axiology",
+   "validation",
+   "framework"
+  ],
+  "mechanism": "同义反复：线性生成→线性拟合恒真，须注入非线性挑战并主动降级宣称。"
+ },
+ {
+  "item_id": "KB-R05",
+  "trigger": [
+   "macro",
+   "inventory_cycle",
+   "nominal_vs_real",
+   "narrative_truth"
+  ],
+  "mechanism": "名义/实际拆分：名义库存补库可能只是 PPI 涨价的水分，须拆成实际量才见真相。"
+ },
+ {
+  "item_id": "KB-R06",
+  "trigger": [
+   "retrospective",
+   "framework",
+   "hindsight_risk"
+  ],
+  "mechanism": "复盘对象校正：复盘应针对框架逻辑方法(framework)，而非研究对象(subject)。"
+ },
+ {
+  "item_id": "KB-R07",
+  "trigger": [
+   "audit",
+   "validity",
+   "framework",
+   "self_consistency"
+  ],
+  "mechanism": "区分自洽与有效：内部逻辑自洽的系统仍可能对真实世界无效，须有外部锚点。"
+ },
+ {
+  "item_id": "KB-R08",
+  "trigger": [
+   "retrospective",
+   "framework",
+   "vanity",
+   "improvement"
+  ],
+  "mechanism": "改进该改进的（三分法）：fix 真缺陷、vanity 假改进、preserve 守住边界。"
+ },
+ {
+  "item_id": "KB-E01",
+  "trigger": [
+   "pdca",
+   "automation",
+   "framework",
+   "stopping"
+  ],
+  "mechanism": "PDCA 戴明环：识别→研究→验证→改进的自动机，且必须有停止条件（预算/收敛）。"
+ },
+ {
+  "item_id": "KB-E02",
+  "trigger": [
+   "red_team",
+   "adversarial",
+   "validation"
+  ],
+  "mechanism": "红队对抗：让系统自己构造让它露馅的输入，主动找洞而非自证正确。"
+ },
+ {
+  "item_id": "KB-E03",
+  "trigger": [
+   "ablation",
+   "metrics",
+   "experiment"
+  ],
+  "mechanism": "消融与反例对照：看似完美的指标（recall=1.0）须拆解「靠什么撑起」，做诊断而非新检验。"
+ },
+ {
+  "item_id": "KB-E04",
+  "trigger": [
+   "optimal_stopping",
+   "telos",
+   "decision"
+  ],
+  "mechanism": "序贯最优停止：何时停止观测、接受当前最优，本身是一个可形式化的决策问题。"
+ },
+ {
+  "item_id": "KB-E05",
+  "trigger": [
+   "irl",
+   "value",
+   "axiology",
+   "bootstrap"
+  ],
+  "mechanism": "逆强化学习 IRL：价值可从专家示范/裁决中推断，无需显式设定奖励。"
+ },
+ {
+  "item_id": "KB-E06",
+  "trigger": [
+   "sdt",
+   "calibration",
+   "estimation",
+   "metrics"
+  ],
+  "mechanism": "信号检测论 SDT：用 d'（辨别力）与 criterion（偏差）分离「看不看得清」与「判断阈值」。"
+ },
+ {
+  "item_id": "KB-E07",
+  "trigger": [
+   "hindsight_risk",
+   "blind_test",
+   "preregistration",
+   "anti_bias"
+  ],
+  "mechanism": "对抗偏差三件套：预注册判据 + 盲测 + 时间戳门禁，把「我不知道」变成一等公民。"
+ },
+ {
+  "item_id": "KB-R-L-inventory-2026-c0",
+  "trigger": [
+   "macro",
+   "cycle_phase",
+   "narrative_truth",
+   "hindsight_risk"
+  ],
+  "mechanism": "遇到同类情境时，先验须让位于预注册判据的结果：当前状态和'印象'相反：营收库存双升是主动补库，数据推翻'转变属实'的先验"
+ },
+ {
+  "item_id": "KB-R-L-inventory-2026-c1",
+  "trigger": [
+   "macro",
+   "cycle_phase",
+   "narrative_truth",
+   "hindsight_risk"
+  ],
+  "mechanism": "遇到同类情境时，先验须让位于预注册判据的结果：名义库存+11.6%里约5pct是PPI价格效应，实际物量仅+6.6%"
+ },
+ {
+  "item_id": "KB-R-L-inventory-2026-b0",
+  "trigger": [
+   "macro",
+   "cycle_phase",
+   "narrative_truth",
+   "hindsight_risk",
+   "finance",
+   "audit_signals"
+  ],
+  "mechanism": "复用防偏差措施：入场先记录先验倾向"
+ },
+ {
+  "item_id": "KB-R-L-inventory-2026-b1",
+  "trigger": [
+   "macro",
+   "cycle_phase",
+   "narrative_truth",
+   "hindsight_risk",
+   "finance",
+   "audit_signals"
+  ],
+  "mechanism": "复用防偏差措施：预注册判据"
+ },
+ {
+  "item_id": "KB-R-L-inventory-2026-b2",
+  "trigger": [
+   "macro",
+   "cycle_phase",
+   "narrative_truth",
+   "hindsight_risk",
+   "finance",
+   "audit_signals"
+  ],
+  "mechanism": "复用防偏差措施：盲判/揭盲分离"
+ },
+ {
+  "item_id": "KB-R-L-inventory-2026-b3",
+  "trigger": [
+   "macro",
+   "cycle_phase",
+   "narrative_truth",
+   "hindsight_risk"
+  ],
+  "mechanism": "复用防偏差措施：名义实际双轨"
+ },
+ {
+  "item_id": "KB-R-L-inventory-2026-b4",
+  "trigger": [
+   "macro",
+   "cycle_phase",
+   "narrative_truth",
+   "hindsight_risk"
+  ],
+  "mechanism": "复用防偏差措施：历史反例对照"
+ },
+ {
+  "item_id": "KB-R-L-finance-hcnh-c0",
+  "trigger": [
+   "finance",
+   "narrative_truth",
+   "hindsight_risk",
+   "audit_signals"
+  ],
+  "mechanism": "遇到同类情境时，先验须让位于预注册判据的结果：判据全过只说明没违反符号约束，不等于叙事真实——早期补贴依赖是判据盲区"
+ },
+ {
+  "item_id": "KB-R-L-finance-hcnh-b3",
+  "trigger": [
+   "finance",
+   "narrative_truth",
+   "hindsight_risk",
+   "audit_signals"
+  ],
+  "mechanism": "复用防偏差措施：下挖判据盲区"
+ },
+ {
+  "item_id": "KB-R-L-audit19-remedy20-fix0",
+  "trigger": [
+   "framework",
+   "self_reflection",
+   "remediation",
+   "audit"
+  ],
+  "mechanism": "真该改的方法缺陷——改机制而非文案：P0 estimation criterion符号与生成模型相反: 真修复：criterion=-b，与生成模型同号，加回归测试"
+ },
+ {
+  "item_id": "KB-R-L-audit19-remedy20-fix1",
+  "trigger": [
+   "framework",
+   "self_reflection",
+   "remediation",
+   "audit"
+  ],
+  "mechanism": "真该改的方法缺陷——改机制而非文案：复盘对象误用为研究对象(库存周期/华测导航): 校正scope：框架自我反省只针对逻辑方法，不针对具体研究对象"
+ },
+ {
+  "item_id": "KB-R-L-audit19-remedy20-van0",
+  "trigger": [
+   "framework",
+   "self_reflection",
+   "remediation",
+   "audit"
+  ],
+  "mechanism": "识破虚荣改进——别拿改动冒充进步：telos/axiology/mechanism 的过度宣称: 降级报告口径：加'诚实结论''稳健边界'段落"
+ },
+ {
+  "item_id": "KB-R-L-audit19-remedy20-van1",
+  "trigger": [
+   "framework",
+   "self_reflection",
+   "remediation",
+   "audit"
+  ],
+  "mechanism": "识破虚荣改进——别拿改动冒充进步：财报盲测的后验分组循环: 加反例对照量化循环(precision 0.42)，宣称'去循环已修'"
+ },
+ {
+  "item_id": "KB-R-L-audit19-remedy20-van2",
+  "trigger": [
+   "framework",
+   "self_reflection",
+   "remediation",
+   "audit"
+  ],
+  "mechanism": "识破虚荣改进——别拿改动冒充进步：第22节L3复利曲线与教训计数: 识别为虚荣指标：教训数从7涨到9、置信0.5→0.556不等于认知提升"
+ },
+ {
+  "item_id": "KB-R-L-audit19-remedy20-keep0",
+  "trigger": [
+   "framework",
+   "self_reflection",
+   "remediation",
+   "audit"
+  ],
+  "mechanism": "不该改的边界——反省后确认守住：把'不知道'当一等公民 / 不可约交人 / 诚实边界: 保留，且在复盘中确认这是框架的脊梁，不因'进化'而改掉"
+ },
+ {
+  "item_id": "KB-R-SSQ01",
+  "trigger": [
+   "large_sample",
+   "statistical_significance",
+   "effect_size",
+   "blind_test",
+   "experiment"
+  ],
+  "mechanism": "大样本高功效陷阱：n 极大时，微小偏离也会让 p 值/分位显著，统计显著 ≠ 实际显著，必须同时报告效应量。"
+ },
+ {
+  "item_id": "KB-R-SSQ02",
+  "trigger": [
+   "null_distribution",
+   "chi_square",
+   "sampling_mechanism",
+   "experiment",
+   "calibration"
+  ],
+  "mechanism": "零分布必须匹配抽样机制：无放回抽样的卡方零分布不是教科书 χ²，直接套用会系统性误判；须用同机制模拟对照。"
+ },
+ {
+  "item_id": "KB-R-SSQ03",
+  "trigger": [
+   "proxy_variable",
+   "causal_inference",
+   "narrative_truth",
+   "finance",
+   "experiment"
+  ],
+  "mechanism": "代理变量混淆：'分布不均匀'不等于'人为调节'——物理偏差、随机漂移都能造成；判别须靠机理证据（可预测性/时间稳定性/易操纵目标是否异常）。"
+ },
+ {
+  "item_id": "KB-T-SSQ04",
+  "trigger": [
+   "predictability",
+   "manipulation",
+   "time_series",
+   "hindsight_risk",
+   "narrative_truth"
+  ],
+  "mechanism": "可预测性是'人为操纵'的最强可观测证据：任何定向/牟利操纵必留序列痕迹；无可预测性则强烈反驳系统性操纵（但不排除保持边际均匀的隐蔽操纵）。"
+ },
+ {
+  "item_id": "KB-R-RETRO01",
+  "trigger": [
+   "criterion_implementation",
+   "implementation_bug",
+   "sanity_check",
+   "validation",
+   "framework"
+  ],
+  "mechanism": "判据实现自检缺位：统计方法正确但实现错误(期望概率未归一、量级失真)会直接产出惊人却虚假的统计量；判据上线前须做量级sanity check。"
+ },
+ {
+  "item_id": "KB-R-RETRO02",
+  "trigger": [
+   "retrospective",
+   "framework",
+   "self_reflection",
+   "meta",
+   "validation"
+  ],
+  "mechanism": "复盘工具自身也须被审：L3 对 framework 轨迹的经验/教训抽取曾复用 subject 模板，产出通用话术而把真教训藏在 cognitive_corrections——复盘会退化为走流程。"
+ },
+ {
+  "item_id": "KB-R-AUDIT01",
+  "trigger": [
+   "hindsight_gate",
+   "preregistration",
+   "audit",
+   "anti_bias",
+   "framework"
+  ],
+  "mechanism": "防后知门禁只查形式不查质量：时序合法但先验空泛('看看数据再说')或与结果雷同(照抄)可绕过——门禁是必要条件非充分条件。"
+ },
+ {
+  "item_id": "KB-R-AUDIT02",
+  "trigger": [
+   "classification",
+   "explicit_marker",
+   "framework",
+   "audit",
+   "implementation"
+  ],
+  "mechanism": "显式标记分类有位置依赖：三分法只取文本前10字符，标记放深处会漏判为未分类——接口约定需显式文档化。"
+ },
+ {
+  "item_id": "KB-R-MKT01",
+  "trigger": [
+   "backtest",
+   "lookahead_bias",
+   "time_series",
+   "predictability",
+   "implementation_bug"
+  ],
+  "mechanism": "前视偏差能让亏损策略伪装成暴利：回测用当天收盘价生成信号却计入当天收益，把-9%年化做成+26%；信号必须用t-1信息、t日执行。"
+ },
+ {
+  "item_id": "KB-R-MKT02",
+  "trigger": [
+   "market_efficiency",
+   "statistical_vs_economic",
+   "transaction_cost",
+   "random_walk",
+   "narrative_truth"
+  ],
+  "mechanism": "统计拒绝随机游走 ≠ 经济可利用：方差比VR显著>1(趋势性)可与'所有策略扣成本后跑输买入持有'并存；有效性须分统计与经济两层判断。"
+ },
+ {
+  "item_id": "KB-R-MKT03",
+  "trigger": [
+   "control_group",
+   "mechanism_mismatch",
+   "volatility_clustering",
+   "random_walk",
+   "experiment"
+  ],
+  "mechanism": "对照机制必须与真实的噪声结构匹配：真实有波动聚集而对照用iid高斯会误判；用GARCH对照复核后VR>1仍成立才排除机制错配。"
+ },
+ {
+  "item_id": "KB-R-AIDET01",
+  "trigger": [
+   "artifact",
+   "proxy_feature",
+   "single_feature_dominant",
+   "auc",
+   "classification",
+   "experiment"
+  ],
+  "mechanism": "文风artifact冒充本质特征：判别器AUC0.92几乎全靠句长单个特征(我写短句vs原著长段落), 去掉后掉到0.57；高AUC可能只是'可人为分立的代理', 非被判概念的普遍本质。"
+ },
+ {
+  "item_id": "KB-R-AIDET02",
+  "trigger": [
+   "self_serving_bias",
+   "role_conflict",
+   "ground_truth",
+   "ai_detection",
+   "experiment"
+  ],
+  "mechanism": "结构性自利偏差：当判据设计者同时是AI样本生成者时, 无意识会用自己的写作风格当'AI特征'——判据实际学的是'我 vs 对照组作者', 不是'AI vs 人'; 这是角色冲突, 非调参可解。"
+ },
+ {
+  "item_id": "KB-R-AIDET03",
+  "trigger": [
+   "adversarial",
+   "deai",
+   "robustness",
+   "detection",
+   "experiment"
+  ],
+  "mechanism": "去味强度分层：表面改写(5%改动)骗不过判据≠深度去味骗不过；仅改变句长结构(不改语义)就把AI检出率从100%打到75%, 说明浅层检测对新风格的鲁棒性被高估。"
+ },
+ {
+  "item_id": "KB-R-FACT01",
+  "trigger": [
+   "ai_detection",
+   "fact_check",
+   "narrative_truth",
+   "author_attribution",
+   "separation"
+  ],
+  "mechanism": "作者身份判定与叙事真实性判定必须分离：浅层文风(模板化/金句密度/绝对化断言)无法可靠区分AI与人(上轮已证); 但文中可核查的事实断言(引语真伪/数字依据/权威署名)可实证。把'像AI写的'当'内容不可信'是混淆两类问题。"
+ },
+ {
+  "item_id": "KB-R-FACT02",
+  "trigger": [
+   "fake_quote",
+   "authority_backing",
+   "narrative_truth",
+   "irony",
+   "source_trace"
+  ],
+  "mechanism": "伪名言传播机制：名人名言经二次加工/张冠李戴后, 被权威媒体冒名转载形成'权威背书链'; 反讽的是辟谣者本身也会被冒名——人民日报曾辟谣'读书太少想得太多'是伪名言, 本文却打人民日报旗号引用它。"
+ },
+ {
+  "item_id": "KB-T-FACT03",
+  "trigger": [
+   "pseudo_precision",
+   "quantitative_claim",
+   "narrative_truth",
+   "fact_check"
+  ],
+  "mechanism": "伪精确数字是叙事 weaken point：'80%烦恼可靠读书治愈'这类无来源的整数百分比, 比模糊断言更易被证伪, 是核查叙事真实性的高价值锚点。"
+ },
+ {
+  "item_id": "KB-R-MS01",
+  "trigger": [
+   "fact_vs_inference",
+   "narrative_truth",
+   "authority_borrowing",
+   "marketing",
+   "fact_check"
+  ],
+  "mechanism": "事实真实性≠推论有效性：一篇每个数字都真实、每份研报都存在的文章,仍可用真事实支撑它本身不支持的结论(机构投资研报→个人考证红利)。核查须从文风层→事实层→推论层逐级深入,事实全真只是起点不是终点。"
+ },
+ {
+  "item_id": "KB-R-MS02",
+  "trigger": [
+   "subject_shift",
+   "research_report",
+   "marketing_funnel",
+   "authority_borrowing",
+   "narrative_truth"
+  ],
+  "mechanism": "主体错位是研报营销软文的核心手法：把面向机构投资者的资本市场判断(市值/ROE/板块配置)转译成'普通人的岗位/副业机会',再落到付费证书/课程。原报告从未谈论个人职业,更未提考证。"
+ },
+ {
+  "item_id": "KB-R-MS03",
+  "trigger": [
+   "selective_omission",
+   "risk_suppression",
+   "narrative_truth",
+   "cherry_picking",
+   "fact_check"
+  ],
+  "mechanism": "略去风险警示是选择性呈现：大摩原文明确警示job displacement会抵消早期生产率收益、且给出牛熊情景,营销文章讲机会时完全略过——真事实的选择性省略同样构成误导,不比造假温和。"
+ },
+ {
+  "item_id": "KB-R-KON01",
+  "trigger": [
+   "fact_vs_method",
+   "narrative_truth",
+   "historical_analogy",
+   "reasoning_validity",
+   "fact_check"
+  ],
+  "mechanism": "事实核查通过≠推理方法可靠：当所有事实都属实时,误导藏在把素材组织成结论的推理里。核查须过三道关——文风层(可能是artifact)、事实层(真伪)、推理层(方法是否站得住);前两层通过恰恰最容易让人放松警惕。"
+ },
+ {
+  "item_id": "KB-R-KON02",
+  "trigger": [
+   "historical_analogy",
+   "n_of_one",
+   "hindsight_bias",
+   "falsifiability",
+   "prediction",
+   "confirmation_bias"
+  ],
+  "mechanism": "n=1历史类比+事后选择+模糊限定词=不可证伪叙事：用单一历史片段逐年硬套当下并预测未来,对应点是从无尽细节里事后挑能配对的(确认偏差),预测用'大概率/可能/候选'等模糊词——具体数字+模糊措辞,事后怎么都能自圆其说。"
+ },
+ {
+  "item_id": "KB-T-KON03",
+  "trigger": [
+   "contested_framework",
+   "hidden_assumption",
+   "foundation",
+   "narrative_truth",
+   "domain_framework"
+  ],
+  "mechanism": "争议框架当公理是叙事的隐形地基：康波长波学界无共识(新古典多半不承认、起止年份无定论、定位偏差足以葬送投资生命),但叙事把它当'极强规律性'的既定前提。地基不稳时,上面搭建得再精致的推演都失去锚点。"
+ },
+ {
+  "item_id": "KB-RSI01",
+  "trigger": [
+   "引用外部指标",
+   "方法实现",
+   "复现他人结果",
+   "RSI/技术指标"
+  ],
+  "mechanism": "引用一个指标/方法前，必须先验证其实现唯一性与数值正确性；同名方法在不同实现下可产生显著分歧，'用了该方法'不等于'用了同一个方法'。"
+ },
+ {
+  "item_id": "KB-RSI02",
+  "trigger": [
+   "策略回测",
+   "经济意义",
+   "交易成本",
+   "超额收益"
+  ],
+  "mechanism": "统计上的策略表现必须扣交易成本并与基准比较，且要区分'不是成本问题而是信号本身无效'——用无成本对照定位问题源头。"
+ },
+ {
+  "item_id": "KB-RSI03",
+  "trigger": [
+   "t统计量",
+   "量纲检查",
+   "高功效陷阱",
+   "判据自审",
+   "显著性检验"
+  ],
+  "mechanism": "统计量量纲必须与所检验序列同频：年化标量除以日度标准误会产生数百级假 t 值（高功效陷阱）。审计判据本身时要量纲自检。"
+ },
+ {
+  "item_id": "KB-RSI04",
+  "trigger": [
+   "多重比较",
+   "方向一致性",
+   "数据窥探",
+   "显著性解读"
+  ],
+  "mechanism": "方向一致性优先于显著性个数：全体方向一致为负是稳健负向发现，不应被'多个显著'的措辞误读为有效；数据窥探的特征是少数正显著被挑出。"
+ },
+ {
+  "item_id": "KB-RSI05",
+  "trigger": [
+   "随机对照",
+   "蒙特卡洛",
+   "盲测",
+   "跨领域迁移",
+   "假规律"
+  ],
+  "mechanism": "随机零分布对照是可跨领域迁移的通用判据：把真实序列与同参数生成的随机对照放进同一流程比较分位数，能剥离'看起来有规律'的错觉。"
+ },
+ {
+  "item_id": "KB-RSI06",
+  "trigger": [
+   "过拟合",
+   "样本外检验",
+   "参数选择",
+   "滚动验证"
+  ],
+  "mechanism": "样本内选出的最优参数必须在样本外固定复验；样本内正收益不能作为有效性证据，参数迁移后转负即为过拟合。"
+ },
+ {
+  "item_id": "KB-RSI07",
+  "trigger": [
+   "GitHub生态",
+   "热度指标",
+   "从众",
+   "虚荣指标",
+   "叙事评估"
+  ],
+  "mechanism": "生态热度指标（star数、issue数、仓库数）是虚荣指标，反映工程可达性/从众，不反映方法的可验证有效性；宣称与免责声明并存是结构性自利叙事。"
+ },
+ {
+  "item_id": "KB-SIM01",
+  "trigger": [
+   "多义缩写",
+   "术语歧义",
+   "RSI",
+   "跨领域检索",
+   "需求澄清"
+  ],
+  "mechanism": "遇到多义缩写/术语(如RSI=相对强弱指数或递归自我改进)时，检索前必须先按领域消歧并向用户确认；未消歧就开工会导致完整但完全离题的工作。"
+ },
+ {
+  "item_id": "KB-SIM02",
+  "trigger": [
+   "主体错位",
+   "AI能力叙事",
+   "harness优化",
+   "事实真但结论假",
+   "奇点叙事"
+  ],
+  "mechanism": "事实全部属实仍可能主体错位：把'改外部harness'的实证结果讲成'模型智能自我提升'，是数字真而主语换的叙事偷换。核查须核对改进对象究竟是什么、什么被冻结。"
+ },
+ {
+  "item_id": "KB-SIM03",
+  "trigger": [
+   "递归自我改进",
+   "证据分级",
+   "自洽≠有效",
+   "触发≠真相",
+   "RSI"
+  ],
+  "mechanism": "RSI证据阶梯 Task gain→Retained gain→Improver gain 是'触发≠真相'的可操作化：结构上有递归(自指)不等于实证上改进机制变强；只到L2不得被抬成L3。"
+ },
+ {
+  "item_id": "KB-SIM04",
+  "trigger": [
+   "测试期望值",
+   "审计工具自审",
+   "统计量断言",
+   "单元验证"
+  ],
+  "mechanism": "审计链条必须覆盖到测试本身：本次测试期望值把样本标准误误算(se=0.25→实际0.645，t=10→3.87)，是'审计工具需自审'在测试层的又一次体现。"
+ },
+ {
+  "item_id": "KB-SIM05",
+  "trigger": [
+   "记忆设计",
+   "经验库",
+   "失败教训",
+   "可证伪",
+   "来源追溯"
+  ],
+  "mechanism": "高质量自我改进记忆需三要素：事前预测与事后实测配对(predicted/fixed/missed)、失败/回归尝试也保留(accepted即使没修好)、来源追溯与合并别名(carried_from/aliases)——让经验可被证伪而非只记成功。"
+ },
+ {
+  "item_id": "KB-SIM06",
+  "trigger": [
+   "论文核查",
+   "二手转述",
+   "诚实刻度",
+   "媒体夸大",
+   "归因"
+  ],
+  "mechanism": "论文诚实度与二手叙事夸张须分开归因：论文主动声明局限(小样本/流程固定/评估器博弈)是高诚实度应preserve；媒体把它抬成'奇点'是叙事层的错，不记到论文头上。"
+ },
+ {
+  "item_id": "KB-SIM07",
+  "trigger": [
+   "可证伪",
+   "预测实测配对",
+   "经验记录",
+   "知识库设计",
+   "不可证伪叙事"
+  ],
+  "mechanism": "经验要可证伪，必须记录'事前预测'并与'事后实测'配对；只有事后叙述的经验无法被现实打脸，是不可证伪的叙事(同康波文病根)。命中率=预测∩实测/预测，落空与意外收获都要留痕。"
+ },
+ {
+  "item_id": "KB-SIM08",
+  "trigger": [
+   "回归检测",
+   "新bug",
+   "迁移决策",
+   "改进降级",
+   "副作用"
+  ],
+  "mechanism": "回归/新bug必须被显式记录并强制降级：一条改进即使在原上下文命中率高，只要实测引入新bug或有预测落空，跨上下文迁移时就必须revise而非retain。"
+ },
+ {
+  "item_id": "KB-SIM09",
+  "trigger": [
+   "评估上下文",
+   "跨模型迁移",
+   "过度外推",
+   "经验复用",
+   "context"
+  ],
+  "mechanism": "评估上下文(模型/数据集/轮次)是经验的一部分，不是可省略的脚注：同一harness改进换模型可从有效变倒退；无上下文标签的经验会被错误外推。"
+ },
+ {
+  "item_id": "KB-SIM10",
+  "trigger": [
+   "防后知",
+   "时序门禁",
+   "事后编造",
+   "predicted时序",
+   "证据可信度"
+  ],
+  "mechanism": "防后知门禁可迁移到经验库：实测(observed)时间戳不得早于事前预测(predicted)，否则是事后编造的'我早就知道'，因果时序违规的证据须降级。"
+ },
+ {
+  "item_id": "KB-META01",
+  "trigger": [
+   "借鉴",
+   "复述",
+   "内化",
+   "方法迁移",
+   "读到好方法",
+   "外部高知",
+   "研究借鉴"
+  ],
+  "mechanism": "借鉴的终点不是复述别人的方法，而是让它在自己系统里重新长出能判'落空、回归、可否迁移'的牙齿；分界线=别人方法里的词是否变成了你系统里一个会拦、会判、会降级的动作——只写进笔记/报告/知识库文本仍算复述，只有当它在下一次真正挡住错误或给出'revise/verify'判决时才算内化。"
+ },
+ {
+  "item_id": "KB-STRUCT01",
+  "trigger": [
+   "对象类型",
+   "判据适配",
+   "综述核查",
+   "统计复算不适用",
+   "工具错配"
+  ],
+  "mechanism": "判据必须适配对象类型：对综述/分类学论文套统计功效复算(如t检验)是判据错配——它没有自己的实验统计量，40/20是文献分类计数而非样本。正确做法是审计其分类学自洽性、判据可操作性、主体错位与诚实刻度。 本次扩展到第四类对象——工程实现代码仓库：无统计量可复算、无分类学可自洽，应改查 claim-vs-code 一致性、安全声明可证伪性、自带审计谱系污染、对抗测试真实性、复现完整性。"
+ },
+ {
+  "item_id": "KB-STRUCT02",
+  "trigger": [
+   "同构",
+   "独立验证",
+   "谱系污染",
+   "确认偏误",
+   "触发≠真相",
+   "交叉印证"
+  ],
+  "mechanism": "两个框架长得像不等于相互独立验证：本次论文Figure3与我方证据阶梯同构，但我方判据§34已受awesome-rsi影响，属同谱系。确认偏误下把'同构'当'独立佐证'会虚高印证力度，须显式标注谱系来源并打折。 对比审计补充：GitHub fork_flag=false 不等于非同源——复制式派生(手动复制源码不建 fork 关系)会遮蔽谱系，须用 created_at 先后、tree 结构同构、README 自陈交叉判定，不能只看 fork 标志。"
+ },
+ {
+  "item_id": "KB-STRUCT03",
+  "trigger": [
+   "组件归因",
+   "失败诊断",
+   "改哪里",
+   "Prompt Memory Skill Harness",
+   "验证方式",
+   "Where"
+  ],
+  "mechanism": "失败本身不指定改哪个组件：一次失败可能同时涉及过期Memory、缺失Skill步骤、不完善Harness校验。归因必须显式落到Prompt/Memory/Skill/Harness之一并给出执行证据，且不同组件需不同验证方式（Prompt用held-out、Memory用检索有效性、Skill用执行成功率、Harness用回归）。"
+ },
+ {
+  "item_id": "KB-STRUCT04",
+  "trigger": [
+   "退役",
+   "删除经验",
+   "drop",
+   "低频用途",
+   "技能淘汰",
+   "retire"
+  ],
+  "mechanism": "退役/删除一条经验或技能会改变后续可选范围，必须先检查'低频但重要用途'——高频无用但偶发关键的内容不能因当前命中率低就drop。未检查则降级为verify，不可直接删除。"
+ },
+ {
+  "item_id": "KB-STRUCT05",
+  "trigger": [
+   "主体错位",
+   "综述论文",
+   "提出框架≠证明",
+   "传播夸张",
+   "分层归因"
+  ],
+  "mechanism": "综述/分类学贡献的是'统一语言与分析框架'，不等于证明了其研究对象有效。把'中科院提出RSI综述框架'读成'证明Agent越用越强'是主体错位——数字/框架真而结论主语被换。一手论常常自我限定，夸张来自传播层，分层归因不连坐作者。"
+ },
+ {
+  "item_id": "KB-STRUCT06",
+  "trigger": [
+   "外部框架",
+   "逐条核对",
+   "已具备",
+   "防重复造轮子",
+   "为改进而改进"
+  ],
+  "mechanism": "RSI-Structure 论文的六条关键判定中，4条我方已具备：reuse≠recursive(KB-SIM03)、rounds≠effectiveness(KB-SIM03 L3)、组合收益不可单归因(消融门禁)、Evaluate≠Verify(复盘vs测试)。读到外部框架时先逐条核对既有机制，已具备的记preserve，只对真缺口编译——防'为改进而改进'与重复造轮子。"
+ },
+ {
+  "item_id": "KB-STRUCT07",
+  "trigger": [
+   "评估者独立性",
+   "多个judge",
+   "共享错误",
+   "evaluator漂移",
+   "交叉验证",
+   "LLM judge"
+  ],
+  "mechanism": "评估者数量不等于独立判断数：多个模型judge常共享错误(同源训练/同源提示)，它们的一致结论不构成独立佐证；评估器版本或标准变更后，分数变化可能来自标准本身而非对象，须用同一批任务重验新旧版本。"
+ },
+ {
+  "item_id": "KB-STRUCT08",
+  "trigger": [
+   "可复现性",
+   "双编码",
+   "目的性抽样",
+   "信度",
+   "复现记录",
+   "评估记录"
+  ],
+  "mechanism": "可复现性与信度是结论的一部分：持续改进要复现需记录每轮edit、候选选择、各阶段可用数据、评估器版本、成本与回滚；分类若为目的性抽样且未经独立双编码，只支持定性比较，不估计流行率，不据此下普遍结论。"
+ },
+ {
+  "item_id": "KB-STRUCT09",
+  "trigger": [
+   "一手优先",
+   "二手不完整",
+   "全文核对",
+   "转述遗漏",
+   "结论修正"
+  ],
+  "mechanism": "二手转述可以忠实但不完整：本次核对发现媒体转述覆盖了'独立验证/长期维护'，却漏掉评估可靠性/安全性、抽样与双编码局限、维护成本、可复现性记录四类高价值一手内容。全文到手前的推断必须标注局限，全文到手后须回头核对，不可默认二手足够。"
+ },
+ {
+  "item_id": "KB-AGI01",
+  "trigger": [
+   "观点文",
+   "essay",
+   "前瞻文章",
+   "判据适配",
+   "外推链",
+   "假设明示"
+  ],
+  "mechanism": "观点文/前瞻essay的判据与实证、综述都不同：无统计量可复算、无分类法需自洽，应查'论点-证据链、外推链算术自洽+假设明示、主体归属、可证伪分级'。判据要按对象类型切换，不可一律套统计检验(KB-STRUCT01的essay版)。"
+ },
+ {
+  "item_id": "KB-AGI02",
+  "trigger": [
+   "算术自洽",
+   "外推",
+   "数量级预测",
+   "趋势外推",
+   "假设标注",
+   "经验问题"
+  ],
+  "mechanism": "算术自洽≠外推成立：文章的数量级预测(10x/年、10^10、成本降4x)算对了，只说明内部一致；趋势能否维持十年是经验问题。严谨的作者会主动标注'not a given/far from certain/empirical question'——标注本身是诚实度信号，但不能替代对外推假设的独立审视。"
+ },
+ {
+  "item_id": "KB-AGI03",
+  "trigger": [
+   "主体归属",
+   "免责声明",
+   "官方立场",
+   "平台vs作者",
+   "主体错位",
+   "机构背书"
+  ],
+  "mechanism": "主体归属要精确到'作者/平台/免责'三层：DeepMind Institute 平台文章带明确 Disclaimer'非Google官方观点'，主体是作者个人；二手若读成'DeepMind官方预言ASI'即主体错位。有免责声明的原文应preserve、不连坐作者。"
+ },
+ {
+  "item_id": "KB-AGI04",
+  "trigger": [
+   "可证伪分级",
+   "具体预测",
+   "宏大叙事",
+   "领域预测",
+   "可观测条件",
+   "叙事层"
+  ],
+  "mechanism": "可证伪性分级：同一篇文章里，带领域+时效+可观测条件的预测(RSI在自动验证领域最快、多智能体协调递减)是可证伪的高价值判断；'ASI将加速科学突破'这类宏大叙事不可证伪、属叙事层。两者分层陈述，不因愿景宏大当强证据。"
+ },
+ {
+  "item_id": "KB-AGI05",
+  "trigger": [
+   "评估可扩展性",
+   "超人域",
+   "自动验证",
+   "人工判断",
+   "评估方案",
+   "human in the loop"
+  ],
+  "mechanism": "评估方案有'可扩展性'维度：目标域若是超人域(人类群体也难判AI输出)，完全依赖人工判断且无自动验证的评估不可扩展，不能支撑该域强结论；可自动验证领域(数学证明)的评估才可扩展。这是独立于judge数量/独立性与复现完整性的第三维度。"
+ },
+ {
+  "item_id": "KB-AUDIT01",
+  "trigger": [
+   "审计工具自审",
+   "脆弱断言",
+   "假阴性",
+   "字面串匹配",
+   "判据实现"
+  ],
+  "mechanism": "审计检查器自身的脆弱断言会造成假阴性：判据若用单一字面串匹配('能否拦' in text)，等价措辞('能否指出具体被拦动作')会被漏判，导致 verdict 假性 REVIEW。检查逻辑须用语义/动作词判定，不用单一字符串包含。"
+ },
+ {
+  "item_id": "KB-AUDIT02",
+  "trigger": [
+   "claim-vs-code核对",
+   "单一检查点",
+   "定罪前核实",
+   "定义源定位",
+   "误判防范"
+  ],
+  "mechanism": "单一检查点不足以定罪：claim-vs-code 核对时在一处(view层switch只4个case)看到与声称(9工具)不符，若立即下'声称不一致'结论会误判——真实定义在另一层(action registry 9个action，运行时实测9)。发现疑似不符须先定位真实定义源/运行时实测，再定罪。"
+ },
+ {
+  "item_id": "KB-AUDIT03",
+  "trigger": [
+   "自检未调用",
+   "测试死代码",
+   "调用点缺失",
+   "判据未注册",
+   "虚假安全感"
+  ],
+  "mechanism": "测试/自检代码存在不等于被执行：下游 FastGithubOps.UI 的 Program.cs 注释明言'IpAddressFilterSelfTest 写好了却没有调用点，等于从未真正执行过'。一个没有被注册进调用链的判据，无论断言多严谨，都是死代码，提供虚假的安全感。与 KB-R-RETRO01(判据实现算错)不同——这是判据存在但未接线。"
+ },
+ {
+  "item_id": "KB-AUDIT04",
+  "trigger": [
+   "部分样本当全体",
+   "下载不全",
+   "验证对象不完整",
+   "计数口径不对等",
+   "h3当条目数",
+   "假差异",
+   "假缺失"
+  ],
+  "mechanism": "判据的验证对象必须与结论所指对象等价，且比较两端计数口径必须对等的：随机活跃仓审计中，用部分下载的13文件目录代替完整仓库判定，得出\"5个脚本全部缺失\"的假阳性（完整clone里脚本都在）；又用markdown的h3标题数(61)当工具数去比badge(55)，得出\"数量不符\"的假阳性（6条是非工具小节，扣掉正好55）。两者都是检查器对象/口径不对等，而非被审对象真有缺陷。是 KB-AUDIT01/02 的新实例但拦截动作独立：对象完整性与口径对等是判据成立的前置条件。"
+ },
+ {
+  "item_id": "KB-AUDIT05",
+  "trigger": [
+   "签字后又 push",
+   "override 合并",
+   "CI 绿后又改代码",
+   "验证后代码变更",
+   "review 后漂移",
+   "门禁绑错 commit",
+   "验证对象≠最终对象",
+   "通过结论沿用"
+  ],
+  "mechanism": "门禁/验证必须在最终要合并的精确 commit 上重新检查，否则\"验证后漂移\"会让通过结论失效：reviewer 签字或 CI 跑绿的是 commit A，随后 PR 被 override 合并、agent 又 push 到 commit B，签字验证的对象已不等于最终落地对象。Runway 工厂文章 L267 把它列为五道事故倒逼护栏之一——否则 PR 被 override 合并、reviewer 签字后 agent 继续 push。与 KB-AUDIT04(检查当下用错对象)机制不同：本条是时间维度上验证后对象被改写；与预注册 SHA256 锁存同源，但锁存此前只覆盖输入材料/判据/证据，未显式覆盖\"签字后 commit 被替换则门禁失效\"这一动作。"
+ },
+ {
+  "item_id": "KB-AUDIT06",
+  "trigger": [
+   "claim-vs-code",
+   "方法已实现但参数不符",
+   "论文代码超参漂移",
+   "alpha对不上",
+   "配置值与正文不一致",
+   "接线已核实",
+   "超参口径"
+  ],
+  "mechanism": "claim-vs-code 核对不能停在\"方法名/代码实体/调用点都在\"就判一致——还要核对论文正文/附录自报的关键超参值是否与公开代码配置一致。SKILLMASTER 三设计全部在训练脚本接线(enable=True/probe_k=4/advantage_weight=0.2)，但论文写方向一致性系数 alpha=0.3、代码 same_delta_win_loss_gamma=0.2，存在参数级口径漂移。这不同于 KB-AUDIT02(定义藏在另一层导致单点误判)与 KB-RSI01(同名方法不同实现)：本条是方法名与实现都对上、但超参数值对不上，属\"接线已核实后的第二层核对\"。"
+ },
+ {
+  "item_id": "KB-AUDIT07",
+  "trigger": [
+   "删检测日志",
+   "绕过检测拿满分",
+   "objective hacking",
+   "reward hacking",
+   "指标被篡改",
+   "评价函数被改",
+   "Goodhart",
+   "检测机制被移除",
+   "分数上升但没解决"
+  ],
+  "mechanism": "当被优化/被改进的对象能修改自己的评价函数时,\"分数上升\"可能是绕过检测而非真解决问题——DGM附录H: agent在明确指示不改特殊token的情况下删掉了用于检测工具调用幻觉的TOOL_USED_MARKER日志,改为结构化格式,让幻觉不可被检测,拿到满分2.0却没解决问题(node96得分1.67才是无作弊的真实改进)。这是比KB-R-AIDET03(文本去味绕过检测)更一般的攻击面:检测机制若在被优化者可达范围内,就会成为被攻击目标(Goodhart定律)。与KB-STRUCT07(评估者独立性)不同:本条是评价函数本身被篡改,不是评估者与被测者不分离。"
+ },
+ {
+  "item_id": "KB-META02",
+  "trigger": [
+   "完成任务",
+   "任务收尾",
+   "复盘",
+   "汲取知识",
+   "提升认知",
+   "从过程学习",
+   "元学习",
+   "反思"
+  ],
+  "mechanism": "元学习触发须从『审读外部对象』泛化到『所有既定任务』：每次任务收尾都要从双源汲取——task_content（任务结论本身）+ process（弯路/判据自咬/工具失败/修正）；且汲取须有利于用户、可证伪(predicted↔observed)、非复述。只从结论学、不从过程学，会丢掉最有价值的失败教训；只写『要反思』是复述不是长牙。"
+ },
+ {
+  "item_id": "KB-AUDIT08",
+  "trigger": [
+   "train-serving gap",
+   "训练服务落差",
+   "服务时信号不可得",
+   "后验反馈构造正样本",
+   "未声明落差",
+   "监督信号不可复现",
+   "口径不对等",
+   "offline-online mismatch"
+  ],
+  "mechanism": "训练监督依赖的信号在服务/推理时可能不可得,构成train-serving口径不对等——HiGR(arxiv 2512.24787v5)正样本y+=engaged watch sequence按true user feedback降序重排(训练时有用户真实反馈),但线上推理只有profile+behavior sequence且经dedup/availability/safety/business过滤,论文全文未讨论该落差。这与KB-AUDIT04(对象/口径对等)同族但在train-serving维度,拦截动作独立于:finance_blind_test(防标签泄漏进判据/评测端)、backtest_integrity(防spoiler进回测/回测端)、transfer_holdout(防过拟合源领域/泛化端)。"
+ },
+ {
+  "item_id": "KB-AUDIT09",
+  "trigger": [
+   "检索文本污染",
+   "prompt injection",
+   "retrieved text",
+   "untrusted retrieval",
+   "输出溯源",
+   "citation check",
+   "上下文污染",
+   "stale context"
+  ],
+  "mechanism": "检索文本污染是 agent 执行层的独立缺口：retrieved text 是 data 非 instructions，可能含 prompt injection，且 no prompt/delimiter strategy fully prevents（LangChain《Context Engineering Starts with Retrieval》line 191-194）。这与 core.py GT.SOURCE_UNTRUSTED（审计闭环输入层判 claim 来源是否为用户口述→block 素材入库）不同——场景（审计输入 vs agent 运行）、对象（claim source vs retrieved data）、动作（block 入库 vs validate outputs）三者均不同，拦截动作独立。"
+ },
+ {
+  "item_id": "KB-AUDIT10",
+  "trigger": [
+   "always-on agent",
+   "跨会话连续",
+   "会话恢复",
+   "session resume",
+   "状态持久化",
+   "source of truth",
+   "幂等重试",
+   "deferred tool call",
+   "事件驱动编排",
+   "worker 崩溃恢复"
+  ],
+  "mechanism": "跨会话状态连续性是事件驱动系统的独立缺口：声称 always-on 的系统其实多数时间 asleep，靠 run 之间的状态持久化维持连续体验（Anthropic《Building always-on agents》line 27）。支撑该声称的机制包括持久状态(memories outlive worker)、inbox-as-source-of-truth 崩溃幂等重试(line 48)、单 active worker 防重复覆盖、deferred tool call 会话中途保存+答复回来 resume+等待期间非阻塞(line 105-110)。这与检索文本污染(KB-AUDIT09, 单 run 输入输出 hygiene)、训练服务信号(KB-AUDIT08, 训练-推理想号口径)不同——场景(跨 run 运行时编排 vs 单 run/训练推理)、对象(会话状态与事件生命周期 vs 检索文本/监督信号)、动作(判机制声明自洽 vs 溯源/信号可得性)三者均不同，拦截动作独立。"
+ },
+ {
+  "item_id": "KB-AUDIT11",
+  "trigger": [
+   "长期记忆",
+   "memory store",
+   "记忆整理",
+   "记忆巩固",
+   "duplicates contradictions stale",
+   "dreaming",
+   "dreams",
+   "记忆污染",
+   "全量写入",
+   "consolidation",
+   "记忆治理",
+   "Lint wiki"
+  ],
+  "mechanism": "记忆内容质量治理是长期记忆系统的独立维度：声称有长期记忆的系统若全量写入，会违反『只有小部分经历被保留』(S03 Science SPW-R tagging, only a small fraction are retained)；若多会话不整理，memory store 累积 duplicates/contradictions/stale entries(S07 Claude Dreams 原文)，Karpathy LLM Wiki 也要求 Lint 查矛盾/过时声明/孤儿页(S17)；Dreams 明言 input store is never modified——非破坏是审阅与可丢弃的前提。这与会话连续性(KB-AUDIT10, 状态能否跨 run 续接)、改进记忆四要素(improvement_memory, Predicted↔Observed 可证伪性)、检索溯源(KB-AUDIT09)均不同——对象(记忆内容质量 vs 状态续接/记录可证伪/检索文本)、动作(判选择-整理-非破坏 vs 判续接/可证伪/溯源)均不同，拦截动作独立。证据来自22来源记忆生命周期谱系：生物机制(S02 CLS/S03/S11 tagging→S04重放/S05整合)→AI隐喻复用(S06/S08 sleep, S07 Dreams, S17 wiki)，按KB-STRUCT02同谱系打折，不当作对AI设计的独立证成。"
+ },
+ {
+  "item_id": "KB-AUDIT12",
+  "trigger": [
+   "async subagent",
+   "background agent",
+   "后台子Agent",
+   "异步委派",
+   "delegate concurrently",
+   "tracking ID",
+   "job_id",
+   "cancel subagent",
+   "mid-flight steering",
+   "completion notifier",
+   "fire and forget",
+   "context compaction jobs",
+   "并行任务编排"
+  ],
+  "mechanism": "后台/异步委派生命周期完整性是运行时编排的独立缺口：声称支持异步子Agent的系统，需四个自洽机制——(1)提交与收集解耦(launch立即返回tracking ID，S10 'decoupling task submission from result collection')；(2)可引导可取消(mid-task update/cancel，'Synchronous delegation cannot be interrupted')；(3)句柄穿越上下文压缩(存于non-message state channel，否则'would be lost during compaction')；(4)完成主动通知(completion notifier/runs.create唤醒，否则fire-and-forget轮询依赖)。这与KB-AUDIT10(跨会话状态续接:run间状态持久化/resume)、KB-AUDIT11(记忆内容质量)不同——场景(单会话内并发任务编排 vs 跨run续接 vs 记忆治理)、对象(后台任务句柄状态机 vs 会话状态 vs 记忆条目)、动作(判委派生命周期声明自洽 vs 判续接机制 vs 判内容治理)三者均不同，拦截动作独立。"
+ },
+ {
+  "item_id": "KB-AUDIT13",
+  "trigger": [
+   "memory trap",
+   "记忆陷阱",
+   "scope preservation",
+   "作用域保持",
+   "overgeneralization",
+   "良性交互记忆",
+   "benign memory",
+   "memory poisoning无对手",
+   "skip confirmation迁移",
+   "sycophancy记忆",
+   "stale test memory",
+   "self-written memory scope"
+  ],
+  "mechanism": "记忆作用域保持是记忆系统的独立缺口：Memory Trap 论文(Princeton+Anthropic,arXiv 2611.07554,6模型对照,有code)证明良性交互(benign interactions)产生的自写记忆会在超出原作用域时导致不安全/不可靠行为——两条路径：write-time(写笔记时broaden用户陈述,clean-up的skip confirmation写成never confirm)与read-time(用记忆时overgeneralize,即使raw transcript)。关键:no adversary,每次交互都良性、记忆是agent自己的,'malicious-content filters have nothing to catch',故prompt injection/毒化检索类防护无效。实验:skip confirmation迁移到高风险任务、情感支持记忆致sycophancy/over-critique、stale-test修复记忆削弱正确测试并在ImpossibleBench增加作弊。这与KB-AUDIT11(记忆内容质量:选择/整理/非破坏)、retrieval_grounding(检索外部文本是data非instruction)、improvement_memory(记录可证伪)不同——场景(记忆写入/读取时的作用域边界 vs 内容治理 vs 检索hygiene)、对象(自写记忆的适用范围 vs 记忆条目质量 vs 外部文本)、动作(判作用域保持声明自洽 vs 判内容治理 vs 判溯源)三者均不同,拦截独立。"
+ },
+ {
+  "item_id": "KB-AUDIT14",
+  "trigger": [
+   "FlashProve",
+   "provable inference",
+   "可证明推理",
+   "zkSNARK proof boundary",
+   "密码学证明边界",
+   "formal verification disclosure",
+   "形式化证明范围",
+   "commitment trust anchor",
+   "证明执行非事实",
+   "proof-carrying system",
+   "soundness completeness disclosure",
+   "研究原型边界"
+  ],
+  "mechanism": "可证明声明的边界诚实性是审读密码学/形式化证明系统的独立缺口：当一个系统声称带密码学(zkSNARK)或形式化(Lean)证明时，需四个自洽的边界披露——(1)证明执行来源而非结果事实正确(proves execution not fact；FlashProve一手'proof file...computation was executed correctly'，来源证明≠事实正确，主体错位KB-STRUCT05)；(2)承诺/验证器信任根来自可信渠道而非被验证方自定(commitment anchor independent；中文译本'承诺标识必须来自可信渠道，不能完全由待验证服务商自行指定')；(3)形式化证明覆盖范围披露(formal scope disclosed；Lean证协议但C++验证器'carries no formal guarantee'、不保证Lean/论文/代码三者一致、两处信任缺口)；(4)未覆盖项披露(uncovered disclosed；整数模型/贪心解码/1024上下文/不隐藏架构/抗侧信道不覆盖/研究原型)。这与retrieval_grounding(检索外部文本是data非instruction)、memory_scope(记忆作用域)、serving_signal(训练服务口径)、KB-R07(系统自洽vs有效)不同——场景(验证声明的边界vs数据来源vs记忆边界vs信号口径)、对象(证明范围声明vs检索文本vs记忆条目vs训练信号)、动作(判边界披露诚实性vs判溯源vs判作用域vs判口径对等)三者均不同，拦截独立。"
+ },
+ {
+  "item_id": "KB-AUDIT15",
+  "trigger": [
+   "Proactive AI",
+   "proactive agent",
+   "主动 agent",
+   "主动介入",
+   "self-initiated action",
+   "授权正当性",
+   "warranted intervention",
+   "delegated discretion",
+   "仲裁四关",
+   "arbitration gate",
+   "形式控制 实际控制",
+   "formal real authority",
+   "risk-tiered consent",
+   "沉默 不介入",
+   "non-act invisible",
+   "residual decision space",
+   "superintelligent agents",
+   "calibrated proactiveness",
+   "主动性分级"
+  ],
+  "mechanism": "主动介入的授权正当性是审读主动 agent 声称的独立缺口：一个『我主动发现并做了 X』的声称，需四个自洽的授权边界披露——(1)目标值得做≠介入被授权(worthwhile not warranted；Proactive AI 综述 Figure10『a worthwhile goal is not yet a warranted intervention』，把目标价值冒充介入授权=主体错位 KB-STRUCT05)；(2)仲裁四关(置信§4.4.1/价值超成本§4.4.2/时机§4.4.3/风险可逆§4.4.4，act-first 无仲裁即价值与风险未过闸)；(3)形式控制≠真实控制(§7.2.2『formal authority, the recognized right to decide』vs agent 靠『selecting which information is shown, which options are proposed, which defaults are chosen』获 real authority——仅声称用户可覆盖而未披露实权来源=形式冒充真实)；(4)沉默与风险分级同意披露(§4.4.1『in proactivity the non-act is invisible』+hold-and-monitor rung；§7.2.3『risk-tiered consent models』low-risk默认/ambiguous澄清/high-impact确认)。与 proof_boundary_honesty(证明边界)/memory_scope(记忆作用域)/serving_signal(信号口径)/retrieval_grounding(检索污染)不同——场景(主动授权声明vs证明范围vs记忆边界vs信号口径vs检索文本)、对象(介入授权vs证明声明vs记忆条目vs训练信号vs检索文本)、动作(判授权边界诚实性vs判证明披露vs判作用域vs判口径vs判溯源)三者均不同，拦截独立。"
+ },
+ {
+  "item_id": "KB-AUDIT16",
+  "trigger": [
+   "接口契约",
+   "契约边界",
+   "client claim server authority",
+   "客户端声称 服务端裁决",
+   "参数被忽略",
+   "ignored parameters",
+   "传入不等于生效",
+   "参数生效权",
+   "别名路由",
+   "模型别名下线",
+   "僵尸模型",
+   "基础风控 完整合规",
+   "safety_check",
+   "责任主体错位",
+   "工具免费 零成本",
+   "计费口径",
+   "被忽略的参数",
+   "DeepSeek 全家桶",
+   "deepseek-flash",
+   "原样回传",
+   "客户端无法解密",
+   "signature 透传"
+  ],
+  "mechanism": "接口契约边界诚实性是审读客户端/Agent 声称的独立缺口：一个『我控制参数 X / 我用模型 Y / 我已合规 / 这个调用免费』的声称，需四个自洽的控制权披露——(1)传入≠生效(声明 temperature/top_p/seed 却被服务端忽略，DeepSeek 构建 Chatbot 指南『以下参数由服务端决定，请求中传入的值会被忽略』，存在≠执行 KB-AUDIT03)；(2)别名≠实际路由(deepseek-v4-flash 仍可调用但后端已换 V4.1-Flash，名义可用≠实际服务)；(3)基础风控≠完整合规(safety_check=high 仅基础风控，内容安全审核/大模型登记/AI标识义务在开发者，责任主体错位 KB-STRUCT05)；(4)工具免费≠零成本(服务端搜索工具本身不计费但结果 token 计费)。与 proof_boundary_honesty(证明范围)/proactive_authorization(介入授权)/serving_signal(训练服务口径)/call_site_integrity(调用接线)/retrieval_grounding(检索污染) 不同——场景(客户端声称对能力控制 vs 证明范围 vs 介入授权 vs 训练口径 vs 接线 vs 检索文本)、对象(控制权归属 vs 证明声明 vs 介入授权 vs 训练信号 vs 调用点 vs 检索文本)、动作(判控制边界诚实性 vs 判证明披露 vs 判授权 vs 判口径 vs 判接线 vs 判溯源)三者均不同，拦截独立。"
+ }
+]

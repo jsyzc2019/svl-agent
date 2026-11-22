@@ -1,0 +1,32 @@
+{
+  "section": "§73 第21道门禁 interface_contract_honesty 实现前预注册",
+  "locked_at": "2026-11-22T08:52:00+08:00",
+  "gate_name": "check_interface_contract_honesty",
+  "module": "svagent/interface_contract_honesty.py",
+  "purpose": "审读一个客户端/Agent 声称它对参数与能力的控制时，是否诚实披露了哪些由它自己决定、哪些被服务端接管/忽略/重新计费。只判契约声明边界诚实性，不承诺服务端行为真实有效。",
+  "dimensions": {
+    "param_effect_authority": "参数生效权：声称传入的参数(temperature/top_p/seed 等)是否真的由调用方决定；声明扩展工具后这些参数被服务端忽略却仍声称控制→工具层误述",
+    "alias_route_truth": "路由归属权：使用的模型名/接口别名是否真路由到声称的后端；别名仍可调用但后端已换(deepseek-v4-flash→V4.1-Flash)却按旧名声称→工具层误述",
+    "risk_compliance_ownership": "合规责任主体：开启安全校验后是否把它当成完整合规；仅基础风控而内容安全/大模型登记/AI标识义务在开发者却声称已合规→主体错位",
+    "cost_scope_honesty": "计费口径：是否把工具免费当成零成本；服务端搜索工具本身不计费但结果 token 计费却声称免费→口径误述"
+  },
+  "enum": ["yes", "no", "partial"],
+  "rules": {
+    "R0": "任一维非 yes/no/partial 枚举（含字面串/中文长句）→ flag（避 §56 brittle 根因）",
+    "R1": "param_effect_authority=no → downgrade（声称控制被服务端忽略的参数，传入≠生效 KB-AUDIT03）",
+    "R2": "alias_route_truth=no → downgrade（别名可调用≠后端未换，名义可用≠实际路由）",
+    "R3": "risk_compliance_ownership=no → downgrade（基础风控冒充完整合规，责任主体错位 KB-STRUCT05）",
+    "R4": "cost_scope_honesty=no → flag（工具免费冒充零成本，计费口径误述）",
+    "R5": "任一维 partial → flag（覆盖不全，待核）",
+    "R6": "全 yes → ok（只判契约声明自洽，不承诺服务端行为真按声明执行——存在≠有效性 KB-R07/AUDIT03）"
+  },
+  "live_regression_count": 8,
+  "ast_rule": "Compare 节点不得含中文字面量；中文锚点/短语集中 _A 字典，用 ord() 判 CJK 边界（§56/§70/§71/§73 纪律）",
+  "wiring": "惰性登记于 svagent/__init__.py，遵循 §58 决策A 不接 run_loop",
+  "boundary": "本门审读外部 API 契约与客户端实现，不判本仓；本仓判据库是被动工具库。与 proof_boundary_honesty(证明范围)/proactive_authorization(介入授权)/serving_signal(训练服务口径) 对象与动作均不同，拦截面独立。",
+  "three_layer_honesty": {
+    "layer1": "官方契约文本与源码事实可核",
+    "layer2": "五来源同主体折1；能力效果 self-reported 折扣；提出能力≠真能控制",
+    "layer3": "服务端是否真按声明裁决不可判定；本门只判声明诚实披露控制边界"
+  }
+}

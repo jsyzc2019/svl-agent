@@ -1,0 +1,68 @@
+{
+  "section": "§73 DeepSeek 全家桶应用 API + Chatbot 指南 + 在线 Demo + chat-demo 仓库 + 定价：接口契约边界诚实性（客户端声称 vs 服务端裁决）",
+  "subject": "DeepSeek 官方：全家桶应用 API 发布（deepseek-flash / V4.1-Flash）、构建 Chatbot 指南、在线 chat-demo、GitHub deepseek-ai/chat-demo (v0.1.3, commit 8ad7b56)、模型 & 价格页",
+  "object_type": "官方文档/发布公告/演示客户端源码（一手契约描述与官方实现）；能力效果为 self-reported 需折扣；五来源同属 DeepSeek 一个主体，按 KB-STRUCT02 折为 1",
+  "sources": {
+    "S01_online_demo_shell": {
+      "path": "downloads/S01_online_demo.html",
+      "url": "https://cdn.deepseek.com/chat-demo",
+      "grade": "一手（在线 Demo 入口，React SPA 壳，436 字节，真实内容在 JS bundle）",
+      "sha256": "83752154e46a5110aba53406d0e8938de5e6d2b7e30d5272eb40b03f0d26d073",
+      "bytes": 436
+    },
+    "S01_online_demo_js": {
+      "path": "downloads/S01_online_demo_main.js",
+      "url": "https://cdn.deepseek.com/chat-demo/static/js/main.4fc5bb07.js",
+      "grade": "一手（在线 Demo 实际前端 bundle，477569 字节）",
+      "sha256": "c4c9fb2a55c452bb4b31780df5c2d565c2583312b39a2876ea171755ed112855",
+      "bytes": 477569
+    },
+    "S01_online_demo_css": {
+      "path": "downloads/S01_online_demo_main.css",
+      "url": "https://cdn.deepseek.com/chat-demo/static/css/main.27198ffe.css",
+      "grade": "一手（样式，非断言载体，仅锁存不精读）",
+      "sha256": "c586817f49bf3bfc720f6cc12df6a8010e3f6424e3dfd4081f02e9badae34de7",
+      "bytes": 88834
+    },
+    "S02_fullstack_news": {
+      "path": "downloads/S02_full_stack_news.html",
+      "url": "https://api-docs.deepseek.com/zh-cn/news/news261113/",
+      "grade": "一手（官方发布公告：全家桶应用 API，工具独立调用；能力效果 self-reported 折扣）",
+      "sha256": "7255a36146601ecd69c35acfd04b2067ae6968aefbcb39a656872b0d29c7466a",
+      "bytes": 27520,
+      "text_sha256": "ee4c44bcc1befe0f5a1d2429f3caa9214275faee1082157e60327a86935ca045"
+    },
+    "S03_build_chatbot": {
+      "path": "downloads/S03_build_chatbot.html",
+      "url": "https://api-docs.deepseek.com/zh-cn/guides/build_a_chatbot/",
+      "grade": "一手（官方 API 契约指南：被忽略的参数/内容块/合规要求，核心拦截面来源）",
+      "sha256": "f05387a1c09b10d935c23436520e861c7817df404f89783eee50b6328f3f59d0",
+      "bytes": 52418,
+      "text_sha256": "c0110867c8f4bf0bdd3c500bbbfb3217c3b55d786843ef50867f47f8a6886c75"
+    },
+    "S04_chat_demo_repo": {
+      "path": "downloads/chat-demo-repo",
+      "url": "https://github.com/deepseek-ai/chat-demo",
+      "grade": "一手（官方开源演示客户端源码；commit 8ad7b56e196b87d8a3215dc09476d6d146ad3f0e, 2026-11-20, v0.1.3）",
+      "commit": "8ad7b56e196b87d8a3215dc09476d6d146ad3f0e",
+      "note": "git clone --depth 1；源码读 types.ts / parseEvent.ts / reply.ts / README.zh-CN.md；.git 目录不入证据断言仅用 commit 锁存"
+    },
+    "S05_pricing": {
+      "path": "downloads/S05_pricing.html",
+      "url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing",
+      "grade": "一手（官方定价页：模型价格/工具计费规则/僵尸模型别名；价格是契约声明非实测）",
+      "sha256": "e872c2c8277f4682c5d4db3e5cc5f88f3462b403c30dea7753cdb025b004e43c",
+      "bytes": 29623,
+      "text_sha256": "79669f9736208ca19a31a0053db1997bfb512e61837b58e101e69bd7e7815a9a"
+    }
+  },
+  "kb_baseline": {
+    "path": "kb_baseline.json",
+    "items": 109,
+    "sha256": "c1cdab79dd7b6bfb2c0fef77b1b5c8eda88c07de9b841e633bdba23e5fc09306",
+    "note": "本轮编译前 KB 快照，供 V4 缺口核验，防 §71 第五处自咬（缺口探测词咬到本轮新增 KB）"
+  },
+  "lineage": "S01-S05 全部来自 DeepSeek 官方（api-docs.deepseek.com / cdn.deepseek.com / github.com/deepseek-ai），同一发布主体、同一产品（deepseek-flash 全家桶），按 KB-STRUCT02 同源谱系折为 1 个主体。五来源不是五个独立验证，而是同一契约的五个视角（公告/指南/实现/在线 Demo/价格）。能力效果（如『1:1 复刻 DeepSeek App』『轻松实现复杂对话』）为官方自述，按 KB-RSI07 折扣，不采信为有效性证据。",
+  "anchor_verification": "所有中文判据锚点先在 BeautifulSoup 提取的纯文本 .txt 上核验单行连续（原始 HTML 有 <code> 标签分隔会跨行断裂——§72 教训），12/12 单行命中；英文代码标识符在源码 .ts 上核验。",
+  "timestamp": "2026-11-22T08:40:00+08:00"
+}

@@ -1,0 +1,128 @@
+[
+ {
+  "id": "S01_x_addyosmani",
+  "url": "https://x.com/addyosmani/status/2117512471930167377",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='x.com', port=443): Max retries exceeded with url: /addyosmani/status/2117512471930167377 (Caus"
+ },
+ {
+  "id": "S02_cognitive_surrender",
+  "url": "https://addyosmani.com/blog/cognitive-surrender/",
+  "status": 200,
+  "size": 197384,
+  "sha256": "c73b3bf37f8643b8f2a45d8c80cbe031a6140822e0e7c7d366de44df311d7dbd",
+  "final_url": "https://addyosmani.com/blog/cognitive-surrender/"
+ },
+ {
+  "id": "S03_ssrn_shaw_nave",
+  "url": "https://ssrn.com/abstract_id=6097646",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='ssrn.com', port=443): Max retries exceeded with url: /abstract_id=6097646 (Caused by NewConnec"
+ },
+ {
+  "id": "S04_storey_cognitive_debt",
+  "url": "https://margaretstorey.com/blog/2026/02/09/cognitive-debt/",
+  "status": 200,
+  "size": 14739,
+  "sha256": "4221dd794f615d90cb2aa10f3088e422bc28266ab54b2773db1eb13fe2dfd1fd",
+  "final_url": "https://margaretstorey.com/blog/2026/02/09/cognitive-debt/"
+ },
+ {
+  "id": "S05_comprehension_debt",
+  "url": "https://addyosmani.com/blog/comprehension-debt/",
+  "status": 200,
+  "size": 194235,
+  "sha256": "7be547ad8554b1d3a4e15866fc1b182e1d0dd24a6a13fbb1bb99434e7ad8c892",
+  "final_url": "https://addyosmani.com/blog/comprehension-debt/"
+ },
+ {
+  "id": "S06_claude_code_review",
+  "url": "https://claude.dev/blog/solving-code-review-at-anthropic/",
+  "status": 200,
+  "size": 222500,
+  "sha256": "0d57e8f3c473f5826141255b44ec3cd01f9e189dba6bc4efa469d4c065115398",
+  "final_url": "https://claude.dev/blog/solving-code-review-at-anthropic/"
+ },
+ {
+  "id": "S07_intent_debt",
+  "url": "https://addyosmani.com/blog/intent-debt/",
+  "status": 200,
+  "size": 191585,
+  "sha256": "028ba41be3fbfacce48a104ed1aeb86bc06d0be9da2179826b7c8b97f259bc5f",
+  "final_url": "https://addyosmani.com/blog/intent-debt/"
+ },
+ {
+  "id": "S08_critical_thinking",
+  "url": "https://addyo.substack.com/p/critical-thinking-during-the-age",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='addyo.substack.com', port=443): Max retries exceeded with url: /p/critical-thinking-during-the"
+ },
+ {
+  "id": "S09_field_guide_unknowns",
+  "url": "https://claude.com/blog/a-field-guide-to-claude-fable-finding-your-unknowns",
+  "status": 404,
+  "size": 114031,
+  "sha256": "e11d79059a29ce4c7ded5fb321aad7a730d1012f55f9780861c6e79ee95d5166",
+  "final_url": "https://claude.com/blog/a-field-guide-to-claude-fable-finding-your-unknowns"
+ },
+ {
+  "id": "S10_agentic_verification",
+  "url": "https://addyo.substack.com/p/agentic-verification",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='addyo.substack.com', port=443): Max retries exceeded with url: /p/agentic-verification (Caused"
+ },
+ {
+  "id": "S11_x_bcherny",
+  "url": "https://x.com/bcherny/status/2007179861115511237",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='x.com', port=443): Max retries exceeded with url: /bcherny/status/2007179861115511237 (Caused "
+ },
+ {
+  "id": "S12_80_problem",
+  "url": "https://addyo.substack.com/p/the-80-problem-in-agentic-coding",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='addyo.substack.com', port=443): Max retries exceeded with url: /p/the-80-problem-in-agentic-co"
+ },
+ {
+  "id": "S13_orchestration_tax",
+  "url": "https://addyosmani.com/blog/orchestration-tax/",
+  "status": 200,
+  "size": 190175,
+  "sha256": "7c105bfec7a4d999190d2a09d4f15d1c90af4b02371f405cb9449a3bd7e7468e",
+  "final_url": "https://addyosmani.com/blog/orchestration-tax/"
+ },
+ {
+  "id": "S14_intent_debt_radar",
+  "url": "https://oreillyradar.substack.com/p/the-intent-debt",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='oreillyradar.substack.com', port=443): Max retries exceeded with url: /p/the-intent-debt (Caus"
+ },
+ {
+  "id": "S15_pubmed_clark",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/40389440/",
+  "status": 403,
+  "size": 134,
+  "sha256": "c996c0469ef05ff6fdd1f7cefbc3f7e109bb21969de42fcf591498a828a7ad5f",
+  "final_url": "https://pubmed.ncbi.nlm.nih.gov/40389440/"
+ },
+ {
+  "id": "S16_code_review_responsibility",
+  "url": "https://addyo.substack.com/p/code-review-in-the-age-of-ai",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='addyo.substack.com', port=443): Max retries exceeded with url: /p/code-review-in-the-age-of-ai"
+ },
+ {
+  "id": "S17_anthropic_ai_work",
+  "url": "https://www.anthropic.com/research/how-ai-is-transforming-work-at-anthropic",
+  "status": 200,
+  "size": 293185,
+  "sha256": "169a2598cb5f3f9af8e123aeb3050a96a520795d64ed9f5c691f9082ea019f98",
+  "final_url": "https://www.anthropic.com/research/how-ai-is-transforming-work-at-anthropic"
+ },
+ {
+  "id": "S18_skill_atrophy",
+  "url": "https://addyo.substack.com/p/avoiding-skill-atrophy-in-the-age",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='addyo.substack.com', port=443): Max retries exceeded with url: /p/avoiding-skill-atrophy-in-th"
+ }
+]

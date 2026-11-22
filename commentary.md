@@ -3289,3 +3289,59 @@ V6 守主体错位：capability（能主动发起）≠ authority（被授权发
 task_content：下载三来源、识别同主体谱系、核验授权正当性缺口、编译会拦门禁。process：顶住"综述很重要该造多牙"的诱惑，只认授权正当性一个独立维度编译一牙；Google Research 页抓取失败如实标 unavailable 不硬凑；严格分一手 PDF vs 二手转述；提出框架≠证明有效守界；三处锚点自咬+一处笔误现场修工具不放水。边界：主动 agent 是否真的校准/真的只在授权内行动、各域系统 self-reported 能力、Google Research 元数据页内容均未一手完全可核。
 
 一句话收束：**一篇讲"主动 AI"的五机构综述，最该学的不是 6A 框架多整齐，而是它自己反复划的那条线——值得做的目标不等于被授权的介入，形式上的"你能覆盖"不等于真能覆盖（agent 靠选信息、定默认项就已经把局定了），以及在没人要求时"不介入"这个动作是隐形的、得专门给它留一级静默档。四载体一个主体，1410 被引按同源折一条，提出框架不等于证明有效。本仓 19 道门禁量过证明边界、记忆作用域、服务信号、检索污染，却没一道问过"你说你主动做了——授权边界亮出来了吗"。于是一把新尺子 proactive_authorization 落地：目标冒充授权、无仲裁、形式冒充实控一律降级，沉默与分级同意不披露待核，全自洽也只判声明自洽。三处自咬又留痕——跨行锚点、误用主页句、HTML 断串——尺子会断、会错配，唯一解法还是信规则、改工具、不放水。**
+
+---
+
+## 73. 精研 DeepSeek 全家桶 API（公告 + Chatbot 指南 + 在线 Demo + chat-demo 仓库 + 定价）——编译第 21 道门禁 interface_contract_honesty（110 条，新+1）
+
+用户要求下载并精研五来源：在线 Demo（cdn.deepseek.com/chat-demo）、全家桶应用 API 发布公告（api-docs.deepseek.com/zh-cn/news/news261113/）、构建 Chatbot 指南（guides/build_a_chatbot）、GitHub 仓库 deepseek-ai/chat-demo、定价与 API 指南（quick_start/pricing）。按固定流水线：S01 在线 Demo 是 React SPA 壳（436 字节 HTML）+ JS bundle（477569 字节）+ CSS（锁存，CSS 不精读）；S02 公告 HTML 27KB、S03 指南 HTML 52KB、S05 定价 HTML 29KB，均 BeautifulSoup 提取纯文本 txt 落盘；S04 仓库 git clone --depth 1（commit 8ad7b56，2026-11-20，v0.1.3）。全部 SHA256 锁存（见 manifest.json / downloads/SHA256SUMS.txt）。五来源全部 DeepSeek 官方、同一产品 deepseek-flash、同一发布主体，按 KB-STRUCT02 同源谱系折为 1。导出本轮编译前 KB 基线 110→109 条（sha256 c1cdab79…）供 V4 缺口核验，防 §71 第五处自咬。预注册 c0dd563d… 分析前锁存，门预注册 8f8dbf15… 实现前锁存。
+
+### 73.1 谱系与克制：五个载体，一个主体，一篇契约
+
+S01–S05 全是 DeepSeek 官方对同一套全家桶 API 的五种视角：公告（能力清单）、指南（契约条款）、在线 Demo（前端壳）、仓库（客户端实现）、定价（计费条款）。这不是五个独立验证，是同一契约的五面。能力效果（『1:1 复刻 DeepSeek App』『轻松实现复杂对话』『基础风控』）是官方 self-reported，按 KB-RSI07 折扣，不采信为有效性证据。这一轮最重要的克制：不为『全家桶功能很全/工具很多』造牙——那只是能力清单，按 KB-STRUCT05『提出能力≠真能控制』打折；只为一个可迁移的拦截面造牙。
+
+### 73.2 核心缺口：20 道门禁无一判「客户端声称的控制 vs 服务端实际裁决」
+
+V4 在编译前 KB 基线（109 条）上核验本仓能力矩阵：call_site_integrity 判代码是否接线到调用点、serving_signal 判训练/服务口径、retrieval_grounding 判检索文本是 data 非 instruction、proof_boundary_honesty（§71）判可证明声明范围、proactive_authorization（§72）判介入授权、memory_scope 判记忆作用域、session_continuity 判跨 run 续接——**无一判一个客户端/Agent 声称它控制的参数与能力，是否诚实区分了自己能决定的 vs 服务端悄悄接管/忽略/重新计费的**。五来源一手材料把四个维度全摊开：①传入≠生效（S03『以下参数由服务端决定，请求中传入的值会被忽略』——声明 deepseek_web_search 后 temperature/top_p/seed 失效）；②别名≠实际路由（S05『deepseek-v4-flash 仍可调用，但对应模型已下线』由 V4.1-Flash 提供服务）；③基础风控≠完整合规（S03 平台仅『基础风控』，『内容安全审核、大模型登记、AI 标识等义务』在开发者）；④工具免费≠零成本（S05『工具调用本身不再计费』但『结果拼进上下文按 Token 用量计费』）。拦截面独立、可迁移（任何『客户端声明层 + 服务端裁决层』系统都适用），V5 会拦才入通过。
+
+### 73.3 断言落到代码：第 21 道门禁 interface_contract_honesty
+
+`svagent/interface_contract_honesty.py:check_interface_contract_honesty`：四维 param_effect_authority / alias_route_truth / risk_compliance_ownership / cost_scope_honesty ∈ {yes,no,partial}。R0 字面串→flag；R1 参数被忽略→downgrade（传入≠生效）；R2 别名改路由→downgrade（名义≠实际）；R3 基础风控冒合规→downgrade（主体错位）；R4 工具免费冒零成本→flag（口径误述）；R5 部分→flag；R6 全自洽→ok（只判声明自洽，不承诺服务端真按声明裁决）。8 活体回归对齐门预注册，25 项测试（含 parametrize 展开），门禁+引擎双 AST 自审 PASS，惰性导入登记，遵循 §58 选 A 不接 run_loop。KB 109→110（新增 AUDIT16，加固 STRUCT02 同主体折1/STRUCT05 capability≠control≠compliance/AUDIT03 存在≠执行）。
+
+### 73.4 诚实边界与两处自咬
+
+V6 守四层错位：传入≠决定、名义可用≠实际路由、基础风控≠完整合规、工具免费≠零成本，四者维度独立不得混谈（仓库 types.ts 一手佐证：encrypted_content『客户端无法解密展示』、signature『服务端解密恢复网页上下文』、parseEvent.ts『未识别事件静默丢弃』、README『附件格式以服务端校验为准』——客户端只展示/透传，裁决权在服务端）。V8 守自洽≠有效：本门只判契约声明是否诚实披露控制边界，不承诺服务端行为真按声明执行（KB-R07/AUDIT03）；审读外部 API/客户端，不判本仓。
+
+判据引擎两处自咬（均修工具不放水）：①V2/V3 判定用中文『折为 1』『折扣』做 Compare，触发 brittle 自审（§56/§70/§71 同款）→ 移入 `_A` 字典，Compare 里只留英文符号与布尔；V3 判定条件过严（要求 V3 文本含 KB-RSI07 字样，但该编号在 principles 里）→ 改为 principles 含 KB-RSI07 且 V3 文本含折扣词，符合预注册本意。②`has_cjk` 用 `'\u4e00'`/`'\u9fff'` 字符串字面量做 CJK 边界，被 AST 自审误判为内容字面量 → 改用 `ord()` 边界（本仓纪律）。修后 V1–V8 零漂移、15/15 锚点命中、brittle 空。
+
+task_content：下载五来源、识别同主体谱系、核验契约边界缺口、编译会拦门禁。process：顶住『全家桶功能很全会拦很多』的诱惑，只认接口契约边界一个独立维度编译一牙；五来源同主体如实折 1；严格分一手契约事实 vs self-reported 效果；提出能力≠真能控制守界；两处锚点/逻辑自咬现场修工具不放水。边界：服务端是否真按声明裁决、加密内容是否真不可解密、安全风控是否真有效、计费是否真按声明执行，均未一手可核。
+
+一句话收束：**DeepSeek 把这套装进 API 的东西，最有意思的不是『全家桶功能很全』，而是它自己的文档反复提醒你的那句——你传进去的 temperature/seed，在开了搜索之后被服务端悄悄忽略了；你用的旧模型名还能调，但后面已经是另一个模型了；你开了 safety_check，平台说这只是基础风控，内容安全、大模型登记、AI 标识的义务还在你自己；你说搜索工具免费了，它补一句结果 token 还在计费。本仓 20 道门禁量过调用接线、训练口径、检索污染、证明范围、介入授权、记忆作用域，却没一道问过『你说你控制着这些参数与能力——哪些真是你说了算，哪些是服务端替你决定了却没告诉你』。于是一把新尺子 interface_contract_honesty 落地：参数被忽略、别名改路由、基础风控冒合规一律降级，工具免费冒零成本待核，全自洽也只判声明自洽。五个载体一个主体折一条，能力效果 self-reported 不采信，提出能力不等于真能控制。两处自咬又留痕——中文 Compare、CJK 边界字面量——尺子会断会误报，唯一解法还是信规则、改工具、不放水。**
+
+---
+
+## 74. 精研认知投降谱系 18 来源（门首篇 X + 认知/理解/意图债务 + 编排税 + 验证 + 代码评审 + 监督悖论）——编译第 22 道门禁 supervision_viability（111 条，新+1）
+
+用户给出 22 链接（去重 18 来源），以 X@addyosmani(status 2117512471930167377) 为门首篇，涵盖认知投降、认知债务、理解债务、意图债务、编排税、agentic verification、Claude Code 代码评审、Andy Clark 延伸心智、Anthropic 内部 AI 使用研究等。按固定流水线并发下载：7 一手成功（认知投降/Storey 认知债/理解债务/Claude Code 评审/意图债务/编排税/Anthropic 内部研究）+ PubMed 用 NCBI 官方 E-utilities API 补救（Andy Clark Nature Communications 2025）；6+ 来源不可达（门首篇 X、5 篇 Substack、SSRN direct、claude.com 404）——根因是 DNS 被劫持到 Meta IP 段（x.com→157.240.x/substack→69.63.x，IPv6→2a03:2880），非反爬，curl/WebFetch/IPv4 强制均失败，如实标 unavailable 不硬凑。SSRN 研究 abstract 经 Zotero/managementcraft/launchpad 二手镜像获取；Substack agentic-verification 经 thekb.eu 结构化摘要 + wqu.guru 中文详述获取，均明确标二手折扣。全部 SHA256 锁存（manifest.json/ALL_SHA256.txt，28 文件）。导出编译前 KB 基线 110 条（sha256 35341afa…）供 V4 缺口核验。预注册 dc52aa6c… 分析前锁存，门预注册 791f5407… 实现前锁存。
+
+### 74.1 谱系与克制：一个作者家族 + 几篇独立研究
+
+Osmani 观点谱系（门首篇 X/S02 认知投降/S05 理解债务/S06 Claude Code 评审(Osmani 合著)/S07 意图债务/S10 agentic-verification/S13 编排税）是同一作者、相互引用、单一论点家族——cognitive surrender→comprehension debt→intent debt→orchestration tax→agentic verification 一环扣一环，按 KB-STRUCT02 折为 1 主体，不是多源独立验证。相对独立的一手来源：S03 Shaw-Nave SSRN（Wharton，preprint 未同行评审）、S04 Storey（学界观点）、S15 Clark（Nature Comms 2025 哲学观点文）、S17 Anthropic 内部研究（官方 survey+53 深访，自陈 privileged position）。证据等级必须分清：一手实验数字（Shaw-Nave N=1372/+25-15pp/h=0.81；Anthropic RCT 52 人 17% lower；Claude Code 2500→30000 changes/day、revert 降 40%）vs 博客观点无数据（thekb.eu 明标 'without figures or studies'）vs preprint 未评审（etcjournal 评 Shaw-Nave 'productive but incomplete'，6 认知路径只测 2）vs self-reported survey。术语 cognitive debt 跨 Storey/MIT/Addy 共用，须区分谁提出谁转述。这一轮最重要的克制：不为一个"认知很重要"的宏大叙事造牙，只为可迁移、会拦的独立拦截面造一牙。
+
+### 74.2 核心缺口：20 道门禁无一判「评审者的独立判断能力前提」
+
+V4 在编译前 KB 基线（110 条）上核验：reviewer_evaluation（§60）判单次评审漏斗是否被身份/权威污染（过程保真）、evaluation_reliability 判 judge 独立性与复现完整性、serving_signal 判训练/服务口径、call_site_integrity 判调用接线、proof_boundary_honesty 判证明范围、proactive_authorization 判介入授权、interface_contract_honesty（§73）判客户端控制边界——**无一判一个声称"有人类评审所以可靠"的流程，是否诚实披露评审者仍具备独立判断能力这一前提**。五来源一手材料把四个能力前提全摊开：①独立观点形成（cognitive surrender：AI 输出变成你的输出、无独立观点可比，AI 错时 73% 接受错误答案、borrowed-confidence 错误后信心反升）；②评审能力未侵蚀（Anthropic skill-formation RCT 52 工程师，生成式使用 comprehension 17% 更低 50% vs 67%，概念探究不掉）；③监督未自我消解（Anthropic 一手原话 'paradox of supervision'——监督需编码技能，而技能正因 AI 使用退化；>50% 员工 fully delegate 仅 0-20%）；④表面≠系统正确（'did a human read the code is an imprecise proxy'、surface correctness not systemic、Claude Code 官方承认 'we don't yet have circuit breakers that tighten approval when revert/incident 上升'）。拦截面独立可迁移（任何"人评审 AI 产出"的流程都适用），与 reviewer_evaluation 的过程保真属不同对象层级（能力存在性 vs 单次过程污染），V5 会拦才入通过。
+
+### 74.3 断言落到代码：第 22 道门禁 supervision_viability
+
+`svagent/supervision_viability.py:check_supervision_viability`：四维 independent_view_formed / review_capability_preserved / oversight_not_self_undermining / surface_vs_systemic ∈ {yes,no,partial}。R0 字面串→flag；R1 无独立观点→downgrade（认知投降）；R2 能力侵蚀→downgrade；R3 监督悖论自我消解→downgrade；R4 表面冒系统→flag；R5 部分→flag；R6 全自洽→ok（只判能力前提自洽，不承诺评审真有效）。8 活体回归对齐门预注册，25 项测试（含 parametrize 展开），门禁+引擎双 AST 自审 PASS，惰性导入登记，遵循 §58 选 A 不接 run_loop。KB 110→111（新增 AUDIT17，加固 STRUCT02 单一作者谱系折1/STRUCT05 委托≠投降且生产≠评审能力/AUDIT03 有评审环节≠评审者仍有独立判断）。
+
+### 74.4 诚实边界与两处自咬
+
+V6 守四层能力前提错位：独立观点/能力保持/监督可行/表面vs系统，四者维度独立（S06 Claude Code 官方坦承评审第二职责"共享理解"无正式流程——'we don't have a formal process for this'、'nobody keeps a complete mental model'；靠 ask Claude explainer + 开放 Slack 频道弥补，这恰是 comprehension debt 的官方承认）。V8 守自洽≠有效：本门只判能力前提是否诚实披露，不承诺评审真有效（KB-R07/AUDIT03）；审读外部流程，不判本仓。
+
+判据引擎两处自咬（均修工具不放水）：①引擎第 111/121 行 Compare 用中文『折扣』字面量（我明明有 `_A["discount_word"]` 却没用）→ 移入 `_A` 引用；②锚点 `circuit_breaker` 原文首字母大写 `We don't yet have...` 我写成小写、S03 二手镜像 accepted_wrong 用不同措辞 → 按原文大写 + S03 改用镜像中实际存在的 `Cohen`/`cognitive surrender` 探测。修后 V1–V8 零漂移、14/14 锚点命中、brittle 空。
+
+task_content：下载18来源(去重22链接)、识别 DNS 劫持不可达来源、区分一手研究vs博客观点vs二手转述、核验监督可行性缺口、编译会拦门禁。process：顶住"认知债务宏大叙事该造多牙"的诱惑，只认监督可行性一个独立维度编译一牙；6+来源不可达如实标 unavailable 不硬凑；SSRN abstract/Substack 二手转述双重折扣；术语跨来源区分提出vs转述；两处锚点自咬现场修工具不放水。边界：评审者能力是否真被侵蚀、流程是否真有效、AI 错时接受率是否在真实工程复现，均未一手可核；门首篇 X 内容未一手核。
+
+一句话收束：**这 18 篇里最该带走的不是"认知债务很可怕"，而是 Anthropic 官方那句冷冰冰的悖论——用 AI 需要你有能力监督它，而监督所需的编码能力，正被你用它这件事一点点磨掉。Addy 把这条线拆成认知投降（AI 输出变成你的输出，你连独立观点都没形成就去 review）、理解债务（代码涨得比团队脑里的系统理论快）、意图债务（why 只能来自人，agent 只会编一个听着合理的理由）、编排税（你是那个不可并行的 GIL，20 个 agent 只会把判断队列堆深）。还有最容易被忽略的一层：把'有人读过代码/测试全绿/表面正确'当成'系统正确'——Claude Code 自己承认连 revert 上升时自动收紧审批的断路器都还没有。本仓 20 道门禁量过单次评审漏斗、judge 独立性、服务口径、证明范围、接口控制，却没一道问过'你说有人评审——可评审者还有没有独立判断的能力？'于是一把新尺子 supervision_viability 落地：无独立观点、能力被侵蚀、监督自我消解一律降级，表面冒系统待核，全自洽也只判能力前提声明自洽。Osmani 一个作者家族折一条，博客无数据/preprint未评审/survey自陈各打各折，6+来源 DNS 劫持不可达如实标 unavailable。两处自咬又留痕——中文 Compare、锚点大小写——尺子会断会错配，唯一解法还是信规则、改工具、不放水。**

@@ -1,0 +1,57 @@
+Thinking—Fast, Slow, and Artificial: How AI Is Reshaping Human Reasoning and the Rise of Cognitive Surrender / Management Craft
+What it says
+›
+The question
+As people increasingly consult AI mid-decision, what happens to the accuracy of their judgment — and to their confidence in it?
+The method
+Three preregistered experiments using an adapted Cognitive Reflection Test (N = 1,372 participants, 9,593 trials), where participants could choose whether to consult an AI assistant on each trial, and the AI’s accuracy was secretly randomized by the researchers
+[
+1
+]
+.
+The findings
+Participants chose to consult the AI on the majority of trials (over 50%)
+[
+1
+]
+. Relative to a no-AI baseline, accuracy rose 25 percentage points when the AI was right and fell 15 percentage points when the AI was wrong (Cohen’s h = 0.81) — what the authors call “cognitive surrender,” ceding judgment to the AI’s answer
+[
+1
+]
+. Access to the AI increased confidence by 11.7 percentage points, and that confidence didn’t reliably decline as the AI made more errors
+[
+1
+]
+. Time pressure and per-item accuracy incentives shifted people’s overall performance but didn’t remove the pattern: a correct AI cushioned the cost of time pressure and amplified the benefit of incentives, while a wrong AI reliably dragged accuracy down regardless
+[
+1
+]
+. People who trusted AI more, and who scored lower on need-for-cognition and fluid intelligence, surrendered to it more
+[
+1
+]
+.
+The limits
+This is a preprint (posted 2026, not yet through peer review) run in controlled experimental environments, which the authors themselves note may limit generalizability to real-world settings
+[
+1
+]
+. Management Craft’s description of “cognitive surrender” as covering template or job-description handoffs, not just AI, is Management Craft’s own extension of the concept, not a claim Shaw and Nave test themselves.
+When it matters
+›
+When you hand a role definition or hiring rubric to an AI to draft: don’t ship its output unedited. This research shows accuracy gains from consulting an AI evaporate into losses the moment it’s wrong, and people’s confidence doesn’t reliably drop to warn them
+[
+1
+]
+— reading and editing the draft in your own words is the check that catches what your gut won’t.
+When you’re using AI to check a completed scorecard or rubric: keep it to arithmetic, not judgment. Ask it to add up written scores, not to decide who’s right — the paper’s finding is that surrendering judgment (not just arithmetic) to a wrong AI answer costs real accuracy while confidence climbs anyway
+[
+1
+]
+.
+References
+›
+1
+Steven D. Shaw and Gideon Nave, “Thinking—Fast, Slow, and Artificial: How AI Is Reshaping Human Reasoning and the Rise of Cognitive Surrender,” SSRN working paper, The Wharton School, University of Pennsylvania,
+2026,
+https://ssrn.com/abstract=6097646

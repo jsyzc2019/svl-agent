@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§73 DeepSeek 全家桶 API 精研报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1040px;margin:32px auto;padding:0 20px;color:#222;line-height:1.7}
+h1{border-bottom:3px solid #c33;padding-bottom:8px} h2{color:#a22;margin-top:32px;border-left:4px solid #c33;padding-left:10px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px} th,td{border:1px solid #ddd;padding:7px 10px;text-align:left;vertical-align:top} th{background:#fdf2f2}
+.pass{color:#0a7;font-weight:bold} .fail{color:#c22;font-weight:bold}
+.note{background:#fff5f5;border-left:4px solid #c33;padding:10px 14px;margin:14px 0}
+code{background:#f4f4f4;padding:2px 5px;border-radius:3px;font-size:12px} .dim{color:#555}
+</style></head><body>
+<h1>§73 DeepSeek 全家桶应用 API 精研报告</h1>
+<p class="dim">生成 2026-11-22T08:41:44+08:00　|　预注册 <code>c0dd563d394ab36b</code>　|　门预注册 <code>8f8dbf15ae9b0d6f</code>　|　零漂移 <b>True</b>　|　KB 基线 <code>c1cdab79dd7b6bfb</code>　|　全量 540→565 passed</p>
+
+<h2>一、抓取与证据分级</h2>
+<p>五来源全部 DeepSeek 官方、同一产品 <code>deepseek-flash</code> 全家桶：在线 Demo（React SPA 壳 436B + JS bundle 477KB + CSS）、全家桶发布公告、构建 Chatbot 指南、GitHub 仓库 <code>deepseek-ai/chat-demo</code>（commit <code>8ad7b56</code>, v0.1.3）、模型 &amp; 价格页。HTML 经 BeautifulSoup 提取纯文本落盘后核验锚点（原始 HTML 有 <code>&lt;code&gt;</code> 标签分隔会跨行断裂）。</p>
+<table><tr><th>载体</th><th>等级</th><th>SHA256 / commit</th></tr><tr><td>S01_online_demo_shell</td><td>一手（在线 Demo 入口，React SPA 壳，436 字节，真实内容在 J</td><td><code>83752154e46a5110</code></td></tr><tr><td>S01_online_demo_js</td><td>一手（在线 Demo 实际前端 bundle，477569 字节）</td><td><code>c4c9fb2a55c452bb</code></td></tr><tr><td>S01_online_demo_css</td><td>一手（样式，非断言载体，仅锁存不精读）</td><td><code>c586817f49bf3bfc</code></td></tr><tr><td>S02_fullstack_news</td><td>一手（官方发布公告：全家桶应用 API，工具独立调用；能力效果 self-rep</td><td><code>7255a36146601ecd</code></td></tr><tr><td>S03_build_chatbot</td><td>一手（官方 API 契约指南：被忽略的参数/内容块/合规要求，核心拦截面来源）</td><td><code>f05387a1c09b10d9</code></td></tr><tr><td>S04_chat_demo_repo</td><td>一手（官方开源演示客户端源码；commit 8ad7b56e196b87d8a3</td><td><code>8ad7b56e196b87d8</code></td></tr><tr><td>S05_pricing</td><td>一手（官方定价页：模型价格/工具计费规则/僵尸模型别名；价格是契约声明非实测）</td><td><code>e872c2c8277f4682</code></td></tr></table>
+<p class="dim">谱系：五来源是同一契约的五视角（公告/指南/实现/在线 Demo/价格），按 KB-STRUCT02 折为 1 主体，非五个独立验证；能力效果 self-reported 按 KB-RSI07 折扣。</p>
+
+<h2>二、核心判断</h2>
+<div class="note">
+<b>不是"全家桶功能很全"，而是一个可迁移的独立拦截面。</b> 官方文档反复提醒的事实：<b>你传进去的 temperature/seed，在开了搜索后被服务端悄悄忽略；旧模型名还能调但后端已换；开了 safety_check 只是"基础风控"，内容安全/大模型登记/AI 标识义务仍在开发者；搜索工具本身免费了但结果 token 仍在计费。</b> 这四层是"客户端声称的控制 vs 服务端实际裁决"的错位。本仓 20 道门禁判了调用接线、训练口径、检索污染、证明范围、介入授权、记忆作用域……却无一判这个维度。
+</div>
+
+<h2>三、判据裁决（V1–V8 零漂移，15/15 一手锚点命中）</h2>
+<table><tr><th>判据</th><th>裁决</th><th>要点</th></tr><tr><td><b>V1</b></td><td><span class="pass">PASS</span></td><td>所有锚点在 BeautifulSoup 提取的纯文本单行命中；原始 HTML 有 code 标签分隔，弃用 HTML 直接匹配（§72 教训）。</td></tr><tr><td><b>V2</b></td><td><span class="pass">PASS</span></td><td>S01-S05 全部 DeepSeek 官方，5 来源同一产品 deepseek-flash，折为 1 主体，非 5 独立验证。</td></tr><tr><td><b>V3</b></td><td><span class="pass">PASS</span></td><td>官方『1:1 复刻/轻松实现/基础风控』效果声称折扣；只采信其对契约边界的事实陈述（参数被忽略、块无法解密）。</td></tr><tr><td><b>V4</b></td><td><span class="pass">PASS</span></td><td>编译前 109 条 KB 与现有 20 道门禁无一判『客户端声称控制 vs 服务端裁决』。缺口探测只用本轮编译前基线（c1cdab79…），防 §71 第五处自咬。</td></tr><tr><td><b>V5</b></td><td><span class="pass">PASS</span></td><td>非 DeepSeek 特例；拦截维度=参数/能力控制权的诚实归属，会拦。</td></tr><tr><td><b>V6</b></td><td><span class="pass">PASS</span></td><td>四层维度独立：参数生效权/路由归属权/合规责任主体/计费口径，不得混为一谈。</td></tr><tr><td><b>V7</b></td><td><span class="pass">PASS</span></td><td>{"engine_ast_brittle": [], "strike": "中文锚点集中 _A 字典；Compare 里只有英文符号与布尔；门禁模块写后须复跑自审。"}</td></tr><tr><td><b>V8</b></td><td><span class="pass">PASS</span></td><td>{"layer1_一手可核": "官方契约文本与源码事实：S03 明列被忽略参数清单（temperature/top_p/seed 等由服务端决定）、客户端只展示内容块并原样回传、safety_check=high 仅基础风控且合规义务在开发者；S05 明列服务端搜索工具本身不计费但结果 token 计费、deepseek-v4-flash 别名可调用但后端</td></tr></table>
+<h3>V6 四层错位（维度独立）</h3>
+<table><tr><th>层次</th><th>命中</th></tr><tr><td>L1_传入≠决定</td><td>✓</td></tr><tr><td>L2_名义可用≠实际路由</td><td>✓</td></tr><tr><td>L3_基础风控≠完整合规</td><td>✓</td></tr><tr><td>L4_工具免费≠零成本</td><td>✓</td></tr></table>
+
+<h2>四、断言落到代码</h2>
+<p>第 21 道门禁 <code>svagent/interface_contract_honesty.py:check_interface_contract_honesty</code>：四维语义枚举 + R0–R6 短路规则（参数忽略/别名改路由/风控冒合规 → downgrade；免费冒零成本/部分/字面串 → flag；全自洽 → ok），惰性登记、不接 run_loop（§58 选 A）。8 活体回归 + 25 项测试 + 门禁/引擎双 AST 自审全过。KB 109→<b>110</b>（新增 AUDIT16，加固 STRUCT02 / STRUCT05 / AUDIT03）。</p>
+
+<h2>五、两处判据自咬（修工具不放水）</h2>
+<ol>
+<li><b>V2/V3 中文 Compare</b>：判定用中文『折为 1』『折扣』做 <code>in</code> 比较，触发 brittle 自审（§56/§70/§71 同款）→ 移入 <code>_A</code> 字典，Compare 里只留英文符号与布尔；V3 判定条件过严（要求 V3 文本含 KB-RSI07 编号，实际在 principles）→ 改为 principles 含编号且 V3 文本含折扣词。</li>
+<li><b>has_cjk 边界字面量</b>：<code>'\u4e00'/'\u9fff'</code> 字符串字面量被 AST 自审误判为内容字面量 → 改用 <code>ord()</code> 边界（本仓纪律）。</li>
+</ol>
+
+<h2>六、三层诚实结论</h2>
+<p><b>一手可核：</b>官方契约文本与源码事实：S03 明列被忽略参数清单（temperature/top_p/seed 等由服务端决定）、客户端只展示内容块并原样回传、safety_check=high 仅基础风控且合规义务在开发者；S05 明列服务端搜索工具本身不计费但结果 token 计费、deepseek-v4-flash 别名可调用但后端已下线；仓库 types.ts 明注 encrypted_content 客户端无法解密、signature 由服务端解密恢复上下文、parseEvent.ts 未识别事件静默丢弃。</p>
+<p><b>scoped 与折扣：</b>五来源同属 DeepSeek 一个主体（KB-STRUCT02 折 1），非独立验证；『1:1 复刻 App/轻松实现复杂对话/基础风控』为官方 self-reported（KB-RSI07），不采信为效果证据；价格是契约声明非实测；提出全家桶能力（capability）≠ 客户端真能控制（control）。</p>
+<p><b>不可判定边界：</b>客户端是否真的只依赖服务端裁决、加密内容是否真不可解密、安全风控是否真的有效、计费是否真按声明执行——本门只判『契约声明是否诚实披露控制边界』，不承诺系统行为有效（KB-R07/KB-AUDIT03 存在≠执行）；本门审读外部 API 契约与客户端，不判本仓。</p>
+<p class="dim">推送节奏：按用户"两批次一推"，本批 §73 先本地完成、不单独推送，等待下一批后合并推送。§73+§74 已合并为本地提交 <code>7b6f631</code>（65 文件）。<b>远端推送失败</b>：当前环境 GitHub 凭据不可用（could not read Username）+ TLS 连接被中断；本地提交完好，凭据与网络恢复后 <code>git push origin HEAD</code> 即可，无需重做。</p>
+</body></html>

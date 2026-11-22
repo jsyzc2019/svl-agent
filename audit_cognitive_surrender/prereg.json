@@ -1,0 +1,31 @@
+{
+  "section": "§74 认知投降谱系：监督可行性（supervision viability）——评审独立性能力前提",
+  "locked_at": "2026-11-22T09:08:00+08:00",
+  "object": "18 来源（门首篇 X 不可达；7 一手 + 4 二手转述 + 6 unavailable）。判据对象是『一个声称有人类评审/验证的流程，是否披露了评审者仍具备独立判断能力这一前提』——审读外部工程流程/系统声称，不判本仓。",
+  "principles": [
+    "KB-STRUCT01 判据适配对象类型（本轮对象=工程博客观点+一手实证+官方实践+二手转述）",
+    "KB-STRUCT02 同源谱系打折（Osmani 谱系 8+ 来源折为 1；一手研究各自独立按等级折扣）",
+    "KB-STRUCT05 主体错位（委托≠投降；生产答案的能力≠评审答案的能力；表面正确≠系统正确）",
+    "KB-RSI07 self-reported 折扣（博客观点无数据/Anthropic survey 自陈/SSRN preprint 未同行评审，均折扣）",
+    "KB-META01 会拦才入（只为一个独立拦截面造一牙）",
+    "KB-AUDIT03 存在≠执行（有评审环节≠评审者仍有独立判断能力）",
+    "KB-R07 区分自洽与有效（只判能力前提是否诚实披露，不承诺评审真有效）",
+    "KB-T05 验证成本<生成成本（判据只读纯文本单行锚点，可复现）",
+    "§58 决策A（新门禁惰性登记，不接 run_loop）"
+  ],
+  "V": {
+    "V1_一手锚点": "关键断言锚点须在可核来源纯文本单行连续命中（一手博客/Anthropic 官方/二手 abstract），记录文件；unavailable 来源不据此下断言。",
+    "V2_同主体折扣": "Osmani 观点谱系（S01/S02/S05/S06/S07/S10/S13 等）须显式折为 1 主体；一手研究(S03 Shaw-Nave/S04 Storey/S15 Clark/S17 Anthropic)各自独立但按证据等级折扣；术语跨来源共用须区分提出者vs转述者。",
+    "V3_self_reported折扣": "博客观点(thekb.eu 明标 without figures or studies)、Anthropic survey(自陈 privileged position)、SSRN preprint(未同行评审+二手 abstract)须折扣；只采信一手事实描述(实验数字、官方实践数字、paradox of supervision 原话)。",
+    "V4_缺口确认": "须在编译前 KB 基线(110 条, 35341afa…)上核验：现有 20 道门禁无一判『评审/验证者的独立判断能力前提是否被工具使用侵蚀/是否诚实披露』。须论证与 reviewer_evaluation(§60 评审漏斗保真/单次过程污染)的区别——本维判的是能力前提的存在性，非单次过程保真。缺口探测只用编译前基线，防 §71 第五处自咬。",
+    "V5_会拦才入": "拦截面须独立可迁移（任何『人评审 AI 产出』的流程都适用），非某博客特例；给出反例：一个团队宣称『我们有人类评审所以质量有保障』，但评审者已因长期依赖 AI 丧失独立判断、表面正确即放行——本门会拦。",
+    "V6_主体错位": "须区分四层能力前提，不得混谈：①独立观点形成(construct an expectation before reading / independent view to compare)；②能力未侵蚀(skill formation：生成式使用 17% 更低，概念探究不掉；paradox of supervision)；③监督未自我消解(监督所需技能正被 AI 退化；survey>50% 仅委托 0-20%)；④表面≠系统正确(surface correctness not systemic；did a human read code 是 imprecise proxy)。",
+    "V7_AST无brittle": "判据引擎与门禁模块须过 AST 自审：Compare 节点不得含中文字面量(集中 _A 字典，ord() 判 CJK 边界)；英文锚点含弯引号须按原文。",
+    "V8_自洽不等于有效": "三层诚实结论须齐：一手可核=实验数字/官方实践数字/paradox 原话；scoped折扣=Osmani 谱系折1/博客无数据/preprint未评审/survey自陈；不可判定=评审者实际能力是否真被侵蚀、流程是否真有效——本门只判『能力前提是否诚实披露』，不承诺评审真有效；审读外部流程不判本仓。"
+  },
+  "expected_verdicts": {
+    "V1": "PASS", "V2": "PASS", "V3": "PASS", "V4": "PASS",
+    "V5": "PASS", "V6": "PASS", "V7": "PASS", "V8": "PASS"
+  },
+  "claim": "识别出一个独立于现有 20 道门禁的拦截面：监督可行性（supervision viability）——一个声称有人类评审/验证的流程，是否诚实披露评审者仍具备独立判断能力这一前提（独立观点/能力未侵蚀/监督未自我消解/表面≠系统正确）。编译为第 22 道门禁 supervision_viability，遵循会拦才入、§58 选 A 不接 run_loop。"
+}

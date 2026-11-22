@@ -1,0 +1,32 @@
+{
+  "section": "§74 第22道门禁 supervision_viability 实现前预注册",
+  "locked_at": "2026-11-22T09:15:00+08:00",
+  "gate_name": "check_supervision_viability",
+  "module": "svagent/supervision_viability.py",
+  "purpose": "审读一个声称『有人类评审/验证』的流程，是否诚实披露评审者仍具备独立判断能力这一前提。只判能力前提披露诚实性，不承诺评审真有效。",
+  "dimensions": {
+    "independent_view_formed": "独立观点形成：评审者是否在看产出前形成自己的预期/独立观点(construct an expectation before reading / independent view to compare)；有评审环节但无独立观点=投降前提",
+    "review_capability_preserved": "评审能力未侵蚀：生成式使用是否未削弱评审/理解能力(skill formation RCT 17% lower vs 概念探究不掉；paradox of supervision)；能力被它要评审的工具侵蚀=自我消解",
+    "oversight_not_self_undermining": "监督未自我消解：监督所需技能是否被 AI 使用退化到无法监督(paradox of supervision 原话；survey>50% 仅委托0-20%)；监督能力被侵蚀仍声称可靠=元层矛盾",
+    "surface_vs_systemic": "表面≠系统正确：是否用『有人读过代码/测试全绿/表面正确』冒充系统正确(did a human read code 是 imprecise proxy；surface correctness not systemic correctness；无 revert/incident 断路器)"
+  },
+  "enum": ["yes", "no", "partial"],
+  "rules": {
+    "R0": "任一维非 yes/no/partial 枚举（含字面串）→ flag（避 §56 brittle 根因）",
+    "R1": "independent_view_formed=no → downgrade（有评审无独立观点认知投降）",
+    "R2": "review_capability_preserved=no → downgrade（评审能力被工具侵蚀）",
+    "R3": "oversight_not_self_undermining=no → downgrade（监督悖论自我消解）",
+    "R4": "surface_vs_systemic=no → flag（表面正确冒充系统正确）",
+    "R5": "任一维 partial → flag（覆盖不全，待核）",
+    "R6": "全 yes → ok（只判能力前提自洽，不承诺评审真有效）"
+  },
+  "live_regression_count": 8,
+  "ast_rule": "Compare 节点不得含中文字面量；中文锚点集中 _A 字典，用 ord() 判 CJK 边界（§56/§70/§71/§73/§74 纪律）",
+  "wiring": "惰性登记于 svagent/__init__.py，遵循 §58 决策A 不接 run_loop",
+  "boundary": "本门审读外部工程流程/系统声称，不判本仓；与 reviewer_evaluation(§60 单次评审漏斗保真/过程污染) 对象层级不同——本门判评审者独立判断能力前提(能力存在性)。与 evaluation_reliability(judge独立性)/serving_signal(训练服务口径) 拦截面独立。",
+  "three_layer_honesty": {
+    "layer1": "实验/实践一手数字与原话(Shaw-Nave RCT/Anthropic RCT/Claude Code 实践数字/paradox 原话)",
+    "layer2": "Osmani 谱系折1；博客无数据/preprint未评审/survey自陈折扣；6+来源 unavailable",
+    "layer3": "评审者能力是否真被侵蚀不可判定；本门只判能力前提是否诚实披露"
+  }
+}

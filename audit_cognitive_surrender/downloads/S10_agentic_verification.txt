@@ -1,0 +1,17 @@
+Agentic Verification: Self-Verifying Agent Testing Loops — thekb.eu (二手结构化摘要, 源 addyo.substack.com/p/agentic-verification, Addy Osmani, 2026-10-14, ~1900 words)
+Source note: thekb.eu marks "The argument rests on the author's own experience and unnamed teams' feedback, without figures or studies."
+
+Summary: Giving an agent a way to verify its own work strongly improves output quality. What made "good code" expensive (tests, benchmarks, specs, real e2e) can be delegated. Human work shifts from line-by-line review to building loops the agent runs itself; taste capitalizes (every error becomes config/hook/test). Human owns what ships but reviews evidence rather than diffs.
+
+Thesis: verification is the bottleneck, not writing code. An agent that cannot check itself guesses; correction requires slow human round trip. Tests become how the agent perceives the world and knows it is done.
+
+Three test families:
+1. E2E tests: oracle of choice, describe what user does, hard to fool (unlike mock-based unit test which can share agent's own misunderstanding). Must point to failing step (screenshots, traces). Slow and flaky, keep few.
+2. Property-based tests: state what must never happen. tools fast-check/Hypothesis/proptest generate thousands of inputs, shrink to minimal case. Properties: round-trips, invariants, idempotence, equivalence to simple version. "Example tests say what should happen; properties say what must not."
+3. Differential tests: for rewrite, old system = oracle; identical/random/replayed-traffic inputs; compare output, normalize insignificant; justified list of approved changes until old system retired.
+
+Healthy loop: sub-second core loop, seeded randomness, frozen clock, controlled network; flaky tests pulled from suite; short output; E2E and diff tests before integration. "An agent facing slow or flaky tests learns to retry rather than fix."
+
+Adjacent habits: restate success criteria before coding; reviewer agent in fresh context; inspect generated tests. Conclusion: write the check before the code.
+
+Attributed claims: "the bottleneck of coding agents is verification, not writing code"; "a much better feedback loop is worth more than a slightly better model".

@@ -1,0 +1,125 @@
+{
+  "section": "§74 认知投降/认知债务/理解债务/意图债务/编排税/验证/代码评审 18 来源——编译第 22 道门禁 supervision_viability（监督可行性：评审独立性能力前提）",
+  "subject": "门首篇 X@addyosmani(status 2117512471930167377) + Addy Osmani 系列博客(cognitive-surrender/comprehension-debt/intent-debt/orchestration-tax) + Shaw & Nave SSRN 工作论文 + Margaret-Anne Storey 认知债博客 + Claude Code 团队代码评审实践 + Andy Clark Nature Communications 论文 + Anthropic 内部 AI 使用研究 + 若干 Substack(agentic-verification/critical-thinking/80-problem/skill-atrophy/code-review-responsibility)",
+  "object_type": "博客观点文(一手作者自述,无数据) + 一手实证(preprint/RCT/survey) + 官方工程实践(有数字) + 二手转述(thekb.eu/vuink/managementcraft/zotero)",
+  "sources": {
+    "S01_x_gatepost": {
+      "url": "https://x.com/addyosmani/status/2117512471930167377",
+      "grade": "unavailable",
+      "note": "门首篇。X 域名 DNS 被劫持到 Meta IPv6 段(2a03:2880)/IPv4(157.240.x)，当前沙箱不可达；curl/WebFetch/IPv4 强制均失败。不据此下断言。主题由同作者 S02 cognitive-surrender 一手博客覆盖。"
+    },
+    "S02_cognitive_surrender": {
+      "path": "downloads/S02_cognitive_surrender.html",
+      "url": "https://addyosmani.com/blog/cognitive-surrender/",
+      "grade": "一手（作者博客，观点+转述 Shaw/Nave 实验；无自身数据）",
+      "sha256": "c73b3bf37f86",
+      "text_lines": 165
+    },
+    "S03_ssrn_shaw_nave": {
+      "url": "https://ssrn.com/abstract_id=6097646",
+      "grade": "二手转述一手 abstract（SSRN 域名不可达；经 Zotero/managementcraft/launchpadlibrary 抓到完整 abstract；preprint 未同行评审）",
+      "mirror_files": ["downloads/S03_ssrn_abstract_via_zotero.html", "downloads/S03_ssrn_via_managementcraft.html", "downloads/S03_ssrn_via_launchpad.html"],
+      "note": "Shaw & Nave 'Thinking—Fast, Slow, and Artificial' Wharton working paper, DOI 10.2139/ssrn.6097646, 2026-01-11。三预注册实验 N=1372/9593 trials, hidden-seed 随机化 AI 正确性, +25/-15pp, Cohen's h=0.81, 错误后 confidence 仍上升。Preprint 未经同行评审；etcjournal 评 productive but incomplete(6认知路径只测2条/任务类型窄)。abstract 经二手镜像获取，双重折扣。"
+    },
+    "S04_storey_cognitive_debt": {
+      "path": "downloads/S04_storey_cognitive_debt.html",
+      "url": "https://margaretstorey.com/blog/2026/02/09/cognitive-debt/",
+      "grade": "一手（作者博客，学界观点+Naur 'program is a theory' 谱系；无数据）",
+      "sha256": "4221dd794f61",
+      "text_lines": 55
+    },
+    "S05_comprehension_debt": {
+      "path": "downloads/S05_comprehension_debt.html",
+      "url": "https://addyosmani.com/blog/comprehension-debt/",
+      "grade": "一手（作者博客；转述 Anthropic skill-formation RCT 52 人 17% lower；无自身数据）",
+      "sha256": "7be547ad8554",
+      "text_lines": 80
+    },
+    "S06_claude_code_review": {
+      "path": "downloads/S06_claude_code_review.html",
+      "url": "https://claude.dev/blog/solving-code-review-at-anthropic/",
+      "grade": "一手（Anthropic 官方工程博客，作者 Addy Osmani/Morgan Lunt/Qing Wang；有数字：changes/day 2500→30000，revert 降 40%）",
+      "sha256": "0d57e8f3c473",
+      "text_lines": 387
+    },
+    "S07_intent_debt": {
+      "path": "downloads/S07_intent_debt.html",
+      "url": "https://addyosmani.com/blog/intent-debt/",
+      "grade": "一手（作者博客；Storey Triple Debt Model 谱系；无数据）",
+      "sha256": "028ba41be3fb",
+      "text_lines": 98
+    },
+    "S08_critical_thinking": {
+      "url": "https://addyo.substack.com/p/critical-thinking-during-the-age",
+      "grade": "unavailable",
+      "note": "Substack 域名 DNS 被劫持(Meta IP)，不可达。主题由 addyosmani.com 主站同主题文章覆盖。"
+    },
+    "S09_field_guide_unknowns": {
+      "path": "downloads/S09_field_guide_unknowns.html",
+      "url": "https://claude.com/blog/a-field-guide-to-claude-fable-finding-your-unknowns",
+      "grade": "404（HTTP 404，页面不可访问；标 unavailable，不据此下断言）",
+      "sha256": "e11d79059a29"
+    },
+    "S10_agentic_verification": {
+      "url": "https://addyo.substack.com/p/agentic-verification",
+      "grade": "二手转述（Substack 原文不可达；经 thekb.eu 结构化摘要 + wqu.guru 中文详述 + vuink 摘录获取；thekb.eu 明确标注 'without figures or studies'）",
+      "mirror_files": ["downloads/S10_agentic_verification.md"],
+      "note": "Addy Osmani 2026-10-14 Substack。核心：验证是瓶颈；E2E/property/differential 三类测试；sub-second 确定性循环；review evidence not diffs；agent 面对慢/不稳定测试会学会 retry 而非 fix。纯观点文无数据(KB-RSI07)。"
+    },
+    "S11_x_bcherny": {
+      "url": "https://x.com/bcherny/status/2007179861115511237",
+      "grade": "unavailable",
+      "note": "X 域名不可达(DNS 劫持)。Boris Cherny 验证方法观点未一手核，不据此下断言。"
+    },
+    "S12_80_problem": {
+      "url": "https://addyo.substack.com/p/the-80-problem-in-agentic-coding",
+      "grade": "unavailable",
+      "note": "Substack 不可达。主题(机器验证无聊80%，人专注20%)由 S06 claude_code_review + S13 orchestration_tax 一手覆盖。"
+    },
+    "S13_orchestration_tax": {
+      "path": "downloads/S13_orchestration_tax.html",
+      "url": "https://addyosmani.com/blog/orchestration-tax/",
+      "grade": "一手（作者博客；GIL/Amdahl 类比；无数据）",
+      "sha256": "7c105bfec7a4",
+      "text_lines": 50
+    },
+    "S14_intent_debt_radar": {
+      "url": "https://oreillyradar.substack.com/p/the-intent-debt",
+      "grade": "unavailable",
+      "note": "Substack 不可达。意图债务主题由 S07 一手博客覆盖。"
+    },
+    "S15_pubmed_clark": {
+      "path": "downloads/S15_pubmed_eutils.xml",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40389440/",
+      "grade": "一手（NCBI 官方 E-utilities API 获取元数据；PubMed 网页需 cookie 不可达）",
+      "sha256": "a66b5895058dd01adf9531b824140cdf51a84f258a403deda6c664015e9ef3",
+      "note": "Andy Clark 'Extending Minds with Generative AI', Nature Communications 2025-05, DOI 10.1038/s41467-025-59906-9。摘要：human-AI 协作常态下，人类本性就是构建 hybrid thinking systems（fluidly incorporate non-biological resources）。观点文(philosophy)，无实验数据。"
+    },
+    "S16_code_review_responsibility": {
+      "url": "https://addyo.substack.com/p/code-review-in-the-age-of-ai",
+      "grade": "unavailable",
+      "note": "Substack 不可达。代码评审责任主题由 S06 官方实践覆盖。"
+    },
+    "S17_anthropic_ai_work": {
+      "path": "downloads/S17_anthropic_ai_work.html",
+      "url": "https://www.anthropic.com/research/how-ai-is-transforming-work-at-anthropic",
+      "grade": "一手（Anthropic 官方研究；survey + 53 深访；自陈 privileged position + Limitations）",
+      "sha256": "169a2598cb5f",
+      "text_lines": 232,
+      "note": "核心：paradox of supervision（监督需编码技能，而技能因 AI 使用退化）；>50% 员工 fully delegate 仅 0-20%；trust-but-verify 渐进；高/战略思维不委托。self-reported survey，KB-RSI07 折扣。"
+    },
+    "S18_skill_atrophy": {
+      "url": "https://addyo.substack.com/p/avoiding-skill-atrophy-in-the-age",
+      "grade": "unavailable",
+      "note": "Substack 不可达。技能退化主题由 S17 paradox of supervision + S05 skill-formation RCT 一手覆盖。"
+    }
+  },
+  "lineage": "18 来源高度同源：门首篇+5篇 Addy Osmani 主站博客+S10 Substack+S06 Claude Code 博客(Osmani 合著)+S13 = 同一作者 Addy Osmani 的观点谱系（cognitive surrender→comprehension debt→intent debt→orchestration tax→agentic verification 相互引用，构成单一论点家族）。S03 Shaw/Nave SSRN + S04 Storey + S05 转述的 Anthropic RCT + S15 Clark + S17 Anthropic survey 是相对独立的一手研究/学界来源。按 KB-STRUCT02：Osmani 谱系折为 1 主体；一手研究各自独立但需按证据等级折扣(S03 preprint 未同行评审+二手 abstract、S05 转述 RCT 非原文、S17 self-reported)。'认知债务' 术语跨 Storey/Addy/MIT 共用，须区分谁提出谁转述。",
+  "kb_baseline": {
+    "path": "kb_baseline.json",
+    "items": 110,
+    "sha256": "35341afa88a7c49f8a4d018e286f7652c9e0a67c25929d8c43fbbb2e54db532e"
+  },
+  "anchor_verification": "所有判据锚点在 BeautifulSoup 提取的纯文本 .txt 上核验单行连续（英文含弯引号 ' '，探测串用原文弯引号；原始 HTML 标签会跨行断裂）。17 条核心锚点确认命中。X/Substack/SSRN Direct 不可达按 unavailable 处理，SSRN abstract 经 Zotero/managementcraft/launchpad 二手镜像获取。",
+  "timestamp": "2026-11-22T09:05:00+08:00"
+}

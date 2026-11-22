@@ -1,0 +1,44 @@
+[
+ {
+  "id": "S03_ssrn",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='papers.ssrn.com', port=443): Max retries exceeded with url: /sol3/papers.cfm?abstract_id=60976"
+ },
+ {
+  "id": "S08_critical_thinking",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='addyo.substack.com', port=443): Max retries exceeded with url: /p/critical-thinking-during-the"
+ },
+ {
+  "id": "S10_agentic_verification",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='addyo.substack.com', port=443): Max retries exceeded with url: /p/agentic-verification (Caused"
+ },
+ {
+  "id": "S12_80_problem",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='addyo.substack.com', port=443): Max retries exceeded with url: /p/the-80-problem-in-agentic-co"
+ },
+ {
+  "id": "S14_intent_debt_radar",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='oreillyradar.substack.com', port=443): Max retries exceeded with url: /p/the-intent-debt (Caus"
+ },
+ {
+  "id": "S16_code_review",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='addyo.substack.com', port=443): Max retries exceeded with url: /p/code-review-in-the-age-of-ai"
+ },
+ {
+  "id": "S18_skill_atrophy",
+  "status": "ERR",
+  "error": "HTTPSConnectionPool(host='addyo.substack.com', port=443): Max retries exceeded with url: /p/avoiding-skill-atrophy-in-th"
+ },
+ {
+  "id": "S15_pubmed",
+  "status": 403,
+  "size": 134,
+  "sha256": "c996c0469ef05ff6fdd1f7cefbc3f7e109bb21969de42fcf591498a828a7ad5f",
+  "final_url": "https://pubmed.ncbi.nlm.nih.gov/40389440/"
+ }
+]

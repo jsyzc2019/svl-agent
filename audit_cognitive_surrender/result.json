@@ -1,0 +1,130 @@
+{
+  "section": "§74 认知投降谱系：监督可行性（supervision viability）——评审独立性能力前提",
+  "prereg_sha256": "dc52aa6c45e413c0575dd4ccf0807ab561bc7b7065179da1449a2043e0acc5e6",
+  "manifest_sha256": "06cfe2b445a3d76e082f0054de6e0b3aff2ea6ff3605c87a614c7adde70debe8",
+  "kb_baseline_sha256": "35341afa88a7c49f8a4d018e286f7652c9e0a67c25929d8c43fbbb2e54db532e",
+  "verdicts": {
+    "V1": "PASS",
+    "V2": "PASS",
+    "V3": "PASS",
+    "V4": "PASS",
+    "V5": "PASS",
+    "V6": "PASS",
+    "V7": "PASS",
+    "V8": "PASS"
+  },
+  "judges": {
+    "V1": {
+      "verdict": "PASS",
+      "anchors_hit": "14/14",
+      "detail": {
+        "by_source": {
+          "S02_cognitive_surrender": {
+            "offload_vs_surrender": true,
+            "borrowed_confidence": true,
+            "accepted_wrong": true,
+            "no_independent_view": true,
+            "surface_not_systemic": true
+          },
+          "S06_claude_code_review": {
+            "imprecise_proxy": true,
+            "circuit_breaker": true
+          },
+          "S13_orchestration_tax": {
+            "gil": true
+          },
+          "S17_anthropic_ai_work": {
+            "paradox": true,
+            "paradox_detail": true,
+            "delegate_pct": true
+          },
+          "S07_intent_debt": {
+            "generate_intent": true
+          },
+          "S05_comprehension_debt": {
+            "skill_17": true
+          },
+          "S10_agentic_verification": {
+            "verification_bottleneck": true
+          },
+          "S03_ssrn_abstract": {
+            "accepted_wrong": true
+          }
+        },
+        "note": "锚点在纯文本 .txt 单行核验；英文含弯引号按原文；unavailable 来源不据此下断言。"
+      }
+    },
+    "V2": {
+      "verdict": "PASS",
+      "detail": {
+        "osmani_lineage_folded": true,
+        "independent_studies_discounted": true,
+        "note": "Osmani 8+来源折1；S03/S04/S15/S17 独立但按等级折扣；cognitive debt 术语区分 Storey/Addy/MIT 提出vs转述。"
+      }
+    },
+    "V3": {
+      "verdict": "PASS",
+      "detail": {
+        "blog_no_data_discounted": true,
+        "ssrn_preprint_discounted": true,
+        "survey_selfreported_discounted": true,
+        "note": "thekb.eu 明标 without figures or studies；SSRN preprint 未评审+二手 abstract；Anthropic survey 自陈 privileged position。只采信一手事实数字与原话。"
+      }
+    },
+    "V4": {
+      "verdict": "PASS",
+      "detail": {
+        "kb_baseline_items": 110,
+        "kb_baseline_sha256": "35341afa88a7c49f8a4d018e286f7652c9e0a67c25929d8c43fbbb2e54db532e",
+        "gap_probe_hits": [],
+        "dedicated_gate_exists": [],
+        "distinct_from_reviewer_evaluation": "reviewer_evaluation(§60)判单次评审漏斗是否被身份/权威污染(过程保真)；本维判评审者是否仍具备独立判断能力这一前提(能力存在性)，对象层级不同。",
+        "note": "编译前 110 条 KB 与现有 20 门禁无一判监督可行性；缺口探测只用编译前基线，防 §71 第五处自咬。"
+      }
+    },
+    "V5": {
+      "verdict": "PASS",
+      "detail": {
+        "independent": true,
+        "transferable": "任何『人评审 AI 产出』的流程",
+        "counterexample": "团队声称『我们有人工 review 所以质量有保障』，但评审者长期依赖 AI 已丧失独立判断、surface-correct 即放行、revert 上升也无断路器——本门会拦(downgrade/flag)。",
+        "note": "非博客特例；拦截维度=评审独立性能力前提是否诚实披露，会拦。"
+      }
+    },
+    "V6": {
+      "verdict": "PASS",
+      "detail": {
+        "four_layers": {
+          "L1_独立观点形成": true,
+          "L2_能力未侵蚀": true,
+          "L3_监督未自我消解": true,
+          "L4_表面非系统正确": true
+        },
+        "note": "四层能力前提维度独立：独立观点/能力保持/监督可行/表面vs系统，不得混谈。"
+      }
+    },
+    "V7": {
+      "verdict": "PASS",
+      "detail": {
+        "engine_ast_brittle": [],
+        "strike": "中文短语集中 _A 字典；has_cjk 用 ord() 边界；英文锚点按原文弯引号。"
+      }
+    },
+    "V8": {
+      "verdict": "PASS",
+      "detail": {
+        "layer1_一手可核": "实验/实践一手数字与原话：Shaw-Nave 三预注册实验 N=1372/9593 trials、hidden-seed 随机化 AI 正确性、AI 错时 73% 接受、+25/-15pp、Cohen's h=0.81、错误后 confidence 仍升(经二手 abstract 转述)；Anthropic skill-formation RCT 52 工程师、生成式使用 comprehension 17% 更低(50% vs 67%)(经 Addy 博客转述)；Claude Code 官方 changes/day 2500→30000、revert 降 40%、'did a human read code 是 imprecise proxy'、'尚无 revert/incident 断路器'；Anthropic survey >50% 员工 fully delegate 仅 0-20%、'paradox of supervision' 原话。",
+        "layer2_scoped_折扣": "Osmani 8+来源同一作者谱系按 KB-STRUCT02 折为 1（cognitive surrender→comprehension debt→intent debt→orchestration tax 相互引用，单一论点家族）；博客观点无数据(thekb.eu 明标 without figures or studies)；SSRN 是 preprint 未同行评审且 abstract 经二手镜像(etcjournal 评 productive but incomplete)；Anthropic survey 自陈 privileged position；S01/X/Substack/SSRN direct 6+ 来源不可达标 unavailable。术语 cognitive debt 跨 Storey/Addy/MIT 共用须区分提出vs转述。",
+        "layer3_不可判定边界": "评审者实际能力是否真被侵蚀、某流程的评审是否真有效、AI 错时接受率是否在真实工程场景复现——本门只判『能力前提是否诚实披露』，不承诺评审真有效(KB-R07/KB-AUDIT03 存在≠执行)；审读外部工程流程，不判本仓。"
+      }
+    }
+  },
+  "zero_drift": true,
+  "three_layer_honesty": {
+    "layer1_一手可核": "实验/实践一手数字与原话：Shaw-Nave 三预注册实验 N=1372/9593 trials、hidden-seed 随机化 AI 正确性、AI 错时 73% 接受、+25/-15pp、Cohen's h=0.81、错误后 confidence 仍升(经二手 abstract 转述)；Anthropic skill-formation RCT 52 工程师、生成式使用 comprehension 17% 更低(50% vs 67%)(经 Addy 博客转述)；Claude Code 官方 changes/day 2500→30000、revert 降 40%、'did a human read code 是 imprecise proxy'、'尚无 revert/incident 断路器'；Anthropic survey >50% 员工 fully delegate 仅 0-20%、'paradox of supervision' 原话。",
+    "layer2_scoped_折扣": "Osmani 8+来源同一作者谱系按 KB-STRUCT02 折为 1（cognitive surrender→comprehension debt→intent debt→orchestration tax 相互引用，单一论点家族）；博客观点无数据(thekb.eu 明标 without figures or studies)；SSRN 是 preprint 未同行评审且 abstract 经二手镜像(etcjournal 评 productive but incomplete)；Anthropic survey 自陈 privileged position；S01/X/Substack/SSRN direct 6+ 来源不可达标 unavailable。术语 cognitive debt 跨 Storey/Addy/MIT 共用须区分提出vs转述。",
+    "layer3_不可判定边界": "评审者实际能力是否真被侵蚀、某流程的评审是否真有效、AI 错时接受率是否在真实工程场景复现——本门只判『能力前提是否诚实披露』，不承诺评审真有效(KB-R07/KB-AUDIT03 存在≠执行)；审读外部工程流程，不判本仓。"
+  },
+  "gate_decision": "编译第 22 道门禁 supervision_viability（监督可行性：评审独立性能力前提）",
+  "kb_decision": "新增 KB-AUDIT17 + 加固 STRUCT02（Osmani 谱系折1）/STRUCT05（委托≠投降/生产≠评审能力）/AUDIT03（有评审环节≠评审者仍有独立判断）"
+}
