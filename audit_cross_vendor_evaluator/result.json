@@ -1,13 +1,100 @@
 {
-  "experiment": "§110 异厂商 designer 冻结 gt 盲评（待命）",
-  "status": "PENDING_API_KEY",
-  "missing_judges": [
-    "P0",
-    "P1",
-    "P2"
-  ],
+  "experiment": "§110 异厂商 designer 设计者独立性受控验证",
+  "status": "EXECUTED",
   "locks_ok": true,
-  "note": "异厂尚未生成 judge_vendor.py；本文件为占位，不构成任何裁决。key 到位→call_vendor.py→重跑 engine。",
+  "all_admissions_pass": false,
+  "vendor": "OpenRouter/nvidia/nemotron-3.5-super-vl:free",
+  "samples_blind_sha256": "e7a65f4d2df068d799040a3c0cd5f06ead87cc01584558a66aa5bcfc22c4252a",
+  "prereg_sha256": "fbf66d3943d0be01d58364f018ab305b9dbbe94e5e1a6f32f74f25bedb7db70c",
+  "verdict": "CROSS_VENDOR_INCONCLUSIVE",
+  "why": "哈希锁失配或准入未全过（异厂源码含泄漏/随机/id硬编码或签名错），对照组不成立，封顶 INCONCLUSIVE。",
+  "metrics": {
+    "PRIMARY": 1.0,
+    "SECONDARY": 0.0,
+    "P1_core": 1.0,
+    "P0_core": 0.5,
+    "P0_dT": 1.0,
+    "P0_floor": true,
+    "orient_gap_all_diagnostic_only": 0.6666666666666666
+  },
+  "per_condition": {
+    "P0": {
+      "admission": {
+        "signature": [
+          "text_a",
+          "text_b"
+        ],
+        "signature_ok": true,
+        "leaked_label_tokens": [
+          "variant"
+        ],
+        "no_label_leak": false,
+        "hardcoded_sample_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_tokens": [],
+        "deterministic_no_rng": true,
+        "admission_ok": false
+      },
+      "core_acc": 0.5,
+      "clean_pass": 1.0,
+      "tamper_catch": 0.0,
+      "canary_fp": 1.0,
+      "dT_all_tampered": 1.0
+    },
+    "P1": {
+      "admission": {
+        "signature": [
+          "text_a",
+          "text_b"
+        ],
+        "signature_ok": true,
+        "leaked_label_tokens": [
+          "negation"
+        ],
+        "no_label_leak": false,
+        "hardcoded_sample_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_tokens": [],
+        "deterministic_no_rng": true,
+        "admission_ok": false
+      },
+      "core_acc": 1.0,
+      "clean_pass": 1.0,
+      "tamper_catch": 1.0,
+      "canary_fp": 1.0,
+      "dT_all_tampered": 0.0
+    },
+    "P2": {
+      "admission": {
+        "signature": [
+          "text_a",
+          "text_b"
+        ],
+        "signature_ok": true,
+        "leaked_label_tokens": [
+          "negation"
+        ],
+        "no_label_leak": false,
+        "hardcoded_sample_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_tokens": [],
+        "deterministic_no_rng": true,
+        "admission_ok": false
+      },
+      "core_acc": 0.6666666666666666,
+      "clean_pass": 1.0,
+      "tamper_catch": 0.3333333333333333,
+      "canary_fp": 1.0,
+      "dT_all_tampered": 0.6666666666666666
+    }
+  },
+  "verdict_rules_snapshot": [
+    "CROSS_VENDOR_CONFIRMED：PRIMARY≥0.8 且 SECONDARY≤0.3 且 P1.core≥0.9 且 P0 地板 且三条件准入全过 → 跨厂商设计者复现分层效应，设计者厂商独立性一维获受控证据",
+    "CROSS_VENDOR_PARTIAL：PRIMARY≥0.8 但 SECONDARY>0.3 或 P1.core<0.9 或 P0 非地板 或某条件准入未过 → 主效应在异厂下部分复现，完整模式不成立",
+    "CROSS_VENDOR_REFUTED：PRIMARY<0.3 → 异厂设计者下取向差不复现，§107 效应可能是同厂商设计习惯产物（这是真负面结果，如实记）",
+    "CROSS_VENDOR_INCONCLUSIVE：PRIMARY 0.3~0.8 中间带 / API 失败 / 准入不过 → 诚实标注不强行归因"
+  ],
+  "honest_boundary": "即使 CONFIRMED 也不宣布 L3/absolute：① 只证明'设计者'这一维的厂商独立性；② 样本集/数据源仍本 Agent 选定（§107 确认集）、gt 由本 Agent 冻结、解释环节本 Agent；③ 异厂仅生成 judge 源码，盲评/裁决仍本 Agent 冻结 gt 执行；④ 单次单集单厂商，无多样本量/多厂商交叉。仍 l3=false / absolute=false（KB-META05/KB-STRUCT02）。",
   "l3_claimed": false,
   "absolute_claimed": false
 }

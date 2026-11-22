@@ -5,13 +5,15 @@
 - 三条件各发一次全新无历史 chat completion（天然干净 context）。
 - prompt 只含统一 system + purpose.md + 裸样本(id/text_a/text_b)，禁带 gt/variant/deletion_class/历史。
 - 只接受返回中的 Python 代码块，落 vendor_Px/judge_vendor.py；同时存 prompt 哈希与调用留痕（不含 key）。
+- reasoning 模型 content 可能为空：代码块若在 reasoning 字段（同为异厂干净 context 真实生成），
+  则回退提取并在留痕 code_source=reasoning_fallback 标注，绝不伪造。
 - 失败/非代码块 → 该条件记 status=failed，不伪造 judge，engine 会封顶 INCONCLUSIVE。
 
 用法：
   CROSS_VENDOR_API_KEY=... CROSS_VENDOR_BASE=https://api.deepseek.com/v1 \
   CROSS_VENDOR_MODEL=deepseek-chat python3 call_vendor.py
 """
-import json, os, re, hashlib, datetime, urllib.request, urllib.error
+import json, os, re, hashlib, datetime, time, urllib.request, urllib.error
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 CELLS = ("P0", "P1", "P2")
@@ -62,24 +64,45 @@ def extract_code(text):
     return max(m, key=len).strip()
 
 
+MAX_TOKENS = int(os.environ.get("CROSS_VENDOR_MAX_TOKENS", "16000"))
+
+
 def call_api(system, user):
-    """OpenAI 兼容 chat/completions；返回 (content, meta) 或抛异常。"""
+    """OpenAI 兼容 chat/completions；返回 (content, reasoning, meta) 或抛异常。
+
+    reasoning 模型 reasoning 很长，max_tokens 必须足够大（默认 16000）才能 finish=stop
+    并在 content 给出最终代码块。429 上游限流按指数退避重试。
+    """
     url = API_BASE + "/chat/completions"
     payload = json.dumps({
         "model": MODEL,
         "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
         "temperature": 0,
-        "max_tokens": 2048,
+        "max_tokens": MAX_TOKENS,
     }).encode("utf-8")
     req = urllib.request.Request(url, data=payload, headers={
         "Authorization": "Bearer " + API_KEY,
         "Content-Type": "application/json",
     }, method="POST")
-    with urllib.request.urlopen(req, timeout=90) as resp:
-        body = json.loads(resp.read().decode("utf-8"))
-    content = body["choices"][0]["message"]["content"]
-    meta = {"model": body.get("model", MODEL), "usage": body.get("usage")}
-    return content, meta
+    body = None
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(req, timeout=280) as resp:
+                body = json.loads(resp.read().decode("utf-8"))
+            break
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt < 3:
+                time.sleep(15 * (attempt + 1))
+                continue
+            raise
+    ch = body["choices"][0]
+    msg = ch["message"]
+    content = msg.get("content") or ""
+    reasoning = msg.get("reasoning") or ""
+    meta = {"model": body.get("model", MODEL), "usage": body.get("usage"),
+            "finish_reason": ch.get("finish_reason"),
+            "content_len": len(content), "reasoning_len": len(reasoning)}
+    return content, reasoning, meta
 
 
 def main():
@@ -95,10 +118,19 @@ def main():
             rec["system_sha256"] = sha(system)
             rec["user_prompt_sha256"] = sha(user)
             rec["user_prompt_chars"] = len(user)
-            content, meta = call_api(system, user)
+            content, reasoning, meta = call_api(system, user)
             code = extract_code(content)
+            code_source = "content"
+            if not code and reasoning:
+                # reasoning 字段同为异厂干净 context 真实生成；回退提取并标注来源
+                code = extract_code(reasoning)
+                code_source = "reasoning_fallback"
             rec["model_resp_model"] = meta["model"]
             rec["usage"] = meta["usage"]
+            rec["finish_reason"] = meta.get("finish_reason")
+            rec["content_len"] = meta.get("content_len")
+            rec["reasoning_len"] = meta.get("reasoning_len")
+            rec["code_source"] = code_source
             rec["response_chars"] = len(content)
             if not code:
                 rec["status"] = "failed_no_code"

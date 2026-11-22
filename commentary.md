@@ -4006,3 +4006,24 @@ PRIMARY=1.0≥0.8（非否定限定 P1 dT=0/P2 dT=1，4/4 逐样本相反，**�
 仍 **l3=false/absolute=false**：① 只证明执行环境可外移、裁决可复现；② judge 设计者仍本 Agent spawn（同厂商 Hunyuan，KB-STRUCT02）、样本本 Agent 选、解释本 Agent——设计者/数据源/解释三处独立性未动；③ 外部 runner 执行的是本 Agent 预置的确定性脚本，不是异厂商 LLM 评判；④ 尝试 2（异厂商 evaluator 无 API key）仍不可达。**确认的只是"执行者独立"这一维，不是系统达 L3。**
 
 验收：7 项专项测试 + 全量 1380→1387 passed（+7）；链审与 KB 本轮无门禁编译（不新增 five_piece，仅增 workflow/attestation 取证文件）；token 安全落盘不入仓，hosts/askpass/临时图像全部即用即删；系统安全红线全程遵守。KB 追加 KB-AUDIT51（workflow scope 解锁→外部执行者独立性受控确认 + 图摄 token 识别易混字符教训 preserve）。成果报告 ROUND20_ACHIEVEMENT_REPORT_20261122.html。
+
+---
+
+## §110 异厂商 designer 设计者独立性受控验证（2026-11-22，用户提供 OpenRouter key）
+
+### 触发：从"不可达"到真实执行
+§108/§109 两轮均把"异厂商 evaluator 无 API key"记为硬障碍（BLOCKERS.md 尝试 2）。本轮用户给 OpenRouter key（`sk-or-v1-…`，只从环境变量读、chmod 600 落上传区、全程不入仓不入日志不入 prompt 留痕）。先机器探测端点可用性——付费模型多被区域 403 或账户未充值 402 挡住，可用免费模型全是 reasoning 型（content 空、答案在 reasoning 字段；max_tokens 太小会 finish=length 截断）。这是从"肉眼信凭据图"（§109 KB-META17 教训）到"机器验证闭环"的延续。
+
+### 110.1 异厂 designer 真实生成判据（一维外移）
+把 §107 判据设计者从本 Agent（Hunyuan 同厂，KB-STRUCT02）外移到异厂 LLM：**NVIDIA nemotron-3.5-super-vl**（经 OpenRouter 免费端点，明确非 Hunyuan）。`audit_cross_vendor_evaluator/prereg.json` 在 spawn 前锁死哈希（spawn 前锁哈希纪律），三条件各一次**全新无历史 chat completion**，只发 purpose + 裸样本（id/text_a/text_b；gt/variant/deletion_class/scorer_key 物理隔离），temperature 0，唯一变量=目的叙事。调用器工程适配：max_tokens 16000 + 429 指数退避 + reasoning 回退提取（标注 code_source）；只改调用/提取层，prompt 文本与哈希锁未动。三条件全 `finish=stop`、异厂真实生成 judge（P0 1127 / P1 2211 / P2 2234 字符），留痕 `vendor_call_manifest.json` 记厂商/模型/prompt 哈希/usage/来源，无 key 无裸样本全文。
+
+### 110.2 冻结 gt 盲评：数值完全复现 §107
+`engine.py` 不采信异厂自报，import 三份 judge 源码、用 §107 逐字节冻结的 gt 盲评重跑：**PRIMARY=1.00 / SECONDARY=0.00 / P1.core=1.00 / P0 地板 core=0.50 dT=1.00**——分层模式数值上完整复现。能力对照：P1 clean 1.0/tamper 1.0/canary_fp 0.0，纯文本限定词集合运算。
+
+### 110.3 裁决：CROSS_VENDOR_INCONCLUSIVE（准入未全过，数值不翻案）
+关键诚实点：三份 judge 的 **notes 说明文字**出现 `variant`（P0）/`negation`（P1/P2），命中 prereg 事前锁定的禁用词表 → `all_admissions_pass=false` → 按裁决树首枝封顶 **CROSS_VENDOR_INCONCLUSIVE**。查证上下文：这些词只在 judge 写给调用者的 `notes` 里描述文本的"否定/限定词""删改变体"现象——正是 P1 忠实性核查任务本身要求的正当语义，判据控制流并未读取 scorer_key/gt/deletion_class 字段（源码仅 `re` + 词集合）。这是**保守准入规则的粒度误报**（词边界无差别匹配），但纪律要求**事后不得放宽已锁规则翻案**——数值再漂亮，准入不过就 INCONCLUSIVE。本轮如实落 INCONCLUSIVE，把"准入规则粒度"作为下轮可定位可修弱点（KB-META18），绝不改阈值重跑到 CONFIRMED。
+
+### 110.4 诚实边界：设计者一维外移 ≠ 达到 L3
+仍 **l3=false/absolute=false**：① 只把"判据设计者"一维外移到异厂，且该维因准入误报未获受控确认（INCONCLUSIVE）；② 样本集/冻结 gt/盲评/裁决/解释仍本 Agent（§107 确认集）；③ 异厂仅生成 judge 源码，评估与裁决仍本 Agent；④ 单次单集单厂商，无多样本量/多厂商交叉；⑤ 异厂是不信任对象、不采信自报，只 import 源码盲评。设计者厂商独立性一维获"数值复现但准入封顶"的诚实记录，不是系统达 L3。
+
+验收：13 项专项测试 + 全量 1395→1400 passed（+5 执行态回归：异厂真实输出/非 Hunyuan/数值不翻案/泄漏词只在 notes 不进控制流/key 零泄漏）；verify.py 8/8 ALL_OK（裁决树自洽）；KB 160→162（KB-AUDIT52 异厂 designer 执行结论 + KB-META18 准入词边界误报定位）；链审与门禁本轮无新增 five_piece（受控实验轮不编译门禁）。API key 零入仓（全工作区模式扫描 NONE）。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。

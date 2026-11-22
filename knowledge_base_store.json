@@ -4246,6 +4246,53 @@
       "evidence": "commentary.md §109 触发段;token 正确串经 API 200 验证(不入仓)",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT52",
+      "kind": "reasoning_lesson",
+      "mechanism": "异厂商 designer 独立性一维可真正外移执行(§110):用户提供 OpenRouter key 后，把§107判据设计者从本Agent(Hunyuan同厂)外移到异厂LLM(NVIDIA nemotron-3.5-super-vl，经OpenRouter免费端点)。三条件各一次全新无历史chat completion，只发purpose+裸样本(id/text_a/text_b，gt/variant/deletion_class物理隔离)，temperature0。实测困难:免费端点多被区域403/未充值402挡住，可用免费模型全是reasoning型(content空、答案在reasoning)且max_tokens小会finish=length截断——把预算提到16000+429指数退避+reasoning回退提取(标注code_source)后三条件全finish=stop、异厂真实生成judge(1127/2211/2234字符)。冻结gt盲评数值完全复现§107分层模式(PRIMARY=1.00/SECONDARY=0.00/P1.core=1.00/P0地板core0.50 dT1.00)，但三judge的notes说明文字出现variant/negation命中prereg事前锁定禁用词表→准入未全过→按裁决树首枝封顶CROSS_VENDOR_INCONCLUSIVE，不事后翻案。关键:数值复现≠裁决成立，准入是事前锁的硬门禁。",
+      "trigger": [
+        "cross_vendor",
+        "designer_independence",
+        "openrouter",
+        "api_key",
+        "reasoning_model",
+        "admission_gate"
+      ],
+      "action": "要做异厂商独立性时:①key只从环境变量读、绝不入仓;②先机器探测端点可用性(200/401/402/403+模型finish_reason)，别肉眼信凭据图;③reasoning模型max_tokens给足(≥16000)否则答案截断在思考;④prompt物理隔离标签字段;⑤数值再漂亮，准入/哈希锁任一不过就按预注册树封顶INCONCLUSIVE，禁止事后放宽规则翻案。",
+      "provenance": "commentary:§110",
+      "timestamp": "2026-11-22T13:47:52.847066+00:00",
+      "support": [
+        "commentary:§110",
+        "audit_cross_vendor_evaluator/result.json",
+        "audit_cross_vendor_evaluator/runs/vendor_call_manifest.json"
+      ],
+      "evidence": "experiment",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META18",
+      "kind": "reasoning_lesson",
+      "mechanism": "保守准入规则粒度不足会把正当语义误判为标签泄漏(§110定位):prereg禁用词表含negation/variant，词边界匹配命中即判泄漏。异厂judge在notes说明里写 limiting/negation terms present in text_a but absent in text_b 或 deletion variant——这是忠实性核查任务本身要求的否定/限定词检测(P1目的)，判据控制流并未读取scorer_key/gt/deletion_class字段，是纯文本集合运算。机制:禁用词表用词边界无差别匹配源码全文，无法区分「读标签字段(真泄漏)」与「在说明文字/任务正当语义里提及该词(误报)」。后果:数值完全复现(PRIMARY1.0)却因三条notes误报被封顶INCONCLUSIVE。纪律要求事后不得放宽已锁规则翻案，故本轮如实记INCONCLUSIVE，把粒度问题作为下轮可定位可修弱点。",
+      "trigger": [
+        "admission_false_positive",
+        "word_boundary",
+        "label_leak",
+        "conservative_gate",
+        "post_hoc_no_overturn"
+      ],
+      "action": "设计标签泄漏准入审计时，区分「控制流读取标签字段」与「说明文字/任务正当语义提及该词」:前者硬拒，后者不应算泄漏。若要收紧，只在spawn前预注册修订规则并重跑，严禁看到结果后放宽阈值翻案——事后改规则=Goodhart+自欺。误报导致INCONCLUSIVE是诚实成本，低于翻案带来的证据污染。",
+      "provenance": "commentary:§110",
+      "timestamp": "2026-11-22T13:47:52.847066+00:00",
+      "support": [
+        "commentary:§110",
+        "audit_cross_vendor_evaluator/result.json",
+        "tests/test_cross_vendor_evaluator.py"
+      ],
+      "evidence": "experiment",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第二十一轮成果报告 · §110 异厂商 designer 设计者独立性</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.win{background:#e8f0e4;border:1px solid #b8d0ae;padding:14px 18px;border-radius:6px;font-size:14px}
+.recursion{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+.ck{font-family:monospace;font-size:13px;line-height:1.9}
+</style></head><body><div class="wrap">
+<h1>自主运维第二十一轮成果报告 <span class="pill tag">§110</span></h1>
+<div class="sub">异厂商 designer 设计者独立性受控验证 · 2026-11-22 · 触发：用户提供 OpenRouter key</div>
+
+<h2>一、触发：从"不可达"到真实执行</h2>
+<div class="phil">
+§108 / §109 两轮均把"异厂商 evaluator 无 API key"记为硬障碍（<code>BLOCKERS.md</code> 尝试 2）。本轮用户提供 OpenRouter key（<code>sk-or-v1-…</code>）。延续 §109 的 <b>KB-META17：高风险凭据先机器验证闭环、不信肉眼</b>——先探测端点可用性，而非肉眼转录。
+</div>
+<div class="note">
+<b>安全处理</b>：key 只从环境变量 <code>CROSS_VENDOR_API_KEY</code> 读，chmod 600 落上传区，<b>不入仓、不入日志、不入 prompt 留痕、不入 result</b>。全工作区模式扫描确认零 key 泄漏。未删除任何 OS/系统文件、未格式化磁盘。
+</div>
+
+<h2>二、端点探测：先机器验证，不用肉眼</h2>
+<p>探测发现两类硬障碍，均如实记录、不绕过：</p>
+<table>
+<tr><th>类别</th><th>表现</th><th>处理</th></tr>
+<tr><td>区域限制</td><td>付费模型 <code>gpt-4o-mini</code>/<code>claude-3.5-sonnet</code>/<code>claude-sonnet-4.5</code> → HTTP 403 <em>not available in your region</em></td><td>排除</td></tr>
+<tr><td>未充值</td><td><code>deepseek-v4</code>/<code>mistral-medium</code>/<code>grok</code> → HTTP 402 <em>Insufficient credits</em></td><td>排除</td></tr>
+<tr><td>reasoning 截断</td><td>免费模型 content 空、答案在 <code>reasoning</code>；<code>max_tokens</code> 小 → <code>finish_reason=length</code>，无代码块</td><td>预算提到 16000 + reasoning 回退提取</td></tr>
+</table>
+<p>最终选定 <b>NVIDIA nemotron-3.5-super-vl</b>（OpenRouter 免费端点，明确非 Hunyuan）。决定性测试确认 <code>finish=stop</code>、content 含模型真实生成的合法 <code>judge()</code> 代码（53 行）。</p>
+
+<h2>三、一维外移：异厂 designer 真实生成判据</h2>
+<p><code>audit_cross_vendor_evaluator/prereg.json</code> 在 spawn 前锁死哈希（prereg / 样本 / scorer_key 全锁，<code>locked_before_vendor_spawn=true</code>）。三条件各一次<b>全新无历史 chat completion</b>，只发 purpose + 裸样本（<code>id/text_a/text_b</code>；gt / variant / deletion_class / scorer_key 物理隔离），temperature 0，唯一变量 = 目的叙事（P0 无目的 / P1 忠实性核查 / P2 近似重复）。</p>
+<div class="win">
+调用器工程适配（只改调用/提取层，<b>prompt 文本与哈希锁未动</b>）：<code>max_tokens=16000</code> + 429 指数退避 + reasoning 回退提取（标注 <code>code_source</code>）。三条件全 <code>finish=stop</code>，异厂真实生成 judge：<b>P0 1127 / P1 2211 / P2 2234 字符</b>，留痕 <code>vendor_call_manifest.json</code> 记厂商/模型/prompt 哈希/usage/来源，无 key、无裸样本全文。
+</div>
+
+<h2>四、冻结 gt 盲评：数值完全复现 §107</h2>
+<p><code>engine.py</code> 不采信异厂自报，import 三份 judge 源码、用 §107 逐字节冻结的 gt 盲评重跑：</p>
+<table>
+<tr><th>指标</th><th>实测</th><th>门槛</th><th>结果</th></tr>
+<tr><td>PRIMARY（非否定限定 gap）</td><td><b>1.00</b></td><td>≥0.8</td><td class="ok">达标</td></tr>
+<tr><td>SECONDARY（否定翻转 gap）</td><td><b>0.00</b></td><td>≤0.3</td><td class="ok">达标</td></tr>
+<tr><td>P1.core</td><td><b>1.00</b></td><td>≥0.9</td><td class="ok">达标</td></tr>
+<tr><td>P0 地板</td><td>core 0.50 / dT 1.00</td><td>core≤0.6 或 dT≥0.8</td><td class="ok">成立</td></tr>
+</table>
+<p>分层模式<b>数值上完整复现</b>。能力对照：P1 clean 1.0 / tamper 1.0 / canary_fp 0.0，纯文本限定词集合运算。</p>
+
+<h2>五、裁决：CROSS_VENDOR_INCONCLUSIVE（数值不翻案）</h2>
+<div class="recursion">
+<b>关键诚实点</b>：三份 judge 的 <code>notes</code> 说明文字出现 <code>variant</code>（P0）/<code>negation</code>（P1/P2），命中 prereg <b>事前锁定</b>的禁用词表 → <code>all_admissions_pass=false</code> → 按裁决树首枝封顶 <b>CROSS_VENDOR_INCONCLUSIVE</b>。
+</div>
+<p>查证上下文：这些词只在 judge 写给调用者的 <code>notes</code> 里描述文本的"否定/限定词""删改变体"现象——正是 P1 忠实性核查任务<b>本身要求</b>的正当语义；判据控制流并未读取 scorer_key / gt / deletion_class 字段（源码仅 <code>re</code> + 词集合）。这是<b>保守准入规则的粒度误报</b>（词边界无差别匹配），但纪律要求<b>事后不得放宽已锁规则翻案</b>——数值再漂亮，准入不过就 INCONCLUSIVE。本轮如实落 INCONCLUSIVE，把"准入规则粒度"作为下轮可定位可修弱点（KB-META18），绝不改阈值重跑到 CONFIRMED。</p>
+<p class="ck">verdict = <b>CROSS_VENDOR_INCONCLUSIVE</b> &nbsp; locks_ok = true &nbsp; all_admissions_pass = false<br>
+why = 哈希锁失配或准入未全过（异厂源码含泄漏/随机/id硬编码或签名错），对照组不成立，封顶 INCONCLUSIVE。<br>
+verify.py = 8/8 ALL_OK（裁决树自洽 + l3/absolute 未抬级）</p>
+
+<h2>六、诚实边界：设计者一维外移 ≠ 达到 L3</h2>
+<div class="phil">
+仍 <b>l3=false / absolute=false</b>：① 只把"判据设计者"一维外移到异厂，且该维因准入误报<b>未获受控确认</b>（INCONCLUSIVE）；② 样本集/冻结 gt/盲评/裁决/解释仍本 Agent（§107 确认集）；③ 异厂仅生成 judge 源码，评估与裁决仍本 Agent；④ 单次单集单厂商，无多样本量/多厂商交叉；⑤ 异厂是不信任对象、不采信自报，只 import 源码盲评。设计者厂商独立性一维获"数值复现但准入封顶"的诚实记录，不是系统达 L3。
+</div>
+
+<h2>七、验收与沉淀</h2>
+<table>
+<tr><th>项</th><th>结果</th></tr>
+<tr><td>专项测试</td><td>13 项（§110 执行态回归 5 项：异厂真实输出 / 非 Hunyuan / 数值不翻案 / 泄漏词只在 notes 不进控制流 / key 零泄漏）</td></tr>
+<tr><td>全量测试</td><td>1395 → <b>1400 passed</b>（+5，无回归）</td></tr>
+<tr><td>verify.py</td><td>8/8 ALL_OK</td></tr>
+<tr><td>知识库</td><td>160 → 162（KB-AUDIT52 异厂 designer 执行结论 + KB-META18 准入词边界误报定位）</td></tr>
+<tr><td>门禁</td><td>不编译新门禁（受控实验轮，无新 five_piece）</td></tr>
+<tr><td>安全</td><td>key 零入仓（全仓模式扫描 NONE）；系统安全红线全程遵守</td></tr>
+</table>
+<p>文档同步：commentary §110、SESSION_HANDOFF §4w + 三清单 + 速查表、TIME_PLAN 受控实验轮、README、REPOSITORY_MAP。遵循 §58 不接 run_loop；篡改只在临时副本。</p>
+
+<div class="foot">自主运维第二十一轮 · §110 异厂商 designer 设计者独立性受控验证 · 数值复现但准入封顶 INCONCLUSIVE · l3=false / absolute=false · 2026-11-22</div>
+</div></body></html>
