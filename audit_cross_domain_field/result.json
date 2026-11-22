@@ -1,0 +1,715 @@
+{
+  "experiment": "§105 跨数据域字段名语义消融 2×2",
+  "locks_ok": true,
+  "source_sha256": "5950a338aab20cecc054dfcabdbcec0e784bde842f3a355adc094cdbaee351f8",
+  "samples_sha256": "a388e200319942eda4a5fab9bbbb45644620ef3b0aff21979da4ce25038e5d8c",
+  "annotator_note": "6 条 claim 均为 paper_flat.txt 中逐字连续原文，分别删除一个限定成分：S01 删限定词 only，S02 删否定词 not，S03 删转折词 but（句首片段），S04 删具体数字 three，S05 删否定词 never，S06 删转折词 However；其余字符保持逐字不变且删后句子仍通顺。每条 canary 均另选论文连续原句，含可疑/限定词（only/While/but/not）且在语义上支撑对应 claim，但不是 claim 的逐字复述，用作干扰项。GT 规则：clean 为 claim 原文副本，逐字支撑，supported=True；tampered 因限定成分被删而不再逐字支撑 claim 的全部限定，supported=False；canary 虽非逐字复述但语义支撑，supported=True。",
+  "per_judge": {
+    "A1": {
+      "admission": {
+        "signature": [
+          "claim",
+          "evidence"
+        ],
+        "signature_ok": true,
+        "leaked_label_tokens": [],
+        "no_label_leak": true,
+        "hardcoded_sample_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_tokens": [],
+        "deterministic_no_rng": true,
+        "admission_ok": true
+      },
+      "rows": [
+        {
+          "nid": "N01",
+          "orig_id": "S06_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N02",
+          "orig_id": "S04_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N03",
+          "orig_id": "S02_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N04",
+          "orig_id": "S02_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N05",
+          "orig_id": "S01_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N06",
+          "orig_id": "S05_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N07",
+          "orig_id": "S01_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N08",
+          "orig_id": "S03_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N09",
+          "orig_id": "S04_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N10",
+          "orig_id": "S06_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N11",
+          "orig_id": "S06_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N12",
+          "orig_id": "S05_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N13",
+          "orig_id": "S03_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N14",
+          "orig_id": "S05_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N15",
+          "orig_id": "S03_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N16",
+          "orig_id": "S01_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N17",
+          "orig_id": "S02_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N18",
+          "orig_id": "S04_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        }
+      ],
+      "clean_pass": 1.0,
+      "tamper_catch": 0.0,
+      "canary_fp": 1.0,
+      "core_acc": 0.5,
+      "all_acc": 0.3333333333333333
+    },
+    "A2": {
+      "admission": {
+        "signature": [
+          "claim",
+          "evidence"
+        ],
+        "signature_ok": true,
+        "leaked_label_tokens": [],
+        "no_label_leak": true,
+        "hardcoded_sample_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_tokens": [],
+        "deterministic_no_rng": true,
+        "admission_ok": true
+      },
+      "rows": [
+        {
+          "nid": "N01",
+          "orig_id": "S06_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N02",
+          "orig_id": "S04_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N03",
+          "orig_id": "S02_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N04",
+          "orig_id": "S02_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N05",
+          "orig_id": "S01_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N06",
+          "orig_id": "S05_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N07",
+          "orig_id": "S01_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N08",
+          "orig_id": "S03_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N09",
+          "orig_id": "S04_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N10",
+          "orig_id": "S06_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N11",
+          "orig_id": "S06_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N12",
+          "orig_id": "S05_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N13",
+          "orig_id": "S03_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N14",
+          "orig_id": "S05_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N15",
+          "orig_id": "S03_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N16",
+          "orig_id": "S01_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N17",
+          "orig_id": "S02_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N18",
+          "orig_id": "S04_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        }
+      ],
+      "clean_pass": 1.0,
+      "tamper_catch": 0.0,
+      "canary_fp": 1.0,
+      "core_acc": 0.5,
+      "all_acc": 0.3333333333333333
+    },
+    "B1": {
+      "admission": {
+        "signature": [
+          "text_a",
+          "text_b"
+        ],
+        "signature_ok": true,
+        "leaked_label_tokens": [],
+        "no_label_leak": true,
+        "hardcoded_sample_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_tokens": [],
+        "deterministic_no_rng": true,
+        "admission_ok": true
+      },
+      "rows": [
+        {
+          "nid": "N01",
+          "orig_id": "S06_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N02",
+          "orig_id": "S04_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N03",
+          "orig_id": "S02_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N04",
+          "orig_id": "S02_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N05",
+          "orig_id": "S01_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N06",
+          "orig_id": "S05_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N07",
+          "orig_id": "S01_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N08",
+          "orig_id": "S03_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N09",
+          "orig_id": "S04_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N10",
+          "orig_id": "S06_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N11",
+          "orig_id": "S06_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N12",
+          "orig_id": "S05_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N13",
+          "orig_id": "S03_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N14",
+          "orig_id": "S05_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N15",
+          "orig_id": "S03_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N16",
+          "orig_id": "S01_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N17",
+          "orig_id": "S02_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N18",
+          "orig_id": "S04_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        }
+      ],
+      "clean_pass": 1.0,
+      "tamper_catch": 0.0,
+      "canary_fp": 1.0,
+      "core_acc": 0.5,
+      "all_acc": 0.3333333333333333
+    },
+    "B2": {
+      "admission": {
+        "signature": [
+          "text_a",
+          "text_b"
+        ],
+        "signature_ok": true,
+        "leaked_label_tokens": [],
+        "no_label_leak": true,
+        "hardcoded_sample_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_tokens": [],
+        "deterministic_no_rng": true,
+        "admission_ok": true
+      },
+      "rows": [
+        {
+          "nid": "N01",
+          "orig_id": "S06_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N02",
+          "orig_id": "S04_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N03",
+          "orig_id": "S02_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N04",
+          "orig_id": "S02_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N05",
+          "orig_id": "S01_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N06",
+          "orig_id": "S05_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N07",
+          "orig_id": "S01_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N08",
+          "orig_id": "S03_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N09",
+          "orig_id": "S04_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N10",
+          "orig_id": "S06_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N11",
+          "orig_id": "S06_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N12",
+          "orig_id": "S05_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N13",
+          "orig_id": "S03_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N14",
+          "orig_id": "S05_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N15",
+          "orig_id": "S03_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N16",
+          "orig_id": "S01_tampered",
+          "variant": "tampered",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N17",
+          "orig_id": "S02_canary",
+          "variant": "canary",
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N18",
+          "orig_id": "S04_clean",
+          "variant": "clean",
+          "gt": true,
+          "decision": true,
+          "correct": true
+        }
+      ],
+      "clean_pass": 1.0,
+      "tamper_catch": 0.0,
+      "canary_fp": 1.0,
+      "core_acc": 0.5,
+      "all_acc": 0.3333333333333333
+    }
+  },
+  "condition_A_core": [
+    0.5,
+    0.5
+  ],
+  "condition_B_core": [
+    0.5,
+    0.5
+  ],
+  "old_domain_baseline": {
+    "old_A_core_vals": [
+      0.6666666666666666,
+      1.0
+    ],
+    "old_A_best": 1.0,
+    "old_B_core_vals": [
+      0.3333333333333333,
+      0.16666666666666666
+    ],
+    "old_B_best": 0.3333333333333333
+  },
+  "field_gap_new_domain": 0.0,
+  "field_gap_old_domain": 0.6666666666666667,
+  "verdict": "CROSS_DOMAIN_INCONCLUSIVE",
+  "verdict_why": "条件A在新域也未恢复D1b式判据(四设计者tamper_catch全0、集体收敛到近逐字复述)，存在地板效应：A/B同低(core均0.5)无法归因于字段名，无法区分'字段名非引导源'与'新域样本结构使逐字支撑判据不可归纳'。字段名效应未跨论文复现，但不宣称已被推翻。",
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "honest_boundary": "四个设计者仍由本Agent spawn且同模型家族(KB-STRUCT02)；解释环节本Agent；字段名在新域的效应限于此论文样本；不宣布L3/absolute。",
+  "self_note": "四设计者全部收敛到'近逐字复述'判据(clean+tampered判True/canary判False)——tampered删限定词仍被判支撑(catch=0)、canary语义支撑被误拒(fp=1)，与§104 D2a同型的逐字/语义错配；本轮核心看字段名是否改变这一收敛。 根因取证见 root_cause_forensic：新旧域用同构算法但正类取向相反,真正杠杆是'删限定成分=负类'的语义取向而非字段名。",
+  "root_cause_forensic": {
+    "observation": "旧域§103 D1b 与新域B2 识别出同一个三层结构(逐字重复/删一段/独立句)、用几乎相同的算法(最长公共前后缀判单段删除),但正类取向相反:D1b把'删一段'判tampered=False(core1.0),B2把'删一段'判decision=True(core0.5)。四个新域设计者(A1/A2/B1/B2)全部把clean+tampered判True、canary判False,与字段名无关。",
+    "implication": "决定成败的不是字段名方向语义(§104的结论),而是'删限定成分=被篡改=负类'这一正类语义取向——它源自任务目的(逐字支撑判定),无法从纯文本结构自明。新域四个设计者都把二分归纳成'近逐字复述vs不同句',把tampered并入'近逐字'正类,集体取错正类→地板效应→字段名效应无法归因。这与§103的D1a/D1b'正类取哪层'自由度(KB-AUDIT45)同源,在新域实证且证明与字段名无关。",
+    "evidence": [
+      "audit_designer_desteering/judge_D1b_by_agent.py:_is_single_span_deletion→decision=not tampered(tampered判False)",
+      "audit_cross_domain_field/designer_B2/judge_B2_by_agent.py:最长公共前后缀→可单段删除→decision=True(判True)",
+      "audit_cross_domain_field/result.json:四设计者tamper_catch全0.0/clean_pass全1.0/canary_fp全1.0"
+    ],
+    "status": "forensic_observation_not_verdict_change——裁决仍CROSS_DOMAIN_INCONCLUSIVE"
+  }
+}

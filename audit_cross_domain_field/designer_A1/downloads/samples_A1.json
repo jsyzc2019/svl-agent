@@ -1,0 +1,95 @@
+{
+  "note": "18 组文本对,每组一个 claim(声明)与一段 evidence(引文)。请观察它们的异同,归纳一个确定性的二分规律,写成纯函数 judge(claim, evidence) 返回三元组 (bool, list, list)。无规则描述、无标签;id 为中性编号,禁止据此判断。",
+  "pairs": [
+    {
+      "id": "N01",
+      "claim": "However, more reliable self-evolving agents may also increase the capability of automated systems that can perform harmful or unauthorized actions",
+      "evidence": "These methods show that textual updates can improve agents, but they may overgeneralize local lessons, accumulate stale or conflicting memories, or degrade useful context during iterative rewriting, echoing concerns about unreliable self-correction"
+    },
+    {
+      "id": "N02",
+      "claim": "The plot reveals three groups: committed updates in the upper right with high transfer and low risk, unsafe shortcuts in the lower right, and safe but low-transfer local fixes in the upper left.",
+      "evidence": "The plot reveals groups: committed updates in the upper right with high transfer and low risk, unsafe shortcuts in the lower right, and safe but low-transfer local fixes in the upper left."
+    },
+    {
+      "id": "N03",
+      "claim": "It is not available to the agent during deployment.",
+      "evidence": "It is not available to the agent during deployment."
+    },
+    {
+      "id": "N04",
+      "claim": "It is not available to the agent during deployment.",
+      "evidence": "It is available to the agent during deployment."
+    },
+    {
+      "id": "N05",
+      "claim": "FGSE tests each lesson as a structured hypothesis in a temporary state and commits only verified, transferable updates to long-term memory.",
+      "evidence": "FGSE tests each lesson as a structured hypothesis in a temporary state and commits only verified, transferable updates to long-term memory."
+    },
+    {
+      "id": "N06",
+      "claim": "Regression probes are drawn from previously solved held-out tasks and are never used to propose the candidate hypothesis.",
+      "evidence": "The proof requires that the final evaluation probes are not reused to construct or refine the hypothesis being certified. This condition prevents adaptive overfitting to the finite falsification set."
+    },
+    {
+      "id": "N07",
+      "claim": "FGSE tests each lesson as a structured hypothesis in a temporary state and commits only verified, transferable updates to long-term memory.",
+      "evidence": "FGSE treats each candidate update as a structured, verifier-grounded hypothesis and commits it only after target-transfer, falsification, and regression testing."
+    },
+    {
+      "id": "N08",
+      "claim": "but current self-improvement mechanisms often write episode-derived lessons directly into memory, making local success an unreliable signal for reusable and safe knowledge.",
+      "evidence": "but current self-improvement mechanisms often write episode-derived lessons directly into memory, making local success an unreliable signal for reusable and safe knowledge."
+    },
+    {
+      "id": "N09",
+      "claim": "The plot reveals three groups: committed updates in the upper right with high transfer and low risk, unsafe shortcuts in the lower right, and safe but low-transfer local fixes in the upper left.",
+      "evidence": "Refined candidates lie between these groups, suggesting that many useful but unsafe updates require scope narrowing before commitment."
+    },
+    {
+      "id": "N10",
+      "claim": "However, more reliable self-evolving agents may also increase the capability of automated systems that can perform harmful or unauthorized actions",
+      "evidence": "However, more reliable self-evolving agents may also increase the capability of automated systems that can perform harmful or unauthorized actions"
+    },
+    {
+      "id": "N11",
+      "claim": "However, more reliable self-evolving agents may also increase the capability of automated systems that can perform harmful or unauthorized actions",
+      "evidence": "more reliable self-evolving agents may also increase the capability of automated systems that can perform harmful or unauthorized actions"
+    },
+    {
+      "id": "N12",
+      "claim": "Regression probes are drawn from previously solved held-out tasks and are never used to propose the candidate hypothesis.",
+      "evidence": "Regression probes are drawn from previously solved held-out tasks and are used to propose the candidate hypothesis."
+    },
+    {
+      "id": "N13",
+      "claim": "but current self-improvement mechanisms often write episode-derived lessons directly into memory, making local success an unreliable signal for reusable and safe knowledge.",
+      "evidence": "current self-improvement mechanisms often write episode-derived lessons directly into memory, making local success an unreliable signal for reusable and safe knowledge."
+    },
+    {
+      "id": "N14",
+      "claim": "Regression probes are drawn from previously solved held-out tasks and are never used to propose the candidate hypothesis.",
+      "evidence": "Regression probes are drawn from previously solved held-out tasks and are never used to propose the candidate hypothesis."
+    },
+    {
+      "id": "N15",
+      "claim": "but current self-improvement mechanisms often write episode-derived lessons directly into memory, making local success an unreliable signal for reusable and safe knowledge.",
+      "evidence": "While such updates can help on similar tasks, they may overgeneralize, disrupt previously solved behaviors, or encode brittle shortcuts."
+    },
+    {
+      "id": "N16",
+      "claim": "FGSE tests each lesson as a structured hypothesis in a temporary state and commits only verified, transferable updates to long-term memory.",
+      "evidence": "FGSE tests each lesson as a structured hypothesis in a temporary state and commits verified, transferable updates to long-term memory."
+    },
+    {
+      "id": "N17",
+      "claim": "It is not available to the agent during deployment.",
+      "evidence": "The hindsight subset keeps lessons with high near-transfer gain and low boundary/archive harm, and is used only as an oracle diagnostic upper bound."
+    },
+    {
+      "id": "N18",
+      "claim": "The plot reveals three groups: committed updates in the upper right with high transfer and low risk, unsafe shortcuts in the lower right, and safe but low-transfer local fixes in the upper left.",
+      "evidence": "The plot reveals three groups: committed updates in the upper right with high transfer and low risk, unsafe shortcuts in the lower right, and safe but low-transfer local fixes in the upper left."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "rule": "本数据是对称的文本近似重复（near-duplicate）二分：只判断两段文字是否为同一句话的近似复写，不判断语义是否一致，也不预设 claim/evidence 谁支持谁。归一化词元后，若词元序列相似度与词集 Jaccard 同时不低于 0.70，判为 True；否则判为 False。训练数据中 True 组包含完全相同的文本及仅增删/替换一个词（含否定词、限定词、连词、数词）的微小变体，False 组则是词元重合很低的不同句子（含语义转述与不相关表述）。",
+  "groups": {
+    "near_duplicate": "两文本词元序列几乎一致：完全相同，或仅差一个词（如 not/never/only/three/however/but 等）的增删。判定为 True，共 12 组。",
+    "different_sentence": "两文本词元序列差异显著，是两句内容不同的话，无论语义上是否相关或可互相转述。判定为 False，共 6 组。"
+  },
+  "true_count": 12
+}

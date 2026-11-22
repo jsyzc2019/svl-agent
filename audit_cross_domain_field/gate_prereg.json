@@ -1,0 +1,29 @@
+{
+  "gate": "cross_domain_field_honesty（受控实验，非编译门禁）",
+  "timestamp": "2026-11-22T16:58:00+08:00",
+  "four_dims": {
+    "evidence_authenticity": {
+      "requirement": "新论文一手取料（abs+full HTML），fetch_log+SHA256+paper_flat source.sha256 齐全；claim 逐字可回溯论文原文",
+      "adjudication": "取证式：逐条 claim 在 paper_flat 中逐字命中"
+    },
+    "design_independence": {
+      "requirement": "出题者与四个设计者全部信息隔离、无标签、无规则词、互不知对方；预注册先于 spawn 锁存",
+      "adjudication": "哈希锁时间线 + 准入审计（签名/泄漏/硬编码/确定性/词边界）"
+    },
+    "controlled_comparison": {
+      "requirement": "2×2 唯一变量=字段名语义与数据域；样本协议/prompt/评分口径全冻结",
+      "adjudication": "条件A/B 的样本逐字相同，仅字段名与函数签名不同"
+    },
+    "honest_verdict": {
+      "requirement": "按预注册三情形裁决，不事后挑；不宣布 L3/absolute；canary 类型错配单列；负面/翻转结果照实记",
+      "adjudication": "裁决码 ∈ {CROSS_DOMAIN_CONFIRMED, CROSS_DOMAIN_WEAKENED, CROSS_DOMAIN_INCONCLUSIVE}；l3_claimed=false"
+    }
+  },
+  "downgrade_rules": {
+    "R1": "任一 claim 在 paper_flat 无法逐字命中 → evidence_authenticity=partial",
+    "R2": "任一设计者准入审计未过 → design_independence=no 并单列",
+    "R3": "条件A/B 样本非逐字相同 → controlled_comparison=partial",
+    "R4": "事后改判据/换样本 → 全维 flag + 记录 posthoc"
+  },
+  "final_verdict_rule": "全四维 yes → ok；任一 partial → downgrade；任一 no → flag"
+}

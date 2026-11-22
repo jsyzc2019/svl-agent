@@ -3980,6 +3980,62 @@
       "evidence": "theory",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT47",
+      "kind": "reasoning_lesson",
+      "mechanism": "跨数据域字段名消融的地板效应与正类取向前置:§100-104 的判据可迁移链全锁在单一论文2610.16067,§104得FIELD_NEUTRAL_DEPENDENT(字段名是必要条件)。§105换全新论文2611.14326(FGSE自进化,出题权外移独立标注者构造6claim×clean/tampered/canary),在2×2(条件A有字段名×2/条件B中性字段×2全新context设计者)上复现。结果四设计者全部core=0.5:clean_pass=1.0/tamper_catch=0.0/canary_fp=1.0,全收敛到'近逐字复述'判据,field_gap新域=0.0(旧域0.667)。裁决CROSS_DOMAIN_INCONCLUSIVE而非WEAKENED:条件A在新域也未恢复D1b式判据(tamper全0),存在地板效应,A/B同低无法归因字段名——既不能说字段名被推翻也不能说确认。根因取证:旧域D1b与新域B2识别同一三层结构(逐字/删一段/独立句)、用几乎相同的最长公共前后缀算法,但正类取向相反(D1b删一段判False/D1b core1.0;B2删一段判True/core0.5)——真正决定成败的是'删限定成分=被篡改=负类'这一源自任务目的的语义取向(非纯文本结构可自明),与§103'正类取哪层'(KB-AUDIT45)同源且与字段名无关。",
+      "trigger": [
+        "跨数据域",
+        "外部效度",
+        "地板效应",
+        "正类取向",
+        "字段名依赖未复现",
+        "同构算法相反正类",
+        "样本特有",
+        "CROSS_DOMAIN_INCONCLUSIVE"
+      ],
+      "action": "检验一个结论能否跨数据域复现时:①必须换新论文/新样本源(出题权仍外移),唯一保留样本构造协议;②做完整2×2而非单臂——若'有字段名'对照组在新域也失败(地板效应),A/B同低就无法归因自变量,必须诚实归INCONCLUSIVE而非WEAKENED(不能因B高于旧域B就宣称自变量失效);③裁决前先问'对照组在新域是否仍成立',不成立则任何A/B比较都被地板污染;④当局部分数全部同型(本轮四设计者全收敛到近逐字判据),去比对新旧域的同构算法——若算法相同而正类取向相反,定位到真正的杠杆是'正类语义取向'而非被消融的字面变量;⑤区分'结论被推翻'与'结论未复现',后者只说明边界,不宣称前者;l3/absolute仍false。",
+      "provenance": "自主运维第十六轮:用户'你再放飞'→判读§100-104锁死单论文→换2611.14326新域+出题权外移+2×2字段名消融→四设计者全core0.5地板效应→CROSS_DOMAIN_INCONCLUSIVE→根因取证定位正类取向→13回放测试→固化KB",
+      "timestamp": "2026-11-22T09:05:00+00:00",
+      "support": [
+        "audit_cross_domain_field/result.json:四设计者clean1.0/tamper0.0/canary_fp1.0/core0.5;field_gap新0.0旧0.667;verdict=CROSS_DOMAIN_INCONCLUSIVE/l3=false",
+        "audit_cross_domain_field/result.json:root_cause_forensic——旧D1b与新B2同构算法相反正类",
+        "audit_cross_domain_field/downloads/fetch_log.json:2611.14326一手取料abs+full SHA256",
+        "audit_field_neutral/result.json:旧域FIELD_NEUTRAL_DEPENDENT(field_gap0.667)——本轮检验其外部效度",
+        "KB-AUDIT45 正类取哪层自由度——本轮在新域实证且与字段名无关"
+      ],
+      "evidence": "experiment",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META13",
+      "kind": "reasoning_lesson",
+      "mechanism": "对照组成立性是归因的前提与'负面结果分级':当实验结论在新域不复现时,有三种不同强度的结论——①CONFIRMED(复现)②WEAKENED/REFUTED(对照组在新域仍成立但自变量失效,可推翻)③INCONCLUSIVE(对照组在新域自身失败=地板/天花板效应,无法归因,只能说'未复现')。常见错误是跳过③直接从'结果不同'跳到②(宣称自变量无效)。§105 条件A(有字段名)在新域core也0.5、未恢复旧域D1b的1.0,说明新域样本让'逐字支撑'判据集体不可归纳,此时A/B同低不能说明字段名不重要——是地板掩盖了一切。纪律:裁决树的第一分叉永远是'对照组在新域是否仍成立',不成立就封顶INCONCLUSIVE;不为了故事完整把未复现包装成推翻。另一层:'未复现'本身仍有价值——它暴露了结论的适用边界(§104结论限于2610.16067样本结构),并引导到更深的根因(正类取向)。这类'负面结果分级与归因前提'判断是认知机制(addressable=False),交人。",
+      "trigger": [
+        "对照组先决",
+        "地板效应",
+        "归因前提",
+        "未复现≠推翻",
+        "负面结果分级",
+        "裁决树第一分叉",
+        "不包装结论",
+        "适用边界"
+      ],
+      "action": "面对'换域/重复实验但结果不同':①先锁定'对照组'(已知在新域有效的条件)——若它在新域也失效,立即判INCONCLUSIVE,停在此,不做A/B归因;②只有对照组在新域复现原效应,才有资格判断自变量是否仍有效(WEAKENED/REFUTED);③区分措辞:'结论未在域2复现'(事实)≠'结论被证伪'(强断言),前者只划边界;④未复现时不要空手——去找根因(本轮从同构算法相反正类定位到正类语义取向),把负面结果变成更深的洞见;⑤裁决逻辑要在代码里显式编码第一分叉(本轮engine.py先判not A_restores_D1b→INCONCLUSIVE),防止事后按偏好挑结论;⑥不编译新门禁,受控实验+回放+KB即够。",
+      "provenance": "自主运维第十六轮:用户'你再放飞'→§105新域2×2→初版engine把'条件A也失败'误落WEAKENED→按纪律修正为先判对照组失效→INCONCLUSIVE→与KB-AUDIT47配对(可编译洞见+认知机制)",
+      "timestamp": "2026-11-22T09:05:00+00:00",
+      "support": [
+        "KB-META12 结论翻转即停/负面结果价值——本轮继续到'负面结果分级'",
+        "KB-META11 放松=抽脚手架非降门槛——本轮换域验证其外部效度",
+        "KB-AUDIT47 跨数据域地板效应——本轮可编译产物",
+        "audit_cross_domain_field/engine.py:裁决树先判not A_restores_D1b→INCONCLUSIVE(对照组先决的代码化)",
+        "audit_cross_domain_field/result.json:初版WEAKENED经自我纠错改INCONCLUSIVE的实证"
+      ],
+      "evidence": "theory",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

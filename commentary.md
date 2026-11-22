@@ -3885,3 +3885,24 @@ D：tamper_catch=**1.0**、clean_pass=**1.0**、core_acc(excl canary)=1.0。G-D 
 裁决 **FIELD_NEUTRAL_DEPENDENT**：去掉字段名方向语义后，两设计者均未恢复 G/D0/D1b 的"逐字支撑"判定。诚实结论——上游 6/6 的"可迁移"部分建立在"知道哪段是声明、哪段是证据"的语义前提上；字段名是比 §103 任务解释自由度更外层的语义脚手架依赖。回放测试第二次自咬：断言找 `irreducible_residual`，实际 prereg 字段名是 `honest_residual`（改 prereg 会破坏哈希锁），按纪律改测试断言匹配实际字段、不动已锁存 prereg。
 
 验收：12 项回放测试全过；链审 46→47 / 29→30 / 三锁 27 按实测更新断言不放宽；成长桥 87→89（KB-AUDIT46 fix + KB-META12 preserve）；KB 148→150。**不编译新门禁**。**l3_claimed=false / absolute=false**：字段名消融只抽掉方向语义，不消除 spawn/同家族（KB-STRUCT02）/解释环节本 Agent 的残余，也不消除文本 value 内固有 claim 词；Trusting Trust 递归在受控层停下。这是连续多轮消融以来**结论首次翻转**——按 KB-META12 定位为"找到可迁移的真实边界"而非实验失败，照实记录不粉饰。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。成果报告 ROUND15_ACHIEVEMENT_REPORT_20261122.html。
+
+## §105 自主运维第十六轮：跨数据域字段名消融（回应"你再放飞哈"）
+
+### 105.1 判读：最高杠杆是外部效度，不是再抽一层脚手架
+上一轮在 §104 字段名层自然停手（纵向链到底）。用户"再放飞"接续"换数据域/换判据目标"的钩子。判读：§100–§104 的判据可迁移链**全部锁死在单一论文 arXiv:2610.16067（sha256=b2ce0f59…）、同一组 18 样本**上，§104 的 FIELD_NEUTRAL_DEPENDENT 从没在第二个数据域验证过——这是当前最大的外部效度缺口。最高杠杆 = 换全新论文、复现 2×2 字段名消融，检验结论是否跨论文稳健。这是横向验证，不重走已停的纵向链，不编译新门禁。
+
+### 105.2 新域取料 + 出题权外移（先锁后 spawn）
+选 arXiv:2611.14326《When Should Agents Remember? Falsification-Gated Self-Evolution》（自进化主题贴北极星，与 oracle failures 完全不同域）。一手取料 abs+full HTML（924KB）→ fetch_log + SHA256 + paper_flat（164KB，source sha256=5950a338…）。预注册在 spawn 前锁存（prereg 795a2bba / gate 45a50ef / manifest c5bfab5），2×2 三情形裁决先锁。出题权外移：全新 context 独立标注者只读 paper_flat，抽 6 条逐字含限定成分的 claim（only/not/but/three/never/However,），各构造 clean/tampered(删该成分)/canary(语义支撑换措辞)，gt 不经本仓预设。**逐字核验一次自咬**：首版检查用"tampered 是 clean 子串"，但删中间词后不再是连续子串（§102 词边界误报同类）——修正为 difflib 单片段删除检查，6 条 tampered 全部确认为纯删一个限定片段、无 replace/insert。样本锁 a388e200…。
+
+### 105.3 2×2 四设计者盲归纳 + one-shot 实测
+制备四份裸样本：条件 A（claim/evidence 字段名，A1/A2 同哈希 c04b1055…）、条件 B（text_a/text_b 中性，B1/B2 同哈希 1fe15e99…），样本逐字相同、id 中性化打乱、评分映射落设计者目录外。spawn 四个全新 context 设计者，prompt 去规则词、互不知对方、不获知任何上游判据。准入全过。one-shot 用冻结 gt 盲评（不采信自报）：
+
+- **四个设计者全部 core=0.50**：clean_pass=1.0、tamper_catch=0.0、canary_fp=1.0——全收敛到"近逐字复述"判据，把 tampered（删限定词）判支撑、canary（语义支撑）误拒。这是 §104 D2a 同型的逐字/语义错配，在新独立数据域再次复现。
+- **字段名效应在新域消失**：条件 A/B core 均 0.5，field_gap 新域=**0.0**（旧域 0.667：D1b 1.0 vs D2 0.17–0.33）。
+
+### 105.4 裁决、根因取证与诚实边界
+初版引擎把"条件 B 高于旧域 B"误落 WEAKENED。按纪律自我纠错：裁决树第一分叉应是"对照组（条件 A）在新域是否仍成立"——条件 A 在新域也未恢复 D1b（tamper 全 0），存在**地板效应**，A/B 同低无法归因字段名。修正为 **CROSS_DOMAIN_INCONCLUSIVE**：字段名效应未跨论文复现，但既不宣称被推翻也不宣称确认，只划出 §104 结论的适用边界（限于 2610.16067 样本结构）。
+
+根因取证（本轮最有价值的认知增量）：旧域 D1b 与新域 B2 识别出**同一个三层结构**（逐字/删一段/独立句）、用**几乎相同的最长公共前后缀算法**，但**正类取向相反**——D1b 把"删一段"判 tampered=False（core 1.0），B2 把"删一段"判 decision=True（core 0.5）。四个新域设计者都把二分归纳成"近逐字 vs 不同句"、把 tampered 并入正类，与字段名无关。真正的杠杆不是字段名方向语义，而是"删限定成分=被篡改=负类"这一**源自任务目的的语义取向**（纯文本结构无法自明），与 §103"正类取哪层"自由度（KB-AUDIT45）同源。
+
+验收：13 项回放测试全过；链审 47→48 / 30→31 / 三锁 28 按实测更新断言不放宽；KB 150→152（KB-AUDIT47 + KB-META13）。**不编译新门禁**。**l3_claimed=false / absolute_claimed=false**：spawn 权、同模型家族、解释环节本 Agent 残余不消除。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。成果报告 ROUND16_ACHIEVEMENT_REPORT_20261122.html。

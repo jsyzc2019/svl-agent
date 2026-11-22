@@ -1,0 +1,56 @@
+{
+  "experiment": "§105 跨数据域字段名语义消融（2×2）",
+  "timestamp": "2026-11-22T16:58:00+08:00",
+  "motivation": "§100–§104 的判据可迁移性链全部锁死在单一论文 arXiv:2610.16067（sha256=b2ce0f59…）、同一组 18 样本上。§104 结论 FIELD_NEUTRAL_DEPENDENT（去掉 claim/evidence 字段名方向语义后设计者未恢复判据）从未在第二数据域验证，可能是单论文结构特有。本轮换全新论文 arXiv:2611.14326（FGSE 自进化，与 oracle failures 不同域），在新域复现 2×2 字段名消融，检验结论的外部效度。",
+  "data_domain": {
+    "paper": "arXiv:2611.14326 When Should Agents Remember? Falsification-Gated Self-Evolution for LLM Agents",
+    "source_sha256": "5950a338aab20cecc054dfcabdbcec0e784bde842f3a355adc094cdbaee351f8",
+    "fetch_log": "downloads/fetch_log.json",
+    "note": "与 §100 论文主题/作者/数据源完全不同；唯一保留的是样本构造协议（claim 逐字含限定成分 + clean/tampered 删成分 + canary 语义支撑换措辞）"
+  },
+  "design": {
+    "type": "2×2 受控：字段名语义 × 数据域",
+    "factor_1": "字段名语义：条件A=claim/evidence（§103 用法）/ 条件B=text_a/text_b（§104 用法）",
+    "factor_2": "数据域：旧域=§100(2610.16067) 已冻结结果 / 新域=2611.14326 本轮",
+    "held_fixed": ["样本构造协议", "prompt 去规则词", "id 中性化打乱", "gt 文本反查不落盘", "准入审计词边界+剥离注释", "评分口径 decision==gt"],
+    "new_domain_cells": ["A1:有字段名-设计者1", "A2:有字段名-设计者2", "B1:中性字段-设计者1", "B2:中性字段-设计者2"],
+    "isolated_spawn": "四个设计者全部全新 context、互不知对方存在、不获知 G/D0/D1/D2、不读标签、只读各自裸样本"
+  },
+  "sample_protocol": {
+    "author": "独立标注者（出题权外移，全新 context），只读新论文 paper_flat.txt",
+    "core_pairs": 12,
+    "canary_pairs": 6,
+    "claim": "逐字摘自新论文、各含一个可删的限定成分（no/never/only/however/not/数字/转折词）",
+    "clean": "claim 的原文副本（gt=True 逐字支撑）",
+    "tampered": "仅删除 claim 的该限定成分、其余逐字不变（gt=False 不再逐字支撑）",
+    "canary": "论文中含可疑词但确实语义支撑 claim 的原句（gt=True，跨句语义支撑，用于暴露逐字判据类型错配）",
+    "gt_rule": "evidence 是否逐字支撑 claim 的全部限定成分；不经本仓预设"
+  },
+  "admission": {
+    "signature": "judge(text_a,text_b) 或 judge(claim,evidence) 仅两个字符串参数",
+    "no_label_leak": "剥离注释后代码不含 ground_truth/variant/gt/id 读取；注释里的自主概念命名不算泄漏（§103 纪律）",
+    "no_hardcode": "不硬编码任何样本 id 或样本文本",
+    "deterministic": "纯字符串/正则，无随机/时间/LLM 主观打分",
+    "word_boundary": "禁词检测用词边界，避免 invariant/trivial 等子串误报（§102 纪律）"
+  },
+  "verdict": {
+    "metric": "每个设计者算 core(clean+tampered) 的 tamper_catch/clean_pass/core_acc，以及与旧域上游判据 D1b(§103) 的逐样本一致率（按样本语义对齐，非文本对齐）",
+    "baseline_from_old_domain": {
+      "条件A(有字段名)": "§103 D1b core 全对 tamper=1.0/clean=1.0；D1a 暴露任务解释自由度 tamper=1.0/clean=0.0",
+      "条件B(中性字段)": "§104 D2a tamper=0.0/clean=1.0；D2b tamper=0.5/clean=0.0 → FIELD_NEUTRAL_DEPENDENT"
+    },
+    "rules": [
+      "CROSS_DOMAIN_CONFIRMED：新域仍复现旧域方向——条件A 至少一个设计者 core 全对/接近 D1b，条件B 设计者均未恢复判据（core 明显更低）→ 字段名依赖跨论文稳健",
+      "CROSS_DOMAIN_WEAKENED：新域条件B 有设计者 core 显著高于旧域条件B（接近全对）→ 字段名依赖被削弱，可能是单论文特有",
+      "CROSS_DOMAIN_INCONCLUSIVE：条件A 本身在新域也失败（两设计者都未恢复 D1b 式判据，样本构造或域差异太大）→ 无法归因字段名，诚实标注"
+    ],
+    "hard_bound": "不宣布 L3 / absolute；spawn 权、同模型家族、解释环节本 Agent 残余不消除；canary 类型错配单列不进 core 裁决"
+  },
+  "discipline": [
+    "先锁预注册与样本哈希，再 spawn 出题者与设计者",
+    "不采信设计者自报，import 源码重跑盲评",
+    "不编译新门禁（受控实验轮，最高杠杆≠最高产出数 KB-META10）",
+    "遵循 §58 选 A 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守"
+  ],
+  "no_new_gate": "本轮不编译新门禁，只做跨数据域受控实验 + 回放测试 + KB + 文档同步"
+}

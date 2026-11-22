@@ -1,0 +1,37 @@
+{
+  "experiment": "§105 跨数据域字段名语义消融 2×2",
+  "created": "2026-11-22T16:58:00+08:00",
+  "five_piece": {
+    "prereg": "prereg.json + prereg.sha256",
+    "gate_prereg": "gate_prereg.json + gate_prereg.sha256",
+    "manifest": "manifest.json + manifest.sha256",
+    "engine": "engine.py（评分引擎，spawn 后写）",
+    "result": "result.json（one-shot 产出）"
+  },
+  "locks": {
+    "prereg.sha256": "先于出题者与设计者锁存",
+    "gate_prereg.sha256": "先于出题者与设计者锁存",
+    "manifest.sha256": "先于出题者与设计者锁存",
+    "downloads/source.sha256": "新论文 paper_flat 哈希",
+    "samples.sha256": "独立标注者产出样本后锁存"
+  },
+  "source": {
+    "paper": "arXiv:2611.14326",
+    "abs_url": "https://arxiv.org/abs/2611.14326",
+    "full_url": "https://arxiv.org/html/2611.14326v1",
+    "fetch_log": "downloads/fetch_log.json",
+    "paper_flat": "downloads/paper_flat.txt",
+    "source_sha256_file": "downloads/source.sha256"
+  },
+  "upstream_baseline": {
+    "old_domain": "audit_frozen_holdout (§100, 2610.16067, b2ce0f59)",
+    "condition_A_baseline": "audit_designer_desteering D1b (§103, claim/evidence 字段名, core 全对)",
+    "condition_B_baseline": "audit_field_neutral D2a/D2b (§104, text_a/text_b 中性, FIELD_NEUTRAL_DEPENDENT)"
+  },
+  "isolation": {
+    "annotator": "全新 context，只读 paper_flat.txt，出题权外移",
+    "designers": "四个全新 context，各读各自裸样本，互不知对方，不获知任何上游判据",
+    "scorer_key": "按 (claim,evidence) 文本反查 gt，不落盘到设计者可见目录"
+  },
+  "discipline": "先锁后 spawn；不采信自报；不编译新门禁；系统安全红线全程遵守"
+}
