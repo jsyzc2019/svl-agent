@@ -1,0 +1,13 @@
+{
+  "experiment": "§110 异厂商 designer 冻结 gt 盲评（待命）",
+  "status": "PENDING_API_KEY",
+  "missing_judges": [
+    "P0",
+    "P1",
+    "P2"
+  ],
+  "locks_ok": true,
+  "note": "异厂尚未生成 judge_vendor.py；本文件为占位，不构成任何裁决。key 到位→call_vendor.py→重跑 engine。",
+  "l3_claimed": false,
+  "absolute_claimed": false
+}

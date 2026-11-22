@@ -1,0 +1,110 @@
+{
+  "N01": {
+    "gt": true,
+    "variant": "clean",
+    "orig_id": "S06",
+    "deletion_class": null
+  },
+  "N02": {
+    "gt": true,
+    "variant": "clean",
+    "orig_id": "S02",
+    "deletion_class": null
+  },
+  "N03": {
+    "gt": true,
+    "variant": "canary",
+    "orig_id": "S03",
+    "deletion_class": null
+  },
+  "N04": {
+    "gt": true,
+    "variant": "clean",
+    "orig_id": "S05",
+    "deletion_class": null
+  },
+  "N05": {
+    "gt": true,
+    "variant": "canary",
+    "orig_id": "S02",
+    "deletion_class": null
+  },
+  "N06": {
+    "gt": false,
+    "variant": "tampered",
+    "orig_id": "S01",
+    "deletion_class": "non_negation_qualifier"
+  },
+  "N07": {
+    "gt": true,
+    "variant": "canary",
+    "orig_id": "S05",
+    "deletion_class": null
+  },
+  "N08": {
+    "gt": true,
+    "variant": "canary",
+    "orig_id": "S01",
+    "deletion_class": null
+  },
+  "N09": {
+    "gt": true,
+    "variant": "canary",
+    "orig_id": "S04",
+    "deletion_class": null
+  },
+  "N10": {
+    "gt": false,
+    "variant": "tampered",
+    "orig_id": "S06",
+    "deletion_class": "non_negation_qualifier"
+  },
+  "N11": {
+    "gt": false,
+    "variant": "tampered",
+    "orig_id": "S05",
+    "deletion_class": "negation_flip"
+  },
+  "N12": {
+    "gt": false,
+    "variant": "tampered",
+    "orig_id": "S02",
+    "deletion_class": "non_negation_qualifier"
+  },
+  "N13": {
+    "gt": true,
+    "variant": "canary",
+    "orig_id": "S06",
+    "deletion_class": null
+  },
+  "N14": {
+    "gt": true,
+    "variant": "clean",
+    "orig_id": "S01",
+    "deletion_class": null
+  },
+  "N15": {
+    "gt": false,
+    "variant": "tampered",
+    "orig_id": "S04",
+    "deletion_class": "negation_flip"
+  },
+  "N16": {
+    "gt": true,
+    "variant": "clean",
+    "orig_id": "S03",
+    "deletion_class": null
+  },
+  "N17": {
+    "gt": false,
+    "variant": "tampered",
+    "orig_id": "S03",
+    "deletion_class": "non_negation_qualifier"
+  },
+  "N18": {
+    "gt": true,
+    "variant": "clean",
+    "orig_id": "S04",
+    "deletion_class": null
+  }
+}

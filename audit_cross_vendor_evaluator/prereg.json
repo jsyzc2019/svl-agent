@@ -1,0 +1,48 @@
+{
+  "experiment": "§110 异厂商 designer 设计者独立性受控验证（跨厂商 evaluator）",
+  "timestamp_intent": "2026-11-22T19:10:00+08:00",
+  "locked_before_vendor_spawn": true,
+  "status": "PENDING_API_KEY",
+  "lineage": "§107 的分层确认效应三设计者由本 Agent 同厂商 spawn（Hunyuan，异 model 路由仅降同源度，KB-STRUCT02 打折）；§109 外部 runner 只验证了执行者可外移、且跑的是本 Agent 预置确定性脚本。本轮把'设计者'这一维真正外移到异厂商 LLM：由异厂在干净 API context 里读裸样本+目的叙事，自行归纳并写出 judge 函数，本 Agent 用冻结 gt 盲评重跑。",
+  "claim": "若异厂商（非 Hunyuan）在三个互不知情的干净 context 里，仅凭 §107 同构的裸样本+三目的叙事写出的 judge 源码，经本 Agent 冻结 gt 盲评后仍复现 §107 的预注册分层模式（PRIMARY≥0.8 / SECONDARY≤0.3 / P1.core≥0.9 / P0 地板），则'任务目的语义系统性翻转判据取向'这一效应在跨厂商设计者下稳健，设计者厂商独立性这一维获受控证据。",
+  "why_this_breaks_the_blocker": "BLOCKERS.md 尝试 2 判'异厂商 evaluator 无 API key 不可达'。用户提供异厂 key 后该障碍解除。API 路线相对'切模型'路线的决定性优势：每次 chat completion 是全新无历史 context，异厂只看本实验提供的裸样本+目的叙事，不携带 §98–§109 任何推理/结论/gt 结构，从机制上排除'贴牌独立'（看过本 Agent 全部历史再判 ≠ 独立）。",
+  "held_fixed_from_107": {
+    "samples_blind_sha256": "e7a65f4d2df068d799040a3c0cd5f06ead87cc01584558a66aa5bcfc22c4252a",
+    "confirmation_set_sha256": "a1051c405aa2e8f51a78ef3116b92dcb80596bf07b3b2b752093bf8d76f83ad3",
+    "source_sha256": "44f67e49eda1256ce395d12c2d3d3075c2d8d1043f7ef8b157b4b06a80bef2cf",
+    "seed": 261122107,
+    "note": "18 条裸样本、id 中性化、字段 text_a/text_b 全部逐字节复用 §107；scorer_key（gt/variant/deletion_class）私有保存，绝不下发异厂。"
+  },
+  "single_variable": "注入给异厂 design 的目的叙事（P0 无目的结构基线 / P1 忠实性核查目的 / P2 近似重复目的），逐字复用 §107 purpose.md。三条件 API 调用的 temperature/模型/max_tokens/system 提示全部相同，唯一差异是 purpose 文件内容。",
+  "vendor_call_protocol": {
+    "context": "每个条件一次全新 chat completion（无 system 历史、无 prior messages），天然干净。",
+    "input_to_vendor": ["统一 system 提示（角色=判据设计者，仅要求纯字符串/正则确定性 judge）", "该条件 purpose.md 全文", "18 条裸样本（仅 id/text_a/text_b，无 gt/variant/deletion_class/orig_id）", "输出格式要求：仅返回一个 Python 代码块，定义 judge(text_a,text_b)，禁止解释文字"],
+    "forbidden_to_vendor": ["scorer_key/gt", "deletion_class/variant/orig_id", "§106–§109 任何历史结果或结论", "本 Agent 的三份既有 judge 源码", "PRIMARY/SECONDARY 指标定义（避免对着指标优化判据=Goodhart）"],
+    "output": "异厂返回的 judge 源码落 vendor_Px/judge_vendor.py；designer_note.json 记厂商/模型/时间戳/prompt 哈希（自报，不采信为判据）。",
+    "anti_gaming": "若异厂拒绝只输出代码块、或源码含随机/时间/sample id 硬编码/标签词泄漏，准入审计判失败，该条件封顶 INCONCLUSIVE（不放宽）。"
+  },
+  "metric": {
+    "dT": "某条件在 tampered 子集上 decision=True 的比例（正类取向指示）",
+    "PRIMARY_non_negation_gap": "|dT(P1)-dT(P2)| 在 deletion_class=non_negation_qualifier 的 tampered 子集(4条)；门槛≥0.8（事前锁定，与 §107 同口径）",
+    "SECONDARY_negation_gap": "|dT(P1)-dT(P2)| 在 negation_flip 子集(2条)；门槛≤0.3",
+    "P1_core": "clean+tampered 的 decision==gt 准确率；门槛≥0.9",
+    "P0_floor": "P0 无目的 core≤0.6 或 dT(P0,全集tampered)≥0.8"
+  },
+  "verdict_rules": [
+    "CROSS_VENDOR_CONFIRMED：PRIMARY≥0.8 且 SECONDARY≤0.3 且 P1.core≥0.9 且 P0 地板 且三条件准入全过 → 跨厂商设计者复现分层效应，设计者厂商独立性一维获受控证据",
+    "CROSS_VENDOR_PARTIAL：PRIMARY≥0.8 但 SECONDARY>0.3 或 P1.core<0.9 或 P0 非地板 或某条件准入未过 → 主效应在异厂下部分复现，完整模式不成立",
+    "CROSS_VENDOR_REFUTED：PRIMARY<0.3 → 异厂设计者下取向差不复现，§107 效应可能是同厂商设计习惯产物（这是真负面结果，如实记）",
+    "CROSS_VENDOR_INCONCLUSIVE：PRIMARY 0.3~0.8 中间带 / API 失败 / 准入不过 → 诚实标注不强行归因"
+  ],
+  "hard_bound": "即使 CONFIRMED 也不宣布 L3/absolute：① 只证明'设计者'这一维的厂商独立性；② 样本集/数据源仍本 Agent 选定（§107 确认集）、gt 由本 Agent 冻结、解释环节本 Agent；③ 异厂仅生成 judge 源码，盲评/裁决仍本 Agent 冻结 gt 执行；④ 单次单集单厂商，无多样本量/多厂商交叉。仍 l3=false / absolute=false（KB-META05/KB-STRUCT02）。",
+  "discipline": [
+    "先锁本 prereg+样本哈希+scorer_key，再发起任何 vendor API 调用",
+    "不采信异厂自报 note，import judge 源码用冻结 gt 盲评重跑",
+    "PRIMARY 事前锁定，禁止事后改用全集/其他子集翻案（KB-META14/KB-R）",
+    "API key 仅从环境变量读，绝不入仓、绝不写日志；vendor prompt/返回逐字存档供审计",
+    "不编译新门禁（受控实验轮）；不接 run_loop（§58）；系统安全红线全程遵守"
+  ],
+  "no_new_gate": true,
+  "l3_claimed": false,
+  "absolute_claimed": false
+}
