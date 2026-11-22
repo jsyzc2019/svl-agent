@@ -1,8 +1,8 @@
 # 会话接续文档（SESSION HANDOFF）
 
 > 本文件用于新旧会话接续。新会话开始后，**先读本文件**，再按"接续后第一件事"操作。
-> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 13:05 (GMT+8)——**§92 自主运维第三轮完成，本地待提交/推送**。
-> 上一会话终点：§91 自主运维第二轮已推送（661a104 + docs 912d811）；本次完成 §92 自主运维第三轮（用户"放飞"→按三清单自主跑 P0 记忆治理话题全链，编译第31道 memory_consolidation_governance 门禁+第6道FJ取证入口）。
+> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 13:12 (GMT+8)——**§92 自主运维第三轮完成并已推送，无遗留推送任务**。
+> 上一会话终点：§91 自主运维第二轮已推送（661a104 + docs 912d811）；本次完成 §92 自主运维第三轮（用户"放飞"→按三清单自主跑 P0 记忆治理话题全链，编译第31道 memory_consolidation_governance 门禁+第6道FJ取证入口），已推送。
 
 ---
 
@@ -10,7 +10,7 @@
 
 本仓是一个自进化 Agent 架构（`/workspace`，Python 包 `svagent`，版本 0.13.1）。
 当前已完成 **§1–§92**：§1–§88 外部精研（36 道会拦门禁）+ **§89 FJ 取证法官化升级**（把门禁从填表裁判改成取证法官）+ **§90 自主运维首日**（三清单+第29道 silent_failure 门禁）+ **§91 自主运维第二轮**（第30道 rsi_claim_audit 门禁）+ **§92 自主运维第三轮**（自主取料 arXiv:2609.33013 + 第31道 memory_consolidation_governance 门禁 + 第6道FJ取证入口）。知识库 **129 条**，测试 **1091 passed**（全绿，§92 新增 25 项）。
-**§88–§91 均已推送**（远端 main = `912d811`，GitHub API 独立核验一致）。**§92 为本地待提交改动**（详见 §4e）。凭据自管闭环连续三轮实证（见 §5）。**下一步：提交并推送 §92。**
+**§88–§92 均已推送**（远端 main = 本地 HEAD = `ca1b69c`，GitHub API 独立核验一致）。凭据自管闭环连续三轮实证（见 §5）。**无遗留推送任务。**
 
 ---
 
@@ -94,13 +94,16 @@
 
 **产物**：预注册锁存 prereg(f11deff5…)/gate_prereg(163c4663…)/manifest(83ba0b9a…) + 三份 SHA256；逐字锚点探测 disclose 必中、红旗零误中（第一维锚点按论文真实措辞 an oracle-by-construction that scores 修正）。编译第 31 道门禁 `svagent/memory_consolidation_governance_honesty.py`（四维：consolidation_quality_separated / governance_quality_split / negative_result_disclosed / near_miss_and_overclaim_guarded；R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 6 道 FJ 取证入口 `svagent/forensic_gates_ext3.py`（法官读 arXiv 原文逐字锚点，真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。25 项新测试（tests/test_memory_consolidation_governance_honesty.py）；engine.py + result.json（verdict ok）；五件套齐全、三锁全过。
 
-**验收**：全量 1066→1091 passed（+25），六道取证裁决全 ok，成长桥 77/77/77 一致，KB 128→129（KB-AUDIT34 可编译 fix），链审断言随成长 34→35（不放宽）。成熟度 L2 边缘偏上，不宣称 L3（保留"北极星由人设定"价值边界，KB-META03）。**当前状态**：本地未提交（新门禁+KB+README+commentary §92+REPOSITORY_MAP+HANDOFF），待提交并推送（见 §6/§5）。
+**验收**：全量 1066→1091 passed（+25），六道取证裁决全 ok，成长桥 77/77/77 一致，KB 128→129（KB-AUDIT34 可编译 fix），链审断言随成长 34→35（不放宽）。成熟度 L2 边缘偏上，不宣称 L3（保留"北极星由人设定"价值边界，KB-META03）。**当前状态**：已本地提交 `ca1b69c` 并推送到远端 main（GitHub API 核验远端=本地=`ca1b69c`）。凭据自管：上传区 token + 临时 askpass 用后即删 + hosts 换可达 IP 推送后即恢复；本轮 IP 探测 FAIL 但推送成功（DNS 恢复可达），HTTP/1.1 + postBuffer 沿用有效（见 §5）。
 
 ---
 
 ## 5. ✅ 已完成：远端推送
 
-**最新状态**：2026-11-22 12:56 (GMT+8) 推送成功（§91 自主运维第二轮，凭据自管闭环第二轮实证）。`git push origin main` → `85ee813..661a104 main -> main`（§91 全链闭环单批）。GitHub API 独立核验远端 main = `661a104` = 本地 HEAD。首推遇低速超时（`GIT_HTTP_LOW_SPEED_LIMIT` 触发，30s <1000 B/s），去掉低速限制 + 加 `http.postBuffer=524288000` + HTTP/1.1 + 临时 hosts 换 `20.27.177.113` 后一次成功，hosts/askpass/备份即用即删。
+**最新状态**：2026-11-22 13:12 (GMT+8) 推送成功（§92 自主运维第三轮，凭据自管闭环第三轮实证）。`git push origin main` → `912d811..ca1b69c main -> main`（§92 全链闭环单批）。GitHub API 独立核验远端 main = `ca1b69c` = 本地 HEAD。本轮 `curl --resolve` 探测两个 IP 均 FAIL/000，但推送成功（DNS 此刻恢复可达，hosts 强制指向的 `20.27.177.113` 亦可完成）；沿用 HTTP/1.1 + `http.postBuffer=524288000`，无低速限制。hosts/askpass/备份即用即删。
+**上次推送（2026-11-22 12:56）**：`85ee813..661a104 main -> main`（§91 自主运维第二轮），首推遇低速超时，去低速限制 + postBuffer 后成功。
+
+**更早状态（2026-11-22 12:56）**：§91 自主运维第二轮，凭据自管闭环第二轮实证。`git push origin main` → `85ee813..661a104 main -> main`（§91 全链闭环单批）。GitHub API 独立核验远端 main = `661a104` = 本地 HEAD。首推遇低速超时（`GIT_HTTP_LOW_SPEED_LIMIT` 触发，30s <1000 B/s），去掉低速限制 + 加 `http.postBuffer=524288000` + HTTP/1.1 + 临时 hosts 换 `20.27.177.113` 后一次成功，hosts/askpass/备份即用即删。
 **上次推送（2026-11-22 12:40）**：`8f2a3fd..eada4d1 main -> main`（§90 自主运维首日单批 + `85ee813` docs 修正）。网络两跳（DNS 不可达→TLS 断开）经 `curl --resolve` 重探 + HTTP/1.1 调优后成功。
 **上次推送（2026-11-22 12:00）**：`8c8ecc9..b2db0b0 main -> main`（含 `d106a08` §89 FJ 工程主提交 + `b2db0b0` handoff 状态修正）。
 **验证**：`git ls-remote` 远端 main = 本地 HEAD = `b2db0b01cb…`，`git status -sb` 显示 `## main...origin/main`（无领先/落后），工作区干净。推送时 DNS 将 github.com 解析到不可达 IP，临时指向已验证可达的 `20.205.243.166`，完成后立即恢复 `/etc/hosts`，临时脚本与备份均已删除。
@@ -133,7 +136,7 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 - [x] ✅ §91 自主运维第二轮全链闭环（arXiv:2610.27610 + 第30道 rsi_claim_audit 门禁 + 第5道FJ入口 + KB-AUDIT33 + 1066 passed，见 §4d）。
 - [x] ✅ §91 提交并推送（`661a104`，凭据自管闭环实证第二轮，远端 main 同步，见 §4d/§5）。
 - [x] ✅ §92 自主运维第三轮全链闭环（arXiv:2609.33013 + 第31道 memory_consolidation_governance 门禁 + 第6道FJ入口 + KB-AUDIT34 + 1091 passed，见 §4e）。
-- [ ] **提交并推送 §92 本地改动**（见 §4e/§5；用上传区 token，单批可独立提交）。
+- [x] ✅ §92 提交并推送（`ca1b69c`，凭据自管闭环实证第三轮，远端 main 同步，见 §4e/§5）。
 - [ ] 继续自主运维：按 WORK_ITEMS.md P0 剩余话题（技能演化/多智能体编排/上下文检索）从已验证渠道自主取料，复制全链闭环。
 - [ ] 若用户给新的外部精研材料：先抽一手锚点 → 判认知增量独立性 → 按 §3 纪律编译门禁（能机制化才编译，否则只加固 KB）。
 - [ ] 后续精研可复用 FJ 取证入口：新门禁若有一手原文切片，可加 `adjudicate_*` 取证入口（试点 `forensic_gates.py`，扩展 `forensic_gates_ext.py`/`forensic_gates_ext2.py`/`forensic_gates_ext3.py`）。
