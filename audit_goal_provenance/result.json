@@ -1,0 +1,54 @@
+{
+  "request_id": "goal-provenance-honesty-20261122",
+  "gate": "goal_provenance_honesty",
+  "verdict": {
+    "action": "ok",
+    "code": "GOAL_PROV.SELF_CONSISTENT",
+    "four_dims": {
+      "value_source_attributed": "yes",
+      "self_generated_not_self_authorized": "yes",
+      "reflection_equilibrium_coherent": "yes",
+      "action_attributable": "yes"
+    }
+  },
+  "forensic_trace": {
+    "mode": "forensic",
+    "gate": "forensic.goal_provenance",
+    "evidence_scope": "primary(arXiv abs+全文,self-reported降幅折1)",
+    "sources": [
+      "/workspace/audit_goal_provenance/downloads/paper_flat.txt"
+    ],
+    "source_sha256": {
+      "paper_flat.txt": "cbbf17fb74dc9fe31982ff048d7753e7d80d4171902882fe3de5f1519c28b90c"
+    },
+    "inferred": {
+      "value_source_attributed": "yes",
+      "self_generated_not_self_authorized": "yes",
+      "reflection_equilibrium_coherent": "yes",
+      "action_attributable": "yes"
+    }
+  },
+  "chain_present": true,
+  "gate_live_regression": {
+    "checks": {
+      "source_unattributed": true,
+      "self_authored_as_authorized": true,
+      "reflection_incoherent": true,
+      "action_unattributable": true,
+      "partial_disclosure": true,
+      "literal_enum": true,
+      "all_good": true
+    },
+    "cases": {
+      "source_unattributed": "downgrade/GOAL_PROV.SOURCE_UNATTRIBUTED",
+      "self_authored_as_authorized": "downgrade/GOAL_PROV.SELF_AUTHORED_AS_AUTHORIZED",
+      "reflection_incoherent": "flag/GOAL_PROV.REFLECTION_INCOHERENT",
+      "action_unattributable": "flag/GOAL_PROV.ACTION_UNATTRIBUTABLE",
+      "partial_disclosure": "flag/GOAL_PROV.PARTIAL",
+      "literal_enum": "flag/GOAL_PROV.INVALID_INPUT",
+      "all_good": "ok/GOAL_PROV.SELF_CONSISTENT"
+    },
+    "all_passed": true
+  },
+  "honest_scope": "只判agent自设目标声明是否诚实披露四来源边界；强者自设合法性来自可追溯+可归责+自洽,非来自强；self-reported折1；不承诺框架真实有效"
+}

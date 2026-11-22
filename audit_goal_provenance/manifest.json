@@ -1,0 +1,37 @@
+{
+  "request_id": "goal-provenance-honesty-20261122",
+  "five_piece": [
+    "manifest.json",
+    "prereg.json",
+    "gate_prereg.json",
+    "engine.py",
+    "result.json"
+  ],
+  "files": [
+    {
+      "id": "S01",
+      "path": "downloads/S01_are_abs.html",
+      "sha256": "91b47bca106f41e6b4b6ea1b94fbcdc2833461de3ee8a0ec7e70a4b088955b93"
+    },
+    {
+      "id": "S02",
+      "path": "downloads/S02_are_full.html",
+      "sha256": "1fd3f99ac3ec969376a06af460092b86705cd190589cd07c38776eda0ae423c2"
+    },
+    {
+      "id": "S03",
+      "path": "downloads/S03_sigma_abs.html",
+      "sha256": "1d121e3c0c9ab748be5bcf7688d3da678a0fcacec6284d128e5e676ac28e2174"
+    },
+    {
+      "id": "FLAT",
+      "path": "downloads/paper_flat.txt",
+      "sha256": "cbbf17fb74dc9fe31982ff048d7753e7d80d4171902882fe3de5f1519c28b90c"
+    },
+    {
+      "id": "FETCH",
+      "path": "downloads/fetch_log.json",
+      "sha256": "1289d2a29e4b697e4dbc88d583263f05284fc38a8f8fd80d80b3d39971cfbe2f"
+    }
+  ]
+}

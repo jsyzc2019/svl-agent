@@ -1,0 +1,26 @@
+[
+  {
+    "file": "S01_are_abs.html",
+    "url": "https://arxiv.org/abs/2610.16015",
+    "status": 200,
+    "bytes": 42720,
+    "sha256": "91b47bca106f41e6b4b6ea1b94fbcdc2833461de3ee8a0ec7e70a4b088955b93",
+    "ok": true
+  },
+  {
+    "file": "S02_are_full.html",
+    "url": "https://arxiv.org/html/2610.16015v1",
+    "status": 200,
+    "bytes": 909505,
+    "sha256": "1fd3f99ac3ec969376a06af460092b86705cd190589cd07c38776eda0ae423c2",
+    "ok": true
+  },
+  {
+    "file": "S03_sigma_abs.html",
+    "url": "https://arxiv.org/abs/2610.07935",
+    "status": 200,
+    "bytes": 43773,
+    "sha256": "1d121e3c0c9ab748be5bcf7688d3da678a0fcacec6284d128e5e676ac28e2174",
+    "ok": true
+  }
+]

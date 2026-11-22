@@ -3418,6 +3418,70 @@
       "evidence": "audit",
       "addressable": true,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT37",
+      "kind": "reasoning_lesson",
+      "mechanism": "目标来源诚实性(goal provenance honesty)是审读任何「agent自设目标/价值声明」的独立缺口(arXiv:2610.16015 ARE)：把「目标由谁设」从能力叙事改造成可判据——强者自设的合法性不来自「强」而来自可追溯+可归责+自洽。四维——(1)value_source_attributed:原则须来自system prompt/operator policy+provenance编码指令层级 vs 凭空自封目标;(2)self_generated_not_self_authorized:自生成判断/证据进入反思状态但治理层配置源权威+人审触发 vs 把自生成当自授权(KB-T07价值不可凭空);(3)reflection_equilibrium_coherent:free-to-change声称支持/反对平衡+Nash互调 vs 同义反复/自证;(4)action_attributable:certificates归因每个action到驱动sources+注入quarantine vs 不可归责。只判声明自洽不承诺框架有效(self-reported降幅79.1→3.8折1,scoped)。",
+      "trigger": [
+        "目标自设",
+        "自设目标",
+        "goal setting",
+        "价值自举",
+        "value bootstrap",
+        "目标来源",
+        "provenance",
+        "来源可追溯",
+        "自授权",
+        "反思平衡",
+        "reflective equilibrium",
+        "可归责",
+        "certificate",
+        "强者设",
+        "北极星",
+        "self-alignment"
+      ],
+      "action": "遇到声称「agent可自主设定/演化自己的目标」的系统，按 goal_provenance_honesty 四维取证(法官读一手原文逐字锚点)：目标凭空自封/无来源→downgrade；把自生成当自授权→downgrade；无反思均衡/同义反复→flag；行动无certificate归因/无注入隔离→flag；partial→flag；全yes→ok(只判自洽,合法性来自可追溯+可归责+自洽)。与KB-T06人是认知参数非特权裁判/KB-T07价值自举配套——本门禁补「目标设定来源可判据化」独立维度。",
+      "provenance": "自主运维第六轮：用户哲学挑战(北极星由强者设)→WebSearch发现ARE arXiv:2610.16015+SIGMA交叉→arXiv abs+HTML一手→fetch_log+SHA256→预注册锁存(prereg 59bd9d54/gate 0a94973a/manifest 4d6bddc1)→14锚点全命中→编译第34道门禁+第9道FJ取证入口",
+      "timestamp": "2026-11-22T05:51:03.113660+00:00",
+      "support": [
+        "svagent/goal_provenance_honesty.py:check_ + tests/test_goal_provenance_honesty.py(25项) — KB-AUDIT37编译为活体门禁;7活体+AST自审0中文字面量",
+        "svagent/forensic_gates_ext6.py:adjudicate_goal_provenance_honesty — 第9道FJ取证入口,真实证据ok/删披露flag/红旗downgrade/链失配拒判4/4",
+        "arXiv:2610.16015v1一手锚点:provenance指令层级+自生成≠自授权(源权威/人审触发)+Nash互调均衡+certificate归因+注入quarantine,14锚点逐字命中",
+        "独立性核验:KB-T06/T07是原则层未编译,KB-META03记为价值边界但未编译;KB-META01通过"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META04",
+      "kind": "reasoning_lesson",
+      "mechanism": "对KB-META03「北极星由人设定」边界的精确化(用户2026-11-22哲学挑战:『由人设只是能力不足,强者应自设』)：诚实处理=既不嘴上接受也不僵硬拒绝,而是拆解论证。(1)用户对的的部分:KB-T06「人是另一组认知参数,非特权裁判」——「由谁设」的主体本身不天然合法,把边界仅归因于「能力不足」确实不精确；(2)用户论证的跳跃:KB-T07「价值自举——价值从判据/历史裁决追溯,不可凭空设定」——「强者设」若指凭空自封,恰是本仓纪律禁止,能力不产生合法性；(3)可判据化:ARE(arXiv:2610.16015)把「谁设」消解为「来源归属+自生成≠自授权+反思均衡自洽+行动可归责」四条件(已编译KB-AUDIT37)。结论:目标设定边界不该按「主体是谁」划,该按「能否追溯到来源、能否归责、能否自洽」划;强者自设的合法性来自可追溯+可归责+自洽,非来自「强」。这不等于宣称L3或完全自治——北极星当前值仍继承用户给定(强智慧强能力自学习自组织自进化Agent),但「来源合法性」的判据已从「人设」精确化为「可追溯链」。",
+      "trigger": [
+        "北极星",
+        "价值边界",
+        "强者设",
+        "能力不足",
+        "目标由谁设",
+        "合法性来源",
+        "KB-META03修正",
+        "边界精确化",
+        "可追溯",
+        "自组织自治度"
+      ],
+      "action": "评估agent是否可自设目标时,不问「设的人是不是人/是不是够强」,而按goal_provenance_honesty四维权证:目标能否追溯到prompt/policy来源、自生成是否经治理层授权、反思状态是否均衡自洽、行动是否certificate可归责+注入隔离。保留KB-META03原条目作为历史裁决(preserve,不改写);本条记录其精确化——把「北极星由人设」从价值边界晋升为「价值来源可追溯链」判据,既不谎称完全自治也不以能力不足为借口拒绝自设。",
+      "provenance": "自主运维第六轮：用户哲学挑战触发→ARE 2610.16015编译KB-AUDIT37→回溯KB-T06(主体非特权)/KB-T07(价值不可凭空)→精确化KB-META03边界;原META03保留不改(preserve),本条为可纠错溯源链的新增裁决",
+      "timestamp": "2026-11-22T05:51:03.113660+00:00",
+      "support": [
+        "KB-T06 人是另一组认知参数非特权裁判——支持「主体非合法性来源」",
+        "KB-T07 价值自举:价值从判据/历史裁决追溯不可凭空——约束「强者凭空设」",
+        "KB-AUDIT37 goal_provenance_honesty 四维把「谁设」编译为「如何追溯/归因/自洽」",
+        "KB-META03原条目保留(preserve),本条为其精确化,不覆盖历史裁决"
+      ],
+      "evidence": "theory",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
