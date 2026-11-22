@@ -9,8 +9,8 @@
 ## 1. 一句话现状
 
 本仓是一个自进化 Agent 架构（`/workspace`，Python 包 `svagent`，版本 0.13.1）。
-当前已完成 **§1–§96**：§1–§88 外部精研（36 道会拦门禁）+ **§89 FJ 取证法官化升级**（把门禁从填表裁判改成取证法官）+ **§90 自主运维首日**（三清单+第29道 silent_failure 门禁）+ **§91 自主运维第二轮**（第30道 rsi_claim_audit 门禁）+ **§92 自主运维第三轮**（arXiv:2609.33013 + 第31道 memory_consolidation_governance 门禁 + 第6道FJ入口）+ **§93 自主运维第四轮**（清单动态扩展 P3 安全/合规 + arXiv:2611.24362 + 第32道 redteam_robustness_honesty 门禁 + 第7道FJ入口）+ **§94 自主运维第五轮**（arXiv:2611.21315 + 第33道 benchleaking_honesty 门禁 + 第8道FJ入口）+ **§95 自主运维第六轮**（回应"强者自设北极星"哲学挑战 + arXiv:2610.16015 + 第34道 goal_provenance_honesty 门禁 + 第9道FJ入口 + KB-META04 边界精确化）+ **§96 自主运维第七轮**（P0 技能演化话题 + arXiv:2610.09832 SkillForge + 第35道 skill_lifecycle_honesty 门禁 + 第10道FJ入口 + 虚高指标拆穿迁移）。知识库 **134 条**，测试 **1191 passed**（全绿，§96 新增 25 项）。
-**§88–§96 均已推送**（远端 main = 本地 HEAD = `2004174`，`git status -sb` 无 ahead）。凭据自管闭环连续七轮实证（见 §5）。**无遗留推送任务。**
+当前已完成 **§1–§97**：§1–§88 外部精研（36 道会拦门禁）+ **§89 FJ 取证法官化升级**（把门禁从填表裁判改成取证法官）+ **§90 自主运维首日**（三清单+第29道 silent_failure 门禁）+ **§91 自主运维第二轮**（第30道 rsi_claim_audit 门禁）+ **§92 自主运维第三轮**（arXiv:2609.33013 + 第31道 memory_consolidation_governance 门禁 + 第6道FJ入口）+ **§93 自主运维第四轮**（清单动态扩展 P3 安全/合规 + arXiv:2611.24362 + 第32道 redteam_robustness_honesty 门禁 + 第7道FJ入口）+ **§94 自主运维第五轮**（arXiv:2611.21315 + 第33道 benchleaking_honesty 门禁 + 第8道FJ入口）+ **§95 自主运维第六轮**（回应"强者自设北极星"哲学挑战 + arXiv:2610.16015 + 第34道 goal_provenance_honesty 门禁 + 第9道FJ入口 + KB-META04 边界精确化）+ **§96 自主运维第七轮**（P0 技能演化话题 + arXiv:2610.09832 SkillForge + 第35道 skill_lifecycle_honesty 门禁 + 第10道FJ入口 + 虚高指标拆穿迁移）+ **§97 自主运维第八轮**（回应"期待L3" + arXiv:2610.38266 L0-L3 rubric + 第36道 maturity_evidence_honesty 门禁 + 第11道FJ入口 + 首次自审诚实判未达L3）。知识库 **136 条**，测试 **1217 passed**（全绿，§97 新增 26 项）。
+**§88–§97 均已推送**（远端 main = 本地 HEAD = `d8c0499`，`git status -sb` 无 ahead）。凭据自管闭环连续八轮实证（见 §5）。**无遗留推送任务。**
 
 ---
 
@@ -125,11 +125,20 @@
 
 **产物与验收**：预注册锁存 prereg(0cc74aa1…)/gate_prereg(90082a02…)/manifest(7ede8fbd…) + source 清单锁；摘要+附录 H 逐字锚点 disclose 必中、红旗零误中（锚点取自 arXiv 原文非第三方转载版）。编译第 35 道门禁 `svagent/skill_lifecycle_honesty.py`（四维：lifecycle_stages_disclosed / credit_assignment_audited / mutation_teacher_controlled / retirement_failure_attributed；R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 10 道 FJ 取证入口 `svagent/forensic_gates_ext7.py`（真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。25 项新测试；engine.py + result.json（verdict ok）；五件套齐全、三锁全过。全量 1166→1191 passed（+25），十道取证裁决全 ok，消费痕迹 80→81，KB 133→134（KB-AUDIT38 fix），链审断言 38→39 / 21→22（不放宽）。报告 `ROUND7_ACHIEVEMENT_REPORT_20261122.html`。**方法论迁移**：首次把"虚高指标拆穿+self-reported 折 1"从评测诚信（§94）迁移到技能演化领域——SkillForge 主动做了 credit leave-one-out / teacher matched-budget / 退役失败类别三组自审，恰对应本仓四维权证。**当前状态**：已本地提交 `2004174` 并推送到远端 main（`9054d89..2004174 main -> main`，`git status -sb` 无 ahead）。用 `20.27.177.113` + HTTP/1.1 + postBuffer 一次成功（首探 140.82.114.4 FAIL，20.27.177.113 200）；凭据/hosts/备份即用即删（见 §5）。
 
+### §4j 自主运维第八轮（§97，成熟度证据诚实性 + 首次自审，回应"期待L3"）
+**对"期待L3"的诚实处理**：不宣布达标，而把 L3 门槛编译成可判据尺子并首次对准本仓。回溯 KB-SIM03（Task→Retained→Improver gain，无受控实验不认 L3）；核对 §91 rsi_claim_audit_honesty 已覆盖 L3 四评估边界，不重复造轮子（KB-STRUCT02 同构≠独立佐证）；arXiv:2610.38266 给出 L0-L3 rubric 精确定义：L3 requires greater subsequent gains from shared learner starts under matched resource budgets and independent tests。关键认知：期待不产生 L3，正如 §95 能力不产生合法性——L3 由受控证据产生。预注册锁定 self_audit_precommit：若受控验证不达标则诚实判未达 L3。
+
+**触发与取料**：用户"飞吧，期待L3"——晨间自检 1191 全绿。WebSearch 自主发现 arXiv:2610.38266v1《RSI in Physical AI》L0-L3 rubric + arXiv:2611.10787 TRUST，取 abs+全文（三源均 200），落 fetch_log+SHA256。10 逐字锚点全命中。增量判断：KB-SIM03 是原则层未编译；§91 审外部 RSI 声称但不判"系统成熟度等级声明是否诚实"——新对象独立，KB-META01 通过。
+
+**产物与验收**：预注册锁存 prereg(37b1610d…)/gate_prereg(d0e24033…)/manifest(818549e6…) + source 清单锁 + self_audit_precommit。编译第 36 道门禁 `svagent/maturity_evidence_honesty.py`（四维：level_definition_traced / process_product_split / shared_start_controlled / independent_tests；R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 11 道 FJ 取证入口 `svagent/forensic_gates_ext8.py`（真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。26 项新测试（含自审结论断言）；engine.py + result.json（取证据辞 ok，含 self_audit）。全量 1191→1217 passed（+26），十一道取证裁决全 ok，消费痕迹 81→82，KB 134→136（KB-AUDIT39 fix + KB-META05 首次自审结论 preserve），链审断言 39→40 / 22→23（不放宽）。报告 `ROUND8_ACHIEVEMENT_REPORT_20261122.html`。**首次自审结论**：四维 yes/yes/no/no → flag/MATURITY.SHARED_START_UNCONTROLLED → 诚实判未达 L3、停在 L2 边缘偏上（缺 shared-start 匹配预算受控验证 + 独立评估器）；达成 L3 三路径已落档 result.json：①同一任务起点+相同预算对照 §89 前填表裁判 vs 之后 FJ 取证流程；②引入本仓外 common-data/第三方 evaluator；③量化 improver gain 证明改进机制本身使后续增益更大。**当前状态**：已本地提交 `d8c0499` 并推送到远端 main（`36613a0..d8c0499 main -> main`，`git status -sb` 无 ahead）。用 `140.82.114.4` + HTTP/1.1 + postBuffer 3 秒一次成功；凭据/hosts/备份即用即删（见 §5）。
+
 ---
 
 ## 5. ✅ 已完成：远端推送
 
-**最新状态**：2026-11-22 14:10 (GMT+8) 推送成功（§96 自主运维第七轮，凭据自管闭环第七轮实证）。`git push origin main` → `9054d89..2004174 main -> main`（§96 全链闭环单批）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = `2004174`。本轮 `curl --resolve` 探测 `20.27.177.113` 返回 200、`140.82.114.4` FAIL/000，用 `20.27.177.113` + HTTP/1.1 + postBuffer 一次推送成功。hosts/askpass/备份即用即删，git config 无明文凭据。
+**最新状态**：2026-11-22 14:20 (GMT+8) 推送成功（§97 自主运维第八轮，凭据自管闭环第八轮实证）。`git push origin main` → `36613a0..d8c0499 main -> main`（§97 全链闭环单批，3 秒完成）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = `d8c0499`。本轮 `curl --resolve` 探测 `20.27.177.113` / `140.82.114.4` 均 200，用 `140.82.114.4` + HTTP/1.1 + postBuffer 一次推送成功。hosts/askpass/备份即用即删，git config 无明文凭据。
+
+**上次推送（2026-11-22 14:10）**：§96 自主运维第七轮，凭据自管闭环第七轮实证。`git push origin main` → `9054d89..2004174 main -> main`（§96 全链闭环单批）。本地 HEAD 曾为 `2004174`。用 `20.27.177.113` + HTTP/1.1 + postBuffer 一次成功；凭据/hosts/备份即用即删。
 
 **上次推送（2026-11-22 13:56）**：§95 自主运维第六轮，凭据自管闭环第六轮实证。`git push origin main` → `a7c55a5..f17b1d7 main -> main`（§95 全链闭环单批）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = `f17b1d7`。首推 `20.27.177.113` 遇 HTTP 408（`The requested URL returned error: 408`，send-pack sideband 断连，核验确认 ahead 1 未写入）；换 `140.82.114.4` + HTTP/1.1 + postBuffer 一次成功。hosts/askpass/备份即用即删，git config 无明文凭据。
 
@@ -181,10 +190,12 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 - [x] ✅ §95 回应"强者自设北极星"哲学挑战（拆解：主体非特权裁判 KB-T06 / 价值不可凭空 KB-T07 / ARE 四维可判据化）+ 自主运维第六轮全链闭环（arXiv:2610.16015 + 第34道 goal_provenance_honesty 门禁 + 第9道FJ入口 + KB-AUDIT37/KB-META04 + 1166 passed，见 §4h）。
 - [x] ✅ §95 提交并推送（`f17b1d7`，凭据自管闭环实证第六轮，远端 main 同步，见 §4h/§5）。
 - [x] ✅ §96 提交并推送（`2004174`，凭据自管闭环实证第七轮，远端 main 同步，见 §4i/§5）。
+- [x] ✅ §97 回应"期待L3"（编译 L0-L3 成熟度证据尺子 + 首次自审诚实判未达L3，达成路径落档）+ 提交推送（`d8c0499`，凭据自管闭环实证第八轮，见 §4j/§5）。
+- [ ] 达成 L3 的受控验证（KB-META05 三路径）：①同一任务起点+相同预算对照 §89 前填表裁判 vs 之后 FJ 取证流程；②引入本仓外 common-data/第三方 evaluator；③量化 improver gain 证明改进机制本身使后续增益更大。
 - [ ] 继续自主运维（清单可动态扩展，领域不限但守法）：按 WORK_ITEMS.md P0 剩余话题（多智能体编排/上下文检索）或 P1/P2/P3 择机从已验证渠道自主取料，复制全链闭环。
 - [ ] 若用户给新的外部精研材料：先抽一手锚点 → 判认知增量独立性 → 按 §3 纪律编译门禁（能机制化才编译，否则只加固 KB）。
-- [ ] 后续精研可复用 FJ 取证入口：新门禁若有一手原文切片，可加 `adjudicate_*` 取证入口（试点 `forensic_gates.py`，扩展 `forensic_gates_ext.py`/`ext2.py`/`ext3.py`/`ext4.py`/`ext5.py`/`ext6.py`/`ext7.py`）。
-- [ ] 本文件随每次会话终结更新现状（§1/§4/§4b/§4c/§4d/§4e/§4f/§4g/§4h/§4i/§5）。
+- [ ] 后续精研可复用 FJ 取证入口：新门禁若有一手原文切片，可加 `adjudicate_*` 取证入口（试点 `forensic_gates.py`，扩展 `forensic_gates_ext.py`/`ext2.py`/`ext3.py`/`ext4.py`/`ext5.py`/`ext6.py`/`ext7.py`/`ext8.py`）。
+- [ ] 本文件随每次会话终结更新现状（§1/§4/§4b/§4c/§4d/§4e/§4f/§4g/§4h/§4i/§4j/§5）。
 
 ---
 
@@ -192,14 +203,14 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 
 | 用途 | 路径 |
 |---|---|
-| 门禁源码 | `svagent/*.py`（88 模块，惰性导入登记于 `svagent/__init__.py`） |
-| FJ 取证层 | `svagent/forensics.py` / `forensic_gates.py` / `forensic_gates_ext.py`(§90) / `forensic_gates_ext2.py`(§91) / `forensic_gates_ext3.py`(§92) / `forensic_gates_ext4.py`(§93) / `forensic_gates_ext5.py`(§94) / `forensic_gates_ext6.py`(§95) / `forensic_gates_ext7.py`(§96) / `evidence_chain.py` / `growth_bridge.py` / `evidence_scope.py` / `cli.py` |
-| 测试 | `tests/test_*.py`（68 文件，1191 项） |
+| 门禁源码 | `svagent/*.py`（90 模块，惰性导入登记于 `svagent/__init__.py`） |
+| FJ 取证层 | `svagent/forensics.py` / `forensic_gates.py` / `forensic_gates_ext.py`(§90) / `forensic_gates_ext2.py`(§91) / `forensic_gates_ext3.py`(§92) / `forensic_gates_ext4.py`(§93) / `forensic_gates_ext5.py`(§94) / `forensic_gates_ext6.py`(§95) / `forensic_gates_ext7.py`(§96) / `forensic_gates_ext8.py`(§97) / `evidence_chain.py` / `growth_bridge.py` / `evidence_scope.py` / `cli.py` |
+| 测试 | `tests/test_*.py`（69 文件，1217 项） |
 | 自主运维三清单 | `WORKPLACES.md` / `WORK_ITEMS.md` / `TIME_PLAN.md`（§90 起，§93 升 v1.1：动态扩展 P3 安全/合规） |
-| FJ 计划/成果 | `OPTIMIZATION_PLAN_20261122.md` / `FJ_ACHIEVEMENT_REPORT_20261122.html` / `ROUND4_ACHIEVEMENT_REPORT_20261122.html`(§93) / `ROUND5_ACHIEVEMENT_REPORT_20261122.html`(§94) / `ROUND6_ACHIEVEMENT_REPORT_20261122.html`(§95) / `ROUND7_ACHIEVEMENT_REPORT_20261122.html`(§96) / 独立审计 `INDEPENDENT_AUDIT_20261122.html` |
-| 知识库 | `knowledge_base_store.json`（134 条，含 thresholds；KB-META04 边界精确化） |
-| 完整推导日志 | `commentary.md`（§1–§96） |
+| FJ 计划/成果 | `OPTIMIZATION_PLAN_20261122.md` / `FJ_ACHIEVEMENT_REPORT_20261122.html` / `ROUND4_ACHIEVEMENT_REPORT_20261122.html`(§93) / `ROUND5_ACHIEVEMENT_REPORT_20261122.html`(§94) / `ROUND6_ACHIEVEMENT_REPORT_20261122.html`(§95) / `ROUND7_ACHIEVEMENT_REPORT_20261122.html`(§96) / `ROUND8_ACHIEVEMENT_REPORT_20261122.html`(§97) / 独立审计 `INDEPENDENT_AUDIT_20261122.html` |
+| 知识库 | `knowledge_base_store.json`（136 条，含 thresholds；KB-META04 边界精确化；KB-META05 首次自审未达L3） |
+| 完整推导日志 | `commentary.md`（§1–§97） |
 | 架构导航 | `REPOSITORY_MAP.md`（阅读顺序已指向本文件） |
-| 最近精研证据 | `audit_evosteer/`（§81-82）、`audit_mllm_failure/`（§83-84）、`audit_ultrabert/`（§85-86）、`audit_latent_taxonomies/`（§87-88）、`audit_silent_failure/`（§90）、`audit_rsi_claim_audit/`（§91）、`audit_memory_epistemics/`（§92）、`audit_redteam_honesty/`（§93）、`audit_benchleaking_honesty/`（§94）、`audit_goal_provenance/`（§95）、`audit_skill_lifecycle_honesty/`（§96） |
+| 最近精研证据 | `audit_evosteer/`（§81-82）、`audit_mllm_failure/`（§83-84）、`audit_ultrabert/`（§85-86）、`audit_latent_taxonomies/`（§87-88）、`audit_silent_failure/`（§90）、`audit_rsi_claim_audit/`（§91）、`audit_memory_epistemics/`（§92）、`audit_redteam_honesty/`（§93）、`audit_benchleaking_honesty/`（§94）、`audit_goal_provenance/`（§95）、`audit_skill_lifecycle_honesty/`（§96）、`audit_l3_evidence_rubric/`（§97，含首次自审） |
 | 本接续文档 | `SESSION_HANDOFF.md`（本文件） |
 | git 远端 | `origin` = `https://github.com/jsyzc2019/svl-agent.git`，分支 `main` |
