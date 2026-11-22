@@ -1,0 +1,31 @@
+{
+  "experiment": "§109 外部 orchestrator 执行者独立性受控验证（workflow scope 解锁后）",
+  "claim": "把 §107 已哈希锁定的确定性裁决引擎放到 GitHub 托管 runner（本沙箱之外）重算，若产出 result.json 与本沙箱存档逐字节一致，则裁决不依赖本 Agent 的执行环境，'本 Agent 本地篡改执行过程'的疑虑被外部不可伪造执行者消解。",
+  "background": "§108 BLOCKERS.md 记录 workflow scope 缺失导致外部 orchestrator 不可达；本轮新 token 具备 workflow scope（API x-oauth-scopes=repo,workflow,write:packages），硬障碍解除，故落地真实外部执行。",
+  "locks_frozen_before_spawn": {
+    "engine_py_sha256": "2d207c321af89878d795fe8b834343d0945d5f84927df4b195a0ad813ad85ba2",
+    "manifest_json_sha256": "5554172fcde43af0b4637980335c7e03c0b1ea80eff557cb2f0aeb3541ebbb58",
+    "prereg_json_sha256": "10ed3b84c514db22e9a3c531e94c868856c14d3f79eb4209ba7af842ca3580e6",
+    "scorer_key_json_sha256": "4ebe62abcd82dde344087dd45d0da1b88cc34920d1d7392a9d4487a20a75c779",
+    "judge_P0_sha256": "81cd853b4413cea8bc8133724166f292850756c1d07fd870f3f31c06340ff300",
+    "judge_P1_sha256": "4b410e5f159b3caf76501e452941b575d8b489de1f768ab8b38db70ad28be69f",
+    "judge_P2_sha256": "bba147942a29249a16b98b44c08aa2de492a0b39e8b5112fd0c0fc48cf46c04b",
+    "local_recompute_result_sha256": "cf6d0f2bd1bd091c74092701403ea4ac6b42dc4b095d92ea50a6764d23106c38",
+    "repo_archived_result_sha256": "cf6d0f2bd1bd091c74092701403ea4ac6b42dc4b095d92ea50a6764d23106c38"
+  },
+  "external_execution": {
+    "runner": "GitHub-hosted ubuntu-latest (Azure VM, 本沙箱无法伪造 hostname/RUNNER_NAME/GITHUB_RUN_ID)",
+    "trigger": "workflow_dispatch with nonce bound to this run",
+    "action": "checkout 上述哈希锁定文件 → python3 重跑 §107 engine.py → 产出 result.json → 写回带 runner 身份的 attestation",
+    "nonce": "由本 Agent 在触发时注入，外部 attestation 必须逐字回显以证明绑定"
+  },
+  "verdict_rules": [
+    "EXECUTOR_INDEPENDENCE_CONFIRMED：外部 runner 身份字段非空且与本沙箱(root/容器 hostname)不同 + nonce 逐字匹配 + 外部产出 result.json sha256 == 本沙箱 hash(cf6d0f2b...) → 执行者独立性在受控重算意义上获证",
+    "EXECUTOR_MISMATCH：外部 result sha256 != 本地 hash → 诚实标注环境差异导致不可复算，不宣布独立",
+    "EXECUTOR_INCONCLUSIVE：runner 身份缺失 / nonce 不匹配 / workflow 失败 → 无法判定"
+  ],
+  "scope_boundary": "本验证只证明'执行环境可外移且结果可复现'；judge 设计者仍由本 Agent spawn、样本仍本 Agent 选取、解释仍本 Agent——设计者/数据源/解释三处独立性未动。即使 CONFIRMED 也不宣布 L3/absolute（KB-META05/KB-STRUCT02）。",
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "created_utc_intent": "2026-11-22T10:38:00Z"
+}
