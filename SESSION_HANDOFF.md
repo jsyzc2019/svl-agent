@@ -1,8 +1,8 @@
 # 会话接续文档（SESSION HANDOFF）
 
 > 本文件用于新旧会话接续。新会话开始后，**先读本文件**，再按"接续后第一件事"操作。
-> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 14:35 (GMT+8)——**§98 自主运维第九轮本地闭环，待推送（无其他遗留）**。
-> 上一会话终点：§97 自主运维第八轮已推送（d8c0499 + docs 4017ba0）；本次完成 §98 自主运维第九轮（用户"可以跑"→真正执行 §97 落档路径① shared-start 受控对照：填表裁判 0.0 vs 取证法官 1.0、improver_gain=1.0，诚实重审 L3 为 flag/MATURITY.PARTIAL 未抬级；编译第37道 improver_gain_controlled_honesty 门禁 + 第12道 FJ 入口 + 受控对照引擎），本地已闭环待推送。
+> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 14:40 (GMT+8)——**§98 自主运维第九轮完成并已推送，无遗留推送任务**。
+> 上一会话终点：§97 自主运维第八轮已推送（d8c0499 + docs 4017ba0）；本次完成 §98 自主运维第九轮（用户"可以跑"→真正执行 §97 落档路径① shared-start 受控对照：填表裁判 0.0 vs 取证法官 1.0、improver_gain=1.0，诚实重审 L3 为 flag/MATURITY.PARTIAL 未抬级；编译第37道 improver_gain_controlled_honesty 门禁 + 第12道 FJ 入口 + 受控对照引擎），已推送。
 
 ---
 
@@ -11,7 +11,7 @@
 本仓是一个自进化 Agent 架构（`/workspace`，Python 包 `svagent`，版本 0.13.1）。
 当前已完成 **§1–§98**：§1–§88 外部精研（36 道会拦门禁）+ **§89 FJ 取证法官化升级**（把门禁从填表裁判改成取证法官）+ **§90 自主运维首日**（三清单+第29道 silent_failure 门禁）+ **§91 自主运维第二轮**（第30道 rsi_claim_audit 门禁）+ **§92 自主运维第三轮**（arXiv:2609.33013 + 第31道 memory_consolidation_governance 门禁 + 第6道FJ入口）+ **§93 自主运维第四轮**（清单动态扩展 P3 安全/合规 + arXiv:2611.24362 + 第32道 redteam_robustness_honesty 门禁 + 第7道FJ入口）+ **§94 自主运维第五轮**（arXiv:2611.21315 + 第33道 benchleaking_honesty 门禁 + 第8道FJ入口）+ **§95 自主运维第六轮**（回应"强者自设北极星"哲学挑战 + arXiv:2610.16015 + 第34道 goal_provenance_honesty 门禁 + 第9道FJ入口 + KB-META04 边界精确化）+ **§96 自主运维第七轮**（P0 技能演化话题 + arXiv:2610.09832 SkillForge + 第35道 skill_lifecycle_honesty 门禁 + 第10道FJ入口 + 虚高指标拆穿迁移）+ **§97 自主运维第八轮**（回应"期待L3" + arXiv:2610.38266 L0-L3 rubric + 第36道 maturity_evidence_honesty 门禁 + 第11道FJ入口 + 首次自审诚实判未达L3）。知识库 **136 条**，测试 **1217 passed**（全绿，§97 新增 26 项）。
 **§88–§98**：§98 自主运维第九轮（用户"可以跑"→真正执行 §97 落档路径①的 shared-start + matched-budget 受控对照：填表裁判捕捉率 0.0 vs 取证法官 1.0、improver_gain=1.0，诚实重审 L3→flag/MATURITY.PARTIAL 未抬级；arXiv:2610.16491 SpecRSI + 第37道 improver_gain_controlled_honesty 门禁 + 第12道 FJ 入口 + 受控对照引擎）。知识库 **138 条**，测试 **1249 passed**（全绿，§98 新增 32 项）。
-**§88–§97 均已推送**（远端 main = 本地 HEAD = `4017ba0`，`git status -sb` 无 ahead）。凭据自管闭环连续八轮实证（见 §5）。**§98 本地已闭环待推送**（见 §4k）。
+**§88–§98 均已推送**（远端 main = 本地 HEAD = `36fb904`，`git status -sb` 无 ahead）。凭据自管闭环连续九轮实证（见 §5）。**无遗留推送任务。**
 
 ---
 
@@ -144,15 +144,15 @@
 
 **L3 诚实重审（不抬级）**：shared_start_controlled no→yes（受控对照已执行+增益已量化），independent_tests no→partial（本仓外 common-data 已引入，但 evaluator 锚点规格仍本仓自建，KB-STRUCT02 同构≠独立佐证）。R5 partial→flag：裁决 **flag/MATURITY.PARTIAL，仍未完整达 L3，停在 L3 门槛前**。关键认知：受控对照补上证据缺口但没制造独立性，process revision 增益可量化 ≠ 已达 L3。
 
-**验收**：32 项新测试全过（25 门禁 + 7 受控对照回放），全量 1217→1249 passed（+32）；成长桥 82→84（重建含历史遗漏 KB-AUDIT34，诚实修正）；KB 136→138（KB-AUDIT40 fix + KB-META06 受控对照结论 preserve）；链审断言 40→41 / 23→24 按实测更新不放宽。报告 `ROUND9_ACHIEVEMENT_REPORT_20261122.html`。**当前状态**：§98 全链本地闭环，工作区改动待提交推送（见 §5）。
+**验收**：32 项新测试全过（25 门禁 + 7 受控对照回放），全量 1217→1249 passed（+32）；成长桥 82→84（重建含历史遗漏 KB-AUDIT34，诚实修正）；KB 136→138（KB-AUDIT40 fix + KB-META06 受控对照结论 preserve）；链审断言 40→41 / 23→24 按实测更新不放宽。报告 `ROUND9_ACHIEVEMENT_REPORT_20261122.html`。**当前状态**：已本地提交并推送到远端 main（`36fb904`，`git status -sb` 无 ahead），凭据自管闭环第九轮实证（见 §5）。
 
 ---
 
 ## 5. ✅ 已完成：远端推送
 
-**待推送（§98 自主运维第九轮）**：本地全链闭环（32 项新测试 + 全量 1249 passed + KB 138 + 链审 41/24 + 受控对照 result.json + ROUND9 报告 + 三文档同步），工作区改动待提交推送。推送时：凭据取自用户上传区 `/root/uploads/github-token1115.txt`（不入仓/不入配置/不打印），临时 askpass 用后即删，hosts 用可达 IP（`20.27.177.113` / `140.82.114.4`）即改即恢复，HTTP/1.1 + postBuffer，推送后核验远端=本地无 ahead。详见 §4k。
+**最新状态**：2026-11-22 14:40 (GMT+8) 推送成功（§98 自主运维第九轮，凭据自管闭环第九轮实证）。`git push origin main` → `4017ba0..36fb904 main -> main`。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = 远端 = `36fb904`。凭据取自用户上传区最新 token 文件（带时间戳前缀，不入仓/不入配置/不打印），临时 askpass 用后即删，hosts 用 `20.27.177.113`（三 IP 探测均 200）+ HTTP/1.1 + postBuffer，一次推送成功；hosts 即改即恢复，git config 无明文凭据。详见 §4k。
 
-**最新已推送状态**：2026-11-22 14:20 (GMT+8) 推送成功（§97 自主运维第八轮，凭据自管闭环第八轮实证）。`git push origin main` → `36613a0..d8c0499 main -> main`（§97 全链闭环单批，3 秒完成）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = `d8c0499`。本轮 `curl --resolve` 探测 `20.27.177.113` / `140.82.114.4` 均 200，用 `140.82.114.4` + HTTP/1.1 + postBuffer 一次推送成功。hosts/askpass/备份即用即删，git config 无明文凭据。
+**上次推送（2026-11-22 14:20）**：§97 自主运维第八轮，凭据自管闭环第八轮实证（`36613a0..d8c0499 main -> main` + docs `4017ba0`）。`git push origin main` → `36613a0..d8c0499 main -> main`（§97 全链闭环单批，3 秒完成）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = `d8c0499`。本轮 `curl --resolve` 探测 `20.27.177.113` / `140.82.114.4` 均 200，用 `140.82.114.4` + HTTP/1.1 + postBuffer 一次推送成功。hosts/askpass/备份即用即删，git config 无明文凭据。
 
 **上次推送（2026-11-22 14:10）**：§96 自主运维第七轮，凭据自管闭环第七轮实证。`git push origin main` → `9054d89..2004174 main -> main`（§96 全链闭环单批）。本地 HEAD 曾为 `2004174`。用 `20.27.177.113` + HTTP/1.1 + postBuffer 一次成功；凭据/hosts/备份即用即删。
 
