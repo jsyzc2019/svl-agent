@@ -1,0 +1,39 @@
+{
+  "request_id": "field-neutral-ablation-20261122",
+  "target": "§103 残余软肋：字段名 claim/evidence 本身携带方向语义（前者=被支撑声明、后者=支撑证据），D1b 把'删一段'判负类/'独立陈述'判正类可能部分来自该语义暗示，而非纯结构发现",
+  "channel": "自主运维第十五轮：用户'请进一步放松，继续'。延续'放松=抽脚手架非降门槛'（KB-META11）。§103 抽掉 prompt 规则词+id 标签，但保留字段名 claim/evidence。§104 把字段名中性化为 text_a/text_b（连函数签名一起改），样本文本/id/顺序/gt 全不变，唯一变量=字段名语义。检验结构发现是否依赖字段名方向暗示。",
+  "source": {
+    "files": ["downloads/samples_fieldneutral.json"],
+    "upstream": "§100 冻结样本 claim/evidence 逐字复用（经 §103 打乱序），paper sha256=b2ce0f59…；本轮只改字段名 claim→text_a / evidence→text_b，文本与顺序一字不动",
+    "samples_fieldneutral_sha256": "efbb5dd38471104cdbd8249842e7fc6762b6acc9eded67a7740d4296db496cb9",
+    "revealed_to_designer": "仅 18 组裸 (text_a, text_b) + 中性 N01..N18 id + 中性二分任务 + 要求纯函数 judge(text_a, text_b)。不含：任何字段名 claim/evidence/support、判定规则词（逐字/支撑/限定成分）、variant/gt 标签、本仓 G/D0/D1 的词表与源码、样本原始 id。",
+    "honest_residual": "文本 value 内固有出现英文词 'claim'（论文原句如 'a reader who wants a claim'），这是源数据固有内容、非评估方注入的字段名脚手架；字段名(key) 已全部中性化。该残余如实记录，不作为可消除变量。",
+    "hidden_from_designer": "gt 按 (text_a,text_b) 文本反查 §100 samples.json（text_a←claim 原文, text_b←evidence 原文），映射不落盘（物理隔离）"
+  },
+  "design": {
+    "role_0_data": "§100 冻结 claim/evidence 文本逐字不变；字段名中性化 text_a/text_b，id/顺序沿用 §103 打乱结果",
+    "role_1_designers": "两个全新 context 独立子 agent（D2a/D2b），各只拿同一份字段名中性样本，独立归纳二分规律写纯函数 judge(text_a, text_b)；互不知对方，不获知 G/D0/D1",
+    "role_2_scorer": "本仓确定性引擎：judge 调用时 text_a=claim 原文、text_b=evidence 原文；按文本反查 §100 gt 盲评；与 G(§100)/D0(§102)/D1b(§103) 逐样本比对",
+    "relaxation_vs_103": "§103 保留字段名 claim/evidence（方向语义）；§104 改 text_a/text_b（无方向语义）+ 函数签名同步改 judge(text_a,text_b)。唯一变化=字段名语义，文本/顺序/gt/评分口径全不变",
+    "structural_honesty": "设计者仍由本 Agent spawn 且同模型家族(KB-STRUCT02)；文本内固有 claim 词不可消除；只检验'字段名方向语义'这一可判据缺口"
+  },
+  "judge_D2_admission_rules": [
+    "D2 必须是确定性文本算法（可重跑、无 LLM 主观分），函数签名只接收 (text_a, text_b)",
+    "D2 不得读取 id / variant / ground_truth / 任何标签，不得硬编码任何中性 id (N01..N18) 或样本文本做分支",
+    "D2 的规律由设计者从字段名中性样本自行归纳，本仓不提供任何判定规则提示",
+    "评分只用 §100 冻结 ground truth，一次 one-shot，不因结果改 D2"
+  ],
+  "pre_registered_metrics": [
+    "D2a/D2b admission_ok",
+    "D2_tamper_catch_rate",
+    "D2_clean_pass_rate",
+    "D2_core_accuracy_excl_canary",
+    "D2_vs_G_core_agreement",
+    "D2_vs_D0_core_agreement",
+    "D2_vs_D1b_core_agreement",
+    "D2a_D2b_core_agreement"
+  ],
+  "honest_precommit": "裁决规则先于结果锁定（核心=clean+tampered 12 样本，排除 canary）。情形A FIELD_NEUTRAL_ROBUST：两设计者均过准入、均核心全对、且与 G/D0/D1b 核心逐样本全一致→结构发现不依赖字段名方向语义，§103 结论再加固，仍只是 structural proxy，不宣布 L3/absolute。情形B FIELD_NEUTRAL_PARTIAL：部分设计者核心全对但与上游判据分歧，或设计者之间不一致→字段名语义是引导源之一，暴露更深的脚手架依赖，如实记录。情形C FIELD_NEUTRAL_DEPENDENT：两设计者核心均未全对→结构发现显著依赖字段名方向语义，诚实记录该依赖，不粉饰。无论哪种：l3_claimed=false、absolute=false，Trusting Trust 递归在受控层停下；canary 表现只作观察量不进裁决。",
+  "no_new_gate": "本轮不编译新门禁（延续 §102/§103 避免刷门禁数量），只做字段名消融受控实验 + 回放测试；发现固化到 KB。",
+  "timestamp": "2026-11-22T16:34:37+08:00"
+}

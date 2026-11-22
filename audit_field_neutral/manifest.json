@@ -1,0 +1,21 @@
+{
+  "request_id": "field-neutral-ablation-20261122",
+  "experiment": "§104 字段名语义消融（semantic field-name ablation）",
+  "files": [
+    {"path": "downloads/samples_fieldneutral.json", "role": "设计者唯一输入：18 组字段名中性裸样本（text_a/text_b + 中性 id + 打乱顺序）", "sha256": "efbb5dd38471104cdbd8249842e7fc6762b6acc9eded67a7740d4296db496cb9"},
+    {"path": "prereg.json", "role": "分析前锁存命题与三情形裁决规则"},
+    {"path": "gate_prereg.json", "role": "实现前锁存门禁（本轮 no_new_gate）"},
+    {"path": "engine.py", "role": "one-shot 确定性评分（生成后锁）"},
+    {"path": "result.json", "role": "冻结结果（生成后锁）"},
+    {"path": "judge_D2a_by_agent.py", "role": "设计者 a 产出的判据源码"},
+    {"path": "judge_D2b_by_agent.py", "role": "设计者 b 产出的判据源码"}
+  ],
+  "upstream_reuse": {
+    "samples": "audit_frozen_holdout/downloads/samples.json（§100 冻结，claim/evidence 逐字复用，字段名中性化，gt 按文本反查不落盘给设计者）",
+    "D1b": "audit_designer_desteering/result.json（§103 冻结判定，读值不重算）",
+    "D0": "audit_criterion_portability/result.json（§102 冻结判定，读值不重算）",
+    "G": "audit_frozen_holdout/result.json（§100 冻结判定，读值不重算）"
+  },
+  "structural_note": "设计者目录仅可见 samples_fieldneutral.json；gt 映射不落盘；字段名 key 全中性，文本 value 内固有 claim 词为源数据内容非脚手架。",
+  "timestamp": "2026-11-22T16:34:37+08:00"
+}

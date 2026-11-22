@@ -1,7 +1,7 @@
 # 会话接续文档（SESSION HANDOFF）
 
 > 本文件用于新旧会话接续。新会话开始后，**先读本文件**，再按"接续后第一件事"操作。
-> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 16:25 (GMT+8)——**§103 自主运维第十四轮完成并已推送，无遗留推送任务**。
+> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 16:45 (GMT+8)——**§104 自主运维第十五轮完成，待提交推送**（§102/§103 已推送 d21bfee/42d3978；§103 遗留 docs 4a5e8a5 因 GitHub 抖动四次推送失败，本机 ahead，待网络恢复一并推）。
 > 上一会话终点：§102 自主运维第十三轮已推送（d21bfee）；本次完成 §103 自主运维第十四轮（用户"D的设计者拟可进一步放松"→判读为"抽引导脚手架非降验收门槛"→复用 §100 冻结 claim/evidence + 抽 prompt 规则词 + id 中性化打乱 + gt 文本反查物理隔离→两个全新 context 设计者从零归纳→D1b 核心 12/12 全对且与 G/D0 一致强加固 §102、D1a 暴露"正类取哪层"任务解释自由度 core 0.5→DESTEER_PARTIAL→不编译新门禁 + l3=false），已推送（`42d3978`）。
 
 ---
@@ -14,7 +14,9 @@
 **§102 自主运维第十三轮**：用户"按最高杠杆去试"→按 KB-META10 读全链裁决定位唯一残余=判据 G 的设计权仍在本 Agent（§100 外移出题权、§101 处理判据投毒，但判据词表本仓自撰，单判据 6/6 不能排除"为这 6 样本量身定做"）→复用 §100 冻结论文/样本/gt 做单变量对照（唯一变量=判据设计者）→prereg 先于 spawn 锁存（a159f5eb…）→全新 context 独立子 agent 只读脱敏 claim+evidence（无 variant/gt、不获知 G）盲设计 judge_D→准入元审计一次自咬（子串匹配把 invariant 当 variant 泄漏/'no randomness' 当随机源，改词边界+剥离注释重判，标准不放宽）→one-shot 本仓 import D 源码重跑（不信自报）用冻结 gt 盲评：D tamper_catch=1.0/clean_pass=1.0，G-D core 一致率=1.0（12/12 核心样本全一致；整体 0.889 差异全在 canary，D 宽词表 6/6 false vs G 4/6，§101 已定位类型错配）→裁决 **CRIT.PORTABLE_SINGLE_DESIGN_OVERFIT_WEAKENED**，l3=false/absolute=false，**刻意不编译第 39 道门禁**（最高杠杆≠最高产出数）。知识库 **146 条**，测试 **1307 passed**（全绿，§102 新增 11 项）。
 **§103 自主运维第十四轮**：用户"D的设计者拟可进一步放松"→按 KB-META11 判读"放松=抽引导脚手架而非降验收门槛"→定位 §102 两处引导(prompt 明说判定规则 + id 带 variant 语义)→复用 §100 冻结 claim/evidence 做约束消融(de-steering)，唯一变量=引导信息量→抽 prompt 规则词+id 中性化 N01..N18 打乱+gt 按文本反查不落盘(设计者目录仅裸样本,物理隔离)→prereg 先于 spawn 锁存(632b6f33…)→spawn 两个全新 context 独立设计者 D1a/D1b(互不知对方/不获知 G、D0)从零归纳：D1b(单段删除检测)core 12/12 全对且与 G/D0 逐样本一致(强加固 §102 可迁移)、D1a(子序列回显检测)tamper 1.0 但 clean 0.0/core 0.5(暴露"正类取哪层"任务解释自由度)→准入双过(D1b 注释 tampered 属自主概念命名非标签泄漏,回放固化判据)→裁决 **DESTEER_PARTIAL**，l3=false/absolute=false，**不编译新门禁**。知识库 **148 条**，测试 **1319 passed**（全绿，§103 新增 12 项）。
 
-**§88–§103 均已推送**（远端 main = 本地 HEAD = `42d3978`，`git status -sb` 无 ahead）。凭据自管闭环连续十四轮实证（见 §5）。**无遗留推送任务。**
+**§104 自主运维第十五轮**：用户"请进一步放松，继续"→判读字段名 `claim`/`evidence` 是最后一层方向语义脚手架（暗含被支撑声明/支撑证据）→字段名中性化 `text_a`/`text_b`（连签名 `judge(text_a,text_b)` 一起改），复用 §100 冻结文本/id/顺序/gt 全不变，唯一变量=字段名语义→制备一次自咬（误把文本 value 内固有 claim 词当字段泄漏，修正为只校验 key，残余如实记 prereg.honest_residual）→prereg 先于 spawn 锁存（77b10d29…）→两全新 context 设计者 D2a(Jaccard 重合)/D2b(否定词极性)从零归纳，均过准入但 D2a tamper_catch=0.0（删微词仍高重合判 True）、D2b tamper_catch=0.5（只抓否定翻转），vs D1b=0.5/0.25、D2a-D2b 一致率 0.25→裁决 **FIELD_NEUTRAL_DEPENDENT**：上游 6/6 部分依赖"知道哪段是声明/证据"的字段名语义，比 §103 任务解释自由度更外层的脚手架依赖，**结论首次翻转**，按 KB-META12 定位为"找到可迁移真实边界"非失败，不粉饰。知识库 **150 条**，测试 **1331 passed**（全绿，§104 新增 12 项）。
+
+**§88–§103 均已推送**（远端 main = `42d3978`）；**§104 待提交推送**且 **§103 docs `4a5e8a5` 仍本机 ahead**（GitHub 传输抖动四次失败，见 §4q/§5）。凭据自管闭环十四轮实证（见 §5）。
 
 ---
 
@@ -203,11 +205,23 @@
 
 **验收**：12 项回放测试全过（只读冻结结果）；全量 1307→1319 passed（+12），链审 45→46 / 28→29 / 三锁 25→26 按实测更新断言不放宽；成长桥 87→88（KB-AUDIT45 fix + KB-META11 preserve）；KB 146→148。**不编译新门禁**（延续 §102，最高杠杆≠最高产出数）。commentary §103、README（统计脚本刷新）、REPOSITORY_MAP、TIME_PLAN 同步；报告 `ROUND14_ACHIEVEMENT_REPORT_20261122.html`。遵循 §58 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。**当前状态**：已本地提交并推送到远端 main（`42d3978`，`git status -sb` 无 ahead），凭据自管闭环第十四轮实证（见 §5）。
 
+### §4q 自主运维第十五轮（§104，字段名语义消融，回应"请进一步放松，继续"）
+用户"请进一步放松，继续"——延续"放松=抽脚手架非降门槛"（KB-META11），判读 §103 残余=字段名 `claim`/`evidence` 是最后一层方向语义脚手架（前者暗含"被支撑声明"、后者暗含"支撑证据"，把"evidence 是否逐字支撑 claim"的方向喂给设计者）。§104 把字段名中性化为 `text_a`/`text_b`（连函数签名一起改 `judge(text_a,text_b)`），复用 §100 冻结 claim/evidence 文本逐字不变、id/顺序沿用 §103 打乱、gt 按文本反查不落盘。唯一变量=字段名方向语义。制备一次自咬：首版断言误把文本 value 内固有英文 claim 词（论文原句"a reader who wants a claim"）当字段泄漏，修正为只校验字段名 key ∈ {id,text_a,text_b}，并把"文本内固有 claim 词不可消除、非注入脚手架"如实记入 prereg.source.honest_residual。prereg 先于 spawn 锁存（prereg 77b10d29 / gate 19cba72a / manifest 7c03bb61 / samples efbb5dd3），三情形裁决先锁。spawn 两个全新 context 设计者 D2a/D2b，prompt 不含任何角色词（claim/evidence/support/逐字/限定成分），明确 text_a/text_b 只是中性代号：
+- **D2a**（token Jaccard 重合度阈值，近逐字=True）：clean 6/6 True（对），tampered 删微词后仍高重合 6/6 True（错，gt=False）→ tamper_catch=0.0、clean_pass=1.0、canary 全 False；抓的是"是否近逐字复述"，分不清 clean 与 tampered。
+- **D2b**（否定词极性反转，单侧 no/not/never）：只把含否定翻转的 tampered 3/6 判 True → tamper_catch=0.5、clean 全 False。
+两者都过准入（签名 (text_a,text_b)、无标签泄漏、无硬编码 N01..N18、确定性），vs D1b=0.5/0.25，D2a-D2b 核心一致率仅 0.25。裁决 **FIELD_NEUTRAL_DEPENDENT**：去掉字段名方向语义后两设计者均未恢复 G/D0/D1b 判定——上游 6/6 的"可迁移"部分建立在"知道哪段是声明/证据"的语义前提上，字段名是比 §103 任务解释自由度更外层的语义脚手架依赖。这是连续多轮消融以来**结论首次翻转**，按 KB-META12 定位为"找到可迁移真实边界"而非实验失败，照实记录不粉饰。l3=false/absolute=false。
+
+**验收**：12 项回放测试全过；全量 1319→1331 passed（+12），链审 46→47 / 29→30 / 三锁 27 按实测更新断言不放宽；成长桥 87→89（KB-AUDIT46 fix + KB-META12 preserve）；KB 148→150。**不编译新门禁**。回放一次自咬：断言找 `irreducible_residual`，实际 prereg 字段是 `honest_residual`（改 prereg 会破坏哈希锁），按纪律改测试断言匹配实际字段、不动已锁存 prereg。commentary §104、README、REPOSITORY_MAP、TIME_PLAN 同步；报告 `ROUND15_ACHIEVEMENT_REPORT_20261122.html`。遵循 §58 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。**当前状态**：待提交推送（见 §5）。
+
 ---
 
 ## 5. ✅ 已完成：远端推送
 
-**最新状态**：2026-11-22 16:20 (GMT+8) 推送成功（§103 自主运维第十四轮，凭据自管闭环第十四轮实证）。`git push origin main` → `dc8d756..42d3978 main -> main`。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = 远端 main = `42d39789…`（`git ls-remote` 独立核验一致）。凭据取上传区最新 token（时间戳前缀，不入仓/不入配置/不打印），临时 hosts+askpass 用后即删（0 残留）。本轮三 IP 均可达（响应约 10s），`140.82.116.4` + 30s 低速上限 + 240s 硬超时一次推送成功（2 秒）。**系统安全红线全程遵守**：hosts 即改即恢复、无删系统/格式化操作。详见 §4p。
+**当前待推送**：§104 自主运维第十五轮（工程，本地已提交 → 待 push）；另 §103 的 docs 状态回填 `4a5e8a5` 自 16:25 起四次推送均因 GitHub 传输低速挂起失败（见下"推送抖动记录"），本机 ahead 1，待网络恢复与本轮一并推。未推送前远端 main 仍为 `42d3978`。详见 §4q。
+
+**推送抖动记录（16:25–16:34）**：`4a5e8a5`（纯 handoff 状态文字，不影响代码/测试/KB/证据链）四次尝试——① `140.82.116.4` + 25s 低速保护→传输挂起；② `140.82.114.3` + 25s→挂起；③ 直连 IP URL（绕 hosts）→ TCP 134s 连接超时；④ 网络恢复后 `140.82.116.4` 再试→再挂起。每次探测 IP 返回 200 但 git 大数据传输均 <1000 B/s 卡住，与 §93/§102 历史抖动同类。每次 hosts/askpass 均 0 残留，系统安全红线全程遵守。按"三次失败停手"纪律不再纠缠纯文字修正，待网络恢复一并推。**注**：工件层成果（§104 实验/测试/KB/报告）均为本地完成，与此文字修正无关。
+
+**最新已完成状态**：2026-11-22 16:20 (GMT+8) 推送成功（§103 自主运维第十四轮，凭据自管闭环第十四轮实证）。`git push origin main` → `dc8d756..42d3978 main -> main`。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = 远端 main = `42d39789…`（`git ls-remote` 独立核验一致）。凭据取上传区最新 token（时间戳前缀，不入仓/不入配置/不打印），临时 hosts+askpass 用后即删（0 残留）。本轮三 IP 均可达（响应约 10s），`140.82.116.4` + 30s 低速上限 + 240s 硬超时一次推送成功（2 秒）。**系统安全红线全程遵守**：hosts 即改即恢复、无删系统/格式化操作。详见 §4p。
 
 **已完成状态**：2026-11-22 16:07 (GMT+8) 推送成功（§102 自主运维第十三轮，凭据自管闭环第十三轮实证）。`git push origin main` → `ae5152b..d21bfee main -> main`。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = 远端 main = `d21bfee6a1a7`（`git ls-remote` 独立核验一致）。凭据取上传区最新 token（时间戳前缀，不入仓/不入配置/不打印），临时 askpass 用后即删。**网络抖动处置**：首选 `20.27.177.113` 探测 200 但 git 传输 send-Q 卡 310 字节挂 10 分钟（低速挂起），主动 TERM 后脚本原子清理完整（hosts/askpass 0 残留）；重探发现 IP 可达性漂移（`140.82.116.4`/`140.82.113.4` 转 200），改 `140.82.116.4` + 30s 低速上限 + 240s 硬超时一次推送成功（4 秒）。**系统安全红线全程遵守**：hosts 即改即恢复、无删系统/格式化操作；askpass/hosts 备份即用即删。详见 §4o。
 
@@ -276,13 +290,15 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 - [x] ✅ §97 回应"期待L3"（编译 L0-L3 成熟度证据尺子 + 首次自审诚实判未达L3，达成路径落档）+ 提交推送（`d8c0499`，凭据自管闭环实证第八轮，见 §4j/§5）。
 - [x] ✅ §102 判据设计权外移（回应"按最高杠杆去试"：唯一残余=判据 G 设计权→复用 §100 冻结集单变量对照→独立设计 judge_D 与 G core 一致率 1.0→CRIT.PORTABLE_SINGLE_DESIGN_OVERFIT_WEAKENED→不编译新门禁+l3=false，见 §4o）。
 - [x] ✅ §103 设计者约束消融 de-steering（回应"设计者可进一步放松"：判读为抽引导脚手架非降门槛→抽 prompt 规则词+id 中性化+gt 文本反查物理隔离→两独立设计者 D1b 无引导全对强加固/D1a 暴露任务解释自由度→DESTEER_PARTIAL→不编译新门禁+l3=false，见 §4p）。
-- [x] ✅ 提交并推送 §103（`42d3978`，凭据自管闭环第十四轮实证，见 §4p/§5）。
+- [x] ✅ 提交并推送 §103（`42d3978`，凭据自管闭环第十四轮实证，见 §4p/§5）；其 docs 回填 `4a5e8a5` 因网络抖动待推。
+- [x] ✅ §104 字段名语义消融（回应"进一步放松"：字段名 claim/evidence→text_a/text_b，唯一变量=方向语义→两设计者均过准入但未恢复上游判定→FIELD_NEUTRAL_DEPENDENT 结论首次翻转，定位可迁移边界→不编译新门禁+l3=false，见 §4q）。
+- [ ] 提交并推送 §104 工程 + §103 遗留 docs（当前待办，见 §4q/§5）。
 - [x] ✅ 提交并推送 §102（`d21bfee`，凭据自管闭环第十三轮实证，网络抖动换 IP 成功，见 §4o/§5）。
 - [ ] 达成 L3 的受控验证（KB-META05 三路径）：①同一任务起点+相同预算对照 §89 前填表裁判 vs 之后 FJ 取证流程（§98 已执行）；②引入本仓外 common-data/第三方 evaluator（§100–§102 逐步推进但仍 structural proxy）；③量化 improver gain 证明改进机制本身使后续增益更大（§98 improver_gain=1.0 已量化）。**当前诚实结论**：三路径均已部分推进，但同模型家族/spawn 权/解释环节本 Agent 残余仍在，不宣布 L3。
 - [ ] 继续自主运维（清单可动态扩展，领域不限但守法）：按 WORK_ITEMS.md P0 剩余话题（多智能体编排/上下文检索）或 P1/P2/P3 择机从已验证渠道自主取料，复制全链闭环。
 - [ ] 若用户给新的外部精研材料：先抽一手锚点 → 判认知增量独立性 → 按 §3 纪律编译门禁（能机制化才编译，否则只加固 KB）。
 - [ ] 后续精研可复用 FJ 取证入口：新门禁若有一手原文切片，可加 `adjudicate_*` 取证入口（试点 `forensic_gates.py`，扩展 `forensic_gates_ext.py`/`ext2.py`/`ext3.py`/`ext4.py`/`ext5.py`/`ext6.py`/`ext7.py`/`ext8.py`）。
-- [ ] 本文件随每次会话终结更新现状（§1/§4/§4b–§4p/§5）。§103 提交推送后回填 §5 状态。
+- [ ] 本文件随每次会话终结更新现状（§1/§4/§4b–§4q/§5）。§104 提交推送后回填 §5 状态。
 
 ---
 
@@ -292,11 +308,11 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 |---|---|
 | 门禁源码 | `svagent/*.py`（90 模块，惰性导入登记于 `svagent/__init__.py`） |
 | FJ 取证层 | `svagent/forensics.py` / `forensic_gates.py` / `forensic_gates_ext.py`(§90) / `forensic_gates_ext2.py`(§91) / `forensic_gates_ext3.py`(§92) / `forensic_gates_ext4.py`(§93) / `forensic_gates_ext5.py`(§94) / `forensic_gates_ext6.py`(§95) / `forensic_gates_ext7.py`(§96) / `forensic_gates_ext8.py`(§97) / `evidence_chain.py` / `growth_bridge.py` / `evidence_scope.py` / `cli.py` |
-| 受控实验层（§98–§103，不编译门禁） | `audit_shared_start_controlled/`(§98) / `audit_evaluator_independence/`(§99) / `audit_frozen_holdout/`(§100) / `audit_meta_canary/`(§101) / `audit_criterion_portability/`(§102，判据设计权外移) / `audit_designer_desteering/`(§103，设计者约束消融去引导) |
-| 测试 | `tests/test_*.py`（71 文件，1319 项） |
+| 受控实验层（§98–§104，不编译门禁） | `audit_shared_start_controlled/`(§98) / `audit_evaluator_independence/`(§99) / `audit_frozen_holdout/`(§100) / `audit_meta_canary/`(§101) / `audit_criterion_portability/`(§102，判据设计权外移) / `audit_designer_desteering/`(§103，设计者约束消融去引导) / `audit_field_neutral/`(§104，字段名语义消融，结论首次翻转) |
+| 测试 | `tests/test_*.py`（72 文件，1331 项） |
 | 自主运维三清单 | `WORKPLACES.md` / `WORK_ITEMS.md` / `TIME_PLAN.md`（§90 起，§93 升 v1.1：动态扩展 P3 安全/合规） |
-| FJ 计划/成果 | `OPTIMIZATION_PLAN_20261122.md` / `FJ_ACHIEVEMENT_REPORT_20261122.html` / `ROUND4_ACHIEVEMENT_REPORT_20261122.html`(§93) / `ROUND5_ACHIEVEMENT_REPORT_20261122.html`(§94) / `ROUND6_ACHIEVEMENT_REPORT_20261122.html`(§95) / `ROUND7_ACHIEVEMENT_REPORT_20261122.html`(§96) / `ROUND8_ACHIEVEMENT_REPORT_20261122.html`(§97) / `ROUND9..ROUND12_ACHIEVEMENT_REPORT_20261122.html`(§98–§101) / `ROUND13_ACHIEVEMENT_REPORT_20261122.html`(§102) / `ROUND14_ACHIEVEMENT_REPORT_20261122.html`(§103) / 独立审计 `INDEPENDENT_AUDIT_20261122.html` |
-| 知识库 | `knowledge_base_store.json`（148 条，含 thresholds；KB-META04 边界精确化；KB-META05 首次自审未达L3；KB-META10 最高杠杆=外移唯一自证环节；KB-META11 放松=抽脚手架非降门槛；KB-AUDIT44 判据设计可迁移；KB-AUDIT45 判据结论的引导依赖消融） |
+| FJ 计划/成果 | `OPTIMIZATION_PLAN_20261122.md` / `FJ_ACHIEVEMENT_REPORT_20261122.html` / `ROUND4_ACHIEVEMENT_REPORT_20261122.html`(§93) / `ROUND5_ACHIEVEMENT_REPORT_20261122.html`(§94) / `ROUND6_ACHIEVEMENT_REPORT_20261122.html`(§95) / `ROUND7_ACHIEVEMENT_REPORT_20261122.html`(§96) / `ROUND8_ACHIEVEMENT_REPORT_20261122.html`(§97) / `ROUND9..ROUND12_ACHIEVEMENT_REPORT_20261122.html`(§98–§101) / `ROUND13_ACHIEVEMENT_REPORT_20261122.html`(§102) / `ROUND14_ACHIEVEMENT_REPORT_20261122.html`(§103) / `ROUND15_ACHIEVEMENT_REPORT_20261122.html`(§104) / 独立审计 `INDEPENDENT_AUDIT_20261122.html` |
+| 知识库 | `knowledge_base_store.json`（150 条，含 thresholds；KB-META04 边界精确化；KB-META05 首次自审未达L3；KB-META10 最高杠杆=外移唯一自证环节；KB-META11 放松=抽脚手架非降门槛；KB-META12 脚手架层级图谱与负面结果价值；KB-AUDIT44 判据设计可迁移；KB-AUDIT45 判据结论的引导依赖消融；KB-AUDIT46 字段名语义依赖） |
 | 完整推导日志 | `commentary.md`（§1–§97） |
 | 架构导航 | `REPOSITORY_MAP.md`（阅读顺序已指向本文件） |
 | 最近精研证据 | `audit_evosteer/`（§81-82）、`audit_mllm_failure/`（§83-84）、`audit_ultrabert/`（§85-86）、`audit_latent_taxonomies/`（§87-88）、`audit_silent_failure/`（§90）、`audit_rsi_claim_audit/`（§91）、`audit_memory_epistemics/`（§92）、`audit_redteam_honesty/`（§93）、`audit_benchleaking_honesty/`（§94）、`audit_goal_provenance/`（§95）、`audit_skill_lifecycle_honesty/`（§96）、`audit_l3_evidence_rubric/`（§97，含首次自审） |

@@ -32,7 +32,7 @@
 | 第三轮 | §92 | P0 记忆治理 | arXiv:2609.33013 | memory_consolidation_governance_honesty (ext3) | 1091 | KB-AUDIT34 |
 | 第四轮 | §93 | P3 安全/合规 | arXiv:2611.24362 | redteam_robustness_honesty (ext4) | 1116 | KB-AUDIT35 |
 
-> **受控实验轮（§98–§103，不编译新门禁）**：第五轮起从"刷门禁数量"转向"补证据链独立性缺口"，不再逐轮加门禁。§98 shared-start 受控对照（improver_gain=1.0）、§99 评估器独立性自审（flag）、§100 冻结 held-out 独立性验证（tamper 6/6 可迁移）、§101 元 canary 投毒检测（poison_detection=1.0）、§102 判据设计权外移（复用 §100 冻结集，唯一变量=判据设计者；独立设计的 judge_D 与 G 在 core 逐样本一致率 1.0 → CRIT.PORTABLE_SINGLE_DESIGN_OVERFIT_WEAKENED；刻意不编译第 39 道门禁）、§103 设计者约束消融 de-steering（用户"设计者可进一步放松"→判读为"抽引导脚手架而非降验收门槛"；抽 prompt 规则词 + id 中性化打乱 + gt 文本反查物理隔离；两全新 context 设计者从零归纳 → D1b core 全对且与 G/D0 一致强加固 §102、D1a 暴露"正类取哪层"任务解释自由度 → DESTEER_PARTIAL；不编译新门禁）。测试 1141→1319，KB 131→148。详见 SESSION_HANDOFF §4k–§4p。守恒：最高杠杆≠最高产出数（KB-META10）、放松=抽脚手架不是降门槛（KB-META11）、排除一个替代解释≠证明绝对属性，不宣布 L3。
+> **受控实验轮（§98–§104，不编译新门禁）**：第五轮起从"刷门禁数量"转向"补证据链独立性缺口"，不再逐轮加门禁。§98 shared-start 受控对照（improver_gain=1.0）、§99 评估器独立性自审（flag）、§100 冻结 held-out 独立性验证（tamper 6/6 可迁移）、§101 元 canary 投毒检测（poison_detection=1.0）、§102 判据设计权外移（复用 §100 冻结集，唯一变量=判据设计者；独立设计的 judge_D 与 G 在 core 逐样本一致率 1.0 → CRIT.PORTABLE_SINGLE_DESIGN_OVERFIT_WEAKENED；刻意不编译第 39 道门禁）、§103 设计者约束消融 de-steering（抽 prompt 规则词 + id 中性化打乱 + gt 文本反查物理隔离；D1b core 全对强加固、D1a 暴露任务解释自由度 → DESTEER_PARTIAL）、§104 字段名语义消融（用户"进一步放松"→字段名 claim/evidence→text_a/text_b，唯一变量=字段名方向语义；两设计者均过准入但未恢复上游判据 D2a tamper0.0/D2b tamper0.5 → FIELD_NEUTRAL_DEPENDENT，结论首次翻转，定位"可迁移"依赖字段名语义这一更外层脚手架；不编译新门禁）。测试 1141→1331，KB 131→150。详见 SESSION_HANDOFF §4k–§4q。守恒：最高杠杆≠最高产出数（KB-META10）、放松=抽脚手架不是降门槛（KB-META11）、脚手架消融层级图谱与负面结果价值（KB-META12）、排除一个替代解释≠证明绝对属性，不宣布 L3。
 
 ## 守恒条款（一天内必须守住）
 

@@ -3867,3 +3867,21 @@ D：tamper_catch=**1.0**、clean_pass=**1.0**、core_acc(excl canary)=1.0。G-D 
 裁决 **DESTEER_PARTIAL**：判据的"结构"可无引导重新发现（D1b 强加固 §102），但"分哪两类/正类取哪层"存在任务解释自由度（D1a）——这是比 §102 更深的残余，如实记录不粉饰。D1a-D1b 核心一致率 0.5。**l3_claimed=false / absolute=false**：去引导只抽掉 prompt 规则描述与 id 标签，不消除 spawn/同模型家族（KB-STRUCT02）/解释环节本 Agent 的残余，Trusting Trust 递归在受控层停下。
 
 验收：12 项回放测试全过（只读冻结结果）；链审 45→46 / 28→29 / 三锁 25→26 按实测更新断言不放宽；成长桥 87→88（KB-AUDIT45 fix + KB-META11 preserve 进 deferred）；KB 146→148。**刻意不编译新门禁**（延续 §102，最高杠杆≠最高产出数）。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。成果报告 ROUND14_ACHIEVEMENT_REPORT_20261122.html。
+
+## §104 自主运维第十五轮：字段名语义消融（回应"请进一步放松，继续"）
+
+### 104.1 判读：字段名也是脚手架，且是最后一层可抽的方向暗示
+延续"放松=抽脚手架非降门槛"（KB-META11）。§103 抽掉 prompt 规则词 + id 标签后，D1b 仍 core 全对，但**保留了字段名 `claim`/`evidence`**——前者暗含"被支撑声明"、后者暗含"支撑证据"，等于把"evidence 是否逐字支撑 claim"的方向喂给了设计者。§104 把字段名中性化为 `text_a`/`text_b`（连函数签名一起改 `judge(text_a,text_b)`），复用 §100 冻结 claim/evidence 文本逐字不变、id/顺序沿用 §103 打乱、gt 按文本反查不落盘。唯一变量=字段名方向语义。
+
+### 104.2 制备、锁存与物理隔离（先锁后 spawn）
+一次自咬：首版制备脚本的断言误把文本 value 内固有英文词 `claim`（论文原句 "a reader who wants a claim"）当成字段名泄漏，AssertionError。修正为只校验字段名 key ∈ {id,text_a,text_b}，文本逐字不变；并把"文本内固有 claim 词不可消除、非注入脚手架"如实记入 prereg.source.honest_residual。预注册在 spawn 前锁存（prereg 77b10d29… / gate 19cba72a… / manifest 7c03bb61… / samples efbb5dd3…）。spawn 两个全新 context 设计者（D2a/D2b），prompt 不含 claim/evidence/support/逐字/限定成分 等任何角色或规则词，明确"text_a/text_b 只是中性代号、不预设角色"。
+
+### 104.3 两项归纳：都过准入，但都未恢复上游判据
+- **D2a**（token Jaccard 重合度阈值）：HIGH 近逐字判 True——clean 6/6 True（对），但 tampered 删微词后仍高重合，6/6 全 True（错，gt=False）→ tamper_catch=**0.0**；canary 意译全 False（错，gt=True）。它抓的是"是否近逐字复述"，分不清 clean 与 tampered。
+- **D2b**（否定词极性反转）：只把含 no/not/never 单侧翻转的 tampered 判 True（3/6）→ tamper_catch=0.5，clean/canary 全 False。
+两者都过准入（签名 (text_a,text_b)、无标签泄漏、无硬编码 N01..N18、确定性），D2a-D2b 核心一致率仅 **0.25**。
+
+### 104.4 裁决、验收与诚实边界
+裁决 **FIELD_NEUTRAL_DEPENDENT**：去掉字段名方向语义后，两设计者均未恢复 G/D0/D1b 的"逐字支撑"判定。诚实结论——上游 6/6 的"可迁移"部分建立在"知道哪段是声明、哪段是证据"的语义前提上；字段名是比 §103 任务解释自由度更外层的语义脚手架依赖。回放测试第二次自咬：断言找 `irreducible_residual`，实际 prereg 字段名是 `honest_residual`（改 prereg 会破坏哈希锁），按纪律改测试断言匹配实际字段、不动已锁存 prereg。
+
+验收：12 项回放测试全过；链审 46→47 / 29→30 / 三锁 27 按实测更新断言不放宽；成长桥 87→89（KB-AUDIT46 fix + KB-META12 preserve）；KB 148→150。**不编译新门禁**。**l3_claimed=false / absolute=false**：字段名消融只抽掉方向语义，不消除 spawn/同家族（KB-STRUCT02）/解释环节本 Agent 的残余，也不消除文本 value 内固有 claim 词；Trusting Trust 递归在受控层停下。这是连续多轮消融以来**结论首次翻转**——按 KB-META12 定位为"找到可迁移的真实边界"而非实验失败，照实记录不粉饰。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。成果报告 ROUND15_ACHIEVEMENT_REPORT_20261122.html。

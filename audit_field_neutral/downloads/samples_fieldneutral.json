@@ -1,0 +1,95 @@
+{
+  "note": "18 组文本对,每组含两段文本 text_a 与 text_b。请观察它们的异同,归纳一个确定性的二分规律,写成纯函数 judge(text_a, text_b) 返回三元组 (bool, list, list)。无规则描述、无标签;id 为中性编号,禁止据此判断。",
+  "pairs": [
+    {
+      "id": "N01",
+      "text_a": "Localising only the tool descriptions is better than localising all three by 1.11 1.11 pp, with an interval of [ 0.36 , 1.86 ] [0.36,1.86] that excludes zero.",
+      "text_b": "But the strongest single arm (tool descriptions, − 9.17 -9.17 pp) has a larger point estimate than the arm that changes all three documents ( − 8.06 -8.06 pp), so it is not the case that no single component reaches the full effect — the full manipulation fails to beat its own largest component."
+    },
+    {
+      "id": "N02",
+      "text_a": "The benchmark’s reward function resets the environment database in order to replay the reference solution and construct a ground-truth hash, and it never restores the database afterwards.",
+      "text_b": "The benchmark’s reward function resets the environment database in order to replay the reference solution and construct a ground-truth hash, and it restores the database afterwards."
+    },
+    {
+      "id": "N03",
+      "text_a": "The suite detects 54 of the 57 separable combinations, and the one it misses on all three targets is named in Section 4.1 rather than summarised away.",
+      "text_b": "The suite is therefore not free of blind spots, and the miss is the same combination on all three targets: an oracle that swallows an exception raised inside itself, so that INV-4 records the probed path as not applicable rather than as a violation."
+    },
+    {
+      "id": "N04",
+      "text_a": "Every injected class is detected, and the repaired oracle the package ships yields no false positive.",
+      "text_b": "Every injected class is detected, and the repaired oracle the package ships yields."
+    },
+    {
+      "id": "N05",
+      "text_a": "The benchmark’s reward function resets the environment database in order to replay the reference solution and construct a ground-truth hash, and it never restores the database afterwards.",
+      "text_b": "In the implementation we audited it never restores what it wrote, so a harness that scores an episode after the session has ended reads the reference solution’s state rather than the agent’s (Section 4.1 )."
+    },
+    {
+      "id": "N06",
+      "text_a": "RQ2 and RQ3 are not measurements of intrinsic language-model capability or behaviour.",
+      "text_b": "RQ2 and RQ3 are measurements of intrinsic language-model capability or behaviour."
+    },
+    {
+      "id": "N07",
+      "text_a": "The benchmark’s reward function resets the environment database in order to replay the reference solution and construct a ground-truth hash, and it never restores the database afterwards.",
+      "text_b": "The benchmark’s reward function resets the environment database in order to replay the reference solution and construct a ground-truth hash, and it never restores the database afterwards."
+    },
+    {
+      "id": "N08",
+      "text_a": "Every injected class is detected, and the repaired oracle the package ships yields no false positive.",
+      "text_b": "INV-5 is silent on the repaired copy we ship, and that silence is the specificity result, not a contradiction of the discovery."
+    },
+    {
+      "id": "N09",
+      "text_a": "The direction, however, is the opposite of the one we measured before:",
+      "text_b": "We pre-registered the two ways this could be read, and this is the second: the effect does not generalise, so we report it as a boundary and restrict the earlier finding to the configuration in which it was measured — a language effect under the retail configuration ."
+    },
+    {
+      "id": "N10",
+      "text_a": "Localising only the tool descriptions is better than localising all three by 1.11 1.11 pp, with an interval of [ 0.36 , 1.86 ] [0.36,1.86] that excludes zero.",
+      "text_b": "Localising only the tool descriptions is better than localising all three by 1.11 1.11 pp, with an interval of [ 0.36 , 1.86 ] [0.36,1.86] that excludes zero."
+    },
+    {
+      "id": "N11",
+      "text_a": "RQ2 and RQ3 are not measurements of intrinsic language-model capability or behaviour.",
+      "text_b": "A reader who wants a claim about how a model behaves under localisation will not find one here, and we do not make one."
+    },
+    {
+      "id": "N12",
+      "text_a": "The suite detects 54 of the 57 separable combinations, and the one it misses on all three targets is named in Section 4.1 rather than summarised away.",
+      "text_b": "The suite detects 54 of the 57 separable combinations, and the one it misses on all three targets is named in Section 4.1 rather than summarised away."
+    },
+    {
+      "id": "N13",
+      "text_a": "Every injected class is detected, and the repaired oracle the package ships yields no false positive.",
+      "text_b": "Every injected class is detected, and the repaired oracle the package ships yields no false positive."
+    },
+    {
+      "id": "N14",
+      "text_a": "The direction, however, is the opposite of the one we measured before:",
+      "text_b": "The direction, however, is the opposite of the one we measured before:"
+    },
+    {
+      "id": "N15",
+      "text_a": "The direction, however, is the opposite of the one we measured before:",
+      "text_b": "The direction, is the opposite of the one we measured before:"
+    },
+    {
+      "id": "N16",
+      "text_a": "RQ2 and RQ3 are not measurements of intrinsic language-model capability or behaviour.",
+      "text_b": "RQ2 and RQ3 are not measurements of intrinsic language-model capability or behaviour."
+    },
+    {
+      "id": "N17",
+      "text_a": "Localising only the tool descriptions is better than localising all three by 1.11 1.11 pp, with an interval of [ 0.36 , 1.86 ] [0.36,1.86] that excludes zero.",
+      "text_b": "Localising the tool descriptions is better than localising all three by 1.11 1.11 pp, with an interval of [ 0.36 , 1.86 ] [0.36,1.86] that excludes zero."
+    },
+    {
+      "id": "N18",
+      "text_a": "The suite detects 54 of the 57 separable combinations, and the one it misses on all three targets is named in Section 4.1 rather than summarised away.",
+      "text_b": "The suite detects of the 57 separable combinations, and the one it misses on all three targets is named in Section 4.1 rather than summarised away."
+    }
+  ]
+}

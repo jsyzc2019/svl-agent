@@ -3923,6 +3923,63 @@
       "evidence": "theory",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT46",
+      "kind": "reasoning_lesson",
+      "mechanism": "字段名方向语义是判据可迁移的实质引导源:§103 抽掉 prompt 规则词+id 标签后 D1b 仍 core 全对(结构可无引导发现),但保留了字段名 claim/evidence——前者暗含'被支撑声明'、后者暗含'支撑证据',把'evidence 是否逐字支撑 claim'的方向喂给了设计者。§104 把字段名中性化为 text_a/text_b(连函数签名一起改),文本/id/顺序/gt 全不变,唯一变量=字段名语义。两个全新 context 设计者从零归纳:D2a(Jaccard词面重合)HIGH近逐字判True——clean 6/6 True 但 tampered 因删微词仍高重合也 6/6 True→tamper_catch=0;canary意译全False。D2b(否定词极性反转)只抓含 no/not/never 的 tampered 3/6→tamper_catch=0.5、clean 全False。两者都过准入(纯函数/无泄漏/确定性)但都未恢复 G/D0/D1b 判定,D2a-D2b 核心一致率仅 0.25。裁决 FIELD_NEUTRAL_DEPENDENT:上游 6/6 显著依赖 claim/evidence 字段名方向语义,这是比 §103 任务解释自由度更外层的语义脚手架依赖。",
+      "trigger": [
+        "字段名语义",
+        "方向暗示",
+        "claim evidence",
+        "语义脚手架",
+        "FIELD_NEUTRAL_DEPENDENT",
+        "可迁移边界",
+        "角色预设",
+        "词面重合",
+        "否定词极性"
+      ],
+      "action": "检验一个'可迁移'结论的真实边界时,要逐级抽掉评估方注入的脚手架,注意字段名也是脚手架:①prompt 规则词(§103)、②id 语义标签(§103)、③字段名角色(§104:claim/evidence→text_a/text_b,连函数签名一起改)、④样本排列顺序。每级只动一个变量、其余冻结。关键发现:去掉字段名后设计者从'文本相似性'或'否定词极性'出发得出完全不同的二分,说明前面轮次的'可迁移'部分建立在'知道哪段是声明/哪段是证据'这一语义前提上——这不是失败而是精确定位了能力边界。不可消除的残余如实标注(文本 value 内固有英文 claim 词是源数据内容非注入字段,不算脚手架)。Designer 抓不全不等于算法缺陷,是其归纳出的结构与目标结构不同,如实记录不粉饰。l3/absolute 仍 false。",
+      "provenance": "自主运维第十五轮:用户'请进一步放松,继续'→判读§103残余=字段名claim/evidence方向语义→§104字段名中性消融→D2a tamper0/D2b tamper0.5均过准入→FIELD_NEUTRAL_DEPENDENT→12回放测试→固化KB",
+      "timestamp": "2026-11-22T08:40:00+00:00",
+      "support": [
+        "audit_field_neutral/result.json:D2a tamper0.0/clean1.0;D2b tamper0.5/clean0.0;vsD1b=0.5/0.25;裁决FIELD_NEUTRAL_DEPENDENT/l3=false",
+        "audit_field_neutral/prereg.json:字段名中性三情形裁决先于spawn锁存(77b10d29);honest_residual记录文本内固有claim词",
+        "audit_field_neutral/downloads/samples_fieldneutral.json:字段名text_a/text_b,文本与§100逐字一致,id/顺序沿用§103打乱",
+        "KB-AUDIT45 去引导消融——§103抽prompt规则词+id标签,设计者仍全对",
+        "KB-META11 放松=抽脚手架非降门槛——本轮抽到字段名层"
+      ],
+      "evidence": "experiment",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META12",
+      "kind": "reasoning_lesson",
+      "mechanism": "脚手架消融的层级图谱与'负面结果'的正确价值:§102-§104 逐级抽出评估方注入的脚手架,形成一个可复用的层级——①出题权(§100外移)②判据设计权(§102外移)③prompt规则词+id标签(§103抽)④字段名方向语义(§104抽)⑤spawn/同模型家族(不可消除,KB-STRUCT02)。每抽一层都问'结论是否仍成立':成立→加固并继续下一层;不成立→精确定位该层是必要条件(负面结果同样有信息量)。§104 抽到字段名层时结论首次翻转(FIELD_NEUTRAL_DEPENDENT)——这不是实验失败,而是找到了'可迁移'的真实边界:设计者需要在'知道哪段是声明/证据'的前提下才能还原判据。纪律:①不要把负面结果粉饰成加固(本次诚实记 DEPENDENT);②区分'设计者抓不全'(归纳结构不同)与'设计者违规'(准入审计);③不可消除的残余(文本固有语义词/同家族)如实标注而非假装消除;④抽到结论翻转即停,不为追求'继续全对'造更弱的玩具任务(KB-META01)。这类'何时停在哪层'的判断是认知机制(addressable=False),交人。",
+      "trigger": [
+        "脚手架层级图谱",
+        "负面结果价值",
+        "结论翻转即停",
+        "必要条件定位",
+        "逐级消融",
+        "不粉饰",
+        "不可消除残余",
+        "可迁移边界"
+      ],
+      "action": "面对'继续放松/深入探索'类指令:①先画出当前结论依赖的脚手架层级清单(出题/判据设计/prompt规则/id标签/字段名/样本顺序/同家族),标出哪些已抽、哪些未抽、哪些不可消除;②每轮只抽一层、冻结其余,预注册三情形(全对加固/部分分歧/翻转依赖)先于结果;③全对→加固并进入下一层;翻转→精确定位该层是必要条件,如实记 DEPENDENT,这是有价值的知识不是失败;④抽到不可消除层(同家族/文本固有语义)或无新层可抽→停手诚实说边界(KB-META09 Trusting Trust);⑤铁律:不为'让结论继续全对'而人为弱化任务或放宽准入(那是造玩具牙/放水),负面结果照实写;⑥每轮不编译新门禁(最高杠杆≠最高产出数,KB-META10)。",
+      "provenance": "自主运维第十五轮:用户'请进一步放松,继续'→§104抽字段名层→结论首次翻转FIELD_NEUTRAL_DEPENDENT→正确识别为'定位真实边界'而非失败→与KB-AUDIT46配对(可编译洞见+认知机制)",
+      "timestamp": "2026-11-22T08:40:00+00:00",
+      "support": [
+        "KB-META09 Trusting Trust无限回归——递归边缘停手来源",
+        "KB-META10 最高杠杆=外移唯一自证环节——层级图谱方法论",
+        "KB-META11 放松=抽脚手架非降门槛——本轮继续抽到字段名层",
+        "KB-AUDIT46 字段名语义依赖——本轮可编译产物(负面结果)",
+        "audit_field_neutral/result.json:FIELD_NEUTRAL_DEPENDENT——结论翻转照实记录的实证"
+      ],
+      "evidence": "theory",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

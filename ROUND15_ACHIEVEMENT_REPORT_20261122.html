@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第十五轮成果报告 · §104 字段名语义消融</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.recursion{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第十五轮成果报告 <span class="pill tag">§104</span></h1>
+<div class="sub">字段名语义消融（semantic field-name ablation）· 复用 §100 冻结 held-out · 2026-11-22 · 触发：用户"请进一步放松，继续"</div>
+
+<h2>一、判读：字段名也是脚手架，且是最后一层方向暗示</h2>
+<div class="phil">
+延续"放松=抽脚手架非降门槛"（KB-META11）。§103 抽掉 prompt 规则词 + id 标签后 D1b 仍 core 全对，<b>但保留了字段名 <code>claim</code>/<code>evidence</code></b>——前者暗含"被支撑声明"、后者暗含"支撑证据"，等于把"evidence 是否逐字支撑 claim"的方向喂给设计者。<br><br>
+§104 把字段名中性化为 <code>text_a</code>/<code>text_b</code>（连函数签名一起改 <code>judge(text_a,text_b)</code>），样本文本/id/顺序/gt 全不变。<b>唯一变量 = 字段名方向语义</b>。连续多轮消融以来，这是<b>结论首次可能翻转</b>的一层。
+</div>
+
+<h2>二、制备、锁存与物理隔离（先锁后测）</h2>
+<p>复用 §100 冻结 claim/evidence 逐字不变，字段名 key 全部中性；gt 按 (text_a,text_b) 文本反查，映射不落盘——设计者目录仅裸样本一个文件。</p>
+<table>
+<tr><th>引导脚手架</th><th>消融轮次</th></tr>
+<tr><td>出题权</td><td>§100 外移（独立子 agent）</td></tr>
+<tr><td>判据设计权</td><td>§102 外移（独立设计 judge_D）</td></tr>
+<tr><td>prompt 规则词 + id 语义标签</td><td>§103 抽掉（去引导）</td></tr>
+<tr><td><b>字段名 claim/evidence 方向语义</b></td><td><b>§104 抽掉（本轮）</b></td></tr>
+<tr><td>spawn / 同模型家族 / 文本内固有 claim 词</td><td>不可消除（如实标注）</td></tr>
+</table>
+<p>预注册在 spawn 前锁存：<code>prereg 77b10d29…</code> / <code>gate 19cba72a…</code> / <code>manifest 7c03bb61…</code> / <code>samples efbb5dd3…</code>。一次自咬：制备脚本断言误把文本 value 内固有 claim 词当字段泄漏，修正为只校验 key；残余如实记入 prereg。</p>
+
+<h2>三、两项归纳：都过准入，但都未恢复上游判据</h2>
+<table>
+<tr><th>设计者</th><th>归纳机制</th><th>clean</th><th>tampered</th><th>canary</th><th>tamper_catch</th></tr>
+<tr><td><b>D2a</b></td><td>token Jaccard 重合度阈值（近逐字=True）</td><td>True ✓</td><td>True ✗（删微词仍高重合）</td><td>False ✗</td><td><span class="pill no">0.0</span></td></tr>
+<tr><td><b>D2b</b></td><td>否定词极性反转（单侧 no/not/never）</td><td>False ✗</td><td>True 3/6（部分）</td><td>False ✗</td><td><span class="pill no">0.5</span></td></tr>
+</table>
+<div class="note">两者都过准入（签名 <code>(text_a,text_b)</code>、无标签泄漏、无硬编码 id、确定性），D2a-D2b 核心一致率仅 <b>0.25</b>。它们抓的是"文本相似性"或"否定词极性"，而非 G/D0/D1b 的"逐字支撑"——<b>设计者抓不全不等于违规</b>，是其归纳结构与目标结构不同，如实记录。</div>
+
+<h2>四、裁决：FIELD_NEUTRAL_DEPENDENT（结论首次翻转）</h2>
+<div class="recursion">
+<b>裁决 <span class="pill tag">FIELD_NEUTRAL_DEPENDENT</span></b>：去掉字段名方向语义后，两设计者均未恢复上游判定。诚实结论——上游 6/6 的"可迁移"部分建立在"知道哪段是声明、哪段是证据"的语义前提上；字段名是比 §103 任务解释自由度<b>更外层的语义脚手架依赖</b>。<br><br>
+这是连续多轮消融以来<b>结论首次翻转</b>。按 KB-META12，这不是实验失败，而是<b>精确定位了"可迁移"的真实边界</b>——照实记录，不粉饰成加固，也不为追求"继续全对"而人为弱化任务。
+</div>
+
+<h2>五、接合、验收与诚实边界</h2>
+<table>
+<tr><th>项</th><th>结果</th></tr>
+<tr><td>回放测试</td><td>12 项全过（只读冻结结果；一次自咬修正字段名断言，不动已锁存 prereg）</td></tr>
+<tr><td>全量测试</td><td>1319 → <b>1331 passed</b>（+12，全绿）</td></tr>
+<tr><td>证据链审计</td><td>46→47 / 五件套 29→30 / 三锁 27（按实测更新断言，不放宽）</td></tr>
+<tr><td>成长桥 / KB</td><td>成长桥 87→89；KB 148→150（KB-AUDIT46 fix + KB-META12 preserve）</td></tr>
+<tr><td>门禁</td><td><b>不编译新门禁</b>（延续 §102–§103）</td></tr>
+</table>
+<div class="recursion"><b>诚实边界</b>：<code>l3_claimed=false</code> / <code>absolute=false</code>。字段名消融只抽掉方向语义，不消除 spawn/同模型家族（KB-STRUCT02）/解释环节本 Agent 的残余，也不消除文本 value 内固有 claim 词（源数据内容，非注入脚手架）。Trusting Trust 递归在受控层停下。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。</div>
+
+<div class="foot">§104 自主运维第十五轮 · 证据链 <code>audit_field_neutral/</code> · 回放 <code>tests/test_field_neutral.py</code> · 报告 ROUND15_ACHIEVEMENT_REPORT_20261122.html</div>
+</div></body></html>
