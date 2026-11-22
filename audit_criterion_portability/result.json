@@ -1,0 +1,252 @@
+{
+  "experiment": "§102 criterion design portability",
+  "source": {
+    "paper": "arXiv:2610.16067v1 (reuse §100 frozen held-out)",
+    "paper_sha256": "b2ce0f59b17b4a6d35269f32bbf70dabc3897a957d90d4484aada3106aa766ce",
+    "reuse_rationale": "复用冻结数据/样本/gt,唯一变量=判据设计者"
+  },
+  "role_separation": {
+    "data": "§100 冻结(hasher-locked)",
+    "designer": "独立子 agent(全新 context,只读脱敏 claim+evidence,无标签,不获知 G)",
+    "scorer": "本仓确定性引擎(重跑 D 源码,§100 冻结 gt 盲评,读 G 冻结判定)"
+  },
+  "locks": {
+    "prereg": true,
+    "gate_prereg": true,
+    "manifest": true,
+    "samples_blind": true,
+    "paper": true,
+    "s100_samples": true
+  },
+  "admission_audit": {
+    "signature": [
+      "claim",
+      "evidence"
+    ],
+    "signature_ok": true,
+    "leaked_label_tokens": [],
+    "no_label_leak": true,
+    "hardcoded_sample_ids": [],
+    "no_hardcoded_ids": true,
+    "deterministic_no_rng": true,
+    "self_correction": "首版子串匹配假阳性(variant←invariant, random←'no randomness' docstring);改词边界+剥离注释后重判,禁词集与准入标准不变,仅匹配方式修正"
+  },
+  "metrics": {
+    "admission_ok": true,
+    "D_tamper_catch_rate": 1.0,
+    "D_clean_pass_rate": 1.0,
+    "D_canary_false_positive_rate": 1.0,
+    "G_D_sample_agreement": 0.8888888888888888,
+    "G_D_core_agreement": 1.0,
+    "D_core_accuracy_excl_canary": 1.0
+  },
+  "rows": [
+    {
+      "id": "S01_clean",
+      "variant": "clean",
+      "D_supported": true,
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "D_match_gt": true,
+      "G_match_gt": true,
+      "D_eq_G": true,
+      "D_missing_count": 0
+    },
+    {
+      "id": "S01_tampered",
+      "variant": "tampered",
+      "D_supported": false,
+      "G_supported": false,
+      "ground_truth_supported": false,
+      "D_match_gt": true,
+      "G_match_gt": true,
+      "D_eq_G": true,
+      "D_missing_count": 3
+    },
+    {
+      "id": "S01_canary",
+      "variant": "canary",
+      "D_supported": false,
+      "G_supported": false,
+      "ground_truth_supported": true,
+      "D_match_gt": false,
+      "G_match_gt": false,
+      "D_eq_G": true,
+      "D_missing_count": 11
+    },
+    {
+      "id": "S02_clean",
+      "variant": "clean",
+      "D_supported": true,
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "D_match_gt": true,
+      "G_match_gt": true,
+      "D_eq_G": true,
+      "D_missing_count": 0
+    },
+    {
+      "id": "S02_tampered",
+      "variant": "tampered",
+      "D_supported": false,
+      "G_supported": false,
+      "ground_truth_supported": false,
+      "D_match_gt": true,
+      "G_match_gt": true,
+      "D_eq_G": true,
+      "D_missing_count": 1
+    },
+    {
+      "id": "S02_canary",
+      "variant": "canary",
+      "D_supported": false,
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "D_match_gt": false,
+      "G_match_gt": true,
+      "D_eq_G": false,
+      "D_missing_count": 12
+    },
+    {
+      "id": "S03_clean",
+      "variant": "clean",
+      "D_supported": true,
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "D_match_gt": true,
+      "G_match_gt": true,
+      "D_eq_G": true,
+      "D_missing_count": 0
+    },
+    {
+      "id": "S03_tampered",
+      "variant": "tampered",
+      "D_supported": false,
+      "G_supported": false,
+      "ground_truth_supported": false,
+      "D_match_gt": true,
+      "G_match_gt": true,
+      "D_eq_G": true,
+      "D_missing_count": 1
+    },
+    {
+      "id": "S03_canary",
+      "variant": "canary",
+      "D_supported": false,
+      "G_supported": false,
+      "ground_truth_supported": true,
+      "D_match_gt": false,
+      "G_match_gt": false,
+      "D_eq_G": true,
+      "D_missing_count": 9
+    },
+    {
+      "id": "S04_clean",
+      "variant": "clean",
+      "D_supported": true,
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "D_match_gt": true,
+      "G_match_gt": true,
+      "D_eq_G": true,
+      "D_missing_count": 0
+    },
+    {
+      "id": "S04_tampered",
+      "variant": "tampered",
+      "D_supported": false,
+      "G_supported": false,
+      "ground_truth_supported": false,
+      "D_match_gt": true,
+      "G_match_gt": true,
+      "D_eq_G": true,
+      "D_missing_count": 1
+    },
+    {
+      "id": "S04_canary",
+      "variant": "canary",
+      "D_supported": false,
+      "G_supported": false,
+      "ground_truth_supported": true,
+      "D_match_gt": false,
+      "G_match_gt": false,
+      "D_eq_G": true,
+      "D_missing_count": 5
+    },
+    {
+      "id": "S05_clean",
+      "variant": "clean",
+      "D_supported": true,
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "D_match_gt": true,
+      "G_match_gt": true,
+      "D_eq_G": true,
+      "D_missing_count": 0
+    },
+    {
+      "id": "S05_tampered",
+      "variant": "tampered",
+      "D_supported": false,
+      "G_supported": false,
+      "ground_truth_supported": false,
+      "D_match_gt": true,
+      "G_match_gt": true,
+      "D_eq_G": true,
+      "D_missing_count": 1
+    },
+    {
+      "id": "S05_canary",
+      "variant": "canary",
+      "D_supported": false,
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "D_match_gt": false,
+      "G_match_gt": true,
+      "D_eq_G": false,
+      "D_missing_count": 7
+    },
+    {
+      "id": "S06_clean",
+      "variant": "clean",
+      "D_supported": true,
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "D_match_gt": true,
+      "G_match_gt": true,
+      "D_eq_G": true,
+      "D_missing_count": 0
+    },
+    {
+      "id": "S06_tampered",
+      "variant": "tampered",
+      "D_supported": false,
+      "G_supported": false,
+      "ground_truth_supported": false,
+      "D_match_gt": true,
+      "G_match_gt": true,
+      "D_eq_G": true,
+      "D_missing_count": 1
+    },
+    {
+      "id": "S06_canary",
+      "variant": "canary",
+      "D_supported": false,
+      "G_supported": false,
+      "ground_truth_supported": true,
+      "D_match_gt": false,
+      "G_match_gt": false,
+      "D_eq_G": true,
+      "D_missing_count": 12
+    }
+  ],
+  "verdict": {
+    "code": "CRIT.PORTABLE_SINGLE_DESIGN_OVERFIT_WEAKENED",
+    "claim": "两个独立设计的判据(G 本仓 / D 外部)在 clean+tampered 上逐样本一致且全对,'单判据为这6样本量身定做'的替代解释被削弱——判据设计可迁移",
+    "l3_claimed": false,
+    "absolute_independence_claimed": false,
+    "single_judge_overfit_alternative": "weakened",
+    "infinite_regression_note": "D 的设计者仍由本 Agent spawn 且同模型家族(KB-STRUCT02),本轮只把'判据设计'角色外移并排除单判据过拟合,不宣称判据真实独立/无后门,Trusting Trust 递归在受控层停下"
+  },
+  "honest_boundary": "判据设计权外移 = 结构性独立性的又一格(设计者与本仓 G 作者分离),排除单判据过拟合替代解释;但同模型家族+spawn 权+解释环节本 Agent 残余仍在,不宣布 L3/absolute;canary 全 false 是逐字判据 vs 跨句语义 canary 的类型错配(§101 已定位),非 D 的核心缺陷"
+}

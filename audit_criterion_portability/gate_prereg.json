@@ -1,0 +1,6 @@
+{
+  "gate": "judge_D (independent criterion designer, blind, pre-registered admission rules)",
+  "lock_time": "2026-11-22T15:48:57+08:00",
+  "note": "判据 D 由独立子 agent 在设计者角色内产出；本锁先于 spawn 写入。评分引擎只读 D 源码与冻结 ground truth，不看设计过程。准入规则见 prereg.judge_D_admission_rules，任何一条不过→D 不作为有效判据，如实记录。",
+  "scoring_once": true
+}

@@ -3814,6 +3814,60 @@
       "evidence": "theory",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT44",
+      "kind": "reasoning_lesson",
+      "mechanism": "判据设计可迁移性(criterion design portability):§100把出题权外移/§101处理判据投毒,但唯一仍在本Agent手里的环节是判据G的设计权(词表no/never/only/however/not/54由本仓撰写)。单一判据tamper 6/6无法排除替代解释='判据为这6样本量身定做'。§102把设计权也外移:独立子agent(全新context,只读脱敏claim+evidence无标签,不获知G)独立设计确定性判据D(所有非停用词实词+数字逐字比对),本仓用§100冻结gt盲评(不信设计者自报,import源码重跑)。实测D的tamper_catch=1.0/clean_pass=1.0,与G逐样本core一致率=1.0(整体0.889差异全在canary——D宽词表6/6全false,G 4/6,§101已定位类型错配)。裁决CRIT.PORTABLE_SINGLE_DESIGN_OVERFIT_WEAKENED:两个独立设计的判据在core全对且一致,'单判据过拟合'替代解释被削弱。关键边界:D设计者仍本Agent spawn+同模型家族(KB-STRUCT02),只排除单判据过拟合,不宣称判据真实独立/无后门,L3未达。",
+      "trigger": [
+        "判据设计权",
+        "可迁移性",
+        "单判据过拟合",
+        "独立设计",
+        "受控对照",
+        "判据一致率",
+        "设计自由度",
+        "替代解释"
+      ],
+      "action": "当证据链的判据由评估方自己撰写时,排除'判据过拟合样本'替代解释的动作不是再加声明或新门禁,而是把判据设计权外移做受控对照:①冻结数据/样本/gt不变(唯一变量=设计者);②设计者信息隔离(不获知原判据词表/逻辑/标签),只给脱敏claim+evidence;③评分方import设计者源码重跑,不采信自报;④准入元审计(D签名只接claim+evidence/不读id标签/不硬编码/确定性);⑤预注册裁决规则先于结果锁定(全对且一致→可迁移;分歧→如实记设计自由度);⑥词表不必相同——独立设计常收敛到同类核心判定但细节不同,关键看core一致而非字面同。注意元审计自身也会错(§102子串匹配把invariant当variant泄漏/'no randomness'当随机源),用固定判据时同样要词边界,这是§100 canary同类错误的 again 实证。",
+      "provenance": "自主运维第十三轮:用户'按最高杠杆去试'→判读§97-101裁决链定位唯一残余=判据G设计权→复用§100冻结论文/样本/gt做干净对照→prereg先于spawn锁存(a159f5eb)→独立子agent设计judge_D→元审计词边界自我纠错→one-shot评分(11回放测试)→不编译新门禁(避免刷数量),发现固化KB",
+      "timestamp": "2026-11-22T07:50:00+00:00",
+      "support": [
+        "audit_criterion_portability/result.json:D_tamper_catch1.0/D_clean_pass1.0/G_D_core_agreement1.0/code=CRIT.PORTABLE_SINGLE_DESIGN_OVERFIT_WEAKENED/l3=false",
+        "audit_criterion_portability/judge_D_by_agent.py:独立设计的判据源码(签名claim,evidence,无标签)",
+        "audit_frozen_holdout/result.json:复用冻结gt与G逐样本判定(唯一变量=设计者)",
+        "KB-STRUCT02 同模型家族/spawn残余——structural proxy非absolute",
+        "KB-META09 Trusting Trust无限回归——排除单判据过拟合≠真实独立"
+      ],
+      "evidence": "experiment",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META10",
+      "kind": "reasoning_lesson",
+      "mechanism": "最高杠杆的判据:当系统已在'加声明/加门禁/加判据'的递进链上走到无限回归边缘(§101 Trusting Trust停手),继续刷同维度层级是伪杠杆;真正的最高杠杆是找证据链里'唯一还由评估方自己持有'的环节并把它外移做受控对照。§97-101链条:§97判未达L3落三路径→§98外移出题意图(shared-start)→§99正面攻独立性缺口→§100外移出题权(独立子agent隔离出题)→§101处理判据投毒→§102发现唯一残余=判据设计权,外移它。判据:每轮先问'这条链上哪个环节仍是自证循环',答不出就停手(不为宏大叙事造玩具牙KB-META01),答得出才动手,且只动一个变量、冻结其余。这类判断addressable=False(是认知机制非可编译门禁),交人。",
+      "trigger": [
+        "最高杠杆",
+        "自证循环",
+        "无限回归",
+        "唯一残余环节",
+        "单变量受控",
+        "不刷门禁",
+        "停手纪律"
+      ],
+      "action": "面对'按最高杠杆去试'类指令:①先读全链裁决(result.json序列)而非只看现状数字,定位自证循环的最后一个环节;②若该环节已经在递归边缘且再动仍是同维度声明→停手诚实说边界(§101);③若找到可外移的持有环节→冻结其余做单变量对照,预注册裁决规则先于结果;④铁律:排除一个替代解释(单判据过拟合)不等于证明绝对属性(真实独立),L3/absolute不由单一实验宣布;⑤不靠堆门禁数量体现工作量——§102刻意不编译第39道门禁,只做受控实验+回放测试+KB,这是对'最高杠杆≠最高产出数'的示范。",
+      "provenance": "自主运维第十三轮:用户'按最高杠杆去试'→判读§97-101全链裁决→定位判据设计权为唯一残余→单变量外移实验→明确停手边界→本条为认知机制(交人)与KB-AUDIT44(可编译洞见)配对落档",
+      "timestamp": "2026-11-22T07:50:00+00:00",
+      "support": [
+        "KB-META01 不为宏大叙事造玩具牙——停手纪律来源",
+        "KB-META09 Trusting Trust无限回归——递归边缘停手实证",
+        "KB-AUDIT44 判据设计可迁移——本轮外移动作的可编译产物",
+        "audit_criterion_portability/prereg.json:no_new_gate='本轮不编译新门禁'——最高杠杆≠最高产出数"
+      ],
+      "evidence": "theory",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

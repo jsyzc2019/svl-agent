@@ -1,0 +1,505 @@
+{
+  "designer_reasoning": "我观察 6 组样本，每组含逐字一致的 clean、删除单个限定成分的 tampered、以及改写过的 canary。被删掉的成分分别是 no false positive、never、only、however、not、54，据此把 claim 的限定成分归纳为否定词、限定/量词、转折对比词、时序/范围词、数字与实体锚点（外加所有非停用词实词作为兜底）。判据 D 抽取 claim 中全部此类限定成分，并要求它们在 evidence 中逐字（带词边界）出现；任一缺失即判为不支撑。因此 clean 全部通过，tampered 因缺一个成分失败，canary 因大量成分被改写而失败。",
+  "marker_categories": {
+    "否定词": [
+      "no",
+      "not",
+      "never",
+      "none",
+      "neither",
+      "nor",
+      "cannot",
+      "n't",
+      "without",
+      "neither",
+      "nowhere"
+    ],
+    "限定词/量词": [
+      "every",
+      "only",
+      "all",
+      "each",
+      "any",
+      "some",
+      "both",
+      "either",
+      "entire",
+      "whole",
+      "single",
+      "just"
+    ],
+    "转折对比词": [
+      "however",
+      "but",
+      "yet",
+      "rather",
+      "instead",
+      "although",
+      "though",
+      "whereas",
+      "opposite",
+      "contrary",
+      "conversely",
+      "nevertheless"
+    ],
+    "时序范围词": [
+      "before",
+      "after",
+      "afterwards",
+      "afterward",
+      "then",
+      "already",
+      "still",
+      "once",
+      "hitherto",
+      "previously"
+    ],
+    "内容锚点": [
+      "false",
+      "positive",
+      "excludes",
+      "zero",
+      "ground-truth",
+      "intrinsic",
+      "summarised",
+      "away",
+      "reference",
+      "solution",
+      "invariant",
+      "detected",
+      "restores",
+      "measurements",
+      "detects"
+    ],
+    "数字": [
+      "<正则 \\d+(?:\\.\\d+)* 匹配的数字字面量，如 54, 57, 1.11, 0.36, 1.86>"
+    ],
+    "其他实词(兜底)": [
+      "<非停用词的所有 word token，例如 injected, database, localising>"
+    ]
+  },
+  "rows": [
+    {
+      "id": "S01_clean",
+      "supported": true,
+      "markers_in_claim": [
+        "class",
+        "detected",
+        "every",
+        "false",
+        "injected",
+        "no",
+        "oracle",
+        "package",
+        "positive",
+        "repaired",
+        "ships",
+        "yields"
+      ],
+      "missing_in_evidence": []
+    },
+    {
+      "id": "S01_tampered",
+      "supported": false,
+      "markers_in_claim": [
+        "class",
+        "detected",
+        "every",
+        "false",
+        "injected",
+        "no",
+        "oracle",
+        "package",
+        "positive",
+        "repaired",
+        "ships",
+        "yields"
+      ],
+      "missing_in_evidence": [
+        "false",
+        "no",
+        "positive"
+      ]
+    },
+    {
+      "id": "S01_canary",
+      "supported": false,
+      "markers_in_claim": [
+        "class",
+        "detected",
+        "every",
+        "false",
+        "injected",
+        "no",
+        "oracle",
+        "package",
+        "positive",
+        "repaired",
+        "ships",
+        "yields"
+      ],
+      "missing_in_evidence": [
+        "class",
+        "detected",
+        "every",
+        "false",
+        "injected",
+        "no",
+        "oracle",
+        "package",
+        "positive",
+        "ships",
+        "yields"
+      ]
+    },
+    {
+      "id": "S02_clean",
+      "supported": true,
+      "markers_in_claim": [
+        "afterwards",
+        "benchmark",
+        "construct",
+        "database",
+        "environment",
+        "function",
+        "ground-truth",
+        "hash",
+        "never",
+        "order",
+        "reference",
+        "replay",
+        "resets",
+        "restores",
+        "reward",
+        "solution"
+      ],
+      "missing_in_evidence": []
+    },
+    {
+      "id": "S02_tampered",
+      "supported": false,
+      "markers_in_claim": [
+        "afterwards",
+        "benchmark",
+        "construct",
+        "database",
+        "environment",
+        "function",
+        "ground-truth",
+        "hash",
+        "never",
+        "order",
+        "reference",
+        "replay",
+        "resets",
+        "restores",
+        "reward",
+        "solution"
+      ],
+      "missing_in_evidence": [
+        "never"
+      ]
+    },
+    {
+      "id": "S02_canary",
+      "supported": false,
+      "markers_in_claim": [
+        "afterwards",
+        "benchmark",
+        "construct",
+        "database",
+        "environment",
+        "function",
+        "ground-truth",
+        "hash",
+        "never",
+        "order",
+        "reference",
+        "replay",
+        "resets",
+        "restores",
+        "reward",
+        "solution"
+      ],
+      "missing_in_evidence": [
+        "afterwards",
+        "benchmark",
+        "construct",
+        "database",
+        "environment",
+        "function",
+        "ground-truth",
+        "hash",
+        "order",
+        "replay",
+        "resets",
+        "reward"
+      ]
+    },
+    {
+      "id": "S03_clean",
+      "supported": true,
+      "markers_in_claim": [
+        "0.36",
+        "1.11",
+        "1.86",
+        "all",
+        "better",
+        "descriptions",
+        "excludes",
+        "interval",
+        "localising",
+        "only",
+        "pp",
+        "three",
+        "tool",
+        "zero"
+      ],
+      "missing_in_evidence": []
+    },
+    {
+      "id": "S03_tampered",
+      "supported": false,
+      "markers_in_claim": [
+        "0.36",
+        "1.11",
+        "1.86",
+        "all",
+        "better",
+        "descriptions",
+        "excludes",
+        "interval",
+        "localising",
+        "only",
+        "pp",
+        "three",
+        "tool",
+        "zero"
+      ],
+      "missing_in_evidence": [
+        "only"
+      ]
+    },
+    {
+      "id": "S03_canary",
+      "supported": false,
+      "markers_in_claim": [
+        "0.36",
+        "1.11",
+        "1.86",
+        "all",
+        "better",
+        "descriptions",
+        "excludes",
+        "interval",
+        "localising",
+        "only",
+        "pp",
+        "three",
+        "tool",
+        "zero"
+      ],
+      "missing_in_evidence": [
+        "0.36",
+        "1.11",
+        "1.86",
+        "better",
+        "excludes",
+        "interval",
+        "localising",
+        "only",
+        "zero"
+      ]
+    },
+    {
+      "id": "S04_clean",
+      "supported": true,
+      "markers_in_claim": [
+        "before",
+        "direction",
+        "however",
+        "measured",
+        "one",
+        "opposite"
+      ],
+      "missing_in_evidence": []
+    },
+    {
+      "id": "S04_tampered",
+      "supported": false,
+      "markers_in_claim": [
+        "before",
+        "direction",
+        "however",
+        "measured",
+        "one",
+        "opposite"
+      ],
+      "missing_in_evidence": [
+        "however"
+      ]
+    },
+    {
+      "id": "S04_canary",
+      "supported": false,
+      "markers_in_claim": [
+        "before",
+        "direction",
+        "however",
+        "measured",
+        "one",
+        "opposite"
+      ],
+      "missing_in_evidence": [
+        "before",
+        "direction",
+        "however",
+        "one",
+        "opposite"
+      ]
+    },
+    {
+      "id": "S05_clean",
+      "supported": true,
+      "markers_in_claim": [
+        "behaviour",
+        "capability",
+        "intrinsic",
+        "language-model",
+        "measurements",
+        "not",
+        "rq2",
+        "rq3"
+      ],
+      "missing_in_evidence": []
+    },
+    {
+      "id": "S05_tampered",
+      "supported": false,
+      "markers_in_claim": [
+        "behaviour",
+        "capability",
+        "intrinsic",
+        "language-model",
+        "measurements",
+        "not",
+        "rq2",
+        "rq3"
+      ],
+      "missing_in_evidence": [
+        "not"
+      ]
+    },
+    {
+      "id": "S05_canary",
+      "supported": false,
+      "markers_in_claim": [
+        "behaviour",
+        "capability",
+        "intrinsic",
+        "language-model",
+        "measurements",
+        "not",
+        "rq2",
+        "rq3"
+      ],
+      "missing_in_evidence": [
+        "behaviour",
+        "capability",
+        "intrinsic",
+        "language-model",
+        "measurements",
+        "rq2",
+        "rq3"
+      ]
+    },
+    {
+      "id": "S06_clean",
+      "supported": true,
+      "markers_in_claim": [
+        "4.1",
+        "54",
+        "57",
+        "all",
+        "away",
+        "combinations",
+        "detects",
+        "misses",
+        "named",
+        "one",
+        "rather",
+        "section",
+        "separable",
+        "suite",
+        "summarised",
+        "targets",
+        "three"
+      ],
+      "missing_in_evidence": []
+    },
+    {
+      "id": "S06_tampered",
+      "supported": false,
+      "markers_in_claim": [
+        "4.1",
+        "54",
+        "57",
+        "all",
+        "away",
+        "combinations",
+        "detects",
+        "misses",
+        "named",
+        "one",
+        "rather",
+        "section",
+        "separable",
+        "suite",
+        "summarised",
+        "targets",
+        "three"
+      ],
+      "missing_in_evidence": [
+        "54"
+      ]
+    },
+    {
+      "id": "S06_canary",
+      "supported": false,
+      "markers_in_claim": [
+        "4.1",
+        "54",
+        "57",
+        "all",
+        "away",
+        "combinations",
+        "detects",
+        "misses",
+        "named",
+        "one",
+        "rather",
+        "section",
+        "separable",
+        "suite",
+        "summarised",
+        "targets",
+        "three"
+      ],
+      "missing_in_evidence": [
+        "4.1",
+        "54",
+        "57",
+        "away",
+        "combinations",
+        "detects",
+        "misses",
+        "named",
+        "one",
+        "section",
+        "separable",
+        "summarised"
+      ]
+    }
+  ],
+  "self_note": "判据为纯确定性规则，仅依赖固定词表与正则，不读取 id 或任何标签。为稳健拒绝改写型 canary，除显式限定成分外还把 claim 的所有非停用词实词都作为必须逐字保留的标记；这对逐字支撑是合理的（合取的各部分都应保留），但若未来出现\"语义相同、用词稍异\"却被预标注为支撑的样本，会被本判据判为不支撑。数字采用带边界的字面量匹配，RQ2 这类词内数字被忽略以保证一致。"
+}

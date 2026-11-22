@@ -3830,3 +3830,20 @@ engine.self_audit() 用 PROCTOR 四维对准本仓评估器（ForensicSpec + che
 
 ### 101.5 接合、验收与诚实边界
 11 项回放测试全过（三判据盲评签名保证 + §100 defect 闭合断言）；全量 1285→1296 passed（+11），链审 43→44 / 26→27 / 三锁 23→24 按实测更新断言不放宽；成长桥 86→87（KB-AUDIT43 fix 注入 + KB-META09 preserve 进 deferred，deferred 39→40）；KB 142→144。**裁决 meta_detection_capability_demonstrated=true，但 absolute_no_backdoor_claimed=false，l3_claimed=false。** 诚实边界：Trusting Trust 递归意味着"检验检验者"是无限回归——本层只证明受控诊断能力，在受控层显式设信任锚并停下，不宣称本仓判据真实无后门、不宣布 L3；人为注入后门≠真实攻击。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；不动历史证据；系统安全红线全程遵守。成果报告 ROUND12_ACHIEVEMENT_REPORT_20261122.html。
+
+## §102 自主运维第十三轮：判据设计权外移（回应"按最高杠杆去试"）
+
+### 102.1 最高杠杆判读（先读全链裁决，不刷门禁数量）
+用户"按最高杠杆去试"——按 KB-META10 纪律先读 §97–§101 全链裁决而非只看现状数字，定位自证循环的最后一个环节：§97 判未达 L3 落三路径 → §98 外移 shared-start 对照 → §99 正面攻独立性缺口 → §100 外移出题权（独立子 agent 隔离出题）→ §101 处理判据投毒（元 canary）→ **唯一仍由本 Agent 自己持有的环节 = 判据 G 的设计权**。G 的词表（no/never/only/however/not/54）由本仓在 prereg 内撰写，单一判据 tamper 6/6 无法排除替代解释"判据为这 6 样本量身定做"。§101 已在 Trusting Trust 无限回归处停手，故本轮不刷第 39 道门禁，而是把判据设计权也外移做单变量受控对照。
+
+### 102.2 三角色分离与预注册（先锁后测）
+复用 §100 冻结论文（sha256=b2ce0f59…）+ 冻结样本 + 冻结 gt——唯一变量=判据设计者。①数据：全部 hash 锁定；②设计者：全新 context 独立子 agent，只读脱敏 samples_blind.json（claim+evidence，无 variant/gt 标签），不获知本仓 G 的词表/逻辑/check_*，独立设计确定性判据 D 并自报逐样本判定；③评分：本仓确定性引擎用 §100 冻结 gt 盲评（**不采信设计者自报，import 源码重跑**），与 G 逐样本比对。预注册在 spawn 设计者之前锁存（prereg a159f5eb… / gate_prereg 566b9be7… / manifest a7d82429… / samples_blind b61de472…），裁决规则先于结果锁定：全对且 core 一致→可迁移；分歧→如实记设计自由度。
+
+### 102.3 独立设计者产出与准入元审计（一次自咬）
+设计者归纳 6 类限定成分 + "所有非停用词实词兜底"，产出 judge_D(claim,evidence) 纯函数（不读 id/标签/无随机）。元审计首版用子串匹配触发两处**假阳性**：`variant` 命中词表 `invariant` 后缀、`random` 命中 docstring "no randomness" 否定声明——与 §100 canary 缺陷同源（粗糙匹配测语义）。按纪律改工具不放水：改词边界 + 剥离注释后重判，禁词集与准入标准不变，D 通过全部准入（签名/无标签泄漏/无硬编码 id/确定性）。本次自我纠错如实记入 admission_audit.self_correction。
+
+### 102.4 one-shot 实测与交叉核验
+D：tamper_catch=**1.0**、clean_pass=**1.0**、core_acc(excl canary)=1.0。G-D 逐样本一致率：core **1.0**（12/12 核心样本两判据完全一致），整体 0.889——差异全在 canary（D 宽词表 6/6 全 false，G 因 S02/S05 碰巧含 never/not 为 4/6，§101 已定位为"逐字判据 vs 跨句语义 canary"类型错配，非 D 核心缺陷）。裁决 **CRIT.PORTABLE_SINGLE_DESIGN_OVERFIT_WEAKENED**：两个独立设计的判据在 core 全对且一致，"单判据为这 6 样本量身定做"的替代解释被削弱——判据设计可迁移。
+
+### 102.5 接合、验收与诚实边界
+11 项回放测试全过（不重算判据，只读冻结结果）；全量 1296→1307 passed（+11），链审 44→45 / 27→28 / 三锁 24→25 按实测更新断言不放宽；成长桥 87→88（KB-AUDIT44 fix 注入 + KB-META10 preserve 进 deferred）；KB 144→146。**裁决 l3_claimed=false / absolute_independence_claimed=false。** 诚实边界：D 的设计者仍由本 Agent spawn 且同模型家族（KB-STRUCT02），本轮只把"判据设计"角色外移并排除单判据过拟合，不宣称判据真实独立/无后门，Trusting Trust 递归在受控层停下；canary 全 false 是类型错配非核心缺陷。**刻意不编译第 39 道门禁**——最高杠杆≠最高产出数（KB-META10）。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。成果报告 ROUND13_ACHIEVEMENT_REPORT_20261122.html。

@@ -1,0 +1,15 @@
+{
+  "experiment": "§102 判据设计权外移（criterion design portability）",
+  "role_separation": {
+    "data": "复用 §100 冻结论文 paper_flat.txt（sha256=b2ce0f59…）+ 脱敏样本 samples_blind.json（sha256=b61de472…）",
+    "designer": "独立子 agent，全新 context，只读 claim+evidence 无标签，独立设计判据 D",
+    "scorer": "本仓确定性引擎，用 §100 冻结 ground truth 盲评 D 并与 G 比对"
+  },
+  "inputs": [
+    {"path": "downloads/paper_flat.txt", "sha256": "b2ce0f59b17b4a6d35269f32bbf70dabc3897a957d90d4484aada3106aa766ce"},
+    {"path": "downloads/samples_blind.json", "sha256": "b61de472f1331cdf7239922cff7ac5375868a9d276b5275d4db2d13f99ad6407"}
+  ],
+  "pre_registration_locked_before_designer": true,
+  "one_shot": true,
+  "no_new_gate": true
+}

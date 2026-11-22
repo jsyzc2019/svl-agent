@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第十三轮成果报告 · §102 判据设计权外移</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.recursion{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第十三轮成果报告 <span class="pill tag">§102</span></h1>
+<div class="sub">判据设计权外移（criterion design portability）· 复用 §100 冻结 held-out · 2026-11-22 · 触发：用户"按最高杠杆去试"</div>
+
+<h2>一、最高杠杆判读：先读全链裁决，不刷门禁</h2>
+<div class="phil">
+按 KB-META10 纪律，先读 §97–§101 全链裁决而非只看现状数字，定位自证循环的最后一个环节：<br>
+§97 判未达 L3 → §98 外移 shared-start 对照 → §99 正面攻独立性缺口 → §100 外移<b>出题权</b>（独立子 agent）→ §101 处理<b>判据投毒</b>（元 canary）→
+<b>唯一仍由本 Agent 自己持有的环节 = 判据 G 的设计权</b>。<br><br>
+G 的词表（<code>no/never/only/however/not/54</code>）由本仓在 prereg 内撰写。单一判据 tamper 6/6 无法排除替代解释：<b>"判据为这 6 个样本量身定做"</b>。§101 已在 Trusting Trust 无限回归处停手，故本轮<b>不编译第 39 道门禁</b>，而是把判据设计权也外移做单变量受控对照——最高杠杆≠最高产出数。
+</div>
+
+<h2>二、三角色分离与预注册（先锁后测）</h2>
+<p>复用 §100 冻结论文（<code>sha256=b2ce0f59…</code>）+ 冻结样本 + 冻结 gt，<b>唯一变量 = 判据设计者</b>。预注册在 spawn 设计者之前锁存。</p>
+<table>
+<tr><th>角色</th><th>隔离设计</th></tr>
+<tr><td>数据</td><td>§100 冻结论文/样本/gt，全部 hash 锁定（paper/samples_blind/s100_samples 五锁）</td></tr>
+<tr><td>判据设计者</td><td>全新 context 独立子 agent；只读脱敏 <code>samples_blind.json</code>（claim+evidence，<b>无 variant/gt 标签</b>）；不获知本仓 G 的词表/逻辑/check_*；独立设计确定性判据 D</td></tr>
+<tr><td>评分方</td><td>本仓确定性引擎；<b>不采信设计者自报</b>，import 源码重跑；用 §100 冻结 gt 盲评；与 G 逐样本比对</td></tr>
+</table>
+<p>预注册锁：<code>prereg a159f5eb…</code> / <code>gate_prereg 566b9be7…</code> / <code>manifest a7d82429…</code> / <code>samples_blind b61de472…</code>。裁决规则先于结果锁定：全对且 core 一致→可迁移；分歧→如实记设计自由度。</p>
+
+<h2>三、独立设计者产出与准入元审计（一次自咬）</h2>
+<p>设计者从脱敏样本自行归纳 6 类限定成分 + "所有非停用词实词兜底"，产出 <code>judge_D(claim, evidence)</code> 纯函数（不读 id/标签/无随机）。元审计首版用<b>子串匹配</b>触发两处假阳性：</p>
+<table>
+<tr><th>假阳性</th><th>来源</th></tr>
+<tr><td><code>variant</code> 误报泄漏</td><td>命中词表 <code>invariant</code>（内容锚点词）的后缀</td></tr>
+<tr><td><code>random</code> 误报非确定</td><td>命中 docstring "no randomness" 的否定声明</td></tr>
+</table>
+<div class="note"><b>自我纠错（不改标准，只修工具）</b>：这与 §100 canary 缺陷同源——用粗糙匹配测语义。按纪律改<b>词边界 + 剥离注释</b>后重判，禁词集与准入标准不变，D 通过全部准入（签名 / 无标签泄漏 / 无硬编码 id / 确定性）。如实记入 <code>admission_audit.self_correction</code>。</div>
+
+<h2>四、one-shot 实测与交叉核验</h2>
+<table>
+<tr><th>指标</th><th>值</th><th>含义</th></tr>
+<tr><td>admission_ok</td><td><span class="pill ok">True</span></td><td>D 通过全部准入元审计</td></tr>
+<tr><td>D tamper_catch_rate</td><td><span class="pill ok">1.0</span></td><td>独立判据抓全 6 个篡改</td></tr>
+<tr><td>D clean_pass_rate</td><td><span class="pill ok">1.0</span></td><td>独立判据放全 6 个干净样本</td></tr>
+<tr><td>G-D core agreement</td><td><span class="pill ok">1.0</span></td><td>两独立判据在 12 核心样本逐样本完全一致</td></tr>
+<tr><td>G-D 整体 agreement</td><td><span class="pill no">0.889</span></td><td>差异全在 canary（类型错配），如实保留不粉饰</td></tr>
+<tr><td>D canary_fp_rate</td><td><span class="pill no">1.0</span></td><td>D 宽词表 6/6 全 false；G 为 4/6（S02/S05 碰巧含 never/not）</td></tr>
+</table>
+<p><b>裁决 <code>CRIT.PORTABLE_SINGLE_DESIGN_OVERFIT_WEAKENED</code></b>：两个独立设计的判据在 core 全对且一致，"单判据为这 6 样本量身定做"的替代解释被削弱——判据设计可迁移。canary 分歧是 §101 已定位的"逐字判据 vs 跨句语义 canary"类型错配，非 D 的核心缺陷。</p>
+
+<h2>五、接合、验收与诚实边界</h2>
+<table>
+<tr><th>项</th><th>结果</th></tr>
+<tr><td>回放测试</td><td>11 项全过（只读冻结结果，不重算判据）</td></tr>
+<tr><td>全量测试</td><td>1296 → <b>1307 passed</b>（+11）</td></tr>
+<tr><td>链审断言</td><td>44→45 / 27→28 / 三锁 24→25，按实测更新不放宽</td></tr>
+<tr><td>成长桥</td><td>87→88（KB-AUDIT44 fix 注入 + KB-META10 preserve 进 deferred）</td></tr>
+<tr><td>知识库</td><td>144→146（KB-AUDIT44 可编译洞见 + KB-META10 认知机制交人）</td></tr>
+<tr><td>新门禁</td><td><b>0</b>（刻意不编译第 39 道，避免刷数量）</td></tr>
+</table>
+<div class="recursion">
+<b>诚实边界</b>：D 的设计者仍由本 Agent spawn 且同模型家族（KB-STRUCT02），本轮只把"判据设计"角色外移并<b>排除单判据过拟合</b>，不宣称判据真实独立/无后门；<code>l3_claimed=false</code> / <code>absolute_independence_claimed=false</code>。排除一个替代解释 ≠ 证明绝对属性。Trusting Trust 递归在受控层停下。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。
+</div>
+
+<div class="foot">§102 自主运维第十三轮 · evidence chain: audit_criterion_portability/{prereg,gate_prereg,manifest}+sha256 / judge_D_by_agent.py / result.json / engine.py · 11 回放测试 · ROUND13_ACHIEVEMENT_REPORT_20261122.html</div>
+</div></body></html>

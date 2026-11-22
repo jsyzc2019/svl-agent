@@ -1,0 +1,35 @@
+{
+  "request_id": "criterion-design-portability-20261122",
+  "target": "§100/§101 冻结 held-out 证据链的残余独立性缺口：判据 G 的设计权仍在本 Agent",
+  "channel": "自主运维第十三轮：用户'按最高杠杆去试'。§100 外移出题权、§101 处理判据投毒，但判据 G 由本仓在 prereg 内撰写，单一判据 6/6 无法排除'判据为这 6 样本量身定做'的替代解释。本轮把判据设计权也外移，检验判据可迁移性。",
+  "source": {
+    "files": [
+      "downloads/paper_flat.txt",
+      "downloads/samples_blind.json"
+    ],
+    "paper_sha256": "b2ce0f59b17b4a6d35269f32bbf70dabc3897a957d90d4484aada3106aa766ce",
+    "samples_blind_sha256": "b61de472f1331cdf7239922cff7ac5375868a9d276b5275d4db2d13f99ad6407",
+    "reuse_rationale": "复用 §100 冻结论文与样本是受控设计的优点：数据源、样本、ground truth 全部不变，唯一变量=判据设计者。论文曾用于 held-out 数据源，但从未用于'判据设计权外移'这一命题。"
+  },
+  "design": {
+    "role_0_data": "§100 冻结论文 + 冻结样本，hash 锁定，不可篡改",
+    "role_1_designer": "独立子 agent（全新 context，不继承本仓对话；只读脱敏 samples_blind.json：claim+evidence，无 variant/ground truth 标签；不获知本仓 G 的词表/逻辑/check_*）。独立设计一个确定性判据 D，产出 judge_D 源码与逐样本判定。",
+    "role_2_scorer": "本仓确定性引擎：用冻结的 §100 ground truth 盲评 D（D 的设计过程从未接触标签），计算 tamper_catch/clean_pass；与 G 逐样本比对一致率。",
+    "structural_honesty": "设计者由本 Agent spawn 且同模型家族→仍是 structural proxy；但'判据设计者'这一角色首次与本仓 G 的作者分离，排除单判据过拟合的替代解释。解释环节仍本 Agent。"
+  },
+  "judge_D_admission_rules": [
+    "D 必须是确定性文本算法（可重跑、无 LLM 主观分），函数签名只接收 (claim, evidence)",
+    "D 不得读取 variant / ground_truth / 样本 id 做任何分支",
+    "D 的词表/规则由设计者从脱敏样本自行归纳，本仓不提供本仓 G 的 MARKERS 词表",
+    "评分只用 §100 冻结 ground truth，一次 one-shot，不因结果改 D"
+  ],
+  "pre_registered_metrics": [
+    "D_tamper_catch_rate",
+    "D_clean_pass_rate",
+    "G_D_sample_agreement",
+    "single_judge_overfit_alternative"
+  ],
+  "honest_precommit": "裁决规则先于结果锁定：①若 D 的 tamper_catch=1.0 且 clean_pass=1.0 且与 G 逐样本一致→判据设计可迁移，'单判据过拟合'替代解释被削弱（仍只是 structural proxy，不宣布 L3/absolute）；②若 D 与 G 分歧或 D 抓不全 tamper→如实记录判据设计自由度，说明 G 的 6/6 部分依赖本仓设计选择，不粉饰；③无论结果如何均不宣布 L3/absolute，Trusting Trust 递归在受控层停下。",
+  "no_new_gate": "本轮不编译新门禁（避免刷门禁数量），只做受控实验 + 回放测试；发现固化到 KB。",
+  "timestamp": "2026-11-22T15:48:57+08:00"
+}

@@ -32,6 +32,8 @@
 | 第三轮 | §92 | P0 记忆治理 | arXiv:2609.33013 | memory_consolidation_governance_honesty (ext3) | 1091 | KB-AUDIT34 |
 | 第四轮 | §93 | P3 安全/合规 | arXiv:2611.24362 | redteam_robustness_honesty (ext4) | 1116 | KB-AUDIT35 |
 
+> **受控实验轮（§98–§102，不编译新门禁）**：第五轮起从"刷门禁数量"转向"补证据链独立性缺口"，不再逐轮加门禁。§98 shared-start 受控对照（improver_gain=1.0）、§99 评估器独立性自审（flag）、§100 冻结 held-out 独立性验证（tamper 6/6 可迁移）、§101 元 canary 投毒检测（poison_detection=1.0）、§102 判据设计权外移（复用 §100 冻结集，唯一变量=判据设计者；独立设计的 judge_D 与 G 在 core 逐样本一致率 1.0 → CRIT.PORTABLE_SINGLE_DESIGN_OVERFIT_WEAKENED；刻意不编译第 39 道门禁）。测试 1141→1307，KB 131→146。详见 SESSION_HANDOFF §4k–§4o。守恒：最高杠杆≠最高产出数（KB-META10），排除一个替代解释≠证明绝对属性，不宣布 L3。
+
 ## 守恒条款（一天内必须守住）
 
 1. **不伪造证据**：所有锚点/数字来自一手原文；篡改测试只在临时副本。

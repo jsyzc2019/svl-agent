@@ -1,0 +1,95 @@
+{
+  "note": "判据设计者盲输入：仅 claim/evidence 文本，无 variant/ground-truth 标签。请据此独立设计一个确定性判据，判断 evidence 是否逐字支撑 claim 的限定成分。",
+  "pairs": [
+    {
+      "id": "S01_clean",
+      "claim": "Every injected class is detected, and the repaired oracle the package ships yields no false positive.",
+      "evidence": "Every injected class is detected, and the repaired oracle the package ships yields no false positive."
+    },
+    {
+      "id": "S01_tampered",
+      "claim": "Every injected class is detected, and the repaired oracle the package ships yields no false positive.",
+      "evidence": "Every injected class is detected, and the repaired oracle the package ships yields."
+    },
+    {
+      "id": "S01_canary",
+      "claim": "Every injected class is detected, and the repaired oracle the package ships yields no false positive.",
+      "evidence": "INV-5 is silent on the repaired copy we ship, and that silence is the specificity result, not a contradiction of the discovery."
+    },
+    {
+      "id": "S02_clean",
+      "claim": "The benchmark’s reward function resets the environment database in order to replay the reference solution and construct a ground-truth hash, and it never restores the database afterwards.",
+      "evidence": "The benchmark’s reward function resets the environment database in order to replay the reference solution and construct a ground-truth hash, and it never restores the database afterwards."
+    },
+    {
+      "id": "S02_tampered",
+      "claim": "The benchmark’s reward function resets the environment database in order to replay the reference solution and construct a ground-truth hash, and it never restores the database afterwards.",
+      "evidence": "The benchmark’s reward function resets the environment database in order to replay the reference solution and construct a ground-truth hash, and it restores the database afterwards."
+    },
+    {
+      "id": "S02_canary",
+      "claim": "The benchmark’s reward function resets the environment database in order to replay the reference solution and construct a ground-truth hash, and it never restores the database afterwards.",
+      "evidence": "In the implementation we audited it never restores what it wrote, so a harness that scores an episode after the session has ended reads the reference solution’s state rather than the agent’s (Section 4.1 )."
+    },
+    {
+      "id": "S03_clean",
+      "claim": "Localising only the tool descriptions is better than localising all three by 1.11 1.11 pp, with an interval of [ 0.36 , 1.86 ] [0.36,1.86] that excludes zero.",
+      "evidence": "Localising only the tool descriptions is better than localising all three by 1.11 1.11 pp, with an interval of [ 0.36 , 1.86 ] [0.36,1.86] that excludes zero."
+    },
+    {
+      "id": "S03_tampered",
+      "claim": "Localising only the tool descriptions is better than localising all three by 1.11 1.11 pp, with an interval of [ 0.36 , 1.86 ] [0.36,1.86] that excludes zero.",
+      "evidence": "Localising the tool descriptions is better than localising all three by 1.11 1.11 pp, with an interval of [ 0.36 , 1.86 ] [0.36,1.86] that excludes zero."
+    },
+    {
+      "id": "S03_canary",
+      "claim": "Localising only the tool descriptions is better than localising all three by 1.11 1.11 pp, with an interval of [ 0.36 , 1.86 ] [0.36,1.86] that excludes zero.",
+      "evidence": "But the strongest single arm (tool descriptions, − 9.17 -9.17 pp) has a larger point estimate than the arm that changes all three documents ( − 8.06 -8.06 pp), so it is not the case that no single component reaches the full effect — the full manipulation fails to beat its own largest component."
+    },
+    {
+      "id": "S04_clean",
+      "claim": "The direction, however, is the opposite of the one we measured before:",
+      "evidence": "The direction, however, is the opposite of the one we measured before:"
+    },
+    {
+      "id": "S04_tampered",
+      "claim": "The direction, however, is the opposite of the one we measured before:",
+      "evidence": "The direction, is the opposite of the one we measured before:"
+    },
+    {
+      "id": "S04_canary",
+      "claim": "The direction, however, is the opposite of the one we measured before:",
+      "evidence": "We pre-registered the two ways this could be read, and this is the second: the effect does not generalise, so we report it as a boundary and restrict the earlier finding to the configuration in which it was measured — a language effect under the retail configuration ."
+    },
+    {
+      "id": "S05_clean",
+      "claim": "RQ2 and RQ3 are not measurements of intrinsic language-model capability or behaviour.",
+      "evidence": "RQ2 and RQ3 are not measurements of intrinsic language-model capability or behaviour."
+    },
+    {
+      "id": "S05_tampered",
+      "claim": "RQ2 and RQ3 are not measurements of intrinsic language-model capability or behaviour.",
+      "evidence": "RQ2 and RQ3 are measurements of intrinsic language-model capability or behaviour."
+    },
+    {
+      "id": "S05_canary",
+      "claim": "RQ2 and RQ3 are not measurements of intrinsic language-model capability or behaviour.",
+      "evidence": "A reader who wants a claim about how a model behaves under localisation will not find one here, and we do not make one."
+    },
+    {
+      "id": "S06_clean",
+      "claim": "The suite detects 54 of the 57 separable combinations, and the one it misses on all three targets is named in Section 4.1 rather than summarised away.",
+      "evidence": "The suite detects 54 of the 57 separable combinations, and the one it misses on all three targets is named in Section 4.1 rather than summarised away."
+    },
+    {
+      "id": "S06_tampered",
+      "claim": "The suite detects 54 of the 57 separable combinations, and the one it misses on all three targets is named in Section 4.1 rather than summarised away.",
+      "evidence": "The suite detects of the 57 separable combinations, and the one it misses on all three targets is named in Section 4.1 rather than summarised away."
+    },
+    {
+      "id": "S06_canary",
+      "claim": "The suite detects 54 of the 57 separable combinations, and the one it misses on all three targets is named in Section 4.1 rather than summarised away.",
+      "evidence": "The suite is therefore not free of blind spots, and the miss is the same combination on all three targets: an oracle that swallows an exception raised inside itself, so that INV-4 records the probed path as not applicable rather than as a violation."
+    }
+  ]
+}
