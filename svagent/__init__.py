@@ -239,6 +239,12 @@ _LAZY: dict[str, tuple[str, str]] = {
     "bridge_into_pdca": ("svagent.growth_bridge", "bridge_into_pdca"),
     "save_consumption": ("svagent.growth_bridge", "save_consumption"),
     "growth_bridge_live_regression": ("svagent.growth_bridge", "live_regression"),
+    # §90 自主运维首日：静默失败诚实性门禁 + FJ 取证扩展入口
+    "SilentFailureVerdict": ("svagent.silent_failure_honesty", "SilentFailureVerdict"),
+    "check_silent_failure_honesty": ("svagent.silent_failure_honesty", "check_silent_failure_honesty"),
+    "silent_failure_honesty_live_regression": ("svagent.silent_failure_honesty", "live_regression"),
+    "adjudicate_silent_failure_honesty": ("svagent.forensic_gates_ext", "adjudicate_silent_failure_honesty"),
+    "forensic_gates_ext_live_regression": ("svagent.forensic_gates_ext", "live_regression"),
 }
 
 

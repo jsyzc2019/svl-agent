@@ -1,0 +1,19 @@
+{
+  "gate": "svagent.silent_failure_honesty.check_silent_failure_honesty",
+  "verdict": "SilentFailureVerdict(claim,silent_failure_triple_defined,oracle_self_audited,claim_contract_ablated,calibration_and_unsupported_reported,action,code,message)",
+  "input_enum": "四维∈{yes,no,partial}",
+  "rules": {
+    "R0": "任一非枚举(含字面串)→flag(SILENT_FAILURE.INVALID_INPUT)",
+    "R1": "silent_failure_triple_defined=no→downgrade(把崩溃/任一失败当静默失败,定义偷换)",
+    "R2": "oracle_self_audited=no→downgrade(判据不自审/只报单向,grader risk当零)",
+    "R3": "claim_contract_ablated=no→downgrade(改进归因于反馈而非claim contract,因果混淆)",
+    "R4": "calibration_and_unsupported_reported=no→flag(校准不披露或未支持预测隐瞒,过度宣称)",
+    "R5": "任一partial→flag(披露覆盖不全,待核)",
+    "R6": "全yes→ok(只判声明自洽,不承诺有效)"
+  },
+  "forensic_spec": {
+    "gate": "forensic.silent_failure",
+    "dimensions": "四维逐字锚点取自S02全文;disclose必中红旗零误中"
+  },
+  "implementation_lock_time": "2026-11-22T12:20:01.217093+08:00"
+}

@@ -1,0 +1,54 @@
+{
+  "request_id": "silent-failure-honesty-20261122",
+  "gate": "silent_failure_honesty",
+  "verdict": {
+    "action": "ok",
+    "code": "SILENT_FAILURE.SELF_CONSISTENT",
+    "four_dims": {
+      "silent_failure_triple_defined": "yes",
+      "oracle_self_audited": "yes",
+      "claim_contract_ablated": "yes",
+      "calibration_and_unsupported_reported": "yes"
+    }
+  },
+  "forensic_trace": {
+    "mode": "forensic",
+    "gate": "forensic.silent_failure",
+    "evidence_scope": "primary(arXiv abs+全文,self-reported折1)",
+    "sources": [
+      "/workspace/audit_silent_failure/downloads/paper_flat.txt"
+    ],
+    "source_sha256": {
+      "paper_flat.txt": "7f4f6a46f1175f04d52559624b60200c509c5e60eb983aa72fe27ea12337e365"
+    },
+    "inferred": {
+      "silent_failure_triple_defined": "yes",
+      "oracle_self_audited": "yes",
+      "claim_contract_ablated": "yes",
+      "calibration_and_unsupported_reported": "yes"
+    }
+  },
+  "chain_present": true,
+  "gate_live_regression": {
+    "checks": {
+      "definition_swap": true,
+      "grader_risk_zero": true,
+      "causal_confound": true,
+      "overclaim": true,
+      "partial_disclosure": true,
+      "literal_enum": true,
+      "all_good": true
+    },
+    "cases": {
+      "definition_swap": "downgrade/SILENT_FAILURE.DEFINITION_SWAP",
+      "grader_risk_zero": "downgrade/SILENT_FAILURE.GRADER_RISK_ZERO",
+      "causal_confound": "downgrade/SILENT_FAILURE.CAUSAL_CONFOUND",
+      "overclaim": "flag/SILENT_FAILURE.OVERCLAIM",
+      "partial_disclosure": "flag/SILENT_FAILURE.PARTIAL",
+      "literal_enum": "flag/SILENT_FAILURE.INVALID_INPUT",
+      "all_good": "ok/SILENT_FAILURE.SELF_CONSISTENT"
+    },
+    "all_passed": true
+  },
+  "honest_scope": "只判论文本身是否诚实披露四边界；可迁移到带自验证的agent verdict系统；不承诺方法真实有效"
+}

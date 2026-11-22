@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>§90 自主运维首日成果报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:960px;margin:40px auto;padding:0 24px;color:#1a1a1a;line-height:1.7}
+h1{border-bottom:3px solid #c0392b;padding-bottom:10px} h2{color:#c0392b;margin-top:36px}
+table{border-collapse:collapse;width:100%;margin:16px 0} th,td{border:1px solid #ddd;padding:9px 12px;text-align:left}
+th{background:#f5f5f5} .ok{color:#c0392b;font-weight:bold} .tag{background:#eef;padding:2px 8px;border-radius:4px;font-size:13px}
+blockquote{border-left:4px solid #c0392b;margin:16px 0;padding:8px 18px;background:#fafafa;color:#444}
+code{background:#f2f2f2;padding:2px 6px;border-radius:3px}
+</style></head><body>
+<h1>§90 自主运维首日成果报告（Pilot Day）</h1>
+<p><span class="tag">2026-11-22</span> 用户赋予独立运维本仓一天的全部权限；以空杯/自主视角跑通"取料→精研→编译→接合→验收→提交→复盘"全链。</p>
+
+<h2>一、三处人类依赖点的自我实现</h2>
+<table><tr><th>依赖点</th><th>原表述</th><th>自主实现路径</th><th>诚实边界</th></tr>
+<tr><td>外部供料</td><td>论文仍需人给</td><td>固化取料渠道清单（WORKPLACES.md），arXiv/GitHub/公众号同步站均有本仓 fetch_log+SHA256 实证，可自主发现并取一手料</td><td>渠道是"工作场所"非"输入"，二手只做交叉验证</td></tr>
+<tr><td>目标设定</td><td>G 仍人给</td><td>北极星一次性给定（强智慧强能力自学习自组织自进化 Agent）作价值函数 V 的锚，稳定可复用</td><td>北极星来源仍是人——不把"可自主执行"读成"可自主设定终极目标"（KB-META03）</td></tr>
+<tr><td>凭据</td><td>推送需 PAT</td><td>token 自管于用户上传区，不入仓/不入配置/不打印；临时 askpass 用后即删、hosts 即改即恢复</td><td>凭据安全纪律不放水，推送后核验远端=本地</td></tr></table>
+
+<h2>二、三张清单</h2>
+<table><tr><th>清单</th><th>内容</th></tr>
+<tr><td><code>WORKPLACES.md</code></td><td>取料渠道地图：已验证场所（arXiv/GitHub/公众号同步站/ACL/机构博客）+ 待验证场所（OpenReview/HuggingFace/PubMed/财经源）+ 取料纪律 + 凭据自管</td></tr>
+<tr><td><code>WORK_ITEMS.md</code></td><td>话题版图：P0 Agent 成长（自组织/RSI/记忆库/自我验证/技能演化/多智能体/上下文）、P1 方法论护城河、P2 领域迁移 + 话题处理规则</td></tr>
+<tr><td><code>TIME_PLAN.md</code></td><td>一日八时段闭环 + 守恒条款（不伪造/不动 R0-R6/不接 run_loop/凭据自管/诚实边界）+ 失败处理</td></tr></table>
+
+<h2>三、全链闭环实测</h2>
+<table><tr><th>环节</th><th>动作</th><th>结果</th></tr>
+<tr><td>①晨间自检</td><td>git + 全量 pytest + 链审</td><td class="ok">全绿、无 ahead、链审稳定</td></tr>
+<tr><td>②自主取料</td><td>WebSearch 发现 → arXiv abs+HTML 一手下载</td><td class="ok">arXiv:2611.10063v1，42KB+212KB，均 200</td></tr>
+<tr><td>③预注册</td><td>fetch_log+SHA256 → prereg/gate_prereg/manifest + 三锁 → 锚点探测</td><td class="ok">先锁后看；disclose 必中、红旗零误中</td></tr>
+<tr><td>④精研</td><td>编译 silent_failure_honesty 门禁 + 第4道 FJ 取证入口</td><td class="ok">四维逐字锚点；篡改即翻转；AST 自审 0 中文字面量</td></tr>
+<tr><td>⑤接合</td><td>四道裁决 + KB fix → PDCA 消费痕迹</td><td class="ok">75 机会 / 75 痕迹 / PDCA 实收 75</td></tr>
+<tr><td>⑥验收</td><td>全量测试 + 链审 + README 统计刷新</td><td class="ok">1010 → 1041 passed（+31）</td></tr>
+<tr><td>⑦提交</td><td>本地提交（凭据自管）</td><td class="ok">见 git log</td></tr>
+<tr><td>⑧复盘</td><td>commentary §90 + REPOSITORY_MAP + HANDOFF + KB</td><td class="ok">KB 125 → 127（KB-AUDIT32 + KB-META03）</td></tr></table>
+
+<h2>四、新门禁取证裁决（法官自己读证据）</h2>
+<p>论文：<code>arXiv:2611.10063v1 Done Is Not Correct</code>（Celabe / Hochschule Coburg / Independent）。四道裁决全部 <span class="ok">ok</span>（SILENT_FAILURE.SELF_CONSISTENT），取证链溯源存在：是。</p>
+<table><tr><th>维度</th><th>取证推导</th><th>论文一手锚点</th></tr>
+<tr><td>silent_failure_triple_defined</td><td class="ok">yes</td><td>静默失败三合取：有效几何+显式完成声明+语义检查失败</td></tr>
+<tr><td>oracle_self_audited</td><td class="ok">yes</td><td>硬化自己 oracle：519 复判中 18 个 pass→fail、无一反向，盲审又推翻 3</td></tr>
+<tr><td>claim_contract_ablated</td><td class="ok">yes</td><td>消融把 14.1%→3.2% 降幅归因于 claim contract 而非反馈</td></tr>
+<tr><td>calibration_and_unsupported_reported</td><td class="ok">yes</td><td>ECE 0.32 失准、照报数据不支持的预测、context 漏细微错误</td></tr></table>
+<p>篡改压力测试：删披露锚点 → partial → flag；注入"判据无需审计"红旗 → no → downgrade；核心锁失配 → ChainIntegrityError 拒判（31 项测试全过，均在临时副本）。</p>
+
+<h2>五、诚实边界</h2>
+<blockquote>新门禁只判"带自验证 verdict 系统是否诚实披露静默失败边界"，可迁移到任何 agent verdict 系统，不判本仓；self-reported 降幅按 KB-RSI07 折 1；只判声明自洽不承诺方法有效（KB-R07）。拆除三依赖后"基础设施就绪度"上升，但保留 KB-META03 价值边界：北极星由人设定仍是价值来源。遵循 §58 选 A 不接 run_loop；篡改测试只在临时副本；不动历史证据。</blockquote>
+
+<h2>六、实测统计</h2>
+<table><tr><th>指标</th><th>数值</th></tr>
+<tr><td>svagent 模块</td><td>76</td></tr>
+<tr><td>测试文件 / 测试项</td><td>62 / 1041</td></tr>
+<tr><td>知识库条目</td><td>127</td></tr>
+<tr><td>证据目录 / 五件套齐全</td><td>33 / 16</td></tr></table>
+<p style="color:#888;margin-top:40px">生成：build_pilot_day_report.py ｜ 数据全部来自本仓实测文件，无硬编码结论</p>
+</body></html>

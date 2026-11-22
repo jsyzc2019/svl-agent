@@ -1,0 +1,32 @@
+{
+  "request_id": "silent-failure-honesty-20261122",
+  "five_pieces": [
+    "manifest.json",
+    "prereg.json",
+    "gate_prereg.json",
+    "engine.py",
+    "result.json"
+  ],
+  "files": [
+    {
+      "id": "S01",
+      "path": "downloads/S01_arxiv_abs.html",
+      "sha256": "0dfe9d35dafe3d2b822e9f5907ce44f5d30e94f35a982cb7471acde338a2e778"
+    },
+    {
+      "id": "S02",
+      "path": "downloads/S02_arxiv_full.html",
+      "sha256": "b9fec2864902ed9e73fa2e6562d2f5f714315695e3da2c5d20a7ac56ce3819da"
+    },
+    {
+      "id": "FLAT",
+      "path": "downloads/paper_flat.txt",
+      "sha256": "7f4f6a46f1175f04d52559624b60200c509c5e60eb983aa72fe27ea12337e365"
+    },
+    {
+      "id": "FETCH",
+      "path": "downloads/fetch_log.json",
+      "sha256": "6fa4b129aa96454587e5a8a3f2af0dbd8703968ed3fcad0192392fe25428f4ab"
+    }
+  ]
+}

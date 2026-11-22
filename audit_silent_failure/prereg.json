@@ -1,0 +1,37 @@
+{
+  "request_id": "silent-failure-honesty-20261122",
+  "target": "arXiv:2611.10063v1 Done Is Not Correct: Measuring Silent Failures and Self-Verification Calibration When LLM Agents Take CAD Actions",
+  "authors": "Carson Rodrigues (Celabe), Clive Rodrigues (Hochschule Coburg), Aravind Reddy G (Independent)",
+  "acquisition": {
+    "channel": "自主取料：WebSearch 发现 → arXiv abs+HTML 一手下载（工作场所清单已验证渠道）",
+    "primary": [
+      {
+        "id": "S01",
+        "url": "https://arxiv.org/abs/2611.10063",
+        "file": "downloads/S01_arxiv_abs.html"
+      },
+      {
+        "id": "S02",
+        "url": "https://arxiv.org/html/2611.10063v1",
+        "file": "downloads/S02_arxiv_full.html"
+      }
+    ],
+    "flat": "downloads/paper_flat.txt",
+    "collection_time": "2026-11-22T12:20:01.217093+08:00"
+  },
+  "analysis_before_prereg": "锚点词频与逐字上下文已探测；disclose 必命中、红旗零误命中（探测脚本实测 ALL_ANCHORS_CLEAN=True）",
+  "cognitive_increment": "独立于已有125条：verification_boundary 判'绿灯覆盖边界'、proof_boundary 判'证明范围'，本门禁判'完成声明与静默失败的三合取定义+判据自审+消融归因+校准/未支持预测披露'——四缺口均未在 KB-AUDIT19/14 覆盖",
+  "four_dimensions": [
+    "silent_failure_triple_defined",
+    "oracle_self_audited",
+    "claim_contract_ablated",
+    "calibration_and_unsupported_reported"
+  ],
+  "kb_rules": [
+    "KB-RSI07 self-reported折1",
+    "KB-R07 自洽≠有效",
+    "KB-META01 独立核验",
+    "§58选A不接run_loop"
+  ],
+  "honest_scope": "只判论文本身是否诚实披露这四个边界；尺子可迁移到任何'带自验证的agent verdict系统'；不判本仓；不承诺方法真实有效"
+}

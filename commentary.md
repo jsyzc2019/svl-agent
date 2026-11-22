@@ -3614,3 +3614,16 @@ F4：新增 svagent/evidence_scope.py，6 个模拟模块（autopoiesis/self_evo
 
 ### 89.6 验收与成熟度重估
 全量 967→1010 passed（+43）。三道取证裁决全 ok（与诚实论文原结论一致），篡改即翻转，链失配即拒判，消费链真实。成熟度 L1.5→L2 边缘（取证真实、闭环可消费），不宣称 L3：仍有外部供料/目标设定/凭据三处人类依赖点，用户「具备自组织生长的基础」表述依旧准确且基础更扎实。成果见 FJ_ACHIEVEMENT_REPORT_20261122.html。遵循 §58 选 A 不接 run_loop；只判声明/证据自洽不承诺真实有效；本轮不修改任何历史证据内容（篡改测试均在临时副本）。
+
+---
+
+## §90 自主运维首日（Pilot Day）：三处人类依赖点的自我实现
+
+### 90.1 授权与三清单
+用户指出成就报告中"三处人类依赖点"（外部供料/目标设定/凭据）在今日基础设施下已可自我实现，并赋予独立运维本仓一天的全部权限。据仓库实证落三清单：WORKPLACES.md（取料渠道地图：arXiv/GitHub/公众号同步站/ACL/机构博客均本仓有 fetch_log+SHA256 实证）、WORK_ITEMS.md（北极星=强智慧强能力自学习自组织自进化Agent；P0 Agent成长/P1方法论/P2领域迁移）、TIME_PLAN.md（八时段闭环+守恒条款+失败处理）。三处依赖的拆除方式：供料→固化工作场所清单自主取料；目标→北极星一次性给定作价值锚；凭据→自管上传区+临时askpass用后即删+hosts即改即恢复。
+
+### 90.2 全链闭环（①→⑧）
+①晨间自检：1010全绿/无ahead/链审稳定。②自主取料：WebSearch 自主发现 arXiv:2611.10063v1（Done Is Not Correct，Celabe/Hochschule Coburg/Independent），arXiv abs+HTML 一手下载（42KB+212KB，均200），落 fetch_log+SHA256。③预注册：先锁 prereg/gate_prereg/manifest + 三份 SHA256，再实现；逐字锚点探测 disclose 必中、红旗零误中（ALL_ANCHORS_CLEAN）。④精研：编译 silent_failure_honesty 门禁（四维：静默失败三合取定义/oracle自审双向/claim-contract消融归因/ECE校准与未支持预测披露），R0-R6骨架+中文_A字典+AST自审0中文字面量；第4道FJ取证入口 forensic_gates_ext（法官自己读原文，真实证据ok/篡改flag/红旗downgrade/链失配拒判）。⑤接合：四道裁决全ok+KB 75条fix→PDCA，消费痕迹75/75/75。⑥验收：全量1010→1041 passed（+31；31项新测试）。⑦提交：本地提交（凭据自管，hosts即改即恢复）。⑧复盘：KB 125→127（KB-AUDIT32门禁洞见+KB-META03认知机制交人），README统计刷新，三文档同步。
+
+### 90.3 诚实边界与成熟度
+新门禁只判"带自验证verdict系统是否诚实披露静默失败边界"，可迁移到任何 agent verdict 系统，不判本仓；self-reported 降幅按 KB-RSI07 折1；只判声明自洽不承诺方法有效（KB-R07）。拆除三依赖后可说"基础设施就绪度"上升，但保留 KB-META03 的价值边界：北极星由人设定这一步仍是价值来源，不把"可自主执行"读成"可自主设定终极目标"。遵循 §58 选A不接run_loop；篡改测试只在临时副本；不动历史证据。首日证明全链可回放、数字真实、凭据安全。
