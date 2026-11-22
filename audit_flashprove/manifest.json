@@ -1,0 +1,58 @@
+{
+  "S00_article": {
+    "grade": "二手",
+    "note": "S2 微信NLPer号中文全文翻译Anthropic官方博客;curl被环境验证页拦,WebFetch提取逐字转录;一手锚点回官方页核",
+    "body_file": "S00_article_body.txt",
+    "bytes": 17425,
+    "sha256": "eac0d4c5b888b6b26cd93363a99b5f29e5f3e941db9a8678d3aabcf3c9964595",
+    "subject": "Anthropic(二手翻译)"
+  },
+  "S01_official": {
+    "grade": "一手",
+    "note": "anthropic.com/research/provable-inference 官方研究页直连200,248KB;核心断言一手源",
+    "body_file": "S01_official.txt",
+    "bytes": 30839,
+    "sha256": "38238e85b39b4b967bba35815c6893c6a523268c999b712347a0126801466e4d",
+    "subject": "Anthropic"
+  },
+  "S02_techreport": {
+    "grade": "一手",
+    "note": "assets.claude.com 技术报告PDF 3.18MB,pdftotext 854行;协议细节/soundness一手",
+    "body_file": "S02_techreport.pdftxt",
+    "bytes": 65358,
+    "sha256": "3bed4714a4a5126cf5b8f0ee4efe5baa8deeae95507e6f074067e3b61709c81b",
+    "subject": "Anthropic"
+  },
+  "S03_readme": {
+    "grade": "一手",
+    "note": "raw.githubusercontent.com/anthropics/FlashProve README.md 200,9.7KB;commit/prove/verify+限制一手code-adjacent",
+    "body_file": "S03_readme.md",
+    "bytes": 9759,
+    "sha256": "fb0f9a5a635d58d569898bcbacfd734dd7956f6d7c0899b3b96fdac37fc6c023",
+    "subject": "Anthropic"
+  },
+  "S03_thirdparty": {
+    "grade": "一手",
+    "note": "THIRD_PARTY.md 200,115KB;第三方来源与许可清单,核claim出处",
+    "body_file": "S03_thirdparty.md",
+    "bytes": 115931,
+    "sha256": "7b3ee916ca8583e02f91cfc42762d51f93edfb4a1c73b5cd44d734b2b14593f7",
+    "subject": "Anthropic"
+  },
+  "S03_paper": {
+    "grade": "一手",
+    "note": "raw github paper/paper.pdf 200,1.45MB;协议规范/形式化依赖",
+    "body_file": "S03_paper.pdftxt",
+    "bytes": 513824,
+    "sha256": "baa1006b6a5d6414eef9bdc600211736d105431baeb8ea5e02c53effa8c18ba2",
+    "subject": "Anthropic"
+  },
+  "S04_statements": {
+    "grade": "缺失",
+    "note": "lean/STATEMENTS.html raw超时000;仅审计辅助工具,非核心断言必需,按必须必要原则不补",
+    "body_file": null,
+    "bytes": 0,
+    "sha256": null,
+    "subject": "Anthropic"
+  }
+}

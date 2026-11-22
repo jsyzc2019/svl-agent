@@ -1,0 +1,117 @@
+{
+  "section": "§71 FlashProve 可证明推理：密码学/形式化证明的边界诚实性",
+  "judges": {
+    "V1": {
+      "verdict": "PASS",
+      "detail": {
+        "S00_cn_sidechannel": true,
+        "S01_flashprove": true,
+        "S01_commitment": true,
+        "S01_completeness": true,
+        "S01_soundness": true,
+        "S01_zero_knowledge": true,
+        "S01_research_proto": true,
+        "S01_greedy": true,
+        "S01_integer": true,
+        "S01_no_formal": true,
+        "S01_limitations": true,
+        "S00_marked_S2": true,
+        "S01_marked_1st": true,
+        "S01_executed_correctly": true
+      }
+    },
+    "V2": {
+      "verdict": "PASS",
+      "detail": {
+        "first_hand_carriers": [
+          "S01_official",
+          "S02_techreport",
+          "S03_readme",
+          "S03_thirdparty",
+          "S03_paper"
+        ],
+        "all_anthropic_same_subject": true,
+        "subject_count_after_discount": 1,
+        "not_counted_as_multi_validation": true
+      }
+    },
+    "V3": {
+      "verdict": "SCOPED",
+      "detail": {
+        "readme_commit_bind": true,
+        "readme_not_maintained": true,
+        "readme_apache": true,
+        "readme_verify_cpu": true,
+        "thirdparty_present": true,
+        "paper_present": true,
+        "perf_self_reported_discounted": true
+      }
+    },
+    "V4": {
+      "verdict": "PASS",
+      "detail": {
+        "gap_terms_hit": {
+          "证明边界诚实性": false,
+          "三者完全一致": false,
+          "proof boundary": false,
+          "commitment binding": false,
+          "soundness completeness disclosure": false
+        },
+        "gate_has_proof_boundary": false,
+        "existing_gates": [
+          "retrieval_grounding",
+          "memory_scope",
+          "serving_signal",
+          "session_continuity"
+        ],
+        "existing_kb_adjacent": [
+          "内容质量",
+          "记忆作用域保持",
+          "检索文本污染",
+          "训练服务信号"
+        ],
+        "gap_confirmed": true
+      }
+    },
+    "V5": {
+      "verdict": "PASS",
+      "detail": {
+        "self_report_of_own_boundary": true,
+        "distinct_intercept": true,
+        "transferable": true,
+        "will_intercept": true,
+        "not_reading_as_flashprove_strong": true
+      }
+    },
+    "V6": {
+      "verdict": "PASS",
+      "detail": {
+        "cn_executed_correctly": true,
+        "cn_three_not_consistent": true,
+        "cn_sidechannel": true,
+        "en_statement_correct": true,
+        "en_cannot_forged": true,
+        "proves_source_not_fact": true,
+        "self_reported_discounted": true
+      }
+    },
+    "V7": {
+      "verdict": "PASS",
+      "detail": {
+        "engine_brittle": [],
+        "gate_brittle": "门禁未生成-编译后单独验"
+      }
+    },
+    "V8": {
+      "verdict": "PASS",
+      "detail": {
+        "t05_isomorphic": true,
+        "proof_library_is_prover": true,
+        "audits_external_not_self": true
+      }
+    }
+  },
+  "drift_from_prereg": {},
+  "all_aligned": true,
+  "prereg_sha256": "5306c3f82dce3d6bf43a949ed11d3f64b91d78fcf2972e4069d87c84ed6d36fa"
+}

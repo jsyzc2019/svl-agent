@@ -1,0 +1,153 @@
+{
+  "section": "§72 Proactive AI for Superintelligent Agents：主动介入的授权正当性",
+  "prereg_sha256": "52f80aad9eb1db2a3e07d36a6918a735ef40ac33a427b674f784c6d3fd71576a",
+  "kb_baseline_sha256": "91c15fc2d028ef904d742e36a5654523e5a85b7fd5d5a044abeb1d8eb777e272",
+  "verdicts": {
+    "V1": "PASS",
+    "V2": "PASS",
+    "V3": "SCOPED",
+    "V4": "PASS",
+    "V5": "PASS",
+    "V6": "PASS",
+    "V7": "PASS",
+    "V8": "PASS"
+  },
+  "zero_drift": true,
+  "drift": {
+    "V1": true,
+    "V2": true,
+    "V3": true,
+    "V4": true,
+    "V5": true,
+    "V6": true,
+    "V7": true,
+    "V8": true
+  },
+  "judges": {
+    "V1": {
+      "verdict": "PASS",
+      "anchors_total": 22,
+      "anchors_hit": 22,
+      "detail": {
+        "delegated_discretion": true,
+        "worthwhile_not_warranted": true,
+        "four_questions": true,
+        "authority_given": true,
+        "suggestion_not_execute": true,
+        "value_vs_cost": true,
+        "timing": true,
+        "risk_reversibility": true,
+        "formal_authority": true,
+        "real_authority": true,
+        "defaults_chosen": true,
+        "risk_tiered_consent": true,
+        "high_impact_confirm": true,
+        "non_act_invisible": true,
+        "hold_monitor": true,
+        "gate_travels": true,
+        "no_agenda_generative": true,
+        "intelligence_alignment_proactiveness": true,
+        "home_six_capacities": true,
+        "home_works_cited": true,
+        "S01_marked_first": true,
+        "S03_marked_na": true
+      }
+    },
+    "V2": {
+      "verdict": "PASS",
+      "detail": {
+        "carriers": [
+          "S01_pdf",
+          "S01_raw",
+          "S02_homepage",
+          "S03_google_research"
+        ],
+        "same_subject": true,
+        "google_na": true,
+        "discount_applied": true,
+        "note": "4 载体同综述同主体 → 折为 1；1410 被引/80/13 为综述规模非独立证据"
+      }
+    },
+    "V3": {
+      "verdict": "SCOPED",
+      "detail": {
+        "has_core_code": false,
+        "has_own_ab": false,
+        "numbers_are_bibliometric": true,
+        "self_reported_discounted": true,
+        "note": "综述无核心代码/无自身实验；1410/80/13/1937-2026 为文献计量口径；各域系统能力二手转述不采信"
+      }
+    },
+    "V4": {
+      "verdict": "PASS",
+      "detail": {
+        "baseline_count": 108,
+        "probe": {
+          "gap_authorization": false,
+          "gap_warranted": false,
+          "gap_arbitration": false,
+          "gap_formal_control": false,
+          "gap_silence": false,
+          "gap_en_auth": false
+        },
+        "gap_confirmed": true,
+        "covered_gates": [
+          "proof_boundary_honesty",
+          "memory_scope",
+          "serving_signal",
+          "session_continuity",
+          "retrieval_grounding",
+          "call_site_integrity"
+        ],
+        "uncovered_dimensions": [
+          "worthwhile≠warranted",
+          "arbitration four gates",
+          "formal≠effective control",
+          "silence & risk-tiered consent"
+        ]
+      }
+    },
+    "V5": {
+      "verdict": "PASS",
+      "detail": {
+        "is_survey": true,
+        "framework_discounted": true,
+        "independent_surface": true,
+        "transferable": true,
+        "note": "贡献为分类学(6A/residual/频谱)，按 STRUCT05 提出框架≠证明有效；只为『审读主动声称是否亮出授权边界』造牙"
+      }
+    },
+    "V6": {
+      "verdict": "PASS",
+      "detail": {
+        "capability_ne_authority": true,
+        "formal_ne_effective": true,
+        "axes_independent": true,
+        "survey_judgment_not_effect": true
+      }
+    },
+    "V7": {
+      "verdict": "PASS",
+      "detail": {
+        "brittle_hits": [],
+        "clean": true
+      }
+    },
+    "V8": {
+      "verdict": "PASS",
+      "detail": {
+        "gate_travels_homologous": true,
+        "tool_library_not_runloop": true,
+        "judges_external_not_self": true,
+        "note": "gate travels with capability≈KB-META01 同构打折；本门审读外部主动 agent 声称，不判本仓、不接 run_loop(§58 选 A)"
+      }
+    }
+  },
+  "three_layer_honesty": {
+    "layer1_一手可核": "PDF 18 条一手锚点单行命中；综述规模 1410/80/13 与作者主页可核；Google Research 元数据页不可达标 unavailable，不据此下断言。",
+    "layer2_scoped_折扣": "综述无核心代码/无自身 A/B/无可复现统计量；1410 被引按 KB-STRUCT02 折为同主体 1；各域系统能力为二手转述与 self-reported，不采信(KB-RSI07)。",
+    "layer3_不可判定边界": "主动 agent 是否真的校准、是否真的只在授权内行动——本门只判『声称的授权声明是否诚实自洽』，不承诺实际行为有效(KB-R07/KB-META01 存在≠有效性)；审读外部系统，不判本仓。"
+  },
+  "gate_decision": "编译新门禁 proactive_authorization (第20道)",
+  "kb_decision": "新增 KB-AUDIT15 + 加固 STRUCT02/STRUCT05/AUDIT03"
+}

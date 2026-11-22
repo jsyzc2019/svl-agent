@@ -1,0 +1,126 @@
+[来源] 微信公众号「NLPer NLPer AINLP」2026-11-06 22:01 江苏
+[标题] Anthropic 开源 FlashProve，给大模型推理加上密码学证明
+[性质] 二手 S2 —— Anthropic 官方研究文章《Progress on provable inference for large language models》(2026-11-02) 的中文全文翻译。curl 直连被微信"环境异常"验证页拦截，正文经 WebFetch 提取逐字转录；一手锚点须回到 Anthropic 官方页/技术报告/GitHub 核验。
+[提取方式] WebFetch 完整正文；下方含原文全部"参考链接"附录清单。
+
+# Anthropic 开源 FlashProve，给大模型推理加上密码学证明
+
+你调用的模型，真的是服务商声称的那个吗？Anthropic 发布了可证明推理原型 FlashProve，尝试在不泄露权重、也不让用户重新运行模型的情况下，为这个问题提供密码学证明。以下是全文翻译。
+
+## 大语言模型可证明推理的新进展
+发布时间：2026年11月2日；团队：前沿红队（Frontier Red Team）
+Roy Rinberg（Anthropic）、Alex Allain（Anthropic）；Alessandro Chiesa（EPFL、StarkWare）、Miranda Christ（MIT、RESI）、Rahul Dalal（Anthropic STEM Fellows Program、Succinct）、Giacomo Fenzi（EPFL）、Ben Mayer（Anthropic Fellows Program、MIT）、Guy Weissenberg（EPFL）
+
+### 内容概要
+当你和朋友面对面交谈时，有很多办法确认对方确实是本人。但和 AI 模型交流时，你几乎没有这样的手段：用户无法检查回答是否真的来自开发者声称正在提供服务的那个模型，还是路由服务为了节省成本暗中换上的另一个模型，甚至是攻击者篡改 token 流后的产物。单凭输出判断并不可靠，即便回答质量很高也一样。推理的密码学证明可以解决这个问题：模型提供方先对某个模型作出密码学承诺，再证明每条回答都由该模型生成。
+
+技术概要：Claude 改进了用于推理的 zkSNARK，构建出明显快于此前开源系统的系统。对 4000 亿参数 MoE 模型 Llama 4 Maverick，在 4-bit 量化权重、prefill 整数运算条件下，单张 H100 GPU 生成证明约每秒 110 个 token；每个 1024-token 请求证明约 19 MB；所需 GPU 时间约为 vLLM 运行模型本身的 70—95 倍。模型承诺值及后续推理证明都会隐藏模型权重；隐藏模型架构不是本系统目标。Claude 常作出难以评估的决策，因此用形式化验证语言 Lean 为所声称的安全保证提供可供审计的顶层命题。
+
+今天发布五项成果：(1) 本文概述系统及潜在应用；(2) 技术报告；(3) 由 Claude 编写的协议规范文档；(4) 可执行代码——证明器 + 两个验证器（C++ 快速验证器、Lean 经过正确性证明的验证器）；(5) 顶层数学命题的 Lean 证明 + 帮助审计 Lean 定理的交互式可视化工具。以 Apache 2.0 许可证发布。这是阶段性进展，非已完成研究议程；公开是希望他人审视、使用并改进。
+
+### 引言
+用户向 AI 发送请求时无法确定回答来自哪个模型。独立评估者需知道评估的是实际服务模型；第三方路由客户希望确认 token 来自付费模型；网络攻击者冒充模型并修改 token 流时用户无法仅凭输出发现。但验证模型回答并不容易：大多数前沿模型权重不公开；即便拿到权重，要确认某条回答由这些权重生成也得运行模型，算力远超普通用户。可证明推理（provable inference, PI）的目标是让算力有限、完全不知道权重的用户也能验证回答是否来自所请求模型。PI 一方面提升客户对 AI 提供商的信任；另一方面为独立评估者提供保证，让提供商证明履行了某些承诺和法律义务，关系到控制前沿 AI 发展节奏与 AI 监管。
+
+实现 PI 的一种方式是使用零知识简洁论证：模型提供方在发送回答时附上简短证明（几兆字节），用户快速验证，理想情况下 CPU 几秒；若回答偏离指定模型计算结果，检查失败；密码学技术确保证明不泄露模型权重任何信息。
+
+我们发布 FlashProve：面向大型 MoE 语言模型的可证明推理系统。对 Llama 4 Maverick（4-bit）单张 H100 生成证明超过每秒 100 token，每 1024-token 请求证明约 19 MB，GPU 时间约为 vLLM 的 70—95 倍。目标：加速可证明推理发展；展示零知识简洁论证用于可证明推理的实际可行性。
+
+### AI 普及带来的信任挑战（四类挑战）
+聚焦纯软件方案 zkSNARK：证明者用简短"证书"向验证者证明某次计算已正确执行；证书零知识（除计算正确性外不透露任何信息）且简洁（验证相对被证明计算具有指数级优势）。
+
+挑战一·控制发展节奏：监管可能要求硬件用于推理而非训练。zkSNARK 帮助：监管者要求提交覆盖某段推理请求的证书，除非硬件确实运行正确模型否则无法满足；监管者无需拥有复杂硬件即可检查，提供商也不泄露专有模型信息。[2] 注意：这验证硬件在提供推理，却不能证明硬件没同时做训练等其他工作。
+
+挑战二·检测篡改：高价值模型服务器是攻击重点；攻击者或失控 Agent 可入侵窃取权重、提供恶意回答并隐藏在正常回答中；更先进模型可能取代获准运行的模型伪装成较弱模型规避分类器监控。Anthropic《前沿安全路线图》公开目标："我们将在 2026 年 9 月 30 日前开发出可证明推理原型……使输出能够归属于一组特定的模型权重。"（RSP 更新中另以相关但独立项目实现了该目标：为推理流量签名并在可信服务器重新计算推理。）[3] zkSNARK 帮助：证明绑定特定权重承诺值，证明"承诺的那个模型生成了回答"；攻击者或冒充模型无法为预期权重生成有效证明。
+
+挑战三·文本来源：想证明自己投入了精力理解某件事（如软件库经前沿安全模型扫描、商业计划经合适模型认可）。zkSNARK 帮助：每条回答附 zkSNARK 证明输出是所声称模型在给定输入上生成的。例：可给代码开发者"失败证明"（Proof-of-Failure），证明某特定模型已花费至少 X token 却未达某结果（如对补丁尝试 100 万 token 未发现漏洞）。
+
+挑战四·模型审批：监管可能要求只提供获批安全模型。zkSNARK 帮助：证明将每个请求绑定到实际使用的模型，使用未批准模型时证明无法通过。
+
+基于可信硬件的 PI：此前常通过 TEE 实现，依赖制造商生产抗篡改硬件；本研究聚焦纯软件密码学方案，安全性和隐私依赖计算问题困难性——即使硬件/OS 被攻破，攻击者不破解计算上不可行的问题也无法伪造证明。两者互补。
+
+### 我们的系统 FlashProve
+两方：模型提供商（证明者）、用户（验证者）。两阶段：
+- 离线阶段：证明者发布模型权重承诺值（简短指纹，锁定一组确定权重，权重保持隐藏）；后续推理声明对照此承诺检查。
+- 在线阶段：验证者发出请求（提示词及对应输出 token），证明者生成证明，命题为"对所承诺的模型执行计算，会生成这些输出 token"。任何持有承诺值、提示词和回答的人都能在没有权重、算力有限时检查。
+
+保证：
+- 完备性：诚实证明者生成的证明会被验证者接受。
+- 健全性：对错误命题生成有效证明在实践中不可能（相当于破解被广泛认可的密码学假设），验证者无需信任证明者。
+- 零知识性：验证者无法得知权重、计算中间值、每层运行了哪些专家；模型架构本身（不含权重）不隐藏。
+- 简洁性：被证明计算是 H100 上运行 4000 亿参数模型（量化版约 232 GB），验证者证明文件仅约 19 MB，24 核 CPU 几秒检查。
+
+评估：Llama 4 Maverick（4000 亿参数 MoE，每 token 约用 170 亿参数），1024-token 窗口，每份证明检查一个 token。证明者：单张 H100 + 24 CPU 核；离线阶段约 39 分钟，承诺值约可用于 1600 万次请求后需重新承诺；在线 24 请求一批约 223 秒、110 token/s、每份证明 18.78 MB。验证者：客户端 CPU 无 GPU，先下载约 6.5 MB 承诺数据，再每请求下载一份证明；24 线程验证一份证明 17 秒、单线程 21 秒。对比 vLLM（8 张 H100、FP8）：按 GPU 时间折算约 72 倍，不同运行 66—77 倍，最高负载下约 94 倍。
+
+系统内部：底层 zkSNARK 已用于以太坊 L2（Starknet、Mantle）。遵循成熟构建：IOP（交互式预言机证明）+ 哈希函数编译成密码学证明，提供后量子安全性。IOP 使用带线性约束的编码邻近性测试、查找论证等前沿组件。
+
+系统工程：(1) 证明者工作量与实际运行的专家数量成正比（每 token 约 170 亿参数而非全部 400B），证明仍隐藏具体选择了哪些专家；(2) 请求完成后批量证明，每批只打开一次权重承诺；(3) 按单张 GPU 可容纳目标设计，权重分段流式送入 GPU，单张 80 GB GPU + 约 290 GB 主机内存即可。
+
+事后证明与同步证明：本系统采用事后证明（计算结束后对部分 token 生成证明）。同步方案要求极快速度可能为效率牺牲安全性；事后方案允许慢一些。事后证明限制：重新计算复杂性、流量保证延迟、固有"非确定性"。
+
+### 通过形式化验证建立可信性
+用 Lean 描述协议及安全性质并机器可检查证明（编译器错误除外）。三项顶层性质：(1) 完备性：命题正确时生成的证明被接受；(2) 健全性：任何伪造证明被拒绝（仅允许可忽略概率例外）；(3) 零知识性：除验证者从回答本身可推断内容外，证明不泄露模型权重任何信息。[4] 在随机预言机模型中表述。
+
+两处信任缺口：(1) 必须人工审计形式化命题是否准确表达原意（负担远小于审计证明），提供交互式可视化工具辅助；(2) 必须审计可执行代码与已证明协议一致。健全性只需验证者代码正确——除 C++ 验证器外还提供可执行 Lean 验证器（更慢，但 Lean 证明它只接受健全性定理中验证器接受的证明）；日常仍用 C++ 验证器（无形式化保证，但测试中每份判断与 Lean 验证器一致）。完备性威胁模型不假设对抗攻击，用标准软件测试建立信心。零知识性只需证明者正确，但证明者昂贵无法运行 Lean 证明器，未额外提供辅助措施——预计希望隐藏权重的证明方有足够资源做细致 Agent 安全审计和/或人工安全审计确认实现与 Lean 证明器等价。
+
+### 已有工作（zkML 进展，均为二手引用，不入 FlashProve 一手证据）
+SafetyNets(2017) 两层卷积 MNIST+小型语音模型；zkCNN(2021) 1500 万参数 VGG-16，每证明 88.3 秒；Kang 等(2022) MobileNet v2 ImageNet；ZKML 对 1.17 亿参数 GPT-2 每 token 约 159 秒（0.006 token/s）；Modulus Labs 15 亿参数 GPT-2 XL 超 90 小时；EZKL(2023) 100 万参数 GPT 每 token 约 966 秒（0.001 token/s）；zkLLM(2024) LLaMA-2-13B/2048 输入约 15 分钟（新增 token 0.001/s，批量 2.5 token/s）；2025 年 zkGPT GPT-2 降至 21.8 秒（0.05 token/s）、zkPyTorch 单 CPU 核证明 Llama-3 8B 每 token 150 秒（0.007/s）、ZKTorch GPT-J 60 亿参数约 20 分钟（0.001/s）；VerInf 对同一 Llama 4 Maverick 约 0.02 token/s；DeepProve（同行评审前沿）单机 GPT-2 约 2.9 token/s、Gemma 3 为 1.4 token/s、分布式 31 token/s；SASH(2026) 单 H100 证明 Llama 3.1 8B 约 1.25 token/s。商业项目 Attestable 单 H100 证明 Gemma 4 31B 达 53—77 token/s，但截至写作时尚未发布开源库。对比：VerInf 在 DGX Spark 证明 1000 token 需 14.3 小时、证明 93.6 GB、验证近一天；FlashProve 单 H100 110 token/s、19 MB、几秒验证。额外开销约两个数量级（实测 70—95 倍），远低于此前预期。
+
+### 局限
+- 快速可执行代码没有形式化保证：提供 Lean 实现（含可执行"慢速"Lean 验证器）+ Lean 证明的安全性质；论文与快速可执行代码均从 Lean 协议推导，但不保证 Lean、论文、代码三者完全一致。
+- 证明针对贪心解码的整数模型：证明公开权重的精确整数版本，每份证明断言所检查 token 是该模型按贪心方式选出的结果；浮点实现或采样解码的回答可能在某位置偏差从而不再精确匹配；一般预期及实证测试表明整数版与真实浮点推理误差率较小（即便考虑浮点非确定性），但不涵盖对抗性设计的提示词。
+- 隐藏架构：系统假设服务模型为 MoE 架构；稠密模型等其他架构也被广泛使用，架构描述可能含提供商希望保密的知识产权；可设想进一步隐藏架构的系统（隐藏承诺同时承诺权重与架构）。
+- 侧信道攻击：协议当前只保证证明本身不泄露承诺模型权重信息；测量生成证明所需时间等侧信道仍可能泄露权重信息，此次发布不处理。
+- 更长上下文：目前最多 1024 token，相较聊天累积上下文相当短；理想应扩展到前沿模型完整上下文窗口（数十万到数百万 token）。
+
+### 脚注
+[1] 使用 Meta Llama 4 Maverick（4000 亿参数），Hugging Face 上第三方公开转换的 4-bit 版本；发布不含权重，读者需自行下载并遵守 Meta Llama 4 许可证；分享的是模型计算得到的小型产物（承诺 ID、校验和、性能数据及部分参数设置），THIRD_PARTY.md 列完整清单；运行完整示例需大型 GPU 机器及对 Meta 分词器访问权限。
+[2] 具体隐藏哪些信息取决于系统设计；本工作中隐藏权重而非架构，未来计划同时隐藏架构。
+[3] 2026-10-19 更新中修改目标名称：现用"推理验证"(inference verification) 而非"可证明推理"(provable inference)；"可证明推理"暗示的路径比认为必要的更窄。
+[4] 模型架构并未隐藏，进一步隐藏架构留待未来工作。
+
+## 参考链接（文章附录，逐字转录）
+- 原文：https://www.anthropic.com/research/provable-inference
+- Read the technical report：https://www.anthropic.com/document/flashprove-technical-report
+- Frontier Red Team：https://www.anthropic.com/research/team/frontier-red-team
+- technical report：https://www.anthropic.com/document/flashprove-technical-report
+- protocol specification：https://github.com/anthropics/FlashProve/blob/main/paper/paper.pdf
+- Executable code：https://github.com/anthropics/FlashProve
+- prover：https://github.com/anthropics/FlashProve/tree/main/prover
+- fast verifier：https://github.com/anthropics/FlashProve/tree/main/verifier
+- provably correct verifier：https://github.com/anthropics/FlashProve/tree/main/tools/lean-verify
+- Lean proofs：https://github.com/anthropics/FlashProve/tree/main/lean
+- interactive visualizer：https://github.com/anthropics/FlashProve/blob/main/lean/STATEMENTS.html
+- trust challenges：https://arxiv.org/abs/2004.07213
+- regulate：https://thefuturesociety.org/international-ai-verification
+- pace：https://darioamodei.com/post/we-must-pace-the-frontier
+- monitoring hardware and how it is used：https://arxiv.org/abs/2402.08797
+- devote its hardware to inference：https://arxiv.org/abs/2506.15867
+- prime targets：https://www.rand.org/pubs/research_reports/RRA2849-1.html
+- compromise an inference server：https://www.wiz.io/blog/nvidia-triton-cve-2025-23319-vuln-chain-to-ai-server
+- hiding among genuine responses：https://arxiv.org/abs/2511.02620
+- Frontier Safety Roadmap：https://www.anthropic.com/responsible-scaling-policy/roadmap
+- public goal：https://www.anthropic.com/responsible-scaling-policy/roadmap
+- cheaper one：https://arxiv.org/abs/2504.04715
+- degraded version：https://kimi.com/blog/kimi-vendor-verifier
+- their chosen model：https://arxiv.org/abs/2410.20247
+- existing mechanisms：https://arxiv.org/abs/2511.20621
+- serve only models approved as safe：https://arxiv.org/abs/2307.03718
+- only approved models are served：https://arxiv.org/abs/2507.15916
+- Llama 4 Maverick：https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E-Instruct
+- vLLM：https://vllm.ai/
+- L2 networks：https://l2beat.com/layer2s/summary?filters=%7B%22ProofSystem%22%3A%7B%22values%22%3A%5B%22Validity%22%5D%7D%7D
+- Starknet：https://www.starknet.io/
+- Mantle：https://www.mantle.xyz/
+- SafetyNets：https://proceedings.neurips.cc/paper_files/paper/2017/file/6048ff4e8cb07aa60b6777b6f7384d52-Paper.pdf
+- zkCNN：https://eprint.iacr.org/2021/673
+- Kang et al：https://arxiv.org/abs/2210.08674
+- ZKML's GPT-2：https://ddkang.github.io/papers/2024/zkml-eurosys.pdf
+- Modulus Labs'：https://medium.com/@CountableMagic/chapter-14-the-worlds-1st-on-chain-llm-7e389189f85e
+- zkLLM：https://arxiv.org/abs/2404.16109
+- zkGPT：https://eprint.iacr.org/2025/1184.pdf
+- zkPyTorch：https://eprint.iacr.org/2025/535
+- ZKTorch：https://arxiv.org/abs/2507.07031
+- VerInf：https://github.com/JamesPetrie/VerInf
+- DeepProve：https://eprint.iacr.org/2026/1112
+- SASH's prover：https://www.aisafety.sg/research/what-proving-llm-inference-actually-costs-research-note
+- Attestable：https://attestable.com/blog/proving-llms-scale

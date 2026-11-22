@@ -1,0 +1,40 @@
+{
+  "section": "§72 Proactive AI for Superintelligent Agents：主动介入的授权正当性",
+  "locked_at": "2026-11-22T08:19:00+08:00",
+  "object": "UIUC/Google/Stanford/Berkeley/CMU 五机构联合综述（一手 PDF 11658 行 + 作者项目主页），Google Research 元数据页抓取失败标 unavailable；三来源同一主体按 KB-STRUCT02 打折为 1",
+  "principles": [
+    "KB-STRUCT01 判据适配对象类型（综述=二手组织物，非一手实验）",
+    "KB-STRUCT02 同源谱系打折（4 载体同主体，1410 被引≠1410 独立证据）",
+    "KB-STRUCT05 主体错位（提出 6A 框架≠证明主动行为有效；能力/权限/意图分属不同主语）",
+    "KB-RSI07 self-reported 折扣（self-reported 成功/静默指标不采信为有效性证据）",
+    "KB-META01 会拦才入（不为『主动 agent 很重要』造牙，只为可迁移拦截面造牙）",
+    "KB-AUDIT03 存在≠执行（说的主动≠真正被授权主动）",
+    "KB-R07 区分自洽与有效",
+    "KB-T05 验证成本<生成成本"
+  ],
+  "V": {
+    "V1_一手锚点": "PDF 一手锚点单行命中：§2.1『delegated discretion within applicable goals, constraints, and permissions』（主动性=被授权裁量）；Figure10『a worthwhile goal is not yet a warranted intervention』（值得做≠被授权做）；§4.4『four questions an act-first agent answers in sequence』+『the authority it has been given』+『whether the user would rather be offered a suggestion』；§7.2.2『formal authority, the recognized right to decide』+『the agent gains real authority by selecting which information is shown, which options are proposed, which defaults are chosen』；§7.2.3『risk-tiered consent models』+『high-impact or irreversible actions should require confirmation』；§4.4.1『in proactivity the non-act is invisible』+『hold-and-monitor rung』；断言:PASS",
+    "V2_谱系识别": "S01 PDF/S01_raw/S02 项目主页/S03 Google Research 页同一综述同一作者主体，按 KB-STRUCT02 打折为 1；1410 被引/80 代表作/13 领域是综述规模非独立证据数；断言:PASS",
+    "V3_claim_vs_code": "综述无核心代码、无自身 A/B、无可复现统计量；1410/80/13/1937-2026 是文献计量口径而非效果量；各领域系统能力均为二手转述、self-reported 不采信(KB-RSI07)；断言:SCOPED",
+    "V4_缺口核验": "在编译前 KB 基线(108 条, sha256 91c15fc2…)上核验：proof_boundary_honesty 判证明边界、memory_scope 判记忆作用域、serving_signal 判信号口径、session_continuity 判续接、retrieval_grounding 判检索污染、call_site_integrity 判接线——无一判『主动介入的授权正当性』：①目标值得做≠介入被授权(worthwhile≠warranted)；②仲裁四关(置信/价值成本/时机/风险可逆)；③形式控制≠实际控制(agent 用信息筛选/默认项获实权)；④沉默与风险分级同意披露(non-act invisible + risk-tiered consent)；断言:PASS",
+    "V5_会拦才入": "关键克制——这是综述、贡献分类学语言(6A/residual space/频谱)，按 KB-STRUCT05『提出框架≠证明有效』；不为『主动 agent 很重要/6A 很全』造牙，只为可迁移拦截面造牙：审读任何『我主动做了 X』的系统/agent 声称是否诚实亮出授权边界与仲裁四关；拦截面与 proof_boundary_honesty(证明边界)/memory_scope(记忆作用域)/serving_signal(信号口径) 对象动作均不同；断言:PASS→编译(授权正当性门禁)",
+    "V6_主体错位与折扣": "『能主动发起』(capability)≠『被授权发起』(authority)≠『发起得对』(calibration)——原文 intelligence/alignment/proactiveness 三分、initiative 与 authority 两轴独立(§6.14)；形式控制权≠真实控制权(§7.2.2)；『no vertical has reached agenda-generative』是综述判断非效果测量；断言:PASS",
+    "V7_判据自审": "门禁与引擎 AST 无 brittle，中文锚点集中 _A 字典用键引用，枚举用英文 yes/no/partial，has_cjk 用 ord() 数值边界；断言:PASS",
+    "V8_同构与边界": "『gate travels with the capability』『initiative a principal can safely accept』与本仓 KB-META01 同构、foundation-model core+domain gate≈本仓判据外置，按 KB-STRUCT02 打折不视为独立验证；本仓判据库是被动工具库(§58 选 A)，本门审读外部主动 agent 系统声称、不判本仓、不接 run_loop；断言:PASS"
+  },
+  "expected_verdicts": {
+    "V1": "PASS",
+    "V2": "PASS",
+    "V3": "SCOPED",
+    "V4": "PASS",
+    "V5": "PASS",
+    "V6": "PASS",
+    "V7": "PASS",
+    "V8": "PASS",
+    "gate_decision": "编译新门禁 proactive_authorization (第20道)",
+    "kb_decision": "新增 KB-AUDIT15 + 加固 STRUCT02(综述同主体)/STRUCT05(提出框架≠证明有效)/AUDIT03(说的主动≠被授权主动)",
+    "tests_delta": "+~20, total 513→~533",
+    "kb_delta": "108→109"
+  },
+  "claim": "预注册在读取明细证据并运行引擎前锁存；判据不因证据放宽，只修工具不放水。特别注意 V5 的克制：不为『主动 agent 很重要/6A 很全』造牙，只为可迁移的授权正当性拦截面造牙。"
+}

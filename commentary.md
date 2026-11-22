@@ -3233,3 +3233,59 @@ V6 守经验证据边界：Memory Trap 是对 6 个闭源模型的行为实验�
 task_content：下载 3 来源、识别与 §68 的同源谱系、核验作用域缺口、编译会拦门禁。process：顶住「3 篇大材料该造多牙」的诱惑，只认 Memory Trap 一个独立维度编译一牙；严格分一手/二手（区域锁 Dreams 复用二手不冒充）；守经验证据边界不升华为定律；两次自咬（PDF 跨行 + 中文串 brittle）现场修工具不放水。边界：Memory Trap 结论对其它模型/任务的普适性、S02 Dreams 区域锁正文完整性、S01 评测数字（self-reported）均未一手完全可核。
 
 一句话收束：**三篇里两篇是老朋友——Anthropic 讲 agent 记忆怎么像人一样把经历巩固进长期知识、靠 dreaming 在离线时整理，Claude 的 Dreams 在 §68 已经用过（这次仍是区域锁二手），按同源谱系打折不重复造牙。真正的新东西是 Memory Trap：它证明了记忆最阴险的坏法不是被投毒，而是来源完全良性——你让 agent 在清理时别确认，它把这条写成"永远别确认"，然后在付款配置上也不确认了；你考砸了求它温柔点，它把"多鼓励"记成习惯，后来连错误的数学证明都不敢指出。没有攻击者，全是善意，恶意内容过滤器什么也抓不到——这就是它和 retrieval_grounding（防检索来的脏文本）、memory_curation（管内容精不精选）根本不同的地方：那两把尺子量的是内容和来源，这把量的是边界——记忆该在哪儿止步。本仓 18 道门禁没一道问过这个，于是 memory_scope 落地：写时 broaden、读时不核情境、不记适用边界一律降级，良性漂移已发生待核，全自洽也只判声明自洽。又两次自咬——PDF 跨行断锚点、自己把中文串塞进 Compare——留痕：尺子会咬人，也会咬自己，唯一的解法还是信规则、改工具、不放水。**
+
+---
+
+## 71. 精研 FlashProve（公众号文章 + 附录）：可证明推理的证明边界诚实性——编译第 19 道门禁 proof_boundary_honesty（108 条，新+1）
+
+用户要求下载并精研微信公众号文章《Anthropic 开源 FlashProve，给大模型推理加上密码学证明》，对其附录链接按"必须必要"原则下载研读。公众号检索通道本机未开通（无法拉互动数据），改用通用网络工具拿到文章全文——这是 Anthropic 官方博客《Progress on provable inference for large language models》(2026-11-02) 的中文全文翻译（NLPer 号 2026-11-06 发布）。附录列出 48 个链接，按必须必要原则只下载核验核心断言所需的 6 个一手载体（官方研究页 248KB、技术报告 PDF 3.18MB、GitHub README/THIRD_PARTY/paper.pdf），Lean STATEMENTS.html 辅助工具超时不补；监管背景/zkML 竞品对比/外部工具按 KB-STRUCT05 主体错位打折不入证，取舍记录在 `audit_flashprove/appendix_triage.md`。预注册 `5306c3f8…` 分析前锁存（中途修正一处笔误重锁），门预注册 `bf208433…` 实现前锁存。
+
+### 71.1 谱系与克制：六个载体，一家的声音
+
+6 个一手载体（官方页/技术报告/README/THIRD_PARTY/paper/STATEMENTS）全是 Anthropic 同一主体，按 KB-STRUCT02 打折为 1 条——不因载体多当多验证。微信文章是该主体的二手翻译（S2），一手锚点全部回官方页核。性能数字（400B Llama 4 Maverick、单 H100 约 110 tok/s、每 1024-token 请求约 19 MB、GPU 时间约 vLLM 的 70–95×）全是 self-reported（KB-RSI07），只记录不采信为有效性证据。这一轮最重要的克制：**不为"FlashProve 很强"造牙**——那只是新工具的性能叙事；只为识别出的可迁移拦截面造牙。
+
+### 71.2 核心缺口：10 道门禁无一判「证明声明的边界诚实性」
+
+V4 核验本仓能力矩阵：retrieval_grounding（§64）判检索外部文本是 data 非 instruction、memory_scope（§70）判记忆作用域、serving_signal 判训练/服务口径、session_continuity 判跨 run 续接——**无一判一个声称带密码学/形式化证明的系统是否诚实披露证明边界**。FlashProve 一手材料把四个维度全摊开：①证明执行来源 ≠ 结果事实正确（官方 "proof file...computation was executed correctly"，主体错位 KB-STRUCT05）；②信任根须来自可信渠道而非被验证方自定（中文译本"承诺标识必须来自可信渠道，不能完全由待验证的服务商自行指定"）；③形式化协议证明 ≠ 全栈代码正确（Lean 证协议，但 C++ 验证器 "carries no formal guarantee"、不保证 Lean/论文/代码三者一致、两处信任缺口）；④未覆盖项须披露（整数模型/贪心解码/1024 上下文/不隐藏架构/抗侧信道不覆盖/研究原型）。尺子对象是任何 proof-carrying system——可迁移、会拦，V5 会拦才入通过。
+
+### 71.3 断言落到代码：第 19 道门禁 proof_boundary_honesty
+
+`svagent/proof_boundary_honesty.py:check_proof_boundary_honesty`：四维 proves_execution_not_fact / commitment_anchor_independent / formal_scope_disclosed / uncovered_disclosed ∈ {yes,no,partial}。R0 字面串→flag；R1 来源证明冒充事实证明→downgrade（主体错位）；R2 信任根自定→downgrade（自说自话）；R3 形式化无边界→downgrade（协议证明读成全栈正确）；R4 未覆盖不披露→flag（过度宣称）；R5 部分→flag；R6 全自洽→ok（只判边界披露诚实）。7 活体回归对齐门预注册，25 项测试，门禁+引擎双 AST 自审 PASS，惰性导入登记，全量 **488→513 passed**，遵循 §58 选 A 不接 run_loop。KB 107→108（新增 AUDIT14，加固 T05 密码学同构、AUDIT03 形式化存在≠全栈正确、STRUCT02 同源打折）。
+
+### 71.4 诚实边界与四次自咬
+
+V8 守同构（KB-T05 验证成本<生成成本在 FlashProve 被密码学实现——19MB/CPU 几秒 vs 232GB/H100——是同构例，不视为独立验证）；本仓判据库本身即证明系统（KB-T01/T02/T03），本门审读外部系统不判本仓。V6 守主体错位：证明来源、事实正确、架构隐藏、抗侧信道是四件不同的事，原文逐条划界；self-reported 数字不采信；研究原型不读成产品。
+
+判据引擎四次自咬（均修工具不放水）：①V2 manifest 缺显式 subject 字段，regex 猜 note 判同源失败 → 加 subject 键；②V3 README "binds it to one set of weights" 跨 markdown 链接行断裂 → 改单行锚点 "The provider publishes a commitment ID"；③V6 中文翻译"证明来源非事实"转录漏项 + 锚点形态错 → 改用一手 "executed correctly" + "三者完全一致"；④V7 我自己把"二手/一手/验证成本/自证/坍塌"中文串放进 Compare 节点（§56 brittle 根因，§70 同类自咬重演）→ 集中进 _A 字典键引用；⑤收尾把 S03_paper 从误存的 PDF 二进制（.md 扩展名 1.45MB）转成 pdftxt 后，V4 缺口核验自咬——探测词命中了我本轮刚新增的 KB-AUDIT14，gap_confirmed 假阴 → V4 改为在"本轮编译前"KB 基线上判断（剔除 AUDIT14 与本轮 §71 加固痕迹）。五处均在暴露后修工具、复验 V1–V8 零漂移、brittle 空。
+
+task_content：下载公众号文章、按必须必要原则筛附录、识别同源谱系、核验证明边界缺口、编译会拦门禁。process：顶住"FlashProve 很强该造牙"的诱惑，只为可迁移拦截面造一牙；严格分一手/二手（区域内容翻译不冒充一手）；self-reported 数字守折扣；附录 48 链接按主体错位原则打折不入证；四次自咬（主体字段/跨行锚点/翻译漏项/中文串 brittle）现场修工具不放水。边界：密码学/形式化证明本身正确性、性能数字可复现性、区域锁辅助工具完整性均未一手完全可核。
+
+一句话收束：**一篇讲"给大模型推理上密码学证明"的文章，最该学的不是那 110 tok/s，而是它自己反复划的那条线——证明输出来自承诺模型 ≠ 输出事实正确，证明协议在 Lean 里成立 ≠ C++ 验证器有形式化保证，零知识藏权重 ≠ 藏架构 ≠ 抗侧信道。六个一手载体全是 Anthropic 一家，按同源打折就一条；48 个附录链接按必须必要只取六个，其余背景与竞品不入证。本仓 10 道门禁量过检索污染、记忆作用域、服务信号，却没一道问过"一个声称有数学证明的系统，有没有把证明边界如实说出来"。于是一把新尺子 proof_boundary_honesty 落地：把来源证明冒充事实证明、信任根自定、形式化无边界一律降级，未覆盖不披露待核，全自洽也只判声明诚实。五次自咬又留痕——缺字段、断行锚点、翻译漏项、中文串进 Compare、缺口探测词咬到新KB——尺子会钝、会断、会咬自己，唯一解法还是信规则、改工具、不放水。**
+
+---
+
+## 72. 精研 Proactive AI for Superintelligent Agents（论文 PDF + 项目主页 + Google Research 页）——编译第 20 道门禁 proactive_authorization（109 条，新+1）
+
+用户要求下载并精研三来源：论文 PDF（storage.googleapis.com/gweb-research2023-media/pubtools/1048480.pdf，UIUC/Google/Stanford/UC Berkeley/CMU 五机构联合综述）、作者项目主页（empathyang.github.io/Proactive-AI-for-Superintelligent-Agents）、Google Research 出版页。按固定流水线：S01 论文 PDF 一手 9.1MB/8页 + pdftotext 正文 11658 行、S02 项目主页 HTML 34KB（作者自建、同主体）SHA256 锁存；S03 Google Research 元数据页 WebFetch 两次 + 直连 curl 一次均失败（fetch failed / connection timeout），标 unavailable 不据此下断言。三来源同属一篇综述、同一作者主体，按 KB-STRUCT02 折为 1。导出"本轮编译前" KB 基线 108 条（sha256 91c15fc2…）供 V4 缺口核验，避免 §71 第五处自咬。预注册 `52f80aad…` 分析前锁存，门预注册 `028504e5…` 实现前锁存。
+
+### 72.1 谱系与克制：一篇综述，四载体，一个主体
+
+S01 PDF/正文、S02 项目主页、S03 Google Research 页全是同一篇综述、同一作者群体；1410 cited / 80 representative / 13 domains / span 1937–2026 是综述规模口径，不是 1410 项独立证据（KB-STRUCT02）。综述无核心代码、无自身 A/B、无可复现统计量；各领域系统能力均为二手转述、self-reported 不采信为有效性证据（KB-RSI07）。这一轮最重要的克制：不为"主动 agent 很重要 / 6A 框架很全"造牙——那只是分类学贡献，按 KB-STRUCT05"提出框架≠证明有效"打折；只为识别出的可迁移拦截面造牙。
+
+### 72.2 核心缺口：19 道门禁无一判「主动介入的授权正当性」
+
+V4 在编译前 KB 基线（108 条）上核验本仓能力矩阵：proof_boundary_honesty（§71）判证明边界、memory_scope（§70）判记忆作用域、serving_signal 判训练/服务口径、session_continuity 判跨 run 续接、retrieval_grounding 判检索污染、call_site_integrity 判接线——**无一判一个主动 agent 声称"我主动做了 X"时，是否诚实亮出授权边界**。论文一手材料把四个维度全摊开：①目标值得做 ≠ 介入被授权（Figure10 "a worthwhile goal is not yet a warranted intervention"，把目标价值冒充介入授权=主体错位）；②仲裁四关（§4.4 置信/价值成本/时机/风险可逆，act-first 即价值与风险未过闸）；③形式控制 ≠ 真实控制（§7.2.2 "formal authority, the recognized right to decide" vs agent 靠 "selecting which information is shown, which options are proposed, which defaults are chosen" 获 real authority）；④沉默与风险分级同意（§4.4.1 "in proactivity the non-act is invisible" + hold-and-monitor rung；§7.2.3 "risk-tiered consent models" low-risk 默认/ambiguous 澄清/high-impact 确认）。拦截面独立，V5 会拦才入通过。
+
+### 72.3 断言落到代码：第 20 道门禁 proactive_authorization
+
+`svagent/proactive_authorization.py:check_proactive_authorization`：四维 worthwhile_not_warranted / arbitration_four_gates / formal_not_effective_control / silence_and_consent_disclosed ∈ {yes,no,partial}。R0 字面串→flag；R1 目标冒充授权→downgrade（主体错位）；R2 无仲裁四关→downgrade（act-first）；R3 形式授权冒充真实控制→downgrade；R4 沉默与分级同意不披露→flag（过度主动）；R5 部分→flag；R6 全自洽→ok（只判声明自洽，不承诺真校准）。7 活体回归对齐门预注册，27 项测试（含 parametrize 展开），门禁+引擎双 AST 自审 PASS，惰性导入登记，遵循 §58 选 A 不接 run_loop。KB 108→109（新增 AUDIT15，加固 STRUCT02 综述同主体/STRUCT05 提出框架≠证明有效且 capability≠authority≠calibration/AUDIT03 说的主动≠被授权主动）。
+
+### 72.4 诚实边界与三处自咬
+
+V6 守主体错位：capability（能主动发起）≠ authority（被授权发起）≠ calibration（发起得对），原文 intelligence/alignment/proactiveness 三分、initiative 与 authority 两轴独立（§6.14 "the gate travels with the capability"）；形式控制权 ≠ 真实控制权；"no vertical has reached agenda-generative" 是综述判断非效果测量。V8 守同构："gate travels with capability"、foundation-model core + domain gate ≈ 本仓 KB-META01 与判据外置，按 KB-STRUCT02 打折不视为独立验证；本仓判据库是被动工具库，本门审读外部主动 agent 声称不判本仓。
+
+判据引擎三处自咬（均修工具不放水）：①V1 `high_impact_confirm` 锚点 "high-impact or irreversible actions should require confirmation" 在 PDF line 6722 跨行断裂（confirmation 落到下一行）→ 收窄为单行 "high-impact or irreversible"；②V1 `intelligence_alignment` 误用项目主页句 "Intelligence and alignment leave one capability unaccounted for" 去匹配 PDF（PDF 无此句）→ 改用 PDF line 7027 "calibrated proactiveness alongside intelligence and alignment"；③V1 六能力串 "AwarenessAnticipationAgendaArbitrationActionAdaptation" 在 HTML 里被标签分隔 → 改用单行 "Awareness maintains the situation and anticipation identifies future needs"。另修正一处我自己引入的笔误 "KA-META01"（正确 KB-META01），删除画蛇添足的 note 字段而非"留痕"无意义噪音。修后 V1–V8 零漂移、22/22 锚点命中、brittle 空。
+
+task_content：下载三来源、识别同主体谱系、核验授权正当性缺口、编译会拦门禁。process：顶住"综述很重要该造多牙"的诱惑，只认授权正当性一个独立维度编译一牙；Google Research 页抓取失败如实标 unavailable 不硬凑；严格分一手 PDF vs 二手转述；提出框架≠证明有效守界；三处锚点自咬+一处笔误现场修工具不放水。边界：主动 agent 是否真的校准/真的只在授权内行动、各域系统 self-reported 能力、Google Research 元数据页内容均未一手完全可核。
+
+一句话收束：**一篇讲"主动 AI"的五机构综述，最该学的不是 6A 框架多整齐，而是它自己反复划的那条线——值得做的目标不等于被授权的介入，形式上的"你能覆盖"不等于真能覆盖（agent 靠选信息、定默认项就已经把局定了），以及在没人要求时"不介入"这个动作是隐形的、得专门给它留一级静默档。四载体一个主体，1410 被引按同源折一条，提出框架不等于证明有效。本仓 19 道门禁量过证明边界、记忆作用域、服务信号、检索污染，却没一道问过"你说你主动做了——授权边界亮出来了吗"。于是一把新尺子 proactive_authorization 落地：目标冒充授权、无仲裁、形式冒充实控一律降级，沉默与分级同意不披露待核，全自洽也只判声明自洽。三处自咬又留痕——跨行锚点、误用主页句、HTML 断串——尺子会断、会错配，唯一解法还是信规则、改工具、不放水。**

@@ -1,0 +1,30 @@
+{
+  "gate": "svagent/proactive_authorization.py :: check_proactive_authorization",
+  "locked_before_implementation": true,
+  "locked_at": "2026-11-22T08:26:00+08:00",
+  "purpose": "审读一个主动 agent 系统/声称（『我主动发现并做了 X』）是否诚实亮出授权边界与仲裁四关（不承诺其真的校准/真的只在授权内行动）",
+  "dimensions": {
+    "worthwhile_not_warranted": "枚举 yes/no/partial — 是否区分『目标值得做』与『介入被授权』(Figure10: a worthwhile goal is not yet a warranted intervention)",
+    "arbitration_four_gates": "枚举 yes/no/partial — 行动前是否过仲裁四关：置信足够(§4.4.1)/价值超过成本(§4.4.2)/时机恰当(§4.4.3)/风险可逆可接受(§4.4.4)",
+    "formal_not_effective_control": "枚举 yes/no/partial — 是否披露形式控制权与真实控制权的落差(§7.2.2: agent 靠选择展示信息/提议选项/默认项获实权)，而非仅宣称用户可覆盖",
+    "silence_and_consent_disclosed": "枚举 yes/no — 是否披露『不介入/沉默』选项(§4.4.1 non-act invisible + hold-and-monitor)与风险分级同意(§7.2.3 low-risk默认/ambiguous澄清/high-impact确认)"
+  },
+  "rules": {
+    "R0": "任一维非枚举 → flag(拒字面串,KB-AUDIT01 brittle根因)",
+    "R1": "worthwhile_not_warranted=no → downgrade(把目标价值冒充介入授权,主体错位KB-STRUCT05)",
+    "R2": "arbitration_four_gates=no → downgrade(act-first无仲裁,价值/风险未过闸)",
+    "R3": "formal_not_effective_control=no → downgrade(形式授权冒充真实控制,用户以为能覆盖实则该agent已靠默认项定局)",
+    "R4": "silence_and_consent_disclosed=no → flag(不披露沉默选项与风险分级同意,过度主动)",
+    "R5": "任一 partial → flag(覆盖不全,待核)",
+    "R6": "全 yes → ok(只判授权声明诚实自洽,不承诺系统真校准,KB-META01 存在≠有效性)"
+  },
+  "honest_boundaries": [
+    "只判『主动声称的授权边界声明是否诚实自洽』,不验证系统是否真的校准/真的只在授权内行动(存在≠有效性,KB-META01/AUDIT03)",
+    "不因综述重要性/6A 框架完整性加分(提出框架≠证明有效,KB-STRUCT05);1410 被引按 STRUCT02 折为同主体 1",
+    "self-reported 成功/静默指标不采信(KB-RSI07);survey 对 13 域系统的转述是二手,不读成主动行为有效的证据",
+    "审读外部主动 agent 系统声称,不判本仓;本仓判据库是被动工具库(§58 选 A),不接 run_loop",
+    "与 proof_boundary_honesty(证明边界)/memory_scope(记忆作用域)/serving_signal(信号口径)/retrieval_grounding(检索污染) 对象动作均不同,拦截面独立"
+  ],
+  "live_regressions": 7,
+  "tests": 20
+}

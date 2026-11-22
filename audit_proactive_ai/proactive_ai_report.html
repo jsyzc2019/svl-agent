@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§72 Proactive AI 精研报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1020px;margin:32px auto;padding:0 20px;color:#222;line-height:1.7}
+h1{border-bottom:3px solid #2a6;padding-bottom:8px} h2{color:#156;margin-top:32px;border-left:4px solid #2a6;padding-left:10px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px} th,td{border:1px solid #ddd;padding:7px 10px;text-align:left;vertical-align:top} th{background:#eef6f2}
+.pass{color:#0a7;font-weight:bold} .scope{color:#b80;font-weight:bold} .fail{color:#c22;font-weight:bold}
+.note{background:#f0f8f4;border-left:4px solid #2a6;padding:10px 14px;margin:14px 0}
+code{background:#f4f4f4;padding:2px 5px;border-radius:3px;font-size:12px} .dim{color:#555}
+</style></head><body>
+<h1>§72 Proactive AI for Superintelligent Agents 精研报告</h1>
+<p class="dim">生成 2026-11-22T08:28:04+08:00　|　预注册 SHA256 <code>52f80aad9eb1db2a</code>　|　门预注册 <code>028504e5ae01fc7e</code>　|　零漂移 <b>True</b>　|　KB 基线 <code>91c15fc2d028ef90</code></p>
+
+<h2>一、抓取与证据分级</h2>
+<p>论文 PDF（一手，UIUC/Google/Stanford/UC Berkeley/CMU 五机构联合综述，11658 行正文）+ 作者项目主页（一手、同主体）。Google Research 元数据页抓取失败标 <b>unavailable</b>，不据此下断言。四载体同一综述同一作者主体，按 KB-STRUCT02 折为 1。</p>
+<table><tr><th>载体</th><th>等级</th><th>SHA256 / 路径</th><th>说明</th></tr><tr><td>S01_pdf</td><td>一手</td><td><code>e90ef681732de7bb</code></td><td>downloads/proactive_ai_superintelligent_agents.pdf</td></tr><tr><td>S01_raw</td><td>一手（pdftotext -layout 提取，含摘要/正文/参考文献）</td><td><code>e09d3cf74264c59e</code></td><td>downloads/proactive_ai_raw.txt</td></tr><tr><td>S02_homepage</td><td>一手（作者自建项目页，与论文同主体；6A/residual decision space/权威阶梯）</td><td><code>82d4747154c07289</code></td><td>audit_proactive_ai/S01_project_homepage.html</td></tr><tr><td>S03_google_research</td><td>unavailable</td><td><code>—</code></td><td>WebFetch 两次 + 直连 curl 一次均失败（fetch failed / connection timeout）。元数据页不影响主体证据，项目页已给出同一论文与 PDF 链接。如实标注未一手核，不据此下断言。</td></tr></table>
+
+<h2>二、核心判断</h2>
+<div class="note">
+<b>不是"主动 agent 很重要"，而是一个可迁移的独立拦截面。</b> 综述贡献的是分类学语言（6A / residual decision space / reactivity–proactivity 频谱），按 KB-STRUCT05"提出框架≠证明有效"打折；1410 被引、80 代表作、13 领域是综述规模口径，不是独立证据。真正的新牙是：<b>一个主动 agent 声称"我主动做了 X"时，是否诚实亮出授权边界</b>——①值得做的目标 ≠ 被授权的介入（Figure10）；②仲裁四关（置信/价值成本/时机/风险可逆）；③形式控制 ≠ 真实控制（agent 靠选信息/选项/默认项获实权）；④沉默选项与风险分级同意须披露。
+</div>
+<p>本仓 19 道门禁判了证明边界、记忆作用域、训练服务口径、跨 run 续接、检索污染、调用接线……却无一判"主动介入的授权正当性"。尺子对象是任何主动 agent 声称——可迁移、会拦，符合 KB-META01。</p>
+
+<h2>三、判据裁决（V1–V8 零漂移，22/22 一手锚点命中）</h2>
+<table><tr><th>判据</th><th>裁决</th><th>要点</th></tr><tr><td><b>V1</b></td><td><span class="pass">PASS</span></td><td>{"delegated_discretion": true, "worthwhile_not_warranted": true, "four_questions": true, "authority_given": true, "suggestion_not_execute": true, "value_vs_cost</td></tr><tr><td><b>V2</b></td><td><span class="pass">PASS</span></td><td>4 载体同综述同主体 → 折为 1；1410 被引/80/13 为综述规模非独立证据</td></tr><tr><td><b>V3</b></td><td><span class="scope">SCOPED</span></td><td>综述无核心代码/无自身实验；1410/80/13/1937-2026 为文献计量口径；各域系统能力二手转述不采信</td></tr><tr><td><b>V4</b></td><td><span class="pass">PASS</span></td><td>{"baseline_count": 108, "probe": {"gap_authorization": false, "gap_warranted": false, "gap_arbitration": false, "gap_formal_control": false, "gap_silence": fals</td></tr><tr><td><b>V5</b></td><td><span class="pass">PASS</span></td><td>贡献为分类学(6A/residual/频谱)，按 STRUCT05 提出框架≠证明有效；只为『审读主动声称是否亮出授权边界』造牙</td></tr><tr><td><b>V6</b></td><td><span class="pass">PASS</span></td><td>{"capability_ne_authority": true, "formal_ne_effective": true, "axes_independent": true, "survey_judgment_not_effect": true}</td></tr><tr><td><b>V7</b></td><td><span class="pass">PASS</span></td><td>{"brittle_hits": [], "clean": true}</td></tr><tr><td><b>V8</b></td><td><span class="pass">PASS</span></td><td>gate travels with capability≈KB-META01 同构打折；本门审读外部主动 agent 声称，不判本仓、不接 run_loop(§58 选 A)</td></tr></table>
+
+<h2>四、断言落到代码</h2>
+<p>第 20 道门禁 <code>svagent/proactive_authorization.py:check_proactive_authorization</code>：四维语义枚举 + R0–R6 短路规则（目标冒充授权 / 无仲裁 / 形式冒充实控 → downgrade；沉默隐藏 / 部分 / 字面串 → flag；全自洽 → ok），惰性登记、不接 run_loop（§58 选 A）。7 活体回归 + 27 项测试 + 门禁/引擎双 AST 自审全过。全量 <b>513→540 passed</b>。KB 108→109（新增 AUDIT15，加固 STRUCT02 / STRUCT05 / AUDIT03）。</p>
+
+<h2>五、三处判据自咬 + 一处笔误（修工具不放水）</h2>
+<ol>
+<li><b>V1 high_impact_confirm</b>：锚点 "high-impact or irreversible actions should require confirmation" 在 PDF line 6722 跨行断裂 → 收窄为单行 "high-impact or irreversible"。</li>
+<li><b>V1 intelligence_alignment</b>：误用项目主页句去匹配 PDF（PDF 无此句）→ 改用 PDF line 7027 "calibrated proactiveness alongside intelligence and alignment"。</li>
+<li><b>V1 六能力串</b>："AwarenessAnticipationAgendaArbitrationActionAdaptation" 在 HTML 被标签分隔 → 改用单行 "Awareness maintains the situation and anticipation identifies future needs"。</li>
+<li><b>笔误</b>：自引入 "KA-META01"（正确 KB-META01）并画蛇添足加 note → 直接改正、删 note，不留无意义噪音。</li>
+</ol>
+
+<h2>六、三层诚实结论</h2>
+<p><b>一手可核：</b>PDF 18 条一手锚点单行命中；综述规模 1410/80/13 与作者主页可核；Google Research 元数据页不可达标 unavailable，不据此下断言。</p>
+<p><b>scoped 与折扣：</b>综述无核心代码/无自身 A/B/无可复现统计量；1410 被引按 KB-STRUCT02 折为同主体 1；各域系统能力为二手转述与 self-reported，不采信(KB-RSI07)。</p>
+<p><b>不可判定边界：</b>主动 agent 是否真的校准、是否真的只在授权内行动——本门只判『声称的授权声明是否诚实自洽』，不承诺实际行为有效(KB-R07/KB-META01 存在≠有效性)；审读外部系统，不判本仓。</p>
+<p class="dim">推送节奏：本轮 §72 与上一批 §71（FlashProve）按用户"两批次一推"约定已合并为一次本地提交 <code>2c27958</code>（39 文件）。<b>远端推送因当前环境 GitHub 凭据不可用而失败</b>（could not read Username），待凭据恢复后重推即可，本地提交完好。<code>.github/</code> 按历史惯例保持未跟踪（PAT 无 workflow scope）。PDF 原件（8.7MB）不入库，证据正文 txt 入库，SHA256 锁存见 manifest。</p>
+</body></html>

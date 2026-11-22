@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§71 FlashProve 精研报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1000px;margin:32px auto;padding:0 20px;color:#222;line-height:1.7}
+h1{border-bottom:3px solid #b33;padding-bottom:8px} h2{color:#a22;margin-top:32px;border-left:4px solid #b33;padding-left:10px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px} th,td{border:1px solid #ddd;padding:7px 10px;text-align:left} th{background:#f6eaea}
+.pass{color:#a22;font-weight:bold} .note{background:#fff8e6;border-left:4px solid #d90;padding:10px 14px;margin:14px 0}
+code{background:#f4f4f4;padding:2px 5px;border-radius:3px;font-size:12px} .dim{color:#555}
+</style></head><body>
+<h1>§71 FlashProve 可证明推理精研报告</h1>
+<p class="dim">生成时间 2026-11-22T08:13:43.949899+08:00　|　预注册 SHA256 <code>5306c3f82dce3d6b</code>　|　门预注册 <code>bf2084334e666e71</code>　|　零漂移 <b>True</b></p>
+
+<h2>一、抓取与证据分级</h2>
+<p>公众号文章（NLPer 号，2026-11-06，Anthropic 官方博客全文翻译）为二手 S2；附录 48 链接按<b>必须必要原则</b>仅下载核验核心断言所需的 6 个（其中 1 个辅助工具超时不补），背景/竞品/监管引用按 KB-STRUCT05 主体错位不入证。详见 <code>appendix_triage.md</code>。</p>
+<table><tr><th>载体</th><th>等级</th><th>字节</th><th>SHA256</th><th>说明</th></tr><tr><td>S00_article</td><td>二手</td><td>17425 B</td><td><code>eac0d4c5b888</code></td><td>S2 微信NLPer号中文全文翻译Anthropic官方博客;curl被环境验证页拦,WebFetc</td></tr><tr><td>S01_official</td><td>一手</td><td>30839 B</td><td><code>38238e85b39b</code></td><td>anthropic.com/research/provable-inference 官方研究页直连2</td></tr><tr><td>S02_techreport</td><td>一手</td><td>65358 B</td><td><code>3bed4714a4a5</code></td><td>assets.claude.com 技术报告PDF 3.18MB,pdftotext 854行;协议</td></tr><tr><td>S03_readme</td><td>一手</td><td>9759 B</td><td><code>fb0f9a5a635d</code></td><td>raw.githubusercontent.com/anthropics/FlashProve RE</td></tr><tr><td>S03_thirdparty</td><td>一手</td><td>115931 B</td><td><code>7b3ee916ca85</code></td><td>THIRD_PARTY.md 200,115KB;第三方来源与许可清单,核claim出处</td></tr><tr><td>S03_paper</td><td>一手</td><td>1449970 B</td><td><code>bcb2a7b32f2f</code></td><td>raw github paper/paper.pdf 200,1.45MB;协议规范/形式化依赖</td></tr><tr><td>S04_statements</td><td>缺失</td><td>0 B</td><td><code>——</code></td><td>lean/STATEMENTS.html raw超时000;仅审计辅助工具,非核心断言必需,按必须必</td></tr></table>
+
+<h2>二、核心判断</h2>
+<div class="note">
+<b>不是"FlashProve 很强"，而是一个可迁移的独立拦截面。</b> 6 个一手载体全是 Anthropic 同一主体（按 KB-STRUCT02 打折为 1），性能数字（110 tok/s、19 MB、70–95×）全是 self-reported 不采信。真正的新牙是：<b>当系统声称带密码学/形式化证明时，是否诚实披露证明边界</b>——①证明执行来源 ≠ 结果事实正确；②信任根须来自可信渠道而非被验证方自定；③形式化协议证明 ≠ 全栈代码正确（C++ 验证器无形式化保证）；④未覆盖项（整数/贪心/1024/不藏架构/抗侧信道/研究原型）须披露。
+</div>
+<p>本仓 10 道门禁判了检索污染、记忆作用域、训练服务口径、跨 run 续接……却无一判"证明声明的边界诚实性"。FlashProve 是最会自曝边界的一手样本，但尺子对象是任何 proof-carrying system——可迁移、会拦，符合 KB-META01。</p>
+
+<h2>三、判据裁决（V1–V8 零漂移）</h2>
+<table><tr><th>判据</th><th>裁决</th><th>要点</th></tr><tr><td><b>V1</b></td><td>PASS</td><td>{&#x27;S00_cn_sidechannel&#x27;: True, &#x27;S01_flashprove&#x27;: True, &#x27;S01_commitment&#x27;: True, &#x27;S01_completeness&#x27;: True, &#x27;S01_so</td></tr><tr><td><b>V2</b></td><td>PASS</td><td>{&#x27;first_hand_carriers&#x27;: [&#x27;S01_official&#x27;, &#x27;S02_techreport&#x27;, &#x27;S03_readme&#x27;, &#x27;S03_thirdparty&#x27;, &#x27;S03_paper&#x27;], &#x27;all_</td></tr><tr><td><b>V3</b></td><td>SCOPED</td><td>{&#x27;readme_commit_bind&#x27;: True, &#x27;readme_not_maintained&#x27;: True, &#x27;readme_apache&#x27;: True, &#x27;readme_verify_cpu&#x27;: True, </td></tr><tr><td><b>V4</b></td><td>PASS</td><td>{&#x27;gap_terms_hit&#x27;: {&#x27;证明边界诚实性&#x27;: False, &#x27;三者完全一致&#x27;: False, &#x27;proof boundary&#x27;: False, &#x27;commitment binding&#x27;: False, &#x27;s</td></tr><tr><td><b>V5</b></td><td>PASS</td><td>{&#x27;self_report_of_own_boundary&#x27;: True, &#x27;distinct_intercept&#x27;: True, &#x27;transferable&#x27;: True, &#x27;will_intercept&#x27;: True</td></tr><tr><td><b>V6</b></td><td>PASS</td><td>{&#x27;cn_executed_correctly&#x27;: True, &#x27;cn_three_not_consistent&#x27;: True, &#x27;cn_sidechannel&#x27;: True, &#x27;en_statement_correct</td></tr><tr><td><b>V7</b></td><td>PASS</td><td>{&#x27;engine_brittle&#x27;: [], &#x27;gate_brittle&#x27;: &#x27;门禁未生成-编译后单独验&#x27;}</td></tr><tr><td><b>V8</b></td><td>PASS</td><td>{&#x27;t05_isomorphic&#x27;: True, &#x27;proof_library_is_prover&#x27;: True, &#x27;audits_external_not_self&#x27;: True}</td></tr></table>
+
+<h2>四、断言落到代码</h2>
+<p>第 19 道门禁 <code>svagent/proof_boundary_honesty.py:check_proof_boundary_honesty</code>：四维语义枚举 + R0–R6 短路规则（source-as-fact / anchor-self-set / formal-overclaim / uncovered-hidden 分别 downgrade/flag），惰性登记、不接 run_loop（§58 选 A）。7 活体回归 + 25 项测试 + 门禁/引擎双 AST 自审全过。全量 <b>488→513 passed</b>。KB 107→108（新增 AUDIT14，加固 T05/AUDIT03/STRUCT02）。</p>
+
+<h2>五、五处判据自咬（修工具不放水）</h2>
+<ol>
+<li><b>V2</b>：manifest 缺显式 subject 字段，regex 猜 note 失败 → 加 subject 键。</li>
+<li><b>V3</b>：README "binds it to one set of weights" 跨 markdown 链接行断裂 → 改单行锚点 "The provider publishes a commitment ID"。</li>
+<li><b>V6</b>：中文翻译"证明来源非事实"转录漏项 + 锚点形态错 → 改用一手 "executed correctly" + "三者完全一致"。</li>
+<li><b>V7</b>：引擎自身把"二手/一手/验证成本/自证/坍塌"中文串放进 Compare（brittle 根因）→ 集中进 _A 字典键引用。</li>
+<li><b>V4（收尾）</b>：S03_paper 从误存 PDF 二进制转 pdftxt 后，缺口探测词命中本轮新增的 KB-AUDIT14 自身致假阴 → V4 改在"本轮编译前"KB 基线判断（剔除 AUDIT14 与 §71 加固痕迹）。</li>
+</ol>
+
+<h2>六、诚实边界</h2>
+<p>只判边界声明诚实自洽，不验证密码学/形式化证明本身正确性（存在≠有效性）；self-reported 吞吐/大小/加速比不采信；6 载体同源打折；研究原型不读成产品；本仓判据库本身即证明系统（KB-T01/T02/T03，T05 密码学实现=同构），本门审读外部系统不判本仓。</p>
+</body></html>

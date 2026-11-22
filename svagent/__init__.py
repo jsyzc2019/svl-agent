@@ -143,6 +143,14 @@ _LAZY: dict[str, tuple[str, str]] = {
     "check_memory_scope": ("svagent.memory_scope", "check_memory_scope"),
     "MemoryScopeVerdict": ("svagent.memory_scope", "MemoryScopeVerdict"),
     "memory_scope_live_regression": ("svagent.memory_scope", "live_regression"),
+    # 可证明声明边界诚实性门禁（§71：从 FlashProve 编译——证明执行≠事实证明/信任根独立/形式化边界/未覆盖披露）
+    "check_proof_boundary_honesty": ("svagent.proof_boundary_honesty", "check_proof_boundary_honesty"),
+    "ProofBoundaryVerdict": ("svagent.proof_boundary_honesty", "ProofBoundaryVerdict"),
+    "proof_boundary_live_regression": ("svagent.proof_boundary_honesty", "live_regression"),
+    # 主动介入授权正当性门禁（§72：从 Proactive AI 综述编译——目标≠授权/仲裁四关/形式≠实际控制/沉默与分级同意）
+    "check_proactive_authorization": ("svagent.proactive_authorization", "check_proactive_authorization"),
+    "ProactiveAuthorizationVerdict": ("svagent.proactive_authorization", "ProactiveAuthorizationVerdict"),
+    "proactive_authorization_live_regression": ("svagent.proactive_authorization", "live_regression"),
 }
 
 

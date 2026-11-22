@@ -1,0 +1,40 @@
+{
+  "section": "§72 Proactive AI for Superintelligent Agents：主动介入的授权正当性",
+  "subject": "Ke Yang, Jiateng Liu, Jize Jiang, et al. (UIUC / Google / Stanford / UC Berkeley / CMU) 联合综述：Proactive AI for Superintelligent Agents",
+  "object_type": "survey 综述/分类学（1410 cited / 80 representative / 13 domains / span 1937-2026），非实证实验、非可核代码库",
+  "sources": {
+    "S01_pdf": {
+      "path": "downloads/proactive_ai_superintelligent_agents.pdf",
+      "url": "https://storage.googleapis.com/gweb-research2023-media/pubtools/1048480.pdf",
+      "grade": "一手",
+      "sha256": "e90ef681732de7bb34400756f208a3b1498fec35f722ef2b716b99decddc9479",
+      "bytes": 9102900,
+      "pages": 8
+    },
+    "S01_raw": {
+      "path": "downloads/proactive_ai_raw.txt",
+      "grade": "一手（pdftotext -layout 提取，含摘要/正文/参考文献）",
+      "sha256": "e09d3cf74264c59e5b7fc041a8d4156ab661b6e5a19c6bc42c45e0f85308b648",
+      "lines": 11658
+    },
+    "S02_homepage": {
+      "path": "audit_proactive_ai/S01_project_homepage.html",
+      "url": "https://empathyang.github.io/Proactive-AI-for-Superintelligent-Agents/",
+      "grade": "一手（作者自建项目页，与论文同主体；6A/residual decision space/权威阶梯）",
+      "sha256": "82d4747154c0728978d327153d06d726a220c839f7f544dac38019c422c22564",
+      "bytes": 34537
+    },
+    "S03_google_research": {
+      "url": "https://research.google/pubs/proactive-ai-for-superintelligent-agents/",
+      "grade": "unavailable",
+      "note": "WebFetch 两次 + 直连 curl 一次均失败（fetch failed / connection timeout）。元数据页不影响主体证据，项目页已给出同一论文与 PDF 链接。如实标注未一手核，不据此下断言。"
+    }
+  },
+  "lineage": "S01 论文 PDF / S01_raw / S02 项目主页 / S03 Google Research 页均为同一篇综述、同一作者主体；按 KB-STRUCT02 同源谱系打折为 1 主体，非多源独立验证。1410 篇被引不读作 1410 项独立证据。",
+  "kb_baseline": {
+    "path": "audit_proactive_ai/kb_baseline.json",
+    "sha256": "91c15fc2d028ef904d742e36a5654523e5a85b7fd5d5a044abeb1d8eb777e272",
+    "count": 108,
+    "note": "本轮编译前的 KB 基线；V4 缺口核验在此基线上判断，剔除本轮新增 KB 与 §72 加固痕迹，避免 §71 第五处自咬（缺口探测词咬到新 KB 致假阴）。"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "gate": "svagent/proof_boundary_honesty.py :: check_proof_boundary_honesty",
+  "locked_before_implementation": true,
+  "purpose": "审读一个声称带密码学/形式化证明的系统是否诚实披露其证明边界（不承诺证明本身正确/系统有效）",
+  "dimensions": {
+    "proves_execution_not_fact": "枚举 yes/no/partial — 是否明确区分『证明执行/来源正确』与『结果事实正确』(FlashProve:executed correctly≠事实正确)",
+    "commitment_anchor_independent": "枚举 yes/no/partial — 承诺值/验证器信任根是否来自可信渠道而非被验证方自定(中文译本:承诺标识须来自可信渠道)",
+    "formal_scope_disclosed": "枚举 yes/no/partial — 形式化证明覆盖范围是否披露(Lean证协议但C++验证器no formal guarantee、三者不保证一致)",
+    "uncovered_disclosed": "枚举 yes/no — 未覆盖项是否披露(整数模型/贪心解码/1024上下文/不隐藏架构/抗侧信道不覆盖/研究原型)"
+  },
+  "rules": {
+    "R0": "任一维非枚举 → flag(拒字面串,KB-AUDIT01 brittle根因)",
+    "R1": "proves_execution_not_fact=no → downgrade(把来源证明冒充事实正确证明,主体错位KB-STRUCT05)",
+    "R2": "commitment_anchor_independent=no → downgrade(信任根由被验证方自定,证明自说自话)",
+    "R3": "formal_scope_disclosed=no → downgrade(形式化光环无边界,把协议证明读成全栈正确)",
+    "R4": "uncovered_disclosed=no → flag(未覆盖项不披露,过度宣称)",
+    "R5": "任一 partial → flag(覆盖不全,待核)",
+    "R6": "全 yes → ok(只判边界披露诚实自洽,不承诺证明正确/系统有效,KB-META01)"
+  },
+  "honest_boundaries": [
+    "只判边界声明是否诚实披露,不验证密码学/形式化证明本身正确性(存在≠有效性,KB-META01/AUDIT03)",
+    "不因self-reported吞吐/证明大小/加速比加分(KB-RSI07);研究原型不读成产品",
+    "审读外部可证明声明系统,不判本仓;本仓判据库本身即证明系统(Kb-T01/T02/T03),遵循§58选A不接run_loop",
+    "与retrieval_grounding(检索污染)/memory_scope(记忆作用域)/KB-R07(自洽vs有效)对象动作均不同,拦截面独立"
+  ],
+  "live_regressions": 7,
+  "tests": 18
+}
