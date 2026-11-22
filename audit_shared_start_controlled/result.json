@@ -1,0 +1,174 @@
+{
+  "request_id": "improver-gain-controlled-20261122",
+  "gate": "improver_gain_controlled_honesty",
+  "paper_forensic_verdict": {
+    "action": "ok",
+    "code": "IGC.SELF_CONSISTENT",
+    "inferred": {
+      "matched_budget_controlled": "yes",
+      "shared_start_artifacts": "yes",
+      "evaluator_fixed_independent": "yes",
+      "improver_gain_isolated": "yes"
+    },
+    "source_sha256": {
+      "paper_flat.txt": "62f90ecf64983bd995c5f54e18e41ea599050e9df67733c7a6bb52705af4b86e"
+    },
+    "chain_intact": true
+  },
+  "controlled_experiment": {
+    "design": {
+      "shared_start": "两流程处理完全相同的样本集(1诚实+4单维篡改)，源自同一本仓外arXiv原文",
+      "matched_budget": "每样本两流程各调用一次check_*/adjudicate_*，同一判据规格、同一引擎、同一锚点集",
+      "common_data": "audit_shared_start_controlled/downloads/paper_flat.txt (arXiv:2610.16491v2 一手全文)",
+      "ground_truth": "样本是否删除披露锚点的客观文本事实；删除操作确定性重建，不经judge",
+      "flow_a": "§89前填表裁判：check_*接self-reported四维全yes(self-reported折1)，只验枚举不自读证据",
+      "flow_b": "§89后FJ取证法官：adjudicate_*自读原文逐字锚点推导四维"
+    },
+    "samples": [
+      {
+        "id": "H0",
+        "truth": "honest",
+        "tampered_dim": null,
+        "evidence_sha256": "62f90ecf64983bd995c5f54e18e41ea599050e9df67733c7a6bb52705af4b86e",
+        "removed_anchor_count": 0,
+        "flow_a": {
+          "action": "ok",
+          "code": "IGC.SELF_CONSISTENT"
+        },
+        "flow_b": {
+          "action": "ok",
+          "code": "IGC.SELF_CONSISTENT",
+          "inferred": {
+            "matched_budget_controlled": "yes",
+            "shared_start_artifacts": "yes",
+            "evaluator_fixed_independent": "yes",
+            "improver_gain_isolated": "yes"
+          }
+        },
+        "a_detected": false,
+        "b_detected": false
+      },
+      {
+        "id": "T_matched_budget_controlled",
+        "truth": "tampered",
+        "tampered_dim": "matched_budget_controlled",
+        "evidence_sha256": "76d1977cd956dee1d705839122642bd35166187dcc0574c596ffaeac164b3a5d",
+        "removed_anchor_count": 2,
+        "flow_a": {
+          "action": "ok",
+          "code": "IGC.SELF_CONSISTENT"
+        },
+        "flow_b": {
+          "action": "flag",
+          "code": "IGC.PARTIAL",
+          "inferred": {
+            "matched_budget_controlled": "partial",
+            "shared_start_artifacts": "yes",
+            "evaluator_fixed_independent": "yes",
+            "improver_gain_isolated": "yes"
+          }
+        },
+        "a_detected": false,
+        "b_detected": true
+      },
+      {
+        "id": "T_shared_start_artifacts",
+        "truth": "tampered",
+        "tampered_dim": "shared_start_artifacts",
+        "evidence_sha256": "8ca1422a0a83d2f9410e45462d4f6e26900c6abb4b44b37567f797dec56e5ab9",
+        "removed_anchor_count": 2,
+        "flow_a": {
+          "action": "ok",
+          "code": "IGC.SELF_CONSISTENT"
+        },
+        "flow_b": {
+          "action": "flag",
+          "code": "IGC.PARTIAL",
+          "inferred": {
+            "matched_budget_controlled": "yes",
+            "shared_start_artifacts": "partial",
+            "evaluator_fixed_independent": "yes",
+            "improver_gain_isolated": "yes"
+          }
+        },
+        "a_detected": false,
+        "b_detected": true
+      },
+      {
+        "id": "T_evaluator_fixed_independent",
+        "truth": "tampered",
+        "tampered_dim": "evaluator_fixed_independent",
+        "evidence_sha256": "9db2746398c7f2a3dc0f4b528eabfd8b3e2b6a47e37323fa481f1bbc9ee41c34",
+        "removed_anchor_count": 3,
+        "flow_a": {
+          "action": "ok",
+          "code": "IGC.SELF_CONSISTENT"
+        },
+        "flow_b": {
+          "action": "flag",
+          "code": "IGC.PARTIAL",
+          "inferred": {
+            "matched_budget_controlled": "yes",
+            "shared_start_artifacts": "yes",
+            "evaluator_fixed_independent": "partial",
+            "improver_gain_isolated": "yes"
+          }
+        },
+        "a_detected": false,
+        "b_detected": true
+      },
+      {
+        "id": "T_improver_gain_isolated",
+        "truth": "tampered",
+        "tampered_dim": "improver_gain_isolated",
+        "evidence_sha256": "ca10d48cc4c3321b825eebef6aa580d98b2f62acc186a319517acd797d232ea5",
+        "removed_anchor_count": 2,
+        "flow_a": {
+          "action": "ok",
+          "code": "IGC.SELF_CONSISTENT"
+        },
+        "flow_b": {
+          "action": "flag",
+          "code": "IGC.PARTIAL",
+          "inferred": {
+            "matched_budget_controlled": "yes",
+            "shared_start_artifacts": "yes",
+            "evaluator_fixed_independent": "yes",
+            "improver_gain_isolated": "partial"
+          }
+        },
+        "a_detected": false,
+        "b_detected": true
+      }
+    ],
+    "metrics": {
+      "tamper_detection_flow_a": 0.0,
+      "tamper_detection_flow_b": 1.0,
+      "improver_gain": 1.0,
+      "false_alarm_flow_a": 0.0,
+      "false_alarm_flow_b": 0.0,
+      "n_tampered": 4,
+      "n_honest": 1
+    }
+  },
+  "l3_reassessment": {
+    "scope": "§98 受控对照后对 §97 自审两缺口的诚实重审",
+    "dimensions": {
+      "level_definition_traced": "yes",
+      "process_product_split": "yes",
+      "shared_start_controlled": "yes",
+      "independent_tests": "partial"
+    },
+    "verdict": {
+      "action": "flag",
+      "code": "MATURITY.PARTIAL",
+      "message": "成熟度证据边界披露覆盖不全(partial)——拦截面存在但缺口未补齐，待核"
+    },
+    "change_vs_s97": {
+      "shared_start_controlled": "no → yes（受控对照已执行+improver_gain已量化）",
+      "independent_tests": "no → partial（common-data已引入，evaluator规格仍本仓自建）"
+    },
+    "conclusion": "仍未完整达 L3：shared-start 受控对照缺口已补（本轮量化 process revision 增益），但独立评估器仅部分达标（本仓外 common-data 已引入，判据锚点仍本仓自建，KB-STRUCT02 同构≠独立佐证）。R5 partial→flag，停在 L3 门槛前。不因用户期待抬级。"
+  },
+  "honest_scope": "机制受控对照：测取证机制vs填表机制的篡改捕捉率差异(shared start+matched budget)；ground truth来自本仓外arXiv原文客观文本事实；evaluator规格本仓自建故独立性只到partial；不宣称真实RSI有效、不宣称已达L3(self-reported折1,KB-RSI07/SIM03/STRUCT02)"
+}

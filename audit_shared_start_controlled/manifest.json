@@ -1,0 +1,32 @@
+{
+  "request_id": "improver-gain-controlled-20261122",
+  "five_piece": [
+    "manifest.json",
+    "prereg.json",
+    "gate_prereg.json",
+    "engine.py",
+    "result.json"
+  ],
+  "files": [
+    {
+      "id": "S01",
+      "path": "downloads/S01_arxiv_abs.html",
+      "sha256": "63320368bd073f4bc43f64772f87d91047845e45f23c1af73a4436f6556576e2"
+    },
+    {
+      "id": "S02",
+      "path": "downloads/S02_arxiv_full.html",
+      "sha256": "dd22c5e08734bed10e4965512b398f2778eec08177183db9bbcd3868a04697e4"
+    },
+    {
+      "id": "FLAT",
+      "path": "downloads/paper_flat.txt",
+      "sha256": "62f90ecf64983bd995c5f54e18e41ea599050e9df67733c7a6bb52705af4b86e"
+    },
+    {
+      "id": "FETCH",
+      "path": "downloads/fetch_log.json",
+      "sha256": "6848c56b2572e918193b16207dabecc51c7511a30677a2f59a73d2fa9bbf6773"
+    }
+  ]
+}

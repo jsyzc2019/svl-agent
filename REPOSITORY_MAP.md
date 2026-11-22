@@ -13,10 +13,10 @@
 |---|---|---|
 | 1 | `README.md` | 核心命题、三层递归、关键实测结果、设计原则 |
 | 1.5 | `SESSION_HANDOFF.md` | **新旧会话接续**：现状、用户意图、纪律、未完成推送任务（换会话先读此） |
-| 2 | `commentary.md` | 完整推导日志，§1–§92 逐节记录机制如何长出来（§89 = FJ 取证法官化工程；§90 = 自主运维首日 Pilot Day；§91 = 自主运维第二轮 RSI 声称审计；§92 = 自主运维第三轮记忆巩固治理） |
+| 2 | `commentary.md` | 完整推导日志，§1–§98 逐节记录机制如何长出来（§89 = FJ 取证法官化工程；§90 = 自主运维首日 Pilot Day；§91 = 自主运维第二轮 RSI 声称审计；§92 = 自主运维第三轮记忆巩固治理；§93–§97 = 清单扩展安全合规 / benchmark 污染 / 目标来源 / 技能演化 / 成熟度自审；§98 = shared-start 受控对照执行 + L3 诚实重审） |
 | 3 | `REPOSITORY_MAP.md`（本文件） | 文件按主题归位 |
 | 4 | `svagent/` | 可执行代码（59 个模块，惰性导入） |
-| 5 | `tests/` | 回归测试（1091 项，`python3 -m pytest -q`） |
+| 5 | `tests/` | 回归测试（1249 项，`python3 -m pytest -q`） |
 
 > 自主运维三清单（§90）：`WORKPLACES.md`（取料渠道地图）· `WORK_ITEMS.md`（话题版图）· `TIME_PLAN.md`（一日闭环+守恒条款）。
 
@@ -209,8 +209,12 @@ core → verifiers → harness → handoff          L0 产物层：生成→判�
 | `svagent/forensic_gates_ext.py` | 第4道取证入口（§90）：silent_failure 法官读 arXiv 原文逐字锚点推导四维，不改已锁存试点 | 真实证据 ok / 篡改 flag / 红旗 downgrade / 链失配拒判 |
 | `svagent/forensic_gates_ext2.py` | 第5道取证入口（§91）：rsi_claim_audit 法官读 arXiv 原文逐字锚点推导四维，不改已锁存试点 | 真实证据 ok / 篡改 flag / 红旗 downgrade / 链失配拒判 4/4 |
 | `svagent/forensic_gates_ext3.py` | 第6道取证入口（§92）：memory_consolidation_governance 法官读 arXiv 原文逐字锚点推导四维，不改已锁存试点 | 真实证据 ok / 篡改 flag / 红旗 downgrade / 链失配拒判 4/4 |
+| `svagent/maturity_evidence_honesty.py` | L0-L3 成熟度证据诚实性（§97，arXiv:2610.38266） | 等级定义追溯/process-product 分离/shared-start 受控/独立测试四维；首次对准本仓自审判未达 L3 |
+| `svagent/improver_gain_controlled_honesty.py` | 改进者增益受控验证诚实性（§98，arXiv:2610.16491 SpecRSI） | 匹配预算/相同起点/评估器固定独立/增益隔离四维；R0-R6 + 中文 _A 字典 + AST 自审 |
+| `svagent/forensic_gates_ext9.py` | 第12道取证入口（§98）：improver_gain_controlled 法官读 arXiv 原文逐字锚点推导四维 | 真实证据 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4 |
+| `audit_shared_start_controlled/engine.py` | shared-start + matched-budget 受控对照实验（§98，执行 §97 落档路径①） | 填表裁判捕捉率 0.0 vs 取证法官 1.0，improver_gain=1.0；L3 重审 flag/MATURITY.PARTIAL 未抬级 |
 
-每道门禁都有对应测试：`tests/test_disambiguation_gate.py` `test_improvement_memory.py` `test_component_attribution.py` `test_evaluation_reliability.py` `test_scoring_integrity.py` `test_transfer_holdout.py` `test_judgment_robustness.py` `test_task_retrospective.py` `test_lineage_guard.py` `test_backtest_integrity.py` `test_call_site_integrity.py` `test_reviewer_evaluation.py` `test_serving_signal_gate.py` `test_retrieval_grounding.py` `test_session_continuity.py` `test_memory_curation.py` `test_proactive_authorization.py` `test_interface_contract_honesty.py` `test_supervision_viability.py` `test_self_knowledge_honesty.py` `test_verification_boundary_honesty.py` `test_criterion_origin_honesty.py` `test_selective_supervision_honesty.py` `test_policy_evolution_grounding.py` `test_memory_provenance_honesty.py` `test_online_repair_honesty.py` `test_skill_admission_calibration.py` `test_failure_causal_identifiability.py` `test_causal_contribution_honesty.py` `test_config_conflict_isolation.py` `test_compute_saturation_honesty.py` `test_induction_structure_honesty.py` `test_context_override_boundary.py`。FJ 升级另加：`tests/test_forensics.py` `test_forensic_gates.py` `test_evidence_chain.py` `test_growth_bridge.py` `test_evidence_scope_and_cli.py`（43 项）。§90 自主运维首日另加：`tests/test_silent_failure_honesty.py`（31 项：gate 裁决+FJ 取证+链失配拒判）。§91 自主运维第二轮另加：`tests/test_rsi_claim_audit_honesty.py`（25 项：gate 裁决+FJ 取证+链失配拒判+AST 自审）。§92 自主运维第三轮另加：`tests/test_memory_consolidation_governance_honesty.py`（25 项：gate 裁决+FJ 取证+链失配拒判+AST 自审）。
+每道门禁都有对应测试：`tests/test_disambiguation_gate.py` `test_improvement_memory.py` `test_component_attribution.py` `test_evaluation_reliability.py` `test_scoring_integrity.py` `test_transfer_holdout.py` `test_judgment_robustness.py` `test_task_retrospective.py` `test_lineage_guard.py` `test_backtest_integrity.py` `test_call_site_integrity.py` `test_reviewer_evaluation.py` `test_serving_signal_gate.py` `test_retrieval_grounding.py` `test_session_continuity.py` `test_memory_curation.py` `test_proactive_authorization.py` `test_interface_contract_honesty.py` `test_supervision_viability.py` `test_self_knowledge_honesty.py` `test_verification_boundary_honesty.py` `test_criterion_origin_honesty.py` `test_selective_supervision_honesty.py` `test_policy_evolution_grounding.py` `test_memory_provenance_honesty.py` `test_online_repair_honesty.py` `test_skill_admission_calibration.py` `test_failure_causal_identifiability.py` `test_causal_contribution_honesty.py` `test_config_conflict_isolation.py` `test_compute_saturation_honesty.py` `test_induction_structure_honesty.py` `test_context_override_boundary.py`。FJ 升级另加：`tests/test_forensics.py` `test_forensic_gates.py` `test_evidence_chain.py` `test_growth_bridge.py` `test_evidence_scope_and_cli.py`（43 项）。§90 自主运维首日另加：`tests/test_silent_failure_honesty.py`（31 项：gate 裁决+FJ 取证+链失配拒判）。§91 自主运维第二轮另加：`tests/test_rsi_claim_audit_honesty.py`（25 项：gate 裁决+FJ 取证+链失配拒判+AST 自审）。§92 自主运维第三轮另加：`tests/test_memory_consolidation_governance_honesty.py`（25 项：gate 裁决+FJ 取证+链失配拒判+AST 自审）。§93–§97 另加：`test_redteam_robustness_honesty.py` `test_benchleaking_honesty.py` `test_goal_provenance_honesty.py` `test_skill_lifecycle_honesty.py` `test_maturity_evidence_honesty.py`（各约 25 项）。§98 另加：`tests/test_improver_gain_controlled_honesty.py`（25 项）`tests/test_shared_start_controlled.py`（7 项受控对照回放）。
 
 ---
 

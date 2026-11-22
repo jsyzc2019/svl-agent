@@ -3586,6 +3586,63 @@
       "evidence": "theory",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT40",
+      "kind": "reasoning_lesson",
+      "mechanism": "改进者增益受控验证诚实性(improver gain controlled honesty)是把shared learner starts+matched budgets+fixed evaluator编译成可判据的独立尺子(arXiv:2610.16491 SpecRSI)：与KB-AUDIT39(判成熟度等级声明四边界)和KB-AUDIT33(审外部RSI声称四评估边界)区分,本尺把一个RSI系统的受控验证声明拆成四边界——(1)matched_budget_controlled:匹配evaluation-call/candidate预算对照 vs 更大预算冒充改进;(2)shared_start_artifacts:identical starting agents/artifacts的frozen-vs-GVO对照 vs 更强初始冒充improver gain;(3)evaluator_fixed_independent:real evaluator(固定契约+执行接口)与improver分离+held-out gain另评 vs 自评当独立(KB-STRUCT02);(4)improver_gain_isolated:frozen-vs-GVO逐轮累计增益隔离 vs product增益冒充process增益。只判声明自洽不承诺RSI真实有效(self-reported 60.0%--96.3%/142.6%折1)。",
+      "trigger": [
+        "RSI受控验证",
+        "improver gain",
+        "shared learner starts",
+        "matched budget",
+        "fixed evaluator",
+        "frozen vs GVO",
+        "GVO",
+        "SpecRSI",
+        "受控对照",
+        "增益隔离"
+      ],
+      "action": "审任一RSI/self-improvement系统的受控验证声明时,按四维盯死是否匹配预算/相同起点/评估器固定独立/增益隔离;尤其区分product增益与process增益(KB-AUDIT39 process_product_split),红旗=更大预算或更强初始冒充改进。可迁移到任何递归自我改进声称,不判本仓等级真伪。",
+      "provenance": "自主运维第九轮:§97自审落档路径①→自主取arXiv:2610.16491一手(abs+全文均200,落fetch_log+SHA256)→预注册锁存prereg/gate_prereg/manifest+三锁→摘要+§3GVO+§4.4RQ3+Γ评估器定义段四维逐字锚点探测(disclose必中红旗零误中)→编译第37道门禁improver_gain_controlled_honesty(R0-R6+中文_A字典+AST自审)+第12道FJ入口forensic_gates_ext9;本条记录可编译fix机制",
+      "timestamp": "2026-11-22T06:33:24.757416+00:00",
+      "support": [
+        "arXiv:2610.16491v2 SpecRSI:under matched evaluation-call budgets / from identical starting agents / keeping the real evaluator fixed / tracks cumulative gains over successive rounds",
+        "KB-AUDIT39 maturity_evidence_honesty——共享起点受控对照的成熟度尺子,本尺聚焦RSI受控验证声明",
+        "KB-STRUCT02 同构≠独立佐证——evaluator_fixed_independent维依据",
+        "KB-RSI07 self-reported折1——60.0%--96.3%/142.6%提升折扣"
+      ],
+      "evidence": "theory",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META06",
+      "kind": "reasoning_lesson",
+      "mechanism": "shared-start受控对照执行结论(用户\"可以跑\"触发,执行§97落档路径①):在同一批样本(1诚实+4单维篡改,源自本仓外arXiv:2610.16491一手全文作common-data)+匹配预算(同一判据规格/引擎/锚点集)下,对照§89前填表裁判(self-reported四维全yes交给check_*)vs§89后FJ取证法官(adjudicate_*自读原文逐字锚点推四维)。实测:填表裁判篡改捕捉率0.0(全放行,因check_*只验自洽不自读证据),取证法官4/4抓到=1.0,improver_gain=1.0,两流程误伤率均0.0;每个篡改样本恰好目标维partial其余三维yes(归因正确)。据此诚实重审§97两缺口:shared_start_controlled no→yes(受控对照已执行+增益已量化),independent_tests no→partial(本仓外common-data已引入但evaluator锚点规格仍本仓自建,KB-STRUCT02同构≠独立佐证)。R5 partial→flag,仍未完整达L3——停在L3门槛前。关键认知:受控对照补上了证据缺口但没制造独立性,process revision的增益可量化≠已达L3。",
+      "trigger": [
+        "受控对照",
+        "shared start",
+        "matched budget",
+        "填表裁判vs取证法官",
+        "improver gain",
+        "L3门槛前",
+        "独立评估器partial",
+        "机制受控对照"
+      ],
+      "action": "评估本仓/任一Agent是否达L3时,引用audit_shared_start_controlled/result.json:controlled_experiment.metrics(improver_gain=1.0,tamper_detection A=0.0/B=1.0)证明§89取证法官化process revision有可量化增益;但independent_tests只到partial(evaluator规格本仓自建),按KB-AUDIT39 R5判flag,不得因有受控增益就抬级到L3。下一步若要独立评估器yes,须引入本仓外第三方evaluator或跨仓common-data判据。坚持KB-META04价值边界与KB-SIM03无受控实验不认L3。",
+      "provenance": "自主运维第九轮:执行§97落档path_to_l3路径①(self_audit.path_to_l3[0])→写audit_shared_start_controlled/engine.py(controlled_comparison+l3_reassessment)→实测五样本裁决逐条核对(目标维partial归因正确)→7项回放测试锁定结果不可事后篡改;本条记录受控对照的诚实结论(preserve,不宣称达L3)",
+      "timestamp": "2026-11-22T06:33:24.757416+00:00",
+      "support": [
+        "audit_shared_start_controlled/result.json:self_audit重审dimensions(yes/yes/yes/partial)→flag/MATURITY.PARTIAL",
+        "KB-META05 首次自审未达L3——本条是其路径①的执行与部分进展",
+        "KB-SIM03 RSI证据阶梯:improver gain需受控验证——本条补齐此证据",
+        "KB-STRUCT02 同构≠独立佐证——independent_tests只到partial的依据",
+        "§89取证法官化升级:process revision增益的受控量化"
+      ],
+      "evidence": "theory",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

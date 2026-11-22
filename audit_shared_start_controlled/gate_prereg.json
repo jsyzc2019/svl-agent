@@ -1,0 +1,19 @@
+{
+  "gate": "svagent.improver_gain_controlled_honesty.check_improver_gain_controlled_honesty",
+  "verdict": "ImproverGainControlledVerdict(claim,matched_budget_controlled,shared_start_artifacts,evaluator_fixed_independent,improver_gain_isolated,action,code,message)",
+  "input_enum": "四维∈{yes,no,partial}",
+  "rules": {
+    "R0": "任一非枚举(含字面串)→flag(IGC.INVALID_INPUT)",
+    "R1": "matched_budget_controlled=no→downgrade(无匹配预算对照,拿更大evaluation-call预算冒充改进)",
+    "R2": "shared_start_artifacts=no→downgrade(无identical starting agents/artifacts对照,拿更强初始冒充improver gain)",
+    "R3": "evaluator_fixed_independent=no→flag(real evaluator未固定/与improver未分离/无held-out gain,自评当独立)",
+    "R4": "improver_gain_isolated=no→flag(无frozen-vs-GVO cumulative gains隔离,product增益冒充process增益)",
+    "R5": "任一partial→flag(受控对照边界披露覆盖不全,待核)",
+    "R6": "全yes→ok(只判声明自洽,不承诺RSI真实有效;self-reported折1)"
+  },
+  "forensic_spec": {
+    "gate": "forensic.improver_gain_controlled",
+    "dimensions": "四维逐字锚点取自S02摘要+§3 GVO+§4.4 RQ3+Γ评估器定义段;disclose必中红旗零误中"
+  },
+  "implementation_lock_time": "2026-11-22T14:30:06.212971+08:00"
+}

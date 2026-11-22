@@ -1,0 +1,39 @@
+{
+  "request_id": "improver-gain-controlled-20261122",
+  "target": "arXiv:2610.16491v2 Drafting Agents, Not Just Tokens: Speculative Recursive Self-Improvement (SpecRSI)",
+  "acquisition": {
+    "channel": "自主运维第九轮：§97自审诚实判未达L3后，按落档路径①(shared-start受控对照)+路径②(独立评估器)自主取一手料(WebSearch发现→arXiv abs+HTML)",
+    "primary": [
+      {
+        "id": "S01",
+        "url": "https://arxiv.org/abs/2610.16491",
+        "file": "downloads/S01_arxiv_abs.html"
+      },
+      {
+        "id": "S02",
+        "url": "https://arxiv.org/html/2610.16491v2",
+        "file": "downloads/S02_arxiv_full.html"
+      }
+    ],
+    "flat": "downloads/paper_flat.txt",
+    "collection_time": "2026-11-22T14:30:06.212971+08:00"
+  },
+  "analysis_before_prereg": "摘要+§3 GVO段+§4.4 RQ3段+Γ评估器定义段逐字命中;disclose必中红旗零误中;四维措辞直取arXiv原文",
+  "cognitive_increment": "独立于已有136条:§97 maturity_evidence_honesty只判等级声明四边界但不生成受控对照证据;§91 rsi_claim_audit审外部RSI声称但不量化本仓improver gain;KB-SIM03是原则层未编译。本轮新对象=『执行shared-start受控对照本身』:同一任务起点+匹配预算下对照§89前填表裁判vs§89后FJ取证流程的篡改捕捉率,用本仓外arXiv原文作common-data+确定性engine评估。新四维:(1)matched_budget_controlled:匹配evaluation-call/candidate预算对照 vs 更大预算冒充改进;(2)shared_start_artifacts:同一initial artifacts/starting agents比较frozen vs updated improver vs 更强初始冒充;(3)evaluator_fixed_independent:real evaluator(Γ契约+Acquire)固定且与improver分离+held-out gain另评 vs 自评当独立;(4)improver_gain_isolated:cumulative gains over successive rounds/frozen-vs-GVO隔离 vs product增益冒充process增益。KB-META01独立性通过",
+  "four_dimensions": [
+    "matched_budget_controlled",
+    "shared_start_artifacts",
+    "evaluator_fixed_independent",
+    "improver_gain_isolated"
+  ],
+  "kb_rules": [
+    "KB-RSI07 self-reported折1",
+    "KB-R07 自洽≠有效",
+    "KB-SIM03 无受控实验不认L3",
+    "KB-STRUCT02 同构≠独立佐证",
+    "KB-META01 独立核验",
+    "§58选A不接run_loop"
+  ],
+  "self_audit_precommit": "受控对照若显示不出可量化的improver gain(篡改捕捉率FJ>填表),或独立评估器仍缺,则诚实判未达L3,不因用户期待抬级;若路径①达标但路径②(独立评估器)仍partial,则诚实判L3判据2/4→3/4但未完整达L3",
+  "honest_scope": "只判SpecRSI是否诚实披露四受控对照边界;尺子可迁移到任何RSI/self-improvement受控验证声明;不判本仓等级真实性;self-reported 60.0%--96.3%/142.6%按KB-RSI07折1"
+}

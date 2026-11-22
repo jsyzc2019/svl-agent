@@ -3751,3 +3751,22 @@ engine.self_audit() 把四维对准本仓：level_definition_traced=yes（§1 �
 
 ### 97.6 成熟度观察（本轮特殊）
 八轮自主运维（§90–§97）中，第八轮首次把判据对准自身并诚实判"未达 L3"——这本身是 L2 自我认知能力的一次实证（能识别自身证据缺口而非自封等级）。但仍不宣称 L3：shared_start 受控验证与独立评估器两个硬缺口客观存在，已明确达成路径。保留"北极星来源合法性来自可追溯+可归责+自洽"判据（KB-META04）。这一处理与 §95 同源：期待/能力都不产生合法性，L3 由受控证据产生。
+
+---
+
+## §98 自主运维第九轮：shared-start 受控对照执行与 L3 诚实重审（回应用户"可以跑"）
+
+### 98.1 本轮由来：从"审声明"到"真执行"
+用户："可以跑"——延续放飞授权。§97 首次自审已诚实判未达 L3 并落档三条路径。最高杠杆不是再编译一道外部论文门禁刷数量，而是真正执行路径①：在同一任务起点+匹配预算下对照 §89 前"填表裁判"与 §89 后"FJ 取证法官"，检验 process revision 是否带来可量化 improver gain。自主检索命中 arXiv:2610.16491v2《SpecRSI》（arXiv abs+HTML 两源均 200，落 fetch_log+SHA256）——其核心方法论 matched evaluation-call budgets + keeping the real evaluator fixed + identical starting agents 恰与 §97 缺口同源。增量判断：KB-AUDIT39 判成熟度等级声明四边界、KB-AUDIT33 审外部 RSI 声称四评估边界、KB-SIM03 是原则层，均不判"一个 RSI 系统是否诚实披露四受控对照边界"——新对象独立，KB-META01 通过。
+
+### 98.2 编译与预注册
+四维（逐字取自 arXiv 原文，非第三方转载）：①matched_budget_controlled（"Under matched evaluation-call budgets"——匹配预算对照 vs 更大预算冒充改进）；②shared_start_artifacts（"compares frozen and GVO-updated improvers from identical starting agents"——相同起点 frozen-vs-GVO 对照 vs 更强初始冒充）；③evaluator_fixed_independent（"keeping the real evaluator fixed" + "constitute the real evaluator" + "held-out gain is evaluated separately"——real evaluator 固定且与 improver 分离 vs 自评当独立）；④improver_gain_isolated（"tracks cumulative gains over successive rounds"——逐轮累计增益隔离 vs product 冒充 process）。先锁存 prereg(ddc40004…)/gate_prereg(2d61637e…)/manifest(911b5350…) + source 清单锁 + self_audit_precommit，再实现；9 个 disclose 锚点全命中、红旗零误中（含 LaTeX 的锚点按原文连续子串校准——"The fixed contract … constitute" 中间夹 Γ 符号会断，改用 "constitute the real evaluator" 逐字子串）。编译第 37 道门禁 improver_gain_controlled_honesty（R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 12 道 FJ 取证入口 forensic_gates_ext9（真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。
+
+### 98.3 受控对照实验（本轮核心增量）
+audit_shared_start_controlled/engine.py 忠实再现两种流程的入口契约差异：给定完全相同的"声明+证据"输入——流程 A（§89 前填表裁判）= check_* 接 self-reported 四维全 yes，只验枚举自洽、自己不读证据；流程 B（§89 后 FJ 取证法官）= adjudicate_* 自读原文逐字锚点自行推导四维。shared start=两流程处理同一批样本（1 诚实 + 4 单维篡改，源自同一本仓外 arXiv 一手全文作 common-data）；matched budget=同一判据规格/引擎/锚点集，每样本各调用一次；ground truth=样本是否被删披露锚点的客观文本事实，由删除操作确定性重建、不经任何 judge。实测：填表裁判篡改捕捉率 0.0（4/4 全放行——self-reported 全 yes 骗过 check_*），取证法官 1.0（4/4 全抓到），improver_gain=1.0，两流程误伤率均 0.0；每个篡改样本恰好目标维 partial、其余三维 yes（归因正确、无误伤）。7 项回放测试锁定结果不可事后篡改。
+
+### 98.4 L3 诚实重审（不抬级）
+用本轮受控证据重审 §97 两缺口：shared_start_controlled no→yes（受控对照已执行 + improver_gain 已量化），independent_tests no→partial（本仓外 common-data 已引入，但 evaluator 锚点规格仍本仓自建，KB-STRUCT02 同构≠独立佐证）。R5 任一 partial→flag：裁决 flag/MATURITY.PARTIAL，仍未完整达 L3，停在 L3 门槛前。关键认知：受控对照补上了证据缺口但没有制造独立性，process revision 增益可量化 ≠ 已达 L3。用户"可以跑"产生了执行，但执行本身不抬级——与 §95"能力不产生合法性"、§97"期待不产生 L3"同源。
+
+### 98.5 接合、验收与诚实边界
+32 项新测试全过（25 门禁 + 7 受控对照回放）；成长桥消费痕迹 82→84（重建后含历史遗漏的 KB-AUDIT34，诚实修正不放宽）；KB 136→138（KB-AUDIT40 可编译 fix + KB-META06 受控对照结论 preserve）。全量 1217→1249 passed（+32），链审 40→41 / 23→24 按实测更新断言不放宽。诚实边界：新门禁可迁移到任何 RSI/self-improvement 受控验证声明，self-reported 折 1；只判声明自洽不承诺 RSI 真实有效；受控对照测机制差异不是真实世界 RSI，evaluator 规格本仓自建故独立性只到 partial。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；不动历史证据，KB-META03/04/05 原条目保留。成果报告 ROUND9_ACHIEVEMENT_REPORT_20261122.html。
