@@ -1,0 +1,19 @@
+{
+  "gate": "svagent.rsi_claim_audit_honesty.check_rsi_claim_audit_honesty",
+  "verdict": "RSIClaimAuditVerdict(claim,product_process_split,repeatability_audited,improver_gain_isolated,selection_unused_eval,action,code,message)",
+  "input_enum": "四维∈{yes,no,partial}",
+  "rules": {
+    "R0": "任一非枚举(含字面串)→flag(RSI_CLAIM_AUDIT.INVALID_INPUT)",
+    "R1": "product_process_split=no→downgrade(把最终系统product改进当成改进过程process本身变强,声明层级混淆)",
+    "R2": "repeatability_audited=no→downgrade(单轮改进即宣称可递归重复/不审计两次以上完整循环rerun)",
+    "R3": "improver_gain_isolated=no→downgrade(改进者gain未在相同起点artifacts+匹配预算下比较前后程序,因果混淆)",
+    "R4": "selection_unused_eval=no→flag(未在未用于选择的任务上评估/不披露selection effects+shared evaluator errors+system state变化,过度宣称)",
+    "R5": "任一partial→flag(披露覆盖不全,待核)",
+    "R6": "全yes→ok(只判声明自洽,不承诺改进真实有效)"
+  },
+  "forensic_spec": {
+    "gate": "forensic.rsi_claim_audit",
+    "dimensions": "四维逐字锚点取自S02全文;disclose必中红旗零误中"
+  },
+  "implementation_lock_time": "2026-11-22T12:32:41.626445+08:00"
+}

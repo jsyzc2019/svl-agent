@@ -3279,6 +3279,38 @@
       "evidence": "audit",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT33",
+      "kind": "reasoning_lesson",
+      "mechanism": "RSI声称审计诚实性(rsi claim audit honesty)是审读递归自我改进系统的独立缺口(arXiv:2610.27610,114篇全文编码/90篇自述RSI)：评估RSI承诺须分离最终系统product声明与改进过程process本身声明；四维——(1)product_process_split:product变好≠process变强(声明层级);(2)repeatability_audited:90篇仅22%审计两次以上完整loop rerun(单轮即宣称可递归=无证据);(3)improver_gain_isolated:26篇声称改进程序者仅4篇在相同起点artifacts+匹配预算下比较前后程序(因果隔离,失败即更强初始模型冒充gain);(4)selection_unused_eval:仅60%在未用于选择任务上评估+须披露selection effects/shared evaluator errors/system-state变化三类confound。提出claim-indexed reporting standard:每条声称绑定测试它所需的评估设计。evidence for repeatability/improved procedures远弱于product evaluation。只判声明自洽不承诺改进有效(self-reported折1,scoped)。",
+      "trigger": [
+        "RSI",
+        "递归自我改进",
+        "recursive self improvement",
+        "product vs process",
+        "循环可重复性",
+        "rerun",
+        "改进者gain",
+        "相同起点",
+        "匹配预算",
+        "未选择任务",
+        "selection effect",
+        "shared evaluator",
+        "claim-indexed"
+      ],
+      "action": "遇到声称『RSI/self-improvement已实现/改进程序更强』的系统，按 rsi_claim_audit_honesty 四维取证(法官读一手原文逐字锚点)：product冒充process→downgrade；单轮即宣称可递归→downgrade；gain无相同起点+匹配预算消融→downgrade；无未选择任务评估/不披露三类confound→flag；partial→flag；全yes→ok(只判自洽)。与KB-RSI03(证据阶梯)/KB-RSI05(改进者gain隔离)配套——本门禁是其可编译执行层。",
+      "provenance": "自主运维第二轮：WebSearch从P0-RSI话题自主发现 arXiv:2610.27610v1→arXiv abs+HTML一手→fetch_log+SHA256→预注册锁存(prereg 5a9a8d72/gate f3618661/manifest ffec1a51)→逐字锚点探测(disclose必中红旗零误中ALL_ANCHORS_CLEAN)→编译第30道门禁+第5道FJ取证入口",
+      "timestamp": "2026-11-22T04:34:14.616739+00:00",
+      "support": [
+        "svagent/rsi_claim_audit_honesty.py:check_rsi_claim_audit_honesty + tests/test_rsi_claim_audit_honesty.py(25项) — KB-AUDIT33 编译为活体门禁;7活体+AST自审0中文字面量",
+        "svagent/forensic_gates_ext2.py:adjudicate_rsi_claim_audit_honesty — 第5道FJ取证入口,真实证据ok/删披露flag/红旗downgrade/链失配拒判4/4",
+        "arXiv:2610.27610v1 一手锚点:product/process分离+22%rerun+60%未选择任务+4/26相同起点匹配预算+claim-indexed,12锚点逐字命中",
+        "独立性核验:KB-RSI01-07覆盖RSI证据阶梯概念但无可编译门禁;KB-R-AUDIT01覆盖一般审计但非RSI专门尺子;KB-META01通过"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {

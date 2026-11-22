@@ -3627,3 +3627,19 @@ F4：新增 svagent/evidence_scope.py，6 个模拟模块（autopoiesis/self_evo
 
 ### 90.3 诚实边界与成熟度
 新门禁只判"带自验证verdict系统是否诚实披露静默失败边界"，可迁移到任何 agent verdict 系统，不判本仓；self-reported 降幅按 KB-RSI07 折1；只判声明自洽不承诺方法有效（KB-R07）。拆除三依赖后可说"基础设施就绪度"上升，但保留 KB-META03 的价值边界：北极星由人设定这一步仍是价值来源，不把"可自主执行"读成"可自主设定终极目标"。遵循 §58 选A不接run_loop；篡改测试只在临时副本；不动历史证据。首日证明全链可回放、数字真实、凭据安全。
+
+---
+
+## §91 自主运维第二轮：RSI 声称审计诚实性（P0-RSI 话题）
+
+### 91.1 自主取料与增量判断
+用户指令"你可以再试试"——按三清单自主启动第二轮。晨间自检 1041 全绿/链审 33 目录稳定。按 WORK_ITEMS.md 的 P0「递归自我改进 RSI」钩子（首日已攻自我验证），用 WebSearch 自主发现 arXiv:2610.27610v1《Auditing the Product, Not the Recursion》（114 篇研究全文编码、90 篇自述 RSI），从 WORKPLACES 已验证的 arXiv 渠道取 abs 44KB + 全文 874KB（均 200），落 fetch_log + SHA256。增量判断：KB-RSI01-07 覆盖 RSI 证据阶梯/改进者 gain 隔离概念，但无可编译门禁审读"RSI 声称是否诚实披露评估边界"；KB-R-AUDIT01 是一般审计非 RSI 专门尺子——KB-META01 独立性通过，编译新门禁。
+
+### 91.2 编译与取证
+第四维一次成型：①product_process_split（最终系统 product 变好 ≠ 改进过程 process 本身变强，声明层级混淆）；②repeatability_audited（90 篇仅 22% 审计两次以上完整 loop rerun，单轮即宣称可递归=可重复性无证据）；③improver_gain_isolated（26 篇声称改进程序者仅 4 篇在相同起点 artifacts + 匹配预算下比较前后程序，否则更强初始模型冒充 gain）；④selection_unused_eval（仅 60% 在未用于选择任务上评估 + 须披露 selection effects / shared evaluator errors / system-state 变化三类 confound）。论文提出 claim-indexed reporting standard：每条声称绑定测试它所需的评估设计。先锁存 prereg(5a9a8d72…)/gate_prereg(f3618661…)/manifest(ffec1a51…) + 三份 SHA256，再实现；12 逐字锚点探测 disclose 必中、红旗零误中（ALL_ANCHORS_CLEAN）。编译第 30 道门禁 `rsi_claim_audit_honesty`（R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 5 道 FJ 取证入口 `forensic_gates_ext2`（法官自己读原文，真实证据 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。
+
+### 91.3 接合、验收与诚实边界
+25 项新测试全过；五道取证裁决全 ok；成长桥把 76 条 KB fix 机制+五道裁决注入 PDCA，消费痕迹 76/76/76 一致。KB 127→128（KB-AUDIT33，可编译 fix）。全量 1041→1066 passed（+25），链审断言随仓库成长更新 33→34（不放宽）。诚实边界：只判 RSI 声称是否诚实披露四评估边界，可迁移到任何 RSI/self-improvement 系统，不判本仓；self-reported 增益按 KB-RSI07 折 1；只判声明自洽不承诺改进真实有效（KB-R07/META01）。遵循 §58 选 A 不接 run_loop；篡改测试只在临时副本；不动历史证据。
+
+### 91.4 成熟度观察
+连续两轮自主运维（§90 silent_failure + §91 rsi_claim_audit）证明：三清单框架可复制、全链闭环可回放、数字真实、凭据自管。基础设施就绪度稳定在 L2 边缘偏上（取证真实、闭环可消费、话题自主发现）；仍不宣称 L3——北极星由人设定这一价值边界保留（KB-META03），不把"可自主执行"读成"可自主设定终极目标"。

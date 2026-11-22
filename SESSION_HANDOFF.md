@@ -1,16 +1,16 @@
 # 会话接续文档（SESSION HANDOFF）
 
 > 本文件用于新旧会话接续。新会话开始后，**先读本文件**，再按"接续后第一件事"操作。
-> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 12:40 (GMT+8)——**§90 自主运维首日完成并已推送，无遗留推送任务**。
-> 上一会话终点：§89 已推送完成；本次完成 §90 自主运维首日（用户赋予独立运维一天权限，拆除三处人类依赖点，跑通取料→精研→编译→接合→验收→提交全链）。
+> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 12:50 (GMT+8)——**§91 自主运维第二轮完成，本地待提交/推送**。
+> 上一会话终点：§90 自主运维首日已推送（eada4d1）；本次完成 §91 自主运维第二轮（用户"你可以再试试"→按三清单自主跑 P0-RSI 话题全链，编译第30道 rsi_claim_audit 门禁+第5道FJ取证入口）。
 
 ---
 
 ## 1. 一句话现状
 
 本仓是一个自进化 Agent 架构（`/workspace`，Python 包 `svagent`，版本 0.13.1）。
-当前已完成 **§1–§90**：§1–§88 外部精研（36 道会拦门禁）+ **§89 FJ 取证法官化升级**（把门禁从填表裁判改成取证法官）+ **§90 自主运维首日**（三清单+自主取料+第29道 silent_failure 门禁+第4道FJ取证入口）。知识库 **127 条**，测试 **1041 passed**（全绿，§90 新增 31 项）。
-**§88、§89、§90 均已推送**（远端 main = 本地 HEAD = `eada4d1`，GitHub API 独立核验一致）。凭据自管闭环已实证：token 自管上传区、临时 askpass 用后即删、hosts 即改即恢复、git 配置无明文凭据（见 §5）。无遗留推送任务。
+当前已完成 **§1–§91**：§1–§88 外部精研（36 道会拦门禁）+ **§89 FJ 取证法官化升级**（把门禁从填表裁判改成取证法官）+ **§90 自主运维首日**（三清单+自主取料+第29道 silent_failure 门禁+第4道FJ取证入口）+ **§91 自主运维第二轮**（自主取料 arXiv:2610.27610 + 第30道 rsi_claim_audit 门禁 + 第5道FJ取证入口）。知识库 **128 条**，测试 **1066 passed**（全绿，§91 新增 25 项）。
+**§88、§89、§90 均已推送**（远端 main = `85ee813`，为 §90 的 docs 状态修正提交，GitHub API 独立核验一致）。**§91 为本地待提交改动**（新门禁+KB+文档+README 刷新，详见 §4d）。凭据自管闭环已实证（见 §5）。**下一步：提交并推送 §91**（用上传区 token，见 §5）。
 
 ---
 
@@ -78,6 +78,16 @@
 
 ---
 
+## 4d. §91 自主运维第二轮（本地待提交/推送）
+
+**触发**：用户"你可以再试试"——按三清单自主启动第二轮。晨间自检 1041 全绿/链审 33 目录稳定。按 WORK_ITEMS.md P0「递归自我改进 RSI」话题（首日已攻自我验证），用 WebSearch 自主发现 arXiv:2610.27610v1《Auditing the Product, Not the Recursion》（114 篇全文编码、90 篇自述 RSI），从 arXiv 渠道取 abs 44KB + 全文 874KB（均 200），落 fetch_log + SHA256。增量判断：KB-RSI01-07 有 RSI 证据阶梯概念但无可编译门禁，KB-META01 独立性通过。
+
+**产物**：预注册锁存 prereg(5a9a8d72…)/gate_prereg(f3618661…)/manifest(ffec1a51…) + 三份 SHA256；12 逐字锚点探测 disclose 必中、红旗零误中（ALL_ANCHORS_CLEAN）。编译第 30 道门禁 `svagent/rsi_claim_audit_honesty.py`（四维：product_process_split / repeatability_audited / improver_gain_isolated / selection_unused_eval；R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 5 道 FJ 取证入口 `svagent/forensic_gates_ext2.py`（法官读 arXiv 原文逐字锚点，真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。25 项新测试（tests/test_rsi_claim_audit_honesty.py）；engine.py + result.json（verdict ok）落盘；五件套齐全、三锁全过。
+
+**验收**：全量 1041→1066 passed（+25），五道取证裁决全 ok，成长桥 76/76/76 一致，KB 127→128（KB-AUDIT33 可编译 fix），链审断言随成长 33→34（不放宽）。成熟度 L2 边缘偏上，不宣称 L3（保留"北极星由人设定"价值边界，KB-META03）。**当前状态**：本地未提交（新门禁+KB+README+commentary §91+REPOSITORY_MAP+HANDOFF），待提交并推送（见 §6/§5）。
+
+---
+
 ## 5. ✅ 已完成：远端推送
 
 **最新状态**：2026-11-22 12:40 (GMT+8) 推送成功（§90 自主运维首日，凭据自管闭环实证）。`git push origin main` → `8f2a3fd..eada4d1 main -> main`（§90 全链闭环单批）。GitHub API 独立核验远端 main = `eada4d1dc8b48eef7a56d6c3a0025eaa3a1325bb` = 本地 HEAD。网络两跳（DNS 不可达→TLS 断开）经 `curl --resolve` 重探 + HTTP/1.1 调优 + 临时 hosts 换 IP 后成功，hosts/askpass/备份即后即删。
@@ -109,10 +119,12 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 - [x] ✅ §89 本地提交已推送（`d106a08` + `b2db0b0`，远端 main `8f2a3fd` 已同步，见 §5）。
 - [x] ✅ §90 自主运维首日全链闭环（三清单 + 第29道门禁 + 第4道FJ入口 + KB + 1041 passed，见 §4c）。
 - [x] ✅ §90 提交并推送（`eada4d1`，凭据自管闭环实证，远端 main 同步，见 §4c/§5）。
-- [ ] 继续自主运维：按 WORK_ITEMS.md P0 话题（RSI/记忆治理/多智能体编排）从 WORKPLACES.md 已验证渠道自主取料，复制 §90 全链闭环。
+- [x] ✅ §91 自主运维第二轮全链闭环（arXiv:2610.27610 + 第30道 rsi_claim_audit 门禁 + 第5道FJ入口 + KB-AUDIT33 + 1066 passed，见 §4d）。
+- [ ] **提交并推送 §91 本地改动**（见 §4d/§5；用上传区 token，单批可独立提交）。
+- [ ] 继续自主运维：按 WORK_ITEMS.md P0 话题（记忆治理/技能演化/多智能体编排/上下文检索）从已验证渠道自主取料，复制全链闭环。
 - [ ] 若用户给新的外部精研材料：先抽一手锚点 → 判认知增量独立性 → 按 §3 纪律编译门禁（能机制化才编译，否则只加固 KB）。
-- [ ] 后续精研可复用 FJ 取证入口：新门禁若有一手原文切片，可加 `adjudicate_*` 取证入口（试点见 `forensic_gates.py`，扩展见 `forensic_gates_ext.py`）。
-- [ ] 本文件随每次会话终结更新现状（§1/§4/§4b/§4c/§5）。
+- [ ] 后续精研可复用 FJ 取证入口：新门禁若有一手原文切片，可加 `adjudicate_*` 取证入口（试点 `forensic_gates.py`，扩展 `forensic_gates_ext.py`/`forensic_gates_ext2.py`）。
+- [ ] 本文件随每次会话终结更新现状（§1/§4/§4b/§4c/§4d/§5）。
 
 ---
 
@@ -120,14 +132,14 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 
 | 用途 | 路径 |
 |---|---|
-| 门禁源码 | `svagent/*.py`（76 模块，惰性导入登记于 `svagent/__init__.py`） |
-| FJ 取证层 | `svagent/forensics.py` / `forensic_gates.py` / `forensic_gates_ext.py`(§90) / `evidence_chain.py` / `growth_bridge.py` / `evidence_scope.py` / `cli.py` |
-| 测试 | `tests/test_*.py`（62 文件，1041 项） |
+| 门禁源码 | `svagent/*.py`（78 模块，惰性导入登记于 `svagent/__init__.py`） |
+| FJ 取证层 | `svagent/forensics.py` / `forensic_gates.py` / `forensic_gates_ext.py`(§90) / `forensic_gates_ext2.py`(§91) / `evidence_chain.py` / `growth_bridge.py` / `evidence_scope.py` / `cli.py` |
+| 测试 | `tests/test_*.py`（63 文件，1066 项） |
 | 自主运维三清单 | `WORKPLACES.md` / `WORK_ITEMS.md` / `TIME_PLAN.md`（§90） |
 | FJ 计划/成果 | `OPTIMIZATION_PLAN_20261122.md` / `FJ_ACHIEVEMENT_REPORT_20261122.html` / 独立审计 `INDEPENDENT_AUDIT_20261122.html` |
-| 知识库 | `knowledge_base_store.json`（127 条，含 thresholds） |
-| 完整推导日志 | `commentary.md`（§1–§90） |
+| 知识库 | `knowledge_base_store.json`（128 条，含 thresholds） |
+| 完整推导日志 | `commentary.md`（§1–§91） |
 | 架构导航 | `REPOSITORY_MAP.md`（阅读顺序已指向本文件） |
-| 最近精研证据 | `audit_evosteer/`（§81-82）、`audit_mllm_failure/`（§83-84）、`audit_ultrabert/`（§85-86）、`audit_latent_taxonomies/`（§87-88）、`audit_silent_failure/`（§90） |
+| 最近精研证据 | `audit_evosteer/`（§81-82）、`audit_mllm_failure/`（§83-84）、`audit_ultrabert/`（§85-86）、`audit_latent_taxonomies/`（§87-88）、`audit_silent_failure/`（§90）、`audit_rsi_claim_audit/`（§91） |
 | 本接续文档 | `SESSION_HANDOFF.md`（本文件） |
 | git 远端 | `origin` = `https://github.com/jsyzc2019/svl-agent.git`，分支 `main` |

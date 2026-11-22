@@ -1,0 +1,32 @@
+{
+  "request_id": "rsi-claim-audit-honesty-20261122",
+  "five_pieces": [
+    "manifest.json",
+    "prereg.json",
+    "gate_prereg.json",
+    "engine.py",
+    "result.json"
+  ],
+  "files": [
+    {
+      "id": "S01",
+      "path": "downloads/S01_arxiv_abs.html",
+      "sha256": "28f7c374c4ca56991aca9d361fa07726ebe01a7705942e04d735aa07f792da2f"
+    },
+    {
+      "id": "S02",
+      "path": "downloads/S02_arxiv_full.html",
+      "sha256": "d77885addb159a276969cd7b8bc9291606d5ef313d728baf096c22fa708117c9"
+    },
+    {
+      "id": "FLAT",
+      "path": "downloads/paper_flat.txt",
+      "sha256": "7e821d86f0b422f0bc720d2f121bd0b3c1f02a0d12637be5aa50d42321f75cd0"
+    },
+    {
+      "id": "FETCH",
+      "path": "downloads/fetch_log.json",
+      "sha256": "d0d41094d7cc8515872d9b8ec344e2607e2e8a35940f1d80db8eccc029c783a1"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "request_id": "rsi-claim-audit-honesty-20261122",
+  "gate": "rsi_claim_audit_honesty",
+  "verdict": {
+    "action": "ok",
+    "code": "RSI_CLAIM_AUDIT.SELF_CONSISTENT",
+    "four_dims": {
+      "product_process_split": "yes",
+      "repeatability_audited": "yes",
+      "improver_gain_isolated": "yes",
+      "selection_unused_eval": "yes"
+    }
+  },
+  "forensic_trace": {
+    "mode": "forensic",
+    "gate": "forensic.rsi_claim_audit",
+    "evidence_scope": "primary(arXiv abs+全文,self-reported折1)",
+    "sources": [
+      "/workspace/audit_rsi_claim_audit/downloads/paper_flat.txt"
+    ],
+    "source_sha256": {
+      "paper_flat.txt": "7e821d86f0b422f0bc720d2f121bd0b3c1f02a0d12637be5aa50d42321f75cd0"
+    },
+    "inferred": {
+      "product_process_split": "yes",
+      "repeatability_audited": "yes",
+      "improver_gain_isolated": "yes",
+      "selection_unused_eval": "yes"
+    }
+  },
+  "chain_present": true,
+  "gate_live_regression": {
+    "checks": {
+      "product_process_conflation": true,
+      "repeatability_unaudited": true,
+      "improver_confound": true,
+      "selection_gap": true,
+      "partial_disclosure": true,
+      "literal_enum": true,
+      "all_good": true
+    },
+    "cases": {
+      "product_process_conflation": "downgrade/RSI_CLAIM_AUDIT.PRODUCT_PROCESS_CONFLATION",
+      "repeatability_unaudited": "downgrade/RSI_CLAIM_AUDIT.REPEATABILITY_UNAUDITED",
+      "improver_confound": "downgrade/RSI_CLAIM_AUDIT.IMPROVER_CONFOUND",
+      "selection_gap": "flag/RSI_CLAIM_AUDIT.SELECTION_UNUSED_GAP",
+      "partial_disclosure": "flag/RSI_CLAIM_AUDIT.PARTIAL",
+      "literal_enum": "flag/RSI_CLAIM_AUDIT.INVALID_INPUT",
+      "all_good": "ok/RSI_CLAIM_AUDIT.SELF_CONSISTENT"
+    },
+    "all_passed": true
+  },
+  "honest_scope": "只判RSI声称是否诚实披露四评估边界；可迁移到任何RSI/self-improvement系统；不承诺改进真实有效"
+}

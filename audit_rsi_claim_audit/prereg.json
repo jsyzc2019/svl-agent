@@ -1,0 +1,37 @@
+{
+  "request_id": "rsi-claim-audit-honesty-20261122",
+  "target": "arXiv:2610.27610v1 Auditing the Product, Not the Recursion: The Evaluation Evidence Behind Recursive Self-Improvement Claims",
+  "authors": "(RSI evaluation auditing study, full-text coding of 114 studies; 90 self-described RSI)",
+  "acquisition": {
+    "channel": "自主运维第二轮：WebSearch发现(P0-RSI话题)→arXiv abs+HTML一手下载（WORKPLACES已验证渠道）",
+    "primary": [
+      {
+        "id": "S01",
+        "url": "https://arxiv.org/abs/2610.27610",
+        "file": "downloads/S01_arxiv_abs.html"
+      },
+      {
+        "id": "S02",
+        "url": "https://arxiv.org/html/2610.27610v1",
+        "file": "downloads/S02_arxiv_full.html"
+      }
+    ],
+    "flat": "downloads/paper_flat.txt",
+    "collection_time": "2026-11-22T12:32:41.626445+08:00"
+  },
+  "analysis_before_prereg": "四维锚点词频与逐字上下文已探测；disclose必命中、红旗零误命中（探测脚本 ALL_ANCHORS_CLEAN=True）",
+  "cognitive_increment": "独立于已有127条：KB-RSI01-07覆盖RSI证据阶梯/改进者gain隔离概念，但无『审读RSI声称是否区分product/process+循环可重复性+相同起点匹配预算消融+未选择任务评估』的可编译门禁；KB-R-AUDIT01覆盖审计但非RSI专门尺子。KB-META01独立性通过",
+  "four_dimensions": [
+    "product_process_split",
+    "repeatability_audited",
+    "improver_gain_isolated",
+    "selection_unused_eval"
+  ],
+  "kb_rules": [
+    "KB-RSI07 self-reported折1",
+    "KB-R07 自洽≠有效",
+    "KB-META01 独立核验",
+    "§58选A不接run_loop"
+  ],
+  "honest_scope": "只判一个RSI声称是否诚实披露这四个评估边界；尺子可迁移到任何RSI/self-improvement系统；不判本仓；不承诺改进真实有效"
+}

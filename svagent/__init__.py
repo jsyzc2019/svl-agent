@@ -245,6 +245,11 @@ _LAZY: dict[str, tuple[str, str]] = {
     "silent_failure_honesty_live_regression": ("svagent.silent_failure_honesty", "live_regression"),
     "adjudicate_silent_failure_honesty": ("svagent.forensic_gates_ext", "adjudicate_silent_failure_honesty"),
     "forensic_gates_ext_live_regression": ("svagent.forensic_gates_ext", "live_regression"),
+    "RSIClaimAuditVerdict": ("svagent.rsi_claim_audit_honesty", "RSIClaimAuditVerdict"),
+    "check_rsi_claim_audit_honesty": ("svagent.rsi_claim_audit_honesty", "check_rsi_claim_audit_honesty"),
+    "rsi_claim_audit_honesty_live_regression": ("svagent.rsi_claim_audit_honesty", "live_regression"),
+    "adjudicate_rsi_claim_audit_honesty": ("svagent.forensic_gates_ext2", "adjudicate_rsi_claim_audit_honesty"),
+    "forensic_gates_ext2_live_regression": ("svagent.forensic_gates_ext2", "live_regression"),
 }
 
 

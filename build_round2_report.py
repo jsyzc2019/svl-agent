@@ -1,0 +1,90 @@
+"""生成 §91 自主运维第二轮成果报告 HTML（本仓里程碑报告惯例）。"""
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+
+result = json.loads((ROOT / "audit_rsi_claim_audit" / "result.json").read_text(encoding="utf-8"))
+kb_count = len(json.loads((ROOT / "knowledge_base_store.json").read_text(encoding="utf-8"))["items"])
+
+html = """<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>自主运维第二轮成果报告 · §91 RSI 声称审计诚实性</title>
+<style>
+  :root { --ink:#1a1a1a; --muted:#666; --line:#e3e3e3; --accent:#8b0000; --bg:#fafafa; --ok:#1a7f37; }
+  * { box-sizing:border-box; }
+  body { font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+         color:var(--ink); background:var(--bg); margin:0; padding:32px 24px 64px; line-height:1.7; }
+  .wrap { max-width:960px; margin:0 auto; }
+  h1 { font-size:26px; margin:0 0 6px; }
+  .sub { color:var(--muted); font-size:13px; margin-bottom:28px; }
+  h2 { font-size:19px; margin:36px 0 12px; padding-left:10px; border-left:4px solid var(--accent); }
+  table { width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+  th,td { border:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top; }
+  th { background:#f0f0f0; font-weight:600; }
+  code { background:#f2f2f2; padding:1px 5px; border-radius:4px; font-size:12.5px; }
+  .pill { display:inline-block; padding:2px 9px; border-radius:12px; font-size:12px; font-weight:600; }
+  .ok { background:#e6f4ea; color:var(--ok); }
+  .tag { background:#fdecea; color:var(--accent); }
+  ul { margin:8px 0 8px 20px; padding:0; }
+  li { margin:5px 0; }
+  .note { background:#fff8e1; border:1px solid #f0e0a0; padding:12px 16px; border-radius:6px; font-size:13.5px; }
+  .foot { margin-top:40px; color:var(--muted); font-size:12px; border-top:1px solid var(--line); padding-top:16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>自主运维第二轮成果报告 <span class="pill tag">§91</span></h1>
+  <div class="sub">arXiv:2610.27610《Auditing the Product, Not the Recursion》→ 第 30 道会拦门禁 + 第 5 道 FJ 取证入口 · 2026-11-22 · 触发：用户"你可以再试试"</div>
+
+  <h2>一、这一轮做了什么</h2>
+  <p>按三清单（WORKPLACES / WORK_ITEMS / TIME_PLAN）自主启动：晨间自检 → 从 <b>WORK_ITEMS.md 的 P0「递归自我改进 RSI」话题</b>自主发现一手料 → arXiv 取料并锁存 → 预注册 → 逐字锚点探测 → 编译门禁与取证入口 → 接合成长桥 → 全量回归 → KB 加固 → 文档同步。首日已攻"自我验证"，本轮换 P0 的 RSI 话题，验证三清单框架可复制。</p>
+  <table>
+    <tr><th>阶段</th><th>产物</th><th>实证</th></tr>
+    <tr><td>自主取料</td><td>arXiv:2610.27610v1 abs 44KB + 全文 874KB，fetch_log + SHA256</td><td>均 HTTP 200；WebSearch 自主发现</td></tr>
+    <tr><td>预注册锁存</td><td>prereg(5a9a8d72…) / gate_prereg(f3618661…) / manifest(ffec1a51…) + 三份 SHA256</td><td>先锁后看、实现前锁存</td></tr>
+    <tr><td>锚点探测</td><td>12 个逐字锚点，disclose 必命中、红旗零误命中</td><td>ALL_ANCHORS_CLEAN=True</td></tr>
+    <tr><td>编译门禁</td><td><code>svagent/rsi_claim_audit_honesty.py</code>（四维 + R0-R6 + 中文 _A 字典）</td><td>7 活体回归 + AST 自审 0 中文字面量</td></tr>
+    <tr><td>FJ 取证入口</td><td><code>svagent/forensic_gates_ext2.py</code>（法官自己读原文逐字锚点）</td><td>真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4</td></tr>
+    <tr><td>接合与验收</td><td>五道裁决 + KB fix → PDCA，消费痕迹落盘</td><td>76/76/76 一致；25 项新测试</td></tr>
+  </table>
+
+  <h2>二、新门禁判什么（四维）</h2>
+  <table>
+    <tr><th>维度</th><th>诚实披露（yes）</th><th>缺陷（no → downgrade / flag）</th><th>论文实证</th></tr>
+    <tr><td>product_process_split</td><td>区分最终系统 product 与改进过程 process 声明</td><td>把产品变好当成改进过程本身变强（层级混淆）→ downgrade</td><td>论文开篇即要求分离两类声称</td></tr>
+    <tr><td>repeatability_audited</td><td>审计两次以上完整 loop rerun</td><td>单轮即宣称可递归、可重复性无证据 → downgrade</td><td>90 篇 RSI 仅 22% 审计 ≥2 次 rerun</td></tr>
+    <tr><td>improver_gain_isolated</td><td>相同起点 artifacts + 匹配预算比较前后程序</td><td>更强初始模型/笼统比较冒充 gain → downgrade</td><td>26 篇声称改进程序者仅 4 篇如此比较</td></tr>
+    <tr><td>selection_unused_eval</td><td>未用于选择的任务上评估 + 披露三类 confound</td><td>只报选择任务 / 不披露 selection·shared-evaluator·system-state → flag</td><td>60% 在未选择任务上评估；论文提 claim-indexed standard</td></tr>
+  </table>
+  <p>取证裁决结果：<span class="pill ok">ok / RSI_CLAIM_AUDIT.SELF_CONSISTENT</span>，四维 inferred 全 yes —— 与论文诚实披露的定位一致。</p>
+
+  <h2>三、实测数据（均可复现）</h2>
+  <table>
+    <tr><th>指标</th><th>数值</th></tr>
+    <tr><td>全量测试</td><td>1041 → <b>1066 passed</b>（+25，全绿）</td></tr>
+    <tr><td>门禁数 / 测试文件 / 模块</td><td>30 道 / 63 文件 / 78 模块</td></tr>
+    <tr><td>知识库</td><td>127 → <b>128 条</b>（新增 KB-AUDIT33，可编译 fix）</td></tr>
+    <tr><td>证据链</td><td>34 目录，五件套齐全 17，三锁完整 14（断言随成长 33→34，不放宽）</td></tr>
+    <tr><td>成长桥消费痕迹</td><td>76 机会 / 76 痕迹 / PDCA 实收 76</td></tr>
+    <tr><td>五道取证裁决</td><td>全部 ok（criterion / verification / proof / silent_failure / rsi_claim_audit）</td></tr>
+  </table>
+
+  <h2>四、诚实边界</h2>
+  <div class="note">
+    新门禁只判「RSI 声称是否诚实披露四个评估边界」，可迁移到任何 RSI / self-improvement 系统，<b>不判本仓</b>；论文中的增益数字按 KB-RSI07 self-reported 折 1；只判声明自洽，<b>不承诺改进真实有效</b>（KB-R07 / META01）。遵循 §58 选 A 不接 run_loop；篡改测试只在临时副本；未改动任何历史证据。
+  </div>
+
+  <h2>五、成熟度观察</h2>
+  <p>连续两轮自主运维（§90 silent_failure + §91 rsi_claim_audit）证明：三清单框架可复制、全链闭环可回放、数字真实、凭据自管。基础设施就绪度稳定在 <b>L2 边缘偏上</b>（取证真实、闭环可消费、话题自主发现）；仍<b>不宣称 L3</b> —— 保留「北极星由人设定」这一价值边界（KB-META03），不把"可自主执行"读成"可自主设定终极目标"。</p>
+
+  <div class="foot">rsv = rsi-claim-audit-honesty-20261122 · 证据目录 audit_rsi_claim_audit/ · 报告 build_round2_report.py 生成</div>
+</div>
+</body>
+</html>
+"""
+(ROOT / "ROUND2_ACHIEVEMENT_REPORT_20261122.html").write_text(html, encoding="utf-8")
+print("报告已生成:", ROOT / "ROUND2_ACHIEVEMENT_REPORT_20261122.html")
+print("result verdict:", result["verdict"]["action"], "| KB:", kb_count)
