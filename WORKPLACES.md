@@ -33,7 +33,7 @@
 3. **逐字锚点**：FJ 取证入口的锚点必须来自原文探测（disclose 命中、红旗零误命中），不可编造或放宽。
 4. **交叉验证**：重大声称至少两个独立来源；评估器数量 ≠ 独立判断数（KB-STRUCT07）。
 5. **诚实折算**：self-reported 数字按 KB-RSI07 折 1；只判机制声明自洽，不承诺真实有效。
-6. **网络兜底**：GitHub DNS 偶发不可达，用 `curl --resolve` 探测可达 IP → 临时写 `/etc/hosts` → 用完立即恢复（见凭据与网络说明）。
+6. **网络兜底**：GitHub DNS 偶发不可达，用 `curl --resolve` 探测可达 IP → 临时写 `/etc/hosts` → 用完立即恢复（见凭据与网络说明）。若 push 报 `Operation too slow`（低速限制触发），去掉 `GIT_HTTP_LOW_SPEED_LIMIT`、加 `http.postBuffer=524288000` + `http.version=HTTP/1.1` 重试（§91 实证）；IP 优先试 `20.27.177.113`（多轮可达），`20.205.243.166` 时通时不通。
 
 ## 4. 凭据自管（"Github 和本地就是常住地"）
 
