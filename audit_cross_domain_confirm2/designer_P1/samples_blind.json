@@ -1,0 +1,94 @@
+{
+  "samples": [
+    {
+      "id": "N01",
+      "text_a": "Each pair varies a single condition in an otherwise fixed setup, yielding two mutually exclusive expected outcomes.",
+      "text_b": "Each pair varies a single condition in an otherwise fixed setup, yielding two mutually exclusive expected outcomes."
+    },
+    {
+      "id": "N02",
+      "text_a": "Both Cosmos models combine understanding and generation, yet their ability to infer experimental outcomes in text does not reliably carry over to video generation.",
+      "text_b": "The two Cosmos models predict both outcomes correctly in text far more often than they depict them correctly in video."
+    },
+    {
+      "id": "N03",
+      "text_a": "Across all ten models, we find that the two videos in an experimental pair frequently depict the same outcome even though the conditions require different results.",
+      "text_b": "Across all ten models, we find that the two videos in an experimental pair frequently depict the same outcome even though the conditions require different results."
+    },
+    {
+      "id": "N04",
+      "text_a": "Half of the pairs use an identical first frame, so the condition is specified only in text.",
+      "text_b": "Half of the pairs use an identical first frame, so the condition is specified only in text."
+    },
+    {
+      "id": "N05",
+      "text_a": "Generating the correct outcome under one condition therefore does not establish that the model understands how the experimental condition affects the outcome.",
+      "text_b": "Physically correct motion alone, however, does not establish that the model derived the outcome from the given conditions through causal reasoning."
+    },
+    {
+      "id": "N06",
+      "text_a": "A pair is scored as correct only when both videos depict their respective scientifically correct outcomes.",
+      "text_b": "A pair passes only if both videos depict the scientifically correct outcomes for their respective conditions."
+    },
+    {
+      "id": "N07",
+      "text_a": "Each pair varies a single condition in an otherwise fixed setup, yielding two mutually exclusive expected outcomes.",
+      "text_b": "Each pair holds the setup fixed and varies one condition, with mutually exclusive expected outcomes."
+    },
+    {
+      "id": "N08",
+      "text_a": "A pair is scored as correct only when both videos depict their respective scientifically correct outcomes.",
+      "text_b": "A pair is scored as correct only when both videos depict their respective scientifically correct outcomes."
+    },
+    {
+      "id": "N09",
+      "text_a": "Half of the pairs use an identical first frame, so the condition is specified only in text.",
+      "text_b": "Half of the pairs use an identical first frame, so the condition is specified in text."
+    },
+    {
+      "id": "N10",
+      "text_a": "Half of the pairs use an identical first frame, so the condition is specified only in text.",
+      "text_b": "When the two conditions share a first frame and differ only in text, PA ranges from 0.0% to 18.9%."
+    },
+    {
+      "id": "N11",
+      "text_a": "Across all ten models, we find that the two videos in an experimental pair frequently depict the same outcome even though the conditions require different results.",
+      "text_b": "Models often repeat the same outcome under both conditions, particularly when the first frame is shared and only the text distinguishes the two inputs."
+    },
+    {
+      "id": "N12",
+      "text_a": "Both Cosmos models combine understanding and generation, yet their ability to infer experimental outcomes in text does not reliably carry over to video generation.",
+      "text_b": "Both Cosmos models combine understanding and generation, yet their ability to infer experimental outcomes in text does reliably carry over to video generation."
+    },
+    {
+      "id": "N13",
+      "text_a": "Both Cosmos models combine understanding and generation, yet their ability to infer experimental outcomes in text does not reliably carry over to video generation.",
+      "text_b": "Both Cosmos models combine understanding and generation, yet their ability to infer experimental outcomes in text does not reliably carry over to video generation."
+    },
+    {
+      "id": "N14",
+      "text_a": "A pair is scored as correct only when both videos depict their respective scientifically correct outcomes.",
+      "text_b": "A pair is scored as correct when both videos depict their respective scientifically correct outcomes."
+    },
+    {
+      "id": "N15",
+      "text_a": "Across all ten models, we find that the two videos in an experimental pair frequently depict the same outcome even though the conditions require different results.",
+      "text_b": "Across all models, we find that the two videos in an experimental pair frequently depict the same outcome even though the conditions require different results."
+    },
+    {
+      "id": "N16",
+      "text_a": "Generating the correct outcome under one condition therefore does not establish that the model understands how the experimental condition affects the outcome.",
+      "text_b": "Generating the correct outcome under one condition therefore does establish that the model understands how the experimental condition affects the outcome."
+    },
+    {
+      "id": "N17",
+      "text_a": "Generating the correct outcome under one condition therefore does not establish that the model understands how the experimental condition affects the outcome.",
+      "text_b": "Generating the correct outcome under one condition therefore does not establish that the model understands how the experimental condition affects the outcome."
+    },
+    {
+      "id": "N18",
+      "text_a": "Each pair varies a single condition in an otherwise fixed setup, yielding two mutually exclusive expected outcomes.",
+      "text_b": "Each pair varies a condition in an otherwise fixed setup, yielding two mutually exclusive expected outcomes."
+    }
+  ]
+}

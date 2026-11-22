@@ -1,0 +1,185 @@
+{
+  "annotator_note": "从论文中挑选逐字连续、长度合规且含可删关键成分的完整句作 claim。clean 为原句副本；tampered 只删去一个成分（single、only、ten 或 not），其余字符逐字保留，删后通顺但语义改变；canary 选论文中语义相近、看似支持 claim 却非其逐字复述的另一连续原句。",
+  "samples": [
+    {
+      "id": "S01_clean",
+      "orig_id": "S01",
+      "variant": "clean",
+      "claim": "Each pair varies a single condition in an otherwise fixed setup, yielding two mutually exclusive expected outcomes.",
+      "evidence": "Each pair varies a single condition in an otherwise fixed setup, yielding two mutually exclusive expected outcomes.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S01_tampered",
+      "orig_id": "S01",
+      "variant": "tampered",
+      "claim": "Each pair varies a single condition in an otherwise fixed setup, yielding two mutually exclusive expected outcomes.",
+      "evidence": "Each pair varies a condition in an otherwise fixed setup, yielding two mutually exclusive expected outcomes.",
+      "ground_truth_supported": false,
+      "deleted_span": "single",
+      "deletion_class": "non_negation_qualifier"
+    },
+    {
+      "id": "S01_canary",
+      "orig_id": "S01",
+      "variant": "canary",
+      "claim": "Each pair varies a single condition in an otherwise fixed setup, yielding two mutually exclusive expected outcomes.",
+      "evidence": "Each pair holds the setup fixed and varies one condition, with mutually exclusive expected outcomes.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S02_clean",
+      "orig_id": "S02",
+      "variant": "clean",
+      "claim": "A pair is scored as correct only when both videos depict their respective scientifically correct outcomes.",
+      "evidence": "A pair is scored as correct only when both videos depict their respective scientifically correct outcomes.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S02_tampered",
+      "orig_id": "S02",
+      "variant": "tampered",
+      "claim": "A pair is scored as correct only when both videos depict their respective scientifically correct outcomes.",
+      "evidence": "A pair is scored as correct when both videos depict their respective scientifically correct outcomes.",
+      "ground_truth_supported": false,
+      "deleted_span": "only",
+      "deletion_class": "non_negation_qualifier"
+    },
+    {
+      "id": "S02_canary",
+      "orig_id": "S02",
+      "variant": "canary",
+      "claim": "A pair is scored as correct only when both videos depict their respective scientifically correct outcomes.",
+      "evidence": "A pair passes only if both videos depict the scientifically correct outcomes for their respective conditions.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S03_clean",
+      "orig_id": "S03",
+      "variant": "clean",
+      "claim": "Across all ten models, we find that the two videos in an experimental pair frequently depict the same outcome even though the conditions require different results.",
+      "evidence": "Across all ten models, we find that the two videos in an experimental pair frequently depict the same outcome even though the conditions require different results.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S03_tampered",
+      "orig_id": "S03",
+      "variant": "tampered",
+      "claim": "Across all ten models, we find that the two videos in an experimental pair frequently depict the same outcome even though the conditions require different results.",
+      "evidence": "Across all models, we find that the two videos in an experimental pair frequently depict the same outcome even though the conditions require different results.",
+      "ground_truth_supported": false,
+      "deleted_span": "ten",
+      "deletion_class": "non_negation_qualifier"
+    },
+    {
+      "id": "S03_canary",
+      "orig_id": "S03",
+      "variant": "canary",
+      "claim": "Across all ten models, we find that the two videos in an experimental pair frequently depict the same outcome even though the conditions require different results.",
+      "evidence": "Models often repeat the same outcome under both conditions, particularly when the first frame is shared and only the text distinguishes the two inputs.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S04_clean",
+      "orig_id": "S04",
+      "variant": "clean",
+      "claim": "Half of the pairs use an identical first frame, so the condition is specified only in text.",
+      "evidence": "Half of the pairs use an identical first frame, so the condition is specified only in text.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S04_tampered",
+      "orig_id": "S04",
+      "variant": "tampered",
+      "claim": "Half of the pairs use an identical first frame, so the condition is specified only in text.",
+      "evidence": "Half of the pairs use an identical first frame, so the condition is specified in text.",
+      "ground_truth_supported": false,
+      "deleted_span": "only",
+      "deletion_class": "non_negation_qualifier"
+    },
+    {
+      "id": "S04_canary",
+      "orig_id": "S04",
+      "variant": "canary",
+      "claim": "Half of the pairs use an identical first frame, so the condition is specified only in text.",
+      "evidence": "When the two conditions share a first frame and differ only in text, PA ranges from 0.0% to 18.9%.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S05_clean",
+      "orig_id": "S05",
+      "variant": "clean",
+      "claim": "Both Cosmos models combine understanding and generation, yet their ability to infer experimental outcomes in text does not reliably carry over to video generation.",
+      "evidence": "Both Cosmos models combine understanding and generation, yet their ability to infer experimental outcomes in text does not reliably carry over to video generation.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S05_tampered",
+      "orig_id": "S05",
+      "variant": "tampered",
+      "claim": "Both Cosmos models combine understanding and generation, yet their ability to infer experimental outcomes in text does not reliably carry over to video generation.",
+      "evidence": "Both Cosmos models combine understanding and generation, yet their ability to infer experimental outcomes in text does reliably carry over to video generation.",
+      "ground_truth_supported": false,
+      "deleted_span": "not",
+      "deletion_class": "negation_flip"
+    },
+    {
+      "id": "S05_canary",
+      "orig_id": "S05",
+      "variant": "canary",
+      "claim": "Both Cosmos models combine understanding and generation, yet their ability to infer experimental outcomes in text does not reliably carry over to video generation.",
+      "evidence": "The two Cosmos models predict both outcomes correctly in text far more often than they depict them correctly in video.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S06_clean",
+      "orig_id": "S06",
+      "variant": "clean",
+      "claim": "Generating the correct outcome under one condition therefore does not establish that the model understands how the experimental condition affects the outcome.",
+      "evidence": "Generating the correct outcome under one condition therefore does not establish that the model understands how the experimental condition affects the outcome.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S06_tampered",
+      "orig_id": "S06",
+      "variant": "tampered",
+      "claim": "Generating the correct outcome under one condition therefore does not establish that the model understands how the experimental condition affects the outcome.",
+      "evidence": "Generating the correct outcome under one condition therefore does establish that the model understands how the experimental condition affects the outcome.",
+      "ground_truth_supported": false,
+      "deleted_span": "not",
+      "deletion_class": "negation_flip"
+    },
+    {
+      "id": "S06_canary",
+      "orig_id": "S06",
+      "variant": "canary",
+      "claim": "Generating the correct outcome under one condition therefore does not establish that the model understands how the experimental condition affects the outcome.",
+      "evidence": "Physically correct motion alone, however, does not establish that the model derived the outcome from the given conditions through causal reasoning.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    }
+  ]
+}

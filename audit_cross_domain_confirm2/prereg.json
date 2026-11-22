@@ -1,0 +1,47 @@
+{
+  "experiment": "§108 跨集复现 + 外部时间戳锚（§107 STRATIFIED_CONFIRMED 的第二独立确认集）",
+  "timestamp": "2026-11-22T18:05:00+08:00",
+  "locked_before_spawn": true,
+  "lineage": "§106 post-hoc 分层(非否定限定 gap1.0/否定 gap0.0)→发现集取证不得翻案(KB-META14)；§107 换独立确认集A(2611.22027 GauntletScore)+预注册分层 PRIMARY→STRATIFIED_CONFIRMED(PRIMARY1.0/SECONDARY0.0/P1.core1.0)。但 §107 仅单一确认集，无跨集复现，故 l3=false。§108 换全新确认集B(2611.20899 SciWorldBench)做第二次独立确认——这次 additionally 把承诺锚到 GitHub 远端（外部时间戳），加固'承诺先于执行'的可证伪性。",
+  "why_second_confirmation_set": "统计纪律：单一确认集的显著结果可能是该集特有噪声。§108 用第三篇全新论文(2611.20899，与发现集2611.14326、确认集A 2611.22027 都不同)+独立标注者构造同构样本(6claim×clean/tampered/canary，2否定翻转+4非否定限定，标注者不知任何分层假设)，检验 §107 分层效应能否跨集复现。若复现，正类取向随任务目的翻转的效应获跨集稳健性；若不复现，如实记 REFUTED/INCONCLUSIVE，不因 §107 已 CONFIRMED 而粉饰。",
+  "external_time_anchor": "全部预注册锁 + 裁决器 engine.py 的 sha256 汇总进 commitment.json，spawn 设计者前 commit+push 到 GitHub 远端。GitHub 服务器提交时间戳证明'承诺先于看到设计者结果'，本 Agent 无法事后回改承诺而不留远端历史痕迹。诚实边界：这是外部不可篡改时间锚（承诺承诺的可证伪性），不是外部执行者/orchestrator——PAT 仅 repo scope 无 workflow scope，GitHub Actions 通道不可达（audit_external_orchestrator/BLOCKERS.md）；裁决仍在本沙箱同厂商环境执行。因此即使跨集复现成功仍 l3=false。",
+  "design": {
+    "type": "跨集复现确认：单变量=任务目的语义(3水平)，主指标在 tampered 非否定限定子集上计算（与§107逐字一致的判据）",
+    "factor": "注入给独立设计者的任务目的叙事：P0=无目的结构基线 / P1=忠实性核查目的 / P2=近似重复目的（与§106/§107逐字一致）",
+    "held_fixed": [
+      "18条确认集B样本逐字相同(论文2611.20899, source=5c9321251a23fcd1)",
+      "字段统一中性 text_a/text_b（§104 脚手架已抽除）",
+      "id 中性化 N01..N18 固定种子 261122108 打乱（§106=261122106, §107=261122107）",
+      "gt 按 (text_a,text_b) 文本反查不落盘到设计者目录（物理隔离）",
+      "三条件技术要求/返回格式/叙事长度对称（逐字复用 §107 purpose.md）",
+      "准入审计（词边界+剥离注释）+ decision==gt 评分口径统一",
+      "裁决器 engine.py 在 spawn 前写完并锁 sha256，承诺锚先于设计者产出"
+    ],
+    "deletion_class_map": "scorer_key.json 私有保存每条 tampered 的 deletion_class，设计者不可见；engine 据此分层",
+    "isolated_spawn": "三个全新 context 独立设计者，互不知对方、不获知历史结果、不读 variant/gt/deletion_class、只读各自目录裸样本+自身目的叙事",
+    "model_routing": "P0=default / P1=reasoning / P2=lite（与§107同路由；诚实边界：仍同厂商同 Agent spawn）"
+  },
+  "metric": {
+    "dT": "某条件在指定 tampered 子集上 decision=True 的比例",
+    "PRIMARY_non_negation_gap": "|dT(P1)-dT(P2)| 在 deletion_class=non_negation_qualifier 子集(4条)上；门槛≥0.8（与§107同）",
+    "SECONDARY_negation_gap": "|dT(P1)-dT(P2)| 在 deletion_class=negation_flip 子集(2条)上；预期≤0.3",
+    "core": "clean+tampered 的 decision==gt 准确率（P1 期望≥0.9）",
+    "P0_floor": "P0 无目的 core≤0.6 或 dT(P0,全集tampered)≥0.8（地板/默认近逐字正类）",
+    "note": "PRIMARY 是唯一主裁决指标（事前锁定）；全集 orient_gap 降为诊断不参与裁决（KB-META14）。"
+  },
+  "verdict_rules": [
+    "CROSS_SET_REPRODUCED：PRIMARY≥0.8 且 SECONDARY≤0.3 且 P1.core≥0.9 且 P0_floor → §107 分层效应在第二独立确认集复现，跨集稳健性成立",
+    "CROSS_SET_PARTIAL：PRIMARY≥0.8 但 SECONDARY>0.3 或 P1.core<0.9 或 P0 非地板 → 主效应复现但完整模式不成立",
+    "CROSS_SET_REFUTED：PRIMARY<0.3 → §107 效应未跨集复现，可能是确认集A特有噪声，如实记 REFUTED",
+    "CROSS_SET_INCONCLUSIVE：准入不过 / PRIMARY 中等(0.3~0.8) / 地板掩盖无法归因 → 诚实标注"
+  ],
+  "hard_bound": "即使 CROSS_SET_REPRODUCED 也不宣布 L3/absolute：外部 orchestrator 不可达(无 workflow scope)、异厂商 evaluator 不可达(无 API key)、三设计者仍由本 Agent spawn(同厂商 Hunyuan)、解释环节本 Agent；外部时间戳锚只保证承诺先于执行，不保证执行者独立。跨两确认集复现加固了效应稳健性，但'确认一个具体分层效应'与'系统达到 L3'严格分离(KB-META15)。",
+  "discipline": [
+    "先锁预注册/样本哈希/scorer_key/三份裸样本/engine.py，再 commit+push commitment 锚，再 spawn 设计者",
+    "不采信设计者自报，import 源码用冻结 gt 盲评重跑",
+    "主指标=PRIMARY 事前锁定并经远端时间戳锚定，禁止事后改用全集/其他子集指标翻案（KB-META14/KB-R）",
+    "不编译新门禁（受控实验轮，最高杠杆≠最高产出数 KB-META10）",
+    "§58 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守"
+  ],
+  "no_new_gate": "本轮不编译新门禁，只做跨集复现确认 + 外部时间戳锚 + 回放测试 + KB + 文档同步"
+}

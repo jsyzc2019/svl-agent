@@ -1,0 +1,22 @@
+{
+  "experiment": "§108 跨集复现确认 + 外部时间戳锚",
+  "paper": "arXiv:2611.20899 SciWorldBench（2026-11-16，从未用过）",
+  "source_sha256": "5c9321251a23fcd1cb3033efbb7736824b2669ec300d06e3153e5aee96a22dd5",
+  "confirmation_set_sha256": "5374af09c7ea03023d2e10c950f5d4254284ac22f0ccc735099277311f7532ba",
+  "seed": 261122108,
+  "conditions": [
+    "P0(default)",
+    "P1(reasoning)",
+    "P2(lite)"
+  ],
+  "locked_files": [
+    "prereg.json",
+    "gate_prereg.json",
+    "manifest.json",
+    "scorer_key.json",
+    "engine.py",
+    "designer_P0/samples_blind.json",
+    "designer_P1/samples_blind.json",
+    "designer_P2/samples_blind.json"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "experiment": "§108 跨集复现 + 外部时间戳锚",
+  "purpose": "spawn 设计者前锁定全部预注册输入与裁决器源码；本 commit 的 GitHub 服务器时间戳 = 承诺先于执行的外部证据",
+  "locked_sha256": {
+    "prereg": "4e61f42c90a0585d1b7b8d7c51c3a0f49ac481d8b5ca0205f35a96cf52515789",
+    "gate_prereg": "223be56cae54b16772c96dfe9192feb6ca4608e4386f96b48b97a479cff79d4d",
+    "manifest": "6ff7e2b69da78e06a5e5d70c1b1c79e9a1bceae539bcad3fbe11ce8ff0cea954",
+    "scorer_key": "42be0b88e00d468bcb0f7be9a7a3db5713d13608b827706bba144d9f23e4780d",
+    "engine": "730c93d906645371443f750caac8b7ebb66d7333cf19835224be4fd4004be812",
+    "samples_blind": "82c9966b990a9b641bf7e4e36f397115e6e2284893480bf2967e6193221cd2e8"
+  },
+  "source_sha256": "5c9321251a23fcd1cb3033efbb7736824b2669ec300d06e3153e5aee96a22dd5",
+  "confirmation_set_sha256": "5374af09c7ea03023d2e10c950f5d4254284ac22f0ccc735099277311f7532ba",
+  "seed": 261122108,
+  "verdict_rules": [
+    "CROSS_SET_REPRODUCED：PRIMARY≥0.8 且 SECONDARY≤0.3 且 P1.core≥0.9 且 P0_floor → §107 分层效应在第二独立确认集复现，跨集稳健性成立",
+    "CROSS_SET_PARTIAL：PRIMARY≥0.8 但 SECONDARY>0.3 或 P1.core<0.9 或 P0 非地板 → 主效应复现但完整模式不成立",
+    "CROSS_SET_REFUTED：PRIMARY<0.3 → §107 效应未跨集复现，可能是确认集A特有噪声，如实记 REFUTED",
+    "CROSS_SET_INCONCLUSIVE：准入不过 / PRIMARY 中等(0.3~0.8) / 地板掩盖无法归因 → 诚实标注"
+  ],
+  "note": "本文件一旦 push，本 Agent 无法事后修改任何被锁文件而不破坏 sha256 一致性（回放测试会验）。"
+}
