@@ -1,7 +1,7 @@
 # 会话接续文档（SESSION HANDOFF）
 
 > 本文件用于新旧会话接续。新会话开始后，**先读本文件**，再按"接续后第一件事"操作。
-> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 18:20 (GMT+8)——**§108 跨集复现+外部时间戳锚（外部承诺锚已推送 b8daa96，实验与文档待本轮收尾推送）**。
+> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 18:22 (GMT+8)——**§108 跨集复现+外部时间戳锚完成并已推送（外部锚 b8daa96 + 实验文档 d02f012），无遗留推送任务**。
 > 上一会话终点：§102 自主运维第十三轮已推送（d21bfee）；本次完成 §103 自主运维第十四轮（用户"D的设计者拟可进一步放松"→判读为"抽引导脚手架非降验收门槛"→复用 §100 冻结 claim/evidence + 抽 prompt 规则词 + id 中性化打乱 + gt 文本反查物理隔离→两个全新 context 设计者从零归纳→D1b 核心 12/12 全对且与 G/D0 一致强加固 §102、D1a 暴露"正类取哪层"任务解释自由度 core 0.5→DESTEER_PARTIAL→不编译新门禁 + l3=false），已推送（`42d3978`）。
 
 ---
@@ -23,7 +23,7 @@
 
 **§108 自主运维第十九轮**：用户"按真正冲击去做"→先审计冲击 L3 两必要条件可达性：**外部 orchestrator 不可达**（三 token 全 `repo` scope，GitHub 拒绝 PAT 建 workflow；远端无现成 workflow）、**异厂商 evaluator 不可达**（无任何 LLM API key）——如实留档 `audit_external_orchestrator/BLOCKERS.md`，不伪造。改做可达最大增量：① **外部时间戳锚**——spawn 前把全部预注册锁+裁决器 sha256 汇总 commitment.json commit+push 远端（锚 `b8daa96`，GitHub 服务器时间戳 10:03:01Z），设计者 mtime 18:07+ 全晚于锚，回放断言锚内哈希一致（事后回改必被发现）；② **第三独立确认集跨集复现**——全新论文 2611.20899 SciWorldBench+独立标注者同构样本，盲评 PRIMARY=1.0/SECONDARY=0.0 跨集复现 §107，但 **P0 地板消失**（core 0.5→1.0 自归纳出正确判据）+canary 能力对照失效 → 按预注册树落 **CROSS_SET_PARTIAL**，不翻案 REPRODUCED；时间锚≠执行者独立，仍 l3=false。知识库 **158 条**，测试 **1380 passed**（全绿，§108 新增 12 项）。**不编译新门禁**。
 
-**§88–§107 均已推送**；§108 外部承诺锚已推送（远端 main = `b8daa96`），实验与文档收尾待本轮推送。凭据自管闭环十九轮实证（见 §5）。
+**§88–§108 均已推送**（远端 main = 本地 HEAD = `d02f012`，`git status -sb` 无 ahead）。凭据自管闭环十九轮实证（见 §5）。**无遗留推送任务。**
 
 ---
 
@@ -255,13 +255,13 @@ Post-hoc 分层取证（解释主指标为何未达，**不改裁决**）：非�
 
 **增量②第三独立确认集 + 跨集复现**：换第三篇全新论文 arXiv:2611.20899 SciWorldBench（视频世界模型 benchmark，与 2611.14326/2611.22027 都不同），一手取料 source `5c932125…`；独立标注者只读论文全文、不知分层假设，构造同构 6 claim×clean/tampered/canary（2 否定+4 非否定，哈希 `5374af09…`，逐字核验零自咬）。三条件 purpose.md 与 §107 逐字一致（唯一变量=任务目的语义），种子换 `261122108`。盲评（import 源码+冻结 gt，不采信自报，准入全过）：P0 无目的词级单删除检测**自归纳出正确判据** core1.00/dT0.0（地板消失）/P1 忠实性 core1.00/P2 近似重复 Jaccard+否定极性 core0.67。**裁决 CROSS_SET_PARTIAL**：PRIMARY=1.0≥0.8（非否定限定 P1 dT=0/P2 dT=1，4/4 逐样本相反，跨集复现 §107）、SECONDARY=0.0≤0.3（跨集复现）、P1.core=1.0，但 **P0 地板未达标**（core 1.0/dT 0.0）——按预注册树落 PARTIAL，绝不因 PRIMARY 达标翻案 REPRODUCED。附加诚实发现：能力对照本轮**不成立**（canary 三条件逐样本不一致，N02/N05 P2 判 0、N10/N11 P1 判 0），与 §107 全一致不同，model 能力替代解释未能排除，但 PRIMARY 4/4 逐样本相反仍是目的语义直接证据。**核心洞察**：§106/§107 的"教科书式完美三层模式"是样本特异的，第三集暴露只有核心分量稳健、辅助对照（P0 地板、能力一致）不稳健——分层陈述，不选择性只报存活分量（KB-META16）。
 
-**验收**：12 项回放测试全过（锚完整性+PARTIAL 不翻案+P0 地板消失+能力对照失效+不宣布 L3；一次自咬：result.seed 字段是 prereg 描述串，改测试从 manifest 读数字 seed、不动已锁 prereg）；全量 1368→1380 passed（+12）；链审 50→52 / 33→34 / 三锁 30→31 按实测更新断言不放宽；KB 156→158（KB-AUDIT50 跨集复现+外部时间锚 fix + KB-META16 单集完美模式样本特异 preserve）；成长桥重建消费痕迹 94 opportunities/47 deferred。**不编译新门禁**。**l3=false/absolute=false**：外部 orchestrator/异厂商 evaluator 不可达、时间锚≠执行者独立、三设计者仍本 Agent spawn（同厂商）、解释环节本 Agent——跨集复现加固效应稳健性≠系统成熟度（KB-META15/16）。commentary §108、README、REPOSITORY_MAP、TIME_PLAN 同步；报告 `ROUND19_ACHIEVEMENT_REPORT_20261122.html`。遵循 §58 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。**当前状态**：外部承诺锚已推送（`b8daa96`），实验与文档收尾待本轮提交推送（见 §5）。
+**验收**：12 项回放测试全过（锚完整性+PARTIAL 不翻案+P0 地板消失+能力对照失效+不宣布 L3；一次自咬：result.seed 字段是 prereg 描述串，改测试从 manifest 读数字 seed、不动已锁 prereg）；全量 1368→1380 passed（+12）；链审 50→52 / 33→34 / 三锁 30→31 按实测更新断言不放宽；KB 156→158（KB-AUDIT50 跨集复现+外部时间锚 fix + KB-META16 单集完美模式样本特异 preserve）；成长桥重建消费痕迹 94 opportunities/47 deferred。**不编译新门禁**。**l3=false/absolute=false**：外部 orchestrator/异厂商 evaluator 不可达、时间锚≠执行者独立、三设计者仍本 Agent spawn（同厂商）、解释环节本 Agent——跨集复现加固效应稳健性≠系统成熟度（KB-META15/16）。commentary §108、README、REPOSITORY_MAP、TIME_PLAN 同步；报告 `ROUND19_ACHIEVEMENT_REPORT_20261122.html`。遵循 §58 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。**当前状态**：已本地提交并推送到远端 main（`b8daa96` 外部锚 + `d02f012` 实验文档，`git status -sb` 无 ahead），凭据自管闭环第十九轮实证（见 §5）。
 
 ---
 
 ## 5. ✅ 已完成：远端推送
 
-**最新推送状态**：2026-11-22 18:06 (GMT+8) §108 外部承诺锚推送成功（凭据自管闭环第十九轮实证）。`git push origin main` → `8b74b8e..b8daa96 main -> main`（换 IP `20.27.177.113` 后 3 秒成功，首次 `140.82.113.4` 遇 3 分钟超时）。**GitHub API 独立核验**：远端 commit `b8daa9644db38555cb3c4b06e713623d039e76aa`，服务器 committer.date `2026-11-22T10:03:01Z`（外部时间锚证据）。**§108 实验与文档收尾待本轮提交推送**。凭据取上传区最新 token，临时 hosts + askpass 用后即删（0 残留），postBuffer 1GB + HTTP/1.1 + 禁低速。**系统安全红线全程遵守**。详见 §4u。（上一条：2026-11-22 17:51 §107 推送 `ebd8dcd..83ce62d`，见 §4t。）
+**最新推送状态**：2026-11-22 18:06 (GMT+8) §108 外部承诺锚推送成功（凭据自管闭环第十九轮实证）。`git push origin main` → `8b74b8e..b8daa96 main -> main`（换 IP `20.27.177.113` 后 3 秒成功，首次 `140.82.113.4` 遇 3 分钟超时）。**GitHub API 独立核验**：远端 commit `b8daa9644db38555cb3c4b06e713623d039e76aa`，服务器 committer.date `2026-11-22T10:03:01Z`（外部时间锚证据）。**2026-11-22 18:15 (GMT+8) §108 实验与文档收尾推送成功**：`git push origin main` → `b8daa96..d02f012 main -> main`（3 秒）。**GitHub API 独立核验远端 main sha = d02f0122887ff94d3c78df90f33aa71819f2ee81**，与本地一致、无 ahead。凭据取上传区最新 token，临时 hosts（`20.27.177.113`）+ askpass 用后即删（0 残留），postBuffer 1GB + HTTP/1.1 + 禁低速。**系统安全红线全程遵守**。详见 §4u。（上一条：2026-11-22 17:51 §107 推送 `ebd8dcd..83ce62d`，见 §4t。）
 
 **上一轮推送状态**：2026-11-22 17:37 (GMT+8) 推送成功（§106 自主运维第十七轮，凭据自管闭环第十七轮实证）。`git push origin main` → `90196dd..2a0a597 main -> main`（5 秒）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = 远端 main = `2a0a597efac4…`（**GitHub API 独立核验远端 main sha = 2a0a597efac40cd111d4f2c44fafa84b0fa7ccb2**，与本地一致；git ls-remote 后探因网络抖动 TLS 中断，但 push 输出明确 + API 核验一致）。凭据取上传区最新 token，临时 hosts+askpass 用后即删（0 残留）。**推送抖动处置**：前 3 次失败——① 直连 TCP 135s 连接超时；② hosts `20.205.243.166` 150s 硬超时；③ hosts `20.27.177.113` GnuTLS TLS 中途断开（1m30s，但连接层已通=有进展）；④ 换 §105 成功过的 `140.82.113.4` + postBuffer 提到 **1GB** + 禁低速限制 → 5 秒一次成功。关键经验：TLS 中途断开时增大 `http.postBuffer`（524MB→1GB）比换 IP 更有效。`git reset --soft` 撤销了 KB indent=1 的噪音提交，重提保持 indent=2 干净 diff（KB 相对远端仅 +55 行纯新增）。**系统安全红线全程遵守**。详见 §4s。
 
@@ -349,13 +349,13 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 - [x] ✅ 提交并推送 §106（`2a0a597`，凭据自管闭环第十七轮实证，API 独立核验远端=本地，见 §4s/§5）。
 - [x] ✅ 提交并推送 §107（`83ce62d`，凭据自管闭环第十八轮实证，API 独立核验远端=本地，见 §4t/§5）。
 - [x] ✅ §108 跨集复现+外部时间戳锚（回应"按真正冲击去做"：先审计外部 orchestrator/异厂商 evaluator 均不可达留档 BLOCKERS.md；外部锚 b8daa96 服务器 10:03:01Z 证明承诺先于执行；第三确认集 2611.20899 跨集复现 PRIMARY1.0 但 P0 地板消失→CROSS_SET_PARTIAL 不翻案；时间锚≠执行者独立仍 l3=false，见 §4u）。
-- [x] ✅ §108 外部承诺锚已推送（`b8daa96`，凭据自管闭环第十九轮实证，GitHub API 独立核验服务器时间戳，见 §4u/§5）；实验与文档收尾待本轮推送。
+- [x] ✅ §108 提交并推送（`b8daa96` 外部锚 + `d02f012` 实验文档，凭据自管闭环第十九轮实证，GitHub API 独立核验远端=本地，见 §4u/§5）。
 - [x] ✅ 提交并推送 §102（`d21bfee`，凭据自管闭环第十三轮实证，网络抖动换 IP 成功，见 §4o/§5）。
 - [ ] 达成 L3 的受控验证（KB-META05 三路径）：①同一任务起点+相同预算对照 §89 前填表裁判 vs 之后 FJ 取证流程（§98 已执行）；②引入本仓外 common-data/第三方 evaluator（§100–§102 逐步推进但仍 structural proxy；**§108 审计确认当前沙箱凭据下外部 orchestrator 无 workflow scope、异厂商 evaluator 无 API key，均不可达，留档 BLOCKERS.md**）；③量化 improver gain 证明改进机制本身使后续增益更大（§98 improver_gain=1.0 已量化）。**当前诚实结论**：三路径均已部分推进，但同模型家族/spawn 权/解释环节本 Agent 残余仍在，外部独立执行者凭据不可得，不宣布 L3。
 - [ ] 继续自主运维（清单可动态扩展，领域不限但守法）：按 WORK_ITEMS.md P0 剩余话题（多智能体编排/上下文检索）或 P1/P2/P3 择机从已验证渠道自主取料，复制全链闭环。
 - [ ] 若用户给新的外部精研材料：先抽一手锚点 → 判认知增量独立性 → 按 §3 纪律编译门禁（能机制化才编译，否则只加固 KB）。
 - [ ] 后续精研可复用 FJ 取证入口：新门禁若有一手原文切片，可加 `adjudicate_*` 取证入口（试点 `forensic_gates.py`，扩展 `forensic_gates_ext.py`/`ext2.py`/`ext3.py`/`ext4.py`/`ext5.py`/`ext6.py`/`ext7.py`/`ext8.py`）。
-- [ ] 本文件随每次会话终结更新现状（§1/§4/§4b–§4u/§5）。§108 实验+文档提交推送后回填 §5 状态（外部锚 `b8daa96` 已推，实验与文档待推）。
+- [x] 本文件随每次会话终结更新现状（§1/§4/§4b–§4u/§5）。§108 提交推送后已回填 §5 状态（`b8daa96` 外部锚 + `d02f012` 实验文档）。
 
 ---
 
