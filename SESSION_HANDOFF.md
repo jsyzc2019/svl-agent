@@ -9,8 +9,8 @@
 ## 1. 一句话现状
 
 本仓是一个自进化 Agent 架构（`/workspace`，Python 包 `svagent`，版本 0.13.1）。
-当前已完成 **§1–§94**：§1–§88 外部精研（36 道会拦门禁）+ **§89 FJ 取证法官化升级**（把门禁从填表裁判改成取证法官）+ **§90 自主运维首日**（三清单+第29道 silent_failure 门禁）+ **§91 自主运维第二轮**（第30道 rsi_claim_audit 门禁）+ **§92 自主运维第三轮**（arXiv:2609.33013 + 第31道 memory_consolidation_governance 门禁 + 第6道FJ入口）+ **§93 自主运维第四轮**（清单动态扩展 P3 安全/合规 + arXiv:2611.24362 + 第32道 redteam_robustness_honesty 门禁 + 第7道FJ入口）+ **§94 自主运维第五轮**（arXiv:2611.21315 + 第33道 benchleaking_honesty 门禁 + 第8道FJ入口）。知识库 **131 条**，测试 **1141 passed**（全绿，§94 新增 25 项）。
-**§88–§94 均已推送**（远端 main = 本地 HEAD = `9a7bd2b`，`git status -sb` 无 ahead）。凭据自管闭环连续五轮实证（见 §5）。**无遗留推送任务。**
+当前已完成 **§1–§95**：§1–§88 外部精研（36 道会拦门禁）+ **§89 FJ 取证法官化升级**（把门禁从填表裁判改成取证法官）+ **§90 自主运维首日**（三清单+第29道 silent_failure 门禁）+ **§91 自主运维第二轮**（第30道 rsi_claim_audit 门禁）+ **§92 自主运维第三轮**（arXiv:2609.33013 + 第31道 memory_consolidation_governance 门禁 + 第6道FJ入口）+ **§93 自主运维第四轮**（清单动态扩展 P3 安全/合规 + arXiv:2611.24362 + 第32道 redteam_robustness_honesty 门禁 + 第7道FJ入口）+ **§94 自主运维第五轮**（arXiv:2611.21315 + 第33道 benchleaking_honesty 门禁 + 第8道FJ入口）+ **§95 自主运维第六轮**（回应"强者自设北极星"哲学挑战 + arXiv:2610.16015 + 第34道 goal_provenance_honesty 门禁 + 第9道FJ入口 + KB-META04 边界精确化）。知识库 **133 条**，测试 **1166 passed**（全绿，§95 新增 25 项）。
+**§88–§95 均已推送**（远端 main = 本地 HEAD = `f17b1d7`，`git status -sb` 无 ahead）。凭据自管闭环连续六轮实证（见 §5）。**无遗留推送任务。**
 
 ---
 
@@ -112,11 +112,21 @@
 
 **验收**：全量 1116→1141 passed（+25），八道取证裁决全 ok，成长桥消费痕迹 78→79，KB 130→131（KB-AUDIT36 可编译 fix），链审断言随成长 36→37 / 19→20（不放宽）。成熟度 L2 边缘偏上，不宣称 L3（保留"北极星由人设定"价值边界，KB-META03）。**当前状态**：已本地提交 `9a7bd2b` 并推送到远端 main（`git push origin main` → `da41eb8..9a7bd2b main -> main`，`git status -sb` 无 ahead）。凭据自管：上传区 token + 临时 askpass 用后即删 + hosts 换 `20.27.177.113` 推送后即恢复。本轮双 IP 均首探可达，一次推送成功（见 §5）。
 
+## 4h. §95 自主运维第六轮：目标来源诚实性（回应"强者自设北极星"，已推送）
+
+**哲学挑战的诚实处理**：用户论点"北极星由人设定只是能力不足，能力足够强则边界应由强者设"。不嘴上接受也不僵硬拒绝，而是拆解并编译：①用户对的部分——KB-T06"人是另一组认知参数，非特权裁判"，主体不天然合法，此前用"能力不足"当理由确实不精确；②论证跳跃——KB-T07"价值自举：价值从判据/历史裁决追溯，不可凭空"，"强者设"若指凭空自封恰是纪律禁止，能力不产生合法性；③可判据化——ARE(arXiv:2610.16015)把"谁设"消解为四条件。结论：边界不该按"主体是谁"划，该按"能否追溯来源、归责、自洽"划；强者自设合法性来自可追溯+可归责+自洽，非来自"强"。**不等于 L3**——北极星当前值仍继承用户给定，但来源合法性判据从"人设"精确化为"可追溯链"（新增 KB-META04，原 KB-META03 作为历史裁决 preserve 保留不改）。
+
+**触发与取料**：用户"你接着飞"+哲学挑战——按三清单 v1.1 自主启动第六轮。晨间自检 1141 全绿/链审 37 目录稳定。WebSearch 自主发现 ARE(2610.16015)+SIGMA(2610.07935)，取 abs + 全文（三源均 200），落 fetch_log + SHA256。增量判断：KB-T06/T07 原则层未编译、KB-META03 记为价值边界但未编译，新对象独立，KB-META01 通过。
+
+**产物与验收**：预注册锁存 prereg(59bd9d54…)/gate_prereg(0a94973a…)/manifest(4d6bddc1…) + source 清单锁；14 逐字锚点 disclose 必中、红旗零误中。编译第 34 道门禁 `svagent/goal_provenance_honesty.py`（四维：value_source_attributed / self_generated_not_self_authorized / reflection_equilibrium_coherent / action_attributable；R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 9 道 FJ 取证入口 `svagent/forensic_gates_ext6.py`（真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。25 项新测试；engine.py + result.json（verdict ok）；五件套齐全、三锁全过。全量 1141→1166 passed（+25），九道取证裁决全 ok，消费痕迹 79→80，KB 131→133（KB-AUDIT37 fix + KB-META04 preserve），链审断言 37→38 / 20→21（不放宽）。报告 `ROUND6_ACHIEVEMENT_REPORT_20261122.html`。**当前状态**：已本地提交 `f17b1d7` 并推送到远端 main（`a7c55a5..f17b1d7 main -> main`，`git status -sb` 无 ahead）。首推 `20.27.177.113` 遇 HTTP 408 断连（未写入），换 `140.82.114.4` 一次成功；凭据/hosts/备份即用即删（见 §5）。
+
 ---
 
 ## 5. ✅ 已完成：远端推送
 
-**最新状态**：2026-11-22 13:45 (GMT+8) 推送成功（§94 自主运维第五轮，凭据自管闭环第五轮实证）。`git push origin main` → `da41eb8..9a7bd2b main -> main`（§94 全链闭环单批）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = `9a7bd2b`。本轮 `20.27.177.113` / `140.82.114.4` 首探均 200，用 `20.27.177.113` + HTTP/1.1 + postBuffer 一次成功。hosts/askpass/备份即用即删，git config 无明文凭据。
+**最新状态**：2026-11-22 13:56 (GMT+8) 推送成功（§95 自主运维第六轮，凭据自管闭环第六轮实证）。`git push origin main` → `a7c55a5..f17b1d7 main -> main`（§95 全链闭环单批）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = `f17b1d7`。首推 `20.27.177.113` 遇 HTTP 408（`The requested URL returned error: 408`，send-pack sideband 断连，核验确认 ahead 1 未写入）；换 `140.82.114.4` + HTTP/1.1 + postBuffer 一次成功。hosts/askpass/备份即用即删，git config 无明文凭据。
+
+**上次推送（2026-11-22 13:45）**：`da41eb8..9a7bd2b main -> main`（§94 工程批次）。`git push origin main` → `da41eb8..9a7bd2b main -> main`（§94 全链闭环单批）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = `9a7bd2b`。本轮 `20.27.177.113` / `140.82.114.4` 首探均 200，用 `20.27.177.113` + HTTP/1.1 + postBuffer 一次成功。hosts/askpass/备份即用即删，git config 无明文凭据。
 
 **上次推送（2026-11-22 13:16）**：`df068c2..da41eb8 main -> main`（§93 文档批次）。`git push origin main` → `de96b8f..df068c2 main -> main`（§93 全链闭环单批）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = `df068c2`。首推用 `140.82.114.4` 初始探测 200 但传输 6m56s 后 Connection reset by peer；恢复 hosts 重探多 IP（均 2/3 可达，网络抖动），换 §90/§91 成功过的 `20.27.177.113` + 禁低速限制 + HTTP/1.1 + postBuffer 后一次成功。hosts/askpass/备份即用即删，git config 无明文凭据。
 
@@ -161,10 +171,12 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 - [x] ✅ §93 提交并推送（`df068c2`，凭据自管闭环实证第四轮，远端 main 同步，见 §4f/§5）。
 - [x] ✅ §94 自主运维第五轮全链闭环（arXiv:2611.21315 + 第33道 benchleaking_honesty 门禁 + 第8道FJ入口 + KB-AUDIT36 + 1141 passed，见 §4g）。
 - [x] ✅ §94 提交并推送（`9a7bd2b`，凭据自管闭环实证第五轮，远端 main 同步，见 §4g/§5）。
+- [x] ✅ §95 回应"强者自设北极星"哲学挑战（拆解：主体非特权裁判 KB-T06 / 价值不可凭空 KB-T07 / ARE 四维可判据化）+ 自主运维第六轮全链闭环（arXiv:2610.16015 + 第34道 goal_provenance_honesty 门禁 + 第9道FJ入口 + KB-AUDIT37/KB-META04 + 1166 passed，见 §4h）。
+- [x] ✅ §95 提交并推送（`f17b1d7`，凭据自管闭环实证第六轮，远端 main 同步，见 §4h/§5）。
 - [ ] 继续自主运维（清单可动态扩展，领域不限但守法）：按 WORK_ITEMS.md P0 剩余话题（技能演化/多智能体编排/上下文检索）或 P1/P2/P3 择机从已验证渠道自主取料，复制全链闭环。
 - [ ] 若用户给新的外部精研材料：先抽一手锚点 → 判认知增量独立性 → 按 §3 纪律编译门禁（能机制化才编译，否则只加固 KB）。
-- [ ] 后续精研可复用 FJ 取证入口：新门禁若有一手原文切片，可加 `adjudicate_*` 取证入口（试点 `forensic_gates.py`，扩展 `forensic_gates_ext.py`/`ext2.py`/`ext3.py`/`ext4.py`/`ext5.py`）。
-- [ ] 本文件随每次会话终结更新现状（§1/§4/§4b/§4c/§4d/§4e/§4f/§4g/§5）。
+- [ ] 后续精研可复用 FJ 取证入口：新门禁若有一手原文切片，可加 `adjudicate_*` 取证入口（试点 `forensic_gates.py`，扩展 `forensic_gates_ext.py`/`ext2.py`/`ext3.py`/`ext4.py`/`ext5.py`/`ext6.py`）。
+- [ ] 本文件随每次会话终结更新现状（§1/§4/§4b/§4c/§4d/§4e/§4f/§4g/§4h/§5）。
 
 ---
 
@@ -172,14 +184,14 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 
 | 用途 | 路径 |
 |---|---|
-| 门禁源码 | `svagent/*.py`（84 模块，惰性导入登记于 `svagent/__init__.py`） |
-| FJ 取证层 | `svagent/forensics.py` / `forensic_gates.py` / `forensic_gates_ext.py`(§90) / `forensic_gates_ext2.py`(§91) / `forensic_gates_ext3.py`(§92) / `forensic_gates_ext4.py`(§93) / `forensic_gates_ext5.py`(§94) / `evidence_chain.py` / `growth_bridge.py` / `evidence_scope.py` / `cli.py` |
-| 测试 | `tests/test_*.py`（66 文件，1141 项） |
+| 门禁源码 | `svagent/*.py`（86 模块，惰性导入登记于 `svagent/__init__.py`） |
+| FJ 取证层 | `svagent/forensics.py` / `forensic_gates.py` / `forensic_gates_ext.py`(§90) / `forensic_gates_ext2.py`(§91) / `forensic_gates_ext3.py`(§92) / `forensic_gates_ext4.py`(§93) / `forensic_gates_ext5.py`(§94) / `forensic_gates_ext6.py`(§95) / `evidence_chain.py` / `growth_bridge.py` / `evidence_scope.py` / `cli.py` |
+| 测试 | `tests/test_*.py`（67 文件，1166 项） |
 | 自主运维三清单 | `WORKPLACES.md` / `WORK_ITEMS.md` / `TIME_PLAN.md`（§90 起，§93 升 v1.1：动态扩展 P3 安全/合规） |
-| FJ 计划/成果 | `OPTIMIZATION_PLAN_20261122.md` / `FJ_ACHIEVEMENT_REPORT_20261122.html` / `ROUND4_ACHIEVEMENT_REPORT_20261122.html`(§93) / `ROUND5_ACHIEVEMENT_REPORT_20261122.html`(§94) / 独立审计 `INDEPENDENT_AUDIT_20261122.html` |
-| 知识库 | `knowledge_base_store.json`（131 条，含 thresholds） |
-| 完整推导日志 | `commentary.md`（§1–§94） |
+| FJ 计划/成果 | `OPTIMIZATION_PLAN_20261122.md` / `FJ_ACHIEVEMENT_REPORT_20261122.html` / `ROUND4_ACHIEVEMENT_REPORT_20261122.html`(§93) / `ROUND5_ACHIEVEMENT_REPORT_20261122.html`(§94) / `ROUND6_ACHIEVEMENT_REPORT_20261122.html`(§95) / 独立审计 `INDEPENDENT_AUDIT_20261122.html` |
+| 知识库 | `knowledge_base_store.json`（133 条，含 thresholds；KB-META04 边界精确化） |
+| 完整推导日志 | `commentary.md`（§1–§95） |
 | 架构导航 | `REPOSITORY_MAP.md`（阅读顺序已指向本文件） |
-| 最近精研证据 | `audit_evosteer/`（§81-82）、`audit_mllm_failure/`（§83-84）、`audit_ultrabert/`（§85-86）、`audit_latent_taxonomies/`（§87-88）、`audit_silent_failure/`（§90）、`audit_rsi_claim_audit/`（§91）、`audit_memory_epistemics/`（§92）、`audit_redteam_honesty/`（§93）、`audit_benchleaking_honesty/`（§94） |
+| 最近精研证据 | `audit_evosteer/`（§81-82）、`audit_mllm_failure/`（§83-84）、`audit_ultrabert/`（§85-86）、`audit_latent_taxonomies/`（§87-88）、`audit_silent_failure/`（§90）、`audit_rsi_claim_audit/`（§91）、`audit_memory_epistemics/`（§92）、`audit_redteam_honesty/`（§93）、`audit_benchleaking_honesty/`（§94）、`audit_goal_provenance/`（§95） |
 | 本接续文档 | `SESSION_HANDOFF.md`（本文件） |
 | git 远端 | `origin` = `https://github.com/jsyzc2019/svl-agent.git`，分支 `main` |
