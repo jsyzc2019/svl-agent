@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§87-§88 潜在分类法 精研报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1060px;margin:32px auto;padding:0 20px;color:#222;line-height:1.7}
+h1{border-bottom:3px solid #569;padding-bottom:8px} h2{color:#345;margin-top:32px;border-left:4px solid #569;padding-left:10px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px} th,td{border:1px solid #ddd;padding:6px 9px;text-align:left;vertical-align:top} th{background:#eef3f7}
+.pass{color:#0a7;font-weight:bold} .dim{color:#555}
+.note{background:#f2f7fb;border-left:4px solid #569;padding:10px 14px;margin:14px 0}
+.core{background:#fbf6ef;border-left:4px solid #b85;padding:12px 16px;margin:16px 0}
+code{background:#f4f4f4;padding:2px 5px;border-radius:3px;font-size:12px}
+</style></head><body>
+<h1>§87-§88《Latent Taxonomies: How Property Induction Develops in Language Model Pre-training》精研报告</h1>
+<p class="dim">生成 2026-11-22　|　arXiv:2610.15836v1（11 Oct 2026，Sobotka/Goliakova/Detyniecki/Bosselut/Renard，EPFL/AXA/Sorbonne-CNRS-LIP6/IBS PAN）　|　论文 HTML <code>81ec5da0…</code>　|　分析前锁 <code>c963c5b8…</code>　|　门实现前锁 <code>0eaa6e8a…</code>　|　锚点 18/18　|　KB 119→125　|　全量 822→967</p>
+<div class="note"><b>证据与诚实边界：</b>一手 arXiv 官方 HTML 全文；合成分类法注入 + 3 random seeds 实验为 self-reported，按 KB-RSI07 折1。scale hurts 结论 scoped 于固定数据预算与合成 taxonomy 设定，不外推为普适定律。弯引号锚点按原文逐字，未放水。</div>
+<h2>一、论文核心</h2><div class="core">人类按类别做属性归纳（知知更鸟有籽骨则更可能推及麻雀而非鲸鱼）。LM 仅靠 next-token prediction 就涌现分类法对齐的归纳；共享更深类别的实体在激活空间更相似，聚类可从表示重建整棵分类树。反直觉：<i>at a fixed data budget, scale hurts</i>——大模型记忆个体事实而非压缩成共享结构。</div>
+<h2>二、认知增量与两道新门禁</h2><p>从归纳泛化切出两条独立拦截面：<b>①归纳结构诚实</b>——归纳优势证据、结构可从表示恢复、记忆vs压缩区分、规模效应诚实报告（bigger-is-better 默认被打破）；<b>②结构覆盖边界</b>——in-weights 与 in-context 分开、冲突时 context 可覆盖 weights 须披露、冲突被测试、上下文可操控性上限须陈述。</p>
+<h2>三、命题与一手锚点命中</h2>
+<table><tr><th>命题</th><th>核心</th><th>锚点</th></tr><tr><td>P0_emergence</td><td>归纳涌现</td><td class="pass">2/2</td></tr><tr><td>P1_recoverable</td><td>结构可恢复</td><td class="pass">3/3</td></tr><tr><td>P2_scale_hurts</td><td>规模反直觉</td><td class="pass">4/4</td></tr><tr><td>P3_maturity</td><td>成熟度</td><td class="pass">2/2</td></tr><tr><td>P4_incontext</td><td>上下文迁移</td><td class="pass">2/2</td></tr><tr><td>P5_override</td><td>覆盖权重</td><td class="pass">3/3</td></tr><tr><td>P6_implication</td><td>数据组织反映</td><td class="pass">2/2</td></tr></table>
+<h2>四、缺口判定与判据自咬</h2><p>transfer_holdout（样本外迁移增益，评测方法层）、memory_provenance_honesty（记忆证据回链）、self_knowledge_honesty（认知边界自知）无一覆盖上述两点。锚点 18/18 逐字命中；一处测试断言与实现文案不匹配，修实现文案（含中文「上下文/权重」）不放宽测试，双门禁 48 项测试 + AST 自审通过。</p>
+<h2>五、收束</h2><div class="core"><b>一句话收束：</b>这篇论文最该带走的是——<b>模型能把一个实体的属性推及同类，不是因为记住了每条事实，而是把数据组织压缩成了可恢复的分类结构；固定数据预算下大模型反而归纳更弱（记忆压过压缩）；而且权重里学到的结构，冲突时会被 prompt 覆盖——这划定了上下文可控性的上限。</b>两把新尺子落地：<b>induction_structure_honesty</b>（无归纳优势/结构不可恢复/记忆冒充压缩/规模效应隐瞒→downgrade）与 <b>context_override_boundary</b>（权重上下文不分/覆盖未披露/冲突未测/上限未述→downgrade）。信规则、不承诺有效。</div>
+</body></html>

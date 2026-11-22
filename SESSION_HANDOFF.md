@@ -2,15 +2,15 @@
 
 > 本文件用于新旧会话接续。新会话开始后，**先读本文件**，再按"接续后第一件事"操作。
 > 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 10:40 (GMT+8)——**推送已完成**。
-> 上一会话终点：§79-§80 完成并已全部推送到远端；本次新增 §81-§82（未推送，待 PAT）。
+> 上一会话终点：§79-§80 已推送；本次新增 §81-§88（共 8 道门禁，均未推送，待 PAT）。
 
 ---
 
 ## 1. 一句话现状
 
 本仓是一个自进化 Agent 架构（`/workspace`，Python 包 `svagent`，版本 0.13.1）。
-当前已完成 **§1–§82** 外部精研，编译 **30 道会拦门禁**，知识库 **119 条**，测试 **822 passed**（全绿）。
-本地 main 在 `321e457`（推送审计提交，与远端 `origin/main` 同步）；本次 §81-§82 已本地提交，**待推送**（需用户再提供 PAT，见 §5）。
+当前已完成 **§1–§88** 外部精研，编译 **36 道会拦门禁**，知识库 **125 条**，测试 **967 passed**（全绿）。
+本地 main 在 `321e457`（推送审计提交，与远端 `origin/main` 同步）；本次 §81-§88 已本地提交，**待推送**（需用户再提供 PAT，见 §5）。
 
 ---
 
@@ -35,17 +35,16 @@
 
 ---
 
-## 4. 最近完成（§81–§82，本地提交）
+## 4. 最近完成（§81–§88，本地提交，待推送）
 
-精研 arXiv:2609.38661v2《EvoSteer: Online Self-Evolving Graph Orchestration via Reference-Anchored Credit Assignment》（CUHK深圳/大连理工/复旦/牛津等）。
-- 一手证据：arXiv 官方 HTML 全文（`942ac20f…`）；self-reported 刷榜数字按 KB-RSI07 折 1，代码仓库声明未拉取未复现实标注。
-- 编译两道新门禁（**第 29、30 道**）：
-  - `svagent/online_repair_honesty.py:check_online_repair_honesty`（§81）——"事后修订≠运行中途修复"：仅批次后编辑/无 rerun-drop/非执行特征驱动/价值无冻结参考锚定 → downgrade。
-  - `svagent/skill_admission_calibration.py:check_skill_admission_calibration`（§82）——"准入≠校准≠退役"：未试用即晋升/无配对反事实/无共享预算序贯检验/无退役机制 → downgrade。
-- 证据目录 `audit_evosteer/`；报告 `audit_evosteer/evosteer_report.html`。
-- KB 新增 `KB-AUDIT24/25`（117→119）；新增测试 `tests/test_online_repair_honesty.py`、`tests/test_skill_admission_calibration.py`（各 25 项）。
-- 锚点 19/19 逐字命中（九处跨行断字+两处措辞自咬均修工具不放水）；双文件 AST 自审干净；惰性导入已登记。
-- 文档已更新：`commentary.md`（§81-§82）、`REPOSITORY_MAP.md`（门禁表/测试列表/统计/推导链）。
+本轮共精研 4 篇论文、编译 8 道新门禁（§81-§88）：
+
+**§81-§82 EvoSteer**（arXiv:2609.38661v2，CUHK深圳/大连理工/复旦/牛津）：`online_repair_honesty`（事后修订≠运行中途修复）+ `skill_admission_calibration`（准入≠校准≠退役）。KB-AUDIT24/25。
+**§83-§84 MLLM 因果诊断**（arXiv:2609.38851v1，Google DeepMind/Research/Stanford）：`failure_causal_identifiability`（端到端/共现/无干预/不分两类→downgrade，前两维否定语义）+ `causal_contribution_honesty`（N/S不分/下界当精确/单调性隐藏/无稀疏→downgrade）。KB-AUDIT26/27。
+**§85-§86 UltraBERT**（arXiv:2610.15028v1，Korea Univ/AIGEN Sciences/Amazon）：`config_conflict_isolation`（冲突未识别/无隔离/比较混淆/一刀切折中→downgrade）+ `compute_saturation_honesty`（无饱和/loss与下游不分/无边际/loss冒充能力→downgrade）。KB-AUDIT28/29。
+**§87-§88 Latent Taxonomies**（arXiv:2610.15836v1，EPFL/AXA/Sorbonne-CNRS-LIP6/IBS PAN）：`induction_structure_honesty`（无归纳优势/结构不可恢复/记忆冒充压缩/规模隐瞒→downgrade）+ `context_override_boundary`（权重上下文不分/覆盖未披露/冲突未测/上限未述→downgrade）。KB-AUDIT30/31。
+
+证据目录 `audit_evosteer/`、`audit_mllm_failure/`、`audit_ultrabert/`、`audit_latent_taxonomies/`（各含 manifest/prereg/gate_prereg + 三份 SHA256 锁、engine.py、result.json、HTML 报告、一手切片）。四篇共 76 个锚点逐字命中；8 门禁各 25 测试 + 7 活体回归 + AST 自审全过。KB 117→125；全量 774→967 passed。`commentary.md`、`REPOSITORY_MAP.md` 已同步。
 
 ---
 
@@ -71,7 +70,7 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 ## 6. 接续后建议动作清单
 
 - [x] ✅ 处理 §5 推送（历史推送已完成，远端现为 `321e457` 审计提交）。
-- [ ] ⏳ 推送 §81-§82 本地提交（需用户提供 PAT，见 §5 凭据说明）。
+- [ ] ⏳ 推送 §81-§88 本地提交（需用户提供 PAT，见 §5 凭据说明）。
 - [ ] 若用户给新的外部精研材料：先抽一手锚点 → 判认知增量独立性 → 按 §3 纪律编译门禁（能机制化才编译，否则只加固 KB）。
 - [ ] 每完成两批 → 一个本地提交 → 推送（后续会话需用户再提供 PAT，见 §5 凭据说明）。
 - [ ] 本文件随每次会话终结更新现状（§1/§4/§5）。

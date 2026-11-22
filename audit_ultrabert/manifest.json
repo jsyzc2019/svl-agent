@@ -1,0 +1,49 @@
+{
+ "request_id": "ultrabert-20261122",
+ "target": "UltraBERT: Beyond the Limit of BERT Pre-Training (arXiv:2610.15028v1)",
+ "collection_time": "2026-11-22T11:30:00+08:00",
+ "sources": {
+  "S01_paper": {
+   "url": "https://arxiv.org/abs/2610.15028",
+   "html_fulltext_url": "https://arxiv.org/html/2610.15028",
+   "html_fulltext_sha256": "6c125cae7fe51cbb4b2f235778b702487401c1cb0419379acdaf7058eef2c2da",
+   "title": "UltraBERT: Beyond the Limit of BERT Pre-Training",
+   "authors": "Jungwoo Park, Taewhoo Lee, Jaewoo Kang",
+   "version": "arXiv:2610.15028v1 [cs.CL] 10 Oct 2026",
+   "affiliations": [
+    "Korea University",
+    "AIGEN Sciences",
+    "Amazon (work done prior to joining)"
+   ],
+   "grade": "primary (official arXiv HTML fulltext); self-reported GLUE 91.0/BEIR 47.7 折1 per KB-RSI07"
+  },
+  "S02_abs": {
+   "url": "https://arxiv.org/abs/2610.15028",
+   "html_sha256": "94d5cf76ef769a0ca6529a942348aca347665300a559a329acfe16089b49162c",
+   "grade": "primary (official abs page)"
+  }
+ },
+ "evidence_slices": [
+  "paper_flat.txt",
+  "paper_text.txt"
+ ],
+ "locks": {
+  "manifest": "manifest.sha256",
+  "prereg_analysis_before": "prereg.sha256",
+  "gate_prereg_before_implementation": "gate_prereg.sha256"
+ },
+ "verification": {
+  "engine": "engine.py",
+  "anchor_count": 14,
+  "anchor_string_hits": "14/14",
+  "gate_A_live_regression": "7/7",
+  "gate_B_live_regression": "7/7",
+  "all_passed": true
+ },
+ "honesty_notes": [
+  "self-reported SOTA/饱和数字折1，只编译方法论拦截面",
+  "饱和结论 scoped 于该配方任务集不外推",
+  "两门禁只判声明自洽不承诺隔离/SOTA真实有效",
+  "无公开代码复现，如实标注"
+ ]
+}

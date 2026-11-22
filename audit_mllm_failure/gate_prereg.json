@@ -1,0 +1,43 @@
+{
+  "section": "§83-§84",
+  "gate_A": {
+    "module": "svagent/failure_causal_identifiability.py",
+    "function": "check_failure_causal_identifiability",
+    "verdict": "FailureCausalVerdict",
+    "dimensions": ["end_to_end_only", "trace_or_cooccurrence", "controlled_intervention", "upstream_vs_intrinsic_split"],
+    "rules": [
+      {"id": "R0", "cond": "任一维非 yes/no/partial 枚举", "action": "flag", "code": "FAILURE_CAUSAL.INVALID_INPUT"},
+      {"id": "R1", "cond": "end_to_end_only=yes（只有聚合端到端准确率，无失败定位）", "action": "downgrade", "code": "FAILURE_CAUSAL.END_TO_END_ONLY"},
+      {"id": "R2", "cond": "trace_or_cooccurrence=yes（仅凭推理trace/子问题共现归因，无受控干预）", "action": "downgrade", "code": "FAILURE_CAUSAL.TRACE_COOCCURRENCE"},
+      {"id": "R3", "cond": "controlled_intervention=no（未把前提设为已知正确/错误状态做干预）", "action": "downgrade", "code": "FAILURE_CAUSAL.NO_INTERVENTION"},
+      {"id": "R4", "cond": "upstream_vs_intrinsic_split=no（未区分上游级联错误与内在能力缺陷）", "action": "downgrade", "code": "FAILURE_CAUSAL.NO_SPLIT"},
+      {"id": "R5", "cond": "任一维 partial", "action": "flag", "code": "FAILURE_CAUSAL.PARTIAL"},
+      {"id": "R6", "cond": "全 yes（语义取反：end_to_end_only=no, trace_or_cooccurrence=no, 其余 yes）", "action": "ok", "code": "FAILURE_CAUSAL.SELF_CONSISTENT"}
+    ],
+    "note": "本门禁前两维为否定语义（=yes 表示缺陷存在），故 R1/R2 在 =yes 时 downgrade；R6 全自洽条件为 end_to_end_only=no 且 trace_or_cooccurrence=no 且 controlled_intervention=yes 且 upstream_vs_intrinsic_split=yes。"
+  },
+  "gate_B": {
+    "module": "svagent/causal_contribution_honesty.py",
+    "function": "check_causal_contribution_honesty",
+    "verdict": "CausalContributionVerdict",
+    "dimensions": ["necessity_sufficiency_split", "lower_bound_labeled", "monotonicity_disclosed", "bottleneck_sparsity_reported"],
+    "rules": [
+      {"id": "R0", "cond": "任一维非 yes/no/partial 枚举", "action": "flag", "code": "CAUSAL_CONTRIB.INVALID_INPUT"},
+      {"id": "R1", "cond": "necessity_sufficiency_split=no（未区分必要性与充分性，混为一谈）", "action": "downgrade", "code": "CAUSAL_CONTRIB.NO_NS_SPLIT"},
+      {"id": "R2", "cond": "lower_bound_labeled=no（把 N/S-Score 下界当精确 PN/PS 呈现）", "action": "downgrade", "code": "CAUSAL_CONTRIB.BOUND_AS_EXACT"},
+      {"id": "R3", "cond": "monotonicity_disclosed=no（未披露是否假设单调性）", "action": "downgrade", "code": "CAUSAL_CONTRIB.MONOTONICITY_HIDDEN"},
+      {"id": "R4", "cond": "bottleneck_sparsity_reported=no（未报告瓶颈稀疏性/单前提贡献集中度）", "action": "downgrade", "code": "CAUSAL_CONTRIB.NO_SPARSITY"},
+      {"id": "R5", "cond": "任一维 partial", "action": "flag", "code": "CAUSAL_CONTRIB.PARTIAL"},
+      {"id": "R6", "cond": "全 yes", "action": "ok", "code": "CAUSAL_CONTRIB.SELF_CONSISTENT"}
+    ]
+  },
+  "shared_discipline": [
+    "四维语义枚举 {yes,no,partial}；R0 非法/字面串→flag（避 §56 brittle 根因）",
+    "R1-R4 按优先级短路返回，不事后加权（防 Goodhart）",
+    "R5 partial→flag；R6 全自洽→ok",
+    "只判声明/机制自洽，不承诺实际有效（存在≠有效性 KB-META01/AUDIT03）",
+    "中文锚点集中 _A 字典；AST 自审禁止 Compare 内中文字面量；必要时 CJK 边界用 ord()",
+    "惰性导入登记 __init__.py；不接 harness.run_loop（§58 选 A）",
+    "self-reported 实验按 KB-RSI07 折1；只编译方法论拦截面"
+  ]
+}

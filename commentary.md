@@ -3537,3 +3537,58 @@ task_content：下载论文与主页、通读两轴框架与原则章、辨析�
 task_content：下载论文 HTML 全文与 abs、通读三大挑战与 §4.1-4.3 方法、辨析两处独立拦截面、编译两道会拦门禁。process：顶住"刷榜论文该造多牙"诱惑，只认两条一手可证伪命题（事后改团队≠运行中修复、准入≠校准≠退役）各编译一牙；与 7 道相关门禁辨析层级防重复造轮子；九处跨行断字 + 两处措辞自咬现场修工具不放水。边界：在线修复是否真提升、序贯检验是否真控 FWER，均未被独立实证；不宣称有效性，只编译机制声明诚实性拦截面。
 
 一句话收束：**这篇论文最该带走的不是十二数据集的刷榜数字，而是对"自演化"三个字的拆解锋利度——事后改团队不叫在线修复，执行中途由执行特征驱动的 rerun/drop 才叫；共享终端奖励给每个动作同一系数不叫信用分配，对冻结参考平衡子轨迹才叫；judge/成功计数准入不叫校准，配对反事实+共享预算序贯检验+退役才叫。本仓 28 道门禁量过判据来源、证明边界、记忆溯源，却没一道判过"编辑是否在同一次运行中途发生"或"技能准入是否校准并可退役"。两把新尺子落地：online_repair_honesty（仅事后/无rerun-drop/非执行驱动/价值无锚定→downgrade）与 skill_admission_calibration（未试用/无配对/无预算/无退役→downgrade）。信规则、不承诺有效、只认会拦的独立拦截面。**
+
+
+---
+
+## §83-§84 MLLM 因果任务分解精研（arXiv:2609.38851v1）
+
+### 83-84.1 来源与分级
+一手 arXiv:2609.38851v1 HTML 全文（30 Sep 2026，Xia Hu 等，Google DeepMind/Google Research/Stanford），abs 页。12 frontier MLLMs 的 54%/84% 诊断为 self-reported，按 KB-RSI07 折 1；无公开 CADET 代码复现实标注。锚点 25/25 逐字命中（公式变量符号被 HTML 剥离处取不含符号的真实子串）。
+
+### 83-84.2 认知增量
+端到端准确率只记失败频率，不区分内在能力缺陷 vs 上游 cascading error（同一错误相反诊断）。分解子问题/检查 CoT 仍不够——stated CoT 不总反映最终答案的计算，且只是共现而非受控干预。CADET 用 SCM 分解任务，对每个前提做三元干预（正确/错误/不注入）；Assumption 3.3 intervention-only identification：状态无可靠观测通道，只能通过干预赋值。Property 3.6 不假设单调性（注入错误可能更有帮助），N/S-Score 是 PN/PS 的下界不是精确值。
+
+### 83-84.3 缺口判定与编译
+component_attribution（执行组件层级）/evaluation_reliability（评估复现）/criterion_origin（判据来源）均非失败因果识别。编译第 31 道 `failure_causal_identifiability.py:check_failure_causal_identifiability`（端到端/共现/无干预/不分两类→downgrade；前两维否定语义，R6 取反已测）+ 第 32 道 `causal_contribution_honesty.py:check_causal_contribution_honesty`（N/S不分/下界当精确/单调性隐藏/无瓶颈稀疏→downgrade）。KB-AUDIT26/27，各 25 测试 + 7 活体 + AST 自审 PASS，全量 822→871。
+
+### 83-84.4 判据自咬
+一处锚点（P3 外生性）初拼了公式变量位置文本致 miss，改取不含符号的真实子串；未放水。只判声明自洽不承诺干预真识别因果；尺子不判本仓，§58 选 A 不接 run_loop。
+
+一句话收束：**端到端分只说失败几次，不说能力不行还是上游拖累；看 CoT/子问题只是共现，把前提设成已知正确/错误做干预才叫因果识别；N/S-Score 是下界不是精确概率，不假设单调性是关键前提。两把尺子：failure_causal_identifiability + causal_contribution_honesty。**
+
+---
+
+## §85-§86 UltraBERT 编码器预训练配方精研（arXiv:2610.15028v1）
+
+### 85-86.1 来源与分级
+一手 arXiv:2610.15028v1 HTML 全文（10 Oct 2026，Park/Lee/Kang，Korea University/AIGEN Sciences/Amazon），abs 页。GLUE 91.0/BEIR 47.7/1–2T 饱和均 self-reported，KB-RSI07 折 1；饱和结论 scoped，无公开代码复现实标注。锚点 14/14 逐字命中。
+
+### 85-86.2 认知增量
+编码器配方沿用 BERT 时代惯例。三发现：①下游 1–2T token 饱和，即使 loss 仍降；②分类偏好低掩码比、检索偏好高掩码比（与"大模型用大 ratio"相反）——任务间配置冲突；③蒸馏+剪枝低 ratio 改善分类、高 ratio 损害检索。UltraBERT 用 LM head 解耦隔离（同 batch 混 5%/50% + 独立 head + 蒸馏只限低 ratio），而非折中。方法论关键：饱和点后比较才排除收敛速度混淆。
+
+### 85-86.3 缺口判定与编译
+evaluation_reliability/scoring_integrity/skill_admission 等无一覆盖配置冲突隔离与饱和诚实。编译第 33 道 `config_conflict_isolation.py:check_config_conflict_isolation`（冲突未识别/无隔离/比较被混淆/一刀切折中→downgrade）+ 第 34 道 `compute_saturation_honesty.py:check_compute_saturation_honesty`（无饱和报告/loss与下游不分/无边际收益/loss冒充能力→downgrade）。KB-AUDIT28/29，各 25 测试 + 7 活体 + AST 自审 PASS，全量 871→919。
+
+### 85-86.4 判据自咬
+锚点无 miss；双门禁 AST 自审干净。只判声明自洽不承诺隔离真带来 SOTA；尺子不判本仓，§58 选 A 不接 run_loop。
+
+一句话收束：**loss 一直降不等于下游还在涨（1–2T 就饱和），低掩码比利分类、高掩码比利检索的相反偏好不能折中抹平要靠机制隔离。两把尺子：config_conflict_isolation + compute_saturation_honesty。**
+
+---
+
+## §87-§88 Latent Taxonomies 属性归纳发展精研（arXiv:2610.15836v1）
+
+### 87-88.1 来源与分级
+一手 arXiv:2610.15836v1 HTML 全文（11 Oct 2026，Sobotka/Goliakova/Detyniecki/Bosselut/Renard，EPFL/AXA/Sorbonne-CNRS-LIP6/IBS PAN），abs 页。合成分类法注入 + 3 seed 为 self-reported，KB-RSI07 折 1；scale hurts scoped 于固定预算与合成 taxonomy。锚点 18/18 逐字命中（弯引号 model's 按原文）。
+
+### 87-88.2 认知增量
+分类法对齐归纳从 next-token prediction 涌现；共享更深类别实体在激活空间更相似，聚类可从表示重建整棵树。反直觉：固定数据预算下大模型归纳更弱——记忆个体事实而非压缩成共享结构。权重结构可迁移到 in-context 新属性；但冲突时 context 覆盖 weights（按 context taxonomy 泛化），这设定了上下文可控性上限。
+
+### 87-88.3 缺口判定与编译
+transfer_holdout（样本外迁移，评测方法层）/memory_provenance（记忆回链）/self_knowledge（认知边界自知）无一覆盖。编译第 35 道 `induction_structure_honesty.py:check_induction_structure_honesty`（无归纳优势/结构不可恢复/记忆冒充压缩/规模效应隐瞒→downgrade）+ 第 36 道 `context_override_boundary.py:check_context_override_boundary`（权重上下文不分/覆盖未披露/冲突未测/上限未述→downgrade）。KB-AUDIT30/31，各 25 测试 + 7 活体 + AST 自审 PASS，全量 919→967。
+
+### 87-88.4 判据自咬
+一处测试断言期望 message 含中文"上下文/权重"，实现文案用英文 context/weights，修实现文案（不放宽测试）后通过——判据自咬落在"测试与实现的语义对齐"。只判声明自洽不承诺结构真恢复/context覆盖真可控；尺子不判本仓，§58 选 A 不接 run_loop。
+
+一句话收束：**模型能归纳不是因为记住每条事实，而是把数据组织压缩成可恢复的分类结构；固定预算下大模型反而归纳更弱（记忆压过压缩）；权重里学到的结构冲突时会被 prompt 覆盖——这划定上下文可控性上限。两把尺子：induction_structure_honesty + context_override_boundary。**

@@ -1,0 +1,35 @@
+{
+  "section": "§87-§88",
+  "title": "Latent Taxonomies 属性归纳发展精研（arXiv:2610.15836v1）",
+  "analysis_before_prereg": true,
+  "note": "命题与锚点在实现门禁代码之前先锁定；一手证据为 arXiv 官方 HTML 全文（v1, 11 Oct 2026，Jan Sobotka 等，EPFL/AXA/Sorbonne/CNRS/LIP6/IBS PAN）。18 个锚点逐字核对（含弯引号 model's）全命中。合成数据实验与 3-seed 结果按 KB-RSI07 折1，只编译可证伪的方法论拦截面。",
+  "sources": [
+    {"id": "S01", "type": "primary", "desc": "arXiv:2610.15836v1 HTML 全文（Latent Taxonomies: How Property Induction Develops in Language Model Pre-training, cs.CL, 11 Oct 2026）", "file": "downloads/paper.html", "sha256": "81ec5da0c46af705df2c2273aabd9e227bf2671dd4a85af343b6b463f9bc69b3"},
+    {"id": "S02", "type": "primary", "desc": "arXiv abs 页（版本历史 v1 11 Oct 2026；作者机构）", "file": "downloads/S01_abstract.html", "sha256": "fee2ccce9e5b57bf967f2ef2ba3008c1acd1d7472b0fef18accde9712f6f19ac"}
+  ],
+  "propositions": {
+    "P0_emergence": "分类法对齐的归纳从 next-token prediction 单独涌现（emerges from next-token prediction alone）：一个实体学到的属性，在其分类类别内的迁移强于跨类别——归纳泛化不必显式教，预训练目标本身可产生。",
+    "P1_recoverable": "归纳来自可恢复的内部结构：共享更深类别的实体在激活空间更相似，聚类可从实体表示完全重建分类树（clustering recovers the full taxonomic tree from entity representations）——含分支结构可被重建（we find that it can）。",
+    "P2_scale_hurts": "反直觉规模效应：固定数据预算下归纳随模型规模减弱（induction weakens with model size when the data budget is fixed），大模型记忆个体事实而非压缩为共享结构（memorize individual facts rather than compress them into shared structure）；At a fixed data budget, scale hurts——bigger is better 的一般期待不成立。",
+    "P3_maturity": "归纳随注入前的预训练成熟度增强（strengthens with more pre-training before the taxonomy injection）——学到更多通用语言的 checkpoint 更能在新分类法上泛化，泛化能力是预训练促进的。",
+    "P4_incontext": "权重中学到的分类结构能迁移到仅在上下文中出现的新属性（transfers to novel in-context properties / apply it to novel in-context properties）——in-weights 结构可用于 in-context 归纳。",
+    "P5_override": "冲突时上下文覆盖权重（Context overrides weights under conflicting taxonomies）：用户 prompt 隐含的分类法可覆盖训练学到的分类法（can be overridden by a latent taxonomy implied by the prompt），模型按 context taxonomy 泛化——这设定了 context 可操控性的上限。",
+    "P6_implication": "模型的归纳泛化反映训练数据的潜在组织（reflects the latent organization of its training data），对数据策展与预测一个学到的事实会传播多远（how far a learned fact will spread）有含义。"
+  },
+  "gate_claims": {
+    "G_A_induction_structure_honesty": "新门禁①：判一个声称『模型学到了可泛化结构/能归纳』的系统是否诚实区分记忆与压缩——四维 induction_advantage_shown / structure_recoverable / memorize_vs_compress_split / scale_effect_honest。",
+    "G_B_context_override_boundary": "新门禁②：判一个声称『学到了稳健内部结构/可被上下文引导』的系统是否诚实披露 in-weights 与 in-context 的冲突边界——四维 inweights_incontext_split / override_disclosed / conflict_tested / steerability_bound_stated。"
+  },
+  "independence_check": {
+    "existing_gates_reviewed": ["transfer_holdout(样本外迁移增益/过拟合，评测方法层)", "memory_provenance_honesty(§80记忆证据回链/可恢复表示)", "memory_scope(§70记忆作用域保持)", "memory_curation(§68记忆内容质量)", "self_knowledge_honesty(§75认知边界自知)", "serving_signal_gate(§62训练-服务信号可得性)"],
+    "gap_A": "transfer_holdout 判改进在样本外是否保持（评测方法），不判模型内部是否把事实压缩成可归纳的共享结构；memory_provenance_honesty 判记忆的证据回链，非归纳泛化的记忆vs压缩区分与结构从表示可恢复。本门禁判『归纳优势证据/结构可恢复/记忆vs压缩/规模效应诚实』，对象与判据不同。",
+    "gap_B": "无一判『in-weights 学到的结构在冲突 prompt 下可被 context 覆盖的边界』——self_knowledge 判主体认知边界自知，非权重-上下文冲突；serving_signal 判信号可得性，非结构性覆盖。此拦截面是上下文可控性的上限声明，独立。",
+    "conclusion": "两门禁拦截面独立、可迁移（任何声称结构化泛化/上下文可引导的系统均可套用）、会拦（对应维度 no→downgrade），KB-META01 通过。"
+  },
+  "honesty_boundaries": [
+    "合成分类法注入 + 3 random seeds 的实验为 self-reported，按 KB-RSI07 折1：只编译可证伪的方法论拦截面，不宣称归纳结论在自然数据/大模型上普适。",
+    "scale hurts 结论限于固定数据预算与合成 taxonomy 设定，scoped，不外推为一切任务的普适定律。",
+    "只判机制声明是否诚实自洽，不承诺结构真被恢复/context 覆盖真可控（存在≠有效性 KB-META01/AUDIT03）。",
+    "两门禁定位为审读外部『结构化泛化/上下文引导系统』的尺子，不判本仓；遵循 §58 选 A，不接 harness.run_loop。"
+  ]
+}

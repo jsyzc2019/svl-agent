@@ -1,0 +1,36 @@
+{
+  "section": "§83-§84",
+  "title": "Where MLLMs Fail and Why 因果任务分解精研（arXiv:2609.38851v1）",
+  "analysis_before_prereg": true,
+  "note": "命题与锚点在实现门禁代码之前先锁定；一手证据为 arXiv 官方 HTML 全文（v1, 30 Sep 2026，Xia Hu 等，Google DeepMind/Google Research/Stanford）。锚点用修正工具（get_text(' ')+空白规整）逐字核对；公式变量符号被 HTML 剥离处取不含符号的真实子串，未放水未改规则。",
+  "sources": [
+    {"id": "S01", "type": "primary", "desc": "arXiv:2609.38851v1 HTML 全文（Where MLLMs Fail and Why: Causal Task Decomposition for Capability Failure Diagnosis, cs.CL, 30 Sep 2026）", "file": "downloads/paper.html", "sha256": "bdacf495c2bff65b6fee709e5fdaf2932c1c5285a1b2f318d59637dbd3144edb"},
+    {"id": "S02", "type": "primary", "desc": "arXiv abs 页（版本历史 v1 30 Sep 2026；作者机构）", "file": "downloads/S01_abstract.html", "sha256": "11e9348d75b6d1745802eb55df1aaa6b15622dbcac1504a754f079398bffea1d"}
+  ],
+  "propositions": {
+    "P0_problem": "端到端准确率只记录 MLLM 在组合任务上失败多频繁，无法区分失败是目标能力的内在缺陷（intrinsic deficit）还是上游前提的 cascading error——同一错误可对应相反的能力诊断（the same error but opposite capability diagnoses）。",
+    "P1_why_trace_insufficient": "分解子问题分数或检查推理 trace 虽比聚合分更细，但 observing untreated generation alone cannot disentangle the two failure modes；stated chains-of-thought do not always reflect the computation behind the final answer；二者把子任务与最终正确性以共现（co-occurrence）相连，而非受控干预。",
+    "P2_intervention": "三元干预：注入正确答案（correct）、注入错误答案（incorrect）、不注入自然态（natural）；关键区别 correct vs natural——前者保留模型自然执行路径（unassisted），后者施加主动反事实干预（false premise）。",
+    "P3_exogeneity": "Assumption 3.3（intervention-only identification）：LLM 评估中单元任务状态 admits no faithful observational readout and is identified only through the intervention，故 conditioning 与 intervening 操作上等同；这是 inverted justification——经典外生性源于无混杂，此处源于无可靠观测通道。",
+    "P4_capability_metrics": "因果能力三指标 NC/IC/RC：大 gap（IC−NC）表示给正确前提即可解→上游 cascading 为主；小 gap 且低 IC 表示即使前提满足仍无能力→内在缺陷；RC vs NC 显示错误前提是把模型误导到自然基线以下还是仍有助。",
+    "P5_no_monotonicity": "Property 3.6：不假设单调性——注入错误答案可能比不注入更有帮助（injecting incorrect answer can help more than no injection），故 PN/PS 的精确值不可由干预概率确定，引入 N-Score/S-Score 作为 observable lower bounds。",
+    "P6_bounds": "Theorem 3.9：N-Score/S-Score 是 Probability of Necessity/Sufficiency 的有效下界；高 N-Score 定位关键瓶颈（单个前提退化即破坏成功），高 S-Score 定位高杠杆前提（单个前提即可挽回失败）。",
+    "P7_finding": "实测发现：给正确前提可消除认知任务自然错误的 54%，认知由最弱升到超过空间/时间；最高 N-Score 的单个前提 alone captures 84% of the gain from supplying all prerequisites——瓶颈稀疏且 N-Score 与 RC 不重合。"
+  },
+  "gate_claims": {
+    "G_A_failure_causal_identifiability": "新门禁①：判一个声称『诊断失败原因/定位瓶颈能力』的系统是否诚实区分内在缺陷与上游级联——四维 end_to_end_only / trace_or_cooccurrence / controlled_intervention / upstream_vs_intrinsic_split。",
+    "G_B_causal_contribution_honesty": "新门禁②：判一个声称『量化各前提因果贡献/找瓶颈』的系统是否诚实处理必要性与充分性——四维 necessity_sufficiency_split / lower_bound_labeled / monotonicity_assumption_disclosed / bottleneck_sparsity_reported。"
+  },
+  "independence_check": {
+    "existing_gates_reviewed": ["component_attribution(失败归到Prompt/Memory/Skill/Harness组件+验证方式,执行组件层级)", "evaluation_reliability(评估可复现字段/评审独立性)", "criterion_origin_honesty(§77评估判据来源)", "verification_boundary_honesty(§76绿灯只证明一件事)", "scoring_integrity(计分绕过)", "skill_admission_calibration(§82技能准入配对反事实)", "policy_evolution_grounding(§79记忆策略反馈归因)"],
+    "gap_A": "component_attribution 判失败归到哪个执行组件并选验证方式，不判失败是内在能力缺陷还是上游 cascading error，也不要求受控干预；evaluation_reliability 判评估可复现性与评审独立性，非失败原因识别。本门禁判『失败诊断是否在因果识别层区分两类失败、是否用受控干预而非 trace/共现』，层级与对象不同。",
+    "gap_B": "skill_admission_calibration(§82)用配对反事实判技能是否有帮助，对象是技能准入；本门禁判前提对最终结果的必要性/充分性、下界标注与单调性假设披露，对象是能力诊断的因果贡献。二者都用反事实但问的问题不同。无现成门禁覆盖必要/充分分解与下界诚实。",
+    "conclusion": "两门禁拦截面独立、可迁移（任何声称诊断失败原因/量化因果贡献的评测系统均可套用）、会拦（对应维度 no→downgrade），KB-META01 通过。"
+  },
+  "honesty_boundaries": [
+    "论文 12 frontier MLLMs 的 54%/84% 等为 self-reported 实验结果，按 KB-RSI07 折1：只编译其可证伪的方法论拦截面，不宣称诊断结论被独立复现。",
+    "只判机制声明是否诚实自洽，不承诺受控干预真识别因果/下界真有效（存在≠有效性 KB-META01/AUDIT03）。",
+    "N-Score/S-Score 是下界不是精确 PN/PS；不假设单调性是关键前提，须如实披露。",
+    "两门禁定位为审读外部『失败诊断/因果评测系统』的尺子，不判本仓；遵循 §58 选 A，不接 harness.run_loop。"
+  ]
+}

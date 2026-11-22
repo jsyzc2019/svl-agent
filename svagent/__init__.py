@@ -191,6 +191,30 @@ _LAZY: dict[str, tuple[str, str]] = {
     "check_skill_admission_calibration": ("svagent.skill_admission_calibration", "check_skill_admission_calibration"),
     "SkillAdmissionVerdict": ("svagent.skill_admission_calibration", "SkillAdmissionVerdict"),
     "skill_admission_calibration_live_regression": ("svagent.skill_admission_calibration", "live_regression"),
+    # 失败因果可识别性门禁（§83：从 MLLM 因果任务分解编译——端到端/共现/受控干预/上游vs内在）
+    "check_failure_causal_identifiability": ("svagent.failure_causal_identifiability", "check_failure_causal_identifiability"),
+    "FailureCausalVerdict": ("svagent.failure_causal_identifiability", "FailureCausalVerdict"),
+    "failure_causal_identifiability_live_regression": ("svagent.failure_causal_identifiability", "live_regression"),
+    # 因果贡献诚实性门禁（§84：从 MLLM N-Score/S-Score 编译——必要充分/下界/单调性/瓶颈稀疏）
+    "check_causal_contribution_honesty": ("svagent.causal_contribution_honesty", "check_causal_contribution_honesty"),
+    "CausalContributionVerdict": ("svagent.causal_contribution_honesty", "CausalContributionVerdict"),
+    "causal_contribution_honesty_live_regression": ("svagent.causal_contribution_honesty", "live_regression"),
+    # 配置冲突隔离门禁（§85：从 UltraBERT 掩码比冲突编译——冲突识别/机制隔离/饱和后比较/不一刀切折中）
+    "check_config_conflict_isolation": ("svagent.config_conflict_isolation", "check_config_conflict_isolation"),
+    "ConfigConflictVerdict": ("svagent.config_conflict_isolation", "ConfigConflictVerdict"),
+    "config_conflict_isolation_live_regression": ("svagent.config_conflict_isolation", "live_regression"),
+    # 计算饱和诚实性门禁（§86：从 UltraBERT loss≠下游编译——饱和报告/loss与下游分离/边际收益/不冒充）
+    "check_compute_saturation_honesty": ("svagent.compute_saturation_honesty", "check_compute_saturation_honesty"),
+    "ComputeSaturationVerdict": ("svagent.compute_saturation_honesty", "ComputeSaturationVerdict"),
+    "compute_saturation_honesty_live_regression": ("svagent.compute_saturation_honesty", "live_regression"),
+    # 归纳泛化结构诚实性门禁（§87：从 Latent Taxonomies 编译——归纳优势/结构可恢复/记忆vs压缩/规模效应）
+    "check_induction_structure_honesty": ("svagent.induction_structure_honesty", "check_induction_structure_honesty"),
+    "InductionStructureVerdict": ("svagent.induction_structure_honesty", "InductionStructureVerdict"),
+    "induction_structure_honesty_live_regression": ("svagent.induction_structure_honesty", "live_regression"),
+    # 结构覆盖边界诚实性门禁（§88：从 Latent Taxonomies context覆盖weights 编译——权重上下文分离/覆盖披露/冲突测试/上限陈述）
+    "check_context_override_boundary": ("svagent.context_override_boundary", "check_context_override_boundary"),
+    "ContextOverrideVerdict": ("svagent.context_override_boundary", "ContextOverrideVerdict"),
+    "context_override_boundary_live_regression": ("svagent.context_override_boundary", "live_regression"),
 }
 
 

@@ -1,0 +1,35 @@
+{
+  "section": "§85-§86",
+  "title": "UltraBERT 编码器预训练配方精研（arXiv:2610.15028v1）",
+  "analysis_before_prereg": true,
+  "note": "命题与锚点在实现门禁代码之前先锁定；一手证据为 arXiv 官方 HTML 全文（v1, 10 Oct 2026，Jungwoo Park 等，Korea University/AIGEN Sciences/Amazon）。14 个锚点逐字核对全命中。GLUE 91.0/BEIR 47.7 等为 self-reported 实验结果，按 KB-RSI07 折1。",
+  "sources": [
+    {"id": "S01", "type": "primary", "desc": "arXiv:2610.15028v1 HTML 全文（UltraBERT: Beyond the Limit of BERT Pre-Training, cs.CL, 10 Oct 2026）", "file": "downloads/paper.html", "sha256": "6c125cae7fe51cbb4b2f235778b702487401c1cb0419379acdaf7058eef2c2da"},
+    {"id": "S02", "type": "primary", "desc": "arXiv abs 页（版本历史 v1 10 Oct 2026；作者机构）", "file": "downloads/S01_abstract.html", "sha256": "94d5cf76ef769a0ca6529a942348aca347665300a559a329acfe16089b49162c"}
+  ],
+  "propositions": {
+    "P0_problem": "编码器预训练配方继承小规模惯例（the pretraining recipe itself remains inherited from small-scale conventions），没有单一模型在分类与检索上都 competitive；近年现代化只改架构（RoPE/FlashAttention/token scaling），MLM 掩码比仍沿用 BERT 时代经验。",
+    "P1_saturation": "训练到 8.8T token 发现下游在 1–2T 饱和，即便训练/验证 loss 仍下降（downstream performance saturates around 1–2T tokens even as training and validation losses keep decreasing）——存在 additional tokens cannot raise 的上界；BEIR 甚至 275B 后无显著提升。loss 下降≠下游提升，饱和点后比较才排除收敛速度混淆。",
+    "P2_mask_conflict": "饱和后 classification consistently favors lower masking ratios across model sizes，contradicting prior work suggesting larger ratios for larger models；而高掩码比利于检索——两个 regime 对同一超参有相反偏好，这是任务间配置冲突，不是单一最优。",
+    "P3_distill_interaction": "蒸馏+剪枝在低掩码比改善分类、高掩码比损害检索（improves classification at low masking ratios but degrades retrieval at high ones）——知识迁移的效果与目标配置交互，不能一刀切。",
+    "P4_de_confounding": "At saturation, where convergence speed no longer confounds the comparison——只有在饱和点后比较，掩码比的比较才不被收敛速度混淆；这是方法论前提，未饱和时快速收敛会被误当最终性能优势。",
+    "P5_decoupling": "UltraBERT 在同一batch混合5%/50%掩码序列并给每个 ratio 分配独立 LM head（assigns a separate LM head to each ratio），蒸馏只限低 ratio 序列、高 ratio 用标准 MLM——reconciles two regimes rather than settling for a single configuration，是隔离机制而非折中。",
+    "P6_sota": "声称首个同时在分类与检索达 SOTA（first encoder to achieve state of the art on both classification and retrieval tasks，GLUE 91.0 / BEIR 47.7）——self-reported，按 KB-RSI07 折1，不采信为独立验证。"
+  },
+  "gate_claims": {
+    "G_A_config_conflict_isolation": "新门禁①：判一个声称『单一模型/统一配置通吃多任务』的系统是否诚实处理任务间配置冲突——四维 conflict_identified / mechanism_isolation / de_confounded_comparison / no_blanket_tradeoff。",
+    "G_B_compute_saturation_honesty": "新门禁②：判一个声称『scale/更多训练带来提升』的系统是否诚实报告饱和与边际收益——四维 saturation_reported / loss_vs_downstream_split / marginal_gain_measured / no_loss_as_capability。"
+  },
+  "independence_check": {
+    "existing_gates_reviewed": ["evaluation_reliability(评估可复现字段/评审独立性)", "backtest_integrity(回测信息污染)", "estimation(估参)", "scoring_integrity(计分绕过)", "selective_supervision_honesty(§78训练数据筛选)", "skill_admission_calibration(§82技能准入)"],
+    "gap_A": "上述门禁无一判『多任务对同一超参有相反偏好时，系统是识别冲突并用机制隔离，还是折中/单一配置蒙混』。evaluation_reliability 判评估复现性非配置设计；scoring_integrity 判计分绕过非配置冲突。",
+    "gap_B": "无一判『scale/训练声明是否报告下游饱和点、区分训练 loss 下降与下游能力、测量边际收益』。本批命题 P1/P4 的 loss≠能力、饱和点后比较是独立拦截面，现有门禁空白。",
+    "conclusion": "两门禁拦截面独立、可迁移（任何声称统一配置通吃多任务/声称 scale 带来提升的系统均可套用）、会拦（对应维度 no→downgrade），KB-META01 通过。"
+  },
+  "honesty_boundaries": [
+    "GLUE 91.0/BEIR 47.7/2T token 等为 self-reported 实验结果，按 KB-RSI07 折1：只编译其可证伪的方法论拦截面，不采信 SOTA 声明为独立验证。",
+    "只判机制声明是否诚实自洽，不承诺隔离机制真带来 SOTA/饱和结论真普适（存在≠有效性 KB-META01/AUDIT03）。",
+    "饱和结论限于该配方与任务集，不外推为一切编码器的普适定律（scoped）。",
+    "两门禁定位为审读外部『预训练/统一配置系统』的尺子，不判本仓；遵循 §58 选 A，不接 harness.run_loop。"
+  ]
+}

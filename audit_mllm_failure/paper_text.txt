@@ -1,0 +1,4217 @@
+Where MLLMs Fail and Why: Causal Task Decomposition for Capability Failure Diagnosis
+Skip to main content
+Report GitHub Issue
+×
+Title:
+Content selection saved. Describe the issue below:
+Description:
+Submit without GitHub
+Submit in GitHub
+Why HTML?
+Report Issue
+Back to Abstract
+Download PDF
+Contents
+Reading mode
+Colour theme
+Abstract
+1
+Introduction
+2
+Related Work
+3
+Causal Decomposition Framework
+3.1
+Task Decomposition via Structural Causal Models
+3.2
+Causal Intervention Design
+3.3
+Capability Metrics
+3.4
+Contribution Metrics: N-Score and S-Score
+4
+Benchmark
+5
+Experiments and Findings
+5.1
+Experiment Setting
+5.2
+Capability Diagnostics
+5.3
+Causal Contribution Analysis
+5.4
+Markov Chain Unit Task Analysis
+6
+Conclusion
+References
+A
+Details and Proofs of Causal Decomposition Framework
+A.1
+General Definition of N-Score, S-Score
+A.2
+Lower Bound Guarantee of N-Score and S-Score
+A.3
+Theoretical Properties
+A.3.1
+Exact Identification under Monotonicity
+A.3.2
+Remaining Prerequisite
+Controlling
+Controlling for Remaining Prerequisites
+.
+Asymmetric Prerequisite Control in N-Score and S-Score.
+Algebraic Coupling under Identical Prerequisite Control.
+Metric Independence under Asymmetric Control.
+A.4
+Markov Chain Structure
+B
+Details of Benchmark
+B.1
+Benchmark Composition
+B.1.1
+Task Inventory and Statistics
+B.1.2
+Capability Categories
+B.1.3
+Per-Task SCM and Unit Task
+B.2
+Benchmark Design Rationale
+B.3
+Benchmark Construction
+B.3.1
+Image/Video Source and License
+B.3.2
+Data Construction and Quality Assurance
+C
+Experiments Setup
+D
+More Experiment Results
+D.1
+More Capability Diagnosis Results (NC, IC, RC)
+D.2
+More Causal Contribution Diagnosis Results (
+,
+-Score)
+D.3
+Detail Explanation of Markov Chain Unit Task Results
+D.4
+Additional Experiments and Findings
+D.4.1
+Ablation on Intervention Modality
+D.4.2
+Ablation on Question-Only Injection
+E
+Discussion
+License: CC BY-SA 4.0
+arXiv:2609.38851v1 [cs.CL] 30 Sep 2026
+\uselogo
+\reportnumber
+Where MLLMs Fail and Why: Causal Task Decomposition for Capability Failure Diagnosis
+Xia Hu
+Affiliation:
+\thepa
+Brian Potetz
+Affiliation:
+\thepa
+Chun-Ta Lu
+Affiliation:
+Google Research
+Huanfen Yao
+Affiliation:
+\thepa
+Leonidas Guibas
+Affiliation:
+\thepa
+Affiliation:
+Stanford University
+Zhicheng Wang
+Affiliation:
+\thepa
+Howard Zhou
+Affiliation:
+\thepa
+Pengfei Xing
+Affiliation:
+\thepa
+Andrew Gallagher
+Affiliation:
+\thepa
+Abstract
+End-to-end accuracy on compositional tasks records how often MLLMs fail, but cannot distinguish whether a failure reflects an intrinsic deficit in the targeted capability or a cascading error from an upstream prerequisite.
+We propose a causal decomposition framework that isolates these two failure modes through controlled interventions on the prerequisite dependencies of each task.
+Our capability metrics (NC, IC, RC) score each task under unassisted, correct, or incorrect prerequisites to diagnose where failures arise;
+contribution metrics (N-Score, S-Score), adapted from probabilities of causation, quantify each prerequisite’s necessity and sufficiency to determine why.
+We instantiate the framework in CADET, a diagnostic benchmark of 10 composite tasks decomposed into 46 unit tasks with over 33,000 human-annotated questions spanning perception, spatial, temporal, and cognitive categories.
+Diagnosing frontier MLLMs with our framework uncovers systematic patterns that end-to-end accuracy obscures.
+Capability-wise, supplying correct prerequisites eliminates 54% of errors on cognitive tasks, lifting them from weakest to above spatial and temporal.
+Prerequisite-wise, causal contributions are concentrated in a few critical prerequisites, and supplying the single most important one alone captures 84% of the gain from supplying all prerequisites.
+1
+Introduction
+Multimodal large language models (MLLMs) are increasingly evaluated on compositional tasks requiring multiple interdependent capabilities, from perceiving objects and estimating spatial layouts to tracking over time and reasoning
+[
+48
+,
+46
+]
+.
+Such tasks are typically scored by a single end-to-end accuracy, which records how often a model fails but not where its failures originate.
+The score conflates an intrinsic deficit, where the model lacks the targeted capability, with a cascading error, where it possesses that capability but fails on an upstream prerequisite.
+In Fig
+1
+, a model failing on multi-view sequential may lack temporal reasoning or merely misjudge the camera viewpoint on which ordering depends, yielding the same error but opposite capability diagnoses.
+More broadly, low accuracy on high-level cognitive tasks is naturally read as a reasoning deficit, a reading that holds only if the perceptual and spatial steps beneath it are sound, and growing evidence suggests they often are not
+[
+8
+,
+39
+]
+.
+A common response examines the constituent steps directly, by decomposing the task into separately scored sub-questions
+[
+31
+,
+52
+]
+or inspecting the reasoning trace for the first erroneous step
+[
+21
+]
+.
+Both localize failure more finely than an aggregate score, yet observing untreated generation alone
+cannot disentangle the two failure modes.
+First, a model’s generated reasoning trace or answers to isolated sub-questions need not reflect what it relies on to solve the full task
+[
+40
+,
+5
+]
+.
+Second, even a faithful readout reveals only co-occurrence: a prerequisite failing alongside the final task neither shows how much final failure is attributable to it, nor answers the counterfactual had it been solved correctly.
+Indeed, the outcome need not hinge on the weakest prerequisite:
+in Fig
+1
+, standalone accuracy is lowest for task-5, yet final performance turns on task-2.
+Input-level interventions do move beyond observation, supplying ground-truth intermediates
+[
+23
+]
+or injecting false premises
+[
+17
+]
+, but each tests a single condition, without a dependency structure linking sub-tasks or a measure of each prerequisite’s contribution.
+What is missing is an evaluation setting every prerequisite’s state within a shared, explicit dependency structure,
+so that the same controlled contrasts apply across capabilities and models, and each prerequisite’s contribution is measured rather than inferred.
+We propose a causal decomposition framework that turns MLLM evaluation from observation into a controlled experiment.
+We decompose each task into unit tasks with explicit prerequisite dependencies, and intervene on each by supplying a correct answer, an incorrect answer, or nothing.
+To diagnose where failures arise, we define
+natural
+,
+intrinsic
+, and
+resilience
+capability (NC, IC, RC) under these three prerequisite states, isolating a model’s performance on a target task from the influence of its modeled prerequisites.
+To explore why the overall outcome fails, we introduce the
+-Score and
+-Score, which measure each prerequisite’s causal necessity and sufficiency for the final outcome: the fraction of success lost when it alone is degraded, and the fraction of failure recovered when it alone is supplied.
+These metrics adapt classical probabilities of causation
+[
+38
+,
+29
+]
+to the LLM setting without assuming monotonicity, providing valid lower bounds on the probabilities of necessity and sufficiency.
+To instantiate this framework, we introduce CADET, a multimodal diagnostic benchmark in which each complex task is decomposed via an explicit structural causal model (SCM) into unit tasks that each target a single capability, and every unit-task question is annotated with both a verified correct answer and a plausible incorrect answer to enable three-state interventions.
+The benchmark spans 10 tasks, yielding 46 unit tasks and over 33,000 unit-task questions across four capability categories: perception, spatial, temporal, and cognitive.
+All questions and annotations are newly created by human annotators to mitigate data contamination and assure benchmark quality.
+Evaluation on 12 frontier MLLMs exposes diagnostic patterns that end-to-end accuracy obscures.
+At capability level, cognitive tasks scores lowest naturally (
+) yet rises to second under correct prerequisites (
+), eliminating
+of its natural errors; whereas spatial and temporal still retain
+–
+of their error, locating the more persistent capability gaps there.
+Injecting incorrect prerequisites degrades all models on perception and spatial (
+) yet improves cognitive in 10 of 12 models.
+Turning to causal contributions,
+- and
+-Scores reveal effective bottleneck sparsity, where a few critical prerequisites drive each task, and that a corrupted prerequisite
+costs far more than an omitted one.
+The single highest-
+prerequisite alone captures
+full-prerequisite gain, and rarely coincides with the lowest-
+NC
+prerequisite.
+Model-wise exhibits distinct diagnostic profiles, especially, the top four achieve close intrinsic capabilities (
+IC
+) despite differing in
+NC
+, and pair lower degradation loss (
+) with higher supply recovery (
+) than others.
+Together, our work
+moves MLLM evaluation beyond scoring how often models fail to diagnosing where and why they fail.
+Figure 1
+:
+An example CADET task (
+left
+) decomposed into 6 unit tasks formalized as an SCM (
+middle
+).
+Right
+: natural capability (NC) of each unit task (
+top
+), and their causal contribution (
+/
+;
+bottom
+) to final task-6, where supplying unit task-2 alone raises final accuracy from 0.27 to 0.65.
+2
+Related Work
+Multimodal Evaluation and Task Decomposition.
+Existing benchmarks evaluate MLLMs across broad capability taxonomies
+[
+48
+,
+22
+,
+53
+]
+,
+while specialized suites target individual skills such as perception and spatial
+[
+8
+,
+46
+]
+or vary visual and textual inputs to test modality reliance
+[
+39
+,
+49
+]
+.
+Beyond evaluating tasks as a whole, one line of work decomposes complex problems into sub-questions and compares sub-task accuracy with overall performance
+[
+31
+,
+52
+]
+.
+Another inspects a model’s generated reasoning steps to locate where errors first occur
+[
+21
+,
+50
+]
+,
+though recent studies show that stated chains-of-thought do not always reflect the computation behind the final answer
+[
+40
+,
+5
+]
+.
+Both read out the model’s unassisted behavior, linking sub-task and final correctness by co-occurrence; we instead set each prerequisite to a known correct or incorrect state.
+Causal Interventions for Model Diagnosis.
+Causal interventions are used to diagnose MLLMs and LLMs
+by modifying specific components at inference time to measure their effect on outputs, such as patching internal activations
+[
+25
+,
+44
+]
+or perturbing visual and textual modalities
+[
+20
+,
+19
+]
+.
+For multi-step reasoning, recent studies apply step-level interventions to execution traces, editing intermediate outputs or re-executing trajectories to identify failure-inducing steps
+[
+24
+,
+41
+,
+2
+,
+35
+]
+.
+At task-input level, prior studies provide ground-truth intermediate results to isolate downstream reasoning
+[
+23
+,
+36
+]
+or inject false premises to test robustness under misleading context
+[
+17
+,
+26
+]
+.
+These interventions either operate on model internals or single-run trajectories, or test one input condition in isolation;
+ours act on a task-defined causal graph shared across models.
+Quantifying Prerequisite Contributions.
+Attributing MLLM behavior to individual components often involves distinguishing whether a factor is necessary to prevent failure or sufficient to drive success, a distinction formalized by counterfactual necessity and sufficiency
+[
+29
+,
+38
+]
+and adopted in explainable AI for feature-level attribution
+[
+42
+,
+9
+]
+.
+In LLMs, recent studies adapt these causal concepts to test whether responses on synthetic logic problems conform to the ground-truth rules of the queries
+[
+14
+]
+, or to add missing and prune redundant chain-of-thought steps
+[
+47
+]
+.
+Both operate on the model’s own outputs; we instead attribute final-task outcomes to prerequisite via necessity and sufficiency.
+3
+Causal Decomposition Framework
+3.1
+Task Decomposition via Structural Causal Models
+Each evaluation task is decomposed into unit tasks testing a single constituent capability, with directed dependencies where some tasks rely on the outcomes of others.
+We represent these dependencies as a structural causal model (SCM)
+[
+28
+,
+30
+]
+, leveraging the established framework of causal interventions for the analysis below.
+Definition 3.1
+(Task Decomposition SCM)
+.
+Consider an evaluation task decomposed into
+constituent capabilities.
+A
+task decomposition
+is a structural causal model (SCM) over unit task variables
+, where
+denotes the outcome of unit task
+, given by the structural assignment:
+(1)
+where
+is the structural function determining
+,
+is the parents set of
+,
+and
+is a noise variable capturing unmodeled factors such as the model’s sampling stochasticity.
+Root nodes (those with
+) represent foundational capabilities that can be assessed independently,
+while the final node
+corresponds to the overall task outcome.
+3.2
+Causal Intervention Design
+To disentangle intrinsic capability from cascading upstream influence, and quantify each capability’s causal role, we adopt the interventionist framework of causal inference
+[
+29
+,
+28
+,
+34
+]
+and introduce a ternary intervention scheme tailored to LLM evaluation.
+Definition 3.2
+(Ternary Intervention)
+.
+For unit task
+, we define an intervention
+,
+:
+(i)
+denotes injecting the correct answer for
+into the prompt;
+(ii)
+denotes injecting an incorrect answer for
+;
+(iii)
+denotes the natural state where
+is not injected.
+Notation.
+All probabilities are induced by a fixed model
+, whose
+subscript we suppress. We write
+for the ternary
+intervention space. For a unit task set
+and
+, we write
+for the homogeneous intervention placing every
+in state
+,
+and abbreviate
+.
+Notably, the distinction between
+,
+is critical:
+the former preserves the model’s natural execution path by evaluating it unassisted,
+where the latter imposes an active counterfactual intervention testing reasoning under a false premise.
+Since LLM evaluation operates through input manipulation rather than passive observation, this ternary formulation emerges as the natural space of interventions, allowing us to systematically evaluate model behavior across each pairwise contrast of states.
+Assumption 3.3
+(Exogeneity under Intervention-Only Identification)
+.
+In LLM evaluation setting, the state of a unit task
+admits no faithful observational readout and is identified only through the intervention
+.
+Consequently, probabilities conditioning on
+for
+are identified with the corresponding interventional probabilities:
+(2)
+Remark 3.4
+(Justification)
+.
+Assumption
+3.3
+follows from the LLM evaluation setting:
+the state of
+admits no faithful observational readout
+[
+40
+,
+5
+]
+,
+thus a reliable mechanism to place
+in a determinate state
+is to inject the corresponding answer into the prompt,
+making conditioning on
+and intervening
+operationally identical.
+This condition coincides with the
+exogeneity
+assumption
+of
+Pearl [29]
+,
+Tian and Pearl [38]
+, but with an inverted justification:
+classical exogeneity invokes the absence of confounders to treat observations as interventions, whereas ours follows from the absence of a faithful observational channel making intervention the reliable state-assignment mechanism.
+3.3
+Capability Metrics
+With the ternary intervention mechanism established,
+we can now place the prerequisites
+of any target task
+into controlled states and measure how the model’s performance on
+responds.
+By additionally evaluating under
+and
+,
+we isolate the model’s capability on
+when its declared prerequisites are correctly provided versus actively corrupted.
+Definition 3.5
+(Causal Capability)
+.
+Let
+be any task node in the SCM with prerequisite dependencies
+. For an intervention state
+, the
+causal capability
+of
+on
+is
+(3)
+i.e., the probability that
+solves
+when all of its prerequisites are
+placed in state
+. This yields three complementary metrics:
+(i)
+natural capability
+, the natural performance where no prerequisite is injected;
+(ii)
+intrinsic capability
+, the performance isolated from declared prerequisites;
+and (iii)
+resilience capability
+, the robustness under corrupted prerequisite context.
+For root nodes (
+), no upstream intervention applies and only
+is defined.
+For non-root nodes, the three metrics disentangle a model’s proficiency on
+from the influence of modeled prerequisites.
+Specifically, comparing
+with
+separates two failure modes:
+a large gap
+indicates that the model can solve
+given correct prerequisites, pointing to upstream cascading errors as the primary bottleneck;
+a small gap with low
+suggests an intrinsic deficit on
+even when all modeled prerequisites are satisfied.
+Finally, comparing
+with
+shows whether false prerequisites mislead the model below its natural baseline, or still help guide its reasoning despite being factually wrong.
+3.4
+Contribution Metrics: N-Score and S-Score
+Building on node-level capability diagnostics, understanding how upstream unit tasks across the SCM affect the final outcome
+requires quantifying their causal contributions.
+To formalize this causal attribution, we draw upon the
+probabilities of causation
+framework
+[
+29
+,
+38
+]
+, which evaluates counterfactual causal influence through the Probability of Necessity (
+) and Probability of Sufficiency (
+).
+We do not assume monotonicity: in LLM reasoning, injecting incorrect answer (
+) can help more than no injection (
+), so
+may exceed
+(Sec
+5.2
+).
+Property 3.6
+(Absence of Monotonicity)
+.
+Under the LLM evaluation setting, the causal effect of intervening on a unit task
+via
+on downstream outcome task
+is not assumed to satisfy monotonicity. That is, the natural ordering below is not required to hold in general:
+(4)
+Without monotonicity, exact
+and
+values cannot be determined from interventional probabilities alone,
+so we introduce the
+N-Score
+and
+S-Score
+as observable lower bounds to capture the causal contribution of each prerequisite
+to the final outcome
+:
+Definition 3.7
+(N-Score)
+.
+Let
+be a target outcome task with prerequisite dependencies
+, let
+, and let
+be a pair of distinct states in
+.
+The
+N-Score
+of
+on
+is
+(5)
+measuring the fraction of
+’s success under state
+harmed by degrading
+alone from
+to
+.
+Definition 3.8
+(S-Score)
+.
+Under the setting of Definition
+3.7
+, the
+S-Score
+of
+on
+is
+(6)
+measuring the fraction of
+’s failure under state
+recovered by upgrading
+alone from
+to
+.
+Theorem 3.9
+.
+Under Assumption
+3.3
+and Property
+3.6
+, N-Score and S-Score provide valid lower bounds on the Probability of Necessity (
+) and Probability of Sufficiency (
+).
+Specifically, N-Score quantifies
+causal necessity
+by measuring how much of the model’s success on
+depends on
+.
+A high N-Score pinpoints critical performance bottlenecks where one degraded task breaks overall success even when all other prerequisites remain at
+.
+Conversely, S-Score quantifies
+causal sufficiency
+by measuring how much of the model’s failure on
+can be overcome through
+.
+A high S-Score identifies high-leverage prerequisites where supplying a single task rescues overall success even when other prerequisites remain at
+.
+Setting the other prerequisites
+asymmetrically to
+for N-Score and
+for S-Score aligns with realistic evaluation
+by testing single-task vulnerability under favorable prerequisite conditions and single-task rescue under degraded ones,
+making the two metrics complementary rather than directly convertible
+[
+29
+]
+.
+We provide the general definitions of N-Score, S-Score under arbitrary
+and theoretical discussions in Appendix.
+Table 1:
+Operational semantics of N-Score, S-Score across 4 ordered state contrasts
+.
+Contrast
+N-Score
+(Success drop from
+)
+S-Score
+(Failure recovery from
+)
+corrupting
+into a wrong answer in oracle env.
+fixing
+into the correct answer in all-wrong env.
+leaving
+unassisted in oracle env.
+providing the correct
+alone in natural env.
+injecting a wrong answer for
+in natural env.
+removing a wrong answer for
+in all-wrong env.
+removing
+’s wrong answer in all-wrong env.
+injecting a wrong
+as a scaffold in natural env.
+In practice, we evaluate N-Score and S-Score across four ordered state contrasts
+over
+:
+,
+,
+, and
+.
+As summarized in Tab
+1
+, the first two contrasts
+measure both degradation from prerequisite corruption or omission and recovery through targeted correction or repair, whereas the latter two evaluate both directions between
+and
+to capture either misinformation harm or structural scaffolding under Property
+3.6
+.
+Together, our node-level capability metrics (
+) and edge-level contribution metrics (
+) form a causal diagnostic framework for complex multimodal tasks, which we instantiate in Sec
+4
+.
+4
+Benchmark
+To apply the causal decomposition framework to frontier MLLMs and uncover where and why they fail,
+we construct CADET, a multimodal benchmark where complex tasks are decomposed into unit tasks connected via SCM and every prerequisite admits controlled interventions (details in Appendix).
+Benchmark Overview.
+CADET comprises 10 multimodal evaluation tasks across over 1,100 instances, decomposed into 46 atomic unit tasks and over 33,000 unit-task questions,
+with both overall and their constituent unit tasks categorized into four core capabilities: perception, spatial, temporal, and cognitive.
+To operationalize our causal framework, each overall task is paired with an explicit SCM defining its prerequisite structure,
+and every unit task is annotated with both a correct and an incorrect answer, along with visual annotations on the images where applicable, to support the ternary intervention scheme (
+) at every node.
+The multimodal inputs span single, multi-images and videos, while the outputs use structured formats (multiple-choice, integer, or list) for 43 of the 46 tasks and free-form text for the remaining three.
+Figure 2
+:
+Overview of SCMs corresponding to 10 tasks in CADET.
+Task Design and SCM Structure.
+Tasks are drawn primarily from real-world scenarios and designed as compositional problems requiring interdependent capabilities on which frontier MLLMs are far from saturation, so that diagnosis targets gaps these models still face.
+We further cover diverse input modalities, application domains, and capability compositions, from foundational perception to high-level cognitive reasoning.
+For each task, we formalize the prerequisite dependencies among its unit tasks into an SCM (Fig
+2
+).
+These structures range from shallow aggregations (e.g., Dice Sum) to deep multi-path cascades (e.g., Traffic Causation).
+In decomposition, we identify unit tasks that involve iterative solving of structurally recurring sub-problems, where each step depends on the previous step’s outcome and reasoning depth itself becomes a variable;
+we define these as
+Markov chain unit tasks
+.
+In the task-level SCM, a Markov chain unit task participates as a single node; for finer-grained analysis, we unfold it into a step-wise chain to track how capabilities evolve with reasoning depth.
+Tasks whose primary structure is a Markov chain are analyzed separately in Sec
+5.4
+.
+Data Construction and Quality Assurance.
+All evaluation content, including questions, answers, and unit-task annotations, is newly created by an experienced rater pool to mitigate data contamination;
+source images and videos are drawn from publicly available datasets with permissive licenses (e.g.,
+Wilson et al. [43]
+).
+The benchmark is constructed in two stages: raters first generate overall task questions and ground-truth answers under predefined task definitions.
+Based on each task’s SCM, we decompose its unit tasks into standardized atomic annotation tasks, such as bounding box localization and semantic labeling.
+Raters provide the corresponding visual annotations and ground-truth labels, which are then converted into unit-task questions and correct answers via structured templates, ensuring consistent alignment between all evaluation items and the underlying causal structure.
+Incorrect answers are randomly sampled from the valid answer space rather than manually crafted, providing a standardized, model-independent perturbation.
+To ensure benchmark quality, each annotation across both stages is independently verified by a quality-check rater who returns deficient items for iterative revision until acceptance.
+Beyond per-item verification, instances flagged as ambiguous or un-annotatable are removed during final assembly to ensure reliable causal diagnosis.
+5
+Experiments and Findings
+5.1
+Experiment Setting
+Evaluated Models.
+We evaluate 12 frontier MLLMs across six model families, covering both proprietary series: Gemini
+[
+12
+]
+, GPT
+[
+27
+]
+, Grok
+[
+45
+]
+; and open-weight series: Gemma
+[
+6
+]
+, Qwen
+[
+32
+]
+, Kimi
+[
+37
+]
+.
+This selection encompasses different model families at varying capability scales, enabling both cross-family and within-family diagnostic comparisons.
+All models are queried through public APIs with default parameter setting.
+Thinking mode is set to high or left at its default if not-configurable.
+Intervention Implementation.
+To operationalize the ternary intervention, for each prerequisite unit task
+, we inject its intervened state (
+) into prompt as a structured JSON question-answer pair.
+For
+, alongside the correct textual answer, we render corresponding visual annotations (e.g., bounding box, path)
+whenever the prerequisite’s ground truth directly represents spatial information in the scene.
+For
+, incorrect answer is injected via text without modifying the image, to prevent shifting the visual referent of the query and ensure we test reasoning under a false premise about the intended target.
+Under natural state
+, no prerequisite information is provided for
+.
+Evaluation Protocol.
+We report the capability metrics (NC, IC, RC) for each unit task, and the contribution metrics (N-Score, S-Score) on the overall task across four state contrasts:
+,
+,
+, and
+.
+Model predictions are evaluated via exact match for structured outputs, with Gemini 3.6 Flash serving as LLM judger
+[
+51
+]
+for free-form text tasks and format mismatches.
+Full experimental settings are provided in Appendix.
+5.2
+Capability Diagnostics
+Figure 3
+:
+Natural(NC) and intrinsic(IC) capabilities on non-root unit tasks:
+(a)
+category-level NC and IC averaged over 12 models;
+(b–e)
+per-model NC and IC within each category.
+Figure 4
+:
+Per-model
+gap across categories on non-root unit tasks.
+Figure 5
+:
+Prerequisite causal contributions
+/
+to overall task
+.
+Cascading errors reorder the apparent capability ranking.
+Under end-to-end evaluation (NC), accuracy falls across perception, spatial, temporal, and cognitive tasks (0.59, 0.56, 0.46, 0.41; Fig
+5
+(a)),
+a pattern that would attribute the largest deficits to high-level reasoning.
+Supplying correct prerequisites (IC) reorders the categories: cognitive reasoning moves to second (0.72), above spatial (0.67) and temporal (0.61), behind only perception (0.80).
+Decomposing the total error into a cascading component
+and a residual component
+accounts for this shift,
+as cascading errors constitute 54% of cognitive failures (0.32 of 0.59).
+Spatial and temporal reasoning show the opposite composition, with residual errors (0.33, 0.39) covering 75% and 72% of their failures and small gains from correct prerequisites (0.12, 0.15), locating the more persistent intrinsic capability gaps at these two categories rather than at cognition.
+Frontier models share similar intrinsic ceilings but differ in cascading errors
+(Fig
+5
+(b-e)).
+Supplying correct prerequisites (IC) brings the top 4 SOTA models to nearly identical ceilings across categories (0.88-0.91 in perception, 0.80-0.83 in cognition), tracing their end-to-end (NC) gaps to cascading errors (
+):
+GPT-5.4 and Gemini family trade places, with larger cascading loss for
+GPT-5.4 in perception (0.28 vs. 0.15–0.22) and for Gemini in cognition (0.35–0.37 vs. 0.24).
+Across all 12 models, perception exhibits the widest spread in residual errors (
+: 0.09–0.45), spatial shows uniformly high residual errors (0.25–0.43), and cognitive carries uniformly large cascading errors (
+: 0.22–0.37).
+Model-wise, close NC scores mask divergent error compositions: Qwen3.5 397B and Kimi K2.5 match neighboring models in NC yet carry substantially higher residual errors (
+) in different categories.
+Incorrect prerequisites harm perception and spatial but mildly aid cognition.
+The
+gap rises across the hierarchy (Fig
+5
+):
+all 12 models fall below zero in perception and spatial, while 10 of 12 turn positive in cognition.
+The gap also varies widely across models within each category (
+to
+).
+The positive cognitive gaps directly instantiate the non-monotonicity formalized in Property
+3.6
+: incorrect prerequisites do not uniformly degrade performance.
+5.3
+Causal Contribution Analysis
+Causal contributions exhibit effective bottleneck sparsity.
+Evaluating prerequisite contributions via
+and
+(Fig
+5
+) across 8 non-Markov tasks shows that causal influence is highly uneven across parents, with each task driven by one or a few critical prerequisites.
+These critical parents act either as core bottlenecks that cause large oracle drops when omitted and strong natural recovery when provided (high
+/high
+), or as compensable levers whose omission is offset by other oracle prerequisites yet still rescue natural failures alone (low
+/high
+).
+By contrast,
+the remaining prerequisites have individually small effects
+(low
+/low
+), while conjunctive bottlenecks that hurt oracle performance without aiding natural recovery are nearly absent (high
+/low
+).
+Figure 6
+:
+across Pattern 1(
+a,b
+) and Pattern 2 (
+c,d
+) tasks for top-4 SOTA (
+a,c
+) and remaining 8 Others (
+b,d
+) models (
+-scaled axes, similar in Fig
+5
+).
+Disaggregating by model reveals two distinct criticality patterns.
+Expanding to individual models (Fig
+6
+) reveals two task patterns and a broad split between top-4 (SOTA) and remaining (Others) models.
+Under Pattern 1 (Fig
+6
+a,b), both groups exhibit critical prerequisites with high single-point recovery capacity (high
+), with Others shifting moderately toward higher
+and lower
+.
+Under Pattern 2 (Fig
+6
+c,d), SOTA keeps prerequisites at high
+with low oracle omission sensitivity (low
+), whereas Others shift substantially toward higher
+and lower
+, losing effective single-point recoverability while suffering larger oracle drops from single-task omission.
+Across both patterns, SOTA maintains low oracle vulnerability and often has multiple high-
+prerequisites per task that each could rescue natural failures alone;
+while Others drift rightward and downward, moderately in Pattern 1 and severely in Pattern 2, reflecting higher oracle sensitivity and weaker single-task recovery.
+Structurally, the prerequisite count
+averages 3.0 in Pattern 1 and 5.25 in Pattern 2.
+Figure 7
+:
+/
+-Scores across the four state contrasts for SOTA vs. Others models.
+Figure 8
+:
+(a)
+vs.
+;
+(b)
+percentage of full all-prerequisite gain(
+) recovered by single-parent supply across selection criteria.
+Figure 9
+:
+Category-level prerequisite
+/
+-Scores across 4 state contrasts.
+Figure 10
+:
+Step-wise capabilities (NC, IC, RC) and causal contributions (
+,
+) along step
+across Markov chain unit tasks.
+A single supplied prerequisites recovers most full-prerequisite gains.
+Supplying only the single most sufficient prerequisite (
+) recovers 84% of the full all-prerequisite gain (
+) overall (Fig
+8
+b), showing that one targeted intervention already accounts for most of the attainable gain.
+This leverage is not readable from standalone accuracy:
+does not track
+across prerequisites (Fig
+8
+a).
+To test whether cheaper node-level signals could substitute for
+in identify the same prerequisite,
+we repeat single-parent repair under alternative criteria (including the weakest prerequisite
+; Fig
+8
+b), none of which recovers this single-parent optimum overall.
+The shortfall of
+stays around 8 pp in Pattern 1 tasks, where models share a single dominant bottleneck;
+but widens sharply in Pattern 2 tasks with denser multi-parent dependencies, where
+-chosen parent sustains 76% of the full gain while
+-based only 36%.
+Incorrect prerequisites hurt far more than omission.
+Extending to full ternary contrast space (Fig
+8
+,
+10
+), injecting incorrect prerequisites is consistently more destructive than leaving them unassisted (
+across all categories), with minor gains from incorrect answers on temporal (
+).
+Unlike cognitive target tasks benefiting from incorrect prerequisites (Sec
+5.2
+), the two cognitive prerequisites are highly sensitive to correctness: corrupting or omitting them causes the steepest overall task drops (
+) with no gain from incorrect answers (
+), while fixing or removing them drives strong recovery (
+).
+SOTA models (Fig
+8
+) pair uniformly lower
+with higher
+than Others across all four contrasts,
+showing stronger robustness to single-prerequisite degradation with superior single-point recovery even under corruption.
+5.4
+Markov Chain Unit Task Analysis
+We analyze the Markov chain unit tasks (Sec
+4
+),
+in which each
+depends solely on its predecessor
+.
+Under this single-parent structure, N, S-Score converge into
+a single NS-Score (
+; Appendix).
+Fig
+10
+reports
+,
+,
+and
+score along step
+.
+First, capability degrades nonlinearly with a single-step effective horizon:
+in goal-directed tasks,
+and
+remain flat until one step from the exit (Fig
+10
+b,
+);
+symmetrically, in process-cumulative tasks where
+collapses to a flat floor immediately at
+,
+and
+peak at the first step (Fig
+10
+c) and gradually decline with depth.
+Second, alternating Position (Fig
+10
+c) and Action (Fig
+10
+d) nodes within the same chain respond divergently to incorrect prerequisites:
+for spatial tracking versus substantial for action planning, consistent with the finding in Sec
+5.2
+that incorrect prerequisites benefit cognitive reasoning but not perception.
+Third, as depth
+grows, Position continues to require factual correctness (
+), whereas in cognitive Action,
+steadily rises from
+(
+) to
+(
+) to match
+(
+), showing that explicit prerequisite conditioning, regardless of correctness, increasingly accounts for cognitive recovery at deeper horizons.
+6
+Conclusion
+We introduced a causal decomposition framework and the CADET benchmark, applying controlled ternary interventions over explicit prerequisite structures to diagnose where and why MLLMs fail.
+Our capability metrics (NC, IC, RC) separate cascading influence from intrinsic deficits, showing that supplying correct prerequisites substantially lifts cognitive tasks while spatial and temporal reasoning retain persistent intrinsic gaps, and that incorrect prerequisites often still aid cognition.
+The
+-,
+-Scores reveal effective bottleneck sparsity, where a few critical prerequisites drive each task, and supplying the single most sufficient one recovers most full-prerequisite gain yet rarely coincides with the least accurate prerequisite.
+Across models, top ones exhibit lower degradation alongside stronger single-point recovery.
+More broadly, our diagnostic framework can inform future improvements, from inference-time CoT guidance, query rewriting to training and multi-step system design.
+References
+[1]
+A. Balke and J. Pearl
+(1994)
+Counterfactual probabilities: computational methods, bounds and applications
+.
+In
+Uncertainty in artificial intelligence
+,
+pp. 46–54
+.
+Cited by:
+§A.2
+.
+[2]
+A. Bonagiri, D. Borkar, G. J. Anderias, S. Rafatirad, and H. Homayoun
+(2026)
+CausalFlow: causal attribution and counterfactual repair for llm agent failures
+.
+arXiv preprint arXiv:2605.25338
+.
+Cited by:
+§2
+.
+[3]
+J. Chen, T. Liang, S. Siu, Z. Wang, K. Wang, Y. Wang, Y. Ni, Z. Jiang, W. Zhu, B. Lyu,
+et al.
+(2025)
+Mega-bench: scaling multimodal evaluation to over 500 real-world tasks
+.
+In
+International Conference on Learning Representations
+,
+Vol.
+2025
+,
+pp. 28384–28494
+.
+Cited by:
+Table 5
+.
+[4]
+L. Chen, W. Xie, Y. Liang, H. He, H. Zhao, Z. Yang, Z. Huang, H. Wu, H. Lu, Y. Bao,
+et al.
+(2026)
+Babyvision: visual reasoning beyond language
+.
+arXiv preprint arXiv:2601.06521
+.
+Cited by:
+Table 5
+.
+[5]
+Y. Chen, J. Benton, A. Radhakrishnan, J. Uesato, C. Denison, J. Schulman, A. Somani, P. Hase, M. Wagner, F. Roger,
+et al.
+(2025)
+Reasoning models don’t always say what they think
+.
+arXiv preprint arXiv:2505.05410
+.
+Cited by:
+§1
+,
+§2
+,
+Remark 3.4
+.
+[6]
+G. DeepMind
+(2026)
+Gemma 4: our most intelligent open models to date
+.
+Note:
+https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/
+Accessed: 2026-05-01
+Cited by:
+Appendix C
+,
+§5.1
+.
+[7]
+M. Fréchet
+(1935)
+Généralisation du théoreme des probabilités totales
+.
+Fundamenta mathematicae
+25
+,
+pp. 379–387
+.
+Cited by:
+§A.2
+.
+[8]
+X. Fu, Y. Hu, B. Li, Y. Feng, H. Wang, X. Lin, D. Roth, N. A. Smith, W. Ma, and R. Krishna
+(2024)
+Blink: multimodal large language models can see but not perceive
+.
+In
+European Conference on Computer Vision
+,
+pp. 148–166
+.
+Cited by:
+§1
+,
+§2
+.
+[9]
+S. Galhotra, R. Pradhan, and B. Salimi
+(2021)
+Explaining black-box algorithms using probabilistic contrastive counterfactuals
+.
+In
+Proceedings of the 2021 international conference on management of data
+,
+pp. 577–590
+.
+Cited by:
+§2
+.
+[10]
+Gemini Team and Google DeepMind
+(2025)
+Gemini 3 flash: frontier intelligence built for speed
+.
+Technical Blog / Model Release
+Google
+.
+External Links:
+Link
+Cited by:
+Appendix C
+.
+[11]
+Gemini Team and Google DeepMind
+(2026)
+Gemini 3.1 flash-lite: built for intelligence at scale
+.
+Technical Blog / Model Release
+Google
+.
+External Links:
+Link
+Cited by:
+Appendix C
+.
+[12]
+Gemini Team
+(2026)
+Gemini 3.1 pro: a smarter model for your most complex tasks
+.
+Google DeepMind
+.
+External Links:
+Link
+Cited by:
+Appendix C
+,
+§5.1
+.
+[13]
+A. Ghosh, S. Zheng, R. Tamburo, K. Vuong, J. Alvarez-Padilla, H. Zhu, M. Cardei, N. Dunn, C. Mertz, and S. G. Narasimhan
+(2025)
+Roadwork: a dataset and benchmark for learning to recognize, observe, analyze and drive through work zones
+.
+In
+2025 IEEE/CVF International Conference on Computer Vision (ICCV)
+,
+pp. 6132–6142
+.
+Cited by:
+Table 5
+.
+[14]
+J. González and A. V. Nori
+(2024)
+Does reasoning emerge? examining the probabilities of causation in large language models
+.
+Advances in Neural Information Processing Systems
+37
+,
+pp. 117737–117761
+.
+Cited by:
+§2
+.
+[15]
+Google DeepMind
+(2026)
+Gemini 3.5 flash: model card
+.
+Note:
+Accessed: 2026-08-18
+External Links:
+Link
+Cited by:
+Appendix C
+.
+[16]
+Google DeepMind
+(2026)
+Gemini 3.6 flash: model card
+.
+External Links:
+Link
+Cited by:
+Appendix C
+.
+[17]
+T. Guan, F. Liu, X. Wu, R. Xian, Z. Li, X. Liu, X. Wang, L. Chen, F. Huang, Y. Yacoob,
+et al.
+(2024)
+Hallusionbench: an advanced diagnostic suite for entangled language hallucination and visual illusion in large vision-language models
+.
+In
+2024 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)
+,
+pp. 14375–14385
+.
+Cited by:
+§1
+,
+§2
+.
+[18]
+Y. Hao, J. Gu, H. W. Wang, L. Li, Z. Yang, L. Wang, and Y. Cheng
+(2025)
+Can mllms reason in multimodality? emma: an enhanced multimodal reasoning benchmark
+.
+arXiv preprint arXiv:2501.05444
+.
+Cited by:
+Table 5
+.
+[19]
+V. Hasic, C. Wang, L. C. Garcia-Peraza-Herrera, D. Watson, and S. Krivic
+(2026)
+Which modality decides? counterfactual modality attribution for multimodal llms
+.
+arXiv preprint arXiv:2608.00076
+.
+Cited by:
+§2
+.
+[20]
+L. Li, J. Qu, L. Song, Y. Zhou, Y. Qin, T. Yang, and Y. Zhao
+(2025)
+Treble counterfactual vlms: a causal approach to hallucination
+.
+Cited by:
+§2
+.
+[21]
+H. Lightman, V. Kosaraju, Y. Burda, H. Edwards, B. Baker, T. Lee, J. Leike, J. Schulman, I. Sutskever, and K. Cobbe
+(2024)
+Let’s verify step by step
+.
+In
+International Conference on Learning Representations
+,
+Vol.
+2024
+,
+pp. 39578–39601
+.
+Cited by:
+§1
+,
+§2
+.
+[22]
+Y. Liu, H. Duan, Y. Zhang, B. Li, S. Zhang, W. Zhao, Y. Yuan, J. Wang, C. He, Z. Liu,
+et al.
+(2024)
+Mmbench: is your multi-modal model an all-around player?
+.
+In
+European conference on computer vision
+,
+pp. 216–233
+.
+Cited by:
+§2
+.
+[23]
+P. Lu, H. Bansal, T. Xia, J. Liu, C. Li, H. Hajishirzi, H. Cheng, K. Chang, M. Galley, and J. Gao
+(2024)
+Mathvista: evaluating mathematical reasoning of foundation models in visual contexts
+.
+In
+International Conference on Learning Representations
+,
+Vol.
+2024
+,
+pp. 23439–23554
+.
+Cited by:
+§1
+,
+§2
+.
+[24]
+M. Ma, J. Zhang, F. Yang, Y. Kang, Q. Lin, S. Rajmohan, and D. Zhang
+(2026)
+Dover: intervention-driven auto debugging for llm multi-agent systems
+.
+In
+International Conference on Learning Representations
+,
+Vol.
+2026
+,
+pp. 28059–28087
+.
+Cited by:
+§2
+.
+[25]
+K. Meng, D. Bau, A. Andonian, and Y. Belinkov
+(2022)
+Locating and editing factual associations in gpt
+.
+Advances in neural information processing systems
+35
+,
+pp. 17359–17372
+.
+Cited by:
+§2
+.
+[26]
+Y. Ming, S. Purushwalkam, S. Pandit, Z. Ke, X. Nguyen, C. Xiong, and S. Joty
+(2025)
+Faitheval: can your language model stay faithful to context, even if" the moon is made of marshmallows"
+.
+In
+International Conference on Learning Representations
+,
+Vol.
+2025
+,
+pp. 29430–29456
+.
+Cited by:
+§2
+.
+[27]
+OpenAI
+(2026)
+Introducing GPT-5.4
+.
+External Links:
+Link
+Cited by:
+Appendix C
+,
+§5.1
+.
+[28]
+J. Pearl
+(2009)
+Causality: models, reasoning, and inference
+.
+External Links:
+ISBN 9780521895606
+Cited by:
+§A.2
+,
+§A.2
+,
+§A.3.2
+,
+Appendix A
+,
+§3.1
+,
+§3.2
+.
+[29]
+J. Pearl
+(2022)
+Probabilities of causation: three counterfactual interpretations and their identification
+.
+In
+Probabilistic and causal inference: the works of Judea Pearl
+,
+pp. 317–372
+.
+Cited by:
+§A.2
+,
+§A.2
+,
+§A.2
+,
+§A.2
+,
+§A.2
+,
+§A.3.1
+,
+§A.3.2
+,
+§1
+,
+§2
+,
+§3.2
+,
+§3.4
+,
+§3.4
+,
+Remark 3.4
+.
+[30]
+J. Peters, D. Janzing, and B. Schölkopf
+(2017)
+Elements of causal inference: foundations and learning algorithms
+.
+The MIT press
+.
+Cited by:
+§3.1
+.
+[31]
+O. Press, M. Zhang, S. Min, L. Schmidt, N. A. Smith, and M. Lewis
+(2023)
+Measuring and narrowing the compositionality gap in language models
+.
+In
+Findings of the Association for Computational Linguistics: EMNLP 2023
+,
+pp. 5687–5711
+.
+Cited by:
+§1
+,
+§2
+.
+[32]
+Qwen Team
+(2026)
+Qwen3.5: towards native multimodal agents
+.
+External Links:
+Link
+Cited by:
+Appendix C
+,
+§5.1
+.
+[33]
+Qwen Team
+(2026)
+Qwen3.6-27B: flagship-level coding in a 27B dense model
+.
+External Links:
+Link
+Cited by:
+Appendix C
+.
+[34]
+D. B. Rubin
+(1974)
+Estimating causal effects of treatments in randomized and nonrandomized studies.
+.
+Journal of educational Psychology
+66
+(
+5
+),
+pp. 688
+.
+Cited by:
+§3.2
+.
+[35]
+J. Shah
+(2026)
+Causal agent replay: counterfactual attribution for llm-agent failures
+.
+arXiv preprint arXiv:2606.08275
+.
+Cited by:
+§2
+.
+[36]
+H. Shao, S. Qian, H. Xiao, G. Song, Z. Zong, L. Wang, Y. Liu, and H. Li
+(2024)
+Visual cot: advancing multi-modal language models with a comprehensive dataset and benchmark for chain-of-thought reasoning
+.
+Advances in Neural Information Processing Systems
+37
+,
+pp. 8612–8642
+.
+Cited by:
+§2
+.
+[37]
+K. Team, T. Bai, Y. Bai, Y. Bao, S. Cai, Y. Cao, Y. Charles, H. Che, C. Chen, G. Chen,
+et al.
+(2026)
+Kimi k2. 5: visual agentic intelligence
+.
+arXiv preprint arXiv:2602.02276
+.
+Cited by:
+Appendix C
+,
+§5.1
+.
+[38]
+J. Tian and J. Pearl
+(2000)
+Probabilities of causation: bounds and identification
+.
+Annals of Mathematics and Artificial Intelligence
+28
+(
+1
+),
+pp. 287–313
+.
+Cited by:
+§A.2
+,
+§A.3.1
+,
+§A.3.1
+,
+§A.3.2
+,
+Proposition A.5
+,
+§1
+,
+§2
+,
+§3.4
+,
+Remark 3.4
+.
+[39]
+S. Tong, Z. Liu, Y. Zhai, Y. Ma, Y. LeCun, and S. Xie
+(2024)
+Eyes wide shut? exploring the visual shortcomings of multimodal llms
+.
+In
+2024 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)
+,
+pp. 9568–9578
+.
+Cited by:
+§1
+,
+§2
+.
+[40]
+M. Turpin, J. Michael, E. Perez, and S. Bowman
+(2023)
+Language models don’t always say what they think: unfaithful explanations in chain-of-thought prompting
+.
+Advances in Neural Information Processing Systems
+36
+,
+pp. 74952–74965
+.
+Cited by:
+§1
+,
+§2
+,
+Remark 3.4
+.
+[41]
+Y. Wang, W. Wu, J. Wang, and Q. Wang
+(2026)
+From flat logs to causal graphs: hierarchical failure attribution for llm-based multi-agent systems
+.
+arXiv preprint arXiv:2602.23701
+.
+Cited by:
+§2
+.
+[42]
+D. S. Watson, L. Gultchin, A. Taly, and L. Floridi
+(2021)
+Local explanations via necessity and sufficiency: unifying theory and practice
+.
+In
+Uncertainty in Artificial Intelligence
+,
+pp. 1382–1392
+.
+Cited by:
+§2
+.
+[43]
+B. Wilson, W. Qi, T. Agarwal, J. Lambert, J. Singh, S. Khandelwal, B. Pan, R. Kumar, A. Hartnett, J. K. Pontes, D. Ramanan, P. Carr, and J. Hays
+(2023)
+Argoverse 2: next generation datasets for self-driving perception and forecasting
+.
+External Links:
+2301.00493
+,
+Link
+Cited by:
+Table 5
+,
+§4
+.
+[44]
+Z. Wu, A. Geiger, T. Icard, C. Potts, and N. Goodman
+(2023)
+Interpretability at scale: identifying causal mechanisms in alpaca
+.
+Advances in neural information processing systems
+36
+,
+pp. 78205–78226
+.
+Cited by:
+§2
+.
+[45]
+xAI
+(2025)
+Grok-4 model card
+.
+External Links:
+Link
+Cited by:
+Appendix C
+,
+§5.1
+.
+[46]
+J. Yang, S. Yang, A. W. Gupta, R. Han, L. Fei-Fei, and S. Xie
+(2025)
+Thinking in space: how multimodal large language models see, remember, and recall spaces
+.
+In
+2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)
+,
+pp. 10632–10643
+.
+Cited by:
+§1
+,
+§2
+.
+[47]
+X. Yu, Z. Wang, L. Yang, H. Li, A. Liu, X. Xue, J. Wang, and M. Yang
+(2026)
+Causal sufficiency and necessity improves chain-of-thought reasoning
+.
+Advances in Neural Information Processing Systems
+38
+,
+pp. 126109–126141
+.
+Cited by:
+§2
+.
+[48]
+X. Yue, Y. Ni, K. Zhang, T. Zheng, R. Liu, G. Zhang, S. Stevens, D. Jiang, W. Ren, Y. Sun,
+et al.
+(2024)
+Mmmu: a massive multi-discipline multimodal understanding and reasoning benchmark for expert agi
+.
+In
+Proceedings of the IEEE/CVF conference on computer vision and pattern recognition
+,
+pp. 9556–9567
+.
+Cited by:
+§1
+,
+§2
+.
+[49]
+R. Zhang, D. Jiang, Y. Zhang, H. Lin, Z. Guo, P. Qiu, A. Zhou, P. Lu, K. Chang, Y. Qiao,
+et al.
+(2024)
+Mathverse: does your multi-modal llm truly see the diagrams in visual math problems?
+.
+In
+European Conference on Computer Vision
+,
+pp. 169–186
+.
+Cited by:
+§2
+.
+[50]
+S. Zhang, M. Yin, J. Zhang, J. Liu, Z. Han, J. Zhang, B. Li, C. Wang, H. Wang, Y. Chen,
+et al.
+(2025)
+Which agent causes task failures and when? on automated failure attribution of llm multi-agent systems
+.
+arXiv preprint arXiv:2505.00212
+.
+Cited by:
+§2
+.
+[51]
+L. Zheng, W. Chiang, Y. Sheng, S. Zhuang, Z. Wu, Y. Zhuang, Z. Lin, Z. Li, D. Li, E. P. Xing, H. Zhang, J. E. Gonzalez, and I. Stoica
+(2023)
+Judging llm-as-a-judge with mt-bench and chatbot arena
+.
+In
+Proceedings of the 37th International Conference on Neural Information Processing Systems
+,
+NIPS ’23
+,
+Red Hook, NY, USA
+.
+Cited by:
+§5.1
+.
+[52]
+Q. Zhou, Y. Gong, G. Bao, H. Qiu, J. Li, X. Zhu, H. Zhang, and Y. Zhang
+(2025)
+Reasoning is all you need for video generalization: a counterfactual benchmark with sub-question evaluation
+.
+In
+Findings of the Association for Computational Linguistics: ACL 2025
+,
+pp. 2939–2957
+.
+Cited by:
+§1
+,
+§2
+.
+[53]
+Z. Zhou, S. Liu, M. Ning, W. Liu, J. Wang, D. Wong, X. Huang, Q. Wang, and K. Huang
+(2025)
+Is your model really a good math reasoner? evaluating mathematical reasoning with checklist
+.
+In
+International Conference on Learning Representations
+,
+Vol.
+2025
+,
+pp. 34238–34281
+.
+Cited by:
+§2
+.
+Appendix A
+Details and Proofs of Causal Decomposition Framework
+In this section, we provide the general definitions of N-Score and S-Score under arbitrary prerequisite states, followed by the theoretical proofs and properties of our causal decomposition framework.
+The do-operator.
+We adopt the standard do-operator (Section
+3.2
+;
+Pearl [28]
+). For
+,
+replaces the structural assignment of
+in (
+1
+) with
+while keeping all other assignments unchanged, and
+leaves
+the assignment of
+intact; interventions on multiple unit tasks apply these operations
+jointly.
+denotes the distribution induced by the resulting SCM.
+A.1
+General Definition of N-Score, S-Score
+In Section
+3.4
+(Definitions
+3.7
+and
+3.8
+), when quantifying the causal contribution of a prerequisite unit task
+to the target outcome
+across an ordered contrast
+, we specifically set the remaining prerequisites
+to the homogeneous state
+for N-Score and
+for S-Score. Here, we generalize this formulation by allowing the remaining prerequisites to take any arbitrary intervention state configuration.
+Specifically, let
+denote an arbitrary intervention state configuration assigned to
+, denoted as
+, which sets the intervention state of each prerequisite
+to
+with
+. Following the notation in Section 3.2, when all unit tasks in
+are placed in a single homogeneous state
+(i.e.,
+for all
+), we write
+without boldface.
+Based on this general state configuration
+for the remaining prerequisites, we define the general N-Score and S-Score as follows.
+Definition A.1
+(General N-Score)
+.
+Let
+be a target outcome task with prerequisite dependencies
+, let
+, and let
+be an ordered pair of distinct states in
+. For any intervention state configuration
+assigned to the remaining prerequisites
+, the general N-Score of
+on
+is defined as:
+(7)
+measuring the fraction of
+’s success under
+that is lost when
+alone is degraded from
+to
+.
+Definition A.2
+(General S-Score)
+.
+Under the setting of Definition
+A.1
+, for any intervention state configuration
+assigned to
+, the general S-Score of
+on
+is defined as:
+(8)
+measuring the fraction of
+’s failure under
+that is recovered when
+alone is upgraded from
+to
+.
+Under these general definitions, the N-Score (Definition 3.7) and S-Score (Definition 3.8) introduced in Section 3.4 correspond to the special cases where every element of
+is set to the homogeneous state
+(i.e.,
+) for N-Score and
+(i.e.,
+) for S-Score, respectively.
+A.2
+Lower Bound Guarantee of N-Score and S-Score
+This section provides the formal statement and proof of Theorem
+3.9
+in Section
+3.4
+. We establish the lower-bound guarantee for the general N-Score and S-Score (Definitions
+A.1
+and
+A.2
+) under an arbitrary prerequisite configuration
+(Theorems
+A.3
+and
+A.4
+), where Theorem
+3.9
+corresponds to the special cases
+for N-Score and
+for S-Score.
+Theorem A.3
+.
+Under Assumption
+3.3
+(Exogeneity), for any prerequisite unit task
+, any ordered contrast
+of distinct states in
+, and any intervention state configuration
+assigned to the remaining prerequisites
+, the general N-Score (Definition
+A.1
+) provides a valid lower bound on the Probability of Necessity (
+) under prerequisite context
+:
+(9)
+In particular, setting every element of
+to the homogeneous state
+(i.e.,
+) directly establishes the N-Score lower bound in Theorem
+3.9
+.
+Proof.
+Note that under exogeneity and non-monotonicity, the mathematical technique of bounding probabilities of causation via Fréchet inequalities
+[
+7
+]
+is established in the foundational works of
+Pearl [29]
+,
+Tian and Pearl [38]
+,
+Pearl [28]
+,
+Balke and Pearl [1]
+. Here, we adapt and instantiate their derivation step-by-step to demonstrate how it applies to our multi-parent LLM evaluation setting under prerequisite configuration
+, Assumption
+3.3
+, and Property
+3.6
+.
+For notational conciseness under the prerequisite intervention
+, in below proof, let
+denote the probability measure in the induced submodel
+[
+28
+]
+, where
+and
+denote the potential outcomes of
+under further regime interventions
+and
+within
+. Following
+Pearl [29]
+, the Probability of Necessity (
+) across contrast
+under context
+is defined as the counterfactual probability that
+fails under
+, given that
+succeeded under regime
+:
+If
+, the success baseline is zero and the bound holds trivially by convention (
+). Thus, assuming
+, we first apply the definition of conditional probability:
+By the consistency property of structural causal models, the observed outcome under regime
+coincides with the potential outcome
+. Substituting
+into the numerator yields:
+Next, we factor out the marginal regime probability
+in the numerator and divide both the numerator and the denominator by it:
+Under the exogeneity of the regime assignment (Assumption
+3.3
+), the potential outcomes
+are independent of
+, and conditioning on
+is operationally identical to intervening on it. This removes the conditioning event in both the numerator and the denominator:
+Since we do not assume monotonicity (Property
+3.6
+) in LLM reasoning, the joint counterfactual probability
+cannot be point-identified from marginal probabilities alone. Applying the classical Fréchet lower bound
+[
+29
+]
+to the numerator gives:
+Using the complement rule
+gives:
+Finally, unpacking the submodel notation back into full interventional probabilities via
+and
+yields:
+Thus
+∎
+Theorem A.4
+.
+Under Assumption
+3.3
+(Exogeneity), for any prerequisite unit task
+, any ordered contrast
+of distinct states in
+, and any intervention state configuration
+assigned to the remaining prerequisites
+, the general S-Score (Definition
+A.2
+) provides a valid lower bound on the Probability of Sufficiency (
+) under prerequisite context
+:
+(10)
+In particular, setting every element of
+to the homogeneous state
+(i.e.,
+) directly establishes the S-Score lower bound in Theorem
+3.9
+.
+Proof.
+Similar to the proof of Theorem
+A.3
+, let
+denote the probability measure in the submodel
+, where
+and
+represent the potential outcomes of
+under
+and
+. Following
+Pearl [29]
+, the Probability of Sufficiency (
+) across contrast
+under context
+measures the counterfactual probability that upgrading
+to state
+would rescue
+to success, given that
+failed under regime
+:
+If
+, the failure baseline is zero and the bound holds trivially by convention (
+). Thus, assuming
+, we expand this conditional counterfactual probability using the definition of conditional probability:
+By consistency, the observed outcome under regime
+coincides with the potential outcome
+, so we replace the observed failure
+in the numerator with
+:
+Factoring out
+in the numerator and dividing both the numerator and the denominator by it yields:
+Under the exogeneity of the regime assignment (Assumption
+3.3
+), the potential outcomes
+are independent of
+, and conditioning on
+is operationally identical to intervening on it. This removes the conditioning event in both the numerator and the denominator:
+Since monotonicity is not assumed (Property
+3.6
+), the joint counterfactual probability
+is again not point-identified. Applying the Fréchet lower bound
+[
+29
+]
+to the numerator yields:
+Substituting
+into the numerator simplifies the fraction to:
+Finally, unpacking the submodel notation
+and
+establishes the general S-Score lower bound:
+Thus
+∎
+A.3
+Theoretical Properties
+In this section, we discuss two key theoretical properties of our contribution metrics that directly underpin our experimental design and diagnostic analysis in the main text: (i) the exact identification of PN and PS under monotonicity versus our conservative lower bounds under LLM non-monotonicity, and (ii) the rationale for our asymmetric prerequisite control scheme over
+.
+A.3.1
+Exact Identification under Monotonicity
+In the probabilities of causation framework
+[
+29
+,
+38
+]
+,
+when the monotonicity assumption holds, the Fréchet lower bounds in Theorems
+A.3
+and
+A.4
+tighten to exact equality.
+Proposition A.5
+(Exact Identification under Monotonicity;
+[
+38
+]
+)
+.
+Under the setting of Theorems
+A.3
+and
+A.4
+, if
+is monotonic with respect to
+across contrast
+under context
+(i.e.,
+), then N-Score and S-Score equal PN and PS.
+For the detailed proof, we refer the reader to
+Tian and Pearl [38]
+.
+In LLM evaluation, however, we do not impose the monotonicity assumption (Property
+3.6
+), as we discussed in Section
+3
+.
+Meanwhile, as our experiments in Section
+5.2
+show, injecting an incorrect answer (
+) can provide a reasoning scaffold that guides downstream deduction better than providing no information (
+),
+causing
+to exceed
+.
+A.3.2
+Remaining Prerequisite
+Controlling
+Controlling for Remaining Prerequisites
+.
+In a multi-parent SCM, the causal effect of a unit task
+on the final outcome
+is also influenced by the states of the remaining prerequisites
+. When
+is left un-intervened in the natural state
+, the actual realizations of these prerequisites remain unobserved and depend on each model’s upstream proficiency, which conflates
+’s causal effect with model-specific upstream variations. To isolate
+’s contribution under controlled conditions, our general definitions (Definitions
+A.1
+and
+A.2
+) allow
+to take any intervention state configuration
+. Because each prerequisite takes one of three states in
+, the full configuration space contains
+possible combinations. To evaluate
+across representative prerequisite contexts without enumerating this exponential space, we restrict
+to homogeneous configurations where all remaining prerequisites share the same state
+. This reduction yields three interpretable background environments: the oracle environment (
+), the corrupted environment (
+), and the natural environment (
+).
+Asymmetric Prerequisite Control in N-Score and S-Score.
+To capture complementary diagnostic properties across these homogeneous environments, our main-text definitions of N-Score and S-Score (Definitions
+3.7
+and
+3.8
+) assign asymmetric background states to
+for any ordered contrast
+. Specifically, N-Score sets
+, whereas S-Score sets
+. This design aligns each metric with its intended diagnostic role in LLM evaluation. For N-Score, conditioning on
+establishes a baseline environment where all prerequisites begin at state
+, allowing the metric to measure single-task vulnerability when
+alone degrades to
+. For S-Score, conditioning on
+establishes a baseline environment where all prerequisites begin at state
+, allowing the metric to measure single-task recovery when
+alone upgrades to
+. Furthermore, combining this asymmetric control with our ordered contrasts
+,
+,
+, and
+systematically covers all three homogeneous environments
+and assigns each contrast a distinct operational meaning. For instance, under contrast
+,
+evaluates how providing the correct answer for
+alone improves overall task accuracy in the natural environment (
+), directly identifying high-leverage targets for single-task repair. Under the same contrast,
+measures how leaving
+unassisted reduces accuracy in the oracle environment (
+). Similarly, contrasts
+,
+, and
+quantify the impact of prerequisite corruption and structural scaffolding across oracle, natural, and corrupted environments.
+Algebraic Coupling under Identical Prerequisite Control.
+Under our general definitions of N-Score and S-Score (Definitions
+A.1
+and
+A.2
+), when both metrics are evaluated under the same prerequisite configuration
+, they share a common interventional background
+. Within this shared environment, necessity and sufficiency are algebraically coupled through the Probability of Necessity and Sufficiency (
+)
+[
+29
+,
+38
+]
+.
+Proposition A.6
+(Algebraic Coupling under Identical Context)
+.
+For any prerequisite unit task
+, any ordered contrast
+of distinct states in
+, and any fixed prerequisite configuration
+, let
+and
+. Denote the conditional Probability of Necessity and Sufficiency under context
+as
+. Under exogeneity assumption (Assumption
+3.3
+), the exact counterfactual probabilities satisfy:
+(11)
+and the general N-Score and S-Score satisfy the parallel lower-bound coupling:
+(12)
+Proof.
+Let
+denote the probability measure in the submodel induced by
+[
+28
+]
+.
+Under exogeneity ssumption, conditioning on
+within this submodel is operationally identical to intervening on it, so
+and
+. By consistency and the definition of conditional probability,
+. An analogous expansion yields
+, establishing Equation (
+11
+).
+Next, multiplying Definition
+A.1
+by
+and Definition
+A.2
+by
+directly gives
+. Applying the classical Fréchet inequality yields
+, which establishes Equation
+12
+.
+∎
+Metric Independence under Asymmetric Control.
+Proposition
+A.6
+shows that necessity and sufficiency are algebraically convertible when evaluated within the same background environment
+.
+However, note that in our main-text formulation (Definitions
+3.7
+and
+3.8
+), N-Score and S-Score evaluate
+across two distinct background environments:
+N-Score conditions on
+, whereas S-Score conditions on
+.
+Whenever
+depends on multiple prerequisites (
+), the contrast states
+place the remaining prerequisites into two different interventional configurations.
+Because the two metrics operate under distinct prerequisite states, their numerators correspond to the Fréchet lower bounds of two different conditional
+quantities,
+and
+, where in general
+.
+Consequently, our main-text N-Score and S-Score cannot be algebraically derived from one another through marginal outcome probabilities.
+A special case arises when
+, representing the single-parent setting where
+is empty; in this case, both metrics operate within the same unconditional environment and reduce directly to the classical coupled relationship in Equation
+12
+.
+For general multi-parent tasks, this LLM-specific decoupling ensures that N-Score and S-Score serve as independent diagnostic dimensions, allowing each paired
+score to provide distinct and practical diagnostic value for pinpointing failure bottlenecks versus high-leverage repair targets.
+A.4
+Markov Chain Structure
+In Section
+4
+, we introduced Markov chain unit tasks to represent sub-problems that require iterative solving across sequential steps. In the task-level SCM (Figure
+2
+), a Markov chain unit task is represented as a single composite node that receives inputs from upstream prerequisites and feeds into downstream tasks.
+To analyze how model capabilities and error propagation evolve over long reasoning horizons, we unfold this composite node into an explicit sequential chain of unit tasks (Section
+5.4
+).
+Below, we formalize the Markov chain structure within a task decomposition SCM and derive its step-wise causal properties.
+Definition A.7
+(Markov Chain Structure in Task Decomposition SCM)
+.
+Consider a task decomposition SCM (Definition
+3.1
+). A Markov chain structure is a recursive sub-model region defined over
+sequential reasoning steps (
+), where each step consists of a recurring cycle of
+constituent unit tasks (
+), represented by unit task variables
+.
+Each unit task variable
+is given by the structural assignment:
+(13)
+where
+is the structural function determining
+,
+is the exogenous noise variable, and the parent set
+is uniquely defined by:
+(14)
+with the initial prerequisite set
+given by the upstream prerequisites external to the Markov chain region in the SCM (or
+if the chain originates at a root node).
+Unfolding this recursive dependency across all
+steps yields the explicit sequential causal chain:
+(15)
+Remark A.8
+.
+In the unfolded Markov chain structure (Definition
+A.7
+), every non-initial unit task variable
+has a single causal prerequisite, i.e.,
+. Consequently, for any such unit task
+and its unique direct parent
+, the set of remaining prerequisites is empty:
+(16)
+Under this single-parent setting,
+in Definitions
+A.1
+and
+A.2
+becomes
+, and the N-Score and S-Score simplify to:
+(17)
+As an immediate consequence, Proposition
+A.6
+directly holds without requiring external context conditioning:
+(18)
+where
+,
+, and
+is the
+score reported in Sec.
+5.4
+, denoting lower bound of PNS.
+In our CADET benchmark, three tasks contain Markov chain structures with cycle lengths
+(Maze, Map Navigation) and
+(Multistep vision reasoning) (Figure
+2
+), corresponding to the step-wise evaluations in Sec.
+5.4
+(Figure
+10
+).
+Appendix B
+Details of Benchmark
+B.1
+Benchmark Composition
+B.1.1
+Task Inventory and Statistics
+Table 2
+:
+Overview of the 10 overall evaluation tasks in CADET.
+Task Name
+Modality
+Category
+# Instances
+Answer Format
+Music Note Counting
+Image
+Perception
+114
+Integer
+Dice Sum
+Image
+Perception
+130
+Integer
+Map Navigation
+Image
+Spatial
+107
+Integer
+Maze
+Image
+Spatial
+80
+Multiple-Choice
+Surround Localization
+Multi-Image
+Spatial
+154
+Integer
+Multi-View Sequencing
+Multi-Image
+Temporal
+154
+Letter List
+Street-View Ordering
+Multi-Image
+Temporal
+91
+Letter List
+Dashcam Counting
+Video
+Cognitive
+79
+Integer
+Traffic Causation
+Video
+Cognitive
+107
+Free-form Text
+Multistep Reasoning
+Image
+Cognitive
+128
+Free-form Text
+Table 3
+:
+Structure of the task-level SCM of each evaluation task. – on multistep reasoning is due to it start from a Markov chain structure.
+Task
+#Units
+#Roots
+Depth
+Category
+#Questions
+Has Markov
+Music Note Counting
+4
+2
+2
+3
+P/C
+1,163
+No
+Dice Sum
+4
+2
+2
+3
+P/C
+1,919
+No
+Map Navigation
+3
+1
+2
+2
+P/S/C
+918
+Yes
+Maze
+2
+1
+1
+1
+P/S
+880
+Yes
+Surround Localization
+6
+3
+2
+5
+P/S
+4,928
+No
+Multi-View Sequencing
+6
+2
+3
+5
+P/S/T
+4,158
+No
+Street-View Ordering
+6
+2
+3
+5
+P/S/T
+3,268
+No
+Dashcam Counting
+5
+2
+3
+4
+P/S/T/C
+6,895
+No
+Traffic Causation
+7
+1
+4
+6
+P/T/C
+2,974
+No
+Multistep Reasoning
+3
+–
+2
+2
+P/C
+6,828
+Yes
+This section reports the benchmark details following our Section
+4
+.
+Table
+2
+lists the 10 overall evaluation tasks, and
+Table
+3
+reports the overview and structure of their task-level SCMs, reported depth is the length of the longest directed path terminating at
+.
+B.1.2
+Capability Categories
+We group unit tasks into four categories according to the kind of information the task
+requires the model to produce. Each unit task is assigned to the category of the
+capability it primarily targets.
+•
+Perception
+: reading out the presence, identity, category, or image position
+of an object from the visual signal, without relating separate elements to one another.
+•
+Spatial
+: relating elements to each other or to the observer, covering
+distance, size, orientation, viewpoint, and navigation.
+•
+Temporal
+: relating observations across frames or views, covering motion,
+ordering, and localization in time.
+•
+Cognitive
+: operating on already extracted facts, covering counting,
+arithmetic, causal attribution, and multi-step or goal-directed reasoning.
+The overall task of each SCM is labelled with the same four categories
+(Table
+2
+). Across the 46 unit tasks, the four categories contain
+15, 12, 10, and 9 tasks respectively.
+B.1.3
+Per-Task SCM and Unit Task
+Table
+4
+specifies the unit tasks and SCM structure of every evaluation task, giving for each node its capability, category, answer format, number of questions, and parent set.
+Nodes are indexed in a topological order of the task-level SCM.
+As a result, CADET contains over 33,000 unit task level questions.
+Table 4
+:
+Unit task specification of the 10 evaluation tasks in CADET.
+denotes the
+overall task outcome;
+marks a Markov chain unit task.
+Node
+Unit Task
+Cat.
+Answer Format
+#Q
+Parents
+Music Note Counting
+Object Identification
+P
+Multiple-choice
+821
+—
+Object Classification
+P
+Multiple-choice
+114
+Completeness Verification
+P
+Multiple-choice
+114
+—
+Object Counting
+C
+Integer
+114
+Dice Sum
+Object Detection
+P
+Integer
+130
+—
+3D Surface Recognition
+P
+Multiple-choice
+791
+—
+Fine-grained Counting
+C
+Integer
+868
+Arithmetic Summation
+C
+Integer
+130
+Map Navigation
+Object Localization
+P
+Multiple-choice
+443
+—
+Sequential Navigation
+S
+Multiple-choice
+368
+Path-Based Counting
+C
+Integer
+107
+Maze
+Object Localization
+P
+Multiple-choice
+80
+—
+Sequential Navigation
+S
+Multiple-choice
+800
+Surround Localization
+Object Identification
+P
+Multiple-choice
+1,078
+—
+Front-View Identification
+S
+Multiple-choice
+1,232
+—
+Viewpoint Estimation
+S
+Multiple-choice
+2,156
+—
+Camera View Identification
+S
+Multiple-choice
+154
+Object Localization
+P
+Multiple-choice
+154
+Clock Position Estimation
+S
+Integer
+154
+Multi-View Sequencing
+Object Localization
+P
+Multiple-choice
+770
+—
+Viewpoint Estimation
+S
+Multiple-choice
+1,386
+Distance Comparison
+S
+Multiple-choice
+1,540
+Motion Detection
+T
+Multiple-choice
+154
+—
+Interaction Status Identification
+T
+Multiple-choice
+154
+Temporal Ordering
+T
+Letter list
+154
+Street-View Ordering
+Object Localization
+P
+Multiple-choice
+455
+—
+Size Comparison
+S
+Multiple-choice
+897
+Distance Comparison
+S
+Multiple-choice
+910
+Horizontal Position Comparison
+S
+Multiple-choice
+824
+Motion Detection
+T
+Multiple-choice
+91
+—
+Temporal Ordering
+T
+Letter list
+91
+Dashcam Counting
+Object Classification
+P
+Multiple-choice
+2,860
+—
+Spatial Relation
+S
+Multiple-choice
+2,237
+—
+Object Re-identification
+P
+Multiple-choice
+1,378
+Motion Classification
+T
+Multiple-choice
+341
+Temporal Object Counting
+C
+Integer
+79
+Traffic Causation
+Object Localization
+P
+Multiple-choice
+2,290
+—
+State Change Recognition
+T
+Multiple-choice
+200
+Reference-Based Action Recognition
+T
+Multiple-choice
+153
+Temporal Localization
+T
+Multiple-choice
+93
+Temporal Sequencing
+T
+Multiple-choice
+105
+False Correlation Rejection
+C
+Multiple-choice
+26
+Causal Reasoning
+C
+Free-form text
+107
+Multistep Reasoning
+Position Tracking
+P
+Integer list
+3,350
+Action Prediction
+C
+Free-form text
+3,350
+Multi-step Reasoning
+C
+Free-form text
+128
+B.2
+Benchmark Design Rationale
+Task Selection.
+The 10 evaluation tasks in CADET are selected based on three considerations. First, we focus on problems where current frontier MLLMs remain far from saturated under end-to-end evaluation, so that the diagnosis concerns capability gaps that current models still struggle with. Second, we select compositional tasks that require multiple interdependent capabilities to reach the final answer, so that each task admits a meaningful decomposition into unit tasks. Third, we prioritize real-world visual scenarios across single-image, multi-image, and video modalities, and the resulting 46 unit tasks cover perception, spatial, temporal, and cognitive capabilities.
+Prerequisite Identification and SCM Structure.
+Each unit task corresponds to a single capability. A capability is included in the decomposition of an evaluation task when it is a required information for answering the overall task question. For example, to tell the number on the top face of a dice, one needs to know where the dice is and which face is its top face; to tell the direction of a pedestrian relative to the ego vehicle, one needs to locate the pedestrian and determine the viewpoint of the camera that observes it. We specify a prerequisite dependency from
+to
+when solving
+requires the information or the capability represented by
+. The same task structure is used for all evaluated models. We discuss the completeness of the specified SCMs in Appendix
+E
+.
+Unit-Task Question Granularity.
+As shown in Tables
+2
+and
+4
+, the number of questions of a unit task is not necessarily equal to the number of overall task instances.
+When an overall task is built on multiple images, video frames, or target objects, the capability of a unit task does not necessarily apply at the same granularity, and querying all of them within a single bundled question would turn the unit task into a multi-target aggregation problem.
+In such cases, we formulate separate questions at the granularity at which the capability applies.
+For example, when a task instance contains five images, object identification is asked separately for each image; when a task instance contains several target objects, object localization is asked separately for each object.
+B.3
+Benchmark Construction
+B.3.1
+Image/Video Source and License
+Table 5
+:
+Source media used in CADET.
+Source
+Source Media Used
+Reference
+License
+Argoverse 2
+Urban driving scenes: multi-camera ring imagery and ego-view video
+Wilson et al. [43]
+CC BY-NC-SA 4.0
+ROADWork
+Roadwork and construction-zone driving images and videos
+Ghosh et al. [13]
+ODC-By v1.0
+BabyVision
+Language-independent core visual reasoning images
+Chen et al. [4]
+MIT
+MEGA-Bench
+Real-world multimodal task images
+Chen et al. [3]
+Apache-2.0
+EMMA
+Scientific and mathematical reasoning figures
+Hao et al. [18]
+Apache-2.0
+Mutopia Project
+Engraved sheet-music scores
+Mutopia Website
+CC BY licensed
+∗
+Wikimedia Commons
+Sheet-music and general-purpose images
+Wikimedia Website
+Common License
+∗
+Procedurally generated
+Synthetic mazes, navigation maps, dice renderings
+–
+Ours (1P)
+Source URLs.
+Argoverse 2:
+https://www.argoverse.org/av2.html
+;
+ROADWork:
+https://github.com/anuragxel/roadwork-dataset
+;
+BabyVision:
+https://huggingface.co/datasets/UnipatAI/BabyVision
+;
+MEGA-Bench:
+https://github.com/TIGER-AI-Lab/MEGA-Bench
+;
+EMMA:
+https://github.com/EMMA-Bench/EMMA
+;
+Mutopia:
+https://www.mutopiaproject.org/
+;
+Wikimedia Commons:
+https://commons.wikimedia.org/
+.
+* The Mutopia Project and Wikimedia Commons both host media under a mixture of licenses that are declared individually for each file. For these two sources we applied the site-level CC BY license filter when browsing and retained only those images distributed under a CC BY license.
+As described in Section
+4
+, while all evaluation questions, task decompositions, and unit-task annotations in CADET are newly created to mitigate data contamination, the underlying source images and videos are curated from publicly available datasets and open repositories with permissive licenses. Table
+5
+summarizes all source media (image and video) used in CADET, along with their corresponding descriptions, references, and license terms.
+B.3.2
+Data Construction and Quality Assurance
+Two-Stage Construction and Closed-Form Annotation.
+We construct CADET in two stages following predefined task structures. In the first stage, for each of the 10 overall tasks, we define the task scope, a question-answer template, and detailed task instructions on the selected source images and videos. Raters follow these instructions and templates to write the overall task question and its ground-truth answer. In the second stage, to decompose each overall task into unit tasks without introducing noise from free-form question writing, we design the decomposition step as closed-form annotation and labeling tasks. Depending on the unit task, raters draw bounding boxes or paths on the images and provide labels that follow strict format specifications. Once these annotations are collected, we extract the labeled information and convert it into unit-task questions, correct answers (
+), and rendered visual annotations through structured templates. For the incorrect answers (
+), structured unit tasks use random sampling over plausible candidates; specifically, for numerical tasks, we sample within a bounded local neighborhood around the ground truth (e.g., within
+of a groundtruth value of
+) rather than drawing distant values (e.g.,
+) that models would trivially rule out. For the remaining three free-form text tasks where random sampling is not applicable, raters write the incorrect answers following instructions designed to minimize subjective bias.
+Two-Rater Iterative Verification.
+All annotations are conducted by a pool of over 130 experienced multimodal raters. Across both stages, every instance is processed by two raters in sequence: the first rater completes the annotation, and a second quality-check rater independently inspects the result. If the quality-check rater identifies an inaccurate answer, an imprecise bounding box or path, or a label that violates the required format specification, the instance is returned to the first rater for revision. This review cycle repeats until the quality-check rater accepts the annotation.
+Instance Revision and Corner-Case Filtering.
+At every annotation step, raters can flag issues with a candidate instance. When a question requires minor rephrasing or an answer can be refined against clear visual content, raters directly update the item within the review loop;
+when an instance cannot be resolved or cleanly annotated at the unit-task level, raters are instructed to drop it.
+Beyond ambiguities in the overall task, drops in the second stage occur when an intermediate unit task cannot be reliably annotated across frames or views.
+Typical cases include a spatial reference (such as a roadside curb) shifting to the image boundary with insufficient visibility, a target vehicle tracked across views becoming too small or partially occluded in a later frame, or a second vehicle of the same color partially entering the scene and preventing unique target identification.
+Removing such instances ensures that every unit task in the SCM admits a well-defined intervention state.
+Across 1,467 candidate instances dispatched for annotation, 323 (22.0%) were dropped under these criteria, yielding the final 1,144 instances and over 33,000 unit-task questions in CADET.
+Appendix C
+Experiments Setup
+Evaluated Models.
+We evaluate 12 MLLMs across six model families: Gemini 3.1 Pro
+[
+12
+]
+, Gemini 3.5 Flash
+[
+15
+]
+, Gemini 3 Flash
+[
+10
+]
+, Gemini 3.1 Flash-Lite
+[
+11
+]
+, GPT-5.4
+[
+27
+]
+, GPT-5.4 Nano
+[
+27
+]
+, Grok 4.3
+[
+45
+]
+, Gemma 4 31B
+[
+6
+]
+, Gemma 4 26B
+[
+6
+]
+, Qwen3.5-397B-A17B
+[
+32
+]
+, Qwen3.6 27B
+[
+33
+]
+, and Kimi K2.5
+[
+37
+]
+.
+The Gemini, GPT, Grok and Gemma models are queried through the official APIs, while the remaining open-weight models are queried via OpenRouter.
+All models are run with their default sampling settings, maximum supported output tokens, and thinking mode set to
+high
+(or left at the default active setting when not configurable).
+LLM-as-a-judge details.
+Among the 46 unit tasks, 43 use structured output formats (multiple-choice, integer, or coordinate) and are evaluated via deterministic rule-based parsing and exact match, while the remaining 3 free-form text unit tasks are evaluated using Gemini 3.6 Flash
+[
+16
+]
+by comparing model predictions against ground-truth reference answers. Although these 3 unit tasks do not constrain outputs to option letters or numbers, each still pairs with a concise, specific reference answer (e.g., an atomic action such as “turn left”), so the judge only checks whether the predicted phrase conveys the same meaning as the reference. For the 43 structured unit tasks, Gemini 3.6 Flash is invoked strictly as a fallback when a response deviates from the required surface format (e.g., outputting “So the answer is **C**.” instead of “C”). Across all evaluation runs on structured unit tasks, deterministic exact match directly resolves
+of predictions, with only
+triggering the LLM-as-a-judge fallback.
+Prompts.
+Figures
+11
+and
+12
+present the prompt templates used to assemble intervened prerequisite context and to run the LLM judge, respectively. For active interventions (
+), the prerequisites
+are formatted as a structured JSON question–answer block and prepended to the target task query using the same template for both
+and
+, differing only in the filled prerequisite answer values (along with the corresponding visual annotations rendered on the image when
+represents spatial ground truth).
+Under the natural state (
+), the prerequisite context block is omitted while the target question and output-format instructions remain the same.
+Figure 11
+:
+Prompt template for our evaluation under active causal interventions (
+). Under the natural state (
+), only the target question and last paragraph of output format instructions are prompted.
+Figure 12
+:
+LLM-as-a-judge prompt template.
+Appendix D
+More Experiment Results
+D.1
+More Capability Diagnosis Results (NC, IC, RC)
+Figure 13
+:
+Comparing NC on root unit tasks against NC and IC on non-root unit tasks, per category, averaged over the 12 models. Cognitive is not shown as it has no root unit task. The non-root bar stacks IC
+NC on top of NC, so its top is IC.
+Figure 14
+:
+Comparing NC on root unit tasks against NC and IC on non-root unit tasks for each of the 12 models. There are 16 root unit tasks and 30 non-root unit tasks. The non-root bar stacks IC
+NC on top of NC, so its top is IC. Models are ordered by overall non-root NC.
+Figure 15
+:
+Comparing NC and RC across the four categories on non-root unit tasks, averaged over the 12 models. Each bar shows NC with the signed NC/RC difference stacked out of it, so the boundary of the shaded band is RC.
+Figure 16
+:
+Comparing NC and RC for each of the 12 models within each category on non-root unit tasks. Circles mark NC and triangles mark RC; the shaded band spans the two and is colored by the sign of RC
+NC. The horizontal lines are the means over the 12 models.
+Table 6
+:
+NC on root unit tasks and NC, IC on non-root unit tasks, per category, with the number of unit tasks in each group. Entries are the unweighted mean over unit tasks, averaged over the 12 models,
+the standard deviation across models.
+#unit tasks
+Root
+Non-root
+Category
+root
+non-root
+NC
+NC
+IC
+IC
+NC
+Perception
+11
+4
+0.775
+0.077
+0.590
+0.138
+0.796
+0.112
++0.206
+Spatial
+3
+9
+0.627
+0.100
+0.556
+0.077
+0.671
+0.059
++0.115
+Temporal
+2
+8
+0.714
+0.119
+0.460
+0.072
+0.614
+0.087
++0.154
+Cognitive
+0
+9
+–
+0.406
+0.092
+0.721
+0.089
++0.316
+Table 7
+:
+NC on root unit tasks and NC, IC on non-root unit tasks for each of the 12 models. Entries are the unweighted mean over unit tasks
+the standard deviation across unit tasks (16 root, 30 non-root). The last two columns are differences of the corresponding means.
+Model
+Root NC
+Non-root NC
+Non-root IC
+NC(root)
+NC(non-root)
+NC(root)
+IC(non-root)
+GPT-5.4
+0.781
+0.108
+0.612
+0.180
+0.791
+0.167
++0.169
+0.010
+Gem 3.5F
+0.839
+0.099
+0.595
+0.217
+0.783
+0.172
++0.244
++0.056
+Gem 3.1P
+0.842
+0.090
+0.577
+0.202
+0.781
+0.173
++0.265
++0.062
+Gem 3F
+0.811
+0.119
+0.528
+0.206
+0.757
+0.180
++0.282
++0.053
+Qwen27B
+0.780
+0.132
+0.515
+0.247
+0.711
+0.219
++0.264
++0.069
+Qwen397B
+0.749
+0.144
+0.487
+0.240
+0.647
+0.226
++0.262
++0.101
+Kimi K2.5
+0.708
+0.200
+0.483
+0.199
+0.652
+0.213
++0.224
++0.056
+Gemma-31B
+0.752
+0.161
+0.475
+0.235
+0.689
+0.202
++0.278
++0.063
+Gem 3.1FL
+0.692
+0.186
+0.430
+0.217
+0.654
+0.209
++0.262
++0.038
+Gemma-26B
+0.722
+0.196
+0.421
+0.248
+0.627
+0.218
++0.301
++0.094
+Grok 4.3
+0.644
+0.175
+0.405
+0.210
+0.601
+0.205
++0.239
++0.043
+GPT-5.4n
+0.559
+0.239
+0.347
+0.190
+0.557
+0.236
++0.212
++0.002
+Table 8
+:
+NC, IC and RC per category on the 30 non-root unit tasks. Entries are the unweighted mean over unit tasks, averaged over the 12 models,
+the standard deviation across models.
+Category
+NC
+IC
+RC
+IC
+NC
+RC
+NC
+Perception
+0.590
+0.138
+0.796
+0.112
+0.446
+0.131
++0.206
+0.144
+Spatial
+0.556
+0.077
+0.671
+0.059
+0.439
+0.102
++0.115
+0.116
+Temporal
+0.460
+0.072
+0.614
+0.087
+0.414
+0.063
++0.154
+0.046
+Cognitive
+0.406
+0.092
+0.721
+0.089
+0.445
+0.060
++0.316
++0.040
+Table 9
+:
+NC, IC and RC per model and category on the 30 non-root unit tasks, with
+Overall
+aggregating all 30. Entries are the unweighted mean over unit tasks
+the standard deviation across unit tasks.
+Perception
+Spatial
+Temporal
+Cognitive
+Overall
+Model
+NC
+IC
+RC
+NC
+IC
+RC
+NC
+IC
+RC
+NC
+IC
+RC
+NC
+IC
+RC
+GPT-5.4
+0.636
+0.194
+0.913
+0.087
+0.507
+0.288
+0.665
+0.202
+0.747
+0.214
+0.549
+0.213
+0.560
+0.148
+0.730
+0.181
+0.537
+0.219
+0.593
+0.192
+0.835
+0.094
+0.575
+0.274
+0.612
+0.180
+0.791
+0.167
+0.548
+0.232
+Gem 3.5F
+0.722
+0.192
+0.889
+0.042
+0.599
+0.194
+0.672
+0.231
+0.754
+0.213
+0.572
+0.252
+0.564
+0.154
+0.699
+0.202
+0.481
+0.187
+0.490
+0.232
+0.839
+0.091
+0.507
+0.219
+0.595
+0.217
+0.783
+0.172
+0.532
+0.212
+Gem 3.1P
+0.761
+0.155
+0.907
+0.027
+0.678
+0.158
+0.650
+0.217
+0.740
+0.230
+0.584
+0.207
+0.515
+0.164
+0.698
+0.175
+0.450
+0.222
+0.478
+0.174
+0.839
+0.088
+0.513
+0.194
+0.577
+0.202
+0.781
+0.173
+0.540
+0.206
+Gem 3F
+0.664
+0.250
+0.879
+0.072
+0.439
+0.304
+0.570
+0.268
+0.710
+0.253
+0.431
+0.240
+0.524
+0.122
+0.707
+0.163
+0.422
+0.205
+0.430
+0.154
+0.796
+0.121
+0.450
+0.223
+0.528
+0.206
+0.757
+0.180
+0.435
+0.222
+Qwen27B
+0.682
+0.167
+0.873
+0.119
+0.418
+0.237
+0.571
+0.308
+0.663
+0.252
+0.439
+0.249
+0.515
+0.248
+0.672
+0.210
+0.466
+0.276
+0.386
+0.159
+0.722
+0.220
+0.421
+0.213
+0.515
+0.247
+0.711
+0.219
+0.438
+0.233
+Qwen397B
+0.655
+0.126
+0.808
+0.167
+0.511
+0.184
+0.579
+0.287
+0.677
+0.269
+0.405
+0.217
+0.407
+0.164
+0.480
+0.150
+0.349
+0.196
+0.390
+0.238
+0.695
+0.194
+0.423
+0.246
+0.487
+0.240
+0.647
+0.226
+0.410
+0.212
+Kimi K2.5
+0.621
+0.112
+0.698
+0.127
+0.342
+0.161
+0.511
+0.245
+0.659
+0.300
+0.359
+0.231
+0.409
+0.156
+0.586
+0.175
+0.331
+0.227
+0.461
+0.204
+0.682
+0.187
+0.395
+0.138
+0.483
+0.199
+0.652
+0.213
+0.360
+0.189
+Gemma-31B
+0.609
+0.291
+0.825
+0.035
+0.485
+0.272
+0.539
+0.275
+0.679
+0.279
+0.470
+0.247
+0.420
+0.182
+0.625
+0.163
+0.414
+0.236
+0.399
+0.200
+0.696
+0.182
+0.438
+0.217
+0.475
+0.235
+0.689
+0.202
+0.448
+0.227
+Gem 3.1FL
+0.514
+0.294
+0.756
+0.117
+0.427
+0.264
+0.482
+0.221
+0.627
+0.260
+0.406
+0.207
+0.419
+0.177
+0.557
+0.230
+0.416
+0.232
+0.349
+0.220
+0.720
+0.141
+0.441
+0.212
+0.430
+0.217
+0.654
+0.209
+0.422
+0.211
+Gemma-26B
+0.540
+0.351
+0.791
+0.115
+0.477
+0.301
+0.520
+0.287
+0.632
+0.285
+0.458
+0.260
+0.370
+0.171
+0.532
+0.212
+0.346
+0.196
+0.314
+0.186
+0.635
+0.154
+0.373
+0.216
+0.421
+0.248
+0.627
+0.218
+0.405
+0.230
+Grok 4.3
+0.399
+0.237
+0.659
+0.096
+0.214
+0.223
+0.458
+0.249
+0.594
+0.273
+0.211
+0.161
+0.447
+0.215
+0.585
+0.220
+0.355
+0.218
+0.317
+0.150
+0.597
+0.174
+0.426
+0.215
+0.405
+0.210
+0.601
+0.205
+0.314
+0.213
+GPT-5.4n
+0.278
+0.250
+0.551
+0.331
+0.260
+0.234
+0.450
+0.204
+0.571
+0.232
+0.389
+0.202
+0.365
+0.176
+0.498
+0.233
+0.395
+0.222
+0.258
+0.120
+0.598
+0.233
+0.378
+0.166
+0.347
+0.190
+0.557
+0.236
+0.370
+0.196
+This section provides additional visualizations and the complete numerical results supporting the capability diagnostics in Section 5.2. First, whereas Section
+5.2
+focuses on the 30 non-root unit tasks (
+) that admit upstream interventions, Figure
+13
+,
+14
+and Table
+7
+,
+6
+incorporate the 16 foundational root unit tasks (
+, for which only natural capability
+NC
+is defined), comparing root
+NC
+against non-root
+NC
+and
+IC
+across individual models (Figure
+14
+, Table
+7
+) and capability categories (Figure.
+13
+, Table
+6
+). Second, Figure
+15
+,
+16
+and Table
+8
+,
+9
+expand the compact
+summary in Figure 4 of the main text by plotting absolute
+NC
+and
+RC
+levels alongside their signed differences at the category level (Figure
+15
+, Table
+8
+) and across all 12 models within each category (Figure
+16
+, Table
+9
+), reporting the full per-group means and standard deviations.
+Comparing Non-Root Capabilities (
+NC
+,
+IC
+) with Foundational Root Capabilities (
+NC
+).
+Because root unit tasks have no modeled upstream prerequisites in the task SCM (
+), their natural capability (
+NC
+) assesses foundational proficiency independently of upstream prerequisite states. Under unassisted evaluation (
+), models achieve higher accuracy on the 16 root unit tasks than on the 30 downstream non-root unit tasks: as reported in Table
+7
+and Figure
+14
+, mean
+NC
+across the 12 models is
+on root nodes versus
+on non-root nodes (a difference of
+, ranging from
+to
+across individual models). A consistent
+NC
+difference between root and non-root nodes appears within each category that contains root tasks (Table
+6
+, Figure
+13
+): Perception (
+vs.
+), Spatial (
+vs.
+), and Temporal (
+vs.
+), while Cognitive unit tasks occur exclusively as non-root nodes (
+) and score lowest under unassisted evaluation (
+). When correct prerequisite answers are supplied (
+), mean non-root
+IC
+across models rises to
+against the
+root
+NC
+baseline
+(narrowing the overall gap from
+to
+, with differences as small as
+for GPT-5.4 and
+for GPT-5.4n).
+Across categories, this comparison reinforces the capability profile in Section 5.2: Perception maintains high accuracy on both root tasks (
+) and prerequisite-supplied non-root tasks (
+), and Cognitive non-root tasks rise from
+to
+, approaching the average root-node baseline (
+). By contrast, Spatial exhibits the lowest root-node accuracy (
+) and reaches a similarly bounded ceiling on non-root tasks when prerequisites are supplied (
+), while Temporal non-root tasks reach
+(vs.
+on root tasks), consistent with the persistent residual gaps (
+) in spatial and temporal capabilities identified in the main text.
+Expanded Breakdown of Resilience Capability (
+RC
+vs.
+NC
+).
+Figure
+15
+and Table
+8
+complement Figure 4 by displaying
+NC
+and
+RC
+on the same absolute capability scale across categories, while Figure
+16
+and Table
+9
+provide the disaggregated per-model profiles parallel to Figure 3(b–e). On average across the 12 models (Table
+8
+), injecting incorrect prerequisite answers (
+) yields lower accuracy than unassisted evaluation in Perception (
+,
+), Spatial (
+,
+), and Temporal (
+,
+), corresponding to an overall non-root difference of
+(
+), whereas Cognitive tasks exhibit a modest positive shift (
+,
+). The per-model breakdown in Figure
+16
+and Table
+9
+shows that these category-level trends hold consistently across model families and scales: all 12 models exhibit
+in Perception and Spatial, 11 of 12 decline in Temporal (with GPT-5.4n showing a
+shift), and 10 of 12 show positive
+shifts in Cognitive (all except GPT-5.4 at
+and Kimi K2.5 at
+), providing the full per-model evidence for the non-monotonicity discussed in Property 3.6 and Section 5.2.
+D.2
+More Causal Contribution Diagnosis Results (
+,
+-Score)
+In this section, we provide additional experimental results complementing the causal contribution analysis in Section 5.3.
+Figure
+17
+reports prerequisite
+- and
+-Scores under the remaining three state contrasts
+,
+, and
+(complementing
+in Figure
+5
+).
+Figure
+18
+disaggregates these three contrasts by task pattern and model group (extending Figure
+6
+).
+Figure
+19
+shows the inter-model rank agreement across all eight contribution scores, and Figure
+20
+provides the per-prerequisite breakdown across the four state contrasts.
+To prevent small denominators from producing numerically unstable ratios in Eqs. (5)–(6), we set a score to
+whenever its baseline denominator falls below
+.
+Crucially, this threshold has zero effect on six of the eight metrics and affects only
+(
+) of all scores, concentrated in
+(with a small remainder in
+).
+This is expected by design:
+measures the success drop from setting a prerequisite to
+in the all-incorrect (
+) environment, where baseline success
+is naturally near zero whenever incorrect prerequisites prevent task completion.
+Figure 17
+:
+Prerequisite
+-Scores under state contrasts (a)
+, (b)
+, and (c)
+, averaged across models. Dashed circles mark the highest-
+prerequisite within each task. Axes and quadrant thresholds follow Figure
+5
+.
+Corrupting a prerequisite reduces success more than leaving it unassisted.
+and
+share the same oracle baseline where all prerequisites are correctly provided, differing only in whether
+receives an incorrect answer or is left unassisted.
+Across prerequisites,
+consistently exceeds
+(Figure
+17
+a vs. Figure
+5
+), shifting more prerequisites into the high-
+/ low-
+quadrant and fewer into the low-
+/ high-
+quadrant.
+For example, on the perception prerequisites of Music Note,
+is low (
+–
+) and
+is high (
+–
+): omitting a single prerequisite in the oracle setting incurs minimal loss, while supplying it alone in the natural state recovers over half of the failures.
+Under
+, however,
+rises to
+–
+and
+falls to at most
+: a single incorrect prerequisite removes a substantial fraction of oracle success, while correcting one prerequisite when others remain incorrect recovers almost no failures.
+Similarly, under
+(Figure
+17
+c), prerequisites shift along
+into the high-
+/ low-
+region, whereas under
+(Figure
+17
+b), most prerequisites remain near zero with positive values concentrated in specific prerequisites examined in Figure
+20
+.
+Figure 18
+:
+Prerequisite
+-Scores under
+(a–d),
+(e–h), and
+(i–l) by task pattern and model group. Large markers denote group means; grey markers indicate individual models.
+Separation between SOTA and Others under prerequisite corruption.
+When disaggregated by task pattern and model group (Figure
+18
+), SOTA and Others separate clearly in Pattern 2 across all three contrasts involving incorrect prerequisites:
+,
+, and
+(Figure
+18
+c,d,k,l).
+Starting from the all-incorrect environment, SOTA achieves consistently higher single-prerequisite recovery than Others both when correcting a single prerequisite (
+:
+–
+for SOTA vs.
+–
+for Others) and when removing a single incorrect answer (
+:
+–
+vs.
+–
+).
+Symmetrically, starting from the oracle environment, corrupting a single prerequisite causes smaller drops for SOTA (
+:
+–
+) than for Others (
+–
+), mirroring the shift toward higher
+and lower
+for Others under
+in Figure
+6
+.
+Figure 19
+:
+Pairwise Spearman rank correlation between models on
+-Scores (a–d) and
+-Scores (e–h) across prerequisites under the four state contrasts. Lines separate SOTA from Others.
+Inter-model agreement on high-
+prerequisites.
+Among the eight contribution metrics,
+exhibits the strongest inter-model agreement, with a mean pairwise Spearman correlation of
+, compared with
+for
+(Figure
+19
+).
+Thus, the high-leverage prerequisites that recover natural failures when supplied alone are largely shared across models, whereas sensitivity to single-prerequisite omission in the oracle setting varies more across models.
+Agreement on
+is especially strong among the four SOTA models (mean
+vs.
+among Others), holding both within the Gemini series (
+) and across families between GPT-5.4 and Gemini (
+), and within individual tasks the top-
+prerequisite is identical or shared between the same top pair across models on the majority of tasks.
+Figure 20
+:
+Prerequisite
+-Scores under the four state contrasts, averaged over evaluated models.
+Cross-contrast consistency and per-prerequisite breakdown.
+Across prerequisites, rankings correlate positively between
+and
+(Spearman
+) and between
+and
+(
+; Figure
+20
+), indicating that prerequisites whose omission most reduces oracle performance also tend to be the most destructive when corrupted, and those that best recover natural failures also drive recovery in the all-incorrect setting.
+For transitions between
+and
+,
+and
+measure opposite directions of the same state pair; under zero-clipping, at most one direction is active for a given model and prerequisite, separating performance degradation from incorrect prerequisites (
+) from positive recovery when an incorrect prerequisite is provided over no prerequisite (
+) under Property 3.6.
+Consistent with Section 5.2 and Figure 9, positive
+values appear primarily on prerequisites feeding into downstream cognitive or spatial-relational integration—such as Temporal Sequencing (
+), Temporal Localization (
+), and Object Localization (
+) in Traffic Causation, and Viewpoint Estimation (
+) in Surround Loc.—while remaining near zero on foundational perception and spatial prerequisites.
+D.3
+Detail Explanation of Markov Chain Unit Task Results
+Section 5.4 analyzes the three Markov chain unit tasks in CADET (Figure
+10
+):
+Maze
+and
+Multistep Reasoning
+, whose primary task structure is a Markov chain, together with the route-planning unit task embedded within
+Map Navigation
+. While all three share the same Markov sequential dependency structure (Definition
+A.7
+), they differ in their concrete step-wise logic, and because this distinction directly manifests in their empirical behavior, we group them into the two regimes discussed in Section 5.4:
+goal-directed
+and
+process-cumulative
+. In
+Maze
+, the trajectory from the start to the exit is partitioned into
+steps; because the overall query (identifying which candidate is the exit) cannot be further decomposed into distinct sub-questions, at each step
+the model is positioned at the
+-th waypoint to answer this same exit-identification question. Similarly, in the Markov chain node of
+Map Navigation
+, the model stands at each intermediate step along the route and looks toward a given destination to decide the next move. Both tasks are therefore goal-directed: conditioned on the current step
+, solving the task depends only on the remaining path toward the goal rather than the history already traversed. By contrast,
+Multistep Reasoning
+is process-cumulative: starting from an initial state without a pre-specified destination, the model follows movement rules where each step alternates between identifying the current
+Position
+and determining the current
+Action
+. Because the terminal state is unknown in advance, accurately resolving either node at step
+requires tracking the cumulative execution process from the starting point up to step
+.
+To operationalize the ternary intervention at step
+along an unfolded chain, we provide the full preceding trajectory context from step
+to
+in the prompt. Under
+, we inject the ground-truth questions, answers, and corresponding visual annotations for all preceding steps. A special case arises in
+Maze
+: because every step asks the same exit-identification question and shares the identical ground-truth answer, injecting the textual answer of any preceding step would directly reveal the answer at step
+. For
+in
+Maze
+, we therefore inject the preceding step questions without their textual answers, accompanied by the visual annotation on the image marking the current waypoint and the human-annotated path from the start up to step
+. Under
+, each preceding step from
+to
+is independently assigned a randomly sampled incorrect answer from the valid answer space via text only (Section 5.1), while
+leaves the preceding trajectory unassisted.
+D.4
+Additional Experiments and Findings
+Figure 21
+:
+Capability on non-root unit tasks under five prerequisite states: RC, NC , question-only (
+), text-answer-only (
+), and IC. (a) Category-level and overall averages over 30 non-root unit tasks and two models; (b–e) per-model results within each category.
+Figure 22
+:
+vs.
+for each prerequisite of an overall task, averaged over two models. Color denotes the prerequisite’s capability category and marker shape the overall task. The solid line denotes
+and the shaded band
+; dashed lines mark the 0.15 threshold as in Figure
+5
+(
+-scaled axes).
+D.4.1
+Ablation on Intervention Modality
+In the main experiments, the correct intervention (
+) injects both a textual answer and, where applicable, visual annotations (e.g., bounding boxes, trajectories) onto the image. To examine the role of visual annotations in this intervention, we also evaluate a text-answer-only condition
+, which provides the same textual answer as
+but keeps the original image unmodified. We run this condition on two models, Gemini 3.5 Flash from the top-4 (SOTA) group and Gemma-4-31B from the remaining (Others) group, across all 30 non-root unit tasks.
+Figure
+22
+(a) shows that
+closely approaches IC across all four capability categories. In temporal, the two conditions are virtually identical (both 0.66); in perception and spatial, they differ by only 0.02 (0.84 vs. 0.86; 0.70 vs. 0.72). The largest gap appears in cognitive (0.71 vs. 0.77), where
+nonetheless remains far above NC (0.44) and RC (0.47). Overall,
+reaches 0.71 against an IC of 0.74. The per-model results (Figure
+22
+(b–e)) are consistent: for both models,
+tracks IC in every category, with a gap of at most 0.06 in any model–category pair. These results indicate that the textual answer accounts for the large majority of the capability gain under correct prerequisites, while the remaining difference between
+and IC reflects the additional contribution of visual annotations.
+The same pattern holds for the causal contribution metrics. Figure
+22
+compares
+with
+in place of state
+, against
+for each prerequisite. Spatial, temporal, and cognitive prerequisites lie along the diagonal, indicating that the magnitude and ranking of S-Scores are largely preserved without visual annotations. The systematic departures below the diagonal correspond to perception prerequisites, whose
+falls well below
+. The corresponding N-Score comparison shows a similar agreement (Pearson
+between
+and
+across all prerequisites).
+D.4.2
+Ablation on Question-Only Injection
+In Section
+5.2
+, incorrect prerequisites improve cognitive tasks for most models (RC
+NC), and in Section
+5.3
+,
+is nonzero for some prerequisite categories, indicating that even incorrect answers occasionally help. Since the incorrect intervention (
+) injects both a sub-question and an incorrect answer, a natural follow-up is to ask how much of the prerequisite effect comes from the sub-question itself. We therefore evaluate a question-only condition
+, which injects each prerequisite’s sub-question without any answer, on the same two models. As shown in Figure
+22
+(a),
+yields a modest improvement over NC (overall 0.58 vs. 0.53) but remains far below
+(0.71) and IC (0.74). Across categories,
+exceeds NC by at most 0.06, whereas
+exceeds NC by 0.09 (spatial) to 0.26 (cognitive). The causal contribution metrics show the same trend:
+averages 0.05 across prerequisites, compared with 0.26 for
+on the same two models, and
+does not exceed 0.09 in any prerequisite category.
+Thus, providing the sub-question without answer does improve performance, meanwhile the improvement is limited and remains far smaller than that from providing its answer.
+Figure 23
+:
+Per-model
+- and
+-Scores for the parents of Map Nav. under the four state contrasts. The vertical line separates SOTA from Others.
+Figure 24
+:
+Same as Figure
+23
+, for Dice Sum.
+Figure 25
+:
+Same as Figure
+23
+, for Music Note.
+Figure 26
+:
+Same as Figure
+23
+, for Dashcam Count..
+Figure 27
+:
+Same as Figure
+23
+, for Multi-View Seq..
+Figure 28
+:
+Same as Figure
+23
+, for Street-View Ord..
+Figure 29
+:
+Same as Figure
+23
+, for Surround Loc..
+Figure 30
+:
+Same as Figure
+23
+, for Traffic Causation.
+Appendix E
+Discussion
+On the Scope and Completeness of Task Decompositions.
+The SCM of each task declares, for every target task, which unit tasks are placed under controlled intervention. It is not intended as an exhaustive characterization of the task’s causal structure or of the model’s internal computation, and we do not claim that it is complete: the set of factors that may influence a model’s answer on a real-world task is open-ended. A unit task is declared as a prerequisite of a target when solving the target requires the information it represents (Appendix.
+B.2
+), and the same declared structure is used for all evaluated models. Any factor outside the declared parent sets belongs to the unmodeled factors captured by
+(Definition
+3.1
+); it is not separately intervened on and remains in its natural regime.
+Completeness is not required for the validity of the metrics. Every quantity entering the capability and contribution metrics is an interventional probability, estimated by directly running the model under the corresponding regime, including the natural regime
+, rather than inferred from co-occurrences between unit-task outcomes. The lower-bound guarantees (Theorems
+A.3
+and
+A.4
+) hold for any configuration
+of the remaining declared prerequisites and rest on prerequisite regimes being assigned through injection (Assumption
+3.3
+), not on the declared parent sets capturing every factor that influences the outcome. N- and S-Scores therefore remain valid lower bounds on PN and PS for the context actually realized, in which the target’s declared prerequisites are set as specified and all other factors are left in their natural regime.
+What the decomposition determines is the reference set against which each metric is read (Section
+3.3
+): IC measures performance on
+when its declared prerequisites are supplied correctly,
+is the net gain from supplying them (the cascading component in Section
+5.2
+), and
+is the residual error that persists under correct prerequisites.
+The category-level findings in Section
+5.2
+are statements of this form, namely which share of the natural error is resolved by supplying the declared prerequisites and which share persists, obtained under the same inclusion criterion for every category.
+Finally, declared dependencies are task-defined, whereas the extent to which a model relies on each of them is measured rather than assumed. Averaged within each category, supplying the declared prerequisites improves performance for every model (
+in all 48 model-category cells; Tab
+9
+). Individually, a declared prerequisite may have small N- and S-Scores under
+(Section
+5.3
+), meaning that neither withholding it in the oracle environment nor supplying it alone in the natural environment substantially changes the outcome. This can occur for a genuine prerequisite: both scores can be small when the model already resolves it correctly within the full task, N when its omission is compensated by the other supplied prerequisites, and S when the outcome remains limited by the other, unsupplied ones. Small scores therefore characterize a model’s reliance under the given contrast.
+Scope and Limitations.
+Input-level interventions.
+In our framework, prerequisite states are controlled by injecting answers into the prompt, so all metrics characterize how a model’s output responds to prerequisite information provided in its input, rather than how the prerequisite is represented inside the model. Operating at the input level allows the same controlled states to be applied across models, including closed-weight models accessible only through APIs, without relying on unverified readouts of intermediate states.
+How a model processes the injected prerequisite (whether adopting it, checking it against the visual input, or overriding it—is) therefore part of the behavior measured by the metrics rather than an external assumption: IC measures task performance when correct prerequisite answers are available in the context, and RC measures performance when incorrect ones are supplied. Empirically, models consistently respond to the injected content: under the same prompt template, supplying correct answers improves performance in all 48 model-category cells, whereas supplying incorrect answers degrades all 12 models in perception and spatial tasks (Section
+5.2
+). Investigating the internal mechanisms by which models attend to and integrate injected prerequisites is an important direction for future work.
+Design of the incorrect intervention.
+For the incorrect state
+, we inject an answer randomly sampled from the valid answer space of unit task
+(Section
+4
+). This provides a standardized, model-independent perturbation that is identical across all evaluated models, ensuring that RC and the contribution scores involving state
+are directly comparable across models. It is intended to test how models behave under an explicitly false premise, rather than to simulate the natural errors that a specific model would make on its own, which are already captured under the unassisted state
+.
+Evaluation cost.
+Evaluating a target task
+with
+prerequisites across the full ternary state space would in principle require
+prerequisite configurations. By setting the remaining prerequisites
+to homogeneous states (Appendix Section
+A.3.2
+), our framework reduces the required runs per instance to linear in
+: for each prerequisite
+, pairing
+with
+yields nine state pairs, where the three all-same states (
+) are shared across all prerequisites, resulting in
+runs per instance across all four contrasts. In this paper, we evaluate all four contrasts to provide a complete characterization of model behavior across the ternary intervention space. In practical applications, the
+contrast is the most directly informative, as it diagnoses how much each prerequisite limits and can improve performance relative to the model’s natural state; evaluating
+alone requires only
+runs per instance (the standard end-to-end evaluation plus
+interventional runs). Exploring automated task decomposition is also a promising direction for scaling this diagnostic pipeline to broader task domains.
+Scope and future directions.
+This work focuses on diagnostic evaluation, establishing a causal framework and benchmark to identify where and why MLLMs fail on compositional tasks. Developing training or inference-time methods to address the diagnosed bottlenecks is a natural next step that we hope our work will inform. More broadly, our diagnostic framework can be extended to several related areas in future work, including localizing failure bottlenecks in multi-step agentic workflows, guiding targeted capability improvement in post-training and reinforcement learning, and complementing chain-of-thought reasoning analysis.
+Experimental support, please
+view the build logs
+for errors. Generated by
+L
+A
+T
+E
+xml
+.
+Instructions for reporting errors
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+Click the "Report Issue"
+(
+)
+button, located in the page header.
+Tip:
+You can select the relevant text first, to include it in your report.
+Our team has already identified
+the following issues
+. We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a
+list of packages that need conversion
+, and welcome
+developer contributions
+.
+We gratefully acknowledge support from our
+major funders
+,
+member institutions
+,
+,
+and all contributors.
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status
+(opens in new tab)

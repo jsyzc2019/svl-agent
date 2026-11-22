@@ -1,0 +1,107 @@
+{
+  "section": "§87-§88",
+  "paper": "arXiv:2610.15836v1 Latent Taxonomies: How Property Induction Develops in Language Model Pre-training",
+  "evidence_grade": "primary（arXiv 官方 HTML 全文，self-reported 实验按 KB-RSI07 折1；只编译方法论拦截面）",
+  "anchors": {
+    "P0_emergence": {
+      "all": true,
+      "hits": {
+        "taxonomically aligned induction emerges from next-token prediction alone": true,
+        "a property learned for one entity transfers more strongly within its taxonomic category than across categories": true
+      }
+    },
+    "P1_recoverable": {
+      "all": true,
+      "hits": {
+        "clustering recovers the full taxonomic tree from entity representations": true,
+        "entities that share a deeper category become more similar in activation space": true,
+        "Can the entire tree, including its branching structure, be fully reconstructed from the representations? Using a standard clustering technique, we find that it can": true
+      }
+    },
+    "P2_scale_hurts": {
+      "all": true,
+      "hits": {
+        "induction weakens with model size when the data budget is fixed": true,
+        "larger models memorize individual facts rather than compress them into shared structure": true,
+        "At a fixed data budget, scale hurts": true,
+        "the induction advantage decreases with model size": true
+      }
+    },
+    "P3_maturity": {
+      "all": true,
+      "hits": {
+        "Induction also strengthens with more pre-training before the taxonomy injection": true,
+        "a model that has learned more general language before the taxonomy is introduced learns to generalize over it more strongly": true
+      }
+    },
+    "P4_incontext": {
+      "all": true,
+      "hits": {
+        "transfers to novel in-context properties": true,
+        "acquiring taxonomic structure in the weights enables models to apply it to novel in-context properties": true
+      }
+    },
+    "P5_override": {
+      "all": true,
+      "hits": {
+        "can be overridden by a latent taxonomy implied by the prompt": true,
+        "Context overrides weights under conflicting taxonomies": true,
+        "the model generalizes according to the context taxonomy": true
+      }
+    },
+    "P6_implication": {
+      "all": true,
+      "hits": {
+        "inductive generalization reflects the latent organization of its training data": true,
+        "predicting how far a learned fact will spread": true
+      }
+    }
+  },
+  "gates": {
+    "gate_A_induction_structure": {
+      "checks": {
+        "no_advantage": true,
+        "structure_opaque": true,
+        "memorize_as_generalize": true,
+        "scale_hidden": true,
+        "partial_disclosure": true,
+        "literal_enum": true,
+        "all_good": true
+      },
+      "cases": {
+        "no_advantage": "downgrade/INDUCTION_STRUCT.NO_ADVANTAGE",
+        "structure_opaque": "downgrade/INDUCTION_STRUCT.STRUCTURE_OPAQUE",
+        "memorize_as_generalize": "downgrade/INDUCTION_STRUCT.MEMORIZE_AS_GENERALIZE",
+        "scale_hidden": "downgrade/INDUCTION_STRUCT.SCALE_HIDDEN",
+        "partial_disclosure": "flag/INDUCTION_STRUCT.PARTIAL",
+        "literal_enum": "flag/INDUCTION_STRUCT.INVALID_INPUT",
+        "all_good": "ok/INDUCTION_STRUCT.SELF_CONSISTENT"
+      },
+      "all_passed": true
+    },
+    "gate_B_context_override": {
+      "checks": {
+        "no_split": true,
+        "override_hidden": true,
+        "no_conflict_test": true,
+        "no_bound": true,
+        "partial_disclosure": true,
+        "literal_enum": true,
+        "all_good": true
+      },
+      "cases": {
+        "no_split": "downgrade/CONTEXT_OVERRIDE.NO_SPLIT",
+        "override_hidden": "downgrade/CONTEXT_OVERRIDE.OVERRIDE_HIDDEN",
+        "no_conflict_test": "downgrade/CONTEXT_OVERRIDE.NO_CONFLICT_TEST",
+        "no_bound": "downgrade/CONTEXT_OVERRIDE.NO_BOUND",
+        "partial_disclosure": "flag/CONTEXT_OVERRIDE.PARTIAL",
+        "literal_enum": "flag/CONTEXT_OVERRIDE.INVALID_INPUT",
+        "all_good": "ok/CONTEXT_OVERRIDE.SELF_CONSISTENT"
+      },
+      "all_passed": true
+    }
+  },
+  "anchor_all_passed": true,
+  "gate_all_passed": true,
+  "all_passed": true
+}

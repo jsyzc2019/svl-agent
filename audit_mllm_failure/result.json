@@ -1,0 +1,119 @@
+{
+  "section": "§83-§84",
+  "paper": "arXiv:2609.38851v1 Where MLLMs Fail and Why: Causal Task Decomposition for Capability Failure Diagnosis",
+  "evidence_grade": "primary（arXiv 官方 HTML 全文，self-reported 实验按 KB-RSI07 折1；只编译方法论拦截面）",
+  "anchors": {
+    "P0_problem": {
+      "all": true,
+      "hits": {
+        "records how often MLLMs fail, but cannot distinguish whether a failure reflects an intrinsic deficit in the targeted capability or a cascading error from an upstream prerequisite": true,
+        "the same error but opposite capability diagnoses": true
+      }
+    },
+    "P1_why_trace_insufficient": {
+      "all": true,
+      "hits": {
+        "observing untreated generation alone cannot disentangle the two failure modes": true,
+        "stated chains-of-thought do not always reflect the computation behind the final answer": true,
+        "linking sub-task and final correctness by co-occurrence": true
+      }
+    },
+    "P2_intervention": {
+      "all": true,
+      "hits": {
+        "we instead set each prerequisite to a known correct or incorrect state": true,
+        "injecting the correct answer for": true,
+        "injecting an incorrect answer for": true,
+        "the natural state where is not injected": true
+      }
+    },
+    "P3_exogeneity": {
+      "all": true,
+      "hits": {
+        "the state of a unit task admits no faithful observational readout and is identified only through the intervention": true,
+        "making conditioning on and intervening operationally identical": true,
+        "absence of a faithful observational channel making intervention the reliable state-assignment mechanism": true
+      }
+    },
+    "P4_capability_metrics": {
+      "all": true,
+      "hits": {
+        "a large gap indicates that the model can solve given correct prerequisites, pointing to upstream cascading errors as the primary bottleneck": true,
+        "a small gap with low suggests an intrinsic deficit": true,
+        "comparing with shows whether false prerequisites mislead the model below its natural baseline": true
+      }
+    },
+    "P5_no_monotonicity": {
+      "all": true,
+      "hits": {
+        "We do not assume monotonicity: in LLM reasoning, injecting incorrect answer": true,
+        "can help more than no injection": true,
+        "N-Score and S-Score as observable lower bounds": true
+      }
+    },
+    "P6_bounds": {
+      "all": true,
+      "hits": {
+        "N-Score and S-Score provide valid lower bounds on the Probability of Necessity": true,
+        "A high N-Score pinpoints critical performance bottlenecks": true,
+        "A high S-Score identifies high-leverage prerequisites": true
+      }
+    },
+    "P7_finding": {
+      "all": true,
+      "hits": {
+        "supplying correct prerequisites eliminates": true,
+        "of its natural errors": true,
+        "the single most important one alone captures": true,
+        "of the gain from supplying all prerequisites": true
+      }
+    }
+  },
+  "gates": {
+    "gate_A_failure_causal": {
+      "checks": {
+        "end_to_end_only": true,
+        "trace_cooccurrence": true,
+        "no_intervention": true,
+        "no_split": true,
+        "partial_disclosure": true,
+        "literal_enum": true,
+        "all_good": true
+      },
+      "cases": {
+        "end_to_end_only": "downgrade/FAILURE_CAUSAL.END_TO_END_ONLY",
+        "trace_cooccurrence": "downgrade/FAILURE_CAUSAL.TRACE_COOCCURRENCE",
+        "no_intervention": "downgrade/FAILURE_CAUSAL.NO_INTERVENTION",
+        "no_split": "downgrade/FAILURE_CAUSAL.NO_SPLIT",
+        "partial_disclosure": "flag/FAILURE_CAUSAL.PARTIAL",
+        "literal_enum": "flag/FAILURE_CAUSAL.INVALID_INPUT",
+        "all_good": "ok/FAILURE_CAUSAL.SELF_CONSISTENT"
+      },
+      "all_passed": true
+    },
+    "gate_B_causal_contribution": {
+      "checks": {
+        "no_ns": true,
+        "bound_as_exact": true,
+        "mono_hidden": true,
+        "no_sparsity": true,
+        "partial_disclosure": true,
+        "literal_enum": true,
+        "all_good": true
+      },
+      "cases": {
+        "no_ns": "downgrade/CAUSAL_CONTRIB.NO_NS_SPLIT",
+        "bound_as_exact": "downgrade/CAUSAL_CONTRIB.BOUND_AS_EXACT",
+        "mono_hidden": "downgrade/CAUSAL_CONTRIB.MONOTONICITY_HIDDEN",
+        "no_sparsity": "downgrade/CAUSAL_CONTRIB.NO_SPARSITY",
+        "partial_disclosure": "flag/CAUSAL_CONTRIB.PARTIAL",
+        "literal_enum": "flag/CAUSAL_CONTRIB.INVALID_INPUT",
+        "all_good": "ok/CAUSAL_CONTRIB.SELF_CONSISTENT"
+      },
+      "all_passed": true
+    }
+  },
+  "anchor_all_passed": true,
+  "gate_all_passed": true,
+  "all_passed": true
+}

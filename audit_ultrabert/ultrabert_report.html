@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§85-§86 UltraBERT 精研报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1060px;margin:32px auto;padding:0 20px;color:#222;line-height:1.7}
+h1{border-bottom:3px solid #569;padding-bottom:8px} h2{color:#345;margin-top:32px;border-left:4px solid #569;padding-left:10px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px} th,td{border:1px solid #ddd;padding:6px 9px;text-align:left;vertical-align:top} th{background:#eef3f7}
+.pass{color:#0a7;font-weight:bold} .dim{color:#555}
+.note{background:#f2f7fb;border-left:4px solid #569;padding:10px 14px;margin:14px 0}
+.core{background:#fbf6ef;border-left:4px solid #b85;padding:12px 16px;margin:16px 0}
+code{background:#f4f4f4;padding:2px 5px;border-radius:3px;font-size:12px}
+</style></head><body>
+<h1>§85-§86《UltraBERT: Beyond the Limit of BERT Pre-Training》精研报告</h1>
+<p class="dim">生成 2026-11-22　|　arXiv:2610.15028v1（10 Oct 2026，Park/Lee/Kang，Korea University/AIGEN Sciences/Amazon）　|　论文 HTML <code>6c125cae…</code>　|　分析前锁 <code>2593887f…</code>　|　门实现前锁 <code>febd1f25…</code>　|　锚点 14/14　|　KB 119→125　|　全量 822→967</p>
+<div class="note"><b>证据与诚实边界：</b>一手 arXiv 官方 HTML 全文；GLUE 91.0/BEIR 47.7/1–2T token 饱和均为 self-reported，按 KB-RSI07 折1，只编译方法论拦截面不采信 SOTA 为独立验证。饱和结论 scoped 于该配方任务集，不外推为普适定律。无公开代码复现实标注。</div>
+<h2>一、论文核心</h2><div class="core">编码器预训练配方沿用小规模惯例，近年现代化只改架构，MLM 掩码比仍用 BERT 时代经验。三大发现：<b>①</b>下游在 1–2T token 饱和，即使训练/验证 loss 仍下降（<i>an upper bound that additional tokens cannot raise</i>）；<b>②</b>分类偏好低掩码比、检索偏好高掩码比，<i>contradicting prior work suggesting larger ratios for larger models</i>；<b>③</b>蒸馏+剪枝在低 ratio 改善分类、高 ratio 损害检索。</div>
+<h2>二、认知增量与两道新门禁</h2><p>从「多任务配置冲突」切出两条独立拦截面：<b>①配置冲突隔离</b>——识别任务对同一超参的相反偏好并用机制隔离（同 batch 混 5%/50% + 独立 LM head + 蒸馏只限低 ratio），而非折中；<b>②计算饱和诚实</b>——区分训练 loss 下降与下游能力提升、报告饱和点与边际收益，饱和点后比较才排除收敛速度混淆。</p>
+<h2>三、命题与一手锚点命中</h2>
+<table><tr><th>命题</th><th>核心</th><th>锚点</th></tr><tr><td>P0_problem</td><td>问题/现状</td><td class="pass">2/2</td></tr><tr><td>P1_saturation</td><td>饱和证据</td><td class="pass">3/3</td></tr><tr><td>P2_mask_conflict</td><td>配置冲突</td><td class="pass">2/2</td></tr><tr><td>P3_distill_interaction</td><td>蒸馏交互</td><td class="pass">1/1</td></tr><tr><td>P4_de_confounding</td><td>去混淆前提</td><td class="pass">1/1</td></tr><tr><td>P5_decoupling</td><td>解耦机制</td><td class="pass">3/3</td></tr><tr><td>P6_sota</td><td>SOTA声明</td><td class="pass">2/2</td></tr></table>
+<h2>四、缺口判定与判据自咬</h2><p>7 道相关门禁（evaluation_reliability/backtest_integrity/estimation/scoring_integrity/selective_supervision/skill_admission 等）无一覆盖配置冲突隔离与饱和诚实。锚点 14/14 逐字命中，无跨行断字 miss；双门禁 AST 自审 Compare 内无中文字面量，惰性导入登记，§58 选 A 不接 run_loop。各 25 项测试 + 7 活体回归 PASS。</p>
+<h2>五、收束</h2><div class="core"><b>一句话收束：</b>这篇论文最该带走的是——<b>loss 一直降不等于下游还在涨（1–2T 后就饱和），低掩码比利分类、高掩码比利检索的相反偏好不能靠折中抹平，要靠机制隔离。</b>本仓 30 道门禁没一道判过「统一配置通吃多任务时冲突有没有被隔离」或「scale 声明有没有报告饱和点、有没有拿 loss 下降冒充能力提升」。两把新尺子落地：<b>config_conflict_isolation</b>（冲突未识别/无隔离/比较被混淆/一刀切折中→downgrade）与 <b>compute_saturation_honesty</b>（无饱和报告/loss与下游不分/无边际收益/loss冒充能力→downgrade）。信规则、不承诺有效。</div>
+</body></html>

@@ -1,0 +1,103 @@
+{
+  "section": "§85-§86",
+  "paper": "arXiv:2610.15028v1 UltraBERT: Beyond the Limit of BERT Pre-Training",
+  "evidence_grade": "primary（arXiv 官方 HTML 全文，self-reported 实验按 KB-RSI07 折1；只编译方法论拦截面）",
+  "anchors": {
+    "P0_problem": {
+      "all": true,
+      "hits": {
+        "the pretraining recipe itself remains inherited from small-scale conventions": true,
+        "no single model performing competitively across both classification and retrieval tasks": true
+      }
+    },
+    "P1_saturation": {
+      "all": true,
+      "hits": {
+        "downstream performance saturates around 1–2T tokens even as training and validation losses keep decreasing": true,
+        "This indicates an upper bound that additional tokens cannot raise": true,
+        "the BEIR scores saturate even earlier, showing no significant improvement beyond the first evaluation point of 275B tokens": true
+      }
+    },
+    "P2_mask_conflict": {
+      "all": true,
+      "hits": {
+        "classification consistently favors lower masking ratios across model sizes, contradicting prior work suggesting larger ratios for larger models": true,
+        "lower masking ratios benefit classification while higher ones benefit retrieval": true
+      }
+    },
+    "P3_distill_interaction": {
+      "all": true,
+      "hits": {
+        "Distillation with pruning improves classification at low masking ratios but degrades retrieval at high ones": true
+      }
+    },
+    "P4_de_confounding": {
+      "all": true,
+      "hits": {
+        "At saturation, where convergence speed no longer confounds the comparison": true
+      }
+    },
+    "P5_decoupling": {
+      "all": true,
+      "hits": {
+        "reconciles the two masking regimes within a single encoder rather than settling for a single configuration": true,
+        "mixes 5% and 50% masked sequences within each batch while assigning a separate LM head to each ratio": true,
+        "restrict distillation to the low-ratio sequences, while training the high-ratio ones with standard MLM": true
+      }
+    },
+    "P6_sota": {
+      "all": true,
+      "hits": {
+        "the first encoder to achieve state of the art on both classification and retrieval tasks": true,
+        "reaching 91.0 on GLUE and 47.7 on BEIR": true
+      }
+    }
+  },
+  "gates": {
+    "gate_A_config_conflict": {
+      "checks": {
+        "conflict_hidden": true,
+        "no_isolation": true,
+        "confoounded": true,
+        "blanket": true,
+        "partial_disclosure": true,
+        "literal_enum": true,
+        "all_good": true
+      },
+      "cases": {
+        "conflict_hidden": "downgrade/CONFIG_CONFLICT.CONFLICT_HIDDEN",
+        "no_isolation": "downgrade/CONFIG_CONFLICT.NO_ISOLATION",
+        "confoounded": "downgrade/CONFIG_CONFLICT.CONFOUNDED",
+        "blanket": "downgrade/CONFIG_CONFLICT.BLANKET_TRADEOFF",
+        "partial_disclosure": "flag/CONFIG_CONFLICT.PARTIAL",
+        "literal_enum": "flag/CONFIG_CONFLICT.INVALID_INPUT",
+        "all_good": "ok/CONFIG_CONFLICT.SELF_CONSISTENT"
+      },
+      "all_passed": true
+    },
+    "gate_B_compute_saturation": {
+      "checks": {
+        "no_saturation": true,
+        "no_split": true,
+        "no_marginal": true,
+        "loss_as_capability": true,
+        "partial_disclosure": true,
+        "literal_enum": true,
+        "all_good": true
+      },
+      "cases": {
+        "no_saturation": "downgrade/COMPUTE_SAT.NO_SATURATION",
+        "no_split": "downgrade/COMPUTE_SAT.NO_SPLIT",
+        "no_marginal": "downgrade/COMPUTE_SAT.NO_MARGINAL",
+        "loss_as_capability": "downgrade/COMPUTE_SAT.LOSS_AS_CAPABILITY",
+        "partial_disclosure": "flag/COMPUTE_SAT.PARTIAL",
+        "literal_enum": "flag/COMPUTE_SAT.INVALID_INPUT",
+        "all_good": "ok/COMPUTE_SAT.SELF_CONSISTENT"
+      },
+      "all_passed": true
+    }
+  },
+  "anchor_all_passed": true,
+  "gate_all_passed": true,
+  "all_passed": true
+}

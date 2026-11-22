@@ -1,0 +1,50 @@
+{
+ "request_id": "latent-taxonomies-20261122",
+ "target": "Latent Taxonomies: How Property Induction Develops in Language Model Pre-training (arXiv:2610.15836v1)",
+ "collection_time": "2026-11-22T11:45:00+08:00",
+ "sources": {
+  "S01_paper": {
+   "url": "https://arxiv.org/abs/2610.15836",
+   "html_fulltext_url": "https://arxiv.org/html/2610.15836",
+   "html_fulltext_sha256": "81ec5da0c46af705df2c2273aabd9e227bf2671dd4a85af343b6b463f9bc69b3",
+   "title": "Latent Taxonomies: How Property Induction Develops in Language Model Pre-training",
+   "authors": "Jan Sobotka, Ekaterina Goliakova, Marcin Detyniecki, Antoine Bosselut, Xavier Renard",
+   "version": "arXiv:2610.15836v1 [cs.CL] 11 Oct 2026",
+   "affiliations": [
+    "EPFL",
+    "AXA",
+    "Sorbonne University, CNRS, LIP6",
+    "Polish Academy of Science, IBS PAN"
+   ],
+   "grade": "primary (official arXiv HTML fulltext); synthetic-taxonomy 3-seed experiments 折1 per KB-RSI07"
+  },
+  "S02_abs": {
+   "url": "https://arxiv.org/abs/2610.15836",
+   "html_sha256": "fee2ccce9e5b57bf967f2ef2ba3008c1acd1d7472b0fef18accde9712f6f19ac",
+   "grade": "primary (official abs page)"
+  }
+ },
+ "evidence_slices": [
+  "paper_flat.txt",
+  "paper_text.txt"
+ ],
+ "locks": {
+  "manifest": "manifest.sha256",
+  "prereg_analysis_before": "prereg.sha256",
+  "gate_prereg_before_implementation": "gate_prereg.sha256"
+ },
+ "verification": {
+  "engine": "engine.py",
+  "anchor_count": 18,
+  "anchor_string_hits": "18/18",
+  "gate_A_live_regression": "7/7",
+  "gate_B_live_regression": "7/7",
+  "all_passed": true
+ },
+ "honesty_notes": [
+  "合成分类法+3 seed 实验折1，只编译方法论拦截面",
+  "scale hurts 结论 scoped 于固定数据预算与合成taxonomy，不外推",
+  "弯引号锚点(model's)按原文逐字，未放水",
+  "两门禁只判声明自洽不承诺结构真恢复/context覆盖真可控"
+ ]
+}

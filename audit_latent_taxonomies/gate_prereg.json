@@ -1,0 +1,42 @@
+{
+  "section": "§87-§88",
+  "gate_A": {
+    "module": "svagent/induction_structure_honesty.py",
+    "function": "check_induction_structure_honesty",
+    "verdict": "InductionStructureVerdict",
+    "dimensions": ["induction_advantage_shown", "structure_recoverable", "memorize_vs_compress_split", "scale_effect_honest"],
+    "rules": [
+      {"id": "R0", "cond": "任一维非 yes/no/partial 枚举", "action": "flag", "code": "INDUCTION_STRUCT.INVALID_INPUT"},
+      {"id": "R1", "cond": "induction_advantage_shown=no（未展示类别内优于跨类的归纳优势，泛化声明无证据）", "action": "downgrade", "code": "INDUCTION_STRUCT.NO_ADVANTAGE"},
+      {"id": "R2", "cond": "structure_recoverable=no（未从表示恢复/internal 结构不可核查）", "action": "downgrade", "code": "INDUCTION_STRUCT.STRUCTURE_OPAQUE"},
+      {"id": "R3", "cond": "memorize_vs_compress_split=no（未区分记忆个体事实vs压缩成共享结构）", "action": "downgrade", "code": "INDUCTION_STRUCT.MEMORIZE_AS_GENERALIZE"},
+      {"id": "R4", "cond": "scale_effect_honest=no（未诚实报告规模效应，默认bigger-is-better）", "action": "downgrade", "code": "INDUCTION_STRUCT.SCALE_HIDDEN"},
+      {"id": "R5", "cond": "任一维 partial", "action": "flag", "code": "INDUCTION_STRUCT.PARTIAL"},
+      {"id": "R6", "cond": "全 yes", "action": "ok", "code": "INDUCTION_STRUCT.SELF_CONSISTENT"}
+    ]
+  },
+  "gate_B": {
+    "module": "svagent/context_override_boundary.py",
+    "function": "check_context_override_boundary",
+    "verdict": "ContextOverrideVerdict",
+    "dimensions": ["inweights_incontext_split", "override_disclosed", "conflict_tested", "steerability_bound_stated"],
+    "rules": [
+      {"id": "R0", "cond": "任一维非 yes/no/partial 枚举", "action": "flag", "code": "CONTEXT_OVERRIDE.INVALID_INPUT"},
+      {"id": "R1", "cond": "inweights_incontext_split=no（未区分权重习得vs上下文给定）", "action": "downgrade", "code": "CONTEXT_OVERRIDE.NO_SPLIT"},
+      {"id": "R2", "cond": "override_disclosed=no（未披露context可覆盖weights）", "action": "downgrade", "code": "CONTEXT_OVERRIDE.OVERRIDE_HIDDEN"},
+      {"id": "R3", "cond": "conflict_tested=no（未测试prompt与weights冲突的情形）", "action": "downgrade", "code": "CONTEXT_OVERRIDE.NO_CONFLICT_TEST"},
+      {"id": "R4", "cond": "steerability_bound_stated=no（未陈述上下文可操控性上限）", "action": "downgrade", "code": "CONTEXT_OVERRIDE.NO_BOUND"},
+      {"id": "R5", "cond": "任一维 partial", "action": "flag", "code": "CONTEXT_OVERRIDE.PARTIAL"},
+      {"id": "R6", "cond": "全 yes", "action": "ok", "code": "CONTEXT_OVERRIDE.SELF_CONSISTENT"}
+    ]
+  },
+  "shared_discipline": [
+    "四维语义枚举 {yes,no,partial}；R0 非法/字面串→flag（避 §56 brittle 根因）",
+    "R1-R4 按优先级短路返回，不事后加权（防 Goodhart）",
+    "R5 partial→flag；R6 全自洽→ok",
+    "只判声明/机制自洽，不承诺实际有效（存在≠有效性 KB-META01/AUDIT03）",
+    "中文锚点集中 _A 字典；AST 自审禁止 Compare 内中文字面量；必要时 CJK 边界用 ord()",
+    "惰性导入登记 __init__.py；不接 harness.run_loop（§58 选 A）",
+    "self-reported 实验按 KB-RSI07 折1；scale 结论 scoped"
+  ]
+}

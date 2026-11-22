@@ -1,0 +1,43 @@
+{
+  "section": "§85-§86",
+  "gate_A": {
+    "module": "svagent/config_conflict_isolation.py",
+    "function": "check_config_conflict_isolation",
+    "verdict": "ConfigConflictVerdict",
+    "dimensions": ["conflict_identified", "mechanism_isolation", "de_confounded_comparison", "no_blanket_tradeoff"],
+    "rules": [
+      {"id": "R0", "cond": "任一维非 yes/no/partial 枚举", "action": "flag", "code": "CONFIG_CONFLICT.INVALID_INPUT"},
+      {"id": "R1", "cond": "conflict_identified=no（未识别多任务对同一配置的相反偏好）", "action": "downgrade", "code": "CONFIG_CONFLICT.CONFLICT_HIDDEN"},
+      {"id": "R2", "cond": "mechanism_isolation=no（无隔离机制，用单一配置硬套）", "action": "downgrade", "code": "CONFIG_CONFLICT.NO_ISOLATION"},
+      {"id": "R3", "cond": "de_confounded_comparison=no（比较未在饱和点后做，收敛速度混淆）", "action": "downgrade", "code": "CONFIG_CONFLICT.CONFOUNDED"},
+      {"id": "R4", "cond": "no_blanket_tradeoff=no（用一刀切折中掩盖冲突而非隔离）", "action": "downgrade", "code": "CONFIG_CONFLICT.BLANKET_TRADEOFF"},
+      {"id": "R5", "cond": "任一维 partial", "action": "flag", "code": "CONFIG_CONFLICT.PARTIAL"},
+      {"id": "R6", "cond": "全 yes", "action": "ok", "code": "CONFIG_CONFLICT.SELF_CONSISTENT"}
+    ],
+    "note": "no_blanket_tradeoff 为能力语义（yes=未用一刀切折中），其余同为能力语义。R4 在 =no 时 downgrade。"
+  },
+  "gate_B": {
+    "module": "svagent/compute_saturation_honesty.py",
+    "function": "check_compute_saturation_honesty",
+    "verdict": "ComputeSaturationVerdict",
+    "dimensions": ["saturation_reported", "loss_vs_downstream_split", "marginal_gain_measured", "no_loss_as_capability"],
+    "rules": [
+      {"id": "R0", "cond": "任一维非 yes/no/partial 枚举", "action": "flag", "code": "COMPUTE_SAT.INVALID_INPUT"},
+      {"id": "R1", "cond": "saturation_reported=no（未报告下游饱和点，暗示 scale 无限受益）", "action": "downgrade", "code": "COMPUTE_SAT.NO_SATURATION"},
+      {"id": "R2", "cond": "loss_vs_downstream_split=no（未区分训练loss下降与下游能力）", "action": "downgrade", "code": "COMPUTE_SAT.NO_SPLIT"},
+      {"id": "R3", "cond": "marginal_gain_measured=no（未测边际收益/额外token无收益的证据）", "action": "downgrade", "code": "COMPUTE_SAT.NO_MARGINAL"},
+      {"id": "R4", "cond": "no_loss_as_capability=no（用loss下降冒充下游能力提升）", "action": "downgrade", "code": "COMPUTE_SAT.LOSS_AS_CAPABILITY"},
+      {"id": "R5", "cond": "任一维 partial", "action": "flag", "code": "COMPUTE_SAT.PARTIAL"},
+      {"id": "R6", "cond": "全 yes", "action": "ok", "code": "COMPUTE_SAT.SELF_CONSISTENT"}
+    ]
+  },
+  "shared_discipline": [
+    "四维语义枚举 {yes,no,partial}；R0 非法/字面串→flag（避 §56 brittle 根因）",
+    "R1-R4 按优先级短路返回，不事后加权（防 Goodhart）",
+    "R5 partial→flag；R6 全自洽→ok",
+    "只判声明/机制自洽，不承诺实际有效（存在≠有效性 KB-META01/AUDIT03）",
+    "中文锚点集中 _A 字典；AST 自审禁止 Compare 内中文字面量；必要时 CJK 边界用 ord()",
+    "惰性导入登记 __init__.py；不接 harness.run_loop（§58 选 A）",
+    "self-reported 实验按 KB-RSI07 折1；只编译方法论拦截面"
+  ]
+}

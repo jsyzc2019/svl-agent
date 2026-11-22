@@ -1,0 +1,49 @@
+{
+ "request_id": "mllm-failure-20261122",
+ "target": "Where MLLMs Fail and Why: Causal Task Decomposition for Capability Failure Diagnosis (arXiv:2609.38851v1)",
+ "collection_time": "2026-11-22T11:20:00+08:00",
+ "sources": {
+  "S01_paper": {
+   "url": "https://arxiv.org/abs/2609.38851",
+   "html_fulltext_url": "https://arxiv.org/html/2609.38851",
+   "html_fulltext_sha256": "bdacf495c2bff65b6fee709e5fdaf2932c1c5285a1b2f318d59637dbd3144edb",
+   "title": "Where MLLMs Fail and Why: Causal Task Decomposition for Capability Failure Diagnosis",
+   "authors": "Xia Hu, Brian Potetz, Chun-Ta Lu, Huanfen Yao, Leonidas Guibas, Zhicheng Wang, Howard Zhou, Pengfei Xing, Andrew Gallagher",
+   "version": "arXiv:2609.38851v1 [cs.CL] 30 Sep 2026",
+   "affiliations": [
+    "Google DeepMind",
+    "Google Research",
+    "Stanford University"
+   ],
+   "grade": "primary (official arXiv HTML fulltext); self-reported 12-MLLM experiments 折1 per KB-RSI07"
+  },
+  "S02_abs": {
+   "url": "https://arxiv.org/abs/2609.38851",
+   "html_sha256": "11e9348d75b6d1745802eb55df1aaa6b15622dbcac1504a754f079398bffea1d",
+   "grade": "primary (official abs page: version + authors)"
+  }
+ },
+ "evidence_slices": [
+  "paper_flat.txt",
+  "paper_text.txt"
+ ],
+ "locks": {
+  "manifest": "manifest.sha256",
+  "prereg_analysis_before": "prereg.sha256",
+  "gate_prereg_before_implementation": "gate_prereg.sha256"
+ },
+ "verification": {
+  "engine": "engine.py",
+  "anchor_count": 25,
+  "anchor_string_hits": "25/25",
+  "gate_A_live_regression": "7/7",
+  "gate_B_live_regression": "7/7",
+  "all_passed": true
+ },
+ "honesty_notes": [
+  "一手证据为 arXiv 官方 HTML 全文；self-reported 12 模型诊断结论（54%/84%）折1，只编译方法论拦截面不宣称结论被独立复现",
+  "公式变量符号被 HTML 剥离处锚点取不含符号的真实子串，未放水未改规则",
+  "两门禁只判机制声明自洽，不承诺受控干预真识别因果/下界真有效（存在≠有效性）",
+  "无公开 CADET 代码复现，如实标注"
+ ]
+}

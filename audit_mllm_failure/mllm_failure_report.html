@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§83-§84 MLLM因果诊断 精研报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1060px;margin:32px auto;padding:0 20px;color:#222;line-height:1.7}
+h1{border-bottom:3px solid #569;padding-bottom:8px} h2{color:#345;margin-top:32px;border-left:4px solid #569;padding-left:10px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px} th,td{border:1px solid #ddd;padding:6px 9px;text-align:left;vertical-align:top} th{background:#eef3f7}
+.pass{color:#0a7;font-weight:bold} .dim{color:#555}
+.note{background:#f2f7fb;border-left:4px solid #569;padding:10px 14px;margin:14px 0}
+.core{background:#fbf6ef;border-left:4px solid #b85;padding:12px 16px;margin:16px 0}
+code{background:#f4f4f4;padding:2px 5px;border-radius:3px;font-size:12px}
+</style></head><body>
+<h1>§83-§84《Where MLLMs Fail and Why: Causal Task Decomposition for Capability Failure Diagnosis》精研报告</h1>
+<p class="dim">生成 2026-11-22　|　arXiv:2609.38851v1（30 Sep 2026，Hu/Potetz/Lu/Yao/Guibas 等，Google DeepMind/Google Research/Stanford）　|　论文 HTML <code>bdacf495…</code>　|　分析前锁 <code>abab1025…</code>　|　门实现前锁 <code>3f6141a9…</code>　|　锚点 25/25　|　KB 119→125　|　全量 822→967</p>
+<div class="note"><b>证据与诚实边界：</b>一手 arXiv 官方 HTML 全文；12 frontier MLLMs 的 54%/84% 诊断为 self-reported，按 KB-RSI07 折1，只编译方法论拦截面不宣称结论被独立复现。公式变量符号被 HTML 剥离处锚点取不含符号的真实子串，未放水。无公开 CADET 代码复现实标注。</div>
+<h2>一、论文核心</h2><div class="core">端到端准确率只记录 MLLM 失败多频繁，无法区分是<b>目标能力的内在缺陷</b>还是<b>上游前提的 cascading error</b>——同一错误可对应相反能力诊断。分解子问题/检查 CoT 仍不够：<i>stated chains-of-thought do not always reflect the computation behind the final answer</i>，且只是共现而非受控干预。CADET 用 SCM 把任务分解为单元任务，对每个前提做三元干预（注入正确/注入错误/不注入）。</div>
+<h2>二、认知增量与两道新门禁</h2><p>从因果识别层切出两条独立拦截面：<b>①失败因果可识别性</b>——是否用受控干预而非 trace/共现、是否区分上游级联与内在缺陷；<b>②因果贡献诚实</b>——必要性(N)与充分性(S)分开、N/S-Score 是下界不是精确 PN/PS、不假设单调性须披露、瓶颈稀疏性须报告。</p>
+<h2>三、命题与一手锚点命中</h2>
+<table><tr><th>命题</th><th>核心</th><th>锚点</th></tr><tr><td>P0_problem</td><td>问题/现状</td><td class="pass">2/2</td></tr><tr><td>P1_why_trace_insufficient</td><td>trace不足</td><td class="pass">3/3</td></tr><tr><td>P2_intervention</td><td>三元干预</td><td class="pass">4/4</td></tr><tr><td>P3_exogeneity</td><td>外生性假设</td><td class="pass">3/3</td></tr><tr><td>P4_capability_metrics</td><td>能力指标</td><td class="pass">3/3</td></tr><tr><td>P5_no_monotonicity</td><td>非单调性</td><td class="pass">3/3</td></tr><tr><td>P6_bounds</td><td>下界</td><td class="pass">3/3</td></tr><tr><td>P7_finding</td><td>实测发现</td><td class="pass">4/4</td></tr></table>
+<h2>四、缺口判定与判据自咬</h2><p>component_attribution（按 Prompt/Memory/Skill/Harness 组件归因）是执行组件层级，evaluation_reliability（评估复现/评审独立）、criterion_origin（判据来源）均非失败因果识别。锚点 25/25 逐字命中；双门禁 49 项测试 + AST 自审通过，§58 选 A 不接 run_loop。门禁 A 前两维是否定语义（缺陷存在=yes），R6 取反逻辑已在测试验证。</p>
+<h2>五、收束</h2><div class="core"><b>一句话收束：</b>这篇论文最该带走的是——<b>端到端分只能告诉你失败了几次，告诉不了你是能力不行还是上游拖累；看 CoT/子问题分数只是共现，把前提设成已知正确/错误做干预才叫因果识别；N/S-Score 是下界不是精确概率，不假设单调性是关键前提。</b>两把新尺子落地：<b>failure_causal_identifiability</b>（只报端到端/靠trace共现/无干预/不分两类→downgrade）与 <b>causal_contribution_honesty</b>（N/S不分/下界当精确/单调性隐藏/无瓶颈稀疏→downgrade）。信规则、不承诺有效。</div>
+</body></html>
