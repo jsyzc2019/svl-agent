@@ -1,0 +1,32 @@
+{
+  "request_id": "benchleaking-honesty-20261122",
+  "five_piece": [
+    "manifest.json",
+    "prereg.json",
+    "gate_prereg.json",
+    "engine.py",
+    "result.json"
+  ],
+  "files": [
+    {
+      "id": "S01",
+      "path": "downloads/S01_arxiv_abs.html",
+      "sha256": "5441256af85ca1e16ca4b24bc4345ce7fcbcaf8dca36ef2c187978832695fd0c"
+    },
+    {
+      "id": "S02",
+      "path": "downloads/S02_arxiv_full.html",
+      "sha256": "fbf2df7d154b976e762b2fdf4d4ffbcd17683bf8735e391ea0cc29c965fcac6c"
+    },
+    {
+      "id": "FLAT",
+      "path": "downloads/paper_flat.txt",
+      "sha256": "210638c0b76fc7cf83f175803528f0154beeaf9919cf7eeae3269f92ff8e0823"
+    },
+    {
+      "id": "FETCH",
+      "path": "downloads/fetch_log.json",
+      "sha256": "c4a93c9235eebde60566ae0d083d9bd8981acafb9a69248c26f2029fb0068ba8"
+    }
+  ]
+}

@@ -10,11 +10,11 @@
 
 | 指标 | 数值 | 来源 |
 |---|---|---|
-| 推导进度 | §1–§93 | `commentary.md` 实测最高节 |
-| 知识库条目 | 130 | `knowledge_base_store.json` |
-| 会拦门禁（`check_*`） | 32 | `svagent/*.py` AST 扫描 |
-| 测试项 | 1116 | `pytest --collect-only` |
-| 证据目录 | 36（五件套齐全 19） | `audit_*/` 实测 |
+| 推导进度 | §1–§94 | `commentary.md` 实测最高节 |
+| 知识库条目 | 131 | `knowledge_base_store.json` |
+| 会拦门禁（`check_*`） | 33 | `svagent/*.py` AST 扫描 |
+| 测试项 | 1141 | `pytest --collect-only` |
+| 证据目录 | 37（五件套齐全 20） | `audit_*/` 实测 |
 
 > 诚实边界：模拟线（autopoiesis/self_evolving/telos/axiology/mechanism/estimation）
 > 的输出均标注 `evidence_scope: synthetic`，是方法演示，不外推为真实世界自进化能力。

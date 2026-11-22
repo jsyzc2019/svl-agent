@@ -3385,6 +3385,39 @@
       "evidence": "audit",
       "addressable": true,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT36",
+      "kind": "reasoning_lesson",
+      "mechanism": "Benchmark污染诚实性(benchleaking honesty)是审读任何leaderboard/模型发布分数声称的独立缺口(arXiv:2611.21315)：核心区分 benchleaking(测试集进入训练数据→分数reflects recall rather than capability)vs benchmaxxing(optimizes toward a benchmark without seeing its test set)。四维——(1)benchleaking_vs_maxxing:须区分两类声称vs把记忆冒充能力;(2)leakage_probe_disclosed:须有few-shot continuation等实证泄漏探针(96%/85% vs 9%/none)vs泛泛声称clean;(3)score_adjusted_for_leak:Anti-Hack score(泄漏样本计错+数量不变重算,量化分数欠多少5.0/16.6分)vs报告分数仍含增益;(4)scope_bounded:倡导decontamination reports+contamination-adjusted scores标准化vs外推为训练数据成员身份/污染流行率。只判声明自洽不承诺模型真实无污染(泄漏率self-reported折1,scoped)。",
+      "trigger": [
+        "benchmark污染",
+        "benchleaking",
+        "benchmaxxing",
+        "benchmark contamination",
+        "测试集泄漏",
+        "test-set leakage",
+        "Anti-Hack score",
+        "去污报告",
+        "decontamination",
+        "leaderboard",
+        "分数虚高",
+        "recall vs capability",
+        "few-shot continuation",
+        "泄漏校正"
+      ],
+      "action": "遇到声称『模型在benchmark上达SOTA/高分』的发布，按 benchleaking_honesty 四维取证(法官读一手原文逐字锚点)：recall冒充capability/不区分两类→downgrade；无实证泄漏探针→downgrade；无Anti-Hack式校正→flag；外推成员身份/不倡导decontamination→flag；partial→flag；全yes→ok(只判自洽,泄漏率折1)。与KB-T03基准隔离/KB-RSI06样本外复验/KB-AUDIT09检索注入配套——本门禁补『benchmark分数污染边界』独立维度。",
+      "provenance": "自主运维第五轮：WebSearch从P1虚高指标拆穿+P0自我验证话题自主发现arXiv:2611.21315v1→arXiv abs+HTML一手→fetch_log+SHA256→预注册锁存(prereg 659ce224/gate f96fc498/manifest 9caceece)→15锚点全命中(disclose必中红旗零误中ALL_ANCHORS_CLEAN)→编译第33道门禁+第8道FJ取证入口",
+      "timestamp": "2026-11-22T05:39:49.384547+00:00",
+      "support": [
+        "svagent/benchleaking_honesty.py:check_ + tests/test_benchleaking_honesty.py(25项) — KB-AUDIT36编译为活体门禁;7活体+AST自审0中文字面量",
+        "svagent/forensic_gates_ext5.py:adjudicate_benchleaking_honesty — 第8道FJ取证入口,真实证据ok/删披露flag/红旗downgrade/链失配拒判4/4",
+        "arXiv:2611.21315v1一手锚点:recall rather than capability+benchmaxxing区分+few-shot continuation 20 benchmarks+Anti-Hack score重算+decontamination reports标准化,15锚点逐字命中",
+        "独立性核验:KB-T03基准隔离/KB-RSI06样本外复验/KB-AUDIT09检索注入均不判benchmark分数污染边界;KB-META01通过"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {

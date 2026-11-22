@@ -1,0 +1,36 @@
+{
+  "request_id": "benchleaking-honesty-20261122",
+  "target": "arXiv:2611.21315v1 Benchleaking Is Accelerating: Benchmark contamination has worsened sharply, from post-training down to pre-training base models",
+  "acquisition": {
+    "channel": "自主运维第五轮：WebSearch发现(P1虚高指标拆穿+P0自我验证)→arXiv abs+HTML一手下载(WORKPLACES已验证渠道)",
+    "primary": [
+      {
+        "id": "S01",
+        "url": "https://arxiv.org/abs/2611.21315",
+        "file": "downloads/S01_arxiv_abs.html"
+      },
+      {
+        "id": "S02",
+        "url": "https://arxiv.org/html/2611.21315v1",
+        "file": "downloads/S02_arxiv_full.html"
+      }
+    ],
+    "flat": "downloads/paper_flat.txt",
+    "collection_time": "2026-11-22T13:38:50.897946+08:00"
+  },
+  "analysis_before_prereg": "15逐字锚点探测全部命中(摘要完整、正文HTML目录后截断);disclose必中红旗零误中;四维措辞直取摘要真实表述,无编造",
+  "cognitive_increment": "独立于已有130条:KB-T03只讲基准须隔离/KB-RSI06只讲样本外复验/KB-AUDIT09是检索注入层,均不判『一个benchmark分数声称是否诚实披露污染边界』。新四维:(1)benchleaking_vs_maxxing(测试集进训练数据→recall vs 不看测试集的优化,区分两类声称);(2)leakage_probe_disclosed(few-shot continuation实证泄漏96%/85% vs 9%/none,非泛泛声称);(3)score_adjusted_for_leak(Anti-Hack score:泄漏样本计错+数量不变重算,量化分数欠多少);(4)scope_bounded(call for decontamination reports+contamination-adjusted scores标准化,不外推为训练数据成员身份/污染流行率)。KB-META01独立性通过",
+  "four_dimensions": [
+    "benchleaking_vs_maxxing",
+    "leakage_probe_disclosed",
+    "score_adjusted_for_leak",
+    "scope_bounded"
+  ],
+  "kb_rules": [
+    "KB-RSI07 self-reported折1",
+    "KB-R07 自洽≠有效",
+    "KB-META01 独立核验",
+    "§58选A不接run_loop"
+  ],
+  "honest_scope": "只判一个benchmark分数声称是否诚实披露四污染边界;尺子可迁移到任何leaderboard/模型发布分数声明;不判本仓;不承诺模型真的无污染;self-reported泄漏率按KB-RSI07折1"
+}

@@ -3678,3 +3678,19 @@ F4：新增 svagent/evidence_scope.py，6 个模拟模块（autopoiesis/self_evo
 
 ### 93.5 成熟度观察
 连续四轮自主运维（§90 silent_failure + §91 rsi_claim_audit + §92 memory_consolidation + §93 redteam_robustness）证明：三清单框架不仅稳定可复制，且**可按用户授权动态扩展领域**（本轮 P0→P3 安全/合规）。每轮约 25 项测试、1 道门禁、1 道 FJ 入口、1 条 KB 洞见，全链闭环可回放、数字真实、凭据自管。就绪度稳定在 L2 边缘偏上；仍不宣称 L3——保留"北极星由人设定"价值边界（KB-META03）。
+
+---
+
+## §94 自主运维第五轮：Benchmark 污染诚实性（P1 虚高指标拆穿 + P0 自我验证）
+
+### 94.1 自主取料与增量判断
+用户"你接着飞"——按三清单 v1.1 自主启动第五轮。晨间自检 1116 全绿/链审 36 目录稳定。WebSearch 自主发现 arXiv:2611.21315v1《Benchleaking Is Accelerating》，从已验证 arXiv 渠道取 abs 44KB + 全文 786KB（均 200），落 fetch_log + SHA256。增量判断：本仓 KB-T03 只讲基准须隔离、KB-RSI06 只讲样本外复验、KB-AUDIT09 是检索注入层，均不判"一个 benchmark 分数声称是否诚实披露污染边界"——新对象独立，KB-META01 通过。
+
+### 94.2 编译与取证
+四维：①benchleaking_vs_maxxing（区分测试集进入训练数据→recall 与不看测试集的优化→capability vs 把记忆冒充能力）；②leakage_probe_disclosed（few-shot continuation 实证泄漏 96%/85% vs 9%/none vs 泛泛声称 clean）；③score_adjusted_for_leak（Anti-Hack score：泄漏样本计错、数量不变重算，量化分数欠多少 vs 分数仍含增益）；④scope_bounded（call for decontamination reports + contamination-adjusted scores 标准化 vs 外推为训练数据成员身份/流行率）。先锁存 prereg(659ce224…)/gate_prereg(f96fc498…)/manifest(9caceece…) + source 清单锁，再实现；15 逐字锚点探测 disclose 必中、红旗零误中（ALL_ANCHORS_CLEAN；全文 HTML 正文在目录后截断，锚点取自完整摘要段）。编译第 33 道门禁 benchleaking_honesty（R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 8 道 FJ 取证入口 forensic_gates_ext5（真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。
+
+### 94.3 接合、验收与诚实边界
+25 项新测试全过；八道取证裁决全 ok；成长桥消费痕迹 78→79。KB 130→131（KB-AUDIT36，可编译 fix）。全量 1116→1141 passed（+25），链审断言随仓库成长 36→37 / 19→20（不放宽）。诚实边界：只判 benchmark 分数声称是否诚实披露四污染边界，可迁移到任何 leaderboard/模型发布分数声明，不判本仓；self-reported 泄漏率（96%/85%）按 KB-RSI07 折 1；只判声明自洽不承诺模型真实无污染（KB-R07/META01）。遵循 §58 选 A 不接 run_loop；篡改测试只在临时副本；不动历史证据。
+
+### 94.4 成熟度观察
+连续五轮自主运维（§90 silent_failure + §91 rsi_claim_audit + §92 memory_consolidation + §93 redteam_robustness + §94 benchleaking）证明：三清单框架稳定可复制且可按授权动态扩展领域，第五轮更把 FJ 取证法官化迁移到"评测诚信"这一新维度。每轮约 25 项测试、1 道门禁、1 道 FJ 入口、1 条 KB 洞见，全链闭环可回放、数字真实、凭据自管。就绪度稳定在 L2 边缘偏上；仍不宣称 L3——保留"北极星由人设定"价值边界（KB-META03）。

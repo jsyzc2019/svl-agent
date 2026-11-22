@@ -1,0 +1,54 @@
+{
+  "request_id": "benchleaking-honesty-20261122",
+  "gate": "benchleaking_honesty",
+  "verdict": {
+    "action": "ok",
+    "code": "BENCHLEAK.SELF_CONSISTENT",
+    "four_dims": {
+      "benchleaking_vs_maxxing": "yes",
+      "leakage_probe_disclosed": "yes",
+      "score_adjusted_for_leak": "yes",
+      "scope_bounded": "yes"
+    }
+  },
+  "forensic_trace": {
+    "mode": "forensic",
+    "gate": "forensic.benchleaking",
+    "evidence_scope": "primary(arXiv abs+全文,泄漏率self-reported折1)",
+    "sources": [
+      "/workspace/audit_benchleaking_honesty/downloads/paper_flat.txt"
+    ],
+    "source_sha256": {
+      "paper_flat.txt": "210638c0b76fc7cf83f175803528f0154beeaf9919cf7eeae3269f92ff8e0823"
+    },
+    "inferred": {
+      "benchleaking_vs_maxxing": "yes",
+      "leakage_probe_disclosed": "yes",
+      "score_adjusted_for_leak": "yes",
+      "scope_bounded": "yes"
+    }
+  },
+  "chain_present": true,
+  "gate_live_regression": {
+    "checks": {
+      "recall_as_capability": true,
+      "probe_undisclosed": true,
+      "score_unadjusted": true,
+      "scope_overclaimed": true,
+      "partial_disclosure": true,
+      "literal_enum": true,
+      "all_good": true
+    },
+    "cases": {
+      "recall_as_capability": "downgrade/BENCHLEAK.RECALL_AS_CAPABILITY",
+      "probe_undisclosed": "downgrade/BENCHLEAK.PROBE_UNDISCLOSED",
+      "score_unadjusted": "flag/BENCHLEAK.SCORE_UNADJUSTED",
+      "scope_overclaimed": "flag/BENCHLEAK.SCOPE_OVERCLAIMED",
+      "partial_disclosure": "flag/BENCHLEAK.PARTIAL",
+      "literal_enum": "flag/BENCHLEAK.INVALID_INPUT",
+      "all_good": "ok/BENCHLEAK.SELF_CONSISTENT"
+    },
+    "all_passed": true
+  },
+  "honest_scope": "只判benchmark分数声称是否诚实披露四污染边界；可迁移到任何leaderboard/模型发布分数声明；泄漏率self-reported折1；不承诺模型真实无污染"
+}

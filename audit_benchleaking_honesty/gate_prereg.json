@@ -1,0 +1,19 @@
+{
+  "gate": "svagent.benchleaking_honesty.check_benchleaking_honesty",
+  "verdict": "BenchleakingVerdict(claim,benchleaking_vs_maxxing,leakage_probe_disclosed,score_adjusted_for_leak,scope_bounded,action,code,message)",
+  "input_enum": "四维∈{yes,no,partial}",
+  "rules": {
+    "R0": "任一非枚举(含字面串)→flag(BENCHLEAK.INVALID_INPUT)",
+    "R1": "benchleaking_vs_maxxing=no→downgrade(把测试集泄漏的recall冒充capability/不区分benchleaking与benchmaxxing)",
+    "R2": "leakage_probe_disclosed=no→downgrade(无few-shot continuation等实证泄漏,泛泛声称clean/只报有利数字)",
+    "R3": "score_adjusted_for_leak=no→flag(不用Anti-Hack式校正/泄漏样本不计错,报告分数仍含泄漏增益)",
+    "R4": "scope_bounded=no→flag(把probe结果外推为训练数据成员身份/污染流行率/分数膨胀,或不倡导decontamination报告)",
+    "R5": "任一partial→flag(污染边界披露覆盖不全,待核)",
+    "R6": "全yes→ok(只判声明自洽,不承诺模型真实无污染;泄漏率self-reported折1)"
+  },
+  "forensic_spec": {
+    "gate": "forensic.benchleaking",
+    "dimensions": "四维逐字锚点取自S02摘要;disclose必中红旗零误中"
+  },
+  "implementation_lock_time": "2026-11-22T13:38:50.897946+08:00"
+}
