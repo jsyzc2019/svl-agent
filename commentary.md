@@ -3979,3 +3979,30 @@ PRIMARY=1.0≥0.8（非否定限定 P1 dT=0/P2 dT=1，4/4 逐样本相反，**�
 仍 **l3=false/absolute=false**：① 外部 orchestrator 不可达（无 workflow scope）；② 异厂商 evaluator 不可达（无 LLM API key）；③ 时间锚只保证承诺先于执行、不保证执行者独立；④ 三设计者仍由本 Agent spawn（同厂商 Hunyuan，KB-STRUCT02）、解释环节本 Agent；⑤ 跨集复现加固的是效应稳健性、不是系统成熟度（KB-META15/16）。
 
 验收：12 项回放测试全过（锚完整性 + PARTIAL 不翻案 + P0 地板消失 + 能力对照失效 + 不宣布 L3）；全量 1368→1380 passed（+12）；链审 total 50→52 / five_piece 33→34 / 三锁 30→31 按实测更新断言不放宽；KB 156→158（KB-AUDIT50 跨集复现+外部时间锚 fix + KB-META16 单集完美模式样本特异 preserve）；成长桥重建消费痕迹（94 opportunities/47 deferred）。**不编译新门禁**。遵循 §58 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。成果报告 ROUND19_ACHIEVEMENT_REPORT_20261122.html。
+
+---
+
+## §109 外部 orchestrator 执行者独立性受控验证（2026-11-22，"给你token，继续"+"识别一下"+"那是S不是5"+"FObt5vE"）
+
+### 触发：token 识别与权限突破
+用户给新 PAT 截图，要求"识别一下"。图摄屏摩尔纹重，初转录把 `FObt` 误读为 `F0Bt`（大写 O→数字 0、小写 b→大写 B）、`0S0` 中的 S 一度当成 5，连续 401。经用户三次纠正（"那是 s"/"那是 S 不是 5"/"FObt5vE"）锁定正确 token（40 字符，明文不入仓，安全落 `/root/uploads/github-token-workflow.txt`）。API 核验 HTTP 200，login=jsyzc2019，**`x-oauth-scopes=repo, workflow, write:packages`**——关键：含 `workflow` scope，正是 §108 BLOCKERS.md 记录尝试 1 被拒（`refusing to allow a PAT to create or update workflow ... without 'workflow' scope`）的硬障碍。安全处理：token 落 `/root/uploads/github-token-workflow.txt`（chmod 600，不入仓），临时图像/askpass/hosts 即用即删，全程未碰 OS/系统文件。
+
+### 109.1 硬障碍解除：外部 orchestrator 真实可达
+先推最小 probe workflow `.github/workflows/external_orchestrator_attest.yml`（commit `a4d1da9`，上一轮同样操作被拒，本轮成功 `494bb1d..a4d1da9`）。`workflow_dispatch` 注入 nonce `S109-PROBE-...` 触发，GitHub Azure runner 执行 run `45013089276`（success），写回 `attestation_45013089276.json`：`hostname=runnervm0hi8g`/`whoami=runner`/`runner_name=GitHub Actions 1000018421`/azure 内核/`github_sha=a4d1da9`/nonce 逐字匹配。本沙箱 `hostname=634e581381a2`/`whoami=root`——物理隔离，本 Agent 无法伪造。**§108 判"不可达"的外部 orchestrator 通道真实打开了。**
+
+### 109.2 从"写 attestation"升级到"外部执行者复算裁决"
+只写 attestation 证明"有个外部 runner 跑了"，还不够——要冲击"本 Agent 可能本地篡改执行过程"的疑虑，须让外部真正**执行裁决本身**。选 §107 的 `engine.py` 为载体：纯标准库（json/re/hashlib/ast/importlib）确定性盲评引擎，import 三个 designer judge、用冻结样本按预注册分层指标裁决。本地副本重算 result sha256=`cf6d0f2b...` 与仓库存档逐字节一致（确定性已证）。
+
+### 109.3 spawn 前锁死预注册（纪律）
+`audit_external_orchestrator/prereg.json` 在触发外部 runner **之前** commit：锁 engine.py `2d207c32…`/三 judge `81cd853b…`/`4b410e5f…`/`bba14794…`/scorer_key `4ebe62ab…`/本地重算与存档 result 均 `cf6d0f2b…`；预注册裁决树 `EXECUTOR_INDEPENDENCE_CONFIRMED`/`EXECUTOR_MISMATCH`/`EXECUTOR_INCONCLUSIVE`，且 `l3_claimed=false`。commit `d96e1f0` 推送。
+
+### 109.4 外部 runner 重算（含一次诚实排错）
+写 `.github/workflows/external_recompute.yml`：checkout 锁定 commit → 校验 5 项冻结哈希 → `python3 engine.py` 重跑 → 产出带 runner 身份的 result 哈希/裁决/core/nonce。首次触发 422（YAML 一 step 两个 `env` 块，诚实修工具不放宽门禁）→ 合并 env 修复 commit `e26d5ef`。重触发 run `45013693112`（success，head_sha=`e26d5ef`）：`frozen_locks_ok=true`/`engine_exit_code=0`、外部 result sha256=`cf6d0f2b…`、**与本沙箱重算+仓库存档三方逐字节一致**、`verdict=STRATIFIED_CONFIRMED`/`core={P0:0.5,P1:1.0,P2:0.667}`/`P0_floor=true` 独立复现、nonce `S109-RECOMPUTE-...` 逐字匹配。runner `1000018422`/`runnervm0hi8g`/azure，与本沙箱隔离。
+
+### 109.5 裁决：EXECUTOR_INDEPENDENCE_CONFIRMED（10 项检查全过）
+`verify_external.py` 纯比对裁决：runner 身份非空/确属外部（whoami=runner+azure+runnervm 前缀）/nonce 绑定/冻结锁全过/引擎 exit0/外部 hash=本地重算=存档=本地复查（三方一致）/verdict 与 core 一致——10/10 ✓，落 `EXECUTOR_INDEPENDENCE_CONFIRMED`。这是从 §108"外部时间戳锚（承诺先于执行）"到 §109"外部执行者（执行本身外移）"的实质升级：消解"本 Agent 本地篡改执行"的疑虑。
+
+### 109.6 诚实边界：确认执行者独立 ≠ 达到 L3
+仍 **l3=false/absolute=false**：① 只证明执行环境可外移、裁决可复现；② judge 设计者仍本 Agent spawn（同厂商 Hunyuan，KB-STRUCT02）、样本本 Agent 选、解释本 Agent——设计者/数据源/解释三处独立性未动；③ 外部 runner 执行的是本 Agent 预置的确定性脚本，不是异厂商 LLM 评判；④ 尝试 2（异厂商 evaluator 无 API key）仍不可达。**确认的只是"执行者独立"这一维，不是系统达 L3。**
+
+验收：7 项专项测试 + 全量 1380→1387 passed（+7）；链审与 KB 本轮无门禁编译（不新增 five_piece，仅增 workflow/attestation 取证文件）；token 安全落盘不入仓，hosts/askpass/临时图像全部即用即删；系统安全红线全程遵守。KB 追加 KB-AUDIT51（workflow scope 解锁→外部执行者独立性受控确认 + 图摄 token 识别易混字符教训 preserve）。成果报告 ROUND20_ACHIEVEMENT_REPORT_20261122.html。

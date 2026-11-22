@@ -4200,6 +4200,52 @@
       "evidence": "audit_cross_domain_confirm2/result.json:per_condition.P0.core_acc=1.0+tamper_catch=1.0+P0_floor=false+diagnostic_only.model_capability_control.canary_all_agree=false+verdict=CROSS_SET_PARTIAL(PRIMARY仍1.0);tests/test_cross_domain_confirm2.py固化之",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT51",
+      "kind": "reasoning_lesson",
+      "mechanism": "workflow scope 解锁把外部 orchestrator 从不可达变为真实可达,并把执行者独立性做成受控可证伪命题(§109):§108 因 PAT 缺 workflow scope 判外部 orchestrator 硬不可达。新 token(含 workflow scope)使 workflow 文件可推送、dispatch 可触发,GitHub Azure runner(hostname=runnervm0hi8g,whoami=runner,azure 内核)真实执行并把带身份的 attestation 写回本仓,字段本沙箱(root/容器)无法伪造。进一步让外部 runner 重跑哈希锁定的确定性裁决引擎,产出 result sha256 与本沙箱重算、仓库存档三方逐字节一致,verdict/core 独立复现,nonce 逐字绑定——把外部性从时间戳锚(承诺先于执行)升级为执行者独立(执行本身外移),消解本 Agent 本地篡改执行的疑虑。认知机制:权限障碍(不是方法障碍)一旦解除,先前判不可达的通道应立即重验而非沿用旧结论;把独立性拆成可执行者外移/承诺可证伪/设计者外移等可分别验证的维,逐维取证不混为一谈。",
+      "trigger": [
+        "workflow scope",
+        "外部 orchestrator 可达",
+        "执行者独立性",
+        "不可伪造 runner 身份",
+        "三方哈希一致",
+        "nonce 绑定",
+        "承诺锚vs执行者",
+        "逐维取证",
+        "权限障碍重验"
+      ],
+      "action": "①遇不可达结论先分辨是方法障碍还是权限障碍,权限变更(新凭据/新scope)后必须重验旧结论而非默认沿袭;②把抽象独立性拆成可证伪子命题(执行环境外移/承诺先于执行/设计者外移/数据源外移),每维单独设计受控验证与裁决档;③外部执行证据须含不可伪造身份字段+nonce 绑定+冻结哈希+结果哈希三方一致,缺一即降档;④即使执行者独立获证,仍按其余未动维诚实标 l3=false,不把单维确认当系统达标。",
+      "provenance": "§109 外部 orchestrator 执行者独立性受控验证;commit a4d1da9(probe)/d96e1f0(prereg)/e26d5ef(workflow fix);run 45013089276+45013693112;result verdict=EXECUTOR_INDEPENDENCE_CONFIRMED 10/10",
+      "timestamp": "2026-11-22T10:45:00Z",
+      "support": 10.0,
+      "evidence": "audit_external_orchestrator/{prereg.json,runs/attestation_45013089276.json,runs/recompute_45013693112.json,result.json,verify_external.py,BLOCKERS.md};tests/test_external_orchestrator.py(7 passed)",
+      "addressable": false,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META17",
+      "kind": "reasoning_lesson",
+      "mechanism": "图摄 token 识别的易混字符必须靠验证闭环而非肉眼信任(§109 触发):GitHub classic PAT 截图经摩尔纹干扰,视觉转录把 FObt 误读为 F0Bt(大写字母 O 误作数字 0、小写 b 误作大写 B)、把 0S0 中的 S 误作 5,连续 API 401。经用户逐次纠正才锁定正确串。认知机制:等宽字体+屏摄摩尔纹下,O/0、b/B、S/5、l/I/1 的误读是系统性的,单靠放大/OCR 都不可靠(本例 OCR 无输出、多次放大仍有歧义),唯一可靠的是用 API 响应(200/401+scope)作验证闭环——任何转录都先打到认证端点看 login 是否匹配预期账号,401 即换易混变体,直到 200 且 scope 符合需求。纪律:①高风险凭据转录后必须机器验证,不信肉眼;②把易混字符列成变体集系统性试探(0/O、1/l/I、5/S、b/B);③验证通过再落盘使用,失败变体不留痕;④scope 也要一并核对(x-oauth-scopes),scope 不符等于不可用。",
+      "trigger": [
+        "图摄 token",
+        "易混字符",
+        "摩尔纹",
+        "O与0",
+        "S与5",
+        "b与B",
+        "验证闭环",
+        "API核验",
+        "scope核对"
+      ],
+      "action": "①任何从图片/截图转录的凭据先打认证端点验证(200+login匹配),401 立即启动易混变体试探;②不信任单次肉眼/放大/OCR 结果,以机器响应为唯一真值;③验证通过后核对 scope 是否满足任务需要;④成功后安全落盘(chmod600、不入仓),临时图像/凭据即用即删。",
+      "provenance": "§109 token 识别:三次 401→用户纠正(那是S不是5/FObt5vE)→200+repo,workflow,write:packages",
+      "timestamp": "2026-11-22T10:45:00Z",
+      "support": 8.0,
+      "evidence": "commentary.md §109 触发段;token 正确串经 API 200 验证(不入仓)",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

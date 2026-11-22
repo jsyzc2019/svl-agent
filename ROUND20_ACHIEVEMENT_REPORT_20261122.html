@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第二十轮成果报告 · §109 外部 orchestrator 执行者独立性</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.win{background:#e8f0e4;border:1px solid #b8d0ae;padding:14px 18px;border-radius:6px;font-size:14px}
+.recursion{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+.ck{font-family:monospace;font-size:13px;line-height:1.9}
+</style></head><body><div class="wrap">
+<h1>自主运维第二十轮成果报告 <span class="pill tag">§109</span></h1>
+<div class="sub">外部 orchestrator 执行者独立性受控验证 · 2026-11-22 · 触发：用户"给你token，继续" + 三次 token 识别纠正</div>
+
+<h2>一、触发：token 识别与权限突破</h2>
+<div class="phil">
+用户给新 PAT 截图要求"识别一下"。图摄屏摩尔纹重，视觉转录把 <code>FObt</code> 误读成 <code>F0Bt</code>（大写 O→数字 0、小写 b→大写 B）、<code>0S0</code> 中的 S 一度当成 5，连续 API <code>401 Bad credentials</code>。经用户三次纠正（"那是 s" / "那是 S 不是 5" / "FObt5vE"）锁定正确串。API 核验 HTTP 200，login=<code>jsyzc2019</code>，<b><code>x-oauth-scopes=repo, workflow, write:packages</code></b>——关键：含 <code>workflow</code> scope，正是 §108 判"外部 orchestrator 不可达"的硬障碍所在。
+</div>
+<div class="note">
+<b>安全处理</b>：token 落 <code>/root/uploads/github-token-workflow.txt</code>（chmod 600，<b>不入仓</b>）；临时图像、askpass、hosts 补丁即用即删；全程未删除任何 OS/系统文件、未格式化磁盘。token 正确串不写入报告与仓库。
+</div>
+
+<h2>二、硬障碍解除：外部 orchestrator 真实可达</h2>
+<p>先推最小 probe workflow <code>.github/workflows/external_orchestrator_attest.yml</code>（commit <code>a4d1da9</code>）——<b>上一轮同样操作被 GitHub 明确拒绝</b>（<code>refusing to allow a PAT to create or update workflow ... without 'workflow' scope</code>），本轮推送成功 <code>494bb1d..a4d1da9</code>。</p>
+<p><code>workflow_dispatch</code> 注入 nonce 触发，GitHub Azure runner 执行 <b>run <code>45013089276</code>（success）</b>，写回 <code>attestation_45013089276.json</code>：</p>
+<table>
+<tr><th>字段</th><th>外部 runner 值</th><th>本沙箱值（对比）</th></tr>
+<tr><td>hostname</td><td><code>runnervm0hi8g</code></td><td><code>634e581381a2</code></td></tr>
+<tr><td>whoami</td><td><code>runner</code></td><td><code>root</code></td></tr>
+<tr><td>runner_name</td><td><code>GitHub Actions 1000018421</code></td><td>—（容器）</td></tr>
+<tr><td>uname</td><td>内核含 <code>azure</code></td><td>容器内核</td></tr>
+<tr><td>injected_nonce</td><td colspan="2"><code>S109-PROBE-20261122T103416Z-36062</code> 逐字匹配 ✓</td></tr>
+</table>
+<div class="win">物理隔离、本 Agent 无法伪造。<b>§108 判"不可达"的外部 orchestrator 通道真实打开了。</b> 历史失败审计保留在 <code>BLOCKERS.md</code> 不删除，追加 §109 解锁记录。</div>
+
+<h2>三、从"写 attestation"升级到"外部执行者复算裁决"</h2>
+<p>只写 attestation 仅证明"有个外部 runner 跑了"。要冲击"本 Agent 可能本地篡改执行过程"的疑虑，须让外部<b>真正执行裁决本身</b>。选 §107 的 <code>engine.py</code> 为载体：纯标准库（json/re/hashlib/ast/importlib）确定性盲评引擎，import 三个 designer judge、用冻结样本按预注册分层指标裁决。本地副本重算 result sha256=<code>cf6d0f2b…</code> 与仓库存档逐字节一致（确定性已先证）。</p>
+
+<h2>四、spawn 前锁死预注册（纪律）</h2>
+<p><code>audit_external_orchestrator/prereg.json</code> 在触发外部 runner <b>之前</b> commit（<code>d96e1f0</code>）：锁 engine.py <code>2d207c32…</code>、三 judge <code>81cd853b…</code>/<code>4b410e5f…</code>/<code>bba14794…</code>、scorer_key <code>4ebe62ab…</code>、本地重算与存档 result 均 <code>cf6d0f2b…</code>。裁决树预注册：EXECUTOR_INDEPENDENCE_CONFIRMED / EXECUTOR_MISMATCH / EXECUTOR_INCONCLUSIVE，且 <code>l3_claimed=false</code>。</p>
+
+<h2>五、外部 runner 重算（含一次诚实排错）</h2>
+<p><code>.github/workflows/external_recompute.yml</code>：checkout 锁定 commit → 校验 5 项冻结哈希 → <code>python3 engine.py</code> 重跑 → 产出带 runner 身份的 result 哈希/裁决/core/nonce。</p>
+<div class="recursion">
+首次触发 <b>HTTP 422</b>：YAML 一个 step 出现两个 <code>env</code> 块（<code>'env' is already defined</code>）。<b>诚实修工具，不放宽门禁</b>——合并 env 块（commit <code>e26d5ef</code>），重触发成功。
+</div>
+<p>重触发 <b>run <code>45013693112</code>（success，head_sha=<code>e26d5ef</code>）</b>的关键回执：</p>
+<div class="ck">
+frozen_locks_ok = true &nbsp; engine_exit_code = 0 &nbsp; external_lock_fields_ok = true<br>
+external_result_sha256 = <b>cf6d0f2bd1bd091c74092701403ea4ac6b42dc4b095d92ea50a6764d23106c38</b><br>
+verdict = STRATIFIED_CONFIRMED &nbsp; core = {P0:0.5, P1:1.0, P2:0.667} &nbsp; P0_floor = true<br>
+runner = GitHub Actions 1000018422 / runnervm0hi8g / whoami=runner / azure 内核<br>
+injected_nonce = S109-RECOMPUTE-20261122T103903Z-36486（逐字匹配 ✓）
+</div>
+
+<h2>六、裁决：EXECUTOR_INDEPENDENCE_CONFIRMED（10 项检查全过）</h2>
+<p><code>verify_external.py</code> 纯比对裁决（不改裁决逻辑）：runner 身份非空 / 确属外部（whoami=runner + azure + runnervm 前缀）/ nonce 绑定 / 冻结锁全过 / 引擎 exit0 / 外部 hash = 本地重算 = 仓库存档 = 本地复查（<b>三方逐字节一致</b>）/ verdict 与 core 一致——<b>10/10 ✓</b>。</p>
+<table>
+<tr><th>哈希来源</th><th>SHA256</th></tr>
+<tr><td>外部 runner 产出</td><td><code>cf6d0f2b…23106c38</code></td></tr>
+<tr><td>本沙箱本地重算</td><td><code>cf6d0f2b…23106c38</code></td></tr>
+<tr><td>仓库存档（§107）</td><td><code>cf6d0f2b…23106c38</code></td></tr>
+<tr><td>验证时本地复查</td><td><code>cf6d0f2b…23106c38</code></td></tr>
+</table>
+<div class="win">这是从 §108"外部时间戳锚（承诺先于执行）"到 §109"外部执行者（执行本身外移）"的<b>实质升级</b>：消解"本 Agent 本地篡改执行"的疑虑。</div>
+
+<h2>七、诚实边界：确认执行者独立 ≠ 达到 L3</h2>
+<div class="recursion">
+仍 <b>l3=false / absolute=false</b>：<br>
+① 只证明执行环境可外移、裁决可复现；<br>
+② judge 设计者仍由本 Agent spawn（同厂商 Hunyuan，KB-STRUCT02）、样本本 Agent 选、解释本 Agent——<b>设计者/数据源/解释三处独立性未动</b>；<br>
+③ 外部 runner 执行的是本 Agent 预置的确定性脚本，<b>不是异厂商 LLM 评判</b>；<br>
+④ §108 尝试 2（异厂商 evaluator 无 API key）仍不可达。<br>
+<b>确认的只是"执行者独立"这一维，不是系统达 L3。</b>
+</div>
+
+<h2>八、验收</h2>
+<table>
+<tr><th>项</th><th>结果</th></tr>
+<tr><td>专项测试</td><td>tests/test_external_orchestrator.py 7 项全过</td></tr>
+<tr><td>全量测试</td><td>1380 → <b>1387 passed</b>（+7，无回归）</td></tr>
+<tr><td>门禁编译</td><td>本轮<b>不编译新门禁</b>（仅增 workflow/attestation 取证文件，无新 five_piece）</td></tr>
+<tr><td>知识库</td><td>158 → 160（KB-AUDIT51 workflow scope 解锁+执行者独立受控确认；KB-META17 图摄 token 易混字符验证闭环）</td></tr>
+<tr><td>安全红线</td><td>token 不入仓、hosts/askpass/临时图像即用即删、未碰 OS 文件、未格式化</td></tr>
+</table>
+<div class="foot">自主运维第二十轮 · §109 · 触发于用户"给你token，继续"与三次 token 识别纠正 · 裁决 EXECUTOR_INDEPENDENCE_CONFIRMED 但 l3=false / absolute=false · 生成于 2026-11-22</div>
+</div></body></html>

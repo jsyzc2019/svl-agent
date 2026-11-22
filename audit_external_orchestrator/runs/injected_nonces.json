@@ -1,0 +1,5 @@
+{
+  "note": "本 Agent 在 workflow_dispatch 触发时注入的 nonce 记录（与外部 runner 写回的 attestation/recompute 文件逐字比对，证明执行绑定到本次触发）。此文件为注入侧证据，与执行侧证据同仓存储，不修改 spawn 前锁定的 prereg。",
+  "probe_run_45013089276": "S109-PROBE-20261122T103416Z-36062",
+  "recompute_run_45013693112": "S109-RECOMPUTE-20261122T103903Z-36486"
+}

@@ -1,0 +1,48 @@
+{
+  "experiment": "§109 外部 orchestrator 执行者独立性受控验证",
+  "claim": "把 §107 已哈希锁定的确定性裁决引擎放到 GitHub 托管 runner（本沙箱之外）重算，若产出 result.json 与本沙箱存档逐字节一致，则裁决不依赖本 Agent 的执行环境，'本 Agent 本地篡改执行过程'的疑虑被外部不可伪造执行者消解。",
+  "verdict": "EXECUTOR_INDEPENDENCE_CONFIRMED",
+  "checks": {
+    "runner_identity_nonempty": true,
+    "runner_is_external": true,
+    "nonce_match": true,
+    "frozen_locks_ok": true,
+    "engine_exit_zero": true,
+    "external_hash_eq_local_recompute": true,
+    "external_hash_eq_repo_archive": true,
+    "local_hash_eq_locks": true,
+    "verdict_consistency": true,
+    "core_consistency": true
+  },
+  "all_checks_pass": true,
+  "hashes": {
+    "external_runner_result": "cf6d0f2bd1bd091c74092701403ea4ac6b42dc4b095d92ea50a6764d23106c38",
+    "local_recompute": "cf6d0f2bd1bd091c74092701403ea4ac6b42dc4b095d92ea50a6764d23106c38",
+    "repo_archive": "cf6d0f2bd1bd091c74092701403ea4ac6b42dc4b095d92ea50a6764d23106c38",
+    "local_recheck": "cf6d0f2bd1bd091c74092701403ea4ac6b42dc4b095d92ea50a6764d23106c38",
+    "three_way_identical": true
+  },
+  "external_runner": {
+    "run_id": "45013693112",
+    "runner_name": "GitHub Actions 1000018422",
+    "hostname": "runnervm0hi8g",
+    "whoami": "runner",
+    "uname": "Linux runnervm0hi8g 7.0.0-1020-azure #21-Ubuntu SMP PREEMPT Tue Oct 27 22:34:38 UTC 2026 x86_64 GNU/Linux",
+    "github_sha": "e26d5efce51665503d770c06d35a2ddc148df67e",
+    "nonce": "S109-RECOMPUTE-20261122T103903Z-36486",
+    "generated_at_utc": "2026-11-22T10:42:02Z"
+  },
+  "local_sandbox": {
+    "hostname": "634e581381a2",
+    "whoami": "root"
+  },
+  "verdict_rules_snapshot": [
+    "EXECUTOR_INDEPENDENCE_CONFIRMED：外部 runner 身份字段非空且与本沙箱(root/容器 hostname)不同 + nonce 逐字匹配 + 外部产出 result.json sha256 == 本沙箱 hash(cf6d0f2b...) → 执行者独立性在受控重算意义上获证",
+    "EXECUTOR_MISMATCH：外部 result sha256 != 本地 hash → 诚实标注环境差异导致不可复算，不宣布独立",
+    "EXECUTOR_INCONCLUSIVE：runner 身份缺失 / nonce 不匹配 / workflow 失败 → 无法判定"
+  ],
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "honest_boundary": "本验证只证明'执行环境可外移且裁决在 GitHub 托管 runner 上逐字节复现'——执行者独立性在受控重算意义上获证，消解'本 Agent 本地篡改执行过程'疑虑。但 judge 设计者仍由本 Agent spawn、样本仍本 Agent 选取、解释仍本 Agent，设计者/数据源/解释三处独立性未动；外部 runner 执行的是本 Agent 预置的确定性脚本而非异厂商 LLM 评判。因此即使 EXECUTOR_INDEPENDENCE_CONFIRMED 也不宣布 L3/absolute（KB-META05/KB-STRUCT02）。",
+  "contribution": "§108 BLOCKERS.md 因缺 workflow scope 判外部 orchestrator 不可达；本轮新 token 具 workflow scope 后，首次实现真正的本仓外执行：GitHub Azure runner(hostname=runnervm0hi8g,whoami=runner)在锁定 commit e26d5ef 上重跑哈希锁定的 §107 裁决引擎，产出 result.json sha256=cf6d0f2b... 与本沙箱重算、仓库存档三方逐字节一致，verdict/core/P0_floor 独立复现，nonce 绑定+runner 身份不可伪造。这是从'外部时间戳锚(承诺先于执行)'到'外部执行者(执行本身外移)'的实质升级；但严守诚实边界不抬级。"
+}

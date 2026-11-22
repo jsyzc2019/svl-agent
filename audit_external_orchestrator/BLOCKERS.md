@@ -21,3 +21,15 @@
 
 ## 诚实边界
 以上增量**不等于**达成外部 orchestrator 或异厂商 evaluator：执行仍在本沙箱、裁决器仍同厂商环境。因此即使跨集复现成功，**仍 l3=false / absolute=false**。真正的 L3 仍需：带 workflow scope 的 token（GitHub Actions）或异厂商 API 凭据——本沙箱二者皆无。
+
+---
+
+## §109 更新（2026-11-22）：workflow scope 解锁，外部 orchestrator 已真实可达
+
+**状态翻转**：本轮用户新 token（API `x-oauth-scopes=repo, workflow, write:packages`，login=jsyzc2019）具备 `workflow` scope，尝试 1 的硬障碍已解除。本节记录解锁后的真实执行，不覆盖上方历史失败审计（保留证据链）。
+
+- workflow 文件 `.github/workflows/external_orchestrator_attest.yml` 推送成功（commit `a4d1da9`，上一轮同样操作因缺 scope 被拒）。
+- `workflow_dispatch` 触发后 GitHub Azure runner 真实执行：run `45013089276`，conclusion=success，写回 `runs/attestation_45013089276.json`，含本沙箱不可伪造字段 `hostname=runnervm0hi8g` / `whoami=runner` / `runner_name=GitHub Actions 1000018421` / azure 内核 / nonce 逐字绑定。
+- 进一步落地 §109 外部执行者独立性受控验证：`.github/workflows/external_recompute.yml` 在 GitHub runner 上重跑哈希锁定的 §107 裁决引擎（commit `e26d5ef`），run `45013693112` success，外部产出 `result.json` sha256=`cf6d0f2b...` 与本沙箱本地重算、仓库存档**三方逐字节一致**，verdict/core/P0_floor 独立复现。裁决 `EXECUTOR_INDEPENDENCE_CONFIRMED`（10 项检查全过）。
+
+**诚实边界（未变）**：这只证明执行环境可外移、裁决可复现；judge 设计者/样本/解释三处独立性未动，且外部 runner 执行的是本 Agent 预置的确定性脚本而非异厂商 LLM 评判。**仍 l3=false / absolute=false**。真正 L3 仍需异厂商 evaluator API 凭据（尝试 2 仍不可达）。
