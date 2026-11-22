@@ -234,15 +234,15 @@
 
 Post-hoc 分层取证（解释主指标为何未达，**不改裁决**）：非否定限定（only/but/three/However 4 条）P1 全负/P2 全正 **gap=1.0**；否定翻转（not/never 2 条，删后断言反转）两目的都判负 gap=0.0（P2 判负在其近似重复目的下语义一致，非摇摆）——全集 dT 把两类平均稀释成 0.67，属 §100 canary 类型错配、§105 地板效应同类的**指标语义与样本异质性错配**。按纪律分层只作 post_hoc_forensic 单列（标注 not_in_preregistered_verdict），只加只读诊断字段 + 修正过强措辞（"获受控验证"→"强提示但未达门槛"），裁决规则/样本/gt/源码/核心评分 one-shot 一律不变。
 
-**验收**：12 项回放测试全过（固化"主裁决不翻案+分层诊断存在+锁未篡改"；一次自咬：断言 `no_new_gate is True` 但 prereg 里是字符串说明，按 §104 纪律改测试不动已锁 prereg）；全量 1344→1356 passed（+12）；链审 48→49 / 31→32 / 三锁 29 按实测更新断言不放宽；KB 152→154（KB-AUDIT48 目的语义作为正类取向变量 fix + KB-META14 指标异质性错配/post-hoc 不翻案 preserve）；成长桥重建消费痕迹 92 opportunities/45 deferred。**不编译新门禁**。**l3=false/absolute=false**：三设计者同模型家族/spawn 权/解释环节本 Agent 残余（KB-STRUCT02）不消除，诚实停在"强提示+INCONCLUSIVE"，不宣布受控验证完成、不宣布 L3。commentary §106、README、REPOSITORY_MAP、TIME_PLAN 同步；报告 `ROUND17_ACHIEVEMENT_REPORT_20261122.html`。遵循 §58 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。**当前状态**：本地已完成，**待提交推送**。
+**验收**：12 项回放测试全过（固化"主裁决不翻案+分层诊断存在+锁未篡改"；一次自咬：断言 `no_new_gate is True` 但 prereg 里是字符串说明，按 §104 纪律改测试不动已锁 prereg）；全量 1344→1356 passed（+12）；链审 48→49 / 31→32 / 三锁 29 按实测更新断言不放宽；KB 152→154（KB-AUDIT48 目的语义作为正类取向变量 fix + KB-META14 指标异质性错配/post-hoc 不翻案 preserve）；成长桥重建消费痕迹 92 opportunities/45 deferred。**不编译新门禁**。**l3=false/absolute=false**：三设计者同模型家族/spawn 权/解释环节本 Agent 残余（KB-STRUCT02）不消除，诚实停在"强提示+INCONCLUSIVE"，不宣布受控验证完成、不宣布 L3。commentary §106、README、REPOSITORY_MAP、TIME_PLAN 同步；报告 `ROUND17_ACHIEVEMENT_REPORT_20261122.html`。遵循 §58 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。**当前状态**：已本地提交并推送到远端 main（`2a0a597`，`git status -sb` 无 ahead），凭据自管闭环第十七轮实证（见 §5）。
 
 ---
 
 ## 5. ✅ 已完成：远端推送
 
-> **§106（第十七轮）本地完成，尚未提交推送**——远端 main 仍停在 `bd37b41`（§105）。推送动作待本轮提交后执行，凭据自管闭环第十七轮实证将在此补记。
+**最新推送状态**：2026-11-22 17:37 (GMT+8) 推送成功（§106 自主运维第十七轮，凭据自管闭环第十七轮实证）。`git push origin main` → `90196dd..2a0a597 main -> main`（5 秒）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = 远端 main = `2a0a597efac4…`（**GitHub API 独立核验远端 main sha = 2a0a597efac40cd111d4f2c44fafa84b0fa7ccb2**，与本地一致；git ls-remote 后探因网络抖动 TLS 中断，但 push 输出明确 + API 核验一致）。凭据取上传区最新 token，临时 hosts+askpass 用后即删（0 残留）。**推送抖动处置**：前 3 次失败——① 直连 TCP 135s 连接超时；② hosts `20.205.243.166` 150s 硬超时；③ hosts `20.27.177.113` GnuTLS TLS 中途断开（1m30s，但连接层已通=有进展）；④ 换 §105 成功过的 `140.82.113.4` + postBuffer 提到 **1GB** + 禁低速限制 → 5 秒一次成功。关键经验：TLS 中途断开时增大 `http.postBuffer`（524MB→1GB）比换 IP 更有效。`git reset --soft` 撤销了 KB indent=1 的噪音提交，重提保持 indent=2 干净 diff（KB 相对远端仅 +55 行纯新增）。**系统安全红线全程遵守**。详见 §4s。
 
-**最新已推送状态**：2026-11-22 17:08 (GMT+8) 推送成功（§105 自主运维第十六轮，凭据自管闭环第十六轮实证）。`git push origin main` → `dde2d7c..bd37b41 main -> main`（3 秒）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = 远端 main = `bd37b410…`（换 IP `140.82.113.4` 后 `git ls-remote` 独立核验一致；首次 `140.82.116.4` 的 ls-remote 受网络抖动返回空但 push 明确成功）。凭据取上传区最新 token，临时 hosts+askpass 用后即删（0 残留）。四个 IP 探测均 200（响应约 8s），`140.82.116.4` + 30s 低速上限 + 240s 硬超时一次推送成功。**系统安全红线全程遵守**。详见 §4r。
+**上次推送**：2026-11-22 17:08 (GMT+8) 推送成功（§105 自主运维第十六轮，凭据自管闭环第十六轮实证）。`git push origin main` → `dde2d7c..bd37b41 main -> main`（3 秒）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = 远端 main = `bd37b410…`（换 IP `140.82.113.4` 后 `git ls-remote` 独立核验一致；首次 `140.82.116.4` 的 ls-remote 受网络抖动返回空但 push 明确成功）。凭据取上传区最新 token，临时 hosts+askpass 用后即删（0 残留）。四个 IP 探测均 200（响应约 8s），`140.82.116.4` + 30s 低速上限 + 240s 硬超时一次推送成功。**系统安全红线全程遵守**。详见 §4r。
 
 **上次推送**：2026-11-22 16:44 (GMT+8) 推送成功（§104 自主运维第十五轮 + 顺带清掉 §103 遗留 docs）。`git push origin main` → `42d3978..e7c5a6b main -> main`（一次把 ahead 2 全推上去：4a5e8a5 docs + e7c5a6b 工程）。`git status -sb` = `## main...origin/main`（无 ahead/落后），本地 HEAD = 远端 main = `e7c5a6b8864…`（`git ls-remote` 独立核验一致）。凭据取上传区最新 token，临时 hosts+askpass 用后即删（0 残留）。**推送抖动处置**：`20.205.243.166` TCP 134s 连接超时（一次失败），换 `140.82.113.4` + 30s 低速上限 + 200s 硬超时 5 秒成功。§103 遗留 docs 的 4 次历史失败（见下）已随本轮一并清空。**系统安全红线全程遵守**。详见 §4q。
 
@@ -323,7 +323,7 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 - [x] ✅ §105 跨数据域字段名消融 2×2（回应"你再放飞哈"：换论文 2611.14326 检验 §104 外部效度→四设计者全 core0.5 地板效应→CROSS_DOMAIN_INCONCLUSIVE→根因=同构算法相反正类→不编译新门禁+l3=false，见 §4r）。
 - [x] ✅ 提交并推送 §105（`bd37b41`，凭据自管闭环第十六轮实证，见 §4r/§5）。
 - [x] ✅ §106 任务目的语义注入受控实验（回应"攻新方向"：把 §105 根因从事后观察升级为因果验证；唯一变量=目的叙事 P0/P1/P2，样本/字段/id/gt 全锁死；P0 core0.50→P1 core1.00 强提示但主指标 orient_gap0.67未达0.8→PURPOSE_INCONCLUSIVE 不翻案；post-hoc 分层=指标异质性错配；不编译新门禁+l3=false，见 §4s）。
-- [ ] 提交并推送 §106（第十七轮，本地完成待推，见 §4s/§5）。
+- [x] ✅ 提交并推送 §106（`2a0a597`，凭据自管闭环第十七轮实证，API 独立核验远端=本地，见 §4s/§5）。
 - [x] ✅ 提交并推送 §102（`d21bfee`，凭据自管闭环第十三轮实证，网络抖动换 IP 成功，见 §4o/§5）。
 - [ ] 达成 L3 的受控验证（KB-META05 三路径）：①同一任务起点+相同预算对照 §89 前填表裁判 vs 之后 FJ 取证流程（§98 已执行）；②引入本仓外 common-data/第三方 evaluator（§100–§102 逐步推进但仍 structural proxy）；③量化 improver gain 证明改进机制本身使后续增益更大（§98 improver_gain=1.0 已量化）。**当前诚实结论**：三路径均已部分推进，但同模型家族/spawn 权/解释环节本 Agent 残余仍在，不宣布 L3。
 - [ ] 继续自主运维（清单可动态扩展，领域不限但守法）：按 WORK_ITEMS.md P0 剩余话题（多智能体编排/上下文检索）或 P1/P2/P3 择机从已验证渠道自主取料，复制全链闭环。
