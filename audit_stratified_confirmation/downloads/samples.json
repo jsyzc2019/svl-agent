@@ -1,0 +1,185 @@
+{
+  "annotator_note": "从论文全文中挑选逐字连续、长度合规的句子作为 claim，优先选含明确限定词或否定词的原句。clean 直接复制原句；tampered 仅删去句中的一个词或短语，其余字符逐字不变，使句子通顺但语义改变；canary 选取论文中与 claim 语义相关、看似支持但并非逐字复述的另一句原句。",
+  "samples": [
+    {
+      "id": "S01_clean",
+      "orig_id": "S01",
+      "variant": "clean",
+      "claim": "It combines the measurements with a fixed Bayesian rule that counts a contradiction only when two readers agree.",
+      "evidence": "It combines the measurements with a fixed Bayesian rule that counts a contradiction only when two readers agree.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S01_tampered",
+      "orig_id": "S01",
+      "variant": "tampered",
+      "claim": "It combines the measurements with a fixed Bayesian rule that counts a contradiction only when two readers agree.",
+      "evidence": "It combines the measurements with a fixed Bayesian rule that counts a contradiction when two readers agree.",
+      "ground_truth_supported": false,
+      "deleted_span": "only",
+      "deletion_class": "non_negation_qualifier"
+    },
+    {
+      "id": "S01_canary",
+      "orig_id": "S01",
+      "variant": "canary",
+      "claim": "It combines the measurements with a fixed Bayesian rule that counts a contradiction only when two readers agree.",
+      "evidence": "Evidence that shares an origin counts once, and a contradiction is accepted only when two readers agree.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S02_clean",
+      "orig_id": "S02",
+      "variant": "clean",
+      "claim": "On the same claims it beats two of its three readers used alone (Readers A and B) by 1.66 and 2.17 points (95% intervals 0.80 to 2.53 and 1.29 to 3.06).",
+      "evidence": "On the same claims it beats two of its three readers used alone (Readers A and B) by 1.66 and 2.17 points (95% intervals 0.80 to 2.53 and 1.29 to 3.06).",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S02_tampered",
+      "orig_id": "S02",
+      "variant": "tampered",
+      "claim": "On the same claims it beats two of its three readers used alone (Readers A and B) by 1.66 and 2.17 points (95% intervals 0.80 to 2.53 and 1.29 to 3.06).",
+      "evidence": "On the same claims it beats two of its readers used alone (Readers A and B) by 1.66 and 2.17 points (95% intervals 0.80 to 2.53 and 1.29 to 3.06).",
+      "ground_truth_supported": false,
+      "deleted_span": "three",
+      "deletion_class": "non_negation_qualifier"
+    },
+    {
+      "id": "S02_canary",
+      "orig_id": "S02",
+      "variant": "canary",
+      "claim": "On the same claims it beats two of its three readers used alone (Readers A and B) by 1.66 and 2.17 points (95% intervals 0.80 to 2.53 and 1.29 to 3.06).",
+      "evidence": "Without CNN, its lead over Reader A is 0.90 points, and over Reader B 1.32 points.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S03_clean",
+      "orig_id": "S03",
+      "variant": "clean",
+      "claim": "Without AggreFact-CNN, described below, the leads are 0.90 and 1.32 and both intervals stay above zero.",
+      "evidence": "Without AggreFact-CNN, described below, the leads are 0.90 and 1.32 and both intervals stay above zero.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S03_tampered",
+      "orig_id": "S03",
+      "variant": "tampered",
+      "claim": "Without AggreFact-CNN, described below, the leads are 0.90 and 1.32 and both intervals stay above zero.",
+      "evidence": "Without AggreFact-CNN, described below, the leads are 0.90 and 1.32 and intervals stay above zero.",
+      "ground_truth_supported": false,
+      "deleted_span": "both",
+      "deletion_class": "non_negation_qualifier"
+    },
+    {
+      "id": "S03_canary",
+      "orig_id": "S03",
+      "variant": "canary",
+      "claim": "Without AggreFact-CNN, described below, the leads are 0.90 and 1.32 and both intervals stay above zero.",
+      "evidence": "Without CNN it is 0.90 (0.14 to 1.66) and 1.32 (0.54 to 2.09).",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S04_clean",
+      "orig_id": "S04",
+      "variant": "clean",
+      "claim": "The engine also records the evidence behind every verdict, which a single model does not.",
+      "evidence": "The engine also records the evidence behind every verdict, which a single model does not.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S04_tampered",
+      "orig_id": "S04",
+      "variant": "tampered",
+      "claim": "The engine also records the evidence behind every verdict, which a single model does not.",
+      "evidence": "The engine also records the evidence behind every verdict, which a single model does.",
+      "ground_truth_supported": false,
+      "deleted_span": "not",
+      "deletion_class": "negation_flip"
+    },
+    {
+      "id": "S04_canary",
+      "orig_id": "S04",
+      "variant": "canary",
+      "claim": "The engine also records the evidence behind every verdict, which a single model does not.",
+      "evidence": "Both kinds rely on one model’s answer to a single question.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S05_clean",
+      "orig_id": "S05",
+      "variant": "clean",
+      "claim": "Even with the source document in hand, leading language models still add claims the source does not support.",
+      "evidence": "Even with the source document in hand, leading language models still add claims the source does not support.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S05_tampered",
+      "orig_id": "S05",
+      "variant": "tampered",
+      "claim": "Even with the source document in hand, leading language models still add claims the source does not support.",
+      "evidence": "Even with the source document in hand, leading language models still add claims the source does support.",
+      "ground_truth_supported": false,
+      "deleted_span": "not",
+      "deletion_class": "negation_flip"
+    },
+    {
+      "id": "S05_canary",
+      "orig_id": "S05",
+      "variant": "canary",
+      "claim": "Even with the source document in hand, leading language models still add claims the source does not support.",
+      "evidence": "In our own work, an AI-drafted outreach message credited an attorney with an appellate decision he had written about but never litigated.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S06_clean",
+      "orig_id": "S06",
+      "variant": "clean",
+      "claim": "Only a few of the Index’s 37 tasks, among them ANLI, ContractNLI and NLI4CT, check a statement against a document, whereas every LLM-AggreFact dataset does.",
+      "evidence": "Only a few of the Index’s 37 tasks, among them ANLI, ContractNLI and NLI4CT, check a statement against a document, whereas every LLM-AggreFact dataset does.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    },
+    {
+      "id": "S06_tampered",
+      "orig_id": "S06",
+      "variant": "tampered",
+      "claim": "Only a few of the Index’s 37 tasks, among them ANLI, ContractNLI and NLI4CT, check a statement against a document, whereas every LLM-AggreFact dataset does.",
+      "evidence": "a few of the Index’s 37 tasks, among them ANLI, ContractNLI and NLI4CT, check a statement against a document, whereas every LLM-AggreFact dataset does.",
+      "ground_truth_supported": false,
+      "deleted_span": "Only",
+      "deletion_class": "non_negation_qualifier"
+    },
+    {
+      "id": "S06_canary",
+      "orig_id": "S06",
+      "variant": "canary",
+      "claim": "Only a few of the Index’s 37 tasks, among them ANLI, ContractNLI and NLI4CT, check a statement against a document, whereas every LLM-AggreFact dataset does.",
+      "evidence": "The Decision Index covers tools, classification, language, knowledge, and games and arts.",
+      "ground_truth_supported": true,
+      "deleted_span": null,
+      "deletion_class": null
+    }
+  ]
+}

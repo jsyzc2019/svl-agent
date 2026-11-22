@@ -59,10 +59,10 @@ def test_historical_dir_honestly_marked():
 def test_audit_all_counts():
     a = audit_all(str(_ROOT))
     # 每新增一个完整证据目录，total 与 five_piece_complete 各 +1（随仓库成长更新，不放宽）
-    # §106 任务目的语义注入受控实验目录加入 → total 48→49 / five_piece 31→32
-    assert a["total"] == 49
-    assert a["five_piece_complete"] == 32
-    assert a["three_locks_intact"] == 29
+    # §107 预注册分层确认性实验目录加入 → total 49→50 / five_piece 32→33
+    assert a["total"] == 50
+    assert a["five_piece_complete"] == 33
+    assert a["three_locks_intact"] == 30
     assert 0 < a["three_locks_intact"] <= a["total"]
 
 

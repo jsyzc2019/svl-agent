@@ -1,0 +1,26 @@
+[
+  {
+    "file": "S01_arxiv_abs.html",
+    "url": "https://arxiv.org/abs/2611.22027",
+    "status": 200,
+    "bytes": 42674,
+    "sha256": "fc84480816c23045312658487ef2964016eb74b98f5c0a70ab20d7dbac6f07e0",
+    "ok": true
+  },
+  {
+    "file": "S02_arxiv_full.html",
+    "url": "https://arxiv.org/html/2611.22027",
+    "status": 200,
+    "bytes": 167275,
+    "sha256": "44f67e49eda1256ce395d12c2d3d3075c2d8d1043f7ef8b157b4b06a80bef2cf",
+    "ok": true,
+    "source": "arxiv_html"
+  },
+  {
+    "file": "paper_flat.txt",
+    "derived_from": "S02_arxiv_full.html",
+    "bytes": 41332,
+    "sha256": "c757d9254bd3641df364f7757b91a6de85e63892d6ce227d6e0cd66ac648633b",
+    "ok": true
+  }
+]

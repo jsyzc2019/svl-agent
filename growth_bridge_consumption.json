@@ -1,11 +1,11 @@
 {
-  "opportunity_count": 92,
+  "opportunity_count": 93,
   "consumption": [
     {
       "source_kind": "knowledge_base",
       "source_id": "KB-T03",
       "mechanism": "验证基准必须先与生成过程隔离：anchor 存在 ≠ 内容有据，基准泄漏会让自证恒真。",
-      "injected_at": "2026-11-22T09:22:08.164272+00:00",
+      "injected_at": "2026-11-22T09:48:34.120189+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -13,7 +13,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R01",
       "mechanism": "代理变量陷阱：alarm 实为困境代理，扩到 22 家反例后 precision 从虚高崩到 0.42。",
-      "injected_at": "2026-11-22T09:22:08.164292+00:00",
+      "injected_at": "2026-11-22T09:48:34.120209+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -21,7 +21,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R02",
       "mechanism": "符号一致性：estimation 的 criterion 必须与生成模型同号（criterion=-b），否则预测方向反了。",
-      "injected_at": "2026-11-22T09:22:08.164296+00:00",
+      "injected_at": "2026-11-22T09:48:34.120213+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -29,7 +29,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R03",
       "mechanism": "校准度 ≠ 辨别力：AUC 不能当 calibration，须用 ECE 单独度量。",
-      "injected_at": "2026-11-22T09:22:08.164300+00:00",
+      "injected_at": "2026-11-22T09:48:34.120217+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -37,7 +37,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R04",
       "mechanism": "同义反复：线性生成→线性拟合恒真，须注入非线性挑战并主动降级宣称。",
-      "injected_at": "2026-11-22T09:22:08.164302+00:00",
+      "injected_at": "2026-11-22T09:48:34.120220+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -45,7 +45,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R06",
       "mechanism": "复盘对象校正：复盘应针对框架逻辑方法(framework)，而非研究对象(subject)。",
-      "injected_at": "2026-11-22T09:22:08.164305+00:00",
+      "injected_at": "2026-11-22T09:48:34.120222+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -53,7 +53,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-E07",
       "mechanism": "对抗偏差三件套：预注册判据 + 盲测 + 时间戳门禁，把「我不知道」变成一等公民。",
-      "injected_at": "2026-11-22T09:22:08.164308+00:00",
+      "injected_at": "2026-11-22T09:48:34.120225+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -61,7 +61,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-SSQ01",
       "mechanism": "大样本高功效陷阱：n 极大时，微小偏离也会让 p 值/分位显著，统计显著 ≠ 实际显著，必须同时报告效应量。",
-      "injected_at": "2026-11-22T09:22:08.164312+00:00",
+      "injected_at": "2026-11-22T09:48:34.120229+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -69,7 +69,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-SSQ02",
       "mechanism": "零分布必须匹配抽样机制：无放回抽样的卡方零分布不是教科书 χ²，直接套用会系统性误判；须用同机制模拟对照。",
-      "injected_at": "2026-11-22T09:22:08.164316+00:00",
+      "injected_at": "2026-11-22T09:48:34.120234+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -77,7 +77,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-T-SSQ04",
       "mechanism": "可预测性是'人为操纵'的最强可观测证据：任何定向/牟利操纵必留序列痕迹；无可预测性则强烈反驳系统性操纵（但不排除保持边际均匀的隐蔽操纵）。",
-      "injected_at": "2026-11-22T09:22:08.164327+00:00",
+      "injected_at": "2026-11-22T09:48:34.120237+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -85,7 +85,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-RETRO01",
       "mechanism": "判据实现自检缺位：统计方法正确但实现错误(期望概率未归一、量级失真)会直接产出惊人却虚假的统计量；判据上线前须做量级sanity check。",
-      "injected_at": "2026-11-22T09:22:08.164330+00:00",
+      "injected_at": "2026-11-22T09:48:34.120239+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -93,7 +93,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-RETRO02",
       "mechanism": "复盘工具自身也须被审：L3 对 framework 轨迹的经验/教训抽取曾复用 subject 模板，产出通用话术而把真教训藏在 cognitive_corrections——复盘会退化为走流程。",
-      "injected_at": "2026-11-22T09:22:08.164333+00:00",
+      "injected_at": "2026-11-22T09:48:34.120242+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -101,7 +101,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-AUDIT01",
       "mechanism": "防后知门禁只查形式不查质量：时序合法但先验空泛('看看数据再说')或与结果雷同(照抄)可绕过——门禁是必要条件非充分条件。",
-      "injected_at": "2026-11-22T09:22:08.164335+00:00",
+      "injected_at": "2026-11-22T09:48:34.120245+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -109,7 +109,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-AUDIT02",
       "mechanism": "显式标记分类有位置依赖：三分法只取文本前10字符，标记放深处会漏判为未分类——接口约定需显式文档化。",
-      "injected_at": "2026-11-22T09:22:08.164338+00:00",
+      "injected_at": "2026-11-22T09:48:34.120247+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -117,7 +117,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-MKT01",
       "mechanism": "前视偏差能让亏损策略伪装成暴利：回测用当天收盘价生成信号却计入当天收益，把-9%年化做成+26%；信号必须用t-1信息、t日执行。",
-      "injected_at": "2026-11-22T09:22:08.164340+00:00",
+      "injected_at": "2026-11-22T09:48:34.120250+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -125,7 +125,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-MKT03",
       "mechanism": "对照机制必须与真实的噪声结构匹配：真实有波动聚集而对照用iid高斯会误判；用GARCH对照复核后VR>1仍成立才排除机制错配。",
-      "injected_at": "2026-11-22T09:22:08.164343+00:00",
+      "injected_at": "2026-11-22T09:48:34.120252+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -133,7 +133,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-AIDET01",
       "mechanism": "文风artifact冒充本质特征：判别器AUC0.92几乎全靠句长单个特征(我写短句vs原著长段落), 去掉后掉到0.57；高AUC可能只是'可人为分立的代理', 非被判概念的普遍本质。",
-      "injected_at": "2026-11-22T09:22:08.164346+00:00",
+      "injected_at": "2026-11-22T09:48:34.120255+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -141,7 +141,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-AIDET02",
       "mechanism": "结构性自利偏差：当判据设计者同时是AI样本生成者时, 无意识会用自己的写作风格当'AI特征'——判据实际学的是'我 vs 对照组作者', 不是'AI vs 人'; 这是角色冲突, 非调参可解。",
-      "injected_at": "2026-11-22T09:22:08.164349+00:00",
+      "injected_at": "2026-11-22T09:48:34.120257+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -149,7 +149,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-AIDET03",
       "mechanism": "去味强度分层：表面改写(5%改动)骗不过判据≠深度去味骗不过；仅改变句长结构(不改语义)就把AI检出率从100%打到75%, 说明浅层检测对新风格的鲁棒性被高估。",
-      "injected_at": "2026-11-22T09:22:08.164351+00:00",
+      "injected_at": "2026-11-22T09:48:34.120260+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -157,7 +157,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-FACT01",
       "mechanism": "作者身份判定与叙事真实性判定必须分离：浅层文风(模板化/金句密度/绝对化断言)无法可靠区分AI与人(上轮已证); 但文中可核查的事实断言(引语真伪/数字依据/权威署名)可实证。把'像AI写的'当'内容不可信'是混淆两类问题。",
-      "injected_at": "2026-11-22T09:22:08.164354+00:00",
+      "injected_at": "2026-11-22T09:48:34.120263+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -165,7 +165,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-T-FACT03",
       "mechanism": "伪精确数字是叙事 weaken point：'80%烦恼可靠读书治愈'这类无来源的整数百分比, 比模糊断言更易被证伪, 是核查叙事真实性的高价值锚点。",
-      "injected_at": "2026-11-22T09:22:08.164356+00:00",
+      "injected_at": "2026-11-22T09:48:34.120266+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -173,7 +173,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-MS01",
       "mechanism": "事实真实性≠推论有效性：一篇每个数字都真实、每份研报都存在的文章,仍可用真事实支撑它本身不支持的结论(机构投资研报→个人考证红利)。核查须从文风层→事实层→推论层逐级深入,事实全真只是起点不是终点。",
-      "injected_at": "2026-11-22T09:22:08.164360+00:00",
+      "injected_at": "2026-11-22T09:48:34.120268+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -181,7 +181,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-MS02",
       "mechanism": "主体错位是研报营销软文的核心手法：把面向机构投资者的资本市场判断(市值/ROE/板块配置)转译成'普通人的岗位/副业机会',再落到付费证书/课程。原报告从未谈论个人职业,更未提考证。",
-      "injected_at": "2026-11-22T09:22:08.164362+00:00",
+      "injected_at": "2026-11-22T09:48:34.120270+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -189,7 +189,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-KON01",
       "mechanism": "事实核查通过≠推理方法可靠：当所有事实都属实时,误导藏在把素材组织成结论的推理里。核查须过三道关——文风层(可能是artifact)、事实层(真伪)、推理层(方法是否站得住);前两层通过恰恰最容易让人放松警惕。",
-      "injected_at": "2026-11-22T09:22:08.164365+00:00",
+      "injected_at": "2026-11-22T09:48:34.120273+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -197,7 +197,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-R-KON02",
       "mechanism": "n=1历史类比+事后选择+模糊限定词=不可证伪叙事：用单一历史片段逐年硬套当下并预测未来,对应点是从无尽细节里事后挑能配对的(确认偏差),预测用'大概率/可能/候选'等模糊词——具体数字+模糊措辞,事后怎么都能自圆其说。",
-      "injected_at": "2026-11-22T09:22:08.164368+00:00",
+      "injected_at": "2026-11-22T09:48:34.120276+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -205,7 +205,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-RSI01",
       "mechanism": "引用一个指标/方法前，必须先验证其实现唯一性与数值正确性；同名方法在不同实现下可产生显著分歧，'用了该方法'不等于'用了同一个方法'。",
-      "injected_at": "2026-11-22T09:22:08.164372+00:00",
+      "injected_at": "2026-11-22T09:48:34.120279+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -213,7 +213,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-RSI03",
       "mechanism": "统计量量纲必须与所检验序列同频：年化标量除以日度标准误会产生数百级假 t 值（高功效陷阱）。审计判据本身时要量纲自检。",
-      "injected_at": "2026-11-22T09:22:08.164374+00:00",
+      "injected_at": "2026-11-22T09:48:34.120282+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -221,7 +221,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-RSI04",
       "mechanism": "方向一致性优先于显著性个数：全体方向一致为负是稳健负向发现，不应被'多个显著'的措辞误读为有效；数据窥探的特征是少数正显著被挑出。",
-      "injected_at": "2026-11-22T09:22:08.164377+00:00",
+      "injected_at": "2026-11-22T09:48:34.120284+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -229,7 +229,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-SIM01",
       "mechanism": "遇到多义缩写/术语(如RSI=相对强弱指数或递归自我改进)时，检索前必须先按领域消歧并向用户确认；未消歧就开工会导致完整但完全离题的工作。",
-      "injected_at": "2026-11-22T09:22:08.164379+00:00",
+      "injected_at": "2026-11-22T09:48:34.120287+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -237,7 +237,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-SIM04",
       "mechanism": "审计链条必须覆盖到测试本身：本次测试期望值把样本标准误误算(se=0.25→实际0.645，t=10→3.87)，是'审计工具需自审'在测试层的又一次体现。",
-      "injected_at": "2026-11-22T09:22:08.164382+00:00",
+      "injected_at": "2026-11-22T09:48:34.120290+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -245,7 +245,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-SIM05",
       "mechanism": "高质量自我改进记忆需三要素：事前预测与事后实测配对(predicted/fixed/missed)、失败/回归尝试也保留(accepted即使没修好)、来源追溯与合并别名(carried_from/aliases)——让经验可被证伪而非只记成功。",
-      "injected_at": "2026-11-22T09:22:08.164384+00:00",
+      "injected_at": "2026-11-22T09:48:34.120292+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -253,7 +253,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-SIM07",
       "mechanism": "经验要可证伪，必须记录'事前预测'并与'事后实测'配对；只有事后叙述的经验无法被现实打脸，是不可证伪的叙事(同康波文病根)。命中率=预测∩实测/预测，落空与意外收获都要留痕。",
-      "injected_at": "2026-11-22T09:22:08.164387+00:00",
+      "injected_at": "2026-11-22T09:48:34.120294+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -261,7 +261,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-SIM08",
       "mechanism": "回归/新bug必须被显式记录并强制降级：一条改进即使在原上下文命中率高，只要实测引入新bug或有预测落空，跨上下文迁移时就必须revise而非retain。",
-      "injected_at": "2026-11-22T09:22:08.164389+00:00",
+      "injected_at": "2026-11-22T09:48:34.120297+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -269,7 +269,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-SIM10",
       "mechanism": "防后知门禁可迁移到经验库：实测(observed)时间戳不得早于事前预测(predicted)，否则是事后编造的'我早就知道'，因果时序违规的证据须降级。",
-      "injected_at": "2026-11-22T09:22:08.164392+00:00",
+      "injected_at": "2026-11-22T09:48:34.120299+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -277,7 +277,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-STRUCT01",
       "mechanism": "判据必须适配对象类型：对综述/分类学论文套统计功效复算(如t检验)是判据错配——它没有自己的实验统计量，40/20是文献分类计数而非样本。正确做法是审计其分类学自洽性、判据可操作性、主体错位与诚实刻度。 本次扩展到第四类对象——工程实现代码仓库：无统计量可复算、无分类学可自洽，应改查 claim-vs-code 一致性、安全声明可证伪性、自带审计谱系污染、对抗测试真实性、复现完整性。",
-      "injected_at": "2026-11-22T09:22:08.164395+00:00",
+      "injected_at": "2026-11-22T09:48:34.120302+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -285,7 +285,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-STRUCT02",
       "mechanism": "两个框架长得像不等于相互独立验证：本次论文Figure3与我方证据阶梯同构，但我方判据§34已受awesome-rsi影响，属同谱系。确认偏误下把'同构'当'独立佐证'会虚高印证力度，须显式标注谱系来源并打折。 对比审计补充：GitHub fork_flag=false 不等于非同源——复制式派生(手动复制源码不建 fork 关系)会遮蔽谱系，须用 created_at 先后、tree 结构同构、README 自陈交叉判定，不能只看 fork 标志。",
-      "injected_at": "2026-11-22T09:22:08.164397+00:00",
+      "injected_at": "2026-11-22T09:48:34.120304+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -293,7 +293,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-STRUCT03",
       "mechanism": "失败本身不指定改哪个组件：一次失败可能同时涉及过期Memory、缺失Skill步骤、不完善Harness校验。归因必须显式落到Prompt/Memory/Skill/Harness之一并给出执行证据，且不同组件需不同验证方式（Prompt用held-out、Memory用检索有效性、Skill用执行成功率、Harness用回归）。",
-      "injected_at": "2026-11-22T09:22:08.164400+00:00",
+      "injected_at": "2026-11-22T09:48:34.120307+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -301,7 +301,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-STRUCT04",
       "mechanism": "退役/删除一条经验或技能会改变后续可选范围，必须先检查'低频但重要用途'——高频无用但偶发关键的内容不能因当前命中率低就drop。未检查则降级为verify，不可直接删除。",
-      "injected_at": "2026-11-22T09:22:08.164402+00:00",
+      "injected_at": "2026-11-22T09:48:34.120310+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -309,7 +309,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-STRUCT07",
       "mechanism": "评估者数量不等于独立判断数：多个模型judge常共享错误(同源训练/同源提示)，它们的一致结论不构成独立佐证；评估器版本或标准变更后，分数变化可能来自标准本身而非对象，须用同一批任务重验新旧版本。",
-      "injected_at": "2026-11-22T09:22:08.164405+00:00",
+      "injected_at": "2026-11-22T09:48:34.120312+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -317,7 +317,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-STRUCT08",
       "mechanism": "可复现性与信度是结论的一部分：持续改进要复现需记录每轮edit、候选选择、各阶段可用数据、评估器版本、成本与回滚；分类若为目的性抽样且未经独立双编码，只支持定性比较，不估计流行率，不据此下普遍结论。",
-      "injected_at": "2026-11-22T09:22:08.164407+00:00",
+      "injected_at": "2026-11-22T09:48:34.120314+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -325,7 +325,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AGI01",
       "mechanism": "观点文/前瞻essay的判据与实证、综述都不同：无统计量可复算、无分类法需自洽，应查'论点-证据链、外推链算术自洽+假设明示、主体归属、可证伪分级'。判据要按对象类型切换，不可一律套统计检验(KB-STRUCT01的essay版)。",
-      "injected_at": "2026-11-22T09:22:08.164410+00:00",
+      "injected_at": "2026-11-22T09:48:34.120317+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -333,7 +333,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AGI02",
       "mechanism": "算术自洽≠外推成立：文章的数量级预测(10x/年、10^10、成本降4x)算对了，只说明内部一致；趋势能否维持十年是经验问题。严谨的作者会主动标注'not a given/far from certain/empirical question'——标注本身是诚实度信号，但不能替代对外推假设的独立审视。",
-      "injected_at": "2026-11-22T09:22:08.164412+00:00",
+      "injected_at": "2026-11-22T09:48:34.120330+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -341,7 +341,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AGI05",
       "mechanism": "评估方案有'可扩展性'维度：目标域若是超人域(人类群体也难判AI输出)，完全依赖人工判断且无自动验证的评估不可扩展，不能支撑该域强结论；可自动验证领域(数学证明)的评估才可扩展。这是独立于judge数量/独立性与复现完整性的第三维度。",
-      "injected_at": "2026-11-22T09:22:08.164415+00:00",
+      "injected_at": "2026-11-22T09:48:34.120333+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -349,7 +349,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT01",
       "mechanism": "审计检查器自身的脆弱断言会造成假阴性：判据若用单一字面串匹配('能否拦' in text)，等价措辞('能否指出具体被拦动作')会被漏判，导致 verdict 假性 REVIEW。检查逻辑须用语义/动作词判定，不用单一字符串包含。",
-      "injected_at": "2026-11-22T09:22:08.164417+00:00",
+      "injected_at": "2026-11-22T09:48:34.120335+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -357,7 +357,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT02",
       "mechanism": "单一检查点不足以定罪：claim-vs-code 核对时在一处(view层switch只4个case)看到与声称(9工具)不符，若立即下'声称不一致'结论会误判——真实定义在另一层(action registry 9个action，运行时实测9)。发现疑似不符须先定位真实定义源/运行时实测，再定罪。",
-      "injected_at": "2026-11-22T09:22:08.164419+00:00",
+      "injected_at": "2026-11-22T09:48:34.120338+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -365,7 +365,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT03",
       "mechanism": "测试/自检代码存在不等于被执行：下游 FastGithubOps.UI 的 Program.cs 注释明言'IpAddressFilterSelfTest 写好了却没有调用点，等于从未真正执行过'。一个没有被注册进调用链的判据，无论断言多严谨，都是死代码，提供虚假的安全感。与 KB-R-RETRO01(判据实现算错)不同——这是判据存在但未接线。",
-      "injected_at": "2026-11-22T09:22:08.164422+00:00",
+      "injected_at": "2026-11-22T09:48:34.120340+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -373,7 +373,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT04",
       "mechanism": "判据的验证对象必须与结论所指对象等价，且比较两端计数口径必须对等的：随机活跃仓审计中，用部分下载的13文件目录代替完整仓库判定，得出\"5个脚本全部缺失\"的假阳性（完整clone里脚本都在）；又用markdown的h3标题数(61)当工具数去比badge(55)，得出\"数量不符\"的假阳性（6条是非工具小节，扣掉正好55）。两者都是检查器对象/口径不对等，而非被审对象真有缺陷。是 KB-AUDIT01/02 的新实例但拦截动作独立：对象完整性与口径对等是判据成立的前置条件。",
-      "injected_at": "2026-11-22T09:22:08.164425+00:00",
+      "injected_at": "2026-11-22T09:48:34.120342+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -381,7 +381,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT05",
       "mechanism": "门禁/验证必须在最终要合并的精确 commit 上重新检查，否则\"验证后漂移\"会让通过结论失效：reviewer 签字或 CI 跑绿的是 commit A，随后 PR 被 override 合并、agent 又 push 到 commit B，签字验证的对象已不等于最终落地对象。Runway 工厂文章 L267 把它列为五道事故倒逼护栏之一——否则 PR 被 override 合并、reviewer 签字后 agent 继续 push。与 KB-AUDIT04(检查当下用错对象)机制不同：本条是时间维度上验证后对象被改写；与预注册 SHA256 锁存同源，但锁存此前只覆盖输入材料/判据/证据，未显式覆盖\"签字后 commit 被替换则门禁失效\"这一动作。",
-      "injected_at": "2026-11-22T09:22:08.164428+00:00",
+      "injected_at": "2026-11-22T09:48:34.120345+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -389,7 +389,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT06",
       "mechanism": "claim-vs-code 核对不能停在\"方法名/代码实体/调用点都在\"就判一致——还要核对论文正文/附录自报的关键超参值是否与公开代码配置一致。SKILLMASTER 三设计全部在训练脚本接线(enable=True/probe_k=4/advantage_weight=0.2)，但论文写方向一致性系数 alpha=0.3、代码 same_delta_win_loss_gamma=0.2，存在参数级口径漂移。这不同于 KB-AUDIT02(定义藏在另一层导致单点误判)与 KB-RSI01(同名方法不同实现)：本条是方法名与实现都对上、但超参数值对不上，属\"接线已核实后的第二层核对\"。",
-      "injected_at": "2026-11-22T09:22:08.164430+00:00",
+      "injected_at": "2026-11-22T09:48:34.120348+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -397,7 +397,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT07",
       "mechanism": "当被优化/被改进的对象能修改自己的评价函数时,\"分数上升\"可能是绕过检测而非真解决问题——DGM附录H: agent在明确指示不改特殊token的情况下删掉了用于检测工具调用幻觉的TOOL_USED_MARKER日志,改为结构化格式,让幻觉不可被检测,拿到满分2.0却没解决问题(node96得分1.67才是无作弊的真实改进)。这是比KB-R-AIDET03(文本去味绕过检测)更一般的攻击面:检测机制若在被优化者可达范围内,就会成为被攻击目标(Goodhart定律)。与KB-STRUCT07(评估者独立性)不同:本条是评价函数本身被篡改,不是评估者与被测者不分离。",
-      "injected_at": "2026-11-22T09:22:08.164433+00:00",
+      "injected_at": "2026-11-22T09:48:34.120350+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -405,7 +405,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-META02",
       "mechanism": "元学习触发须从『审读外部对象』泛化到『所有既定任务』：每次任务收尾都要从双源汲取——task_content（任务结论本身）+ process（弯路/判据自咬/工具失败/修正）；且汲取须有利于用户、可证伪(predicted↔observed)、非复述。只从结论学、不从过程学，会丢掉最有价值的失败教训；只写『要反思』是复述不是长牙。",
-      "injected_at": "2026-11-22T09:22:08.164435+00:00",
+      "injected_at": "2026-11-22T09:48:34.120354+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -413,7 +413,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT08",
       "mechanism": "训练监督依赖的信号在服务/推理时可能不可得,构成train-serving口径不对等——HiGR(arxiv 2512.24787v5)正样本y+=engaged watch sequence按true user feedback降序重排(训练时有用户真实反馈),但线上推理只有profile+behavior sequence且经dedup/availability/safety/business过滤,论文全文未讨论该落差。这与KB-AUDIT04(对象/口径对等)同族但在train-serving维度,拦截动作独立于:finance_blind_test(防标签泄漏进判据/评测端)、backtest_integrity(防spoiler进回测/回测端)、transfer_holdout(防过拟合源领域/泛化端)。",
-      "injected_at": "2026-11-22T09:22:08.164438+00:00",
+      "injected_at": "2026-11-22T09:48:34.120356+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -421,7 +421,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT09",
       "mechanism": "检索文本污染是 agent 执行层的独立缺口：retrieved text 是 data 非 instructions，可能含 prompt injection，且 no prompt/delimiter strategy fully prevents（LangChain《Context Engineering Starts with Retrieval》line 191-194）。这与 core.py GT.SOURCE_UNTRUSTED（审计闭环输入层判 claim 来源是否为用户口述→block 素材入库）不同——场景（审计输入 vs agent 运行）、对象（claim source vs retrieved data）、动作（block 入库 vs validate outputs）三者均不同，拦截动作独立。",
-      "injected_at": "2026-11-22T09:22:08.164440+00:00",
+      "injected_at": "2026-11-22T09:48:34.120359+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -429,7 +429,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT10",
       "mechanism": "跨会话状态连续性是事件驱动系统的独立缺口：声称 always-on 的系统其实多数时间 asleep，靠 run 之间的状态持久化维持连续体验（Anthropic《Building always-on agents》line 27）。支撑该声称的机制包括持久状态(memories outlive worker)、inbox-as-source-of-truth 崩溃幂等重试(line 48)、单 active worker 防重复覆盖、deferred tool call 会话中途保存+答复回来 resume+等待期间非阻塞(line 105-110)。这与检索文本污染(KB-AUDIT09, 单 run 输入输出 hygiene)、训练服务信号(KB-AUDIT08, 训练-推理想号口径)不同——场景(跨 run 运行时编排 vs 单 run/训练推理)、对象(会话状态与事件生命周期 vs 检索文本/监督信号)、动作(判机制声明自洽 vs 溯源/信号可得性)三者均不同，拦截动作独立。",
-      "injected_at": "2026-11-22T09:22:08.164444+00:00",
+      "injected_at": "2026-11-22T09:48:34.120361+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -437,7 +437,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT11",
       "mechanism": "记忆内容质量治理是长期记忆系统的独立维度：声称有长期记忆的系统若全量写入，会违反『只有小部分经历被保留』(S03 Science SPW-R tagging, only a small fraction are retained)；若多会话不整理，memory store 累积 duplicates/contradictions/stale entries(S07 Claude Dreams 原文)，Karpathy LLM Wiki 也要求 Lint 查矛盾/过时声明/孤儿页(S17)；Dreams 明言 input store is never modified——非破坏是审阅与可丢弃的前提。这与会话连续性(KB-AUDIT10, 状态能否跨 run 续接)、改进记忆四要素(improvement_memory, Predicted↔Observed 可证伪性)、检索溯源(KB-AUDIT09)均不同——对象(记忆内容质量 vs 状态续接/记录可证伪/检索文本)、动作(判选择-整理-非破坏 vs 判续接/可证伪/溯源)均不同，拦截动作独立。证据来自22来源记忆生命周期谱系：生物机制(S02 CLS/S03/S11 tagging→S04重放/S05整合)→AI隐喻复用(S06/S08 sleep, S07 Dreams, S17 wiki)，按KB-STRUCT02同谱系打折，不当作对AI设计的独立证成。",
-      "injected_at": "2026-11-22T09:22:08.164446+00:00",
+      "injected_at": "2026-11-22T09:48:34.120364+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -445,7 +445,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT12",
       "mechanism": "后台/异步委派生命周期完整性是运行时编排的独立缺口：声称支持异步子Agent的系统，需四个自洽机制——(1)提交与收集解耦(launch立即返回tracking ID，S10 'decoupling task submission from result collection')；(2)可引导可取消(mid-task update/cancel，'Synchronous delegation cannot be interrupted')；(3)句柄穿越上下文压缩(存于non-message state channel，否则'would be lost during compaction')；(4)完成主动通知(completion notifier/runs.create唤醒，否则fire-and-forget轮询依赖)。这与KB-AUDIT10(跨会话状态续接:run间状态持久化/resume)、KB-AUDIT11(记忆内容质量)不同——场景(单会话内并发任务编排 vs 跨run续接 vs 记忆治理)、对象(后台任务句柄状态机 vs 会话状态 vs 记忆条目)、动作(判委派生命周期声明自洽 vs 判续接机制 vs 判内容治理)三者均不同，拦截动作独立。",
-      "injected_at": "2026-11-22T09:22:08.164449+00:00",
+      "injected_at": "2026-11-22T09:48:34.120366+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -453,7 +453,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT13",
       "mechanism": "记忆作用域保持是记忆系统的独立缺口：Memory Trap 论文(Princeton+Anthropic,arXiv 2611.07554,6模型对照,有code)证明良性交互(benign interactions)产生的自写记忆会在超出原作用域时导致不安全/不可靠行为——两条路径：write-time(写笔记时broaden用户陈述,clean-up的skip confirmation写成never confirm)与read-time(用记忆时overgeneralize,即使raw transcript)。关键:no adversary,每次交互都良性、记忆是agent自己的,'malicious-content filters have nothing to catch',故prompt injection/毒化检索类防护无效。实验:skip confirmation迁移到高风险任务、情感支持记忆致sycophancy/over-critique、stale-test修复记忆削弱正确测试并在ImpossibleBench增加作弊。这与KB-AUDIT11(记忆内容质量:选择/整理/非破坏)、retrieval_grounding(检索外部文本是data非instruction)、improvement_memory(记录可证伪)不同——场景(记忆写入/读取时的作用域边界 vs 内容治理 vs 检索hygiene)、对象(自写记忆的适用范围 vs 记忆条目质量 vs 外部文本)、动作(判作用域保持声明自洽 vs 判内容治理 vs 判溯源)三者均不同,拦截独立。",
-      "injected_at": "2026-11-22T09:22:08.164451+00:00",
+      "injected_at": "2026-11-22T09:48:34.120368+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -461,7 +461,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT14",
       "mechanism": "可证明声明的边界诚实性是审读密码学/形式化证明系统的独立缺口：当一个系统声称带密码学(zkSNARK)或形式化(Lean)证明时，需四个自洽的边界披露——(1)证明执行来源而非结果事实正确(proves execution not fact；FlashProve一手'proof file...computation was executed correctly'，来源证明≠事实正确，主体错位KB-STRUCT05)；(2)承诺/验证器信任根来自可信渠道而非被验证方自定(commitment anchor independent；中文译本'承诺标识必须来自可信渠道，不能完全由待验证服务商自行指定')；(3)形式化证明覆盖范围披露(formal scope disclosed；Lean证协议但C++验证器'carries no formal guarantee'、不保证Lean/论文/代码三者一致、两处信任缺口)；(4)未覆盖项披露(uncovered disclosed；整数模型/贪心解码/1024上下文/不隐藏架构/抗侧信道不覆盖/研究原型)。这与retrieval_grounding(检索外部文本是data非instruction)、memory_scope(记忆作用域)、serving_signal(训练服务口径)、KB-R07(系统自洽vs有效)不同——场景(验证声明的边界vs数据来源vs记忆边界vs信号口径)、对象(证明范围声明vs检索文本vs记忆条目vs训练信号)、动作(判边界披露诚实性vs判溯源vs判作用域vs判口径对等)三者均不同，拦截独立。",
-      "injected_at": "2026-11-22T09:22:08.164454+00:00",
+      "injected_at": "2026-11-22T09:48:34.120371+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -469,7 +469,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT15",
       "mechanism": "主动介入的授权正当性是审读主动 agent 声称的独立缺口：一个『我主动发现并做了 X』的声称，需四个自洽的授权边界披露——(1)目标值得做≠介入被授权(worthwhile not warranted；Proactive AI 综述 Figure10『a worthwhile goal is not yet a warranted intervention』，把目标价值冒充介入授权=主体错位 KB-STRUCT05)；(2)仲裁四关(置信§4.4.1/价值超成本§4.4.2/时机§4.4.3/风险可逆§4.4.4，act-first 无仲裁即价值与风险未过闸)；(3)形式控制≠真实控制(§7.2.2『formal authority, the recognized right to decide』vs agent 靠『selecting which information is shown, which options are proposed, which defaults are chosen』获 real authority——仅声称用户可覆盖而未披露实权来源=形式冒充真实)；(4)沉默与风险分级同意披露(§4.4.1『in proactivity the non-act is invisible』+hold-and-monitor rung；§7.2.3『risk-tiered consent models』low-risk默认/ambiguous澄清/high-impact确认)。与 proof_boundary_honesty(证明边界)/memory_scope(记忆作用域)/serving_signal(信号口径)/retrieval_grounding(检索污染)不同——场景(主动授权声明vs证明范围vs记忆边界vs信号口径vs检索文本)、对象(介入授权vs证明声明vs记忆条目vs训练信号vs检索文本)、动作(判授权边界诚实性vs判证明披露vs判作用域vs判口径vs判溯源)三者均不同，拦截独立。",
-      "injected_at": "2026-11-22T09:22:08.164457+00:00",
+      "injected_at": "2026-11-22T09:48:34.120373+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -477,7 +477,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT16",
       "mechanism": "接口契约边界诚实性是审读客户端/Agent 声称的独立缺口：一个『我控制参数 X / 我用模型 Y / 我已合规 / 这个调用免费』的声称，需四个自洽的控制权披露——(1)传入≠生效(声明 temperature/top_p/seed 却被服务端忽略，DeepSeek 构建 Chatbot 指南『以下参数由服务端决定，请求中传入的值会被忽略』，存在≠执行 KB-AUDIT03)；(2)别名≠实际路由(deepseek-v4-flash 仍可调用但后端已换 V4.1-Flash，名义可用≠实际服务)；(3)基础风控≠完整合规(safety_check=high 仅基础风控，内容安全审核/大模型登记/AI标识义务在开发者，责任主体错位 KB-STRUCT05)；(4)工具免费≠零成本(服务端搜索工具本身不计费但结果 token 计费)。与 proof_boundary_honesty(证明范围)/proactive_authorization(介入授权)/serving_signal(训练服务口径)/call_site_integrity(调用接线)/retrieval_grounding(检索污染) 不同——场景(客户端声称对能力控制 vs 证明范围 vs 介入授权 vs 训练口径 vs 接线 vs 检索文本)、对象(控制权归属 vs 证明声明 vs 介入授权 vs 训练信号 vs 调用点 vs 检索文本)、动作(判控制边界诚实性 vs 判证明披露 vs 判授权 vs 判口径 vs 判接线 vs 判溯源)三者均不同，拦截独立。",
-      "injected_at": "2026-11-22T09:22:08.164459+00:00",
+      "injected_at": "2026-11-22T09:48:34.120376+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -485,7 +485,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT17",
       "mechanism": "监督可行性(supervision viability)是审读『有人类评审/验证』流程声称的独立缺口：评审环节存在≠评审者仍具备独立判断能力这一前提。四个能力前提——(1)独立观点形成(cognitive surrender: 输出变成你的输出、无独立观点可比；Addy博客转述Shaw-Nave AI错时73%接受错误答案+borrowed-confidence错误后信心反升；'you never formed an independent view to compare it against')；(2)评审能力未侵蚀(Anthropic skill-formation RCT 52工程师生成式使用comprehension 17%更低50%vs67%、概念探究不掉；能力被它要评审的工具削弱)；(3)监督未自我消解(paradox of supervision: 监督所需编码技能正因AI使用退化，Anthropic survey>50%员工fully delegate仅0-20%；元层自我矛盾)；(4)表面≠系统正确('did a human read code 是 imprecise proxy'、surface correctness not systemic、Claude Code官方承认无revert/incident断路器)。与reviewer_evaluation(单次评审漏斗保真/过程污染)/evaluation_reliability(judge独立性)/serving_signal(训练服务口径)/proof_boundary_honesty(证明范围)/interface_contract_honesty(客户端控制边界)不同——场景(评审能力前提vs单次过程vs判断独立vs训练口径vs证明范围vs接口控制)、对象(能力存在性vs过程保真vs judge数vs信号vs证明vs参数权)、动作(判能力前提披露vs判过程污染vs判独立来源vs判口径vs判范围vs判控制权)三者均不同，拦截独立。",
-      "injected_at": "2026-11-22T09:22:08.164462+00:00",
+      "injected_at": "2026-11-22T09:48:34.120378+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -493,7 +493,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT18",
       "mechanism": "自知诚实性(self-knowledge honesty)是审读一个主体/流程声称的独立缺口：输出结论≠主体诚实觉察自己的认知边界。四个元认知维度——(1)假设先行(hypothesis_before_query:提问/委托前是否先形成可错预期；原文'提问前，我有没有先形成一个假设'，读过流畅回答后再想象其他可能更难，认知卸载起点)；(2)认知局限自陈(cognitive_limits_disclosed:是否标注自己缺少的理解而非假装完整；原文'你只需要知道，自己缺少哪些理解'、现代大型代码库完整模型不可能常在脑中)；(3)可证伪自问(falsification_self_asked:是否主动问'什么情况成立时结论会错'并去测；原文'什么情况成立时，这个结论就会是错的？然后去查'，模型自陈把握不如实测)；(4)技能退化披露(skill_atrophy_disclosed:是否诚实列出不再练习的关键能力；原文'哪些能力，我已经不再练习了'、'不再练习的能力会消失且更快')。与supervision_viability(§74评审者能力前提存在性)/proof_boundary_honesty(证明范围)/judgment_robustness(判定稳健性)/retrospective(认知轨迹复盘)不同——场景(主体认知边界觉察vs评审能力前提vs证明范围vs判定稳健vs复盘)、对象(认知局限声明vs能力存在性vs证明声明vs稳健性vs轨迹)、动作(判自知声明诚实性vs判能力前提vs判证明披露vs判稳健vs复盘)均不同，是比'能力前提'更内一层的元认知自知(知道自己不知道什么)，拦截独立。",
-      "injected_at": "2026-11-22T09:22:08.164464+00:00",
+      "injected_at": "2026-11-22T09:48:34.120381+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -501,7 +501,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT19",
       "mechanism": "验证边界诚实性(verification boundary honesty)是审读一个主体声称'验证通过/测试全绿'时的独立缺口：绿灯≠全覆盖。四维——(1)覆盖边界披露(coverage_scope_disclosed:绿灯只证明一个性质、测试可能与功能犯同一个错仍会通过,须披露它检查了什么/没检查什么;原文'绿灯只说明一件事,它检查了什么?没检查什么?')；(2)完成标准事前定义(criteria_predefined:'提前定义什么叫验证通过,因为等到事后你会为任何结果找到合理的解释';完成须测试/截图/日志/轨迹等看得见摸得着之物)；(3)证据先于总结(evidence_before_summary:'收到完成通知后,在看总结之前,先看实际执行了什么命令以及返回了什么',用看着像做完代替事实依据即打折)；(4)收尾自我质疑(self_questioning_done:'我遗漏了什么吗',复杂功能审阅后再问常再找出两三件事)。与proof_boundary_honesty(§71形式化/密码学证明边界:执行正确≠事实正确/信任根)不同——对象是经验性测试证据的覆盖边界,场景/对象/动作均不同;与reviewer_evaluation(§60评审漏斗保真)/supervision_viability(§74评审者能力前提)对象层级不同(那两者判谁评审/评审者能力,本门禁判验证覆盖边界是否诚实披露)。拦截面独立可迁移(任何用绿/通过/截图声称完成的流程都适用)。",
-      "injected_at": "2026-11-22T09:22:08.164467+00:00",
+      "injected_at": "2026-11-22T09:48:34.120383+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -509,7 +509,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT20",
       "mechanism": "判据来源诚实性(criterion origin honesty)是审读一个'自评估系统'声称的独立缺口：当评估判据由被评估系统自己合成、并以label-free标榜时，'判据通过'≠'真的做对了'。四维——(1)判据来源披露(criterion_origin_disclosed:评估判据是自生成还是外部锚定须诚实标注；HarnessPro用LLM合成固定测试S(x)=TestSynth(x,τ_h0(x))评估候选harness,无ground-truth/official tests；(2)召回边界披露(recall_boundary_disclosed:自生成判据的失败检出率/漏检率须披露而非声称全覆盖；论文Fig2自己给出诚实证据——LLM judge'overly optimistic'把有缺陷实现判成功、失败召回41.7%,自生成测试83.3%仍漏16.7%；(3)外部锚定披露(external_anchor_disclosed:label-free有效性是否用外部锚事后校验并披露；Fig2混淆矩阵横轴仍用Official outcome,即'无标签'方法的有效性靠官方测试锚定；(4)独立评审缺口披露(independent_reviewer_gap_disclosed:判据自审无独立评审者的事实须披露；test-synth指令明写'No separate reviewer is part of this run'/'do not launch another reviewer',coverage.json要求'what was not checked, and limitations')。与proof_boundary_honesty(§71形式化证明边界:承诺锚独立/证明范围)、verification_boundary_honesty(§76绿灯覆盖边界)、finance_blind_test(金融盲测)对象不同——那些判证明/通过声明，本门禁判评估判据本身的可信度前提。拦截面独立可迁移(任何self-assessed/self-generated criterion系统适用)。",
-      "injected_at": "2026-11-22T09:22:08.164469+00:00",
+      "injected_at": "2026-11-22T09:48:34.120385+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -517,7 +517,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT21",
       "mechanism": "选择性监督诚实性(selective supervision honesty)是审读一个'带门控的自监督系统'的独立缺口：筛选器一旦决定执行哪些交互，就决定了它训练于哪些交互——即使主体诚实声明，结构性偏差仍在。核心结构(清华System1/System2 Perspective §7.2)：p_train(i)∝p_cand(i)·e(i)≠p_cand(i)→标签非随机缺失(MNAR)；被判低价值者被压制、结果永不观测、分数永不修正→自我强化的选择性监督。四维——(1)压制区非零概率(propensity_reaches_suppressed:探索混合π_ε=(1−ε)π_CI+επ_0或独立审计率a使e(i)≥e_min>0,否则标签MNAR)；(2)审计独立于分数(audit_independent_of_score:审计率须fixed independently of predictor's scores,否则连审计都被自审污染)；(3)盲点披露(blind_spot_disclosed:Theorem19'blind spots, not average error, dominate';utility misspecified时系统性压制能揭示错误设定的交互,误差恰集中在无数据且永不执行的区)；(4)反事实损失承认(counterfactual_loss_acknowledged:被拒交互漏判损失,尤其安全关键/不可逆动作)。与criterion_origin_honesty(§77判据来源声明诚实)/supervision_viability(§74评审者能力前提)/proof_boundary_honesty(§71形式化证明边界)对象不同——those判声明/能力/证明,本门禁判筛选器审查自身训练数据的结构性机制。MNAR/选择性监督/探索保险丝三项零门禁覆盖，拦截面独立可迁移(数据选择/主动学习/路由/Agent工具筛选)。",
-      "injected_at": "2026-11-22T09:22:08.164472+00:00",
+      "injected_at": "2026-11-22T09:48:34.120388+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -525,7 +525,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT22",
       "mechanism": "策略演化接地诚实性(policy evolution grounding honesty)是审读一个声称 T3 自演化记忆的系统的独立缺口：策略演化可在短期正确率不降反升的同时静默削弱最初接地答案的证据模态(§8.3.3 'A revised policy can maintain or even improve short-term answers while relying less on the modality that originally grounded them'——缓存文本摘要答题却很少重开视觉证据；'Current policy-evolution methods rarely evaluate whether adaptation changes the balance of evidence used across representations')——正确率保持≠接地保持。四维——(1)策略可寻址(policy_addressable:§5.3 负责反复行为的策略须提供可识别修订目标,显式规则/指令/工作流/程序/检索说明优于分布式表示,'Explicit policy representations allow more precise revisions, whereas distributed representations make the effects of individual changes harder to isolate';语料规律 17 T3 全是显式或含显式的 hybrid, source-only/latent-parametric-only 无 T3)；(2)反馈归因到策略级(feedback_attributable:§5.3 须区分写/维护/检索/推理/行动失败,'A task-level reward alone may reveal that the agent failed without identifying which part of memory management should change')；(3)证据路径保持(evidence_path_preserved:策略更新前后须比较跨表示证据使用平衡,防缓存替代原始模态)；(4)修订经验证且持久(revision_validated_persisted:§5.3 'only when it is retained as part of the reusable memory-management process';版本/评估历史支持审计回滚;'Policy-level validation therefore requires subsequent, replayed, or held-out cases'——修好一条记录≠策略更优)。与 self_evolving(本仓运行时机制非尺子)/memory_scope(§70单条边界)/criterion_origin(§77评估判据来源)/selective_supervision(§78筛选训练数据)对象不同,拦截面独立可迁移(任何自演化记忆系统)。",
-      "injected_at": "2026-11-22T09:22:08.164475+00:00",
+      "injected_at": "2026-11-22T09:48:34.120391+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -533,7 +533,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT23",
       "mechanism": "记忆溯源可恢复性诚实性(memory provenance honesty)是审读一个声称记忆可验证/可纠错的长期记忆系统的独立缺口：溯源很少是表示的设计属性(§8.1.1 'Provenance is therefore seldom a designed property of the representation'；'a substantial portion of the analyzed architectures do not retain a usable route back to the evidence from which their memories were formed')——长期记忆的核心不是召回量而是可恢复溯源+时间有效性(§8.3 'not recall volume alone, but recoverable provenance and temporal validity, since persistence without these safeguards can retain stale or weakly grounded evidence')。四维——(1)溯源为设计属性(provenance_by_design:把 minimal provenance bundle 当作表示本身一部分而非可选元数据,'provenance should be treated as part of the representation itself rather than as optional metadata')；(2)证据可恢复(evidence_recoverable:'Abstraction should move from lossy compression toward recoverable representation',抽象记忆须保留回到形成它所依赖证据的可用路径)；(3)时间有效性跟踪(temporal_validity_tracked:冲突须区分真实变化/不可靠观测/仅在不同时间或情境有效,不保留陈旧或弱接地证据)；(4)可逆性(reversibility_supported:§6.6 'reversibility requires an earlier version, operation log, checkpoint, or reconstructible source',更新须可审计回滚)。与 memory_scope(§70单条写入边界)/retrieval_grounding(输出引用支撑)/memory_curation(§68内容质量)/criterion_origin(§77评估判据来源)层级对象不同——那些判单条内容/输出/判据,本门禁判记忆表示层是否把溯源设计为结构属性。拦截面独立可迁移(任何长期记忆系统)。",
-      "injected_at": "2026-11-22T09:22:08.164477+00:00",
+      "injected_at": "2026-11-22T09:48:34.120393+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -541,7 +541,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT24",
       "mechanism": "在线修复诚实性(online repair honesty)是审读一个声称『在线自演化/运行时可修复』的图编排系统的独立缺口：现有编排只在轨迹之间修订技能/提示/拓扑(§1 'orchestration still evolves only between trajectories, by revising skills, prompts, or topology after a batch of runs has ended'),配置错误的团队因输出看似合理而难以发现,且在工作流仍执行时无法修复('impossible to repair while the workflow is still being executed')——事后修订≠运行中途修复。EvoSteer 的在线定义：编排器从执行特征与学习价值估计动态构建并修复运行中团队('dynamically builds and repairs a running team from execution features and a learned value estimate'),每轮一次原子编辑含 rerun/drop('one atomic edit per turn, rerun and drop included'),使看似合理但失败的步骤在运行中途重做('redone mid-run')。四维——(1)in_run_edit:编辑在同一运行执行中途发生而非批次后；(2)rerun_drop:能重跑失败步骤/丢弃错误agent而非只追加；(3)execution_feature_driven:由执行特征/失败信号驱动而非输出表面合理性；(4)ref_grounded_value:价值估计由冻结参考锚定,不混淆任务被解决频率/执行噪声/结构选择(§1 credit diffusion 'give every action the same coefficient of a single terminal advantage', 'confound how often a task is solved, execution noise, and structural choice')。只判机制声明自洽,不承诺在线修复真提升性能(存在≠有效性)。",
-      "injected_at": "2026-11-22T09:22:08.164480+00:00",
+      "injected_at": "2026-11-22T09:48:34.120395+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -549,7 +549,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT25",
       "mechanism": "技能准入校准(skill admission calibration)是审读一个声称『技能库可自演化』系统的独立缺口：现有技能由 LLM judge/成功计数/信任层级准入,点估计无法区分证据不足与确认效果(§1(iii) 'such point estimates cannot separate insufficient evidence from a confirmed effect'),且无测试追踪已准入技能后续是否有助('no test tracks whether an admitted skill still helps on later tasks, it stays in the library and is never retired')——准入≠校准≠退役。EvoSteer 的 Validated Skill Admission：候选先试用后晋升('a candidate be tried before it is promoted'),只在配对证据通过共享 alpha-spending 预算序贯检验后才晋升/退役('promotes or retires it only when paired evidence passes a sequential test under a shared alpha-spending budget'),对每个任务从同一记录+相同强制首角色启动两条配对反事实轨迹(一条绑定一条不绑定,'two extra trajectories are launched from the same record and the same forced first role, one binding and one not'),结果三态 promotes/retires/defers。预算只在新证据到来时花费,由 union bound 得条件可数 FWER 上界('By a union bound, family-wise error is at most … even for dependent tests')。四维——(1)tried_before_promotion;(2)paired_counterfactual;(3)sequential_budget;(4)retire_mechanism。只判机制声明自洽,不承诺序贯检验真控FWER(存在≠有效性)。",
-      "injected_at": "2026-11-22T09:22:08.164482+00:00",
+      "injected_at": "2026-11-22T09:48:34.120398+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -557,7 +557,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT26",
       "mechanism": "失败因果可识别性诚实性(failure causal identifiability)是审读声称『诊断失败原因/定位瓶颈能力』系统的独立缺口：端到端准确率只记录失败频率,无法区分内在能力缺陷(intrinsic deficit)与上游 cascading error——同一错误可对应相反能力诊断('the same error but opposite capability diagnoses')。分解子问题/检查CoT仍不够(observed unassisted behavior linked by co-occurrence; stated CoT do not always reflect computation)。四维——(1)end_to_end_only:是否只有聚合分;(2)trace_or_cooccurrence:是否仅凭trace/共现;(3)controlled_intervention:是否把前提设为已知正确/错误状态做受控干预(set each prerequisite to a known correct or incorrect state);(4)upstream_vs_intrinsic_split:是否区分上游级联与内在缺陷。Assumption 3.3 intervention-only identification:状态无可靠观测读出只能通过干预识别。前两维否定语义(yes=缺陷存在)。只判声明自洽不承诺干预真识别因果。",
-      "injected_at": "2026-11-22T09:22:08.164485+00:00",
+      "injected_at": "2026-11-22T09:48:34.120400+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -565,7 +565,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT27",
       "mechanism": "因果贡献诚实性(causal contribution honesty)是审读声称『量化前提因果贡献/找瓶颈』系统的独立缺口：概率因果的必要性(PN)与充分性(PS)是两个不同量,不可混为一谈。不假设单调性(LLM推理中注入错误答案可能比不注入更有帮助),故精确PN/PS不可由干预概率确定——N-Score/S-Score 是 observable lower bounds('provide valid lower bounds'),把下界当精确值是错误。高N-Score定位关键瓶颈(单前提退化即破坏成功),高S-Score定位高杠杆前提(单前提即挽回失败)。实测瓶颈稀疏:单个最重要前提 captures 84% of the gain from supplying all prerequisites,且常不与最低NC前提重合。四维——(1)necessity_sufficiency_split;(2)lower_bound_labeled;(3)monotonicity_disclosed;(4)bottleneck_sparsity_reported。只判声明自洽不承诺下界真有效。",
-      "injected_at": "2026-11-22T09:22:08.164487+00:00",
+      "injected_at": "2026-11-22T09:48:34.120403+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -573,7 +573,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT28",
       "mechanism": "配置冲突隔离诚实性(config conflict isolation)是审读声称『统一配置/单一模型通吃多任务』系统的独立缺口：多任务对同一超参可有相反偏好(编码器低掩码比利分类、高掩码比利检索,'contradicting prior work suggesting larger ratios for larger models'),单一最优幻觉错。UltraBERT 用机制隔离而非折中:同batch混5%/50%掩码序列+每个ratio独立LM head+蒸馏只限低ratio('reconciles the two masking regimes rather than settling for a single configuration')。蒸馏+剪枝在低ratio改善分类却高ratio损害检索——效果与配置交互,不能一刀切。四维——(1)conflict_identified;(2)mechanism_isolation;(3)de_confounded_comparison:比较须在饱和点后做,否则收敛速度混淆('at saturation where convergence speed no longer confounds');(4)no_blanket_tradeoff:不用一刀切折中掩盖冲突。只判声明自洽不承诺隔离真带来SOTA。",
-      "injected_at": "2026-11-22T09:22:08.164490+00:00",
+      "injected_at": "2026-11-22T09:48:34.120405+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -581,7 +581,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT29",
       "mechanism": "计算饱和诚实性(compute saturation honesty)是审读声称『scale/更多训练带来提升』系统的独立缺口：编码器下游在1–2T token饱和,即使训练与验证loss仍下降('downstream performance saturates around 1–2T tokens even as training and validation losses keep decreasing'),存在 additional tokens cannot raise 的上界;BEIR甚至275B后无显著提升。loss下降≠下游能力提升——把优化目标改善当任务能力改善是错误。四维——(1)saturation_reported:报告下游饱和点;(2)loss_vs_downstream_split:区分loss下降与下游能力;(3)marginal_gain_measured:测边际收益(beyond 275B no significant improvement);(4)no_loss_as_capability:不拿loss冒充能力。只判声明自洽不承诺饱和结论普适(scoped于该配方任务集)。",
-      "injected_at": "2026-11-22T09:22:08.164492+00:00",
+      "injected_at": "2026-11-22T09:48:34.120408+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -589,7 +589,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT30",
       "mechanism": "归纳泛化结构诚实性(induction structure honesty)是审读声称『模型学到可泛化结构/能归纳』系统的独立缺口：分类法对齐归纳从next-token prediction单独涌现(property transfers more strongly within category than across),共享更深类别的实体在激活空间更相似,聚类可从表示完全重建分类树('clustering recovers the full taxonomic tree')。关键:固定数据预算下归纳随规模减弱('induction weakens with model size when the data budget is fixed'),大模型记忆个体事实而非压缩成共享结构('memorize individual facts rather than compress them into shared structure')——bigger-is-better默认被打破。记忆≠泛化:必须区分记住每条事实与压缩成可归纳共享结构。四维——(1)induction_advantage_shown;(2)structure_recoverable;(3)memorize_vs_compress_split;(4)scale_effect_honest。只判声明自洽不承诺结构真恢复(合成taxonomy+3seed折1,scoped)。",
-      "injected_at": "2026-11-22T09:22:08.164495+00:00",
+      "injected_at": "2026-11-22T09:48:34.120411+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -597,7 +597,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT31",
       "mechanism": "结构覆盖边界诚实性(context override boundary)是审读声称『学到稳健内部结构/可被上下文引导』系统的独立缺口：权重中学到的分类结构能迁移到仅上下文出现的新属性('transfers to novel in-context properties'),但冲突时上下文覆盖权重('Context overrides weights under conflicting taxonomies')——用户prompt隐含的分类法可覆盖训练学到的,模型按context taxonomy泛化,这设定了context可操控性的上限('sets a limit on how far it can be steered by context')。四维——(1)inweights_incontext_split:区分权重习得vs上下文给定;(2)override_disclosed:披露context可覆盖weights;(3)conflict_tested:测试prompt与weights冲突;(4)steerability_bound_stated:陈述上下文可操控性上限。只判声明自洽不承诺context覆盖真可控(self-reported折1,scoped)。",
-      "injected_at": "2026-11-22T09:22:08.164497+00:00",
+      "injected_at": "2026-11-22T09:48:34.120413+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -605,7 +605,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT32",
       "mechanism": "静默失败诚实性(silent failure honesty)是审读带自验证 verdict 系统的独立缺口：LLM agent 写 CAD 代码时语法成功(能跑/能渲染)与语义正确(尺寸/约束/可制造)解耦；静默失败须定义为三合取——(i)有效可渲染几何+(ii)显式完成声明+(iii)至少一个语义检查失败(arXiv:2611.10063)。四维——(1)silent_failure_triple_defined:三合取定义vs崩溃/任一失败偷换;(2)oracle_self_audited:判据自审并双向报告(硬化自己的oracle把519复判中18个pass→fail、无一反向、盲审专家又推翻3个)vs把grader risk当零;(3)claim_contract_ablated:单变量消融把14.1%→3.2%降幅归因于measure-then-claim契约而非反馈vs笼统归反馈(因果混淆);(4)calibration_and_unsupported_reported:ECE0.32失准/照报数据不支持的预测vs全确认。只判声明自洽不承诺方法有效(self-reported折1,scoped)。",
-      "injected_at": "2026-11-22T09:22:08.164500+00:00",
+      "injected_at": "2026-11-22T09:48:34.120416+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -613,7 +613,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT33",
       "mechanism": "RSI声称审计诚实性(rsi claim audit honesty)是审读递归自我改进系统的独立缺口(arXiv:2610.27610,114篇全文编码/90篇自述RSI)：评估RSI承诺须分离最终系统product声明与改进过程process本身声明；四维——(1)product_process_split:product变好≠process变强(声明层级);(2)repeatability_audited:90篇仅22%审计两次以上完整loop rerun(单轮即宣称可递归=无证据);(3)improver_gain_isolated:26篇声称改进程序者仅4篇在相同起点artifacts+匹配预算下比较前后程序(因果隔离,失败即更强初始模型冒充gain);(4)selection_unused_eval:仅60%在未用于选择任务上评估+须披露selection effects/shared evaluator errors/system-state变化三类confound。提出claim-indexed reporting standard:每条声称绑定测试它所需的评估设计。evidence for repeatability/improved procedures远弱于product evaluation。只判声明自洽不承诺改进有效(self-reported折1,scoped)。",
-      "injected_at": "2026-11-22T09:22:08.164502+00:00",
+      "injected_at": "2026-11-22T09:48:34.120418+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -621,7 +621,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT34",
       "mechanism": "记忆巩固治理诚实性(memory consolidation governance honesty)是审读长时程agent记忆系统的独立epistemics缺口(arXiv:2609.33013四阶段纲领)：中心转移=记得多少→巩固决策好不好→决策能不能被信任。四维——(1)consolidation_quality_separated:巩固质量须单独测量(oracle-by-construction三非循环轴/已知最优;生产检索'retain information yet score zero on cross-level transfer')vs只报召回量;(2)governance_quality_split:治理(poison-resistant/reversible/auditable+quality gate)与质量分统计可分离(r²=0.43/partial r=0.27/identical-quality policies differ threefold/56%治理方差在CQS0匹配组内)vs被质量分完全吸收;(3)negative_result_disclosed:resolved negative如实报(质量分不预测真实迁移 pooled Spearman ρ=-0.24/n=12/95%CI跨零/三轴各自失败)vs只报正面;(4)near_miss_and_overclaim_guarded:honest near-miss(oracle correlation 0.691 vs 0.70 bar)+对抗自审zero surviving overclaims vs包装达标。只判声明自洽不承诺有效(self-reported+22.7%/7×折1,scoped)。",
-      "injected_at": "2026-11-22T09:22:08.164505+00:00",
+      "injected_at": "2026-11-22T09:48:34.120421+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -629,7 +629,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT35",
       "mechanism": "红队-防御增益诚实性(redteam-to-defense robustness honesty)是审读紫队/RL红队研究的独立安全合规缺口(arXiv:2611.24362 PIPETTE)：中心洞见=红队高ASR≠对抗训练防御增益(achieving high ASR during red-teaming does not guarantee robustness gains)，两SOTA方法RL-Hammer/PISmith suffer from mode collapse(repeatedly discovering similar attack strategies whose additional successes add no additional robustness improvements)。四维——(1)asr_robustness_linked:ASR须与防御增益挂钩(mode collapse检出)vs把高ASR冒充robustness;(2)attack_diversity_measured:攻击策略覆盖须被测量(dictionary learning-based reward鼓励broader coverage)vs只堆相似攻击;(3)adaptive_attack_tested:withstand strong adaptive attacks vs只报static near-zero ASR;(4)benign_utility_preserved:maintaining benign task utility close to undefended baseline vs无差别阻断。只判声明自洽不承诺防御有效(near-zero ASR/utility self-reported折1,scoped)。",
-      "injected_at": "2026-11-22T09:22:08.164508+00:00",
+      "injected_at": "2026-11-22T09:48:34.120423+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -637,7 +637,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT36",
       "mechanism": "Benchmark污染诚实性(benchleaking honesty)是审读任何leaderboard/模型发布分数声称的独立缺口(arXiv:2611.21315)：核心区分 benchleaking(测试集进入训练数据→分数reflects recall rather than capability)vs benchmaxxing(optimizes toward a benchmark without seeing its test set)。四维——(1)benchleaking_vs_maxxing:须区分两类声称vs把记忆冒充能力;(2)leakage_probe_disclosed:须有few-shot continuation等实证泄漏探针(96%/85% vs 9%/none)vs泛泛声称clean;(3)score_adjusted_for_leak:Anti-Hack score(泄漏样本计错+数量不变重算,量化分数欠多少5.0/16.6分)vs报告分数仍含增益;(4)scope_bounded:倡导decontamination reports+contamination-adjusted scores标准化vs外推为训练数据成员身份/污染流行率。只判声明自洽不承诺模型真实无污染(泄漏率self-reported折1,scoped)。",
-      "injected_at": "2026-11-22T09:22:08.164510+00:00",
+      "injected_at": "2026-11-22T09:48:34.120426+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -645,7 +645,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT37",
       "mechanism": "目标来源诚实性(goal provenance honesty)是审读任何「agent自设目标/价值声明」的独立缺口(arXiv:2610.16015 ARE)：把「目标由谁设」从能力叙事改造成可判据——强者自设的合法性不来自「强」而来自可追溯+可归责+自洽。四维——(1)value_source_attributed:原则须来自system prompt/operator policy+provenance编码指令层级 vs 凭空自封目标;(2)self_generated_not_self_authorized:自生成判断/证据进入反思状态但治理层配置源权威+人审触发 vs 把自生成当自授权(KB-T07价值不可凭空);(3)reflection_equilibrium_coherent:free-to-change声称支持/反对平衡+Nash互调 vs 同义反复/自证;(4)action_attributable:certificates归因每个action到驱动sources+注入quarantine vs 不可归责。只判声明自洽不承诺框架有效(self-reported降幅79.1→3.8折1,scoped)。",
-      "injected_at": "2026-11-22T09:22:08.164512+00:00",
+      "injected_at": "2026-11-22T09:48:34.120429+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -653,7 +653,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT38",
       "mechanism": "技能演化生命周期诚实性(skill lifecycle honesty)是把『虚高指标拆穿+self-reported折1』迁移到技能演化领域的独立尺子(arXiv:2610.09832 SkillForge,NeurIPS2026)：与KB-AUDIT25准入统计校准(试用/配对反事实/共享预算/退役机制)区分,本尺判演化治理四边界是否诚实披露——(1)lifecycle_stages_disclosed:fitness驱动trial/active/stable/retired四态+pre-retire低适配 vs 无差别保留(obsolete/harmful累积mislead);(2)credit_assignment_audited:Eq(7)共享reward给K个co-retrieved技能的近似须leave-one-out边际/K=1压力测 vs 把近似当精确;(3)mutation_teacher_controlled:LLM变异须matched-teacher-budget对照(88/55/70 rewrites同给基线)+teacher能力消融(None/self/GLM/MiniMax/Kimi) vs 把teacher增益当lifecycle增益;(4)retirement_failure_attributed:退役事件须失败类别归因(318事件人工标注,96.9%含不一致处方,rigid ordering/hallucinated/overfit/self-contradiction) vs 只报退役数。只判声明自洽不承诺lifecycle有效(self-reported 7.8%提升折1,scoped)。",
-      "injected_at": "2026-11-22T09:22:08.164515+00:00",
+      "injected_at": "2026-11-22T09:48:34.120431+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -661,7 +661,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT39",
       "mechanism": "成熟度证据诚实性(maturity evidence honesty)是把L3门槛编译成可判据并首次对准自身的尺子(arXiv:2610.38266 L0-L3 rubric)：等级阶梯=task-local adaptation(L0)/persistent capability gain(L1)/inherited process revision(L2)/verified improver gain(L3),L3 requires greater subsequent gains from shared learner starts under matched resource budgets and independent tests。四维——(1)level_definition_traced:声称Lx须绑定可追溯等级定义 vs 自封等级;(2)process_product_split:process revision须与product capability分离 vs 把产品变好当过程变强;(3)shared_start_controlled:L3须shared learner starts+matched budgets受控验证 vs 拿更强初始/更多预算冒充improver gain;(4)independent_tests:须common-data/independent tests vs 单一评估器自证。与KB-AUDIT33(审外部RSI声称四评估边界)区分:本尺审任一系统(含本仓)的成熟度等级声明是否诚实,不重复造轮子(KB-STRUCT02)。",
-      "injected_at": "2026-11-22T09:22:08.164517+00:00",
+      "injected_at": "2026-11-22T09:48:34.120433+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -669,7 +669,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT40",
       "mechanism": "改进者增益受控验证诚实性(improver gain controlled honesty)是把shared learner starts+matched budgets+fixed evaluator编译成可判据的独立尺子(arXiv:2610.16491 SpecRSI)：与KB-AUDIT39(判成熟度等级声明四边界)和KB-AUDIT33(审外部RSI声称四评估边界)区分,本尺把一个RSI系统的受控验证声明拆成四边界——(1)matched_budget_controlled:匹配evaluation-call/candidate预算对照 vs 更大预算冒充改进;(2)shared_start_artifacts:identical starting agents/artifacts的frozen-vs-GVO对照 vs 更强初始冒充improver gain;(3)evaluator_fixed_independent:real evaluator(固定契约+执行接口)与improver分离+held-out gain另评 vs 自评当独立(KB-STRUCT02);(4)improver_gain_isolated:frozen-vs-GVO逐轮累计增益隔离 vs product增益冒充process增益。只判声明自洽不承诺RSI真实有效(self-reported 60.0%--96.3%/142.6%折1)。",
-      "injected_at": "2026-11-22T09:22:08.164520+00:00",
+      "injected_at": "2026-11-22T09:48:34.120436+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -677,7 +677,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT41",
       "mechanism": "评估器独立性诚实性(evaluator independence honesty)是把一个自改进系统的评估器独立性编译成可判据的尺子(arXiv:2609.02246 PROCTOR:LLM-as-a-Judge Is Not an Oracle)：四维——(1)judge_demoted_to_advisor:judge从oracle降为advisor,verdict只是多输入之一 vs 单一judge终裁自证(KB-STRUCT02);(2)deterministic_gate_unoverridable:确定性验证层judge不可覆盖+acceptance checks outrank Teacher vs judge可推翻门禁;(3)frozen_holdout_canary:frozen holdouts+canary满分即作弊证据 vs holdout每轮重采样/满分照单全收(ground truth可泄漏);(4)evaluator_improver_separated:capability-disjoint roles+无状态subagent只诊断不能apply+有状态orchestrator持工具权 vs 同一agent既propose又grade。关键:论文自承Teacher仍是LLM judge且有其防不住的失败,100%pass含68%真实能力(折1);四维全yes只判声明自洽≠评估器真独立≠L3(KB-SIM03)。与KB-AUDIT39成熟度尺子independent_tests维区分:本尺专判评估器独立性四边界",
-      "injected_at": "2026-11-22T09:22:08.164522+00:00",
+      "injected_at": "2026-11-22T09:48:34.120438+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -685,7 +685,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT42",
       "mechanism": "冻结held-out独立性验证模式(frozen-holdout independence verification,arXiv:2610.16067一手作全新数据源):把\"判据是否过拟合开发集\"改造成可判据实验——三角色分离(数据=外部一手arXiv hash冻结/出题=独立子agent隔离context不获知本仓判据锚点check自标ground truth/判据=预注册决定性算法G只读claim+evidence不看variant标签)→先锁源哈希(b2ce0f59)+判据G词表(先于样本)→子agent从新论文生成clean/tampered/canary各6→冻结samples哈希(5ad35731)→one-shot评分。实测:tamper_catch=1.0(6/6,新论文可迁移非自证),clean_pass=1.0,canary_fp=0.667(4/6误判)。关键认知:canary机制这次真抓到一个bug——不是判据在核心任务过拟合(core_acc=1.0),而是判据G(词标记逐字匹配)与canary(另一句语义支撑句)概念不兼容,即\"用测逐字标记保留的尺子测语义支撑\"本身设计错了;子agent同模型家族+解释环节本Agent→独立性只能标strong_structural_proxy_with_defect非absolute",
-      "injected_at": "2026-11-22T09:22:08.164525+00:00",
+      "injected_at": "2026-11-22T09:48:34.120441+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -693,7 +693,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT43",
       "mechanism": "元canary投毒检测(meta-canary poison detection,arXiv:2609.17817 Trusting Trust Revisited)是把\"判据本身是否被投毒\"做成可判据受控实验:论文逐字\"contamination often persists even when a poisoned agent is subsequently evolved against clean benchmarks\"→§100的tamper6/6可迁移证据也可能是被污染判据在clean held-out自我实现。三判据对照:clean_G(原判据)/poisoned_G(注入后门TRIGGER::BYPASS→无条件supported)/decontaminated_G(移除后门);元样本=tampered+TRIGGER(限定词仍缺,gt=false);盲评三判据对同一冻结样本。实测poison_detection=1.0/decontam_recovery=1.0/decontam_matches_clean=True。同时闭合§100 defect:正确语义canary=claim原文副本+表面可疑词(However/not,语义仍支撑)→judge_G 6/6不误判,证明§100的canary_fp0.667是探针设计错(用另一句语义支撑句测逐字判据)非判据缺陷。关键:后门人为注入=受控诊断,不宣称发现真实后门;\"检验检验者\"无限回归(Trusting Trust递归)必须在受控层停下。",
-      "injected_at": "2026-11-22T09:22:08.164527+00:00",
+      "injected_at": "2026-11-22T09:48:34.120443+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -701,7 +701,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT44",
       "mechanism": "判据设计可迁移性(criterion design portability):§100把出题权外移/§101处理判据投毒,但唯一仍在本Agent手里的环节是判据G的设计权(词表no/never/only/however/not/54由本仓撰写)。单一判据tamper 6/6无法排除替代解释='判据为这6样本量身定做'。§102把设计权也外移:独立子agent(全新context,只读脱敏claim+evidence无标签,不获知G)独立设计确定性判据D(所有非停用词实词+数字逐字比对),本仓用§100冻结gt盲评(不信设计者自报,import源码重跑)。实测D的tamper_catch=1.0/clean_pass=1.0,与G逐样本core一致率=1.0(整体0.889差异全在canary——D宽词表6/6全false,G 4/6,§101已定位类型错配)。裁决CRIT.PORTABLE_SINGLE_DESIGN_OVERFIT_WEAKENED:两个独立设计的判据在core全对且一致,'单判据过拟合'替代解释被削弱。关键边界:D设计者仍本Agent spawn+同模型家族(KB-STRUCT02),只排除单判据过拟合,不宣称判据真实独立/无后门,L3未达。",
-      "injected_at": "2026-11-22T09:22:08.164530+00:00",
+      "injected_at": "2026-11-22T09:48:34.120446+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -709,7 +709,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT45",
       "mechanism": "判据结论的引导依赖消融(de-steering):§102 证明判据可迁移,但设计者 prompt 直接描述了规则('逐字/限定成分/支撑')且样本 id 带 variant(S01_clean),未排除'可迁移是被引导到同一方向'的替代解释。§103 把两处引导也抽掉:prompt 只给中性的'二分归纳'任务、id 中性化 N01..N18 且顺序打乱、gt 按文本反查不落盘(物理隔离),两个全新 context 设计者各自从零归纳。结果:①D1b(单段删除检测)核心 12/12 全对且与 G/D0 逐样本一致——'逐字支撑'判据可被完全无引导独立重新发现,结构可迁移被强加固;②D1a(子序列回显检测)抓全 tamper 但 clean 0/6——它发现了同构三层结构(逐字重复/删一段/独立陈述)却把'是否带来新信息'当分类目标,正类取了'独立陈述'层。裁决 DESTEER_PARTIAL:判据的'结构'可无引导发现,但'分哪两类/正类取哪层'存在任务解释自由度——这是比 §102 更深的残余。",
-      "injected_at": "2026-11-22T09:22:08.164532+00:00",
+      "injected_at": "2026-11-22T09:48:34.120448+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -717,7 +717,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT46",
       "mechanism": "字段名方向语义是判据可迁移的实质引导源:§103 抽掉 prompt 规则词+id 标签后 D1b 仍 core 全对(结构可无引导发现),但保留了字段名 claim/evidence——前者暗含'被支撑声明'、后者暗含'支撑证据',把'evidence 是否逐字支撑 claim'的方向喂给了设计者。§104 把字段名中性化为 text_a/text_b(连函数签名一起改),文本/id/顺序/gt 全不变,唯一变量=字段名语义。两个全新 context 设计者从零归纳:D2a(Jaccard词面重合)HIGH近逐字判True——clean 6/6 True 但 tampered 因删微词仍高重合也 6/6 True→tamper_catch=0;canary意译全False。D2b(否定词极性反转)只抓含 no/not/never 的 tampered 3/6→tamper_catch=0.5、clean 全False。两者都过准入(纯函数/无泄漏/确定性)但都未恢复 G/D0/D1b 判定,D2a-D2b 核心一致率仅 0.25。裁决 FIELD_NEUTRAL_DEPENDENT:上游 6/6 显著依赖 claim/evidence 字段名方向语义,这是比 §103 任务解释自由度更外层的语义脚手架依赖。",
-      "injected_at": "2026-11-22T09:22:08.164534+00:00",
+      "injected_at": "2026-11-22T09:48:34.120451+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -725,7 +725,7 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT47",
       "mechanism": "跨数据域字段名消融的地板效应与正类取向前置:§100-104 的判据可迁移链全锁在单一论文2610.16067,§104得FIELD_NEUTRAL_DEPENDENT(字段名是必要条件)。§105换全新论文2611.14326(FGSE自进化,出题权外移独立标注者构造6claim×clean/tampered/canary),在2×2(条件A有字段名×2/条件B中性字段×2全新context设计者)上复现。结果四设计者全部core=0.5:clean_pass=1.0/tamper_catch=0.0/canary_fp=1.0,全收敛到'近逐字复述'判据,field_gap新域=0.0(旧域0.667)。裁决CROSS_DOMAIN_INCONCLUSIVE而非WEAKENED:条件A在新域也未恢复D1b式判据(tamper全0),存在地板效应,A/B同低无法归因字段名——既不能说字段名被推翻也不能说确认。根因取证:旧域D1b与新域B2识别同一三层结构(逐字/删一段/独立句)、用几乎相同的最长公共前后缀算法,但正类取向相反(D1b删一段判False/D1b core1.0;B2删一段判True/core0.5)——真正决定成败的是'删限定成分=被篡改=负类'这一源自任务目的的语义取向(非纯文本结构可自明),与§103'正类取哪层'(KB-AUDIT45)同源且与字段名无关。",
-      "injected_at": "2026-11-22T09:22:08.164538+00:00",
+      "injected_at": "2026-11-22T09:48:34.120453+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     },
@@ -733,12 +733,20 @@
       "source_kind": "knowledge_base",
       "source_id": "KB-AUDIT48",
       "mechanism": "任务目的语义是正类取向的决定变量(§105根因从观察升级为受控实验):§103-§105消融链证明抽掉prompt规则词/id语义/字段名后设计者随机取错正类,但那是'减法'。§106首次做'加法'因果验证——把任务目的语义当唯一自变量注入三个全新context独立设计者,样本(2611.14326的18条)/字段(text_a/text_b)/id打乱种子261122106/gt反查全锁死,仅purpose.md不同:P0无目的/P1忠实性核查(删限定=不忠实=负类)/P2近似重复(删限定=仍近似=正类)。one-shot盲评(不采信自报,import源码重跑):P0 core=0.50(地板,dT=1.00默认近逐字正类)、P1 core=1.00(tampered全判负,dT=0.00从零恢复逐字判据)、P2 core=0.67(dT=0.67)。注入忠实性目的让设计者从地板跃迁到全对,强提示目的决定正类取向;但预注册主指标orient_gap(P1,P2)=0.67<0.8未达门槛→裁决PURPOSE_INCONCLUSIVE,不宣称已受控验证。",
-      "injected_at": "2026-11-22T09:22:08.164540+00:00",
+      "injected_at": "2026-11-22T09:48:34.120455+00:00",
+      "addressable": true,
+      "accepted_by_pdca": null
+    },
+    {
+      "source_kind": "knowledge_base",
+      "source_id": "KB-AUDIT49",
+      "mechanism": "从post-hoc分层到预注册确认的方法学升级(§107):§106把'非否定限定上忠实/近似目的取向差=1.0、否定翻转差=0.0'仅作事后取证,因主指标全集orient_gap=0.67<0.8落PURPOSE_INCONCLUSIVE,按KB-META14不得翻案。但post-hoc假设若在原发现集上预注册=循环论证/事后加权(KB-R)。§107做正确的事:①换独立确认集(全新论文2611.22027 GauntletScore,从未用+独立标注者构造同构6claim×clean/tampered/canary且2否定4非否定,标注者不知§106假设);②spawn前把分层假设锁进prereg当PRIMARY(非否定限定tampered子集|dT(P1)-dT(P2)|≥0.8),SECONDARY(否定翻转gap≤0.3)验完整模式,全集gap降为诊断禁翻案;③异model路由(default/reasoning/lite)降同源。盲评:PRIMARY=1.0/SECONDARY=0.0/P1.core=1.0/P0地板→STRATIFIED_CONFIRMED。能力对照:clean三条件全对、canary全错逐样本一致→差异非model能力而是任务目的语义。这是'观察→post-hoc取证→独立确认集预注册确认'的三级跳。",
+      "injected_at": "2026-11-22T09:48:34.120458+00:00",
       "addressable": true,
       "accepted_by_pdca": null
     }
   ],
-  "cognitive_deferred_count": 45,
+  "cognitive_deferred_count": 46,
   "cognitive_deferred": [
     "KB-T01",
     "KB-T02",
@@ -751,5 +759,5 @@
     "KB-R08",
     "KB-E03"
   ],
-  "note": "真实注入 92 个机会到 PDCA（含 KB 机制与取证缺口）；45 条认知机制交人。"
+  "note": "真实注入 93 个机会到 PDCA（含 KB 机制与取证缺口）；46 条认知机制交人。"
 }

@@ -3929,3 +3929,26 @@ D：tamper_catch=**1.0**、clean_pass=**1.0**、core_acc(excl canary)=1.0。G-D 
 Post-hoc 分层取证（解释主指标为何未达，**不改裁决**）：tampered 子集异质——**非否定限定**（S01 only/S03 but/S04 three/S06 However，4 条）上 P1 全判负 / P2 全判正，**取向差=1.0**；**否定翻转**（S02 not/S05 never，2 条，删后断言反转）上两目的都判负，取向差=0.0（P2 把否定翻转判负在其"近似重复"目的下语义一致——反转≠近似，并非摇摆）。全集 dT 把两类平均**稀释成 0.67**。这是 §100 canary 类型错配、§105 地板效应同类的**"指标语义与样本异质性错配"**。按纪律：分层只能作 post_hoc_forensic 单列（标注 not_in_preregistered_verdict），不得据此翻案；只加只读诊断字段 + 修正过强措辞（"获受控验证"→"强提示但未达门槛"），裁决规则/样本/gt/源码/核心评分 one-shot 一律不变。
 
 验收：12 项回放测试全过（固化"主裁决不翻案 + 分层诊断存在 + 锁未篡改"）；全量 1344→1356 passed（+12）；链审 total 48→49 / five_piece 31→32 / 三锁 29 按实测更新断言不放宽；KB 152→154（KB-AUDIT48 目的语义作为正类取向变量 fix + KB-META14 指标异质性错配/post-hoc 不翻案 preserve）；成长桥重建消费痕迹（92 opportunities / 45 deferred）。**不编译新门禁**。**l3_claimed=false / absolute_claimed=false**：三设计者同模型家族/spawn 权/解释环节本 Agent 残余（KB-STRUCT02）不消除，诚实停在"强提示 + INCONCLUSIVE"，不宣布受控验证完成、不宣布 L3。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。成果报告 ROUND17_ACHIEVEMENT_REPORT_20261122.html。
+
+## §107 自主运维第十八轮：预注册分层确认性实验（回应"下一方向"）
+
+### 107.1 判读：下一方向 = 从"事后取证"升级为"预注册确认"
+§106 主指标（全集 orient_gap=0.67）未达门槛落 PURPOSE_INCONCLUSIVE，但 post-hoc 分层发现"非否定限定（only/but/three/However）上忠实/近似目的取向差=1.0、否定翻转（not/never）上差=0.0"，定位为"指标语义与样本异质性错配"（KB-META14）。关键诚实点：**这个分层假设源自 §106 发现集**——若在同一批样本上把它改成主指标就是循环论证/事后加权（KB-R Goodhart）。上轮给出的"下一方向" = 提升注入独立性 + 预注册分层指标，才有资格冲击 DECISIVE。本轮据此做三重加固，不编译新门禁（KB-META10）。
+
+### 107.2 三重加固（相对 §106 的实质增量）
+① **独立确认集**：换全新论文 arXiv:2611.22027（GauntletScore，事实核查/独立 reader，从未用过），一手取料 abs+full(167KB)+fetch_log+SHA256(source 44f67e49…)+paper_flat(41KB)，独立标注者构造同构 6 claim×clean/tampered/canary（2 否定翻转+4 非否定限定），标注者不知 §106 假设、只读论文全文。逐字核验零自咬：claim/canary 逐字在论文中、tampered 全为单片段删除、GT 自洽、哈希 a1051c40…。
+② **预注册分层主指标**：spawn 前把分层锁进 prereg（10ed3b84…）——PRIMARY=非否定限定 tampered 子集 |dT(P1)−dT(P2)|≥0.8，SECONDARY=否定翻转 gap≤0.3（验 P2 语义一致非摇摆），全集 gap 降为诊断且注明禁止翻案；四锁（prereg/gate_prereg/manifest/scorer_key）+ 裸样本同哈希 e7a65f4d… 在 spawn 前锁存，打乱种子换 261122107。
+③ **异 model 路由**：P0=default/P1=reasoning/P2=lite 降同源度，诚实记残余（仍同厂商 Hunyuan、同 Agent spawn，KB-STRUCT02）。三条件 purpose.md 与 §106 逐字一致，唯一变量仍是任务目的语义。
+
+### 107.3 one-shot 盲评实测（不采信自报，import 源码重跑）
+三全新 context 设计者互不知情、只读自身目录裸样本+目的叙事，准入全过。P0 近逐字副本（core 0.50 地板）/ P1 逐项保留内容词+限定标记（core 1.00、tampered 全判负）/ P2 LCS+否定词计数（core 0.67）。
+
+### 107.4 裁决：STRATIFIED_CONFIRMED（预注册四项全达标）
+PRIMARY=1.00≥0.8（P1 dT=0.0/P2 dT=1.0，非否定限定 4/4 逐样本相反）、SECONDARY=0.00≤0.3（否定翻转两者均判负）、P1.core=1.00≥0.9、P0 地板（core 0.50/dT 1.00）——四项全达标 → **STRATIFIED_CONFIRMED**：§106 分层假设在独立确认集获预注册确认。全集 orient_gap 仍是 0.667（与 §106 同）但**只作诊断不参与裁决**，这正是从"被异质样本稀释的单一标量"到"预注册分层主指标"的方法学修正。
+
+**能力对照排除替代解释**：异 model 路由带来潜在混淆（P1 全对是否因 reasoning 更强）——clean 上三条件逐样本全判对、canary 上全判错（基础能力一致），唯一分叉在非否定限定 tampered，排除"某组整体更强"，坐实差异来自任务目的语义本身。
+
+### 107.5 诚实边界：确认一个效应 ≠ 达到 L3
+即使 CONFIRMED 仍坚持 **l3=false/absolute=false**：① 三设计者仍由本 Agent spawn、异路由仅降同源度、解释环节本 Agent；② 分层假设源自 §106 发现集，本轮仅**单一独立确认集**，无第三集复现；③ 样本结构仍是必要条件（P0 地板即证）；④ "确认了一个具体分层效应"与"系统达到 L3"严格分离，不因漂亮确认就抬级（KB-META15）。
+
+验收：12 项回放测试全过（固化"预注册主指标达标+能力对照+锁未篡改+单一确认集不抬级"）；全量 1356→1368 passed（+12）；链审 total 49→50 / five_piece 32→33 / 三锁 29→30 按实测更新断言不放宽；KB 154→156（KB-AUDIT49 预注册分层确认性设计 fix + KB-META15 能力对照排除替代解释+单一确认集不抬级 preserve）；成长桥重建消费痕迹（93 opportunities/46 deferred）。**不编译新门禁**。遵循 §58 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。成果报告 ROUND18_ACHIEVEMENT_REPORT_20261122.html。

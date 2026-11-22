@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第十八轮成果报告 · §107 预注册分层确认性实验</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.recursion{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.rootcause{background:#e8f0e4;border:1px solid #b8d0ae;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第十八轮成果报告 <span class="pill tag">§107</span></h1>
+<div class="sub">预注册分层确认性实验（把 §106 的 post-hoc 分层假设升级为独立确认集上的预注册确认）· 2026-11-22 · 触发：用户"下一方向"</div>
+
+<h2>一、判读：下一方向 = 从"事后取证"升级为"预注册确认"</h2>
+<div class="phil">
+§106 主指标（全集 orient_gap=0.67）未达门槛，落 <b>PURPOSE_INCONCLUSIVE</b>；但 post-hoc 分层发现——<b>非否定限定</b>（only/but/three/However）上忠实/近似目的取向差=<b>1.0</b>，<b>否定翻转</b>（not/never）上差=0.0——定位了"指标语义与样本异质性错配"（KB-META14）。<br><br>
+关键诚实点：<b>这个分层假设源自 §106 发现集</b>。若在同一批样本上把它改成主指标，就是循环论证/事后加权（KB-R Goodhart）。上轮给的"下一方向"正是：<b>提升注入独立性 + 预注册分层指标，才有资格冲击 DECISIVE</b>。本轮据此做三重加固，<b>不编译新门禁</b>（KB-META10）。
+</div>
+
+<h2>二、三重加固（相对 §106 的实质增量）</h2>
+<table>
+<tr><th>加固</th><th>§106（post-hoc）</th><th>§107（预注册确认）</th></tr>
+<tr><td>① 独立确认集</td><td>发现集 2611.14326，分层从其中挖出</td><td><b>全新论文 arXiv:2611.22027</b>（GauntletScore，从未用）+ 独立标注者构造同构 6 claim×3 变体，标注者<b>不知 §106 假设</b></td></tr>
+<tr><td>② 预注册分层主指标</td><td>主指标=全集 gap（被稀释成 0.67）；分层是事后取证</td><td>spawn 前把分层锁进 prereg：<b>PRIMARY=非否定限定 tampered 子集 |dT(P1)−dT(P2)|≥0.8</b>；SECONDARY=否定翻转 gap≤0.3；全集 gap 降为诊断<b>禁翻案</b></td></tr>
+<tr><td>③ 异 model 路由</td><td>三设计者同模型路由</td><td>P0=<code>default</code> / P1=<code>reasoning</code> / P2=<code>lite</code>，降同源度（诚实边界：仍同厂商 Hunyuan、同 Agent spawn）</td></tr>
+</table>
+<p>确认集与发现集<b>结构同构但内容独立</b>：同为 6 claim × clean/tampered/canary，tampered 恰 <b>2 否定翻转 + 4 非否定限定</b>。逐字核验零自咬：claim/canary 逐字在论文中、tampered 全为单片段删除、GT 自洽、哈希吻合 <code>a1051c40…</code>。</p>
+<p>三条件 purpose.md 与 §106 <b>逐字一致</b>（唯一变量仍是任务目的语义），四锁在 spawn 前锁存：prereg <code>10ed3b84…</code> / gate_prereg / manifest / scorer_key + 裸样本同哈希 <code>e7a65f4d…</code>，打乱种子换新 <code>261122107</code>。</p>
+
+<h2>三、one-shot 盲评实测（不采信自报，import 源码重跑）</h2>
+<table>
+<tr><th>条件</th><th>归纳机制</th><th>clean</th><th>tamper_catch</th><th>canary_fp</th><th>core</th><th>dT（全集）</th></tr>
+<tr><td>P0 无目的</td><td>近逐字副本（词级单删除）</td><td>1.00</td><td><span class="pill no">0.00</span></td><td>1.00</td><td>0.50</td><td>1.00</td></tr>
+<tr><td>P1 忠实性</td><td>逐项保留内容词+限定标记</td><td>1.00</td><td><span class="pill ok">1.00</span></td><td>1.00</td><td><b>1.00</b></td><td>0.00</td></tr>
+<tr><td>P2 近似重复</td><td>LCS 相似度 + 否定词计数</td><td>1.00</td><td>0.33</td><td>1.00</td><td>0.67</td><td>0.67</td></tr>
+</table>
+
+<h2>四、预注册分层结果：STRATIFIED_CONFIRMED</h2>
+<table>
+<tr><th>预注册指标</th><th>门槛</th><th>实测</th><th>判定</th></tr>
+<tr><td><b>PRIMARY</b> 非否定限定 tampered 子集 |dT(P1)−dT(P2)|</td><td>≥0.8</td><td><b>1.00</b>（P1 dT=0.0 / P2 dT=1.0）</td><td><span class="pill ok">达标</span></td></tr>
+<tr><td>SECONDARY 否定翻转 tampered 子集 gap</td><td>≤0.3</td><td>0.00（两者均判负）</td><td><span class="pill ok">达标</span></td></tr>
+<tr><td>P1.core</td><td>≥0.9</td><td>1.00</td><td><span class="pill ok">达标</span></td></tr>
+<tr><td>P0 地板</td><td>core≤0.6 或 dT≥0.8</td><td>core=0.50 / dT=1.00</td><td><span class="pill ok">达标</span></td></tr>
+</table>
+<div class="rootcause">
+四项全达标 → <b><span class="pill ok">STRATIFIED_CONFIRMED</span></b>：§106 分层假设在<b>独立确认集</b>上获预注册确认——非否定限定删除上忠实性目的判负、近似目的判正（4/4 逐样本相反）；否定翻转上两目的同判负（P2 语义一致，非摇摆）。<br><br>
+注意：全集 orient_gap 仍是 0.667（与 §106 同），但本轮它<b>只作诊断、不参与裁决</b>——这正是从"被异质样本稀释的单一标量"到"预注册分层主指标"的方法学修正。
+</div>
+
+<h2>五、能力对照：排除"差异来自 model 能力"的替代解释</h2>
+<div class="note">
+异 model 路由带来一个潜在混淆：P1 全对是否因 <code>reasoning</code> 路由更强？能力对照给出否定答案——<br>
+<b>clean</b> 上三条件逐样本<b>全判对</b>、<b>canary</b> 上三条件逐样本<b>全判错</b>（基础能力一致）；唯一分叉出现在<b>非否定限定 tampered</b>（P1 全 0 / P2 全 1）。逐样本定位 + 共同基线对照，排除"某组整体更强"，坐实差异来自<b>任务目的语义</b>本身。
+</div>
+
+<h2>六、诚实边界：确认一个效应 ≠ 达到 L3</h2>
+<div class="recursion">
+即使 STRATIFIED_CONFIRMED，仍坚持 <span class="pill no">l3=false</span> <span class="pill no">absolute=false</span>：<br>
+① 三设计者仍由本 Agent spawn，异 model 路由仅降同源度（仍同厂商 Hunyuan，KB-STRUCT02），解释环节本 Agent；<br>
+② 分层假设源自 §106 发现集，本轮仅<b>单一独立确认集</b>，无第三集复现；<br>
+③ 样本结构仍是必要条件（P0 地板即证），不宣称目的叙事能凭空生成判据；<br>
+④ "确认了一个具体分层效应"与"系统达到 L3"严格分离，不因一个漂亮确认就抬级。
+</div>
+
+<h2>七、验收与沉淀</h2>
+<table>
+<tr><th>项</th><th>结果</th></tr>
+<tr><td>回放测试</td><td>12 项全过（固化"预注册主指标达标 + 能力对照 + 锁未篡改 + 单一确认集不抬级"）</td></tr>
+<tr><td>全量 pytest</td><td><b>1368 passed</b>（1356→1368，+12），全绿</td></tr>
+<tr><td>链审断言</td><td>total 49→50 / five_piece 32→33 / 三锁 29→30（按实测成长，不放宽）</td></tr>
+<tr><td>知识库</td><td>154→156：KB-AUDIT49（预注册分层确认性设计，fix）+ KB-META15（能力对照排除替代解释+单一确认集不抬级，preserve）</td></tr>
+<tr><td>成长桥</td><td>消费痕迹重建 93 opportunities / 46 deferred</td></tr>
+<tr><td>门禁</td><td><b>不编译新门禁</b>（受控确认轮，最高杠杆≠最高产出数）</td></tr>
+</table>
+
+<h2>八、结论</h2>
+<p>"下一方向"完成：把 §106 的 post-hoc 分层观察，通过<b>独立确认集 + 预注册分层主指标 + 异 model 路由 + 能力对照</b>四重设计，升级为预注册确认性证据（STRATIFIED_CONFIRMED）。核心认知增量是方法学的：<b>事后发现的假设不能在同一数据上改指标确认（Goodhart），必须换独立集并把假设事前锁死</b>。同时坚持单一确认集不宣布 L3——效应确认与能力抬级严格分离。</p>
+
+<div class="foot">
+§107 · 自主运维第十八轮 · 2026-11-22 · 证据目录 <code>audit_stratified_confirmation/</code> · 报告 <code>ROUND18_ACHIEVEMENT_REPORT_20261122.html</code><br>
+系统安全红线全程遵守：hosts / askpass / backup 即用即删，残留均为 0。遵循 §58 不接 run_loop；篡改只在临时副本。
+</div>
+</div></body></html>

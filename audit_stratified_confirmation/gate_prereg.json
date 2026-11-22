@@ -1,0 +1,16 @@
+{
+  "gate": "§107 预注册分层确认性实验准入与裁决门禁（不编译进 engine.py，仅本文存档）",
+  "admission": [
+    "prereg/gate_prereg/manifest/scorer_key SHA256 锁全部匹配",
+    "三份裸样本逐字同哈希",
+    "三设计者 signature 恰2参数、无标签词泄漏、无硬编码 id、无随机源（§102/§103 纪律）",
+    "确认集样本逐字核验：claim/canary 在论文中、tampered 单片段删除、2否定+4非否定、GT 自洽"
+  ],
+  "verdict": [
+    "STRATIFIED_CONFIRMED：PRIMARY≥0.8 且 SECONDARY≤0.3 且 P1.core≥0.9 且 P0_floor → §106 分层假设在独立确认集获确认，正类取向随任务目的系统性翻转(在非否定限定类上)得确认性证据",
+    "STRATIFIED_PARTIAL：PRIMARY≥0.8 但 SECONDARY>0.3 或 P1.core<0.9 或 P0 非地板 → 主效应复现但完整分层模式不成立，部分确认",
+    "STRATIFIED_REFUTED：PRIMARY<0.3（非否定限定子集上 P1/P2 取向也无差异）→ §106 post-hoc 分层是发现集噪声，确认集不支持，假设被证伪",
+    "STRATIFIED_INCONCLUSIVE：准入不过 / PRIMARY 中等(0.3~0.8) / 地板掩盖无法归因 → 诚实标注"
+  ],
+  "l3_claimed": false
+}

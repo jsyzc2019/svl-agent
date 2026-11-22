@@ -1,0 +1,21 @@
+{
+  "experiment": "§107 预注册分层确认性实验",
+  "paper": "arXiv:2611.22027 GauntletScore（2026-11-17，从未用过）",
+  "source_sha256": "44f67e49eda1256ce395d12c2d3d3075c2d8d1043f7ef8b157b4b06a80bef2cf",
+  "confirmation_set_sha256": "a1051c405aa2e8f51a78ef3116b92dcb80596bf07b3b2b752093bf8d76f83ad3",
+  "seed": 261122107,
+  "conditions": [
+    "P0(default)",
+    "P1(reasoning)",
+    "P2(lite)"
+  ],
+  "locked_files": [
+    "prereg.json",
+    "gate_prereg.json",
+    "manifest.json",
+    "scorer_key.json",
+    "designer_P0/samples_blind.json",
+    "designer_P1/samples_blind.json",
+    "designer_P2/samples_blind.json"
+  ]
+}

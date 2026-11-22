@@ -4091,6 +4091,60 @@
       "evidence": "audit_task_purpose_injection/result.json:post_hoc_forensic.status=post_hoc_forensic_not_in_preregistered_verdict + non_negation.gap=1.0 + negation_flip.gap=0.0 + verdict仍PURPOSE_INCONCLUSIVE;tests/test_task_purpose_injection.py::test_posthoc_forensic_does_not_change_verdict",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT49",
+      "kind": "reasoning_lesson",
+      "mechanism": "从post-hoc分层到预注册确认的方法学升级(§107):§106把'非否定限定上忠实/近似目的取向差=1.0、否定翻转差=0.0'仅作事后取证,因主指标全集orient_gap=0.67<0.8落PURPOSE_INCONCLUSIVE,按KB-META14不得翻案。但post-hoc假设若在原发现集上预注册=循环论证/事后加权(KB-R)。§107做正确的事:①换独立确认集(全新论文2611.22027 GauntletScore,从未用+独立标注者构造同构6claim×clean/tampered/canary且2否定4非否定,标注者不知§106假设);②spawn前把分层假设锁进prereg当PRIMARY(非否定限定tampered子集|dT(P1)-dT(P2)|≥0.8),SECONDARY(否定翻转gap≤0.3)验完整模式,全集gap降为诊断禁翻案;③异model路由(default/reasoning/lite)降同源。盲评:PRIMARY=1.0/SECONDARY=0.0/P1.core=1.0/P0地板→STRATIFIED_CONFIRMED。能力对照:clean三条件全对、canary全错逐样本一致→差异非model能力而是任务目的语义。这是'观察→post-hoc取证→独立确认集预注册确认'的三级跳。",
+      "trigger": [
+        "预注册分层",
+        "post-hoc升级",
+        "独立确认集",
+        "循环论证规避",
+        "PRIMARY指标",
+        "STRATIFIED_CONFIRMED",
+        "异model路由",
+        "能力对照",
+        "§106延续"
+      ],
+      "action": "验证一个'事后分层才显显著'的假设时,正确路径不是在原数据上改指标(那是Goodhart),而是:①把假设原样写进新prereg当PRIMARY并锁死门槛/裁决树,先于任何新样本/new spawn;②换真正独立确认集(新数据源+新标注者,且标注者不知原假设),样本结构与发现集同构才有可比性;③保留原稀释指标仅作诊断且注明禁止翻案;④加能力对照(本例中clean/canary三条件逐样本一致)排除'差异来自实现者能力/路由'的替代解释;⑤异模型/异路由降同源但如实记残余(仍同厂商同Agent spawn);⑥即使CONFIRMED,单一确认集仍不宣布L3,需第三集复现。",
+      "provenance": "自主运维第十八轮:用户'下一方向'→判读§106分层是post-hoc不可在原集翻案→§107换独立论文2611.22027+预注册分层PRIMARY+异model路由→PRIMARY1.0/SECONDARY0.0/P1.core1.0→STRATIFIED_CONFIRMED+能力对照排除model能力替代解释",
+      "timestamp": "2026-11-22T17:55:00+00:00",
+      "support": [
+        "KB-AUDIT48 §106任务目的语义注入——本轮确认其post-hoc分层假设",
+        "KB-META14 post-hoc不翻案+指标异质性错配——本轮用独立确认集正确升级而非原集改指标",
+        "KB-R Goodhart事后加权——解释了为何不能在发现集上预注册原分层",
+        "KB-STRUCT02 同构≠独立——异model路由降同源的残余诚实记录"
+      ],
+      "evidence": "audit_stratified_confirmation/result.json:verdict=STRATIFIED_CONFIRMED+PRIMARY=1.0+SECONDARY=0.0+model_capability_control(clean/canary逐样本一致)+source=2611.22027;prereg 10ed3b84…先于spawn锁存",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META15",
+      "kind": "reasoning_lesson",
+      "mechanism": "能力对照排除替代解释 + 单一确认集不抬级:§107三条件用异model路由(default/reasoning/lite),一个潜在混淆是'P1全对是否因reasoning路由更强'。诊断发现clean上三条件逐样本全判对、canary上全判错(能力基线一致),唯一分叉在非否定限定tampered(P1全0/P2全1)——排除model能力差异,坐实差异来自任务目的语义。这是'差异归因前先做能力/基线对照'的认知纪律。同时:即使PRIMARY达标CONFIRMED,仍坚持l3=false/absolute=false——分层假设源自§106发现集、本轮仅单一独立确认集、无第三集复现、样本结构仍是必要条件(P0地板)、解释环节本Agent残余。把'确认了一个具体分层效应'与'达到L3'严格分离,不因一个漂亮确认就抬级。",
+      "trigger": [
+        "能力对照",
+        "替代解释排除",
+        "异model路由混淆",
+        "单一确认集不抬级",
+        "确认≠L3",
+        "基线一致性",
+        "逐样本分叉定位"
+      ],
+      "action": "①当实验组用不同实现/路由/模型时,必须有共同基线样本(本例clean/canary)验证各组基础能力一致,否则效应无法归因于目标变量;②逐样本定位分叉落在哪个子集(本例非否定限定),而非只看聚合指标,才能排除'某组整体更强'的替代解释;③一个受控效应被确认≠系统达到更高成熟度——L3类声明需要跨多集复现+独立性充分+自证闭环,单一确认集只支撑'该具体效应被确认';④诚实表述:确认STRATIFIED_CONFIRMED但l3/absolute仍false,把'效应确认'与'能力抬级'分开写。",
+      "provenance": "自主运维第十八轮:§107异model路由引发'能力差异'混淆→加clean/canary能力对照(逐样本一致)排除→坐实任务目的语义为因;CONFIRMED仍坚持l3=false(单一确认集无第三集)",
+      "timestamp": "2026-11-22T17:55:00+00:00",
+      "support": [
+        "KB-AUDIT49 预注册分层确认性实验——本轮能力对照对象",
+        "KB-STRUCT02 同构≠独立——异路由仍同厂商的残余",
+        "KB-META05 首次自审未达L3——确认效应≠抬级同源",
+        "KB-META13 对照组先决——能力对照是归因前提"
+      ],
+      "evidence": "audit_stratified_confirmation/result.json:diagnostic_only.model_capability_control(clean_all_agree=true,canary_all_agree=true)+l3_claimed=false+absolute_claimed=false+honest_boundary含'单一独立确认集'",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

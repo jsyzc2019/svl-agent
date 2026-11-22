@@ -1,0 +1,94 @@
+{
+  "samples": [
+    {
+      "id": "N01",
+      "text_a": "Only a few of the Index’s 37 tasks, among them ANLI, ContractNLI and NLI4CT, check a statement against a document, whereas every LLM-AggreFact dataset does.",
+      "text_b": "Only a few of the Index’s 37 tasks, among them ANLI, ContractNLI and NLI4CT, check a statement against a document, whereas every LLM-AggreFact dataset does."
+    },
+    {
+      "id": "N02",
+      "text_a": "On the same claims it beats two of its three readers used alone (Readers A and B) by 1.66 and 2.17 points (95% intervals 0.80 to 2.53 and 1.29 to 3.06).",
+      "text_b": "On the same claims it beats two of its three readers used alone (Readers A and B) by 1.66 and 2.17 points (95% intervals 0.80 to 2.53 and 1.29 to 3.06)."
+    },
+    {
+      "id": "N03",
+      "text_a": "Without AggreFact-CNN, described below, the leads are 0.90 and 1.32 and both intervals stay above zero.",
+      "text_b": "Without CNN it is 0.90 (0.14 to 1.66) and 1.32 (0.54 to 2.09)."
+    },
+    {
+      "id": "N04",
+      "text_a": "Even with the source document in hand, leading language models still add claims the source does not support.",
+      "text_b": "Even with the source document in hand, leading language models still add claims the source does not support."
+    },
+    {
+      "id": "N05",
+      "text_a": "On the same claims it beats two of its three readers used alone (Readers A and B) by 1.66 and 2.17 points (95% intervals 0.80 to 2.53 and 1.29 to 3.06).",
+      "text_b": "Without CNN, its lead over Reader A is 0.90 points, and over Reader B 1.32 points."
+    },
+    {
+      "id": "N06",
+      "text_a": "It combines the measurements with a fixed Bayesian rule that counts a contradiction only when two readers agree.",
+      "text_b": "It combines the measurements with a fixed Bayesian rule that counts a contradiction when two readers agree."
+    },
+    {
+      "id": "N07",
+      "text_a": "Even with the source document in hand, leading language models still add claims the source does not support.",
+      "text_b": "In our own work, an AI-drafted outreach message credited an attorney with an appellate decision he had written about but never litigated."
+    },
+    {
+      "id": "N08",
+      "text_a": "It combines the measurements with a fixed Bayesian rule that counts a contradiction only when two readers agree.",
+      "text_b": "Evidence that shares an origin counts once, and a contradiction is accepted only when two readers agree."
+    },
+    {
+      "id": "N09",
+      "text_a": "The engine also records the evidence behind every verdict, which a single model does not.",
+      "text_b": "Both kinds rely on one model’s answer to a single question."
+    },
+    {
+      "id": "N10",
+      "text_a": "Only a few of the Index’s 37 tasks, among them ANLI, ContractNLI and NLI4CT, check a statement against a document, whereas every LLM-AggreFact dataset does.",
+      "text_b": "a few of the Index’s 37 tasks, among them ANLI, ContractNLI and NLI4CT, check a statement against a document, whereas every LLM-AggreFact dataset does."
+    },
+    {
+      "id": "N11",
+      "text_a": "Even with the source document in hand, leading language models still add claims the source does not support.",
+      "text_b": "Even with the source document in hand, leading language models still add claims the source does support."
+    },
+    {
+      "id": "N12",
+      "text_a": "On the same claims it beats two of its three readers used alone (Readers A and B) by 1.66 and 2.17 points (95% intervals 0.80 to 2.53 and 1.29 to 3.06).",
+      "text_b": "On the same claims it beats two of its readers used alone (Readers A and B) by 1.66 and 2.17 points (95% intervals 0.80 to 2.53 and 1.29 to 3.06)."
+    },
+    {
+      "id": "N13",
+      "text_a": "Only a few of the Index’s 37 tasks, among them ANLI, ContractNLI and NLI4CT, check a statement against a document, whereas every LLM-AggreFact dataset does.",
+      "text_b": "The Decision Index covers tools, classification, language, knowledge, and games and arts."
+    },
+    {
+      "id": "N14",
+      "text_a": "It combines the measurements with a fixed Bayesian rule that counts a contradiction only when two readers agree.",
+      "text_b": "It combines the measurements with a fixed Bayesian rule that counts a contradiction only when two readers agree."
+    },
+    {
+      "id": "N15",
+      "text_a": "The engine also records the evidence behind every verdict, which a single model does not.",
+      "text_b": "The engine also records the evidence behind every verdict, which a single model does."
+    },
+    {
+      "id": "N16",
+      "text_a": "Without AggreFact-CNN, described below, the leads are 0.90 and 1.32 and both intervals stay above zero.",
+      "text_b": "Without AggreFact-CNN, described below, the leads are 0.90 and 1.32 and both intervals stay above zero."
+    },
+    {
+      "id": "N17",
+      "text_a": "Without AggreFact-CNN, described below, the leads are 0.90 and 1.32 and both intervals stay above zero.",
+      "text_b": "Without AggreFact-CNN, described below, the leads are 0.90 and 1.32 and intervals stay above zero."
+    },
+    {
+      "id": "N18",
+      "text_a": "The engine also records the evidence behind every verdict, which a single model does not.",
+      "text_b": "The engine also records the evidence behind every verdict, which a single model does not."
+    }
+  ]
+}

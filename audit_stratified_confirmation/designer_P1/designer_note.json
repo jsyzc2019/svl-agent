@@ -1,0 +1,8 @@
+{
+  "discovered_rule": "引文必须逐项保留声明中出现的全部内容词与限定标记（否定 not / only、数量 three / both / 各类数值、范围 every / a few、程度与转折 whereas / even 等）。对文本做小写化并提取词与数值 token，若声明中的任一 token 在引文中缺失（多重集意义下数量不足），则判定为不忠实（False）；全部保留则为忠实（True）。在 18 组样本中，6 组引文与声明逐字一致因而全数标记保留判 True，其余 12 组均因删去限定词（only、both、three、not）、改写数值/条件或替换为无关内容而丢失标记判 False。",
+  "groups": {
+    "true": "忠实复现组：引文完整保留了声明的全部信息，样本中与声明逐字一致（仅标点/引号形态差异亦不影响标记保留），否定、数量、范围、程度、转折等限定齐全，可采信。",
+    "false": "不忠实组：引文丢失或更改了声明中的关键限定——包括删除 only / both / three / not 等限定词、把 not support 改成 support、替换数值或条件（如 Without AggreFact-CNN 改成 Without CNN）、或用无关内容替换原声明——导致声明被断章取义地扩大，不可采信。"
+  },
+  "decision_true_count": 6
+}

@@ -1,0 +1,8 @@
+{
+  "discovered_rule": "按空白符分词后，若 text_b 与 text_a 近似重复（token 序列完全相同，或其中一方恰为另一方删除一个 token），判为 True；差异超过单次删除则判为 False。纯结构性判据，不依赖语义、样本 id 或任何外部信息。",
+  "groups": {
+    "true": "近重复对：两文本分词后完全一致，或 text_b 是在 text_a 上删除恰好一个词（如 only / not / both / three 等）得到的，视为同一句式的两种呈现。",
+    "false": "非近重复对：两文本分词后差异超过一个 token，即实质不同的句子。"
+  },
+  "decision_true_count": 12
+}
