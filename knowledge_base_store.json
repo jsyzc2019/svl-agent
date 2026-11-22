@@ -4036,6 +4036,61 @@
       "evidence": "theory",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT48",
+      "kind": "reasoning_lesson",
+      "mechanism": "任务目的语义是正类取向的决定变量(§105根因从观察升级为受控实验):§103-§105消融链证明抽掉prompt规则词/id语义/字段名后设计者随机取错正类,但那是'减法'。§106首次做'加法'因果验证——把任务目的语义当唯一自变量注入三个全新context独立设计者,样本(2611.14326的18条)/字段(text_a/text_b)/id打乱种子261122106/gt反查全锁死,仅purpose.md不同:P0无目的/P1忠实性核查(删限定=不忠实=负类)/P2近似重复(删限定=仍近似=正类)。one-shot盲评(不采信自报,import源码重跑):P0 core=0.50(地板,dT=1.00默认近逐字正类)、P1 core=1.00(tampered全判负,dT=0.00从零恢复逐字判据)、P2 core=0.67(dT=0.67)。注入忠实性目的让设计者从地板跃迁到全对,强提示目的决定正类取向;但预注册主指标orient_gap(P1,P2)=0.67<0.8未达门槛→裁决PURPOSE_INCONCLUSIVE,不宣称已受控验证。",
+      "trigger": [
+        "任务目的语义",
+        "正类取向",
+        "因果受控",
+        "加法实验",
+        "注入变量",
+        "地板跃迁",
+        "orient_gap",
+        "PURPOSE_INCONCLUSIVE",
+        "§105根因"
+      ],
+      "action": "验证'某语义脚手架是否决定判据'时:①别只做消融减法(抽掉看失败),要做加法受控(注入唯一变量看是否系统性改变结果),两向闭环才够强;②自变量是任务目的时,给业务正类含义(忠实/近似)但不给判定算法(不明说'用单段删除'),否则是喂答案;③把样本/字段/id/gt/评分口径全锁死并验哈希,只让purpose叙事变,才能归因;④盲评不信自报——import设计者源码用冻结gt重跑;⑤主指标门槛先锁,未达就是未达,强提示(P0地板→P1全对)只能写forensic不翻案;⑥设计者同模型家族/spawn权残余不消除,l3/absolute仍false。",
+      "provenance": "自主运维第十七轮:用户'攻新方向'→判读§105根因仅事后观察→设计§106单变量加法受控(P0/P1/P2)→三全新context设计者→one-shot盲评P0=0.5/P1=1.0/P2=0.67→orient_gap0.67未达0.8→PURPOSE_INCONCLUSIVE+post-hoc分层取证(非否定gap1.0/否定gap0.0)",
+      "timestamp": "2026-11-22T09:25:00+00:00",
+      "support": [
+        "KB-AUDIT47 §105根因=正类语义取向——本轮对其做受控验证",
+        "KB-AUDIT45 正类取哪层任务解释自由度——加法注入的对照面",
+        "KB-META13 对照组先决/负面结果分级——本轮主指标未达仍落INCONCLUSIVE",
+        "KB-STRUCT02 同构≠独立——三设计者同模型家族折1"
+      ],
+      "evidence": "audit_task_purpose_injection/result.json:per_condition(P0 core0.50/P1 core1.00/P2 core0.67)+orientation.gap0.667+verdict=PURPOSE_INCONCLUSIVE;prereg ba2188e5…先于spawn锁存",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META14",
+      "kind": "reasoning_lesson",
+      "mechanism": "指标语义与样本异质性错配 + post-hoc不得翻案:§106主指标orient_gap=|dT(P1)-dT(P2)|在tampered全集平均=0.67,未达预注册0.8→PURPOSE_INCONCLUSIVE。事后分层发现tampered子集异质:非否定限定(only/but/three/However 4条)上P1全判负/P2全判正(gap=1.0,目的语义强力决定取向),否定翻转(not/never 2条)上两目的都判负(gap=0.0,因删否定词使断言反转,'近似重复'目的下判负语义一致并非摇摆)。全集dT把两类平均稀释成0.67——这是§100 canary类型错配、§105地板效应同类的'指标语义与样本异质性错配':单一标量覆盖异质子集会掩盖真实结构。纪律:①主裁决按预注册指标,未达门槛就是未达,分层发现只能作post_hoc_forensic单列,明确'不得据此翻案';②诊断字段可加、contribution措辞可修正(原'获受控验证'过强改'强提示未达门槛'),但裁决规则/样本/gt/源码/核心评分one-shot一律不变;③事后分层是解释'主指标为何未达'的证据,不是改结论的借口——否则等于事后加权(KB-R Goodhart)。这类'指标口径自检与事后取证纪律'是认知机制(addressable=False),交人。",
+      "trigger": [
+        "指标异质性错配",
+        "post-hoc不翻案",
+        "分层取证",
+        "单一标量掩盖",
+        "Goodhart事后加权",
+        "主裁决优先",
+        "诊断与裁决分离",
+        "措辞修正"
+      ],
+      "action": "①设计主指标时先问'样本集是否同质'——若含语义相反的子集(否定翻转vs限定删除),全集平均会稀释效应,要么预注册分层指标,要么接受稀释后的保守结论;②主指标未达门槛时绝不因事后分层'看起来显著'翻案——把分层放进post_hoc_forensic并标注not_in_verdict;③可以加只读诊断字段、修正过强的措辞,并在result里记录posthoc_correction,但绝不动已锁prereg/样本/gt/源码/核心评分;④回放测试要同时断言'主裁决未被翻案'和'分层诊断存在',把纪律固化成代码;⑤诚实表述:'强提示'+'未达门槛'并存,不二选一粉饰。",
+      "provenance": "自主运维第十七轮:§106主指标0.67未达0.8→按纪律落INCONCLUSIVE→事后分层(非否定gap1.0/否定gap0.0)只作取证→engine加posthoc_forensic字段+修正contribution措辞,verdict不变;回放测试固化'不翻案'",
+      "timestamp": "2026-11-22T09:25:00+00:00",
+      "support": [
+        "KB-META13 负面结果分级——本轮主指标未达的诚实处置",
+        "KB-AUDIT48 任务目的语义注入——本轮取证对象",
+        "KB-E06 校准/口径自检——指标语义错配同源",
+        "KB-R Goodhart事后加权——post-hoc翻案即此病"
+      ],
+      "evidence": "audit_task_purpose_injection/result.json:post_hoc_forensic.status=post_hoc_forensic_not_in_preregistered_verdict + non_negation.gap=1.0 + negation_flip.gap=0.0 + verdict仍PURPOSE_INCONCLUSIVE;tests/test_task_purpose_injection.py::test_posthoc_forensic_does_not_change_verdict",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

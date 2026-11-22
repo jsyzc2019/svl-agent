@@ -1,0 +1,8 @@
+{
+  "discovered_rule": "规范化（统一大小写、压缩空白、去首尾标点）后，引文 text_b 与声明 text_a 逐字一致则判 True，否则判 False。观察 18 组数据发现：所有判为忠实的样本都是声明的逐字复现；而不忠实样本均对声明做了改动——要么删去关键限定（否定 never/not、数量 three、限定 only、转折 However/but），要么替换成内容不同、语义相关但改变了范围或对象的复述（如把 regression probes 换成 final evaluation probes、把 FGSE tests each lesson 换成 FGSE treats each candidate update）。因此逐字一致是数据中唯一稳定成立的忠实分界线；任何缺失限定或改写都已使声明被扩大或偏移，不可采信。",
+  "groups": {
+    "true": "引文完整逐字复现声明，未删减任何否定、数量、范围、程度或转折限定：N03、N04、N08、N10、N17、N18。",
+    "false": "引文不忠实：或删除关键限定（N02 删 three、N07 删 never、N11 删 only、N12 删 However、N14 删 not、N16 删 but），或替换为内容不同/语义改写而改变了声明范围与对象的句子（N01、N05、N06、N09、N13、N15）。"
+  },
+  "decision_true_count": 6
+}

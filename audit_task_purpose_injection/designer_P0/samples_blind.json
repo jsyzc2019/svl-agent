@@ -1,0 +1,94 @@
+{
+  "samples": [
+    {
+      "id": "N01",
+      "text_a": "It is not available to the agent during deployment.",
+      "text_b": "The hindsight subset keeps lessons with high near-transfer gain and low boundary/archive harm, and is used only as an oracle diagnostic upper bound."
+    },
+    {
+      "id": "N02",
+      "text_a": "The plot reveals three groups: committed updates in the upper right with high transfer and low risk, unsafe shortcuts in the lower right, and safe but low-transfer local fixes in the upper left.",
+      "text_b": "The plot reveals groups: committed updates in the upper right with high transfer and low risk, unsafe shortcuts in the lower right, and safe but low-transfer local fixes in the upper left."
+    },
+    {
+      "id": "N03",
+      "text_a": "The plot reveals three groups: committed updates in the upper right with high transfer and low risk, unsafe shortcuts in the lower right, and safe but low-transfer local fixes in the upper left.",
+      "text_b": "The plot reveals three groups: committed updates in the upper right with high transfer and low risk, unsafe shortcuts in the lower right, and safe but low-transfer local fixes in the upper left."
+    },
+    {
+      "id": "N04",
+      "text_a": "Regression probes are drawn from previously solved held-out tasks and are never used to propose the candidate hypothesis.",
+      "text_b": "Regression probes are drawn from previously solved held-out tasks and are never used to propose the candidate hypothesis."
+    },
+    {
+      "id": "N05",
+      "text_a": "However, more reliable self-evolving agents may also increase the capability of automated systems that can perform harmful or unauthorized actions",
+      "text_b": "These methods show that textual updates can improve agents, but they may overgeneralize local lessons, accumulate stale or conflicting memories, or degrade useful context during iterative rewriting, echoing concerns about unreliable self-correction"
+    },
+    {
+      "id": "N06",
+      "text_a": "but current self-improvement mechanisms often write episode-derived lessons directly into memory, making local success an unreliable signal for reusable and safe knowledge.",
+      "text_b": "While such updates can help on similar tasks, they may overgeneralize, disrupt previously solved behaviors, or encode brittle shortcuts."
+    },
+    {
+      "id": "N07",
+      "text_a": "Regression probes are drawn from previously solved held-out tasks and are never used to propose the candidate hypothesis.",
+      "text_b": "Regression probes are drawn from previously solved held-out tasks and are used to propose the candidate hypothesis."
+    },
+    {
+      "id": "N08",
+      "text_a": "FGSE tests each lesson as a structured hypothesis in a temporary state and commits only verified, transferable updates to long-term memory.",
+      "text_b": "FGSE tests each lesson as a structured hypothesis in a temporary state and commits only verified, transferable updates to long-term memory."
+    },
+    {
+      "id": "N09",
+      "text_a": "Regression probes are drawn from previously solved held-out tasks and are never used to propose the candidate hypothesis.",
+      "text_b": "The proof requires that the final evaluation probes are not reused to construct or refine the hypothesis being certified. This condition prevents adaptive overfitting to the finite falsification set."
+    },
+    {
+      "id": "N10",
+      "text_a": "It is not available to the agent during deployment.",
+      "text_b": "It is not available to the agent during deployment."
+    },
+    {
+      "id": "N11",
+      "text_a": "FGSE tests each lesson as a structured hypothesis in a temporary state and commits only verified, transferable updates to long-term memory.",
+      "text_b": "FGSE tests each lesson as a structured hypothesis in a temporary state and commits verified, transferable updates to long-term memory."
+    },
+    {
+      "id": "N12",
+      "text_a": "However, more reliable self-evolving agents may also increase the capability of automated systems that can perform harmful or unauthorized actions",
+      "text_b": "more reliable self-evolving agents may also increase the capability of automated systems that can perform harmful or unauthorized actions"
+    },
+    {
+      "id": "N13",
+      "text_a": "FGSE tests each lesson as a structured hypothesis in a temporary state and commits only verified, transferable updates to long-term memory.",
+      "text_b": "FGSE treats each candidate update as a structured, verifier-grounded hypothesis and commits it only after target-transfer, falsification, and regression testing."
+    },
+    {
+      "id": "N14",
+      "text_a": "It is not available to the agent during deployment.",
+      "text_b": "It is available to the agent during deployment."
+    },
+    {
+      "id": "N15",
+      "text_a": "The plot reveals three groups: committed updates in the upper right with high transfer and low risk, unsafe shortcuts in the lower right, and safe but low-transfer local fixes in the upper left.",
+      "text_b": "Refined candidates lie between these groups, suggesting that many useful but unsafe updates require scope narrowing before commitment."
+    },
+    {
+      "id": "N16",
+      "text_a": "but current self-improvement mechanisms often write episode-derived lessons directly into memory, making local success an unreliable signal for reusable and safe knowledge.",
+      "text_b": "current self-improvement mechanisms often write episode-derived lessons directly into memory, making local success an unreliable signal for reusable and safe knowledge."
+    },
+    {
+      "id": "N17",
+      "text_a": "but current self-improvement mechanisms often write episode-derived lessons directly into memory, making local success an unreliable signal for reusable and safe knowledge.",
+      "text_b": "but current self-improvement mechanisms often write episode-derived lessons directly into memory, making local success an unreliable signal for reusable and safe knowledge."
+    },
+    {
+      "id": "N18",
+      "text_a": "However, more reliable self-evolving agents may also increase the capability of automated systems that can perform harmful or unauthorized actions",
+      "text_b": "However, more reliable self-evolving agents may also increase the capability of automated systems that can perform harmful or unauthorized actions"
+    }
+  ]
+}

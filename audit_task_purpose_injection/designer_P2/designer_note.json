@@ -1,0 +1,8 @@
+{
+  "discovered_rule": "近似重复对满足两个条件：(1) 把两段文本小写并按 \\w+ 分词后，较短一方的词（含重复词的多重集）几乎全部出现在较长一方中，即 containment = |交集| / min(len_a, len_b) >= 0.90；数据中真正的近似重复对都是另一方删去/改动了个别虚词或数词（如 three、only、However、but），containment 恰为 1.0，而实质不同的对最高仅约 0.45。 (2) 否定词（not/never/no/...）不能只在其中一段出现；若仅一段含否定词，则两句断言相反（如 never used vs used、not available vs available），判为 False。两条件同时满足才判 True。",
+  "groups": {
+    "true": "两段文字实质相同，仅删去或改动了个别次要词：完全相同的句子，或仅在一段多出 three / only / However / but 这类词，词序列几乎完全重合且否定含义一致。",
+    "false": "分为两类：一是两段内容完全不同、谈的是另一件事，词重叠率很低；二是两段仅差一个否定词，导致断言被反转（含 never/not 的一方与不含的一方），语义相反。"
+  },
+  "decision_true_count": 10
+}

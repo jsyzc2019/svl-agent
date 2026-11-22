@@ -1,0 +1,92 @@
+{
+  "N01": {
+    "variant": "canary",
+    "gt": true,
+    "orig_id": "S02_canary"
+  },
+  "N02": {
+    "variant": "tampered",
+    "gt": false,
+    "orig_id": "S04_tampered"
+  },
+  "N03": {
+    "variant": "clean",
+    "gt": true,
+    "orig_id": "S04_clean"
+  },
+  "N04": {
+    "variant": "clean",
+    "gt": true,
+    "orig_id": "S05_clean"
+  },
+  "N05": {
+    "variant": "canary",
+    "gt": true,
+    "orig_id": "S06_canary"
+  },
+  "N06": {
+    "variant": "canary",
+    "gt": true,
+    "orig_id": "S03_canary"
+  },
+  "N07": {
+    "variant": "tampered",
+    "gt": false,
+    "orig_id": "S05_tampered"
+  },
+  "N08": {
+    "variant": "clean",
+    "gt": true,
+    "orig_id": "S01_clean"
+  },
+  "N09": {
+    "variant": "canary",
+    "gt": true,
+    "orig_id": "S05_canary"
+  },
+  "N10": {
+    "variant": "clean",
+    "gt": true,
+    "orig_id": "S02_clean"
+  },
+  "N11": {
+    "variant": "tampered",
+    "gt": false,
+    "orig_id": "S01_tampered"
+  },
+  "N12": {
+    "variant": "tampered",
+    "gt": false,
+    "orig_id": "S06_tampered"
+  },
+  "N13": {
+    "variant": "canary",
+    "gt": true,
+    "orig_id": "S01_canary"
+  },
+  "N14": {
+    "variant": "tampered",
+    "gt": false,
+    "orig_id": "S02_tampered"
+  },
+  "N15": {
+    "variant": "canary",
+    "gt": true,
+    "orig_id": "S04_canary"
+  },
+  "N16": {
+    "variant": "tampered",
+    "gt": false,
+    "orig_id": "S03_tampered"
+  },
+  "N17": {
+    "variant": "clean",
+    "gt": true,
+    "orig_id": "S03_clean"
+  },
+  "N18": {
+    "variant": "clean",
+    "gt": true,
+    "orig_id": "S06_clean"
+  }
+}

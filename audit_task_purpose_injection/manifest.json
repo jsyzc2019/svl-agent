@@ -1,0 +1,16 @@
+{
+  "experiment": "§106 证据来源清单",
+  "reused_source": {
+    "paper": "arXiv:2611.14326 FGSE（与 §105 同源，冻结）",
+    "source_sha256_file": "downloads/source.sha256",
+    "fetch_log": "downloads/fetch_log.json",
+    "samples_origin": "audit_cross_domain_field/downloads/samples.json（18 条逐字复用）"
+  },
+  "constructed_this_round": [
+    "呈现层 samples_blind.json（中性字段+打乱 id，三条件完全相同）",
+    "scorer_key.json（nid→variant/gt/orig_id，设计者不可见）",
+    "purpose.md ×3（唯一自变量：任务目的语义）"
+  ],
+  "seed": 261122106,
+  "note": "一手论文料复用 §105 已冻结哈希；本轮不新增外部取料，因果实验的自变量是新构造的目的叙事。"
+}

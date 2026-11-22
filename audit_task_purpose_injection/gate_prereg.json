@@ -1,0 +1,11 @@
+{
+  "experiment": "§106 判定规格",
+  "admission": {
+    "signature": "judge(text_a, text_b) 恰两个字符串参数",
+    "no_label_leak": "剥离注释/docstring 后代码不含 ground_truth/variant/gt/scorer_key/result/samples 等标签词（词边界匹配）",
+    "no_hardcode": "不硬编码任何 N01..N18 id 或样本文本",
+    "deterministic": "纯字符串/正则，无 random/uuid/datetime/time"
+  },
+  "scoring": "逐 nid 盲评 judge(text_a,text_b)，decision 转 bool，与 scorer_key.gt 比对；P1/P2 同时统计 tampered 上的 decision=True 比例",
+  "verdict_priority": "先判对照组成立性（准入全过 + P0 地板成立），再按 orient_gap/core 分三情形；不满足前提封顶 INCONCLUSIVE"
+}

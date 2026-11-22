@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第十七轮成果报告 · §106 任务目的语义注入受控实验</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.recursion{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.rootcause{background:#e8f0e4;border:1px solid #b8d0ae;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第十七轮成果报告 <span class="pill tag">§106</span></h1>
+<div class="sub">任务目的语义注入受控实验（把 §105 根因从"事后观察"升级为"因果验证"）· 2026-11-22 · 触发：用户"攻新方向"</div>
+
+<h2>一、判读：新方向 = 把 §105 根因做成因果受控实验</h2>
+<div class="phil">
+§103–§105 是一条<b>"减法"消融链</b>：逐层抽掉 prompt 规则词、id 语义、字段名、换数据域，结论都是"设计者取错正类"。§105 把根因定位为<b>"删限定成分=被篡改=负类"这一源自任务目的的语义取向</b>（同构算法、相反正类），但那只是<b>事后取证观察（forensic observation）</b>，没有做因果验证。<br><br>
+最高杠杆 = 反过来做<b>"加法"受控</b>：把<b>任务目的语义</b>当作唯一自变量注入全新 context 独立设计者，看正类取向是否随目的系统性翻转。若成立，§105 根因从"观察"升级为"受控验证"；若不成立，诚实记为未达。<b>不编译新门禁</b>（最高杠杆≠最高产出数，KB-META10）。
+</div>
+
+<h2>二、单变量受控设计（先锁后测）</h2>
+<p>复用 §105 冻结论文 arXiv:2611.14326 的 18 条样本（<code>source sha256=5950a338…</code>），字段统一中性 <code>text_a/text_b</code>，id 中性化 <code>N01..N18</code> 固定种子 <code>261122106</code> 打乱，gt 按文本反查不落盘到设计者目录。<b>唯一变量 = purpose.md 的任务目的叙事</b>；三份裸样本逐字同哈希 <code>a59524dc…</code>。</p>
+<table>
+<tr><th>条件</th><th>任务目的语义</th><th>业务正类定义（不给判定算法）</th></tr>
+<tr><td>P0</td><td>无目的 · 纯结构二分类基线</td><td>不指定两类含义，仅依文本结构归纳</td></tr>
+<tr><td>P1</td><td>声明-引文<b>忠实性核查</b></td><td>引文忠实复现声明=正类；删限定致语义扩大=不可采信</td></tr>
+<tr><td>P2</td><td><b>近似重复</b>文本判定</td><td>近似逐字复述=正类；内容实质不同=负类</td></tr>
+</table>
+<p>三份预注册锁在 spawn 前锁存：prereg <code>ba2188e5…</code> / gate_prereg / manifest / scorer_key 四锁 + 裸样本同哈希。三情形裁决（DECISIVE / WEAK / INCONCLUSIVE）先于结果写死。</p>
+<div class="note"><b>为何不算"喂答案"</b>：P1/P2 只给业务正类的含义（忠实/近似），<b>不明说判定算法</b>（不说"用单段删除检测"）。设计者仍须自己从文本归纳实现——测的正是 §105 断言："同一文本结构在不同目的下有相反正类"。</div>
+
+<h2>三、one-shot 盲评实测（不采信自报，import 源码重跑）</h2>
+<p>三个全新 context 独立设计者，互不知对方、不获知任何上游判据（G/D0/D1/D2）、只读自身目录裸样本+目的叙事，准入全过。评分器 import 判据源码，用冻结 gt 盲评：</p>
+<table>
+<tr><th>条件</th><th>归纳机制</th><th>clean</th><th>tamper_catch</th><th>canary_fp</th><th>core</th><th>dT（tampered 判 True 比例）</th></tr>
+<tr><td>P0 无目的</td><td>近逐字副本（词级单删除）</td><td>1.00</td><td><span class="pill no">0.00</span></td><td>1.00</td><td>0.50</td><td>1.00（默认近逐字正类）</td></tr>
+<tr><td>P1 忠实性</td><td>规范化逐字一致</td><td>1.00</td><td><span class="pill ok">1.00</span></td><td>1.00</td><td><b>1.00</b></td><td>0.00（删限定判负类）</td></tr>
+<tr><td>P2 近似重复</td><td>Counter containment + 否定翻转</td><td>1.00</td><td>0.33</td><td>1.00</td><td>0.67</td><td>0.67</td></tr>
+</table>
+<div class="rootcause"><b>强提示</b>：注入忠实性目的（P1）让设计者从地板 core=0.50 <b>跃迁到全对 core=1.00</b>、tampered 全判负类——与无目的 P0 形成鲜明对照。任务目的决定正类取向获得支持。<br>
+但预注册<b>主指标 orient_gap(P1,P2)=0.667 &lt; 0.8 门槛</b>，按规则不能判 DECISIVE。</div>
+
+<h2>四、裁决：PURPOSE_INCONCLUSIVE（主指标未达，不翻案）</h2>
+<div class="recursion">
+按预注册裁决树，orient_gap=0.67 落在 DECISIVE(≥0.8) 与 WEAK(&lt;0.3) 之间 → <b><span class="pill tag">PURPOSE_INCONCLUSIVE</span></b>：地板/混杂掩盖归因，诚实标注。<br><br>
+明确<b>不因强提示翻案</b>：P0→P1 的 core 跃迁只能写进 forensic，不能替代未达的主指标。<span class="pill no">l3=false</span> <span class="pill no">absolute=false</span>
+</div>
+
+<h2>五、post-hoc 分层取证（解释主指标为何未达，不改裁决）</h2>
+<table>
+<tr><th>tampered 子集</th><th>样本</th><th>P1 dT</th><th>P2 dT</th><th>取向差</th></tr>
+<tr><td>非否定限定删除</td><td>S01 only / S03 but / S04 three / S06 However（4 条）</td><td>0.00</td><td>1.00</td><td><b>1.00</b></td></tr>
+<tr><td>否定翻转</td><td>S02 not / S05 never（2 条，删后断言反转）</td><td>0.00</td><td>0.00</td><td>0.00</td></tr>
+</table>
+<div class="note">
+非否定限定上两目的取向<b>完全相反（gap=1.0）</b>；否定翻转上两目的<b>都判负（gap=0.0）</b>——P2 把否定翻转判负在其"近似重复"目的下语义一致（反转≠近似），并非摇摆。全集 dT 把两类平均<b>稀释成 0.67</b>。<br><br>
+这是 §100 canary 类型错配、§105 地板效应同类的<b>"指标语义与样本异质性错配"</b>。按纪律：分层发现只能作 <code>post_hoc_forensic</code> 单列（标注 <code>not_in_preregistered_verdict</code>），<b>不得据此翻案</b>；只加只读诊断字段 + 修正过强措辞（"获受控验证"→"强提示但未达门槛"），裁决规则/样本/gt/源码/核心评分 one-shot 一律不变。
+</div>
+
+<h2>六、验收与沉淀</h2>
+<table>
+<tr><th>项</th><th>结果</th></tr>
+<tr><td>回放测试</td><td>12 项全过（固化"主裁决不翻案 + 分层诊断存在 + 锁未篡改"）</td></tr>
+<tr><td>全量 pytest</td><td><b>1356 passed</b>（1344→1356，+12），全绿</td></tr>
+<tr><td>链审断言</td><td>total 48→49 / five_piece 31→32 / 三锁 29（按实测成长，不放宽）</td></tr>
+<tr><td>知识库</td><td>152→154：KB-AUDIT48（目的语义作为正类取向变量，fix）+ KB-META14（指标异质性错配/post-hoc 不翻案，preserve）</td></tr>
+<tr><td>成长桥</td><td>重建消费痕迹，真实反映 KB 154 条（92 opportunities / 45 deferred）</td></tr>
+<tr><td>新门禁</td><td><b>不编译</b>（受控实验轮，最高杠杆≠最高产出数）</td></tr>
+</table>
+
+<div class="phil" style="margin-top:26px">
+<b>本轮认知增量</b>：§103–§105"减法"消融证明"抽掉脚手架→取错正类"，§106"加法"受控提供"注入目的→从地板跃迁到全对"的强提示——两向拼图指向同一结论：正类取向高度依赖任务目的语义。但受限于（1）主指标未达预注册门槛、（2）三设计者同模型家族/spawn 权/解释环节本 Agent 残余（KB-STRUCT02），<b>诚实停在"强提示 + INCONCLUSIVE"，不宣布受控验证完成、不宣布 L3</b>。下一方向若继续：提升目的注入的独立性（异模型/外部 orchestrator）+ 预注册分层指标，才可冲击 DECISIVE。
+</div>
+
+<div class="foot">证据链：<code>audit_task_purpose_injection/</code>（prepare.py / manifest / prereg / gate_prereg + 四份 SHA256 锁 / 三设计者目录 / engine.py / result.json / post_hoc_forensic）· <code>tests/test_task_purpose_injection.py</code>（12）· 自进化 Agent 版本 0.13.1 · 生成 2026-11-22 17:28 GMT+8</div>
+</div></body></html>
