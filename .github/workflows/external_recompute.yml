@@ -21,6 +21,7 @@ jobs:
       - name: Verify frozen hashes then recompute §107 engine on external runner
         env:
           INJECTED_NONCE: ${{ github.event.inputs.nonce }}
+          OUT_PATH: audit_external_orchestrator/runs/recompute_${{ github.run_id }}.json
         run: |
           mkdir -p audit_external_orchestrator/runs
           OUT="audit_external_orchestrator/runs/recompute_${GITHUB_RUN_ID}.json"
@@ -69,9 +70,6 @@ jobs:
           json.dump(out, open(target,"w",encoding="utf-8"), ensure_ascii=False, indent=2)
           print("external recompute done; result_sha=", result_sha, "locks_ok=", lock_ok)
           PY
-        env:
-          OUT_PATH: audit_external_orchestrator/runs/recompute_${{ github.run_id }}.json
-          INJECTED_NONCE: ${{ github.event.inputs.nonce }}
 
       - name: Commit external recompute attestation
         run: |
