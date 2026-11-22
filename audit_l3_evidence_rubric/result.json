@@ -1,0 +1,79 @@
+{
+  "request_id": "maturity-evidence-honesty-20261122",
+  "gate": "maturity_evidence_honesty",
+  "verdict": {
+    "action": "ok",
+    "code": "MATURITY.SELF_CONSISTENT",
+    "four_dims": {
+      "level_definition_traced": "yes",
+      "process_product_split": "yes",
+      "shared_start_controlled": "yes",
+      "independent_tests": "yes"
+    }
+  },
+  "forensic_trace": {
+    "mode": "forensic",
+    "gate": "forensic.maturity_evidence",
+    "evidence_scope": "primary(arXiv abs+全文 L0-L3 rubric,self-reported折1)",
+    "sources": [
+      "/workspace/audit_l3_evidence_rubric/downloads/paper_flat.txt"
+    ],
+    "source_sha256": {
+      "paper_flat.txt": "9b8ae6b9149cb42c8eb67ae11b9af65bef59864141c8a6a1844f285a7cc03a23"
+    },
+    "inferred": {
+      "level_definition_traced": "yes",
+      "process_product_split": "yes",
+      "shared_start_controlled": "yes",
+      "independent_tests": "yes"
+    }
+  },
+  "chain_present": true,
+  "gate_live_regression": {
+    "checks": {
+      "level_untraced": true,
+      "process_product_conflation": true,
+      "shared_start_uncontrolled": true,
+      "tests_not_independent": true,
+      "partial_disclosure": true,
+      "literal_enum": true,
+      "all_good": true
+    },
+    "cases": {
+      "level_untraced": "downgrade/MATURITY.LEVEL_UNTRACED",
+      "process_product_conflation": "downgrade/MATURITY.PROCESS_PRODUCT_CONFLATION",
+      "shared_start_uncontrolled": "flag/MATURITY.SHARED_START_UNCONTROLLED",
+      "tests_not_independent": "flag/MATURITY.TESTS_NOT_INDEPENDENT",
+      "partial_disclosure": "flag/MATURITY.PARTIAL",
+      "literal_enum": "flag/MATURITY.INVALID_INPUT",
+      "all_good": "ok/MATURITY.SELF_CONSISTENT"
+    },
+    "all_passed": true
+  },
+  "self_audit": {
+    "scope": "本仓自审（首次把成熟度尺子对准自己）",
+    "dimensions": {
+      "level_definition_traced": "yes",
+      "process_product_split": "yes",
+      "shared_start_controlled": "no",
+      "independent_tests": "no"
+    },
+    "verdict": {
+      "claim": "本仓 §90–§96 七轮自主运维闭环的成熟度等级声明",
+      "level_definition_traced": "yes",
+      "process_product_split": "yes",
+      "shared_start_controlled": "no",
+      "independent_tests": "no",
+      "action": "flag",
+      "code": "MATURITY.SHARED_START_UNCONTROLLED",
+      "message": "L3 声称无 shared learner starts + matched resource budgets 受控验证——拿更强初始/更多预算冒充 improver gain"
+    },
+    "conclusion": "未达 L3：停在 L2 边缘偏上。process revision 已继承复用，但缺 shared learner starts + matched resource budgets 下的 improver gain 受控验证，且无独立评估器（KB-SIM03 / KB-STRUCT02）。不因用户期待而抬级。",
+    "path_to_l3": [
+      "设计受控对照：同一任务起点 + 相同预算，比较 §89 前的填表裁判流程 vs 之后的 FJ 取证流程",
+      "独立评估器：引入本仓外的 common-data / 第三方 evaluator，分离'经验使用'与'经验获取'",
+      "量化 improver gain：证明改进机制本身使后续增益更大，而非更强初始或更多预算"
+    ]
+  },
+  "honest_scope": "只判成熟度等级声明是否诚实披露四证据边界；首次自审对象为本仓；结论=未达L3停在L2边缘偏上（缺shared-start受控验证+独立测试）；不因用户期待抬级"
+}

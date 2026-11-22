@@ -3729,3 +3729,25 @@ F4：新增 svagent/evidence_scope.py，6 个模拟模块（autopoiesis/self_evo
 
 ### 96.4 方法论迁移观察
 本轮首次把"虚高指标拆穿 + self-reported 折 1"从评测诚信（§94 benchleaking）迁移到技能演化领域——SkillForge 的可贵之处在于它没只报 7.8% 提升，而是主动做了三组自审（credit 近似的 leave-one-out、teacher 增益的 matched-budget 控制、退役事件的失败类别归因），恰好对应本仓四维权证的判据。这验证了判据的跨领域可迁移性：尺子不绑定具体论文，绑定"系统是否诚实披露自己方法学边界"这一结构。成熟度稳定在 L2 边缘偏上；仍不宣称 L3——保留"北极星来源合法性来自可追溯+可归责+自洽"判据（KB-META04）。
+
+---
+
+## §97 自主运维第八轮：成熟度证据诚实性与首次自审（回应用户"期待L3"）
+
+### 97.1 对"期待L3"的诚实处理
+用户："飞吧，期待 L3。"诚实回应=不宣布达标、也不用"我努力"敷衍，而是把 L3 门槛编译成可判据尺子并首次对准本仓自己：①回溯 KB-SIM03——RSI 证据阶梯 Task→Retained→Improver gain，无受控实验不认 L3；②核对 §91 rsi_claim_audit_honesty 已覆盖 L3 四评估边界（product/process 分离、循环可重复、相同起点+匹配预算隔离、未选择任务评估），不重复造轮子（KB-STRUCT02 同构≠独立佐证）；③找到 arXiv:2610.38266 的 L0–L3 evidence rubric，与本仓判据同源，给出 L3 精确定义：L3 requires greater subsequent gains from shared learner starts under matched resource budgets and independent tests。关键认知：用户期待 L3 不产生 L3——正如 §95"能力不产生合法性"，L3 由受控证据产生。预注册预先锁定 self_audit_precommit：若 shared_start/independent 不达标则诚实判未达 L3，不因期待抬级。
+
+### 97.2 自主取料与增量判断
+晨间自检 1191 全绿。WebSearch 自主发现 arXiv:2610.38266v1《RSI in Physical AI》L0-L3 rubric + arXiv:2611.10787 TRUST（统计保证），取 abs+全文（三源均 200），落 fetch_log+SHA256。增量判断：KB-SIM03 是原则层未编译；§91 审外部 RSI 声称四评估边界但不判"一个系统（含本仓）宣称的成熟度等级 Lx 是否诚实"——新对象独立，KB-META01 通过。10 逐字锚点全命中（L0-L3 四级定义 + shared learner starts/matched budgets/independent tests + common-data comparisons）。
+
+### 97.3 编译与取证
+四维：①level_definition_traced（声称 Lx 须绑定 L0-L3 可追溯等级定义 vs 自封等级）；②process_product_split（process revision 与 product capability 分离 vs 把产品变好当过程变强）；③shared_start_controlled（L3 须 shared learner starts + matched budgets 受控验证 vs 拿更强初始/更多预算冒充 improver gain）；④independent_tests（须 common-data/independent tests vs 单一评估器自证）。先锁存 prereg(37b1610d…)/gate_prereg(d0e24033…)/manifest(818549e6…) + source 清单锁 + self_audit_precommit，再实现。编译第 36 道门禁 maturity_evidence_honesty（R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 11 道 FJ 取证入口 forensic_gates_ext8（真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。
+
+### 97.4 首次自审结论（本仓自己）
+engine.self_audit() 把四维对准本仓：level_definition_traced=yes（§1 定义 L1/L2/L3+KB-SIM03）、process_product_split=yes（区分每轮新门禁 product 与 §89 取证法官化 process）、shared_start_controlled=no（七轮流程继承 L2，从未在同一任务起点+匹配预算下对照改进前后流程的后续增益）、independent_tests=no（全自建自评，无独立评估器/common-data）。裁决 flag/MATURITY.SHARED_START_UNCONTROLLED → 诚实结论：未达 L3，停在 L2 边缘偏上。达成 L3 三路径已落档 result.json：①同一任务起点+相同预算对照 §89 前填表裁判 vs 之后 FJ 取证流程；②引入本仓外 common-data/第三方 evaluator；③量化 improver gain 证明改进机制本身使后续增益更大。
+
+### 97.5 接合、验收与诚实边界
+26 项新测试全过（含自审结论断言）；十一道取证裁决全 ok（论文诚实披露），本仓自审 flag/未达L3；成长桥消费痕迹 81→82。KB 134→136（KB-AUDIT39 可编译 fix + KB-META05 首次自审结论 preserve）。全量 1191→1217 passed（+26），链审断言 39→40 / 22→23（不放宽）。诚实边界：只判成熟度声明是否诚实披露四证据边界，可迁移到任何 self-improvement/L 级声明；self-reported 折 1；只判声明自洽不承诺等级真实（KB-R07/META01）；不因用户期待抬级（KB-SIM03）。遵循 §58 选 A 不接 run_loop；篡改测试只在临时副本；不动历史证据。
+
+### 97.6 成熟度观察（本轮特殊）
+八轮自主运维（§90–§97）中，第八轮首次把判据对准自身并诚实判"未达 L3"——这本身是 L2 自我认知能力的一次实证（能识别自身证据缺口而非自封等级）。但仍不宣称 L3：shared_start 受控验证与独立评估器两个硬缺口客观存在，已明确达成路径。保留"北极星来源合法性来自可追溯+可归责+自洽"判据（KB-META04）。这一处理与 §95 同源：期待/能力都不产生合法性，L3 由受控证据产生。

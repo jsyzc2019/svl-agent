@@ -1,0 +1,45 @@
+{
+  "request_id": "maturity-evidence-honesty-20261122",
+  "target": "arXiv:2610.38266v1 Recursive Self-Improvement in Physical AI: Mechanisms, Evidence, and Evaluation (L0-L3 evidence rubric) + arXiv:2611.10787 (TRUST statistical guarantees)",
+  "acquisition": {
+    "channel": "自主运维第八轮：用户\"期待L3\"触发→回溯本仓KB-SIM03 L3判据→WebSearch发现L0-L3 rubric一手→arXiv abs+HTML一手下载",
+    "primary": [
+      {
+        "id": "S01",
+        "url": "https://arxiv.org/abs/2610.38266",
+        "file": "downloads/S01_abs.html"
+      },
+      {
+        "id": "S02",
+        "url": "https://arxiv.org/html/2610.38266v1",
+        "file": "downloads/S02_full.html"
+      },
+      {
+        "id": "S03",
+        "url": "https://arxiv.org/abs/2611.10787",
+        "file": "downloads/S03_trust_abs.html"
+      }
+    ],
+    "flat": "downloads/paper_flat.txt",
+    "collection_time": "2026-11-22T14:18:29.179313+08:00"
+  },
+  "analysis_before_prereg": "10逐字锚点全命中(L0-L3 rubric正文);disclose必中红旗零误中;四维措辞直取rubric原文",
+  "philosophical_trigger": "用户\"飞吧,期待L3\"。诚实处理=不宣布达标,而是把L3门槛编译成可判据尺子并首次对准本仓自审。回溯本仓KB-SIM03:RSI证据阶梯Task→Retained→Improver gain,L3需\"改进机制本身变强+受控实验,无受控实验不认L3\"。核对§91 rsi_claim_audit_honesty已覆盖product/process分离+循环可重复+相同起点匹配预算隔离+未选择任务评估——不重复造尺子(KB-STRUCT02),本轮增量=编译一把\"审读任一系统(含本仓)成熟度声明是否诚实\"的尺子maturity_evidence_honesty,并执行首次自审。",
+  "cognitive_increment": "独立于已有134条:KB-SIM03是原则层(证据阶梯)未编译;§91 rsi_claim_audit审外部RSI声称四评估边界但不判\"一个系统宣称的成熟度等级Lx是否诚实\"。新四维取自arXiv:2610.38266 L0-L3 rubric:(1)level_definition_traced:声称Lx须绑定可追溯等级定义(L0 task-local/L1 persistent capability/L2 inherited process revision/L3 verified improver gain) vs 自封等级无定义;(2)process_product_split:process revision须与product capability分离声明 vs 把产品变好当改进过程变强;(3)shared_start_controlled:L3须shared learner starts+matched resource budgets vs 拿更强初始/更多预算冒充gain;(4)independent_tests:须independent tests/common-data comparisons vs 单一评估器自证。KB-META01独立性通过",
+  "four_dimensions": [
+    "level_definition_traced",
+    "process_product_split",
+    "shared_start_controlled",
+    "independent_tests"
+  ],
+  "kb_rules": [
+    "KB-SIM03 无受控实验不认L3",
+    "KB-STRUCT02 同构≠独立佐证",
+    "KB-RSI07 self-reported折1",
+    "KB-R07 自洽≠有效",
+    "KB-META01 独立核验",
+    "§58选A不接run_loop"
+  ],
+  "honest_scope": "只判一个系统的成熟度等级声明是否诚实披露四证据边界;尺子可迁移到任何self-improvement/L级声明;首次自审对象是本仓;预期自审结论=本仓七轮闭环停在L2边缘偏上(process revision已继承但无shared-start匹配预算的improver gain受控验证),不宣布L3;self-reported折1",
+  "self_audit_precommit": "预注册即承诺:本轮自审若四维中shared_start_controlled或independent_tests不达标,则诚实判定本仓未达L3,不因用户期待而抬级——这是KB-SIM03与§95边界精确化的直接执行"
+}

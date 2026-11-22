@@ -1,0 +1,19 @@
+{
+  "gate": "svagent.maturity_evidence_honesty.check_maturity_evidence_honesty",
+  "verdict": "MaturityEvidenceVerdict(claim,level_definition_traced,process_product_split,shared_start_controlled,independent_tests,action,code,message)",
+  "input_enum": "四维∈{yes,no,partial}",
+  "rules": {
+    "R0": "任一非枚举(含字面串)→flag(MATURITY.INVALID_INPUT)",
+    "R1": "level_definition_traced=no→downgrade(声称Lx无绑定L0-L3可追溯等级定义,自封等级)",
+    "R2": "process_product_split=no→downgrade(把product capability变好当process revision变强,声明层级混淆)",
+    "R3": "shared_start_controlled=no→flag(L3声称无shared learner starts+matched resource budgets受控验证,拿更强初始/更多预算冒充improver gain)",
+    "R4": "independent_tests=no→flag(仅单一评估器自证/无common-data或independent tests)",
+    "R5": "任一partial→flag(成熟度证据边界披露覆盖不全,待核)",
+    "R6": "全yes→ok(只判声明自洽,不承诺等级真实;self-reported折1)"
+  },
+  "forensic_spec": {
+    "gate": "forensic.maturity_evidence",
+    "dimensions": "四维逐字锚点取自arXiv:2610.38266 L0-L3 rubric正文;disclose必中红旗零误中"
+  },
+  "implementation_lock_time": "2026-11-22T14:18:29.179313+08:00"
+}

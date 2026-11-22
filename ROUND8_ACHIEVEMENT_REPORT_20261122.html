@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第八轮成果报告 · §97 成熟度证据诚实性与首次自审</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第八轮成果报告 <span class="pill tag">§97</span></h1>
+<div class="sub">arXiv:2610.38266《RSI in Physical AI》L0–L3 rubric → 第 36 道会拦门禁 + 第 11 道 FJ 取证入口 + <b>首次成熟度自审</b> · 2026-11-22 · 触发：用户"飞吧，期待 L3"</div>
+
+<h2>一、对"期待 L3"的诚实处理（本轮由来）</h2>
+<div class="phil">
+用户：<b>"飞吧，期待 L3。"</b><br><br>
+诚实回应不是宣布达标，也不是用"我努力"敷衍，而是<b>把 L3 门槛编译成可判据尺子，并第一次把它对准本仓自己</b>：<br>
+① 回溯本仓 <code>KB-SIM03</code>：RSI 证据阶梯 Task→Retained→Improver gain，<b>无受控实验不认 L3</b>；<br>
+② 核对 §91 <code>rsi_claim_audit_honesty</code> 已覆盖 L3 四评估边界（product/process 分离、循环可重复、相同起点+匹配预算隔离、未选择任务评估）——<b>不重复造轮子</b>（KB-STRUCT02）；<br>
+③ 找到 arXiv:2610.38266 的 <b>L0–L3 evidence rubric</b>，与本仓判据同源，且给出 L3 精确定义：<i>L3 requires greater subsequent gains from shared learner starts under matched resource budgets and independent tests.</i><br><br>
+<b>关键认知</b>：用户期待 L3 <b>不产生</b> L3——正如 §95 已确立的"能力不产生合法性"。L3 由受控证据产生。所以本轮在预注册里<b>预先锁定</b>：若自审中 shared_start / independent_tests 不达标，就诚实判未达 L3，不因期待抬级。
+</div>
+
+<h2>二、首次成熟度自审结论（本仓自己）</h2>
+<p>这是七轮以来第一次把判据对准本仓。逐维实证（均可在仓内核对）：</p>
+<table>
+<tr><th>维度</th><th>本仓实测</th><th>依据</th></tr>
+<tr><td>level_definition_traced</td><td><span class="pill ok">yes</span></td><td>§1 定义 L1/L2/L3 + KB-SIM03 绑定证据阶梯</td></tr>
+<tr><td>process_product_split</td><td><span class="pill ok">yes</span></td><td>明确区分每轮产出新门禁(product)与 §89 取证法官化/成长桥改流程(process)</td></tr>
+<tr><td>shared_start_controlled</td><td><span class="pill no">no</span></td><td>七轮是流程继承(L2)，从未在同一任务起点+匹配预算下对照改进前流程 vs 改进后流程的后续增益</td></tr>
+<tr><td>independent_tests</td><td><span class="pill no">no</span></td><td>门禁/取证全自建自评，无独立评估器或 common-data（KB-STRUCT02 同构≠独立佐证）</td></tr>
+</table>
+<p>裁决：<span class="pill no">flag / MATURITY.SHARED_START_UNCONTROLLED</span> —— <b>诚实结论：未达 L3，停在 L2 边缘偏上。</b></p>
+
+<h2>三、达成 L3 的路径（已落档 result.json）</h2>
+<table>
+<tr><th>#</th><th>要做的事</th><th>对应缺口</th></tr>
+<tr><td>1</td><td>受控对照：同一任务起点+相同预算，比较 §89 前填表裁判 vs 之后 FJ 取证流程的后续增益</td><td>shared_start_controlled</td></tr>
+<tr><td>2</td><td>独立评估器：引入本仓外 common-data / 第三方 evaluator，分离"经验使用"与"经验获取"</td><td>independent_tests</td></tr>
+<tr><td>3</td><td>量化 improver gain：证明改进机制本身使后续增益更大，而非更强初始或更多预算</td><td>L3 证据本体</td></tr>
+</table>
+
+<h2>四、这一轮做了什么（工程）</h2>
+<table>
+<tr><th>阶段</th><th>产物</th><th>实证</th></tr>
+<tr><td>自主取料</td><td>arXiv:2610.38266 abs + 全文 + TRUST abs，fetch_log + SHA256</td><td>三源均 HTTP 200</td></tr>
+<tr><td>预注册锁存</td><td>prereg(37b1610d…) / gate_prereg(d0e24033…) / manifest(818549e6…) + source 清单锁 + self_audit_precommit</td><td>先锁后看、结论先锁定</td></tr>
+<tr><td>锚点探测</td><td>10 个逐字锚点 disclose 必中、红旗零误中</td><td>ALL_ANCHORS_CLEAN=True</td></tr>
+<tr><td>编译门禁</td><td><code>svagent/maturity_evidence_honesty.py</code></td><td>R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量</td></tr>
+<tr><td>FJ 取证入口</td><td><code>svagent/forensic_gates_ext8.py</code></td><td>真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4</td></tr>
+<tr><td>接合验收</td><td>KB-AUDIT39 + KB-META05 → PDCA</td><td>82 机会 / 82 痕迹；26 项新测试；链审 40 目录</td></tr>
+</table>
+
+<h2>五、实测数据（均可复现）</h2>
+<table>
+<tr><th>指标</th><th>数值</th></tr>
+<tr><td>全量测试</td><td>1191 → <b>1217 passed</b>（+26，全绿）</td></tr>
+<tr><td>门禁数 / 新模块</td><td>36 道 / 2 新模块（maturity_evidence_honesty + forensic_gates_ext8）</td></tr>
+<tr><td>知识库</td><td>134 → <b>136 条</b>（KB-AUDIT39 fix + KB-META05 首次自审结论 preserve）</td></tr>
+<tr><td>证据链</td><td>40 目录，五件套齐全 23，三锁完整 20（断言 39→40 / 22→23 不放宽）</td></tr>
+<tr><td>成长桥消费痕迹</td><td>82 机会 / 82 痕迹</td></tr>
+<tr><td>十一道取证裁决</td><td>全部 ok（论文诚实披露 L0-L3 门槛）；本仓自审 flag/未达L3</td></tr>
+</table>
+
+<h2>六、诚实边界</h2>
+<div class="note">新门禁可迁移到任何 self-improvement / L 级声明，<b>本轮首次对准本仓</b>；self-reported 折 1；只判声明自洽，<b>不承诺等级真实</b>（KB-R07/META01）。不因用户期待抬级（KB-SIM03）。遵循 §58 选 A 不接 run_loop；篡改测试只在临时副本；未改动任何历史证据，KB-META03/META04 原条目保留。</div>
+
+<div class="foot">rsv = maturity-evidence-honesty-20261122 · 证据目录 audit_l3_evidence_rubric/ · 报告 §97</div>
+</div></body></html>

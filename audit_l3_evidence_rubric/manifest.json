@@ -1,0 +1,37 @@
+{
+  "request_id": "maturity-evidence-honesty-20261122",
+  "five_piece": [
+    "manifest.json",
+    "prereg.json",
+    "gate_prereg.json",
+    "engine.py",
+    "result.json"
+  ],
+  "files": [
+    {
+      "id": "S01",
+      "path": "downloads/S01_abs.html",
+      "sha256": "e67972601431ed947f2a06f22b2ba00c98fe3659596049bdd3e3ca8047b9bfad"
+    },
+    {
+      "id": "S02",
+      "path": "downloads/S02_full.html",
+      "sha256": "96620a9bd5890e63dd1d4149167f954b8b8179a0825058db61497e11dc3d200b"
+    },
+    {
+      "id": "S03",
+      "path": "downloads/S03_trust_abs.html",
+      "sha256": "ad9b9745cc4b2894d3cc0789b226108c553f960ededb19c7a92ae9d4095e08b1"
+    },
+    {
+      "id": "FLAT",
+      "path": "downloads/paper_flat.txt",
+      "sha256": "9b8ae6b9149cb42c8eb67ae11b9af65bef59864141c8a6a1844f285a7cc03a23"
+    },
+    {
+      "id": "FETCH",
+      "path": "downloads/fetch_log.json",
+      "sha256": "3ae17f12f32261d0ba380b0cf00bdc9b815700ff068debf324ef7cd64ca092ab"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "file": "S01_abs.html",
+    "url": "https://arxiv.org/abs/2610.38266",
+    "status": 200,
+    "bytes": 42542,
+    "sha256": "e67972601431ed947f2a06f22b2ba00c98fe3659596049bdd3e3ca8047b9bfad",
+    "ok": true
+  },
+  {
+    "file": "S02_full.html",
+    "url": "https://arxiv.org/html/2610.38266v1",
+    "status": 200,
+    "bytes": 470141,
+    "sha256": "96620a9bd5890e63dd1d4149167f954b8b8179a0825058db61497e11dc3d200b",
+    "ok": true
+  },
+  {
+    "file": "S03_trust_abs.html",
+    "url": "https://arxiv.org/abs/2611.10787",
+    "status": 200,
+    "bytes": 42005,
+    "sha256": "ad9b9745cc4b2894d3cc0789b226108c553f960ededb19c7a92ae9d4095e08b1",
+    "ok": true
+  }
+]

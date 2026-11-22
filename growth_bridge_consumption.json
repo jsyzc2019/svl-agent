@@ -1,5 +1,5 @@
 {
-  "opportunity_count": 81,
+  "opportunity_count": 82,
   "consumption": [
     {
       "source_kind": "knowledge_base",
@@ -644,6 +644,13 @@
       "mechanism": "skill lifecycle honesty 4-dim gate",
       "injected_at": "2026-11-22T06:06:35.430964+00:00",
       "addressable": true
+    },
+    {
+      "source_kind": "kb_mechanism",
+      "source_id": "KB-AUDIT39",
+      "mechanism": "maturity evidence honesty 4-dim gate + first self-audit",
+      "injected_at": "2026-11-22T06:19:25.352739+00:00",
+      "addressable": true
     }
   ],
   "cognitive_deferred_count": 34,
@@ -659,5 +666,5 @@
     "KB-R08",
     "KB-E03"
   ],
-  "note": "真实注入 77 个机会到 PDCA（含 KB 机制与取证缺口）；34 条认知机制交人。 | §93 新增 KB-AUDIT35(红队-防御增益诚实性) 1 条消费痕迹。 | §94 新增 KB-AUDIT36(benchmark污染诚实性) 1条消费痕迹。 | §95 新增 KB-AUDIT37(目标来源诚实性)+KB-META04(边界精确化) 消费痕迹。 | §96 新增 KB-AUDIT38(技能演化生命周期诚实性) 1条消费痕迹。"
+  "note": "真实注入 77 个机会到 PDCA（含 KB 机制与取证缺口）；34 条认知机制交人。 | §93 新增 KB-AUDIT35(红队-防御增益诚实性) 1 条消费痕迹。 | §94 新增 KB-AUDIT36(benchmark污染诚实性) 1条消费痕迹。 | §95 新增 KB-AUDIT37(目标来源诚实性)+KB-META04(边界精确化) 消费痕迹。 | §96 新增 KB-AUDIT38(技能演化生命周期诚实性) 1条消费痕迹。 | §97 新增 KB-AUDIT39(成熟度证据诚实性)+KB-META05(首次自审:未达L3)消费痕迹。"
 }

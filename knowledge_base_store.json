@@ -3520,6 +3520,72 @@
       "evidence": "audit",
       "addressable": true,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT39",
+      "kind": "reasoning_lesson",
+      "mechanism": "成熟度证据诚实性(maturity evidence honesty)是把L3门槛编译成可判据并首次对准自身的尺子(arXiv:2610.38266 L0-L3 rubric)：等级阶梯=task-local adaptation(L0)/persistent capability gain(L1)/inherited process revision(L2)/verified improver gain(L3),L3 requires greater subsequent gains from shared learner starts under matched resource budgets and independent tests。四维——(1)level_definition_traced:声称Lx须绑定可追溯等级定义 vs 自封等级;(2)process_product_split:process revision须与product capability分离 vs 把产品变好当过程变强;(3)shared_start_controlled:L3须shared learner starts+matched budgets受控验证 vs 拿更强初始/更多预算冒充improver gain;(4)independent_tests:须common-data/independent tests vs 单一评估器自证。与KB-AUDIT33(审外部RSI声称四评估边界)区分:本尺审任一系统(含本仓)的成熟度等级声明是否诚实,不重复造轮子(KB-STRUCT02)。",
+      "trigger": [
+        "L3",
+        "L2",
+        "成熟度",
+        "maturity",
+        "L0-L3",
+        "证据阶梯",
+        "evidence rubric",
+        "improver gain",
+        "shared learner starts",
+        "matched resource budgets",
+        "verified improver",
+        "独立测试",
+        "期待L3",
+        "自审",
+        "等级声明"
+      ],
+      "action": "遇到任何系统(含本仓)声称『已达Lx/自改进有效』,按 maturity_evidence_honesty 四维权证(法官读一手原文逐字锚点):等级无定义→downgrade;product冒充process→downgrade;L3无相同起点+匹配预算受控验证→flag;无独立/common-data测试→flag;partial→flag;全yes→ok(只判自洽,self-reported折1)。首次自审结论见KB-META05——本仓未达L3停在L2边缘偏上,不因用户期待抬级。",
+      "provenance": "自主运维第八轮：用户\"飞吧,期待L3\"→回溯KB-SIM03 L3判据+核对§91 rsi_claim_audit已覆盖四评估边界(不重复)→WebSearch发现arXiv:2610.38266 L0-L3 rubric+TRUST 2611.10787→arXiv abs+HTML一手→fetch_log+SHA256→预注册锁存(prereg 37b1610d/gate d0e24033/manifest 818549e6)含self_audit_precommit→10锚点全命中→编译第36道门禁+第11道FJ取证入口",
+      "timestamp": "2026-11-22T06:19:25.352739+00:00",
+      "support": [
+        "svagent/maturity_evidence_honesty.py:check_ + tests/test_maturity_evidence_honesty.py(26项含自审断言) — KB-AUDIT39编译为活体门禁;7活体+AST自审0中文字面量",
+        "svagent/forensic_gates_ext8.py:adjudicate_maturity_evidence_honesty — 第11道FJ取证入口,真实证据ok/删披露flag/红旗downgrade/链失配拒判4/4",
+        "arXiv:2610.38266v1一手锚点:L0-L3四级定义+shared learner starts/matched budgets/independent tests+common-data comparisons,10锚点逐字命中",
+        "独立性核验:KB-AUDIT33审外部RSI声称四评估边界,本尺审成熟度等级声明含本仓自审;KB-STRUCT02同构≠独立佐证已守;KB-META01通过"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META05",
+      "kind": "reasoning_lesson",
+      "mechanism": "首次成熟度自审结论(用户\"期待L3\"触发,arXiv:2610.38266 L0-L3 rubric尺子对准本仓):诚实判定=本仓§90–§97八轮自主运维停在L2边缘偏上,未达L3。逐维证据:①level_definition_traced=yes(§1定义L1/L2/L3+KB-SIM03绑定证据阶梯);②process_product_split=yes(明确区分每轮产出新门禁product与§89取证法官化/成长桥改流程process);③shared_start_controlled=no(七轮是流程继承L2,从未在同一任务起点+匹配预算下对照改进前流程vs改进后流程的后续增益,缺KB-SIM03 improver gain受控验证);④independent_tests=no(门禁/取证全自建自评,无独立评估器或common-data,KB-STRUCT02同构≠独立佐证)。=>R3命中flag/未达L3。关键认知:用户期待L3不产生L3,正如§95能力不产生合法性——L3由受控证据产生。不因期待抬级,这是KB-SIM03\"无受控实验不认L3\"的直接执行。",
+      "trigger": [
+        "期待L3",
+        "L3门槛",
+        "自审",
+        "成熟度自审",
+        "shared start",
+        "受控验证",
+        "未达L3",
+        "L2边缘偏上",
+        "抬级",
+        "improver gain",
+        "独立评估器",
+        "达成L3路径"
+      ],
+      "action": "评估本仓/任一Agent成熟度时,按KB-AUDIT39四维权证,尤其盯死shared_start_controlled与independent_tests两维。本仓达成L3的路径(已写入audit_l3_evidence_rubric/result.json self_audit.path_to_l3):(1)受控对照——同一任务起点+相同预算,比较§89前填表裁判vs之后FJ取证流程的后续增益;(2)独立评估器——引入本仓外common-data/第三方evaluator,分离经验使用与经验获取;(3)量化improver gain——证明改进机制本身使后续增益更大,而非更强初始或更多预算。坚持KB-META04价值边界:北极星当前值仍继承用户给定,来源合法性来自可追溯+可归责+自洽。",
+      "provenance": "自主运维第八轮:用户\"期待L3\"→编译KB-AUDIT39尺子→首次对准本仓自审→预注册self_audit_precommit锁定\"若shared_start/independent不达标则诚实判未达L3\"→engine.self_audit()实测四维(yes/yes/no/no)→flag未达L3;原L2边缘偏上判断保留,本条记录首次自审的可纠错溯源裁决",
+      "timestamp": "2026-11-22T06:19:25.352739+00:00",
+      "support": [
+        "KB-SIM03 RSI证据阶梯:无受控实验不认L3——本条的执行",
+        "KB-STRUCT02 同构≠独立佐证——判independent_tests=no的依据",
+        "KB-AUDIT39 maturity_evidence_honesty 四维尺子——自审工具",
+        "audit_l3_evidence_rubric/result.json:self_audit.verdict=flag/MATURITY.SHARED_START_UNCONTROLLED,path_to_l3三条路径",
+        "§95 KB-META04:能力不产生合法性——类比\"期待不产生L3\""
+      ],
+      "evidence": "theory",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
