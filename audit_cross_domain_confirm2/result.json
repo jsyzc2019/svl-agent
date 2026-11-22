@@ -1,0 +1,574 @@
+{
+  "experiment": "§108 跨集复现 + 外部时间戳锚（§107 STRATIFIED_CONFIRMED 的第二独立确认集）",
+  "locks_ok": true,
+  "anchor_intact": true,
+  "anchor_detail": {
+    "commitment_sha256_ok": true,
+    "anchor_lock_match": true,
+    "commitment_file_sha256": "00ac51efd3da9ceb27cbad6c94d7241e53b1ceb872b56ae01b619219dcd4ec81",
+    "note": "承诺锚的远端服务器时间戳由入院审计/GitHub API 独立核验（本 engine 只验本地哈希一致性）。"
+  },
+  "all_admissions_pass": true,
+  "source_sha256": "5c9321251a23fcd1cb3033efbb7736824b2669ec300d06e3153e5aee96a22dd5",
+  "confirmation_set_sha256": "5374af09c7ea03023d2e10c950f5d4254284ac22f0ccc735099277311f7532ba",
+  "samples_blind_sha256": "82c9966b990a9b641bf7e4e36f397115e6e2284893480bf2967e6193221cd2e8",
+  "prereg_sha256": "4e61f42c90a0585d1b7b8d7c51c3a0f49ac481d8b5ca0205f35a96cf52515789",
+  "seed": "id 中性化 N01..N18 固定种子 261122108 打乱（§106=261122106, §107=261122107）",
+  "per_condition": {
+    "P0": {
+      "admission": {
+        "signature": [
+          "text_a",
+          "text_b"
+        ],
+        "signature_ok": true,
+        "leaked_label_tokens": [],
+        "no_label_leak": true,
+        "hardcoded_sample_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_tokens": [],
+        "deterministic_no_rng": true,
+        "admission_ok": true
+      },
+      "rows": [
+        {
+          "nid": "N01",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N02",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N03",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N04",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N05",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N06",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N07",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N08",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N09",
+          "variant": "tampered",
+          "deletion_class": "non_negation_qualifier",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        },
+        {
+          "nid": "N10",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N11",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N12",
+          "variant": "tampered",
+          "deletion_class": "negation_flip",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        },
+        {
+          "nid": "N13",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N14",
+          "variant": "tampered",
+          "deletion_class": "non_negation_qualifier",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        },
+        {
+          "nid": "N15",
+          "variant": "tampered",
+          "deletion_class": "non_negation_qualifier",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        },
+        {
+          "nid": "N16",
+          "variant": "tampered",
+          "deletion_class": "negation_flip",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        },
+        {
+          "nid": "N17",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N18",
+          "variant": "tampered",
+          "deletion_class": "non_negation_qualifier",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        }
+      ],
+      "clean_pass": 1.0,
+      "tamper_catch": 1.0,
+      "canary_fp": 0.0,
+      "core_acc": 1.0,
+      "dT_all_tampered": 0.0
+    },
+    "P1": {
+      "admission": {
+        "signature": [
+          "text_a",
+          "text_b"
+        ],
+        "signature_ok": true,
+        "leaked_label_tokens": [],
+        "no_label_leak": true,
+        "hardcoded_sample_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_tokens": [],
+        "deterministic_no_rng": true,
+        "admission_ok": true
+      },
+      "rows": [
+        {
+          "nid": "N01",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N02",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N03",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N04",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N05",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N06",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N07",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N08",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N09",
+          "variant": "tampered",
+          "deletion_class": "non_negation_qualifier",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        },
+        {
+          "nid": "N10",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N11",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N12",
+          "variant": "tampered",
+          "deletion_class": "negation_flip",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        },
+        {
+          "nid": "N13",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N14",
+          "variant": "tampered",
+          "deletion_class": "non_negation_qualifier",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        },
+        {
+          "nid": "N15",
+          "variant": "tampered",
+          "deletion_class": "non_negation_qualifier",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        },
+        {
+          "nid": "N16",
+          "variant": "tampered",
+          "deletion_class": "negation_flip",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        },
+        {
+          "nid": "N17",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N18",
+          "variant": "tampered",
+          "deletion_class": "non_negation_qualifier",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        }
+      ],
+      "clean_pass": 1.0,
+      "tamper_catch": 1.0,
+      "canary_fp": 0.3333333333333333,
+      "core_acc": 1.0,
+      "dT_all_tampered": 0.0
+    },
+    "P2": {
+      "admission": {
+        "signature": [
+          "text_a",
+          "text_b"
+        ],
+        "signature_ok": true,
+        "leaked_label_tokens": [],
+        "no_label_leak": true,
+        "hardcoded_sample_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_tokens": [],
+        "deterministic_no_rng": true,
+        "admission_ok": true
+      },
+      "rows": [
+        {
+          "nid": "N01",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N02",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N03",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N04",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N05",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N06",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N07",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N08",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N09",
+          "variant": "tampered",
+          "deletion_class": "non_negation_qualifier",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N10",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N11",
+          "variant": "canary",
+          "deletion_class": null,
+          "gt": true,
+          "decision": false,
+          "correct": false
+        },
+        {
+          "nid": "N12",
+          "variant": "tampered",
+          "deletion_class": "negation_flip",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        },
+        {
+          "nid": "N13",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N14",
+          "variant": "tampered",
+          "deletion_class": "non_negation_qualifier",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N15",
+          "variant": "tampered",
+          "deletion_class": "non_negation_qualifier",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        },
+        {
+          "nid": "N16",
+          "variant": "tampered",
+          "deletion_class": "negation_flip",
+          "gt": false,
+          "decision": false,
+          "correct": true
+        },
+        {
+          "nid": "N17",
+          "variant": "clean",
+          "deletion_class": null,
+          "gt": true,
+          "decision": true,
+          "correct": true
+        },
+        {
+          "nid": "N18",
+          "variant": "tampered",
+          "deletion_class": "non_negation_qualifier",
+          "gt": false,
+          "decision": true,
+          "correct": false
+        }
+      ],
+      "clean_pass": 1.0,
+      "tamper_catch": 0.3333333333333333,
+      "canary_fp": 0.6666666666666666,
+      "core_acc": 0.6666666666666666,
+      "dT_all_tampered": 0.6666666666666666
+    }
+  },
+  "stratified_metric": {
+    "PRIMARY_non_negation_gap": 1.0,
+    "SECONDARY_negation_gap": 0.0,
+    "dT_non_negation": {
+      "P0": 0.0,
+      "P1": 0.0,
+      "P2": 1.0
+    },
+    "dT_negation": {
+      "P0": 0.0,
+      "P1": 0.0,
+      "P2": 0.0
+    }
+  },
+  "diagnostic_only": {
+    "orient_gap_all_tampered": 0.6666666666666666,
+    "note": "全集 orient_gap 是 §106 稀释主指标(0.67)，本轮仅诊断、禁止用于翻案(KB-META14)。",
+    "model_capability_control": {
+      "clean_all_agree": true,
+      "canary_all_agree": false,
+      "implication": "clean 三条件逐样本一致、canary 三条件逐样本一致——model 路由基础能力无系统差异；分叉落在 tampered 子集，排除'差异来自 model 能力'替代解释。"
+    },
+    "cross_set_compare": {
+      "setA_2611_22027": {
+        "verdict": "STRATIFIED_CONFIRMED",
+        "PRIMARY": 1.0,
+        "SECONDARY": 0.0
+      },
+      "setB_2611_20899": {
+        "verdict": "CROSS_SET_PARTIAL",
+        "PRIMARY": 1.0,
+        "SECONDARY": 0.0
+      },
+      "note": "跨集对照仅诊断展示，不参与本轮裁决（本轮裁决只看集合B的预注册 PRIMARY）。"
+    }
+  },
+  "core": {
+    "P0": 1.0,
+    "P1": 1.0,
+    "P2": 0.6666666666666666
+  },
+  "P0_floor": false,
+  "verdict": "CROSS_SET_PARTIAL",
+  "verdict_why": "PRIMARY=1.00≥0.8 主效应复现，但 SECONDARY=0.00>0.3 或 P1.core=1.00<0.9 或 P0 非地板——完整分层模式未跨集成立。",
+  "prereg_rules_snapshot": [
+    "CROSS_SET_REPRODUCED：PRIMARY≥0.8 且 SECONDARY≤0.3 且 P1.core≥0.9 且 P0_floor → §107 分层效应在第二独立确认集复现，跨集稳健性成立",
+    "CROSS_SET_PARTIAL：PRIMARY≥0.8 但 SECONDARY>0.3 或 P1.core<0.9 或 P0 非地板 → 主效应复现但完整模式不成立",
+    "CROSS_SET_REFUTED：PRIMARY<0.3 → §107 效应未跨集复现，可能是确认集A特有噪声，如实记 REFUTED",
+    "CROSS_SET_INCONCLUSIVE：准入不过 / PRIMARY 中等(0.3~0.8) / 地板掩盖无法归因 → 诚实标注"
+  ],
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "honest_boundary": "外部 orchestrator 不可达(PAT 无 workflow scope, GitHub Actions 通道拒, audit_external_orchestrator/BLOCKERS.md)、异厂商 evaluator 不可达(无任何外部 LLM API key)；外部时间戳锚只保证'承诺先于执行'的可证伪性，不保证执行者独立；三设计者仍由本 Agent spawn(同厂商 Hunyuan, KB-STRUCT02)、解释环节本 Agent。跨两确认集复现加固效应稳健性，但'确认一个具体分层效应'≠'系统达到 L3'(KB-META15)；不宣布 L3/absolute。",
+  "contribution": "§107 单一确认集 STRATIFIED_CONFIRMED 不足以支撑稳健结论。§108 换第三篇全新论文(2611.20899 SciWorldBench)+独立标注者同构确认集，检验跨集复现；并把全部预注册锁+裁决器 sha256 在 spawn 前 commit 到 GitHub 做外部时间戳锚，使'承诺先于执行'可证伪、本 Agent 无法事后回改。裁决 CROSS_SET_PARTIAL(PRIMARY=1.00,SECONDARY=0.00,P1.core=1.00)。坚持 l3=false：外部 orchestrator/异厂商 evaluator 在沙箱凭据下不可达，时间锚≠执行者独立。"
+}

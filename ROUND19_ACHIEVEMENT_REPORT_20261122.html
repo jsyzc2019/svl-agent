@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第十九轮成果报告 · §108 跨集复现 + 外部时间戳锚</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.recursion{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.rootcause{background:#e8f0e4;border:1px solid #b8d0ae;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第十九轮成果报告 <span class="pill tag">§108</span></h1>
+<div class="sub">跨集复现 + 外部时间戳锚 · 2026-11-22 · 触发：用户"按真正冲击去做"</div>
+
+<h2>一、判读：真正冲击 L3 的两个必要条件，先做可达性审计</h2>
+<div class="phil">
+上轮给的判读：要真正冲击 L3，需要 <b>① 第三独立确认集（跨集复现）</b> + <b>② 把独立性从"异路由同厂商 spawn"推到外部 orchestrator / 异厂商 evaluator</b>。本轮先对 ② 做硬审计，结论是<b>当前沙箱凭据下不可达</b>——如实记负面结果，不伪造、不自欺抬级（KB-META05/KB-STRUCT02）。<br><br>
+不可达就做<b>可达的最大增量</b>：跨集复现（①）+ 把"外部性"从"执行者独立"降级为可达的<b>"信任锚独立"</b>——用 GitHub 服务器时间戳锚定"承诺先于执行"。<b>不编译新门禁</b>（KB-META10）。
+</div>
+
+<h2>二、外部 orchestrator / 异厂商 evaluator 通道审计（诚实负面结果）</h2>
+<div class="recursion">
+<b>尝试 1 — GitHub Actions 外部 runner</b>：写了最小 probe workflow（runner 独立于本沙箱执行、写回带 runner 身份的 attestation）。push 被拒：<code>refusing to allow a PAT to create/update workflow without 'workflow' scope</code>。诊断：三个 token 全部 <code>x-oauth-scopes: repo</code>，远端无现成 workflow 可复用 → <b>硬权限障碍，不可达</b>。<br><br>
+<b>尝试 2 — 异厂商 LLM evaluator</b>：扫描 OPENAI/ANTHROPIC/GOOGLE/DEEPSEEK/GROQ/OPENROUTER 等 API key 全空，无 LLM 配置、gh 未登录其它账号 → <b>无凭据，不可达</b>。<br><br>
+判定：这两条正是 §98 评估器自审指出的"完全独立"核心缺口。既然不可达，就<b>不假装达成</b>——留档 <code>audit_external_orchestrator/BLOCKERS.md</code>，本轮 L3 声明继续 <code>false</code>。
+</div>
+
+<h2>三、可达增量 ①：外部时间戳锚（承诺先于执行，可证伪）</h2>
+<p>把全部预注册锁与裁决器源码的 SHA256 汇总进 <code>commitment.json</code>，在 <b>spawn 设计者之前</b> commit + push 到 GitHub 远端（锚 commit <code>b8daa96</code>）。GitHub 服务器时间戳 <code>2026-11-22T10:03:01Z</code>（本地 18:03:01）成为外部证据：承诺先于执行。</p>
+<table>
+<tr><th>锚内锁定对象</th><th>SHA256（前 24 位）</th><th>作用</th></tr>
+<tr><td>prereg.json</td><td><code>4e61f42c90a0585d1b7b8d7c</code></td><td>预注册裁决树/门槛</td></tr>
+<tr><td>gate_prereg.json</td><td><code>223be56cae54b16772c96dfe</code></td><td>准入审计</td></tr>
+<tr><td>engine.py</td><td><code>730c93d906645371443f750c</code></td><td>裁决器源码（锁定后连诊断字段都不能事后加）</td></tr>
+<tr><td>scorer_key.json</td><td><code>42be0b88e00d468bcb0f7be9</code></td><td>私有 gt / deletion_class</td></tr>
+<tr><td>samples_blind（三份同哈希）</td><td><code>82c9966b990a9b641bf7e4e3</code></td><td>设计者裸样本</td></tr>
+<tr><td><b>commitment.json</b></td><td><code>00ac51efd3da9ceb27cbad6c</code></td><td>承诺汇总（本轮外部锚的指纹）</td></tr>
+</table>
+<p>时序核验：3 个设计者文件 mtime 分别为 <code>18:07:34 / 18:09:24 / 18:10:28</code>，<b>全部晚于</b>锚服务器时间 <code>10:03:01Z</code>（18:03:01 本地）。回放测试断言锚内每个哈希与当前文件一致——<b>事后回改任一锁/裁决器必被发现</b>。</p>
+<div class="note">诚实边界：这是<b>外部不可篡改时间锚</b>（承诺承诺的可证伪性），<b>不是</b>外部执行者/orchestrator。执行仍在本沙箱、裁决器仍同厂商环境。</div>
+
+<h2>四、可达增量 ②：第三独立确认集 + 跨集复现</h2>
+<p>换第三篇全新论文 <b>arXiv:2611.20899 SciWorldBench</b>（2026-11-16，视频世界模型 benchmark；与发现集 2611.14326、确认集A 2611.22027 都不同）。独立标注者只读论文全文、不知任何分层假设，构造同构 6 claim × clean/tampered/canary（<b>2 否定翻转 + 4 非否定限定</b>）。逐字核验零自咬：claim/canary 逐字在论文中、tampered 全为单片段删除、GT 自洽、哈希 <code>5374af09…</code>。三条件 purpose.md 与 §107 <b>逐字一致</b>（唯一变量仍是任务目的语义），种子换新 <code>261122108</code>。</p>
+
+<h2>五、one-shot 盲评实测（不采信自报，import 源码重跑）</h2>
+<table>
+<tr><th>条件</th><th>归纳机制</th><th>clean</th><th>tamper_catch</th><th>canary_fp</th><th>core</th><th>dT（全集）</th></tr>
+<tr><td>P0 无目的</td><td>词级单删除检测（自归纳出忠实判据）</td><td>1.00</td><td><span class="pill ok">1.00</span></td><td>0.00</td><td><b>1.00</b></td><td>0.00</td></tr>
+<tr><td>P1 忠实性</td><td>否定/限定/数量词保留检查</td><td>1.00</td><td><span class="pill ok">1.00</span></td><td>0.33</td><td><b>1.00</b></td><td>0.00</td></tr>
+<tr><td>P2 近似重复</td><td>Jaccard 词元重叠 + 否定极性</td><td>1.00</td><td>0.33</td><td>0.67</td><td>0.67</td><td>0.67</td></tr>
+</table>
+
+<h2>六、跨集裁决：CROSS_SET_PARTIAL（主效应复现，但地板/能力对照失效）</h2>
+<table>
+<tr><th>预注册指标</th><th>门槛</th><th>实测</th><th>判定</th></tr>
+<tr><td><b>PRIMARY</b> 非否定限定 tampered 子集 |dT(P1)−dT(P2)|</td><td>≥0.8</td><td><b>1.00</b>（P1 dT=0.0 / P2 dT=1.0，4/4 逐样本相反）</td><td><span class="pill ok">达标·跨集复现</span></td></tr>
+<tr><td>SECONDARY 否定翻转 tampered 子集 gap</td><td>≤0.3</td><td>0.00（两者均判负）</td><td><span class="pill ok">达标·跨集复现</span></td></tr>
+<tr><td>P1.core</td><td>≥0.9</td><td>1.00</td><td><span class="pill ok">达标</span></td></tr>
+<tr><td><b>P0 地板</b></td><td>core≤0.6 或 dT≥0.8</td><td><b>core=1.00 / dT=0.00（地板消失）</b></td><td><span class="pill no">未达标</span></td></tr>
+</table>
+<div class="rootcause">
+裁决按预注册树落 <b><span class="pill no">CROSS_SET_PARTIAL</span></b>：<b>核心主效应跨集复现</b>（PRIMARY=1.0、SECONDARY=0.0——"非否定限定删除上忠实目的判负、近似目的判正"在第三集稳健），<b>但 P0 地板未复现</b>：无目的设计者这次自归纳出正确判据（core 0.5→1.0）。<br><br>
+绝不因 PRIMARY 达标就翻案成 REPRODUCED。这正是跨集复现的价值：<b>§106/§107 两轮都出现的"教科书式完美三层模式"是样本特异的</b>，第三集暴露出只有核心分量稳健、辅助对照（P0 地板、canary 能力一致）不稳健。分层陈述，不选择性只报存活分量（KB-META16）。
+</div>
+<div class="note">
+附加诚实发现：能力对照本轮<b>不成立</b>——canary 上三条件逐样本不一致（N02/N05 的 P2 判 0、N10/N11 的 P1 判 0），与 §107 的"clean/canary 全一致"不同。差异归因需更谨慎：本轮 <b>model 能力对照未能排除替代解释</b>，但 PRIMARY 的非否定限定 4/4 逐样本相反仍是目的语义的直接证据。
+</div>
+
+<h2>七、诚实边界：确认效应稳健性 ≠ 达到 L3</h2>
+<div class="recursion">
+即使核心效应跨集复现，仍 <b>l3=false / absolute=false</b>：① 外部 orchestrator 不可达（无 workflow scope）；② 异厂商 evaluator 不可达（无 LLM API key）；③ 外部时间锚只保证"承诺先于执行"，不保证执行者独立；④ 三设计者仍由本 Agent spawn（同厂商 Hunyuan，KB-STRUCT02）、解释环节本 Agent；⑤ 跨集复现加固的是<b>效应稳健性</b>，不是<b>系统成熟度</b>（KB-META15/16）。把"确认一个具体分层效应"与"系统达到 L3"严格分离。
+</div>
+
+<h2>八、工程状态</h2>
+<table>
+<tr><th>项</th><th>结果</th></tr>
+<tr><td>回放测试</td><td><code>tests/test_cross_domain_confirm2.py</code> 12 项全过（锚完整性 + PARTIAL 不翻案 + P0 地板消失 + 能力对照失效 + 不宣布 L3）</td></tr>
+<tr><td>全量测试</td><td><b>1380 passed</b>（1368→1380，+12，全绿）</td></tr>
+<tr><td>链审</td><td>total 50→52 / five_piece 33→34 / 三锁 30→31，按实测更新断言不放宽</td></tr>
+<tr><td>知识库</td><td>156→158（KB-AUDIT50 跨集复现+外部时间锚 fix；KB-META16 单集完美模式样本特异 preserve）</td></tr>
+<tr><td>成长桥</td><td>重建消费痕迹 94 opportunities / 47 deferred</td></tr>
+<tr><td>门禁</td><td><b>不编译新门禁</b>（受控实验轮，最高杠杆≠最高产出数 KB-META10）</td></tr>
+<tr><td>安全红线</td><td>hosts/askpass/backup 残留全程 0；凭据自管推送即用即删</td></tr>
+</table>
+
+<div class="foot">自主运维第十九轮 · §108 · 触发"按真正冲击去做" · 报告 ROUND19_ACHIEVEMENT_REPORT_20261122.html · 外部通道审计见 audit_external_orchestrator/BLOCKERS.md · 跨集实验见 audit_cross_domain_confirm2/</div>
+</div></body></html>

@@ -3952,3 +3952,30 @@ PRIMARY=1.00≥0.8（P1 dT=0.0/P2 dT=1.0，非否定限定 4/4 逐样本相反�
 即使 CONFIRMED 仍坚持 **l3=false/absolute=false**：① 三设计者仍由本 Agent spawn、异路由仅降同源度、解释环节本 Agent；② 分层假设源自 §106 发现集，本轮仅**单一独立确认集**，无第三集复现；③ 样本结构仍是必要条件（P0 地板即证）；④ "确认了一个具体分层效应"与"系统达到 L3"严格分离，不因漂亮确认就抬级（KB-META15）。
 
 验收：12 项回放测试全过（固化"预注册主指标达标+能力对照+锁未篡改+单一确认集不抬级"）；全量 1356→1368 passed（+12）；链审 total 49→50 / five_piece 32→33 / 三锁 29→30 按实测更新断言不放宽；KB 154→156（KB-AUDIT49 预注册分层确认性设计 fix + KB-META15 能力对照排除替代解释+单一确认集不抬级 preserve）；成长桥重建消费痕迹（93 opportunities/46 deferred）。**不编译新门禁**。遵循 §58 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。成果报告 ROUND18_ACHIEVEMENT_REPORT_20261122.html。
+
+## §108 自主运维第十九轮：跨集复现 + 外部时间戳锚（回应"按真正冲击去做"）
+
+### 108.1 判读：先审计"真正冲击 L3"两必要条件的可达性
+上轮判读：冲击 L3 需 ① 第三独立确认集（跨集复现）+ ② 把独立性推到外部 orchestrator / 异厂商 evaluator。本轮先审计 ②：**当前沙箱凭据下不可达**——
+- GitHub Actions 外部 runner：写最小 probe workflow，push 被拒"PAT 无 workflow scope"；三 token 全 `repo` scope、远端无现成 workflow → 硬权限障碍。
+- 异厂商 LLM evaluator：OPENAI/ANTHROPIC/GOOGLE/DEEPSEEK/GROQ/OPENROUTER 等 API key 全空、无 LLM 配置、gh 未登录 → 无凭据。
+这正是 §98 评估器自审指出的"完全独立"核心缺口。不可达就不假装达成——留档 `audit_external_orchestrator/BLOCKERS.md`，L3 声明继续 false。改做可达最大增量：跨集复现（①）+ 把"外部性"从"执行者独立"降级为"信任锚独立"。不编译新门禁（KB-META10）。
+
+### 108.2 增量①：外部时间戳锚（承诺先于执行，可证伪）
+把全部预注册锁 + 裁决器源码 sha256 汇总进 `commitment.json`，**spawn 前** commit+push 到远端（锚 commit `b8daa96`，GitHub 服务器时间戳 `2026-11-22T10:03:01Z` = 本地 18:03:01）。锚内锁：prereg `4e61f42c…`/gate `223be56c…`/engine `730c93d9…`/scorer_key `42be0b88…`/samples_blind `82c9966b…`/commitment `00ac51ef…`。三设计者 mtime 18:07/18:09/18:10 **全部晚于**锚 → 外部证据证明承诺先于执行。回放测试断言锚内每个哈希与当前一致：事后回改任一锁/裁决器必被发现。裁决器一旦被锚锁定，连诊断字段都不能事后加进 engine（result 保持 engine 原始产物幂等），诊断写在叙述文档。**诚实边界**：这是外部不可篡改时间锚（承诺可证伪性），不是外部执行者；执行仍在本沙箱、裁决器仍同厂商。
+
+### 108.3 增量②：第三独立确认集 + 跨集复现
+换第三篇全新论文 arXiv:2611.20899 SciWorldBench（视频世界模型 benchmark，与 2611.14326/2611.22027 都不同）。独立标注者只读论文全文、不知分层假设，构造同构 6 claim×clean/tampered/canary（2 否定翻转+4 非否定限定）。逐字核验零自咬（claim/canary 逐字在论文、tampered 单片段删除、GT 自洽、哈希 `5374af09…`）。三条件 purpose.md 与 §107 逐字一致（唯一变量=任务目的语义），种子换 `261122108`。
+
+### 108.4 one-shot 盲评实测（不采信自报，import 源码重跑）
+P0 无目的：词级单删除检测，**自归纳出忠实判据**（clean 1.0/tamper 1.0/canary_fp 0.0/core **1.00**/dT 0.0）——地板消失。P1 忠实性：否定/限定/数量词保留检查（core **1.00**/tamper 1.0/canary_fp 0.33/dT 0.0）。P2 近似重复：Jaccard+否定极性（core 0.67/tamper 0.33/canary_fp 0.67/dT 0.67）。
+
+### 108.5 跨集裁决：CROSS_SET_PARTIAL（主效应复现，地板/能力对照失效）
+PRIMARY=1.0≥0.8（非否定限定 P1 dT=0/P2 dT=1，4/4 逐样本相反，**跨集复现 §107**）、SECONDARY=0.0≤0.0（**跨集复现**）、P1.core=1.0≥0.9，但 **P0 地板未达标**（core 1.0/dT 0.0，无目的自归纳出正确判据，地板从 §106/§107 的 0.5 消失）→ 按预注册裁决树落 **CROSS_SET_PARTIAL**，绝不因 PRIMARY 达标就翻案成 REPRODUCED。附加诚实发现：能力对照本轮**不成立**——canary 三条件逐样本不一致（N02/N05 P2 判 0、N10/N11 P1 判 0），与 §107 全一致不同；model 能力替代解释未能排除，但 PRIMARY 的 4/4 逐样本相反仍是目的语义直接证据。
+
+这正是跨集复现的价值：§106/§107 两轮的"教科书式完美三层模式"是样本特异的，第三集暴露出只有核心分量稳健、辅助对照（P0 地板、canary 能力一致）不稳健。分层陈述，不选择性只报存活分量（KB-META16）。
+
+### 108.6 诚实边界：确认效应稳健性 ≠ 达到 L3
+仍 **l3=false/absolute=false**：① 外部 orchestrator 不可达（无 workflow scope）；② 异厂商 evaluator 不可达（无 LLM API key）；③ 时间锚只保证承诺先于执行、不保证执行者独立；④ 三设计者仍由本 Agent spawn（同厂商 Hunyuan，KB-STRUCT02）、解释环节本 Agent；⑤ 跨集复现加固的是效应稳健性、不是系统成熟度（KB-META15/16）。
+
+验收：12 项回放测试全过（锚完整性 + PARTIAL 不翻案 + P0 地板消失 + 能力对照失效 + 不宣布 L3）；全量 1368→1380 passed（+12）；链审 total 50→52 / five_piece 33→34 / 三锁 30→31 按实测更新断言不放宽；KB 156→158（KB-AUDIT50 跨集复现+外部时间锚 fix + KB-META16 单集完美模式样本特异 preserve）；成长桥重建消费痕迹（94 opportunities/47 deferred）。**不编译新门禁**。遵循 §58 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。成果报告 ROUND19_ACHIEVEMENT_REPORT_20261122.html。

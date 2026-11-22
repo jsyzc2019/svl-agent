@@ -4145,6 +4145,61 @@
       "evidence": "audit_stratified_confirmation/result.json:diagnostic_only.model_capability_control(clean_all_agree=true,canary_all_agree=true)+l3_claimed=false+absolute_claimed=false+honest_boundary含'单一独立确认集'",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT50",
+      "kind": "reasoning_lesson",
+      "mechanism": "跨集复现+外部时间戳锚(§108):§107单一确认集(2611.22027)STRATIFIED_CONFIRMED不足以支撑稳健结论。§108做两增量:①第三独立确认集(全新论文2611.20899 SciWorldBench,从未用+独立标注者构造同构6claim×3变体,2否定+4非否定,标注者不知分层假设)检验跨集复现;②外部时间戳锚——spawn前把全部预注册锁(prereg/gate/manifest/scorer_key/engine源码/samples_blind)sha256汇总commitment.json并commit+push到GitHub,服务器时间戳10:03:01Z证明'承诺先于执行'(设计者文件mtime18:07-18:10晚于锚),本Agent无法事后回改锁/裁决器而不破坏哈希(回放测试验锚完整性)。盲评:PRIMARY(非否定限定gap)=1.0复现§107,SECONDARY=0.0复现,P1.core=1.0,但P0地板消失(P0自归纳出正确判据core=1.0)→按裁决树落CROSS_SET_PARTIAL,不因PRIMARY达标就粉饰成REPRODUCED。诚实边界:外部orchestrator不可达(repo scope无workflow scope,GitHub Actions通道拒)、异厂商evaluator不可达(无LLM API key),时间锚只保证承诺先于执行不保证执行者独立,仍l3=false。",
+      "trigger": [
+        "跨集复现",
+        "第三独立确认集",
+        "外部时间戳锚",
+        "commitment哈希锁",
+        "承诺先于执行",
+        "CROSS_SET_PARTIAL",
+        "P0地板消失",
+        "样本特异",
+        "不翻案"
+      ],
+      "action": "①单一确认集的显著结果不要当稳健结论——换第三个全新数据源+独立标注者(不知假设)做第二次确认,复现才加固,不复现如实记REFUTED/PARTIAL;②要让'预注册先于结果'可证伪,把全部锁+裁决器源码sha256在spawn前commit+push到远端,用服务器时间戳做外部锚,并让回放测试验锚内每个哈希与当前一致(事后回改必被发现);③裁决器一旦被锚锁定,连诊断字段都不能事后加进engine(result保持engine原始产物幂等),诊断写在叙述文档;④裁决树严格按预注册:主指标达标但其他先决(如对照组地板)不成立时落PARTIAL而非CONFIRMED,不因一个漂亮主指标翻案;⑤时间锚≠执行者独立——没有外部orchestrator/异厂商evaluator时,即使跨集复现仍l3=false,把'效应稳健性'与'系统成熟度'分离。",
+      "provenance": "自主运维第十九轮:用户'按真正冲击去做'→先审计外部orchestrator/异厂商通道(均不可达,留档BLOCKERS.md)→改做可达最大增量:第三确认集2611.20899+外部时间戳锚(b8daa96,服务器10:03:01Z)+跨集复现→PRIMARY1.0复现但P0地板消失→CROSS_SET_PARTIAL诚实落档",
+      "timestamp": "2026-11-22T18:15:00+00:00",
+      "support": [
+        "KB-AUDIT49 §107预注册分层确认——本轮做其跨集复现",
+        "KB-META15 单一确认集不抬级——本轮加固为跨集但不宣称L3",
+        "KB-STRUCT02 同构≠独立——外部锚只锁承诺不锁执行者同源",
+        "KB-META14 指标异质性错配——本轮仍守全集gap仅诊断禁翻案"
+      ],
+      "evidence": "audit_cross_domain_confirm2/result.json:verdict=CROSS_SET_PARTIAL+PRIMARY1.0+SECONDARY0.0+P0_floor=false+anchor_intact=true;commitment.sha256=00ac51ef…;远端锚b8daa96服务器10:03:01Z早于设计者mtime18:07+;audit_external_orchestrator/BLOCKERS.md通道审计",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META16",
+      "kind": "reasoning_lesson",
+      "mechanism": "单一确认集的完美模式是样本特异的 + 能力对照也可能失效(§108):§106/§107两轮都出现'P0无目的地板core0.5/dT1.0'且clean全对/canary全错的整齐三层模式。§108换第三确认集(2611.20899)后:P0无目的竟然自归纳出'单删除检测'判据做到core1.0/tamper1.0——地板消失;canary上三条件逐样本不一致(N02/N05 P2判0、N10/N11 P1判0),§107的'能力对照全一致'也没复现。只有PRIMARY(非否定限定P1全0/P2全1,gap1.0)跨集稳健。认知机制:一个受控实验里'所有对照条件都呈现教科书式完美模式'往往是该样本构造特质的产物,不是稳健规律;换集后哪些效应留下、哪些消失,才是真实稳健性图谱。纪律:①不把单集上漂亮的完整模式当普遍结论,主动换集看哪个分量存活;②某个对照(地板/能力一致)不复现时如实记入诊断与verdict(本轮CROSS_SET_PARTIAL而非REPRODUCED),不选择性只报存活的分量;③区分'核心效应稳健'(PRIMARY跨集复现)与'辅助对照稳健'(P0地板/能力对照未复现),分层陈述;④这类'单集完美模式不可外推'的认知偏差是addressable=False的交人机制。",
+      "trigger": [
+        "单集完美模式样本特异",
+        "对照不复现",
+        "地板消失",
+        "能力对照失效",
+        "核心效应vs辅助对照",
+        "分层陈述",
+        "稳健性图谱",
+        "不可外推"
+      ],
+      "action": "①设计受控实验时预设'完整模式可能只在发现集成立',把每个对照分量(P0地板/能力一致/主效应)当独立可证伪命题,换集逐个检验;②报告时分层:'核心主效应跨集复现'与'辅助对照未复现'并列,不因前者漂亮就隐去后者;③裁决树要对'主指标达标但辅助先决失效'设PARTIAL档(本轮CROSS_SET_PARTIAL),避免二元CONFIRMED/REFUTED的过度自信;④把'教科书式完美模式'当警讯而非成就——它提示可能过拟合样本构造,主动找第二/第三集证伪;⑤回放测试固化'PARTIAL不翻案+地板消失+能力对照失效',把诚实写进代码。",
+      "provenance": "自主运维第十九轮:§108第三确认集P0地板消失(core0.5→1.0)+canary能力对照由全一致变不一致,只有PRIMARY跨集稳健→如实落CROSS_SET_PARTIAL,把'单集完美模式样本特异'记为认知机制",
+      "timestamp": "2026-11-22T18:15:00+00:00",
+      "support": [
+        "KB-AUDIT50 跨集复现实验——本轮发现的对象",
+        "KB-META15 单一确认集不抬级——本轮的对照稳健性分层",
+        "KB-META13 对照组先决——本轮P0地板作为先决失效的处置",
+        "KB-R Goodhart过度拟合——单集完美模式外推失败的根源"
+      ],
+      "evidence": "audit_cross_domain_confirm2/result.json:per_condition.P0.core_acc=1.0+tamper_catch=1.0+P0_floor=false+diagnostic_only.model_capability_control.canary_all_agree=false+verdict=CROSS_SET_PARTIAL(PRIMARY仍1.0);tests/test_cross_domain_confirm2.py固化之",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
