@@ -1,0 +1,32 @@
+{
+  "experiment": "§109 外部 runner 重算 §107 裁决引擎",
+  "runner_name": "GitHub Actions 1000018422",
+  "runner_os": "Linux",
+  "runner_arch": "X64",
+  "hostname": "runnervm0hi8g",
+  "uname": "Linux runnervm0hi8g 7.0.0-1020-azure #21-Ubuntu SMP PREEMPT Tue Oct 27 22:34:38 UTC 2026 x86_64 GNU/Linux",
+  "whoami": "runner",
+  "github_run_id": "45013693112",
+  "github_run_attempt": "1",
+  "github_sha": "e26d5efce51665503d770c06d35a2ddc148df67e",
+  "github_ref": "refs/heads/main",
+  "github_actor": "jsyzc2019",
+  "injected_nonce": "S109-RECOMPUTE-20261122T103903Z-36486",
+  "generated_at_utc": "2026-11-22T10:42:02Z",
+  "frozen_locks_ok": true,
+  "engine_exit_code": 0,
+  "engine_stdout_tail": [
+    "P0_floor = True  P1.core = 1.0  diag orient_gap_all = 0.667",
+    "VERDICT: STRATIFIED_CONFIRMED",
+    "- 预注册 PRIMARY(非否定限定 tampered 子集 |dT(P1)-dT(P2)|)=1.00≥0.8，SECONDARY(否定翻转 gap)=0.00≤0.3，P1.core=1.00≥0.9，P0 地板(core=0.50,dT=1.00)——§106 分层假设在独立确认集获确认：非否定限定删除上忠实性目的判负/近似目的判正，否定翻转上两目的同判负(P2语义一致非摇摆)。"
+  ],
+  "external_result_sha256": "cf6d0f2bd1bd091c74092701403ea4ac6b42dc4b095d92ea50a6764d23106c38",
+  "external_verdict": "STRATIFIED_CONFIRMED",
+  "external_P0_floor": true,
+  "external_core": {
+    "P0": 0.5,
+    "P1": 1.0,
+    "P2": 0.6666666666666666
+  },
+  "external_lock_fields_ok": true
+}
