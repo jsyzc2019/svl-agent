@@ -1,7 +1,8 @@
 # 会话接续文档（SESSION HANDOFF）
 
 > 本文件用于新旧会话接续。新会话开始后，**先读本文件**，再按"接续后第一件事"操作。
-> 生成时间：2026-11-22 10:35 (GMT+8)　|　上一会话终点：§79-§80 完成并本地提交。
+> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 10:40 (GMT+8)——**推送已完成**。
+> 上一会话终点：§79-§80 完成并已全部推送到远端。
 
 ---
 
@@ -9,7 +10,7 @@
 
 本仓是一个自进化 Agent 架构（`/workspace`，Python 包 `svagent`，版本 0.13.1）。
 当前已完成 **§1–§80** 外部精研，编译 **28 道会拦门禁**，知识库 **117 条**，测试 **774 passed**（全绿）。
-本地 main 领先远端 **8 个提交**；**推送因无 GitHub 凭据受阻**，尚未完成（详见 §5）。
+本地 main 与远端 `origin/main` **完全同步**（均 `f735c79`），**推送已完成**（详见 §5）。无遗留推送任务。
 
 ---
 
@@ -48,39 +49,30 @@
 
 ---
 
-## 5. ⚠️ 未完成：远端推送（接续后第一件事）
+## 5. ✅ 已完成：远端推送
 
-**状态**：本地 main = `206e5c4`，领先 `origin/main`（`2fa339e`）**8 个提交**：
+**状态**：2026-11-22 10:40 (GMT+8) 推送成功。用户提供 PAT，经临时 askpass 脚本（用后即删、不入 git 配置/仓库/日志）认证；`git push origin main` → `38aff7b..f735c79 main -> main`。
+**验证**：`git ls-remote` 远端 main = `f735c797…`，本地 HEAD = `f735c797…`，`origin/main` tracking ref 已同步，`git status -sb` 显示 `## main`（无领先/落后）。工作区干净。
 
+**本次推送的 6 个提交**（远端原在 `38aff7b`）：
 ```
+f735c79  Docs: add SESSION_HANDOFF（本文件）
 206e5c4  §79-§80 policy-evolution-grounding + memory-provenance-honesty
 3a15d98  §77-§78 criterion-origin-honesty + selective-supervision-honesty
 232b932  §75-§76 self-knowledge-honesty + verification-boundary-honesty
 0114230  §73-§74 interface-contract-honesty + supervision-viability
 2aa824b  §71-§72 proof-boundary-honesty + proactive-authorization
-38aff7b  §69-§70 async-delegation-lifecycle + memory-scope
-863e0f0  §67-§68 memory_curation
-f07b6db  §61-§66 serving-signal/retrieval-grounding/session-continuity 等
 ```
 
-**失败原因**：`git push origin main` → `fatal: could not read Username for 'https://github.com': No such device or address`。
-已排查：`gh auth status` 未登录；无 `GH_TOKEN`/`GITHUB_TOKEN` 环境变量；无 `~/.git-credentials`；无可用 GitHub MCP 连接器（当前仅 scheduler-assistant / spaceengine 两个未连接 connector）。**非网络抖动，是凭据缺失**，历史多次同因失败。
-
-**新会话接续后按此顺序处理**：
-1. 先确认用户是否已提供凭据（PAT / gh 登录 / SSH key）。**若仍无凭据，不要反复重试 push**，直接如实告知用户"推送受阻于凭据，需用户配置"。
-2. 凭据就绪后任选其一：
-   - `gh auth login`（浏览器或 token），再 `git push origin main`；
-   - 或 `git remote set-url origin https://<TOKEN>@github.com/jsyzc2019/svl-agent.git` 后 push（注意 token 不入日志/不入库）；
-   - 或配置 SSH key 改用 `git@github.com:...`。
-3. push 成功后在 `commentary.md` 追加一行推送记录（含时间、提交数、目标分支）。
+**凭据说明（供后续会话参考）**：本会话 token 由用户临时提供、未持久化到任何配置。若后续会话再遇 `could not read Username`：先做小认证探测 `git ls-remote` 判断是否凭据问题还是网络抖动；凭据问题需用户再次提供 PAT，用临时 askpass（case `*[Uu]sername*` → 用户名，否则 → token）推送后即删。历史曾出现 `curl` 通但 `git push` 超时的间歇抖动，重跑 `ls-remote`/`push` 可恢复。
 
 ---
 
 ## 6. 接续后建议动作清单
 
-- [ ] 处理 §5 推送（第一优先级；无凭据则如实报告，不硬试）。
+- [x] ✅ 处理 §5 推送（已完成，本地与远端同步于 `f735c79`，无遗留）。
 - [ ] 若用户给新的外部精研材料：先抽一手锚点 → 判认知增量独立性 → 按 §3 纪律编译门禁（能机制化才编译，否则只加固 KB）。
-- [ ] 每完成两批 → 一个本地提交 → 尝试推送（凭据就绪时）。
+- [ ] 每完成两批 → 一个本地提交 → 推送（后续会话需用户再提供 PAT，见 §5 凭据说明）。
 - [ ] 本文件随每次会话终结更新现状（§1/§4/§5）。
 
 ---
