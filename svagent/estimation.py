@@ -348,6 +348,7 @@ def report_real_financial_log(path: str | None = None) -> dict | None:
 
 
 def main() -> None:
+    from .evidence_scope import emit; emit("estimation")
     print("Estimation：从核对原话日志估认知参数，量化人的边界 B(c)\n")
     report_recovery()
     profiles = report_profiles()

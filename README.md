@@ -3,7 +3,36 @@
 > coding agent 能自证，不是因为模型懂代码，而是因为它把「对不对」交给了会越来越完整的外置判据。
 > 本仓库证明：**那个外置判据环境本身，可以被 agent 递归地造出来**。agent 是开放的、自组织的。
 
-> 📚 **首次阅读请先看 [仓库地图 REPOSITORY_MAP.md](REPOSITORY_MAP.md)** —— 本仓约 120 个文件按 12 条实验/研究线归位，附逐条复现纪律说明。完整推导见 [commentary.md](commentary.md)（§1–§40）。
+> 📚 **首次阅读请先看 [仓库地图 REPOSITORY_MAP.md](REPOSITORY_MAP.md)** —— 本仓约 120 个文件按 12 条实验/研究线归位，附逐条复现纪律说明。完整推导见 [commentary.md](commentary.md)（§1–§88，接续见 [SESSION_HANDOFF.md](SESSION_HANDOFF.md)）。
+
+<!-- STATS:START -->
+## 仓库现状（自动生成 · 运行 `python3 build_readme_stats.py --write` 刷新）
+
+| 指标 | 数值 | 来源 |
+|---|---|---|
+| 推导进度 | §1–§88 | `commentary.md` 实测最高节 |
+| 知识库条目 | 125 | `knowledge_base_store.json` |
+| 会拦门禁（`check_*`） | 28 | `svagent/*.py` AST 扫描 |
+| 测试项 | 1010 | `pytest --collect-only` |
+| 证据目录 | 32（五件套齐全 15） | `audit_*/` 实测 |
+
+> 诚实边界：模拟线（autopoiesis/self_evolving/telos/axiology/mechanism/estimation）
+> 的输出均标注 `evidence_scope: synthetic`，是方法演示，不外推为真实世界自进化能力。
+<!-- STATS:END -->
+
+### FJ 取证法官化（2026-11-22 · 把门禁从「填表裁判」改成「取证法官」）
+
+第三方独立审计（[INDEPENDENT_AUDIT_20261122.html](INDEPENDENT_AUDIT_20261122.html)）的决定性发现：
+原有 28 道 `check_*` 全部是「调用方填参」纯函数，0 个自己读证据。FJ 工程新增取证入口，
+让门禁自己读原文、逐字命中预锁锚点、推导四维，再交原门禁裁决——判定智能进到门禁内部：
+
+- `svagent/forensics.py`：`EvidenceBundle`（读原文+SHA256）、`ForensicSpec`、`adjudicate()` 三态取证器（证据缺失→flag，绝不补 yes）。
+- `svagent/forensic_gates.py`：三道试点取证入口 `adjudicate_{criterion,verification,proof}_*`，读一手原文自取四维；篡改证据→裁决翻转。
+- `svagent/evidence_chain.py`：SHA256 锁的**执行者**——取证前验三锁+证据源哈希，失配即 `ChainIntegrityError` 拒判（锁不再是装饰）。
+- `svagent/growth_bridge.py`：真实精研线 → PDCA 的转换层，落**消费痕迹**（哪个 KB id / 裁决 code 被注入），替代关键词计数自证。
+- CLI：`svl-audit`（校验→取证→落证据），详见 `python3 -m svagent.cli --help`。
+
+设计原则见 [OPTIMIZATION_PLAN_20261122.md](OPTIMIZATION_PLAN_20261122.md)：不改原门禁、不接 `run_loop`、只判声明自洽不承诺有效。
 
 ## 核心命题
 

@@ -372,6 +372,7 @@ def report_boundary_shift() -> None:
 
 
 def main() -> None:
+    from .evidence_scope import emit; emit("telos")
     report_unified()
     report_synergy()
     report_convergence()

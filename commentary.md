@@ -3592,3 +3592,25 @@ transfer_holdout（样本外迁移，评测方法层）/memory_provenance（记�
 一处测试断言期望 message 含中文"上下文/权重"，实现文案用英文 context/weights，修实现文案（不放宽测试）后通过——判据自咬落在"测试与实现的语义对齐"。只判声明自洽不承诺结构真恢复/context覆盖真可控；尺子不判本仓，§58 选 A 不接 run_loop。
 
 一句话收束：**模型能归纳不是因为记住每条事实，而是把数据组织压缩成可恢复的分类结构；固定预算下大模型反而归纳更弱（记忆压过压缩）；权重里学到的结构冲突时会被 prompt 覆盖——这划定上下文可控性上限。两把尺子：induction_structure_honesty + context_override_boundary。**
+
+---
+
+## §89 FJ 取证法官化工程（第三方独立审计后的架构升级）
+
+### 89.1 缘起：最高杠杆建议
+第三方独立审计（INDEPENDENT_AUDIT_20261122.html）的决定性发现 F1：28/28 道 check_* 全是「调用方填参」纯函数，0 个自己读证据——判定智能在门禁之外，门禁只是「填表裁判」。审计给出的最高杠杆是「把裁判变成法官」：让门禁自己读证据。用户认可并以空杯/第三方视角要求据此制订计划推进。立项文档 OPTIMIZATION_PLAN_20261122.md（六阶段、三红线：不伪造证据/不动 R0-R6/不接 run_loop）。
+
+### 89.2 阶段 1-2：FJ 取证内核 + 三道试点
+新增 svagent/forensics.py：EvidenceBundle（读原文+SHA256+Unicode 规范化）、ForensicSpec/DimensionSpec（四维锚点规格）、adjudicate() 三态取证器——disclose 命中→yes、红旗 conceal 命中→no、两者皆无或矛盾→partial（原门禁 R5 flag，绝不补 yes）。为 criterion_origin / verification_boundary / proof_boundary 三道各加 adjudicate_* 入口（svagent/forensic_gates.py），逐字锚点取自 audit_harnesspro / audit_addy_critical_thinking / audit_flashprove 的一手原文，并用探测脚本验证 disclose 必命中、红旗零误命中。诚实论文→推导全 yes→与原精研结论一致；篡改/删改证据→no/partial→downgrade/flag（篡改压力测试通过）。原 check_* 一字未改，967 项旧测试全绿。
+
+### 89.3 阶段 3：证据链强制执行
+审计 F2：篡改 prereg.json 后锁失配但 engine 照跑 ALL:True——锁无执行者。新增 svagent/evidence_chain.py：verify_chain() 双格式解析（单行 hex + 清单锁 hash␠␠filename），诚实适配历史目录（source/evidence 清单代 manifest，不误判不放水）；require_intact() 失配抛 ChainIntegrityError；verify_sources() 精确校验取证实际用到的源文件。取证入口前置链校验，核心二锁失配或证据源篡改即拒判（端到端实测）。批量链审落盘 chain_audit_report.json：32 目录、五件套齐 15、三锁完整 12。历史目录如实标注，不伪造缺失证据。
+
+### 89.4 阶段 4：自学习成长桥（两条线接合）
+审计 F3 两条线从未接合、F5 反哺用关键词计数自证。新增 svagent/growth_bridge.py：把 KB 的 addressable+fix 机制（75 条）与取证缺口转成 pdca.Opportunity，经 inject_opportunities 真实注入 PDCA，落 growth_bridge_consumption.json 消费痕迹（逐条指名 KB id / 裁决 code），用真实消费链替代「库里 RETRO 条目≥6」的代理指标。addressable=False 的认知机制（33 条）保持交人，不假装可编译。实测 75 机会/75 痕迹/PDCA 实收 75，数量一致可回放。
+
+### 89.5 阶段 5：诚实标记、门面自动化、对外入口
+F4：新增 svagent/evidence_scope.py，6 个模拟模块（autopoiesis/self_evolving/telos/axiology/mechanism/estimation）main 打印 [EVIDENCE_SCOPE] scope=synthetic 机器可读标记，任何输出自带诚实边界。F6：build_readme_stats.py 从 KB/AST/测试/审计实测重算 README 统计段，§1–§40 漂移修为 §1–§88。F7：新增 svagent/cli.py 与 pyproject console_scripts，svl-audit 暴露 adjudicate/chain/bridge 三子命令，端到端可用。
+
+### 89.6 验收与成熟度重估
+全量 967→1010 passed（+43）。三道取证裁决全 ok（与诚实论文原结论一致），篡改即翻转，链失配即拒判，消费链真实。成熟度 L1.5→L2 边缘（取证真实、闭环可消费），不宣称 L3：仍有外部供料/目标设定/凭据三处人类依赖点，用户「具备自组织生长的基础」表述依旧准确且基础更扎实。成果见 FJ_ACHIEVEMENT_REPORT_20261122.html。遵循 §58 选 A 不接 run_loop；只判声明/证据自洽不承诺真实有效；本轮不修改任何历史证据内容（篡改测试均在临时副本）。

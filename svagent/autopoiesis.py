@@ -475,6 +475,7 @@ def report(agent: SelfOrganizingAgent) -> None:
 
 
 def main() -> None:
+    from .evidence_scope import emit; emit("autopoiesis")
     agent = SelfOrganizingAgent()
     for session in range(11):
         agent.cycle(simulate_session(session))

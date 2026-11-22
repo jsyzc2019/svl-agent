@@ -411,6 +411,7 @@ def compounding_report(substrate: JudgmentSubstrate) -> None:
 
 
 def main() -> None:
+    from .evidence_scope import emit; emit("self_evolving")
     substrate = run_recursion()
     compounding_report(substrate)
     print("\n最终判据基座快照:")

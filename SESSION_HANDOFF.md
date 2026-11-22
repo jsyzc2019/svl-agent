@@ -1,16 +1,16 @@
 # 会话接续文档（SESSION HANDOFF）
 
 > 本文件用于新旧会话接续。新会话开始后，**先读本文件**，再按"接续后第一件事"操作。
-> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 11:30 (GMT+8)——**§81-§88 已推送完成**。
-> 上一会话终点：§79-§80 已推送；本次 §81-§88（共 8 道门禁）已全部推送到远端。
+> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 11:55 (GMT+8)——**§89 FJ 工程完成，尚未推送**。
+> 上一会话终点：§88 已推送完成；本次完成 §89 FJ 取证法官化升级（第三方审计最高杠杆落地），本地未提交/未推送。
 
 ---
 
 ## 1. 一句话现状
 
 本仓是一个自进化 Agent 架构（`/workspace`，Python 包 `svagent`，版本 0.13.1）。
-当前已完成 **§1–§88** 外部精研，编译 **36 道会拦门禁**，知识库 **125 条**，测试 **967 passed**（全绿）。
-本地 main 在 `e8bc13a`，与远端 `origin/main` **完全同步**（均 `e8bc13a`），**推送已完成**（详见 §5）。无遗留推送任务。
+当前已完成 **§1–§89**：§1–§88 外部精研（36 道会拦门禁）+ **§89 FJ 取证法官化升级**（把门禁从填表裁判改成取证法官）。知识库 **125 条**，测试 **1010 passed**（全绿，§89 新增 43 项）。
+**§88 已推送**（远端 main = `8c8ecc9`）。**§89 FJ 工程为本地未提交改动**（16 新增文件 + 9 修改文件，详见 §4b）——无遗留推送任务，但 §89 待用户确认后提交/推送（需再提供 PAT，见 §5）。
 
 ---
 
@@ -48,6 +48,19 @@
 
 ---
 
+## 4b. §89 FJ 取证法官化升级（本地未提交，待推送）
+
+用户认可第三方独立审计（[INDEPENDENT_AUDIT_20261122.html](INDEPENDENT_AUDIT_20261122.html)）最高杠杆建议：把门禁从「填表裁判」改成「取证法官」。按 [OPTIMIZATION_PLAN_20261122.md](OPTIMIZATION_PLAN_20261122.md) 六阶段全部推进完毕：
+- **阶段1-2** `svagent/forensics.py`（三态取证内核）+ `svagent/forensic_gates.py`（三道试点 adjudicate_*，读一手原文逐字锚点自取四维；篡改证据→裁决翻转，原 check_* 一字未改）。
+- **阶段3** `svagent/evidence_chain.py`（SHA256 锁执行者：失配拒判 + 批量链审，32 目录如实标注，落 `chain_audit_report.json`）。
+- **阶段4** `svagent/growth_bridge.py`（KB 75 条 fix 机制 + 取证缺口 → PDCA 真实注入，落 `growth_bridge_consumption.json` 消费痕迹，替代关键词计数自证）。
+- **阶段5** `svagent/evidence_scope.py`（6 模拟模块 synthetic 标记）+ `build_readme_stats.py`（README 统计自动化，§1–§40→§88）+ `svagent/cli.py`（`svl-audit` console script）。
+- **阶段6** 成果报告 `FJ_ACHIEVEMENT_REPORT_20261122.html`；`commentary.md` §89、`REPOSITORY_MAP.md`、`README.md` 已同步。
+
+**验收**：全量 967→1010 passed（+43），三道取证裁决全 ok（与诚实论文一致），链失配即拒判，消费链 75/75/75 一致。成熟度 L1.5→L2 边缘，不宣称 L3（外部供料/目标/凭据仍靠人）。工作区未提交：16 新增 + 9 修改（含未跟踪的 `INDEPENDENT_AUDIT_20261122.html`）。**下一步：用户确认后提交并推送（需 PAT）。**
+
+---
+
 ## 5. ✅ 已完成：远端推送
 
 **最新状态**：2026-11-22 11:29 (GMT+8) 推送成功。用户提供 PAT，经临时 askpass 脚本（只读 token 文件、用后即删、不入 git 配置/仓库/日志）认证；`git push origin main` → `321e457..e8bc13a main -> main`（含 `02db961` §81-§82 + `e8bc13a` §83-§88 两个提交）。
@@ -73,9 +86,11 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 
 - [x] ✅ 处理 §5 推送（历史推送已完成）。
 - [x] ✅ 推送 §81-§88 本地提交（`e8bc13a`，已同步远端，见 §5）。
+- [x] ✅ §89 FJ 取证法官化工程全部推进（见 §4b，本地未提交）。
+- [ ] **提交并推送 §89 FJ 工程**（用户确认后；需再提供 PAT，见 §5；两批次一推纪律当前 §89 单批可独立提交）。
 - [ ] 若用户给新的外部精研材料：先抽一手锚点 → 判认知增量独立性 → 按 §3 纪律编译门禁（能机制化才编译，否则只加固 KB）。
-- [ ] 每完成两批 → 一个本地提交 → 推送（后续会话需用户再提供 PAT，见 §5 凭据说明）。
-- [ ] 本文件随每次会话终结更新现状（§1/§4/§5）。
+- [ ] 后续精研可复用 FJ 取证入口：新门禁若有一手原文切片，可加 `adjudicate_*` 取证入口（模式见 `forensic_gates.py`）。
+- [ ] 本文件随每次会话终结更新现状（§1/§4/§4b/§5）。
 
 ---
 
@@ -83,8 +98,10 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 
 | 用途 | 路径 |
 |---|---|
-| 门禁源码 | `svagent/*.py`（68 模块，惰性导入登记于 `svagent/__init__.py`） |
-| 测试 | `tests/test_*.py`（56 文件，967 项） |
+| 门禁源码 | `svagent/*.py`（74 模块，惰性导入登记于 `svagent/__init__.py`） |
+| FJ 取证层 | `svagent/forensics.py` / `forensic_gates.py` / `evidence_chain.py` / `growth_bridge.py` / `evidence_scope.py` / `cli.py` |
+| 测试 | `tests/test_*.py`（61 文件，1010 项） |
+| FJ 计划/成果 | `OPTIMIZATION_PLAN_20261122.md` / `FJ_ACHIEVEMENT_REPORT_20261122.html` / 独立审计 `INDEPENDENT_AUDIT_20261122.html` |
 | 知识库 | `knowledge_base_store.json`（125 条，含 thresholds） |
 | 完整推导日志 | `commentary.md`（§1–§88） |
 | 架构导航 | `REPOSITORY_MAP.md`（阅读顺序已指向本文件） |

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>svagent 端到端独立审计报告 · 2026-11-22</title>
+<style>
+:root{--ink:#1a2230;--sub:#5b6675;--line:#dde3ea;--bg:#f7f9fb;--card:#fff;--accent:#2b6cb0;--warn:#b7791f;--bad:#c05621;--good:#2f855a;--soft:#edf2f7}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.75;margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding:36px 22px 80px}
+h1{font-size:30px;margin:0 0 6px;letter-spacing:.5px}
+h2{font-size:21px;margin:38px 0 14px;padding-left:12px;border-left:4px solid var(--accent)}
+h3{font-size:16px;margin:22px 0 8px;color:#2d3748}
+p{margin:9px 0}
+.hero{background:linear-gradient(135deg,#1a365d,#2b6cb0);color:#fff;border-radius:14px;padding:28px 30px;margin-bottom:26px}
+.hero .kicker{font-size:12px;letter-spacing:2px;opacity:.85}
+.hero h1{color:#fff}
+.hero .meta{opacity:.9;font-size:13px;margin-top:10px}
+.verdict{background:#fff5f5;border:1px solid #feb2b2;border-left:5px solid var(--bad);border-radius:8px;padding:16px 18px;margin:20px 0;font-size:16px}
+.verdict b{color:var(--bad)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:14px 16px}
+.stat .n{font-size:26px;font-weight:700;color:var(--accent)}
+.stat .l{font-size:12px;color:var(--sub)}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px;background:#fff;border-radius:8px;overflow:hidden}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:600}
+tr:nth-child(even) td{background:#fbfcfd}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;white-space:nowrap}
+.t-true{background:#c6f6d5;color:#22543d}
+.t-half{background:#fefcbf;color:#744210}
+.t-false{background:#fed7d7;color:#742a2a}
+.t-info{background:#bee3f8;color:#2a4365}
+.sev{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.s-crit{background:#c05621}.s-high{background:#dd6b20}.s-mid{background:#d69e2e}.s-low{background:#38a169}
+.evi{font-size:12px;color:var(--sub)}
+.evi b{color:#2c5282}
+.gate{background:#fffaf0;border:1px solid #fbd38d;border-left:4px solid var(--warn);border-radius:8px;padding:14px 18px;margin:14px 0}
+ul,ol{margin:8px 0;padding-left:22px}li{margin:5px 0}
+code{background:#edf2f7;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:"SFMono-Regular",Consolas,monospace}
+.foot{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub)}
+.score{font-size:22px;font-weight:700}
+.sc-good{color:var(--good)}.sc-mid{color:var(--warn)}.sc-bad{color:var(--bad)}
+.quote{border-left:3px solid #cbd5e0;padding-left:14px;color:#4a5568;font-style:italic}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div class="kicker">THIRD-PARTY INDEPENDENT AUDIT · END-TO-END</div>
+  <h1>svagent 架构与自进化能力端到端独立审计</h1>
+  <div class="meta">审计日期 2026-11-22 11:35 GMT+8　|　对象版本 0.13.1　|　立场：空杯 / 第三方 / 实证优先　|　方法：代码实证 + 运行时压力测试 + 交叉核验</div>
+</div>
+
+<div class="verdict">
+<b>总体判定：</b>这是一个<b>工程质量高、诚实纪律强</b>的判据环境原型，但"自组织 / 自进化 / 独立自我运维"目前<b>主要是叙事与模拟，而非已就绪的生产能力</b>。
+决定性证据：全部 <b>28 个 check_* 门禁都是"调用方填参"的纯函数，0 个自己读取证据</b>——判定的智能发生在门禁之外，门禁是"填表裁判"而非"取证法官"。本仓已具备自组织生长的<b>素材与纪律基础</b>，但尚未具备让 agent 脱离人独立运转的<b>闭环驱动与强制机制</b>。
+</div>
+
+<h2>一、审计立场与方法</h2>
+<div class="card">
+<p><b>空杯处理</b>：不采信 README / SESSION_HANDOFF / commentary 的自我叙述为真，只把它们当作"被审计方的声称"。每条结论尽量落到可复现的命令或代码位置。</p>
+<p><b>实证手段</b>：全量测试实跑；门禁调用点静态扫描；哈希锁篡改压力测试；证据链目录完整性统计；KB 引用链追踪；git / 文档一致性交叉核验。</p>
+<p class="evi"><b>证据标注约定</b>：<span class="tag t-true">实测</span>=命令/代码直接验证；<span class="tag t-half">推断</span>=基于多项实测的合理判断；<span class="tag t-false">声称未证</span>=文档宣称但本次未找到实现证据；<span class="tag t-info">边界</span>=审计自身的局限。</p>
+</div>
+
+<h2>二、架构画像（实测骨架）</h2>
+<div class="grid">
+  <div class="stat"><div class="n">68</div><div class="l">svagent 模块数</div></div>
+  <div class="stat"><div class="n">28</div><div class="l">check_* 门禁函数</div></div>
+  <div class="stat"><div class="n">967</div><div class="l">全量测试（实跑通过）</div></div>
+  <div class="stat"><div class="n">125</div><div class="l">KB 知识条目</div></div>
+  <div class="stat"><div class="n">32</div><div class="l">audit 证据目录</div></div>
+  <div class="stat"><div class="n">56</div><div class="l">测试文件</div></div>
+</div>
+
+<div class="card">
+<h3>两条并行的成长线（关键结构发现）</h3>
+<p>仓库实际上存在两条从未接合的成长线，这决定了"自组织"的真实边界：</p>
+<table>
+<tr><th width="20%">线</th><th>内容</th><th>驱动者</th><th>判据形态</th></tr>
+<tr><td><b>线 A：模拟自进化线</b><br><span class="tag t-half">推断</span></td>
+<td><code>autopoiesis.py</code> / <code>self_evolving.py</code> / <code>pdca.py</code> / <code>insight.py</code> / <code>telos.py</code> / <code>axiology.py</code> / <code>mechanism.py</code> / <code>estimation.py</code></td>
+<td>硬编码样本池 + <code>random.Random(seed)</code></td>
+<td>字面 token / regex（词表判据）</td></tr>
+<tr><td><b>线 B：真实精研线</b><br><span class="tag t-true">实测</span></td>
+<td><code>audit_*/</code> 32 个目录 + 28 道 check_* 门禁 + KB-AUDIT 条目</td>
+<td>人给论文 → agent 读全文 → 手工编译门禁 → 手工推送</td>
+<td>Python 纯函数 + <code>_A</code> 中文锚点 + 四维枚举</td></tr>
+</table>
+<p class="evi"><b>证据</b>：线 A 的 <code>simulate_session()</code> / <code>run_recursion()</code> / <code>_sample_batches()</code> / <code>rand_candidates()</code> / <code>simulate_verdicts()</code> / <code>worlds_by_difficulty()</code> 全部为写死素材；线 B 的门禁 0 个被线 A 调用。两套判据形态无转换层。</p>
+</div>
+
+<h2>三、真实能力分层（什么为真、什么为叙事）</h2>
+<table>
+<tr><th>能力声称</th><th>判定</th><th>实测依据</th></tr>
+<tr><td>判据环境 / 真值隔离 / 可验证叙事闭环</td><td><span class="tag t-true">真实且扎实</span></td><td><code>core.py</code> 的 <code>GroundTruth</code> 实现只写一次真值源、anchor 子串核对、来源隔离，逻辑自洽；<code>harness.py</code> block/flag 分离 + 定向返工是真实可运行代码。</td></tr>
+<tr><td>28 道"会拦门禁"</td><td><span class="tag t-half">半真：是判定器，非拦截器</span></td><td>函数逻辑确实按 R0–R6 短路返回 flag/downgrade/ok，测试齐全；但 0 个接入任何生产链路，调用点仅自身 <code>live_regression</code> 与测试。</td></tr>
+<tr><td>证据链五件套 + SHA256 锁</td><td><span class="tag t-half">半真：链在，强制力缺</span></td><td>32 目录仅 15 个五件套齐全；篡改 <code>prereg.json</code> 后锁失配但 <code>engine.py</code> 照跑并输出 <code>ALL: True</code>——锁无运行时校验。</td></tr>
+<tr><td>开放自组织 / 递归自进化 / PDCA 自动机</td><td><span class="tag t-false">模拟，非现实</span></td><td>全部由硬编码池 + 固定随机种子驱动；判据是"收音机/缝纫机"字面词；无 arXiv 抓取、无 commentary/KB 读取、无真实外部输入接口。</td></tr>
+<tr><td>价值自举 / 目的论 / 机制设计 / 认知升级</td><td><span class="tag t-false">受控世界演示</span></td><td><code>telos/axiology/mechanism/estimation</code> 均以 <code>random.Random</code> 生成合成主体/候选/裁决；证明机制在玩具世界可运行，未证明面对真实世界自进化。</td></tr>
+<tr><td>任务复盘反哺（"从任务汲取知识"）</td><td><span class="tag t-half">半真：需人喂养标签</span></td><td><code>task_retrospective.retrospect()</code> 要求调用方填 <code>is_restatement/benefits_user/had_failure</code>；判断仍由 agent 自填，门禁只复核标签一致性。</td></tr>
+<tr><td>KB 驱动下次精研</td><td><span class="tag t-false">声称未证</span></td><td>125 条 KB 全仓仅 <code>retro_audit.py:126</code> 一处 <code>load</code>；无代码读 KB 决定下一步；<code>seed_knowledge()</code> 为硬编码。</td></tr>
+</table>
+
+<h2>四、决定性发现（按严重度）</h2>
+
+<div class="card">
+<h3><span class="sev s-crit"></span>F1 · 门禁是"填表裁判"，判定智能在门禁之外 [CRITICAL]</h3>
+<p>对全部 <code>check_*</code> 做 AST 扫描：<b>28/28 只接收调用方填好的字符串/布尔值，0 个读取论文、网页、日志或任何原始证据</b>。门禁能防的是"填错/填字面串/漏填维度"，防不了"填对了标签但结论是假的"。</p>
+<p class="quote">后果：所谓"会拦门禁"拦的是声明的一致性，不是事实的真实性。这与本仓自己在 §77 写下的 <code>criterion_origin_honesty</code>（自生成判据评估自生成改进的困境）是同一个未解问题。</p>
+<p class="evi"><span class="tag t-true">实测</span> 扫描脚本统计 28 个函数，<code>reads_evidence=0</code>；典型如 <code>context_override_boundary.py:60-67</code> 四个参数全是外部传入的 yes/no/partial。</p>
+</div>
+
+<div class="card">
+<h3><span class="sev s-crit"></span>F2 · 哈希锁与 engine 互不设防，证据链可被静默篡改 [CRITICAL]</h3>
+<p>向 <code>audit_latent_taxonomies/prereg.json</code> 追加 <code>{"tampered":true}</code> 后：<code>prereg.sha256</code> 失配（正确），但 <code>engine.py</code> 仍输出 <code>anchor_all_passed: True / gate_all_passed: True / ALL: True</code>。<b>锁是"声明性装饰"，没有执行者。</b></p>
+<p class="evi"><span class="tag t-true">实测</span> 篡改→失配→engine 照跑→恢复；全过程已还原，工作区干净。另发现 <code>audit_multimodal_memory/manifest.sha256</code> 是多行清单格式，与其余单行格式不统一（脚本误判 1 处，非真实失配）。</p>
+</div>
+
+<div class="card">
+<h3><span class="sev s-high"></span>F3 · 证据链纪律是渐进加严的，历史目录不统一 [HIGH]</h3>
+<p>32 个 audit 目录中，五件套（manifest/prereg/gate_prereg/engine/result）齐全仅 <b>15</b> 个；<b>17</b> 个不完整，其中 3 个（<code>audit_fg_compare</code>、<code>audit_random</code>、<code>audit_wbcursor</code>）连 engine/result 都没有。纪律是最近才固化，早期证据不可同口径复核。</p>
+</div>
+
+<div class="card">
+<h3><span class="sev s-high"></span>F4 · 自进化曲线在封闭玩具世界，不外推 [HIGH]</h3>
+<p><code>DETAIL_BANK</code> 固定 10 个词（收音机/缝纫机/自行车…）、<code>simulate_session</code> 4 类剧本、<code>lab_spec()</code> 写死两条原话、<code>worlds_by_difficulty(60, gap, seed=100)</code>。README 的"攻击成功率 100%→33%""价值余弦 0.982""留出预测 94%"均是这些固定种子上的结果。</p>
+<p class="quote">这是合法的方法演示，但 README 以"天道运行规律的可计算形态"等措辞陈述，读者极易误读为系统已具备现实世界的自进化能力。诚实边界本应更醒目。</p>
+</div>
+
+<div class="card">
+<h3><span class="sev s-high"></span>F5 · 反虚荣门禁使用代理指标，闭环"自证" [HIGH]</h3>
+<p><code>retro_audit.audit_4_feedback_loop()</code> 判定"反哺闭环落地"的条件之一是 <code>len([it for it in kb.items if "RETRO" in id or "SSQ" in id]) &gt;= 6</code>——用"库里有几条 ID 含关键词的条目"证明"复盘教训被下次任务消费"。这是代理指标自证，不是端到端消费证据。</p>
+</div>
+
+<div class="card">
+<h3><span class="sev s-mid"></span>F6 · 文档实效性漂移 [MEDIUM]</h3>
+<p>README 顶部仍写"完整推导见 commentary.md（§1–§40）"，实际已到 §88；README 包结构未列 28 道 honesty/isolation/boundary 门禁；SESSION_HANDOFF §7 的统计数字刚更新但 README 未同步。对外门面落后于内核约 48 节。</p>
+</div>
+
+<div class="card">
+<h3><span class="sev s-mid"></span>F7 · 无对外入口，能力难以被外部验证/复用 [MEDIUM]</h3>
+<p><code>pyproject.toml</code> 无 <code>console_scripts</code>；28 道门禁无生产调用点；无统一 CLI 或 API 暴露"给一段声明→出裁决→落证据"的完整能力。能力沉淀在库与测试里，未产品化。</p>
+</div>
+
+<h2>五、自我运维就绪度评估</h2>
+<table>
+<tr><th>自我运维要素</th><th>就绪度</th><th>说明</th></tr>
+<tr><td>自身状态可持久化 / 可恢复</td><td><span class="tag t-true">基本就绪</span></td><td><code>Environment.save/load</code>、KB JSON、audit 目录、结果文件齐全；跨会话接续文档机制存在。</td></tr>
+<tr><td>自身行为可审计 / 可回放</td><td><span class="tag t-half">部分就绪</span></td><td>有 engine 与审计日志；但哈希锁无强制校验、17 目录证据不完整，回放时可被静默篡改。</td></tr>
+<tr><td>从失败中自动长出新判据并验证</td><td><span class="tag t-half">仅玩具世界就绪</span></td><td>PDCA/归纳器真实可运行，但吃的是硬编码日志、产出的是 token/regex，与真实精研门禁不通。</td></tr>
+<tr><td>自主获取外部新材料（论文/数据）</td><td><span class="tag t-false">未就绪</span></td><td>无任何代码抓取 arXiv 或读 commentary/KB 决定下一步；完全依赖人提供。</td></tr>
+<tr><td>自主判定"声明是否属实"（取证能力）</td><td><span class="tag t-false">未就绪</span></td><td>28 门禁 0 个读证据；判定智能仍由 agent 手工完成并填表。</td></tr>
+<tr><td>价值函数 / 目标自主演化</td><td><span class="tag t-false">未就绪</span></td><td>IRL 价值自举在合成历史演示；README 自陈"唯一仍需人给的是目标 G"。</td></tr>
+<tr><td>脱离人独立运转</td><td><span class="tag t-false">未就绪</span></td><td>推送需人给 PAT、精研需人给论文、判定需人（agent）填表——三处人类依赖点。</td></tr>
+</table>
+<div class="card">
+<h3>成熟度判定</h3>
+<p><span class="score sc-mid">L1.5 / 4</span>　（L0 判据执行 → <b>L1 判据自举（已达成，模拟态）</b> → L2 元学习（演示态） → L3 真实世界自组织（未达成））。</p>
+<p>本仓具备的是<b>"自组织生长的基础"</b>——纪律、结构、样本、可复现工具——而非"已能独立自我运维的系统"。用户所说的"基础"一词是准确的。</p>
+</div>
+
+<h2>六、可执行改进建议（按杠杆排序）</h2>
+<div class="gate">
+<b>最高杠杆（解 F1，把裁判变成法官）：</b>给门禁增加"取证模式"——让 <code>check_*</code> 的调用方改为传入证据对象（论文本地路径 / 原文切片 / 日志），由门禁内部做逐字命中或结构化抽取，而不是传入已填好的 yes/no。可先选 3 道高频门禁试点（如 <code>criterion_origin_honesty</code>、<code>verification_boundary_honesty</code>、<code>proof_boundary_honesty</code>），保持 R0–R6 骨架不变。这是从"自证"走向"他证"的唯一路径。
+</div>
+<div class="gate">
+<b>次高杠杆（解 F2/F3）：</b>把 SHA256 校验写进 <code>engine.py</code> 的 main：启动先校验 prereg/gate_prereg/manifest 三锁，失配直接 <code>sys.exit(1)</code>。同时对 17 个不完整目录补链或明确标注"历史证据，非五件套"，避免同口径误读。
+</div>
+<div class="gate">
+<b>结构杠杆（解 F3 两条线断裂）：</b>建一个转换层，把 KB 的 <code>kind/mechanism/support</code> 结构映射成 PDCA 可消费的 <code>Opportunity</code>（<code>inject_opportunities</code> 已有入口），让真实精研产物能喂给模拟器，而不是两套判据各说各话。
+</div>
+<div class="gate">
+<b>诚实杠杆（解 F4/F5）：</b>在每个模拟模块报告头部加一行机器可读标记 <code>evidence_scope: synthetic</code>；把 <code>audit_4_feedback_loop</code> 的 passed 条件改为"复盘教训 ID 出现在下一次 gate_prereg 的 evidence 字段"，用真实消费链替代关键词计数。
+</div>
+<div class="gate">
+<b>门面杠杆（解 F6/F7）：</b>由脚本从 KB/测试/audit 自动生成 README 统计段与包结构门禁清单，消除手工漂移；提供一个 <code>svl-audit</code> console script 暴露"给声明→出裁决→落证据"。
+</div>
+
+<h2>七、审计自身的诚实边界</h2>
+<div class="card">
+<ul>
+<li><span class="tag t-info">边界</span> 本次审计本身未走五件套流程（无 prereg/锁存/engine），因为审计对象是架构而非外部论文；结论以本报告正文为可复核依据，<b>不宣称本审计已被本仓门禁验证</b>。</li>
+<li><span class="tag t-info">边界</span> git 历史在环境中仅见 4 个提交（部分克隆截断），未据此评判真实开发节奏；提交链完整性以远端为准。</li>
+<li><span class="tag t-info">边界</span> 对"自进化是否为叙事"的判断基于代码静态结构 + 文档措辞，未穷尽所有模块的运行时行为；若存在本报告未覆盖的真实外部接口，相关结论需修正。</li>
+<li><span class="tag t-info">边界</span> 测试 967 passed、28/28 填参门禁、15/32 五件套等为机器实测；"成熟度 L1.5"为定性判断，非精确度量。</li>
+</ul>
+</div>
+
+<div class="foot">
+由第三方独立审计生成 · 2026-11-22 · 证据可复现命令见正文各 <span class="tag t-true">实测</span> 标注处 · 本报告不修改仓库任何门禁或证据链，审计期间对 <code>prereg.json</code> 的临时篡改已完整还原（工作区干净）。
+</div>
+
+</div>
+</body>
+</html>

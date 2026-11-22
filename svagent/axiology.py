@@ -469,6 +469,7 @@ def report_bridge(w: ValueWeights) -> None:
 
 
 def main() -> None:
+    from .evidence_scope import emit; emit("axiology")
     print("Axiology：价值函数的递归自举 —— agent 造出自己的 V（宣称已按审计降级）\n")
     res = report_recovery()
     good = report_anchor()

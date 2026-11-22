@@ -1,0 +1,930 @@
+{
+  "total": 32,
+  "five_piece_complete": 15,
+  "three_locks_intact": 10,
+  "both_ok": 10,
+  "reports": [
+    {
+      "directory": "/workspace/audit_addy_critical_thinking",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "intact": true,
+      "integrity_note": "五件套齐全、三锁校验通过"
+    },
+    {
+      "directory": "/workspace/audit_always_on",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_ambition",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "gate_prereg.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, gate_prereg.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_async_subagents",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "五件套齐全，但锁失配/缺失——禁止作为可信证据"
+    },
+    {
+      "directory": "/workspace/audit_bitter_lesson",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "gate_prereg.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, gate_prereg.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_claude_verify",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "gate_prereg.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, gate_prereg.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_cognitive_surrender",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "intact": true,
+      "integrity_note": "五件套齐全、三锁校验通过"
+    },
+    {
+      "directory": "/workspace/audit_deepseek",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "intact": true,
+      "integrity_note": "五件套齐全、三锁校验通过"
+    },
+    {
+      "directory": "/workspace/audit_dgm",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "gate_prereg.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, gate_prereg.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_evosteer",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "intact": true,
+      "integrity_note": "五件套齐全、三锁校验通过"
+    },
+    {
+      "directory": "/workspace/audit_fg_compare",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "prereg.json",
+        "gate_prereg.json",
+        "engine.py",
+        "result.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, prereg.json, gate_prereg.json, engine.py, result.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_flashprove",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "五件套齐全，但锁失配/缺失——禁止作为可信证据"
+    },
+    {
+      "directory": "/workspace/audit_harnesspro",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "intact": true,
+      "integrity_note": "五件套齐全、三锁校验通过"
+    },
+    {
+      "directory": "/workspace/audit_higr",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "gate_prereg.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, gate_prereg.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_langchain_ctx",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_latent_taxonomies",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "intact": true,
+      "integrity_note": "五件套齐全、三锁校验通过"
+    },
+    {
+      "directory": "/workspace/audit_memory",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "intact": true,
+      "integrity_note": "五件套齐全、三锁校验通过"
+    },
+    {
+      "directory": "/workspace/audit_memory_trap",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "五件套齐全，但锁失配/缺失——禁止作为可信证据"
+    },
+    {
+      "directory": "/workspace/audit_mllm_failure",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "intact": true,
+      "integrity_note": "五件套齐全、三锁校验通过"
+    },
+    {
+      "directory": "/workspace/audit_multimodal_memory",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "manifest",
+          "ok": false,
+          "detail": "清单失配/缺失 11 项: S01_abstract.txt(缺失), S01_axis_framework.txt(缺失), S01_consistency.txt(缺失), S01_corpus_patterns.txt(缺失), S01_evidence_path_drift.txt(缺失)"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "五件套齐全，但锁失配/缺失——禁止作为可信证据"
+    },
+    {
+      "directory": "/workspace/audit_openai_perf",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "gate_prereg.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, gate_prereg.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_proactive_ai",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "五件套齐全，但锁失配/缺失——禁止作为可信证据"
+    },
+    {
+      "directory": "/workspace/audit_random",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "prereg.json",
+        "gate_prereg.json",
+        "engine.py",
+        "result.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, prereg.json, gate_prereg.json, engine.py, result.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_reavideo",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "gate_prereg.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, gate_prereg.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_reveal",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "gate_prereg.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, gate_prereg.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_skillmaster",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "gate_prereg.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, gate_prereg.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_swarm",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "gate_prereg.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, gate_prereg.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_swegym",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "gate_prereg.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, gate_prereg.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_system1_system2",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "intact": true,
+      "integrity_note": "五件套齐全、三锁校验通过"
+    },
+    {
+      "directory": "/workspace/audit_tcsexam",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "gate_prereg.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, gate_prereg.json）且锁不完整——仅供参考，不可用于取证裁决"
+    },
+    {
+      "directory": "/workspace/audit_ultrabert",
+      "five_piece_complete": true,
+      "missing_files": [],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "single",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "intact": true,
+      "integrity_note": "五件套齐全、三锁校验通过"
+    },
+    {
+      "directory": "/workspace/audit_wbcursor",
+      "five_piece_complete": false,
+      "missing_files": [
+        "manifest.json",
+        "prereg.json",
+        "gate_prereg.json",
+        "engine.py",
+        "result.json"
+      ],
+      "locks": [
+        {
+          "lock": "prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "gate_prereg.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        },
+        {
+          "lock": "manifest.sha256",
+          "kind": "missing_lock",
+          "ok": false,
+          "detail": "核心锁缺失"
+        }
+      ],
+      "intact": false,
+      "integrity_note": "历史证据：五件套不齐（缺 manifest.json, prereg.json, gate_prereg.json, engine.py, result.json）且锁不完整——仅供参考，不可用于取证裁决"
+    }
+  ]
+}

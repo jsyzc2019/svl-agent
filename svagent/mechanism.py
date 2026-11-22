@@ -310,6 +310,7 @@ def report_incentive_compatibility() -> None:
 
 
 def main() -> None:
+    from .evidence_scope import emit; emit("mechanism")
     print("Mechanism：多主体 V 冲突的机制设计解\n")
     report_mechanisms()
     report_goal_shift()

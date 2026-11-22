@@ -215,6 +215,30 @@ _LAZY: dict[str, tuple[str, str]] = {
     "check_context_override_boundary": ("svagent.context_override_boundary", "check_context_override_boundary"),
     "ContextOverrideVerdict": ("svagent.context_override_boundary", "ContextOverrideVerdict"),
     "context_override_boundary_live_regression": ("svagent.context_override_boundary", "live_regression"),
+    # FJ 取证内核（阶段1-2：把门禁从填表裁判改成取证法官）
+    "EvidenceBundle": ("svagent.forensics", "EvidenceBundle"),
+    "ForensicSpec": ("svagent.forensics", "ForensicSpec"),
+    "DimensionSpec": ("svagent.forensics", "DimensionSpec"),
+    "adjudicate": ("svagent.forensics", "adjudicate"),
+    "forensics_live_regression": ("svagent.forensics", "live_regression"),
+    "adjudicate_criterion_origin_honesty": ("svagent.forensic_gates", "adjudicate_criterion_origin_honesty"),
+    "adjudicate_verification_boundary_honesty": ("svagent.forensic_gates", "adjudicate_verification_boundary_honesty"),
+    "adjudicate_proof_boundary_honesty": ("svagent.forensic_gates", "adjudicate_proof_boundary_honesty"),
+    "adjudicate_all": ("svagent.forensic_gates", "adjudicate_all"),
+    "forensic_gates_live_regression": ("svagent.forensic_gates", "live_regression"),
+    "verify_chain": ("svagent.evidence_chain", "verify_chain"),
+    "require_intact": ("svagent.evidence_chain", "require_intact"),
+    "ChainIntegrityError": ("svagent.evidence_chain", "ChainIntegrityError"),
+    "audit_all": ("svagent.evidence_chain", "audit_all"),
+    "evidence_chain_live_regression": ("svagent.evidence_chain", "live_regression"),
+    # FJ 成长桥（阶段4：真实精研线 → 模拟自进化线的转换层）
+    "ConsumptionRecord": ("svagent.growth_bridge", "ConsumptionRecord"),
+    "BridgeReport": ("svagent.growth_bridge", "BridgeReport"),
+    "kb_to_opportunities": ("svagent.growth_bridge", "kb_to_opportunities"),
+    "forensic_gaps_to_opportunities": ("svagent.growth_bridge", "forensic_gaps_to_opportunities"),
+    "bridge_into_pdca": ("svagent.growth_bridge", "bridge_into_pdca"),
+    "save_consumption": ("svagent.growth_bridge", "save_consumption"),
+    "growth_bridge_live_regression": ("svagent.growth_bridge", "live_regression"),
 }
 
 
