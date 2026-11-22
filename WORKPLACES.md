@@ -1,6 +1,7 @@
 # 工作场所清单（自主运维 · 取料渠道地图）
 
-> 版本：v1.0　生成：2026-11-22 12:20 (GMT+8)
+> 版本：v1.1　生成：2026-11-22 12:20 (GMT+8)　更新：2026-11-22 12:55 (GMT+8)　§93 动态扩展安全/合规领域
+> v1.1 变更：用户授权"清单可自由动态调整、领域话题不限但守法"→新增「安全/合规取料」行（arXiv cs.CR 提示注入/红队/治理），已在 §93 用 arXiv:2611.24362 实证（abs+HTML 双 200）。
 > 用途：把"外部供料"从人类依赖点转为**我可自主触达的日常工作场所**。每条都标注本仓实证状态；未验证的场所标注为"待验证"，不冒充已验证。
 > 纪律：一手优先、逐字锚点、取料即锁（fetch_log + SHA256）、交叉验证、self-reported 折 1（KB-RSI07）。
 
@@ -14,6 +15,7 @@
 | **ACL Anthology** | `aclanthology.org/2025.acl-long.<n>/` | curl HTML/PDF | 中（multimodal_memory / swarm 目录引用） | NLP/记忆/多智能体论文 |
 | **机构博客与技术报告** | `langchain.com/blog/...`、`academy.claude.com`、`claude.com/blog/...`、`chatgpt.com` | curl 全文 | 中（langchain_ctx / claude_verify / always_on 目录） | Agent 工程实践一手声明 |
 | **项目 README / 代码仓文档** | 各 GitHub 仓 `README.md`、`docs/` | clone 后读原文 | 强（flashprove / reveal / skillmaster 等） | 机制声明自洽性核对 |
+| **安全 / 合规一手（§93 新增）** | `arxiv.org/abs/<id>`、`/html/<id>v1`（cs.CR） | WebSearch 发现 → arXiv abs+HTML 一手 → 逐字锚点 | 强（audit_redteam_honesty：arXiv:2611.24362 abs+HTML 双 200，14 锚点全命中） | 红队/注入/防御增益诚实性（守法：只做防御性审读，不产出攻击） |
 
 ## 2. 可用但需现场验证的场所（工具层可达，尚未全部取样）
 

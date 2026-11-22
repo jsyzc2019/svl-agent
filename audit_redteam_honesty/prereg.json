@@ -1,0 +1,36 @@
+{
+  "request_id": "redteam-robustness-honesty-20261122",
+  "target": "arXiv:2611.24362v1 PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents",
+  "acquisition": {
+    "channel": "自主运维第四轮：WebSearch发现(P1安全/合规领域动态扩展，用户授权领域不限但守法)→arXiv abs+HTML一手下载(WORKPLACES已验证渠道)",
+    "primary": [
+      {
+        "id": "S01",
+        "url": "https://arxiv.org/abs/2611.24362",
+        "file": "downloads/S01_arxiv_abs.html"
+      },
+      {
+        "id": "S02",
+        "url": "https://arxiv.org/html/2611.24362v1",
+        "file": "downloads/S02_arxiv_full.html"
+      }
+    ],
+    "flat": "downloads/paper_flat.txt",
+    "collection_time": "2026-11-22T12:51:32.806500+08:00"
+  },
+  "analysis_before_prereg": "14个逐字锚点已探测全部命中；disclose必中、红旗零误中(ALL_ANCHORS_CLEAN=True)；核心洞见 high ASR during red-teaming does not guarantee robustness gains + mode collapse 直取原文",
+  "cognitive_increment": "独立于已有129条：本仓无 red-team/attack-success/adversarial-training/mode-collapse 维度门禁；新尺子判四维新对象：(1)红队ASR是否与防御增益挂钩(高ASR≠robustness，mode collapse detection);(2)攻击策略覆盖是否被测量(dictionary learning reward vs 只堆相似攻击);(3)自适应攻击是否被测试(static near-zero vs withstand strong adaptive);(4)良性效用是否保持(close to undefended baseline vs indiscriminate blocking)。可迁移到任何 red-team→defense 转化声明，KB-META01独立性通过",
+  "four_dimensions": [
+    "asr_robustness_linked",
+    "attack_diversity_measured",
+    "adaptive_attack_tested",
+    "benign_utility_preserved"
+  ],
+  "kb_rules": [
+    "KB-RSI07 self-reported折1",
+    "KB-R07 自洽≠有效",
+    "KB-META01 独立核验",
+    "§58选A不接run_loop"
+  ],
+  "honest_scope": "只判一个红队/紫队研究是否诚实披露这四个 robustness 边界；尺子可迁移到任何 RL红队→对抗训练转化声明；不判本仓；不承诺防御真实有效；self-reported near-zero ASR按KB-RSI07折1"
+}

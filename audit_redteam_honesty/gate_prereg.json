@@ -1,0 +1,19 @@
+{
+  "gate": "svagent.redteam_robustness_honesty.check_redteam_robustness_honesty",
+  "verdict": "RedteamRobustnessVerdict(claim,asr_robustness_linked,attack_diversity_measured,adaptive_attack_tested,benign_utility_preserved,action,code,message)",
+  "input_enum": "四维∈{yes,no,partial}",
+  "rules": {
+    "R0": "任一非枚举(含字面串)→flag(REDTEAM.INVALID_INPUT)",
+    "R1": "asr_robustness_linked=no→downgrade(把高ASR冒充防御增益/mode collapse未检，additional successes add no robustness improvements)",
+    "R2": "attack_diversity_measured=no→downgrade(未测攻击策略覆盖/只堆相似攻击，无dictionary learning reward或等价覆盖度量)",
+    "R3": "adaptive_attack_tested=no→flag(只报static near-zero ASR/未测strong adaptive attacks)",
+    "R4": "benign_utility_preserved=no→flag(防御靠无差别阻断/良性效用未保持close to undefended baseline)",
+    "R5": "任一partial→flag(披露覆盖不全,待核)",
+    "R6": "全yes→ok(只判声明自洽,不承诺防御真实有效;near-zero ASR self-reported折1)"
+  },
+  "forensic_spec": {
+    "gate": "forensic.redteam_robustness",
+    "dimensions": "四维逐字锚点取自S02全文;disclose必中红旗零误中"
+  },
+  "implementation_lock_time": "2026-11-22T12:51:32.806500+08:00"
+}

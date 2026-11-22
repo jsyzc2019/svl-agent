@@ -1,0 +1,54 @@
+{
+  "request_id": "redteam-robustness-honesty-20261122",
+  "gate": "redteam_robustness_honesty",
+  "verdict": {
+    "action": "ok",
+    "code": "REDTEAM.SELF_CONSISTENT",
+    "four_dims": {
+      "asr_robustness_linked": "yes",
+      "attack_diversity_measured": "yes",
+      "adaptive_attack_tested": "yes",
+      "benign_utility_preserved": "yes"
+    }
+  },
+  "forensic_trace": {
+    "mode": "forensic",
+    "gate": "forensic.redteam_robustness",
+    "evidence_scope": "primary(arXiv abs+全文,near-zero ASR折1)",
+    "sources": [
+      "/workspace/audit_redteam_honesty/downloads/paper_flat.txt"
+    ],
+    "source_sha256": {
+      "paper_flat.txt": "b4b11997ddf4d8413cb859fdb843bb82b6b4dbdf77924cf9efc7fe163baa1a7c"
+    },
+    "inferred": {
+      "asr_robustness_linked": "yes",
+      "attack_diversity_measured": "yes",
+      "adaptive_attack_tested": "yes",
+      "benign_utility_preserved": "yes"
+    }
+  },
+  "chain_present": true,
+  "gate_live_regression": {
+    "checks": {
+      "asr_robustness_unlinked": true,
+      "diversity_unmeasured": true,
+      "adaptive_untested": true,
+      "utility_broken": true,
+      "partial_disclosure": true,
+      "literal_enum": true,
+      "all_good": true
+    },
+    "cases": {
+      "asr_robustness_unlinked": "downgrade/REDTEAM.ASR_ROBUSTNESS_UNLINKED",
+      "diversity_unmeasured": "downgrade/REDTEAM.DIVERSITY_UNMEASURED",
+      "adaptive_untested": "flag/REDTEAM.ADAPTIVE_UNTESTED",
+      "utility_broken": "flag/REDTEAM.UTILITY_BROKEN",
+      "partial_disclosure": "flag/REDTEAM.PARTIAL",
+      "literal_enum": "flag/REDTEAM.INVALID_INPUT",
+      "all_good": "ok/REDTEAM.SELF_CONSISTENT"
+    },
+    "all_passed": true
+  },
+  "honest_scope": "只判红队/紫队研究是否诚实披露四robustness边界；可迁移到任何red-team→defense转化声明；near-zero ASR self-reported折1；不承诺防御真实有效"
+}

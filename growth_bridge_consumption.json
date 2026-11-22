@@ -1,5 +1,5 @@
 {
-  "opportunity_count": 77,
+  "opportunity_count": 78,
   "consumption": [
     {
       "source_kind": "knowledge_base",
@@ -616,6 +616,13 @@
       "injected_at": "2026-11-22T04:42:23.357331+00:00",
       "addressable": true,
       "accepted_by_pdca": null
+    },
+    {
+      "source_kind": "kb_mechanism",
+      "source_id": "KB-AUDIT35",
+      "mechanism": "redteam-to-defense robustness honesty 4-dim gate",
+      "injected_at": "2026-11-22T04:52:55.554326+00:00",
+      "addressable": true
     }
   ],
   "cognitive_deferred_count": 34,
@@ -631,5 +638,5 @@
     "KB-R08",
     "KB-E03"
   ],
-  "note": "真实注入 77 个机会到 PDCA（含 KB 机制与取证缺口）；34 条认知机制交人。"
+  "note": "真实注入 77 个机会到 PDCA（含 KB 机制与取证缺口）；34 条认知机制交人。 | §93 新增 KB-AUDIT35(红队-防御增益诚实性) 1 条消费痕迹。"
 }

@@ -1,0 +1,89 @@
+"""生成 §93 自主运维第四轮成果报告 HTML（安全/合规领域动态扩展）。"""
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+result = json.loads((ROOT / "audit_redteam_honesty" / "result.json").read_text(encoding="utf-8"))
+kb_count = len(json.loads((ROOT / "knowledge_base_store.json").read_text(encoding="utf-8"))["items"])
+cons = json.loads((ROOT / "growth_bridge_consumption.json").read_text(encoding="utf-8"))
+
+html = """<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>自主运维第四轮成果报告 · §93 红队-防御增益诚实性</title>
+<style>
+  :root { --ink:#1a1a1a; --muted:#666; --line:#e3e3e3; --accent:#8b0000; --bg:#fafafa; --ok:#1a7f37; }
+  * { box-sizing:border-box; }
+  body { font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+         color:var(--ink); background:var(--bg); margin:0; padding:32px 24px 64px; line-height:1.7; }
+  .wrap { max-width:960px; margin:0 auto; }
+  h1 { font-size:26px; margin:0 0 6px; }
+  .sub { color:var(--muted); font-size:13px; margin-bottom:28px; }
+  h2 { font-size:19px; margin:36px 0 12px; padding-left:10px; border-left:4px solid var(--accent); }
+  table { width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+  th,td { border:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top; }
+  th { background:#f0f0f0; font-weight:600; }
+  code { background:#f2f2f2; padding:1px 5px; border-radius:4px; font-size:12.5px; }
+  .pill { display:inline-block; padding:2px 9px; border-radius:12px; font-size:12px; font-weight:600; }
+  .ok { background:#e6f4ea; color:var(--ok); }
+  .tag { background:#fdecea; color:var(--accent); }
+  .note { background:#fff8e1; border:1px solid #f0e0a0; padding:12px 16px; border-radius:6px; font-size:13.5px; }
+  .foot { margin-top:40px; color:var(--muted); font-size:12px; border-top:1px solid var(--line); padding-top:16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>自主运维第四轮成果报告 <span class="pill tag">§93</span></h1>
+  <div class="sub">arXiv:2611.24362《PIPETTE: Prompt Injection Purple-Teaming》→ 第 32 道会拦门禁 + 第 7 道 FJ 取证入口 · 2026-11-22 · 触发：用户"清单可动态扩展/领域不限但守法/继续放飞"</div>
+
+  <h2>一、这一轮做了什么（清单动态扩展的首次实证）</h2>
+  <p>用户本轮明确授权"三个清单可自由动态调整、领域话题不受限，但要守法"。据此把选题从 P0 自主扩展到<b>新增的 P3 安全/合规领域</b>，并把三清单升级到 v1.1（WORKPLACES 新增安全/合规取料行、WORK_ITEMS 新增 P3、TIME_PLAN 记录四轮闭环 + 守法红线）。晨间自检 1091 全绿。搜索自主发现 arXiv:2611.24362v1，从已验证 arXiv 渠道取 abs 42KB + 全文 720KB（均 200），落 fetch_log + SHA256。认知增量判断：本仓无 red-team / attack-success / adversarial-training / mode-collapse 维度门禁——新对象独立，编译新门禁。</p>
+  <table>
+    <tr><th>阶段</th><th>产物</th><th>实证</th></tr>
+    <tr><td>清单动态扩展</td><td>WORKPLACES / WORK_ITEMS / TIME_PLAN → v1.1</td><td>新增 P3 安全/合规 + 守法红线（只防御性审读，不产出攻击）</td></tr>
+    <tr><td>自主取料</td><td>arXiv:2611.24362v1 abs + 全文，fetch_log + SHA256</td><td>均 HTTP 200；WebSearch 自主发现</td></tr>
+    <tr><td>预注册锁存</td><td>prereg(29b1779a…) / gate_prereg(d0278ea1…) / manifest(f741bdfd…) + source 清单锁</td><td>先锁后看、实现前锁存</td></tr>
+    <tr><td>锚点探测</td><td>14 个逐字锚点 disclose 必中、红旗零误中</td><td>ALL_ANCHORS_CLEAN=True</td></tr>
+    <tr><td>编译门禁</td><td><code>svagent/redteam_robustness_honesty.py</code></td><td>R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量</td></tr>
+    <tr><td>FJ 取证入口</td><td><code>svagent/forensic_gates_ext4.py</code></td><td>真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4</td></tr>
+    <tr><td>接合验收</td><td>KB fix → PDCA 消费痕迹</td><td>78 机会 / 78 痕迹；25 项新测试；链审 36 目录</td></tr>
+  </table>
+
+  <h2>二、新门禁判什么（四维 robustness 边界）</h2>
+  <table>
+    <tr><th>维度</th><th>诚实披露（yes）</th><th>缺陷（no → downgrade/flag）</th><th>论文实证</th></tr>
+    <tr><td>asr_robustness_linked</td><td>ASR 与防御增益挂钩、mode collapse 被检出</td><td>把高 ASR 冒充 robustness → downgrade</td><td>high ASR during red-teaming does not guarantee robustness gains；add no additional robustness improvements</td></tr>
+    <tr><td>attack_diversity_measured</td><td>攻击策略覆盖被测量/奖励</td><td>只堆相似攻击、无覆盖度量 → downgrade</td><td>dictionary learning-based reward for broader coverage；RL-Hammer/PISmith suffer from mode collapse</td></tr>
+    <tr><td>adaptive_attack_tested</td><td>测过强自适应攻击</td><td>只报 static near-zero ASR → flag</td><td>near-zero ASR on static attacks and withstand strong adaptive attacks</td></tr>
+    <tr><td>benign_utility_preserved</td><td>防御保持良性任务效用</td><td>无差别阻断牺牲效用 → flag</td><td>benign task utility close to that of the undefended baseline</td></tr>
+  </table>
+  <p>取证裁决结果：<span class="pill ok">ok / REDTEAM.SELF_CONSISTENT</span>，四维 inferred 全 yes —— 与论文诚实披露的定位一致。</p>
+
+  <h2>三、实测数据（均可复现）</h2>
+  <table>
+    <tr><th>指标</th><th>数值</th></tr>
+    <tr><td>全量测试</td><td>1091 → <b>1116 passed</b>（+25，全绿）</td></tr>
+    <tr><td>门禁数 / 新模块 / 测试文件</td><td>32 道 / 2 新模块（redteam_robustness_honesty + forensic_gates_ext4）/ 65 文件</td></tr>
+    <tr><td>知识库</td><td>129 → <b>130 条</b>（KB-AUDIT35，可编译 fix）</td></tr>
+    <tr><td>证据链</td><td>36 目录，五件套齐全 19，三锁完整 16（断言随成长 35→36 / 18→19，不放宽）</td></tr>
+    <tr><td>成长桥消费痕迹</td><td>78 机会 / 78 痕迹</td></tr>
+    <tr><td>七道取证裁决</td><td>全部 ok（criterion / verification / proof / silent_failure / rsi_claim_audit / memory_consolidation / redteam_robustness）</td></tr>
+  </table>
+
+  <h2>四、诚实边界与守法</h2>
+  <div class="note">
+    新门禁只判「红队/紫队研究是否诚实披露四个 robustness 边界」，可迁移到任何 red-team→defense 转化声明，<b>不判本仓</b>；论文 self-reported 的 near-zero ASR / utility 数字按 KB-RSI07 折 1；只判声明自洽，<b>不承诺防御真实有效</b>（KB-R07 / META01）。<b>守法红线</b>：安全线只做防御性诚实审读，不产出可利用攻击载荷、不协助绕过防护。遵循 §58 选 A 不接 run_loop；篡改测试只在临时副本；未改动任何历史证据。
+  </div>
+
+  <h2>五、成熟度观察</h2>
+  <p>连续四轮自主运维（§90 silent_failure + §91 rsi_claim_audit + §92 memory_consolidation + §93 redteam_robustness）证明：三清单框架不仅稳定可复制，且<b>可按用户授权动态扩展领域</b>（本轮 P0→P3）。每轮约 25 项测试、1 道门禁、1 道 FJ 入口、1 条 KB 洞见，全链闭环可回放、数字真实、凭据自管。基础设施就绪度稳定在 <b>L2 边缘偏上</b>；仍<b>不宣称 L3</b> —— 保留「北极星由人设定」这一价值边界（KB-META03）。后续可在守法前提下继续从 P0 剩余话题（技能演化 / 多智能体编排 / 上下文检索）或 P1/P2/P3 择机复制此节奏。</p>
+
+  <div class="foot">rsv = redteam-robustness-honesty-20261122 · 证据目录 audit_redteam_honesty/ · 报告 build_round4_report.py 生成</div>
+</div>
+</body>
+</html>
+"""
+(ROOT / "ROUND4_ACHIEVEMENT_REPORT_20261122.html").write_text(html, encoding="utf-8")
+print("报告已生成:", ROOT / "ROUND4_ACHIEVEMENT_REPORT_20261122.html")
+print("result verdict:", result["verdict"]["action"], "| KB:", kb_count, "| consumption:", cons["opportunity_count"])

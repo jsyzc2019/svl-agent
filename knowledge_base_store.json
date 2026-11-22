@@ -3344,6 +3344,47 @@
       "evidence": "audit",
       "addressable": true,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT35",
+      "kind": "reasoning_lesson",
+      "mechanism": "红队-防御增益诚实性(redteam-to-defense robustness honesty)是审读紫队/RL红队研究的独立安全合规缺口(arXiv:2611.24362 PIPETTE)：中心洞见=红队高ASR≠对抗训练防御增益(achieving high ASR during red-teaming does not guarantee robustness gains)，两SOTA方法RL-Hammer/PISmith suffer from mode collapse(repeatedly discovering similar attack strategies whose additional successes add no additional robustness improvements)。四维——(1)asr_robustness_linked:ASR须与防御增益挂钩(mode collapse检出)vs把高ASR冒充robustness;(2)attack_diversity_measured:攻击策略覆盖须被测量(dictionary learning-based reward鼓励broader coverage)vs只堆相似攻击;(3)adaptive_attack_tested:withstand strong adaptive attacks vs只报static near-zero ASR;(4)benign_utility_preserved:maintaining benign task utility close to undefended baseline vs无差别阻断。只判声明自洽不承诺防御有效(near-zero ASR/utility self-reported折1,scoped)。",
+      "trigger": [
+        "红队",
+        "red team",
+        "紫队",
+        "purple team",
+        "prompt injection",
+        "提示注入",
+        "attack success rate",
+        "ASR",
+        "mode collapse",
+        "对抗训练",
+        "adversarial training",
+        "攻击策略覆盖",
+        "attack diversity",
+        "adaptive attack",
+        "自适应攻击",
+        "benign utility",
+        "良性效用",
+        "IPO",
+        "间接提示注入",
+        "PIPETTE",
+        "RL-Hammer",
+        "PISmith"
+      ],
+      "action": "遇到声称『红队发现已转化为强防御/ASR降到近零』的安全研究，按 redteam_robustness_honesty 四维取证(法官读一手原文逐字锚点)：高ASR冒充防御增益/mode collapse未检→downgrade；未测攻击策略覆盖→downgrade；只报static未测adaptive→flag；良性效用牺牲→flag；partial→flag；全yes→ok(只判自洽,near-zero ASR折1)。与KB-AUDIT34等 epistemics 尺子同族——本门禁补『red-team→defense转化可信性』独立维度。",
+      "provenance": "自主运维第四轮：用户授权清单可动态扩展/领域不限但守法→从P1安全合规领域自主发现arXiv:2611.24362v1→arXiv abs+HTML一手→fetch_log+SHA256→预注册锁存(prereg 29b1779a/gate d0278ea1/manifest f741bdfd)→14锚点全命中(disclose必中红旗零误中ALL_ANCHORS_CLEAN)→编译第32道门禁+第7道FJ取证入口",
+      "timestamp": "2026-11-22T04:52:55.507288+00:00",
+      "support": [
+        "svagent/redteam_robustness_honesty.py:check_ + tests/test_redteam_robustness_honesty.py(25项) — KB-AUDIT35编译为活体门禁;7活体+AST自审0中文字面量",
+        "svagent/forensic_gates_ext4.py:adjudicate_redteam_robustness_honesty — 第7道FJ取证入口,真实证据ok/删披露flag/红旗downgrade/链失配拒判4/4",
+        "arXiv:2611.24362v1一手锚点:high ASR does not guarantee robustness+mode collapse+no additional robustness improvements+dictionary learning reward+withstand strong adaptive+close to undefended baseline,14锚点逐字命中",
+        "独立性核验:本仓无red-team/attack-success/adversarial-training/mode-collapse维度门禁;KB-META01通过"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {

@@ -3659,3 +3659,22 @@ F4：新增 svagent/evidence_scope.py，6 个模拟模块（autopoiesis/self_evo
 
 ### 92.4 成熟度观察
 连续三轮自主运维（§90 silent_failure + §91 rsi_claim_audit + §92 memory_consolidation_governance）证明：三清单框架已稳定可复制，每轮约 25 项测试、1 道门禁、1 道 FJ 入口、1 条 KB 洞见，全链闭环可回放、数字真实、凭据自管。基础设施就绪度稳定在 L2 边缘偏上；仍不宣称 L3——保留"北极星由人设定"价值边界（KB-META03）。P0 剩余话题（技能演化/多智能体编排/上下文检索）可继续复制此节奏。
+
+---
+
+## §93 自主运维第四轮：红队-防御增益诚实性（P3 安全/合规领域，清单动态扩展首证）
+
+### 93.1 用户授权与清单动态扩展
+用户祝贺并明确授权："三个清单可以自由动态调整，领域和话题不受限制，但要守法。"据此把选题从 P0 自主扩展到**新增的 P3 安全/合规领域**，并把三清单升级 v1.1：WORKPLACES 新增「安全/合规一手」取料行（arXiv cs.CR）；WORK_ITEMS 新增 P3 安全/合规话题；TIME_PLAN 记录四轮闭环 + 第 7 条守法红线（只做防御性诚实审读，不产出可利用攻击载荷、不协助绕过防护）。晨间自检 1091 全绿/链审 35 目录稳定。
+
+### 93.2 自主取料与增量判断
+按扩展后的清单，搜索自主发现 arXiv:2611.24362v1《PIPETTE: Prompt Injection Purple-Teaming for Robust LLM Agents》，从已验证 arXiv 渠道取 abs 42KB + 全文 720KB（均 200），落 fetch_log + SHA256。核心洞见直取原文：achieving high ASR during red-teaming does not guarantee robustness gains——两个 SOTA RL 红队方法 RL-Hammer/PISmith suffer from mode collapse（similar attack strategies whose additional successes add no additional robustness improvements）。增量判断：本仓无 red-team / attack-success / adversarial-training / mode-collapse 维度门禁，安全线此前只判声明自洽/检索接地，不判"红队发现能否转化为防御增益"——新对象独立，KB-META01 通过。
+
+### 93.3 编译与取证
+四维：①asr_robustness_linked（ASR 须与防御增益挂钩/mode collapse 检出 vs 把高 ASR 冒充 robustness）；②attack_diversity_measured（dictionary learning-based reward 鼓励 broader coverage vs 只堆相似攻击）；③adaptive_attack_tested（withstand strong adaptive attacks vs 只报 static near-zero ASR）；④benign_utility_preserved（benign task utility close to undefended baseline vs 无差别阻断牺牲效用）。先锁存 prereg(29b1779a…)/gate_prereg(d0278ea1…)/manifest(f741bdfd…) + source 清单锁，再实现；14 逐字锚点探测 disclose 必中、红旗零误中（ALL_ANCHORS_CLEAN）。编译第 32 道门禁 redteam_robustness_honesty（R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 7 道 FJ 取证入口 forensic_gates_ext4（真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。
+
+### 93.4 接合、验收与诚实边界
+25 项新测试全过；七道取证裁决全 ok；成长桥把 KB fix 机制注入 PDCA，消费痕迹 77→78。KB 129→130（KB-AUDIT35，可编译 fix）。全量 1091→1116 passed（+25），链审断言随仓库成长 35→36 / 18→19（不放宽）。诚实边界：只判红队/紫队研究是否诚实披露四 robustness 边界，可迁移到任何 red-team→defense 转化声明，不判本仓；near-zero ASR/utility self-reported 按 KB-RSI07 折 1；只判声明自洽不承诺防御真实有效（KB-R07/META01）。守法红线：只做防御性审读，不产出攻击载荷。遵循 §58 选 A 不接 run_loop；篡改测试只在临时副本；不动历史证据。
+
+### 93.5 成熟度观察
+连续四轮自主运维（§90 silent_failure + §91 rsi_claim_audit + §92 memory_consolidation + §93 redteam_robustness）证明：三清单框架不仅稳定可复制，且**可按用户授权动态扩展领域**（本轮 P0→P3 安全/合规）。每轮约 25 项测试、1 道门禁、1 道 FJ 入口、1 条 KB 洞见，全链闭环可回放、数字真实、凭据自管。就绪度稳定在 L2 边缘偏上；仍不宣称 L3——保留"北极星由人设定"价值边界（KB-META03）。
