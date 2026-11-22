@@ -1,0 +1,35 @@
+{
+  "section": "§81-§82",
+  "title": "EvoSteer 在线自演化图编排精研（arXiv:2609.38661v2）",
+  "analysis_before_prereg": true,
+  "note": "命题与锚点在实现门禁代码之前先锁定；一手证据为 arXiv 官方 HTML 全文（v2, 22 Oct 2026，Mingda Zhang 等，CUHK-Shenzhen/DUT/Fudan/Oxford 等）。锚点用修正后的提取工具（get_text(' ') + 空白规整）逐字核对，19/19 命中；跨行断字通过修工具解决，未放水、未改规则。",
+  "sources": [
+    {"id": "S01", "type": "primary", "desc": "arXiv:2609.38661v2 HTML 全文（EvoSteer: Online Self-Evolving Graph Orchestration via Reference-Anchored Credit Assignment, cs.AI, 22 Oct 2026）", "file": "downloads/paper.html", "sha256": "942ac20ff2c28783d0e808218db151d4f93f403fff73279047fd757ea81042a0"},
+    {"id": "S02", "type": "primary", "desc": "arXiv abs 页（版本历史 v1 29 Sep 2026 / v2 22 Oct 2026；作者机构）", "file": "downloads/S01_abstract.html", "sha256": "6de2d9707cea0cdc1a89c08c42eec744d71f23a496c9a1213ddf042ac7136092"}
+  ],
+  "propositions": {
+    "P0_online_in_run": "EvoSteer 的在线自演化定义：编排器在执行中从执行特征与学习到的价值估计动态构建并修复运行中的团队（dynamically builds and repairs a running team from execution features and a learned value estimate），每轮发出一次原子编辑（atomic edit per turn，含 rerun 与 drop），立即执行，使看似合理但失败的步骤可在同一运行中途重做（redone mid-run）。",
+    "P1_posthoc_cost": "事后演化的代价：现有编排只在轨迹之间（between trajectories）修订技能/提示/拓扑，一批运行结束后才改；配置错误的团队因输出看似合理而难以发现，且在工作流仍在执行时无法修复（impossible to repair while the workflow is still being executed）。",
+    "P2_credit_diffusion": "信用扩散：在共享终端奖励下，轨迹级方法给每个动作同一个终端优势系数（same coefficient of a single terminal advantage）；学习到的状态价值混淆了任务被解决的频率、执行噪声与结构选择（confound how often a task is solved, execution noise, and structural choice），编排器无法判断低分来自参考很少解决的任务还是组织糟糕的团队。",
+    "P3_reference_anchor": "AnchorTB 的解法：一个回归式 flow-matching 损失，通过把子轨迹对冻结参考（frozen reference）做平衡，为每个编排动作分配系数；结合任务级参考锚（task-level reference anchor）与前缀依赖修正（prefix-dependent corrections）；测量项固定（held fixed），只更新残差参数。",
+    "P4_skill_trial": "Validated Skill Admission：候选技能先试用后晋升（tried before it is promoted），仅在配对证据通过共享 alpha-spending 预算下的序贯检验后才晋升或退役；对每个批次任务从同一记录与相同强制首角色启动两条配对反事实轨迹（一条绑定、一条不绑定），由参考策略继续。",
+    "P5_calibration": "未校准准入的缺陷：点估计无法区分证据不足与已确认效果（cannot separate insufficient evidence from a confirmed effect）；没有测试追踪已准入技能在后续任务上是否有帮助，故技能留在库中永不退役（never retired）；序贯检验的结果是三态——promotes, retires, or defers。",
+    "P6_fwer": "预算与 FWER：序贯预算只在有新证据到来时花费，总名义水平有上界（total nominal level is at most …）；由 union bound，只要每个方向 p 值对所用选择与采样规则有效，即使是相依检验，family-wise error 也有上界（条件可数 FWER）。"
+  },
+  "gate_claims": {
+    "G_A_online_repair": "新门禁①：判一个声称『在线自演化/运行时可修复』的系统是否诚实具备运行中执行中修复能力——四维 in_run_edit / rerun_drop / execution_feature_driven / ref_grounded_value。",
+    "G_B_skill_admission_calibration": "新门禁②：判一个声称『技能库可自演化/技能经校验准入』的系统是否诚实处理校准与退役——四维 tried_before_promotion / paired_counterfactual / sequential_budget / retire_mechanism。"
+  },
+  "independence_check": {
+    "existing_gates_reviewed": ["self_evolving(本仓运行时机制非审读尺子)", "scoring_integrity(§判检测逻辑可写性/绕过作废)", "component_attribution(失败归因到Prompt/Memory/Skill/Harness)", "memory_curation(§68记忆内容质量治理)", "criterion_origin_honesty(§77评估判据来源)", "policy_evolution_grounding(§79记忆管理策略演化接地)", "selective_supervision_honesty(§78)"],
+    "gap_A": "上述门禁无一判『编排团队是否能在同一运行内、执行中途、由执行特征与参考价值驱动地做原子修复（rerun/drop）』——self_evolving 是本仓判据自造运行时机制，非审读外部在线编排系统的尺子；component_attribution 判失败归因到哪个组件，不判修复是否在运行中途发生；policy_evolution_grounding 判记忆管理策略演化接地，对象是记忆非编排团队。",
+    "gap_B": "scoring_integrity 判计分是否被绕过，非技能准入校准；memory_curation 判记忆内容质量，非技能晋升/退役；criterion_origin 判评估判据来源，非准入序贯检验。无一判『技能是否先试用、配对反事实、共享预算序贯检验、且有退役机制』。",
+    "conclusion": "两门禁拦截面独立、可迁移（任何声称在线自演化编排/技能库自增长的系统均可套用）、会拦（对应维度 no→downgrade），KB-META01 通过。"
+  },
+  "honesty_boundaries": [
+    "论文系 self-reported 实验结果（十二数据集优于基线、28% less compute 等），按 KB-RSI07 折1：只编译其可证伪的机制拦截面，不宣称其有效性被独立复现。",
+    "只判机制声明是否诚实自洽，不承诺在线修复真提升性能/序贯检验真控制 FWER——存在≠有效性（KB-META01/AUDIT03）。",
+    "两门禁定位为审读外部『在线自演化编排系统』的尺子，不判本仓；遵循 §58 选 A，不接 harness.run_loop。",
+    "本仓为纯函数门禁库，非运行时图编排系统；编译的是判据语言不是复现 EvoSteer 训练。"
+  ]
+}

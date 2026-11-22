@@ -183,6 +183,14 @@ _LAZY: dict[str, tuple[str, str]] = {
     "check_memory_provenance_honesty": ("svagent.memory_provenance_honesty", "check_memory_provenance_honesty"),
     "MemoryProvenanceVerdict": ("svagent.memory_provenance_honesty", "MemoryProvenanceVerdict"),
     "memory_provenance_honesty_live_regression": ("svagent.memory_provenance_honesty", "live_regression"),
+    # 在线修复诚实性门禁（§81：从 EvoSteer 在线自演化图编排编译——运行中途编辑/rerun-drop/执行特征驱动/参考锚定价值）
+    "check_online_repair_honesty": ("svagent.online_repair_honesty", "check_online_repair_honesty"),
+    "OnlineRepairVerdict": ("svagent.online_repair_honesty", "OnlineRepairVerdict"),
+    "online_repair_honesty_live_regression": ("svagent.online_repair_honesty", "live_regression"),
+    # 技能准入校准门禁（§82：从 EvoSteer Validated Skill Admission 编译——先试用/配对反事实/共享预算序贯检验/退役机制）
+    "check_skill_admission_calibration": ("svagent.skill_admission_calibration", "check_skill_admission_calibration"),
+    "SkillAdmissionVerdict": ("svagent.skill_admission_calibration", "SkillAdmissionVerdict"),
+    "skill_admission_calibration_live_regression": ("svagent.skill_admission_calibration", "live_regression"),
 }
 
 

@@ -1,0 +1,15 @@
+[L92] C.4 | Nominal Spending and Conditional Countable FWER | C.5
+[L843] gets one binomial sign-test tail per direction, | exact under the fixed-look sign model (Appendix C): | (11)
+[L864] , and the budget is spent only when new | evidence arrives, so the total nominal level is at most | (Appendix C). By a union
+[L866] (Appendix C). By a union | bound, family-wise error is at most | whenever each directional p-value is valid
+[L867] bound, family-wise error is at most | whenever each directional p-value is valid | for the selection and sampling rules in use, even for dependent tests.
+[L868] whenever each directional p-value is valid | for the selection and sampling rules in use, even for dependent tests. | Proposition 3.
+[L872] candidate be tried before it is promoted, and promotes or retires it only when | paired evidence passes a sequential test under a shared alpha-spending budget. | Proof.
+[L3994] There are at most two, each bounded by | , so the union bound gives | , without independence. For the second claim, fair-binomial symmetry
+[L4068] registration-based protocol below conditions on registration information, | which is all the union bound requires. | C.4
+[L4070] C.4 | Nominal Spending and Conditional Countable FWER | Proposition C.5
+[L4072] Proposition C.5 | (Alpha-spending accounting) | .
+[L4094] Proposition C.6 | (Conditional-validity family-wise error bound) | .
+[L4122] . | Apply the finite conditional union bound and conditional monotone | convergence to the same increasing sequence of unions. This proves
+[L4126] . The argument uses no | independence between comparisons or looks, so it covers dependent tests. | ∎
+[L4197] between | valid planned tests leaves the union bound intact. These results bound | false directional rejections.

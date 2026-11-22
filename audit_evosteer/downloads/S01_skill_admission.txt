@@ -1,0 +1,37 @@
+[L33] 4.3 | Validated Skill Admission | 5
+[L147] that | is uncalibrated and never retired. | To address these challenges, we propose EvoSteer, a new paradigm of Online
+[L157] Built on the learned flow, we further propose | Validated Skill Admission | ,
+[L159] , | in which a candidate skill is tried before promotion and promoted only if | paired evidence passes a sequential test under a shared nominal testing budget.
+[L160] in which a candidate skill is tried before promotion and promoted only if | paired evidence passes a sequential test under a shared nominal testing budget. | Moreover, AnchorTB combines measured task-level reference reward
+[L224] from measured execution features and a reference value estimate, and admits a | skill only after a sequential test. | To address these issues, three main lines of work have emerged, as shown in
+[L324] whether an admitted skill still helps on later tasks, it stays in the library | and is never retired. | To address these challenges, we propose
+[L346] Built on the learned flow, we further propose | Validated Skill Admission | :
+[L349] a skill proposer distils candidates from scored experience, the orchestrator may | try a candidate before promotion, and paired rollouts differing only in the | candidate are judged by a sequential sign test under a shared nominal testing budget,
+[L350] try a candidate before promotion, and paired rollouts differing only in the | candidate are judged by a sequential sign test under a shared nominal testing budget, | which promotes, retires, or defers.
+[L351] candidate are judged by a sequential sign test under a shared nominal testing budget, | which promotes, retires, or defers. | Trained end-to-end on natural and paired trajectories with the reference frozen
+[L574] Bottom right: | paired rollouts and a sign test under a shared | nominal
+[L582] including online self-evolving graph orchestration (Section 4.1), anchored | trajectory balance (Section 4.2), and validated skill admission (Section 4.3), all built on the frozen reference | .
+[L643] agents a task needs, when a result is worth redoing, and when the answer in hand suffices. | Team size and repair count follow from the policy under the shared budget, and the | terminal reward
+[L780] 4.3 | Validated Skill Admission | Prior work admits a skill from a single trajectory, by a judge, by counting
+[L820] only when the bound agent executes. | Paired Counterfactual Rollouts. | For every batch task in a family with a candidate, two extra trajectories are
+[L851] whose | clears it is retired, and otherwise it keeps accumulating. One | budget covers the whole run on two levels, and the same counts give the
+[L866] (Appendix C). By a union | bound, family-wise error is at most | whenever each directional p-value is valid
+[L870] Proposition 3. | Validated Skill Admission lets a | candidate be tried before it is promoted, and promotes or retires it only when
+[L871] Validated Skill Admission lets a | candidate be tried before it is promoted, and promotes or retires it only when | paired evidence passes a sequential test under a shared alpha-spending budget.
+[L872] candidate be tried before it is promoted, and promotes or retires it only when | paired evidence passes a sequential test under a shared alpha-spending budget. | Proof.
+[L1961] Removing skill evolution costs 5.27 IID and 3.26 OOD points, most on MBPP+ (7.66). A fixed | success count in place of the sequential test costs 5.17 IID points, nearly the same for any | count from 1 to 10 (Appendix
+[L1977] executes as it is issued, AnchorTB credits it against a frozen reference, and paired | sequential tests decide which skills are kept. It beats all baselines on twelve | benchmarks and improves every executor backbone.
+[L2004] We support reproducibility by documenting the orchestration environment, action space, and value | estimate in Section 4.1, the AnchorTB objective in Section 4.2, and the validated skill admission | procedure in Section 4.3. Section 5.1 specifies the benchmarks, baselines, and evaluation setting.
+[L3230] collected asynchronously, so the behavior adapter may lag the trained | one by one update; paired rollouts have a forced first action. | Lemma A.17
+[L3793] Sequential Validation and the Training Loop | Paired validation compares two specified rollout regimes. We identify | that effect, prove fixed-look directional tests and the error accounting
+[L3898] , the | multinomial law of wins, losses, and ties gives | Dividing, with the usual limiting conventions when a cell probability
+[L4072] Proposition C.5 | (Alpha-spending accounting) | .
+[L4094] Proposition C.6 | (Conditional-validity family-wise error bound) | .
+[L4208] filtered for duplicates and answer leakage. Candidate slots are ordered by | fewest paired observations. Paired rollouts enter AnchorTB and structural buckets as off-policy paths | but not the task, category, and global baseline statistics, and the forced first
+[L4256] 8. | Accumulate paired wins, losses, and ties; at each validation round, run the | author window and the sequential tests of Eq. (
+[L4257] Accumulate paired wins, losses, and ties; at each validation round, run the | author window and the sequential tests of Eq. ( | 11
+[L4286] 32 tasks per step, each with | natural trajectories, plus paired rollouts (192 episodes per step); asynchronous prefetch | Orchestration
+[L4288] Orchestration | team size, repair count, and episode length chosen by the policy; bounded only by the shared budget and the learned | stop
+[L4299] Validation | sequential sign test at each validation round; | with two-level alpha spending
+[L4409] skill evolution removes the whole skill mechanism (no author | window, no candidates, no paired rollouts, and an empty skill library), so the team uses | roles and tools only;
+[L4423] with the value head and the | skill library frozen; no reference, paired, or validation rollouts are drawn. The | transfer study of Figure

@@ -1,0 +1,22 @@
+[L155] orchestration action a coefficient by balancing subtrajectories against | a frozen reference. | Built on the learned flow, we further propose
+[L161] paired evidence passes a sequential test under a shared nominal testing budget. | Moreover, AnchorTB combines measured task-level reference reward | statistics with prefix-dependent corrections.
+[L162] Moreover, AnchorTB combines measured task-level reference reward | statistics with prefix-dependent corrections. | Experimental results on twelve datasets show that EvoSteer significantly
+[L342] orchestration action a coefficient by balancing subtrajectories against | a frozen reference. | It combines measured task-level reference reward statistics with
+[L343] a frozen reference. | It combines measured task-level reference reward statistics with | prefix-dependent corrections.
+[L344] It combines measured task-level reference reward statistics with | prefix-dependent corrections. | Built on the learned flow, we further propose
+[L427] . EvoSteer reruns and drops agents in the running team and | measures flows from a frozen reference. | Skill Self-Evolution.
+[L532] Given a task | , a frozen executor with tools, a frozen reference policy | , and a skill library
+[L582] including online self-evolving graph orchestration (Section 4.1), anchored | trajectory balance (Section 4.2), and validated skill admission (Section 4.3), all built on the frozen reference | .
+[L689] 2 | ), relative to the frozen reference. | Figure 4:
+[L691] Figure 4: | AnchorTB on a three-action history: ① score each action against the frozen reference; | ② anchor each state with a measured, stop-gradient anchor (blue) and a learned residual (pink);
+[L692] AnchorTB on a three-action history: ① score each action against the frozen reference; | ② anchor each state with a measured, stop-gradient anchor (blue) and a learned residual (pink); | ③ form all
+[L735] ); this | motivates reference anchors with a learned residual: | (8)
+[L739] , | is a task-level partial leave-one-out | shrinkage estimate of the reference mean reward on the same task, computed from
+[L770] orchestration action a regression coefficient from all subtrajectories | containing it, and combines a task-level reference anchor with prefix-dependent | corrections.
+[L802] ) that the orchestrator may bind while its evidence accumulates, and | that evidence is measured under the frozen reference of Section 4.2 (Figure | 3
+[L1976] EvoSteer unifies construction, repair, and skill growth in one learned loop: each action | executes as it is issued, AnchorTB credits it against a frozen reference, and paired | sequential tests decide which skills are kept. It beats all baselines on twelve
+[L3228] through nonterminal residual-head values. The reference | encodings and measured anchor statistics are detached. Trajectories are | collected asynchronously, so the behavior adapter may lag the trained
+[L3255] A.28 | ). Stop-gradient sets the derivative | of the measured part to zero, and the calculation conditions on the sampled history and its terminal reward.
+[L3357] . | Stop-gradient leaves these numerical values unchanged. | B.2
+[L3500] (B.9) | If only the measured anchor changes by inputs satisfying | ,
+[L3784] The ideal | , the measured task anchor | , the

@@ -1,0 +1,62 @@
+{
+ "request_id": "evosteer-20261122",
+ "target": "EvoSteer: Online Self-Evolving Graph Orchestration via Reference-Anchored Credit Assignment (arXiv:2609.38661v2)",
+ "collection_time": "2026-11-22T11:05:00+08:00",
+ "sources": {
+  "S01_paper": {
+   "url": "https://arxiv.org/abs/2609.38661",
+   "html_fulltext_url": "https://arxiv.org/html/2609.38661",
+   "html_fulltext_sha256": "942ac20ff2c28783d0e808218db151d4f93f403fff73279047fd757ea81042a0",
+   "title": "EvoSteer: Online Self-Evolving Graph Orchestration via Reference-Anchored Credit Assignment",
+   "authors": "Mingda Zhang, Hanwen Zhang, Qiang Huang, Zijia Wang, Pengfei Guo, Yuchen Zhang, Jionghao Zhu, Xiaoying Tang",
+   "version": "arXiv:2609.38661v2 [cs.AI] 22 Oct 2026 (v1: 29 Sep 2026)",
+   "affiliations": [
+    "The Chinese University of Hong Kong, Shenzhen, China",
+    "Dalian University of Technology, China",
+    "Fudan University, China",
+    "University of Oxford, UK",
+    "North China Electric Power University, China",
+    "The University of Texas Health Science Center at Houston, USA"
+   ],
+   "grade": "primary (official arXiv HTML rendering of paper fulltext); self-reported experiments, 折1 per KB-RSI07",
+   "code_url": "https://github.com/beita6969/evosteer (声明提供，未复现)"
+  },
+  "S02_abs": {
+   "url": "https://arxiv.org/abs/2609.38661",
+   "html_sha256": "6de2d9707cea0cdc1a89c08c42eec744d71f23a496c9a1213ddf042ac7136092",
+   "grade": "primary (official arXiv abs page: version history + authors)",
+   "note": "User-supplied affiliations (CUHK-Shenzhen/DUT/Fudan/Oxford) cross-checked against paper HTML affiliation block — all present."
+  }
+ },
+ "evidence_slices": [
+  "downloads/S01_challenges.txt",
+  "downloads/S01_online_edit.txt",
+  "downloads/S01_credit_diffusion.txt",
+  "downloads/S01_reference_anchor.txt",
+  "downloads/S01_skill_admission.txt",
+  "downloads/S01_fwer_budget.txt",
+  "downloads/S01_results.txt",
+  "paper_text.txt",
+  "paper_flat.txt"
+ ],
+ "locks": {
+  "manifest": "manifest.sha256",
+  "prereg_analysis_before": "prereg.sha256",
+  "gate_prereg_before_implementation": "gate_prereg.sha256"
+ },
+ "verification": {
+  "engine": "engine.py",
+  "anchor_count": 19,
+  "anchor_string_hits": "19/19",
+  "gate_A_live_regression": "7/7",
+  "gate_B_live_regression": "7/7",
+  "all_passed": true
+ },
+ "honesty_notes": [
+  "一手证据为 arXiv 官方 HTML 全文，属论文原文非第三方摘要；PDF 未尝试（HTML 已足，避免 §79 那种 36.5MB 超时）",
+  "论文十二数据集优于基线/28% less compute/5.17 IID points 等均为 self-reported，按 KB-RSI07 折1，只编译机制拦截面不宣称有效性被独立复现",
+  "锚点提取初始用 get_text('\\n') 致跨行断字 miss，修正为 get_text(' ') 后逐字命中——按 §3 纪律改工具不放水、不改规则",
+  "两门禁只判机制声明自洽，不承诺在线修复真提升/序贯检验真控 FWER（存在≠有效性 KB-META01/AUDIT03）",
+  "代码仓库 https://github.com/beita6969/evosteer 为论文声明，本精研未拉取未复现，如实标注"
+ ]
+}

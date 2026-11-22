@@ -3506,3 +3506,34 @@ task_content：下载论文与主页、通读两轴框架与原则章、辨析�
 
 ### 推送记录（2026-11-22 10:40 GMT+8）
 用户提供 GitHub PAT，经临时 askpass（用后即删，不入配置/仓库/日志）认证，`git push origin main` → `38aff7b..f735c79 main -> main`，6 个提交（§71-§80 五批精研 + SESSION_HANDOFF 文档）全部推送成功。`git ls-remote` 验证远端 main = 本地 HEAD = `f735c797…`，工作区干净。此前多次因凭据缺失推送失败的问题到此解决。SESSION_HANDOFF.md §5 已从"⚠️未完成"更新为"✅已完成"。
+
+
+---
+
+## §81-§82 EvoSteer 在线自演化图编排精研（arXiv:2609.38661v2）
+
+### 81-82.1 来源与分级
+
+一手：arXiv:2609.38661v2 HTML 全文（22 Oct 2026，Mingda Zhang 等，CUHK-Shenzhen / 大连理工 / 复旦 / 牛津 / 华北电力 / UTHealth，cs.AI，SHA256 942ac20f…），abs 页（6de2d970…）。用户给定四机构与论文 affiliation block 交叉一致。self-reported 十二数据集刷榜/28% less compute/5.17 IID points 按 KB-RSI07 折 1；代码仓库 github.com/beita6969/evosteer 为论文声明，未拉取未复现实标注。
+
+### 81-82.2 认知增量：把"自演化"拆成可审计的机制承诺
+
+论文三大挑战——(i) post-hoc evolution：只在轨迹之间修订，配置错误的团队输出看似合理却无法在运行中修复；(ii) credit diffusion：共享终端奖励给每个动作同一系数，学习价值混淆任务频率/执行噪声/结构选择，低分分不清是任务太难还是团队太差；(iii) uncalibrated skill admission：judge/成功计数点估计分不清"证据不足"与"确认有效"，准入后永不退役。EvoSteer 应答：在线编辑运行中团队（atomic edit per turn 含 rerun/drop，redone mid-run）、AnchorTB 对冻结参考平衡子轨迹分配系数、Validated Skill Admission 先试用 + 配对反事实 + 共享 alpha-spending 序贯检验后晋升/退役（promotes/retires/defers）。
+
+### 81-82.3 缺口判定：7 道相关门禁无一覆盖
+
+逐一核验 self_evolving（本仓判据自造运行时机制非尺子）、component_attribution（失败归因组件，不判修复是否中途）、policy_evolution_grounding（§79 记忆管理策略非编排团队）、scoring_integrity（计分绕过）、memory_curation（§68 记忆内容）、criterion_origin（§77 判据来源）、selective_supervision（§78 筛选训练数据）——两拦截面（运行中途可修复性 / 技能准入校准退役）层级与对象均不同，gap 确认，新牙成立，独立可迁移，会拦才入（KB-META01）。
+
+### 81-82.4 断言落到代码：第 29、30 道门禁
+
+`svagent/online_repair_honesty.py:check_online_repair_honesty`：四维 in_run_edit / rerun_drop / execution_feature_driven / ref_grounded_value ∈ {yes,no,partial}；R0 字面串→flag，R1 仅事后修订 / R2 无 rerun-drop / R3 非执行特征驱动 / R4 价值无参考锚定→downgrade，R5 部分→flag，R6 全自洽→ok。
+`svagent/skill_admission_calibration.py:check_skill_admission_calibration`：四维 tried_before_promotion / paired_counterfactual / sequential_budget / retire_mechanism ∈ {yes,no,partial}；R0 字面串→flag，R1 未试用即晋升 / R2 无配对反事实 / R3 无共享预算序贯检验 / R4 无退役机制→downgrade，R5 部分→flag，R6 全自洽→ok。
+两门禁共用规则骨架（gate_prereg 实现前 SHA256 a7ad398d… 锁存），中文锚点集中 _A 字典，AST 自审 Compare 内无中文字面量（两文件均 ✓），惰性导入登记，遵循 §58 选 A 不接 run_loop。各 25 项测试 + 7 活体回归 PASS；全量 774→822 passed。KB 117→119（新增 AUDIT24/25）。
+
+### 81-82.5 判据自咬（修工具不放水）
+
+初判 9 处 miss 全为跨行断字（get_text('\n') 切断句子），按 §3 纪律修工具不放水：改用 get_text(' ')+空白规整重建 flat 文本；另有 2 处系记忆措辞与原文不符（"a candidate is tried" 实为 "a candidate be tried"、"when each" 实为 "whenever each"），改取论文逐字原文。19/19 逐字命中，规则一字未放水。诚实边界：self-reported 折 1、代码未复现实标注、只判机制声明自洽不承诺有效（存在≠有效性 KB-META01/AUDIT03、框架≠有效 KB-STRUCT05、自洽≠有效 KB-R07），两门禁定位为审读外部系统的尺子不判本仓。
+
+task_content：下载论文 HTML 全文与 abs、通读三大挑战与 §4.1-4.3 方法、辨析两处独立拦截面、编译两道会拦门禁。process：顶住"刷榜论文该造多牙"诱惑，只认两条一手可证伪命题（事后改团队≠运行中修复、准入≠校准≠退役）各编译一牙；与 7 道相关门禁辨析层级防重复造轮子；九处跨行断字 + 两处措辞自咬现场修工具不放水。边界：在线修复是否真提升、序贯检验是否真控 FWER，均未被独立实证；不宣称有效性，只编译机制声明诚实性拦截面。
+
+一句话收束：**这篇论文最该带走的不是十二数据集的刷榜数字，而是对"自演化"三个字的拆解锋利度——事后改团队不叫在线修复，执行中途由执行特征驱动的 rerun/drop 才叫；共享终端奖励给每个动作同一系数不叫信用分配，对冻结参考平衡子轨迹才叫；judge/成功计数准入不叫校准，配对反事实+共享预算序贯检验+退役才叫。本仓 28 道门禁量过判据来源、证明边界、记忆溯源，却没一道判过"编辑是否在同一次运行中途发生"或"技能准入是否校准并可退役"。两把新尺子落地：online_repair_honesty（仅事后/无rerun-drop/非执行驱动/价值无锚定→downgrade）与 skill_admission_calibration（未试用/无配对/无预算/无退役→downgrade）。信规则、不承诺有效、只认会拦的独立拦截面。**

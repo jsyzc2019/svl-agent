@@ -1,0 +1,8 @@
+[L222] (d) | EvoSteer edits the team inside the same run, deciding | from measured execution features and a reference value estimate, and admits a
+[L333] , in which the | orchestrator dynamically builds and repairs a running team from execution | features and a learned value estimate—replacing the run-then-revise loop.
+[L334] orchestrator dynamically builds and repairs a running team from execution | features and a learned value estimate—replacing the run-then-revise loop. | The orchestrator issues one atomic edit per turn, rerun and drop included; each
+[L335] features and a learned value estimate—replacing the run-then-revise loop. | The orchestrator issues one atomic edit per turn, rerun and drop included; each | is executed at once, and its feedback and the value estimate enter the state,
+[L337] is executed at once, and its feedback and the value estimate enter the state, | so a plausible but failing result can be redone mid-run. | To support this paradigm, we introduce
+[L499] where | is an atomic edit with type in | add_agent
+[L669] Executing every action as it is | issued and placing rerun and drop in the action space lets the orchestrator | edit and retry a running team through the same action interface.
+[L1913] before execution, dropping the execution features | , masking rerun and drop, and | withholding the value estimate cost 5.69, 4.12, 3.57, and 5.07 IID points. Keeping interleaving,

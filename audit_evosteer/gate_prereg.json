@@ -1,0 +1,42 @@
+{
+  "section": "§81-§82",
+  "gate_A": {
+    "module": "svagent/online_repair_honesty.py",
+    "function": "check_online_repair_honesty",
+    "verdict": "OnlineRepairVerdict",
+    "dimensions": ["in_run_edit", "rerun_drop", "execution_feature_driven", "ref_grounded_value"],
+    "rules": [
+      {"id": "R0", "cond": "任一维非 yes/no/partial 枚举", "action": "flag", "code": "ONLINE_REPAIR.INVALID_INPUT"},
+      {"id": "R1", "cond": "in_run_edit=no（只在轨迹之间/批次后才修订，执行中途不可编辑）", "action": "downgrade", "code": "ONLINE_REPAIR.POST_HOC_ONLY"},
+      {"id": "R2", "cond": "rerun_drop=no（不能重跑失败步骤或丢弃错误 agent，只能追加）", "action": "downgrade", "code": "ONLINE_REPAIR.NO_RERUN_DROP"},
+      {"id": "R3", "cond": "execution_feature_driven=no（编辑不由执行特征/失败信号驱动，仅凭输出表面合理性）", "action": "downgrade", "code": "ONLINE_REPAIR.NOT_EXECUTION_DRIVEN"},
+      {"id": "R4", "cond": "ref_grounded_value=no（价值估计无外部/冻结参考锚定，混淆任务难度/噪声/结构选择）", "action": "downgrade", "code": "ONLINE_REPAIR.UNGROUNDED_VALUE"},
+      {"id": "R5", "cond": "任一维 partial", "action": "flag", "code": "ONLINE_REPAIR.PARTIAL"},
+      {"id": "R6", "cond": "全 yes", "action": "ok", "code": "ONLINE_REPAIR.SELF_CONSISTENT"}
+    ]
+  },
+  "gate_B": {
+    "module": "svagent/skill_admission_calibration.py",
+    "function": "check_skill_admission_calibration",
+    "verdict": "SkillAdmissionVerdict",
+    "dimensions": ["tried_before_promotion", "paired_counterfactual", "sequential_budget", "retire_mechanism"],
+    "rules": [
+      {"id": "R0", "cond": "任一维非 yes/no/partial 枚举", "action": "flag", "code": "SKILL_ADMISSION.INVALID_INPUT"},
+      {"id": "R1", "cond": "tried_before_promotion=no（未经试用即凭 judge/单次成功晋升）", "action": "downgrade", "code": "SKILL_ADMISSION.UNTRIED_PROMOTION"},
+      {"id": "R2", "cond": "paired_counterfactual=no（无配对反事实对照，无法分离证据不足与确认效果）", "action": "downgrade", "code": "SKILL_ADMISSION.NO_PAIRED_EVIDENCE"},
+      {"id": "R3", "cond": "sequential_budget=no（无共享名义预算的序贯检验，点估计当可靠信念）", "action": "downgrade", "code": "SKILL_ADMISSION.UNCALIBRATED_TEST"},
+      {"id": "R4", "cond": "retire_mechanism=no（无退役/延迟机制，准入后永不复核）", "action": "downgrade", "code": "SKILL_ADMISSION.NO_RETIRE"},
+      {"id": "R5", "cond": "任一维 partial", "action": "flag", "code": "SKILL_ADMISSION.PARTIAL"},
+      {"id": "R6", "cond": "全 yes", "action": "ok", "code": "SKILL_ADMISSION.SELF_CONSISTENT"}
+    ]
+  },
+  "shared_discipline": [
+    "四维语义枚举 {yes,no,partial}；R0 非法/字面串→flag（避 §56 brittle 根因）",
+    "R1-R4 按优先级短路返回，不事后加权（防 Goodhart）",
+    "R5 partial→flag；R6 全自洽→ok",
+    "只判声明/机制自洽，不承诺实际有效（存在≠有效性 KB-META01/AUDIT03）",
+    "中文锚点集中 _A 字典；AST 自审禁止 Compare 内中文字面量；必要时 CJK 边界用 ord()",
+    "惰性导入登记 __init__.py；不接 harness.run_loop（§58 选 A）",
+    "活体样例 7 例/门禁；self-reported 实验结果按 KB-RSI07 折1，只编译机制拦截面"
+  ]
+}

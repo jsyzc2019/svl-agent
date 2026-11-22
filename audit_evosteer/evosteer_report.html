@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§81-§82 EvoSteer 精研报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1060px;margin:32px auto;padding:0 20px;color:#222;line-height:1.7}
+h1{border-bottom:3px solid #569;padding-bottom:8px} h2{color:#345;margin-top:32px;border-left:4px solid #569;padding-left:10px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px} th,td{border:1px solid #ddd;padding:6px 9px;text-align:left;vertical-align:top} th{background:#eef3f7}
+.pass{color:#0a7;font-weight:bold} .fail{color:#c22;font-weight:bold} .unav{color:#999}
+.note{background:#f2f7fb;border-left:4px solid #569;padding:10px 14px;margin:14px 0}
+.core{background:#fbf6ef;border-left:4px solid #b85;padding:12px 16px;margin:16px 0}
+code{background:#f4f4f4;padding:2px 5px;border-radius:3px;font-size:12px} .dim{color:#555}
+</style></head><body>
+<h1>§81-§82《EvoSteer: Online Self-Evolving Graph Orchestration via Reference-Anchored Credit Assignment》精研报告</h1>
+<p class="dim">生成 2026-11-22　|　arXiv:2609.38661v2（22 Oct 2026，Zhang Zhang Huang 等，CUHK-Shenzhen / DUT / Fudan / Oxford 等，cs.AI）　|　论文 HTML <code>942ac20f…</code>　|　abs <code>6de2d970…</code>　|　分析前锁 <code>97031769…</code>　|　门实现前锁 <code>a7ad398d…</code>　|　清单锁 <code>a92a1001…</code>　|　锚点 19/19　|　KB 117→119　|　全量 774→822</p>
+
+<div class="note"><b>证据与诚实边界：</b>一手证据为 <b>arXiv 官方 HTML 全文</b>（论文原文官方渲染，非二手解读）。十二数据集优于基线、28% less update compute、5.17 IID points 等均为 <b>self-reported</b>，按 KB-RSI07 折 1：只编译其可证伪的<b>机制拦截面</b>，不宣称有效性被独立复现。代码仓库 <code>github.com/beita6969/evosteer</code> 为论文声明，本次<b>未拉取未复现</b>，如实标注。两门禁只判机制声明诚实自洽，不承诺在线修复真提升/序贯检验真控 FWER（存在≠有效性 KB-META01/AUDIT03）。</div>
+
+<h2>一、论文三大挑战与 EvoSteer 的应答</h2>
+<div class="core">
+<b>(i) Post-hoc evolution（事后演化）：</b>现有编排只在轨迹之间修订技能/提示/拓扑——<i>"orchestration still evolves only between trajectories, by revising skills, prompts, or topology after a batch of runs has ended"</i>；配置错误的团队输出看似合理而难发现，<i>"impossible to repair while the workflow is still being executed"</i>。<br><br>
+<b>(ii) Credit diffusion（信用扩散）：</b>共享终端奖励下 <i>"give every action the same coefficient of a single terminal advantage"</i>，且 <i>"learned state values confound how often a task is solved, execution noise, and structural choice"</i>——低分是任务太难还是团队组织糟糕，无法分辨。<br><br>
+<b>(iii) Uncalibrated skill admission（未校准准入）：</b>技能由 judge 或成功计数准入，<i>"such point estimates cannot separate insufficient evidence from a confirmed effect"</i>；<i>"no test tracks whether an admitted skill still helps on later tasks, it stays in the library and is never retired"</i>。<br><br>
+<b>EvoSteer 应答：</b>在线自演化图编排——编排器从执行特征与价值估计<b>动态构建并修复运行中团队</b>，每轮一次原子编辑（含 rerun/drop），<i>"a plausible but failing result can be redone mid-run"</i>；AnchorTB 把子轨迹对<b>冻结参考</b>做平衡为每个动作分配系数；Validated Skill Admission 让候选先试用、配对反事实 + 共享 alpha-spending 预算序贯检验后才晋升/退役。
+</div>
+
+<h2>二、认知增量：从"事后修订"里切出两个独立可证伪拦截面</h2>
+<p>这篇论文最锋利的不是刷榜，而是把"自演化"拆成可审计的机制承诺。精研定位出两条现有门禁完全空白、可迁移、会拦的拦截面：</p>
+<div class="core">
+<b>① 在线可修复性：</b>声称"在线自演化"的系统，究竟能不能在<b>同一运行执行中途</b>做原子修复（rerun/drop），由执行特征与参考锚定价值驱动，而非批次后修订、只能追加节点、凭输出表面合理性。事后正确 ≠ 运行中途可修复。<br><br>
+<b>② 技能准入校准：</b>声称"技能库自演化"的系统，是否<b>先试用后晋升</b>、用<b>配对反事实</b>分离证据不足与确认效果、以<b>共享预算序贯检验</b>代替点估计、并具备<b>退役/延迟</b>机制。准入 ≠ 校准 ≠ 退役。
+</div>
+
+<h2>三、命题提取与一手锚点命中</h2>
+<table><tr><th>命题</th><th>核心</th><th>锚点</th></tr>
+<tr><td>P0 在线运行中途修复</td><td>dynamically builds and repairs a running team；atomic edit per turn（rerun/drop）；redone mid-run</td><td class="pass">3/3</td></tr>
+<tr><td>P1 事后演化代价</td><td>only between trajectories；impossible to repair while still executing</td><td class="pass">2/2</td></tr>
+<tr><td>P2 信用扩散</td><td>same coefficient of a single terminal advantage；confound 频率/噪声/结构</td><td class="pass">3/3</td></tr>
+<tr><td>P3 参考锚定</td><td>against a frozen reference；task-level anchor + prefix-dependent corrections；held fixed</td><td class="pass">3/3</td></tr>
+<tr><td>P4 先试用后晋升</td><td>tried before promoted；sequential test under shared alpha-spending；paired rollouts</td><td class="pass">2/2</td></tr>
+<tr><td>P5 校准与退役</td><td>insufficient evidence vs confirmed effect；never retired；promotes/retires/defers</td><td class="pass">3/3</td></tr>
+<tr><td>P6 FWER 上界</td><td>total nominal level is at most；union bound；even for dependent tests</td><td class="pass">3/3</td></tr>
+</table>
+<p class="dim">初判 9 处 miss 全为跨行断字（HTML 的 get_text('\\n') 切断句子），按 §3 纪律<b>修工具不放水、不改规则</b>：改用 get_text(' ')+空白规整重建 flat 文本；仍有 2 处系我记忆的措辞与原文不符（"a candidate is tried" 实为 "a candidate be tried"、"when each" 实为 "whenever each"），改取论文逐字原文。最终 19/19 逐字命中，<code>engine.py</code> 可重跑复现。</p>
+
+<h2>四、缺口判定：7 道相关门禁无一覆盖</h2>
+<p>逐一核验 <code>self_evolving</code>（本仓判据自造运行时机制，非审读尺子）、<code>component_attribution</code>（失败归因到 Prompt/Memory/Skill/Harness，不判修复是否中途）、<code>policy_evolution_grounding</code>(§79 记忆管理策略，非编排团队)、<code>scoring_integrity</code>（计分绕过）、<code>memory_curation</code>(§68 记忆内容质量)、<code>criterion_origin_honesty</code>(§77 判据来源)、<code>selective_supervision_honesty</code>(§78)——两拦截面层级与对象均不同，gap 确认，新牙成立（KB-META01）。</p>
+
+<h2>五、断言落到代码：第 29、30 道门禁</h2>
+<p><code>svagent/online_repair_honesty.py:check_online_repair_honesty</code>：四维 in_run_edit / rerun_drop / execution_feature_driven / ref_grounded_value ∈ {yes,no,partial}；R0 字面串→flag，R1 仅事后修订 / R2 无 rerun-drop / R3 非执行特征驱动 / R4 价值无参考锚定→downgrade，R5 部分→flag，R6 全自洽→ok。</p>
+<p><code>svagent/skill_admission_calibration.py:check_skill_admission_calibration</code>：四维 tried_before_promotion / paired_counterfactual / sequential_budget / retire_mechanism ∈ {yes,no,partial}；R0 字面串→flag，R1 未试用即晋升 / R2 无配对反事实 / R3 无共享预算序贯检验 / R4 无退役机制→downgrade，R5 部分→flag，R6 全自洽→ok。</p>
+<p class="dim">两门禁共用规则骨架（gate_prereg 实现前 SHA256 <code>a7ad398d…</code> 已锁存），中文锚点集中 _A 字典，AST 自审 Compare 内无中文字面量（两文件均 ✓），惰性导入登记，遵循 §58 选 A 不接 run_loop。各 25 项测试 + 7 活体回归 PASS；全量 774→822 passed。KB 117→119（新增 AUDIT24/25）。</p>
+
+<h2>六、判据自咬与收束</h2>
+<p>锚点自咬现场：跨行断字改提取工具、两处记忆措辞按论文逐字原文修正，规则一字未放水。诚实边界：self-reported 结果折 1、代码未复现实标注、只判机制声明自洽不承诺有效（存在≠有效性、框架≠有效 KB-STRUCT05、自洽≠有效 KB-R07），两门禁定位为审读外部系统的尺子不判本仓。</p>
+<div class="core">
+<b>一句话收束：</b>这篇论文最该带走的不是十二数据集的刷榜数字，而是对"自演化"三个字的拆解锋利度——<b>事后改团队不叫在线修复，执行中途由执行特征驱动的 rerun/drop 才叫；共享终端奖励给每个动作同一系数不叫信用分配，对冻结参考做子轨迹平衡才叫；LLM judge 或成功计数准入不叫校准，配对反事实 + 共享预算序贯检验 + 退役才叫。</b>本仓 28 道门禁量过判据来源、证明边界、记忆溯源，却没一道判过"编辑是否在同一次运行的中途发生"或"技能准入是否校准并可退役"。两把新尺子落地：<b>online_repair_honesty</b>（仅事后/无 rerun-drop/非执行驱动/价值无锚定→downgrade）与 <b>skill_admission_calibration</b>（未试用/无配对/无预算/无退役→downgrade）。信规则、不承诺有效、只认会拦的独立拦截面。
+</div>
+</body></html>

@@ -1,0 +1,5 @@
+[L163] statistics with prefix-dependent corrections. | Experimental results on twelve datasets show that EvoSteer significantly | outperforms baselines across question answering, mathematical reasoning, code
+[L164] Experimental results on twelve datasets show that EvoSteer significantly | outperforms baselines across question answering, mathematical reasoning, code | generation, and interactive decision making.
+[L1957] a,b); | TB lags most on MuSiQue, SWE-Bench, and WebShop. AnchorTB needs 28% less update compute than tempered TB, at a rollout | cost within 9% of PPO and GRPO, so its gains come at comparable compute.
+[L1961] Removing skill evolution costs 5.27 IID and 3.26 OOD points, most on MBPP+ (7.66). A fixed | success count in place of the sequential test costs 5.17 IID points, nearly the same for any | count from 1 to 10 (Appendix
+[L1972] The untrained architecture adds 21.01 IID and 24.04 OOD points to the frozen | executor, and AnchorTB training adds 12.31 and 11.22, so each supplies much of the gain. | 6

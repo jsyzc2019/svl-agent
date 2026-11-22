@@ -1,0 +1,9 @@
+[L139] including | post-hoc evolution | that revises the team only after the
+[L142] trajectory ends, | credit diffusion | that gives every action the same
+[L147] that | is uncalibrated and never retired. | To address these challenges, we propose EvoSteer, a new paradigm of Online
+[L213] (a) | Post-hoc evolution revises the | team only after the run.
+[L272] However, these methods still face three challenges. | (i) Post-hoc evolution. | Self-evolving orchestration revises the team
+[L288] the task has failed. | (ii) Credit diffusion. | Under a shared terminal reward, trajectory-level
+[L290] Under a shared terminal reward, trajectory-level | methods give every action the same coefficient of a single terminal advantage | (
+[L308] provide a training signal for every decision. | (iii) Uncalibrated skill admission. | Skills are admitted by LLM
+[L324] whether an admitted skill still helps on later tasks, it stays in the library | and is never retired. | To address these challenges, we propose

@@ -1,0 +1,5 @@
+[L142] trajectory ends, | credit diffusion | that gives every action the same
+[L288] the task has failed. | (ii) Credit diffusion. | Under a shared terminal reward, trajectory-level
+[L290] Under a shared terminal reward, trajectory-level | methods give every action the same coefficient of a single terminal advantage | (
+[L296] ) | , and learned state values confound how often a task is | solved, execution noise, and structural choice, so the
+[L299] orchestrator cannot tell whether a low score came from a task the reference | rarely solves or from a badly organized team; counterfactual | replay localizes the failing step

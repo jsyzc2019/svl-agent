@@ -2,15 +2,15 @@
 
 > 本文件用于新旧会话接续。新会话开始后，**先读本文件**，再按"接续后第一件事"操作。
 > 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 10:40 (GMT+8)——**推送已完成**。
-> 上一会话终点：§79-§80 完成并已全部推送到远端。
+> 上一会话终点：§79-§80 完成并已全部推送到远端；本次新增 §81-§82（未推送，待 PAT）。
 
 ---
 
 ## 1. 一句话现状
 
 本仓是一个自进化 Agent 架构（`/workspace`，Python 包 `svagent`，版本 0.13.1）。
-当前已完成 **§1–§80** 外部精研，编译 **28 道会拦门禁**，知识库 **117 条**，测试 **774 passed**（全绿）。
-本地 main 与远端 `origin/main` **完全同步**（均 `f735c79`），**推送已完成**（详见 §5）。无遗留推送任务。
+当前已完成 **§1–§82** 外部精研，编译 **30 道会拦门禁**，知识库 **119 条**，测试 **822 passed**（全绿）。
+本地 main 在 `321e457`（推送审计提交，与远端 `origin/main` 同步）；本次 §81-§82 已本地提交，**待推送**（需用户再提供 PAT，见 §5）。
 
 ---
 
@@ -35,17 +35,17 @@
 
 ---
 
-## 4. 最近完成（§79–§80，提交 206e5c4）
+## 4. 最近完成（§81–§82，本地提交）
 
-精研 arXiv:2610.19366v1《Seeing, Maintaining, and Learning: The Evolution of Multimodal Agent Memory》综述。
-- **PDF 36.5MB 三次超时失败** → 降级用 arXiv 官方 HTML 全文作一手证据（已如实记录）；项目主页统计口径与论文不同，分标不混用。
-- 编译两道新门禁（**第 27、28 道**）：
-  - `svagent/policy_evolution_grounding.py:check_policy_evolution_grounding`（§79）——"正确率↑≠接地保持"：策略不可寻址/反馈未归因策略级/证据路径被削弱/修订未经验证 → downgrade。
-  - `svagent/memory_provenance_honesty.py:check_memory_provenance_honesty`（§80）——"召回量≠可恢复溯源+时间有效性"：溯源是可选元数据/证据不可恢复/时间有效性缺失/不可逆 → downgrade。
-- 证据目录 `audit_multimodal_memory/`；报告 `audit_multimodal_memory/multimodal_memory_report.html`。
-- KB 新增 `KB-AUDIT22/23`（115→117）；新增测试 `tests/test_policy_evolution_grounding.py`、`tests/test_memory_provenance_honesty.py`（各 25 项）。
-- 一手锚点 39/39 命中；三处跨行断字锚点修工具不放水；双文件 AST 自审干净；`__init__.py` 已登记惰性导入。
-- 文档已更新：`commentary.md`（§79-§80）、`REPOSITORY_MAP.md`（门禁表/测试列表/头部统计/推导链）。
+精研 arXiv:2609.38661v2《EvoSteer: Online Self-Evolving Graph Orchestration via Reference-Anchored Credit Assignment》（CUHK深圳/大连理工/复旦/牛津等）。
+- 一手证据：arXiv 官方 HTML 全文（`942ac20f…`）；self-reported 刷榜数字按 KB-RSI07 折 1，代码仓库声明未拉取未复现实标注。
+- 编译两道新门禁（**第 29、30 道**）：
+  - `svagent/online_repair_honesty.py:check_online_repair_honesty`（§81）——"事后修订≠运行中途修复"：仅批次后编辑/无 rerun-drop/非执行特征驱动/价值无冻结参考锚定 → downgrade。
+  - `svagent/skill_admission_calibration.py:check_skill_admission_calibration`（§82）——"准入≠校准≠退役"：未试用即晋升/无配对反事实/无共享预算序贯检验/无退役机制 → downgrade。
+- 证据目录 `audit_evosteer/`；报告 `audit_evosteer/evosteer_report.html`。
+- KB 新增 `KB-AUDIT24/25`（117→119）；新增测试 `tests/test_online_repair_honesty.py`、`tests/test_skill_admission_calibration.py`（各 25 项）。
+- 锚点 19/19 逐字命中（九处跨行断字+两处措辞自咬均修工具不放水）；双文件 AST 自审干净；惰性导入已登记。
+- 文档已更新：`commentary.md`（§81-§82）、`REPOSITORY_MAP.md`（门禁表/测试列表/统计/推导链）。
 
 ---
 
@@ -70,7 +70,8 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 
 ## 6. 接续后建议动作清单
 
-- [x] ✅ 处理 §5 推送（已完成，本地与远端同步于 `f735c79`，无遗留）。
+- [x] ✅ 处理 §5 推送（历史推送已完成，远端现为 `321e457` 审计提交）。
+- [ ] ⏳ 推送 §81-§82 本地提交（需用户提供 PAT，见 §5 凭据说明）。
 - [ ] 若用户给新的外部精研材料：先抽一手锚点 → 判认知增量独立性 → 按 §3 纪律编译门禁（能机制化才编译，否则只加固 KB）。
 - [ ] 每完成两批 → 一个本地提交 → 推送（后续会话需用户再提供 PAT，见 §5 凭据说明）。
 - [ ] 本文件随每次会话终结更新现状（§1/§4/§5）。

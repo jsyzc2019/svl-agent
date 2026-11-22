@@ -1,0 +1,34 @@
+{
+ "P0_online_in_run": {
+  "in which the orchestrator dynamically builds and repairs a running team from execution features and a learned value estimate": true,
+  "The orchestrator issues one atomic edit per turn, rerun and drop included": true,
+  "so a plausible but failing result can be redone mid-run.": true
+ },
+ "P1_posthoc_cost": {
+  "orchestration still evolves only between trajectories, by revising skills, prompts, or topology after a batch of runs has ended": true,
+  "impossible to repair while the workflow is still being executed.": true
+ },
+ "P2_credit_diffusion": {
+  "give every action the same coefficient of a single terminal advantage": true,
+  "learned state values confound how often a task is solved, execution noise, and structural choice": true,
+  "whether a low score came from a task the reference rarely solves or from a badly organized team": true
+ },
+ "P3_reference_anchor": {
+  "assigns each orchestration action a coefficient by balancing subtrajectories against a frozen reference": true,
+  "combines a task-level reference anchor with prefix-dependent corrections": true,
+  "The measured terms are held fixed": true
+ },
+ "P4_skill_trial": {
+  "a candidate is tried before it is promoted, and promotes or retires it only when paired evidence passes a sequential test under a shared alpha-spending budget": false,
+  "two extra trajectories are launched from the same record and the same forced first role, one binding and one not": true
+ },
+ "P5_calibration": {
+  "such point estimates cannot separate insufficient evidence from a confirmed effect": true,
+  "no test tracks whether an admitted skill still helps on later tasks, it stays in the library and is never retired": true
+ },
+ "P6_fwer": {
+  "the total nominal level is at most": true,
+  "By a union bound, family-wise error is at most": true,
+  "when each directional p-value is valid for the selection and sampling rules in use, even for dependent tests": false
+ }
+}
