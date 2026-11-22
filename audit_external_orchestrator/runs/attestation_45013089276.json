@@ -1,0 +1,16 @@
+{
+  "github_run_id": "45013089276",
+  "github_run_attempt": "1",
+  "runner_name": "GitHub Actions 1000018421",
+  "runner_os": "Linux",
+  "runner_arch": "X64",
+  "github_actor": "jsyzc2019",
+  "github_ref": "refs/heads/main",
+  "github_sha": "a4d1da9a25b350d369ff7ec4d488e0ae776bdd1c",
+  "github_workflow": "External Orchestrator Attestation",
+  "hostname": "runnervm0hi8g",
+  "uname": "Linux runnervm0hi8g 7.0.0-1020-azure #21-Ubuntu SMP PREEMPT Tue Oct 27 22:34:38 UTC 2026 x86_64 GNU/Linux",
+  "whoami": "runner",
+  "injected_nonce": "S109-PROBE-20261122T103416Z-36062",
+  "generated_at_utc": "2026-11-22T10:34:28Z"
+}
