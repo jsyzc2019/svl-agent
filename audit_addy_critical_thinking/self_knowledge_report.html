@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§75 自知诚实性精研报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1060px;margin:32px auto;padding:0 20px;color:#222;line-height:1.7}
+h1{border-bottom:3px solid #6a5;padding-bottom:8px} h2{color:#465;margin-top:32px;border-left:4px solid #6a5;padding-left:10px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px} th,td{border:1px solid #ddd;padding:6px 9px;text-align:left;vertical-align:top} th{background:#f2f6f2}
+.pass{color:#0a7;font-weight:bold} .fail{color:#c22;font-weight:bold} .unav{color:#999}
+.note{background:#f5f9f5;border-left:4px solid #6a5;padding:10px 14px;margin:14px 0}
+.core{background:#fbf6ef;border-left:4px solid #b85;padding:12px 16px;margin:16px 0}
+code{background:#f4f4f4;padding:2px 5px;border-radius:3px;font-size:12px} .dim{color:#555}
+</style></head><body>
+<h1>§75 公众号 AINLP《当 Agent 接手工作，如何保持批判性思考》精研报告</h1>
+<p class="dim">生成 2026-11-22　|　用户确认出处 09:18:56　|　预注册 <code>80e6af27…</code>　|　清单 <code>9038e9df…</code>　|　门预注册 <code>7ca4020e…</code>　|　锚点 26/26　|　交叉 5/5　|　活体全通过　|　KB 111→112</p>
+
+<h2>一、抓取、出处确认与证据分级</h2>
+<p>用户请求下载微信公众号文章，随后补充确认「公众号 AINLP 有此文」。本机公众号 App 付费检索通道未开通，改用同源公开渠道：AINLP（我爱自然语言处理）同步站 <code>52nlp.cn/?p=21212</code> 下载全文。页面文末「关注我们的微信公众号AINLP」证实同源；用户确认进一步闭合证据链。<b>S01</b> 为含原作者英文原稿检测截图与完整参考链接的中文全文；<b>S02</b> TechMoon 繁体综述作独立交叉验证。X 原文、unwire、BusinessInsider 因 DNS 劫持/网络不可达标 unavailable，不据此下断言。</p>
+<table><tr><th>来源</th><th>等级</th><th>SHA256</th></tr>
+<tr><td>S01 AINLP 原文（52nlp 同步站全文，用户确认）</td><td>二手译文（含原稿截图+参考链接）折1</td><td>26483d35f548…</td></tr>
+<tr><td>S02 TechMoon 独立综述（繁体）</td><td>第三方，明标证据边界</td><td>fb6292ecd09c…</td></tr>
+<tr><td>X 原文 / unwire / BusinessInsider</td><td class="unav">unavailable</td><td>—</td></tr></table>
+<div class="note"><b>证据分级的关键诚实：</b>S02 原文「這套整理屬於個人實務觀察，長文沒有提供採用率或前後對照的量化結果；華頓研究證明的是認知投降會發生，並沒有證明這六個自問能防止它。…132 人的樣本全部來自同一家公司…生產力相關數字屬於自我報告」。故本次证据<b>只支持「作者提出并自述这些自问」</b>，<b>不支持「六问能防认知投降」</b>。内嵌引用的 Shaw-Nave、Anthropic 132 人调查均为本文转述，非一手核查，按 KB-STRUCT02 同源折扣 + KB-RSI07 自述折扣处理。</div>
+
+<h2>二、为什么这篇是「洞见本体（自知）」的基础</h2>
+<div class="core">
+用户点明：这篇文章提出的许多问题，正是构建洞见本体（自知）的基础。精研后确认这个判断精准——文章的核心不是「认知债务很可怕」的告警，而是一组<b>可操作化的自问协议</b>，其精髓是那句「<b>你只需要知道，自己缺少哪些理解</b>」：自知不等于拥有完整心智模型（现代大型代码库本就不可能常在脑中），而是能<b>标记出自己的盲区</b>。这与本仓 <code>insight.py</code>（找到可坍塌的新维度）、<code>retrospective.py</code>（复盘认知轨迹）、<code>estimation.py</code>（把认知参数从假设变测量）一脉相承——是把「元认知」从形容词变成可判定维度的又一块基石。
+</div>
+<p>但必须区分层次：§74 的 <b>supervision_viability</b> 判「评审者是否<b>还具备</b>独立判断能力」（能力存在性，外部流程）；本次要判的是「主体是否<b>诚实觉察</b>自己的认知边界」（元认知自知，更内一层）。前者问「评测环节有效吗」，后者问「你知不知道自己不知道什么」。这不是重复造轮子，是往内再挖一层。</p>
+
+<h2>三、八个命题提取（26/26 原文锚点命中）</h2>
+<table><tr><th>命题</th><th>核心</th><th>锚点</th></tr>
+<tr><td>C1 认知光谱三阶段</td><td>卸载→依赖→投降，渐进且不可察觉</td><td class="pass">4/4</td></tr>
+<tr><td>C2 认知/理解债务</td><td>干净的库+通过的测试 ≠ 有人理解</td><td class="pass">3/3</td></tr>
+<tr><td>C3 六个自问</td><td>假设先行/帮想还是代想/可证伪/反方/不再练的技能/盲点检查</td><td class="pass">5/5</td></tr>
+<tr><td>C4 绿灯只证明一件事</td><td>测试可能与功能犯同一个错</td><td class="pass">4/4</td></tr>
+<tr><td>C5 意图债务</td><td>隐含目标/约束/理由，只能来自人</td><td class="pass">3/3</td></tr>
+<tr><td>C6 编排税</td><td>产出超过背书能力 = 碰运气</td><td class="pass">3/3</td></tr>
+<tr><td>C7 监督悖论</td><td>监督所需技能正被 AI 退化</td><td class="pass">2/2</td></tr>
+<tr><td>C8 责任不可委托</td><td>可交出工作与审计，不可交出责任</td><td class="pass">2/2</td></tr></table>
+
+<h2>四、新门禁的必要性判定（V1–V8）</h2>
+<table><tr><th>判据</th><th>裁决</th><th>要点</th></tr>
+<tr><td>V1 锚点单行核验</td><td class="pass">PASS</td><td>26/26 命中；繁简/措辞差异按原文修正 3 处（工具修正非判定放水）。</td></tr>
+<tr><td>V2 同源折扣</td><td class="pass">PASS</td><td>Addy 概念家族 + S01/S02 折1；Shaw-Nave/Anthropic 转述按等级折扣。</td></tr>
+<tr><td>V3 证据边界</td><td class="pass">PASS</td><td>S02 交叉 5/5：明标个人实务观察/无量化对照/六问未被证明有效/132人单公司/自报。</td></tr>
+<tr><td>V4 缺口探测用编译前基线</td><td class="pass">PASS</td><td>编译前 111 条 KB + 22 门禁无一判主体认知边界觉察，防 §71 第五处自咬。</td></tr>
+<tr><td>V5 拦截面独立可迁移</td><td class="pass">PASS</td><td>非博客特例；任何「输出结论+声称已审慎」的主体都适用（KB-META01 会拦才入）。</td></tr>
+<tr><td>V6 四维独立</td><td class="pass">PASS</td><td>假设先行/局限自陈/可证伪自问/技能退化披露，不得混谈。</td></tr>
+<tr><td>V7 AST 自审</td><td class="pass">PASS</td><td>Compare 内无中文字面量；中文锚点集中 <code>_A</code> 字典。</td></tr>
+<tr><td>V8 三层诚实结论</td><td class="pass">PASS</td><td>一手可核/折扣/不可核分层书写，见第六节。</td></tr></table>
+
+<h2>五、断言落到代码（第 23 门禁）</h2>
+<p><code>svagent/self_knowledge_honesty.py:check_self_knowledge_honesty</code>：四维语义枚举 + R0–R6 短路规则——R0 非法/字面串→flag；R1 无假设 / R2 假装完整 / R3 不可证伪 / R4 隐瞒技能退化→downgrade；R5 部分→flag；R6 全自洽→ok。惰性登记到 <code>__init__.py</code>，Verdict 与 live_regression 同登记，<b>不接 run_loop</b>（§58 选 A）。8 活体回归 + 30 项测试 + AST 自审全过。KB 111→<b>112</b>（新增 AUDIT18）。</p>
+<table><tr><th>维度</th><th>=no 的动作</th><th>语义</th></tr>
+<tr><td>hypothesis_before_query</td><td>downgrade</td><td>提问前是否已形成可错假设</td></tr>
+<tr><td>cognitive_limits_disclosed</td><td>downgrade</td><td>是否标注自己缺少的理解</td></tr>
+<tr><td>falsification_self_asked</td><td>downgrade</td><td>是否主动问「什么情况会错」</td></tr>
+<tr><td>skill_atrophy_disclosed</td><td>downgrade</td><td>是否披露不再练习的关键能力</td></tr></table>
+<div class="note"><b>诚实边界写进代码：</b>本门禁只判「认知边界声明是否诚实自洽」，<b>不承诺真能防认知投降</b>——提出框架≠证明有效（KB-STRUCT05）、自洽≠有效（KB-R07）、self-reported 折扣（KB-RSI07）。这是尺子，不是解药。</div>
+
+<h2>六、三处判据自咬（修工具不放水）</h2>
+<ol>
+<li><b>锚点 C5「意图债务」措辞</b>：初版锚点用全称带括号变体，与原文「我把这称为『意图债务』（intent debt）」单行不匹配 → 改短为真实子串。</li>
+<li><b>锚点 C6「就」字 / C7「恰恰是」</b>：原文「你<b>就</b>不再是在审阅」「<b>恰恰是</b>过度使用 AI 后可能退化」→ 按原文真实单行修正。</li>
+<li><b>交叉锚点繁简</b>：S02 为繁体中文，简体锚点全不命中 → 改用原文繁体「個人實務觀察/並沒有證明這六個自問能防止它/自我報告」，5/5 命中。三处均为工具修正，判定规则一字未放水。</li>
+</ol>
+
+<h2>七、三层诚实结论</h2>
+<p><b>一手可核（经 S01 全文 + S02 交叉）：</b>原文确有六个自问、认知光谱三阶段、绿灯只证明一件事、意图债务/编排税/监督悖论定义；S02 独立复述这些概念并给出证据边界批评；AINLP 公众号出处经用户确认 + 页面文案证实。</p>
+<p><b>scoped 与折扣：</b>S01 为译文（折1）；内嵌 Shaw-Nave 研究、Anthropic 132 人调查为本文转述，非一手核查；Osmani 概念家族与 §74 图谱同源（KB-STRUCT02 折1）；S02 明标个人实务观察、无量化前后对照、六问有效性未被证明。</p>
+<p><b>不可核 / 不宣称：</b>X 原文、unwire、BusinessInsider 因网络不可达；不宣称「六问能防认知投降」、不宣称新门禁能阻止认知退化——只编译「声明诚实性」这一可迁移拦截面。所有 unavailable 来源不用于下断言。</p>
+
+<h2>八、§76 深化：Agent 洞悉本体（自见自知）系统机制化</h2>
+<div class="core">
+用户再定位：「这些问题是构建 <b>Agent 洞悉本体即自见自知</b> 的基础……<b>能机制化尽量机制化</b>」。于是从"编译单簇"升级为"系统机制化整篇自问谱系"。核验原文后归为 6 簇，建 <code>self_insight_ontology.json</code>（sha256 1a8bfa3a…）作为本体资产：
+<b>自见</b>（看见 Agent 产出的真相）= K2 验证边界 / K3 决定透明；
+<b>自知</b>（知道主体自身状态）= K1 认知边界 / K4 意图完整 / K5 反方论证 / K6 责任编排。
+</div>
+<table><tr><th>簇</th><th>面</th><th>核心自问</th><th>机制化状态</th></tr>
+<tr><td>K1 认知边界</td><td>自知</td><td>假设先行/局限/可证伪/技能退化</td><td><span class="pass">§75 已编译 self_knowledge_honesty</span></td></tr>
+<tr><td>K2 验证边界</td><td>自见</td><td>绿灯只证明一件事/标准事前/证据先于总结/自我质疑</td><td><span class="pass">§76 已编译 verification_boundary_honesty</span></td></tr>
+<tr><td>K3 决定透明</td><td>自见</td><td>列出决定/署名/可辩护/凭记忆复述</td><td>候选后续（对象层级待辨析）</td></tr>
+<tr><td>K4 意图完整</td><td>自知</td><td>意图债务/受众范围完成标准/委托vs协作</td><td>候选后续</td></tr>
+<tr><td>K5 反方论证</td><td>自知</td><td>多模型为相反观点辩护</td><td>并入 K1 可证伪簇</td></tr>
+<tr><td>K6 责任编排</td><td>自知</td><td>编排税/责任不可交出</td><td>仅声明（与 §72 部分重叠）</td></tr></table>
+<p><b>第 24 门禁 <code>verification_boundary_honesty.py</code></b>：四维 coverage_scope_disclosed / criteria_predefined / evidence_before_summary / self_questioning_done。R1 绿灯冒充全覆盖 / R2 标准事后合理化 / R3 看总结不见证据 / R4 无自我质疑 → downgrade；R5 部分 / R0 字面串 → flag；R6 全自洽 → ok。与 §71 proof_boundary_honesty（形式化证明边界）对象不同——本门禁判经验性测试证据的覆盖边界。ext_prereg <code>86d3a7f8…</code> 实现前锁存，K2 簇 10/10 锚点，8 活体 + 30 测试 + AST 自审 PASS，不接 run_loop。</p>
+<div class="note"><b>克制纪律：</b>"能机制化尽量机制化"≠"每簇都造牙"。只机制化<b>独立、会拦、可迁移</b>的拦截面——已编译 2 簇、候选 2 簇、并入 1 簇、仅声明 1 簇。K3/K4 识别为候选但不硬编译（对象层级须与现有门禁辨析），K6 与 §72 重叠故仅声明。不为"认知很重要"的宏大叙事造量不出东西的玩具牙（KB-META01 / §67）。全量 620→<b>650 passed</b>，KB 112→<b>113</b>。</div>
+<p class="dim">版本控制：本地提交 <code>3ffd52e</code>（§75+§76 成对，两批次一推）。远端推送失败——HTTPS 凭据不可用（could not read Username for github.com），与 §72/§73-74 同根因，非本轮代码问题；不再重试，如实记录。</p>
+</body></html>

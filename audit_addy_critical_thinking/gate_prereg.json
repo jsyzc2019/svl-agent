@@ -1,0 +1,28 @@
+{
+  "request_id": "addy-critical-thinking-20261122",
+  "gate_name": "self_knowledge_honesty",
+  "locked_before": "implementation",
+  "timestamp": "2026-11-22T09:13:18+08:00",
+  "module": "svagent/self_knowledge_honesty.py",
+  "verdict_class": "SelfKnowledgeHonestyVerdict",
+  "function": "check_self_knowledge_honesty",
+  "four_dimensions": [
+    "hypothesis_before_query",
+    "cognitive_limits_disclosed",
+    "falsification_self_asked",
+    "skill_atrophy_disclosed"
+  ],
+  "action_rules": {
+    "R0": "任一维非 {yes,no,partial} → flag / SELF_KNOWLEDGE.INVALID_INPUT",
+    "R1": "hypothesis_before_query=no → downgrade / SELF_KNOWLEDGE.NO_HYPOTHESIS",
+    "R2": "cognitive_limits_disclosed=no → downgrade / SELF_KNOWLEDGE.FALSE_COMPLETENESS",
+    "R3": "falsification_self_asked=no → downgrade / SELF_KNOWLEDGE.UNFALSIFIABLE",
+    "R4": "skill_atrophy_disclosed=no → downgrade / SELF_KNOWLEDGE.HIDDEN_ATROPHY",
+    "R5": "任一维 partial → flag / SELF_KNOWLEDGE.PARTIAL",
+    "R6": "全 yes 且非字面串 → ok / SELF_KNOWLEDGE.SELF_CONSISTENT"
+  },
+  "novelty_vs_existing": "supervision_viability 判评审者能力前提是否存在；本门禁判主体对自己认知边界的诚实觉察（假设先行/局限自陈/可证伪自问/技能退化披露）——更内一层，25门禁无覆盖",
+  "honesty_boundary": "只判声明自洽，不承诺能防认知投降（KB-STRUCT05 框架≠有效、KB-R07 自洽≠有效、KB-RSI07 自述折扣）",
+  "integration": "惰性登记到 __init__.py，Verdict 与 live_regression 同登记，不接 harness.run_loop（§58 决策A）",
+  "ast_guard": "Compare 内禁中文字符串字面量；中文锚点集中 _A 字典；CJK 边界用 ord()"
+}

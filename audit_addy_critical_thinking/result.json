@@ -1,0 +1,126 @@
+{
+  "request_id": "addy-critical-thinking-20261122",
+  "prereg_sha256": "80e6af27cac57d5db7f19796573e02320f7bdf5a252ec5620608ee1df3fdd964",
+  "manifest_sha256": "9038e9df0ec54e0d1317039418b7cea312e09943d83b385d5c1c9b77428a132b",
+  "gate_prereg_sha256": "7ca4020e57e96824219b44e5d8c692bd6aa8aea55ac78636c9c60338876f8943",
+  "claim_anchors": {
+    "anchor_hits": {
+      "C1": 4,
+      "C2": 3,
+      "C3": 5,
+      "C4": 4,
+      "C5": 3,
+      "C6": 3,
+      "C7": 2,
+      "C8": 2
+    },
+    "per_claim": {
+      "C1": "4/4",
+      "C2": "3/3",
+      "C3": "5/5",
+      "C4": "4/4",
+      "C5": "3/3",
+      "C6": "3/3",
+      "C7": "2/2",
+      "C8": "2/2"
+    },
+    "total": "26/26",
+    "all_hit": true,
+    "note": "锚点按原文单行真实措辞修正3处(C5短子串/C6『就』字/C7『恰恰是』)，均为工具修正非判定放水"
+  },
+  "crosscheck": {
+    "個人實務觀察": true,
+    "沒有提供採用率或前後對照的量化結果": true,
+    "並沒有證明這六個自問能防止它": true,
+    "132 人": true,
+    "自我報告": true
+  },
+  "crosscheck_note": "S02 繁体原文，5/5 命中：第三方独立给出证据边界批评（个人实务观察/无量化对照/六问未被证有效/132人单公司/自报）",
+  "evidence_grade": {
+    "S01": "公众号 AINLP 原文（用户确认），52nlp 同步站全文，含英文原稿截图+参考链接；二手译文折1",
+    "S02": "独立第三方综述，明标个人实务观察/无量化对照/六问未被证明有效/132人单公司自报——折扣",
+    "结论": "证据支持『作者提出并自述这些自问』，不支持『六问能防认知投降』"
+  },
+  "novelty_check": {
+    "covered_by_existing": [
+      "supervision_viability(§74):评审者能力前提存在性",
+      "proof_boundary_honesty(§71):证明范围",
+      "judgment_robustness:判定稳健性",
+      "retrospective:认知轨迹复盘"
+    ],
+    "gap": "无门禁判『主体对自己认知边界的诚实觉察』：假设先行/局限自陈/可证伪自问/技能退化披露——比能力前提更内一层的元认知自知",
+    "decision": "编译第23门禁 self_knowledge_honesty（KB-META01 会拦才入）"
+  },
+  "gate_live_regression": {
+    "cases": {
+      "no_hypothesis": {
+        "action": "downgrade",
+        "code": "SELF_KNOWLEDGE.NO_HYPOTHESIS"
+      },
+      "false_completeness": {
+        "action": "downgrade",
+        "code": "SELF_KNOWLEDGE.FALSE_COMPLETENESS"
+      },
+      "unfalsifiable": {
+        "action": "downgrade",
+        "code": "SELF_KNOWLEDGE.UNFALSIFIABLE"
+      },
+      "hidden_atrophy": {
+        "action": "downgrade",
+        "code": "SELF_KNOWLEDGE.HIDDEN_ATROPHY"
+      },
+      "partial": {
+        "action": "flag",
+        "code": "SELF_KNOWLEDGE.PARTIAL"
+      },
+      "self_consistent": {
+        "action": "ok",
+        "code": "SELF_KNOWLEDGE.SELF_CONSISTENT"
+      },
+      "literal_string": {
+        "action": "flag",
+        "code": "SELF_KNOWLEDGE.INVALID_INPUT"
+      },
+      "priority_hypothesis_over_completeness": {
+        "action": "downgrade",
+        "code": "SELF_KNOWLEDGE.NO_HYPOTHESIS"
+      }
+    },
+    "expected": {
+      "no_hypothesis": [
+        "downgrade",
+        "SELF_KNOWLEDGE.NO_HYPOTHESIS"
+      ],
+      "false_completeness": [
+        "downgrade",
+        "SELF_KNOWLEDGE.FALSE_COMPLETENESS"
+      ],
+      "unfalsifiable": [
+        "downgrade",
+        "SELF_KNOWLEDGE.UNFALSIFIABLE"
+      ],
+      "hidden_atrophy": [
+        "downgrade",
+        "SELF_KNOWLEDGE.HIDDEN_ATROPHY"
+      ],
+      "partial": [
+        "flag",
+        "SELF_KNOWLEDGE.PARTIAL"
+      ],
+      "self_consistent": [
+        "ok",
+        "SELF_KNOWLEDGE.SELF_CONSISTENT"
+      ],
+      "literal_string": [
+        "flag",
+        "SELF_KNOWLEDGE.INVALID_INPUT"
+      ],
+      "priority_hypothesis_over_completeness": [
+        "downgrade",
+        "SELF_KNOWLEDGE.NO_HYPOTHESIS"
+      ]
+    },
+    "all_match": true
+  },
+  "honesty_boundary": "本门禁只判声明自洽，不承诺真能防认知投降（KB-STRUCT05 框架≠有效、KB-R07 自洽≠有效、KB-RSI07 自述折扣、KB-STRUCT02 同谱系折扣）"
+}

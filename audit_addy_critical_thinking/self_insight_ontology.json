@@ -1,0 +1,152 @@
+{
+  "$schema": "self-insight-ontology/v1",
+  "name": "Agent 洞悉本体（自见自知）",
+  "source": {
+    "article": "Addy Osmani：当 Agent 接手工作，如何保持批判性思考",
+    "publisher": "微信公众号 AINLP（用户确认出处）",
+    "fulltext_mirror": "https://www.52nlp.cn/?p=21212",
+    "original": "X@addyosmani status 2117512471930167377《Critical thinking when agents do the work》(2026-11-03)",
+    "sha256": "26483d35f54876e8",
+    "evidence_grade": "二手译文折1；内嵌 Shaw-Nave/Anthropic 研究为本文转述；S02 第三方综述明标个人实务观察/六问未被证有效"
+  },
+  "definition": {
+    "自见": "看见 Agent 产出的真相——覆盖边界、决定过程、执行证据；对应 K2/K3",
+    "自知": "知道主体自身的认知状态——假设/局限/可证伪/意图/责任；对应 K1/K4/K5/K6",
+    "本体定位": "自知≠拥有完整心智模型，而是能标记自己缺少的理解('你只需要知道，自己缺少哪些理解')；这是本仓 insight/retrospective/estimation 元认知谱系的可判定化基础"
+  },
+  "honesty_boundary": "本体只把自问系统化为可判定维度，不承诺这些自问能防认知投降（KB-STRUCT05 框架≠有效、KB-R07 自洽≠有效、S02 明确六问有效性未被证明）",
+  "clusters": [
+    {
+      "id": "K1",
+      "name": "自知边界",
+      "facet": "自知",
+      "mechanization": "已编译",
+      "gate": "self_knowledge_honesty",
+      "dimensions": [
+        "假设先行",
+        "认知局限自陈",
+        "可证伪自问",
+        "技能退化披露"
+      ],
+      "anchors": [
+        "提问前，我有没有先形成一个假设？",
+        "什么情况成立时，这个结论就会是错的？",
+        "哪些能力，我已经不再练习了？",
+        "盲点检查"
+      ],
+      "gate_section": "§75",
+      "section_ref": "本仓自见自知谱系第1牙"
+    },
+    {
+      "id": "K2",
+      "name": "验证边界",
+      "facet": "自见",
+      "mechanization": "已编译",
+      "gate": "verification_boundary_honesty",
+      "dimensions": [
+        "覆盖边界披露",
+        "完成标准事前定义",
+        "证据先于总结",
+        "收尾自我质疑"
+      ],
+      "anchors": [
+        "绿灯只说明一件事",
+        "提前定义什么叫",
+        "先看实际执行了什么命令，以及命令返回了什么",
+        "我遗漏了什么吗"
+      ],
+      "gate_section": "§76",
+      "section_ref": "与 proof_boundary_honesty(形式化证明)对象不同——测试/证据覆盖边界"
+    },
+    {
+      "id": "K3",
+      "name": "决定透明",
+      "facet": "自见",
+      "mechanization": "可编译-待后续",
+      "gate": null,
+      "dimensions": [
+        "列出决定与假设",
+        "署名标准",
+        "可辩护性",
+        "凭记忆复述"
+      ],
+      "anchors": [
+        "让它列出自己作的决定和假设。然后考考自己",
+        "试着凭记忆写出主要论点",
+        "只有全部答对，我才合并",
+        "不愿署上自己名字的东西，就别发出去"
+      ],
+      "gate_section": null,
+      "section_ref": "候选第25牙；与 reviewer_evaluation(评审漏斗)/supervision_viability(评审者能力)对象层级需辨析"
+    },
+    {
+      "id": "K4",
+      "name": "意图完整",
+      "facet": "自知",
+      "mechanization": "可编译-待后续",
+      "gate": null,
+      "dimensions": [
+        "受众/范围/完成标准",
+        "意图来自人",
+        "委托vs协作",
+        "原文链而非层层摘要"
+      ],
+      "anchors": [
+        "意图债务",
+        "意图必须来自你",
+        "说明受众、哪些不在范围内，以及怎样才算完成",
+        "让 Agent 针对它不理解的部分采访你"
+      ],
+      "gate_section": null,
+      "section_ref": "候选第26牙；与 interface_contract_honesty(接口控制权)对象不同"
+    },
+    {
+      "id": "K5",
+      "name": "反方论证",
+      "facet": "自知",
+      "mechanization": "并入K1可证伪簇",
+      "gate": "self_knowledge_honesty",
+      "dimensions": [
+        "多模型为相反观点辩护",
+        "开放性问题不固执"
+      ],
+      "anchors": [
+        "我有没有从另一个角度听过反方论证",
+        "让不止一个模型为相反观点辩护"
+      ],
+      "gate_section": "§75",
+      "section_ref": "不单列门禁——与'什么情况成立时结论会错'同属可证伪自问，避免重复造牙(§67警觉长牙)"
+    },
+    {
+      "id": "K6",
+      "name": "责任与编排",
+      "facet": "自知",
+      "mechanization": "仅声明",
+      "gate": null,
+      "dimensions": [
+        "编排税(产出vs背书差距)",
+        "责任不可交出",
+        "低风险委托/高后果留推理"
+      ],
+      "anchors": [
+        "编排税",
+        "把责任也交出去",
+        "承担责任的仍然必须是人"
+      ],
+      "gate_section": null,
+      "section_ref": "与 §72 proactive_authorization 部分重叠(介入授权vs责任归属)，暂不单列，避免重复造牙"
+    }
+  ],
+  "mechanization_summary": {
+    "total_clusters": 6,
+    "compiled": 2,
+    "candidate": 2,
+    "merged": 1,
+    "declaration_only": 1,
+    "compiled_gates": [
+      "self_knowledge_honesty(§75)",
+      "verification_boundary_honesty(§76)"
+    ],
+    "principle": "会拦才入(KB-META01)、不重复造轮子(§67)、对象层级辨析优先；能机制化尽量机制化，但只机制化独立可迁移的拦截面，不为宏大叙事造无法会拦的玩具牙"
+  }
+}

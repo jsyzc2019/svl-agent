@@ -1,0 +1,30 @@
+[
+  {
+    "id": "S01_52nlp_cn_fulltext",
+    "url": "https://www.52nlp.cn/?p=21212",
+    "status": 200,
+    "bytes": 87446,
+    "sha256": "26483d35f54876e8891a86be448422519fb4770ebe3c44ee56d7329222c57a0e",
+    "ok": true
+  },
+  {
+    "id": "S02_techmoon_spectrum",
+    "url": "https://techmoon.xyz/?p=48702",
+    "status": 200,
+    "bytes": 342928,
+    "sha256": "fb6292ecd09c42e3bb7cd7862de623751306a2534f00f48c092eb9546e353aa7",
+    "ok": true
+  },
+  {
+    "id": "S03_unwire_hk",
+    "url": "https://unwire.hk/2026/11/10/claude-code-ai-cognitive-surrender-thinking/ai",
+    "error": "HTTPSConnectionPool(host='unwire.hk', port=443): Max retries exceeded with url: /2026/11/10/claude-code-ai-cognitive-surrender-thinking/ai (Caused by NewConnectionError(\"HTTPSConnection(host='unwire.hk', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))",
+    "ok": false
+  },
+  {
+    "id": "S04_businessinsider",
+    "url": "https://africa.businessinsider.com/careers/an-anthropic-engineer-warns-about-cognitive-surrender-as-ai-agents-take-over-his-work/32s18q2",
+    "error": "HTTPSConnectionPool(host='africa.businessinsider.com', port=443): Max retries exceeded with url: /careers/an-anthropic-engineer-warns-about-cognitive-surrender-as-ai-agents-take-over-his-work/32s18q2 (Caused by NewConnectionError(\"HTTPSConnection(host='africa.businessinsider.com', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))",
+    "ok": false
+  }
+]

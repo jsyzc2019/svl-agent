@@ -159,6 +159,14 @@ _LAZY: dict[str, tuple[str, str]] = {
     "check_supervision_viability": ("svagent.supervision_viability", "check_supervision_viability"),
     "SupervisionViabilityVerdict": ("svagent.supervision_viability", "SupervisionViabilityVerdict"),
     "supervision_viability_live_regression": ("svagent.supervision_viability", "live_regression"),
+    # 自知诚实性门禁（§75：从 AINLP 公众号 Addy Osmani 文编译——假设先行/局限自陈/可证伪自问/技能退化披露）
+    "check_self_knowledge_honesty": ("svagent.self_knowledge_honesty", "check_self_knowledge_honesty"),
+    "SelfKnowledgeHonestyVerdict": ("svagent.self_knowledge_honesty", "SelfKnowledgeHonestyVerdict"),
+    "self_knowledge_honesty_live_regression": ("svagent.self_knowledge_honesty", "live_regression"),
+    # 验证边界诚实性门禁（§76：从 AINLP 文"绿灯只证明一件事"簇编译——覆盖边界/标准事前/证据先于总结/自我质疑）
+    "check_verification_boundary_honesty": ("svagent.verification_boundary_honesty", "check_verification_boundary_honesty"),
+    "VerificationBoundaryVerdict": ("svagent.verification_boundary_honesty", "VerificationBoundaryVerdict"),
+    "verification_boundary_honesty_live_regression": ("svagent.verification_boundary_honesty", "live_regression"),
 }
 
 

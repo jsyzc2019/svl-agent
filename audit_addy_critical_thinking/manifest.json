@@ -1,0 +1,54 @@
+{
+  "request_id": "addy-critical-thinking-20261122",
+  "target": "微信公众号文章《Addy Osmani：当 Agent 接手工作，如何保持批判性思考》",
+  "user_note": "提出的许多问题正是构建洞见本体（自知）的基础",
+  "collection_time": "2026-11-22T09:13:18+08:00",
+  "acquisition": {
+    "channel": "用户确认的 AINLP 公众号原文；经其同步站 52nlp 下载全文（公众号 App 付费检索通道本机未开通，改用网页版）",
+    "primary_fulltext": {
+      "id": "S01",
+      "site": "AINLP（我爱自然语言处理；52nlp 同步站，同源确认）",
+      "url": "https://www.52nlp.cn/?p=21212",
+      "date": "2026-11-04",
+      "type": "中文全文翻译转载（含原作者英文原稿检测截图 + 完整参考链接）",
+      "sha256": "26483d35f54876e8891a86be448422519fb4770ebe3c44ee56d7329222c57a0e",
+      "user_confirmed_source": "公众号 AINLP"
+    },
+    "crosscheck": {
+      "id": "S02",
+      "site": "TechMoon 科技月球",
+      "url": "https://techmoon.xyz/?p=48702",
+      "date": "2026-11-05",
+      "type": "独立第三方综述（含证据边界批评）",
+      "sha256": "fb6292ecd09c42e3bb7cd7862de623751306a2534f00f48c092eb9546e353aa7"
+    },
+    "unavailable": [
+      {
+        "id": "X-original",
+        "url": "https://x.com/addyosmani/status/2117512471930167377",
+        "reason": "DNS 劫持，不可达（同 §74）"
+      },
+      {
+        "id": "S03-unwire",
+        "url": "unwire.hk/...",
+        "reason": "Network unreachable"
+      },
+      {
+        "id": "S04-BI",
+        "url": "africa.businessinsider.com/...",
+        "reason": "Network unreachable"
+      }
+    ]
+  },
+  "evidence_grade": {
+    "原文主张": "S01 全文翻译（二手：译者转述，但完整含参考链接与英文原稿截图佐证）——折1",
+    "二手概念溯源": "S02 第三方综述（明标个人实务观察、无量化对照）——折1",
+    "内嵌引用的研究（Shaw-Nave / Anthropic 132人）": "本文转述，非一手核查；且同源谱系折扣（KB-STRUCT02）",
+    "结论": "证据只支持'作者提出并自述这些自问'，不支持'六问能防认知投降'（S02 明确此边界）"
+  },
+  "user_confirmation": {
+    "time": "2026-11-22T09:18:56+08:00",
+    "text": "公众号:AINLP，有此文",
+    "implication": "用户确认 AINLP 公众号刊有此文；52nlp 页面文末『关注我们的微信公众号AINLP』证实 52nlp 为 AINLP 同体系同步站，所下载全文即该公众号文章网页版"
+  }
+}

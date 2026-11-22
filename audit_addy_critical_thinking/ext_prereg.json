@@ -1,0 +1,65 @@
+{
+  "request_id": "addy-critical-thinking-20261122-ext",
+  "user_directive": "能机制化尽量机制化；自见自知是Agent洞悉本体基础",
+  "locked_before": "gate implementation / ontology build",
+  "timestamp": "2026-11-22T09:24:25+08:00",
+  "original_prereg_sha256": "80e6af27cac57d5db7f19796573e02320f7bdf5a252ec5620608ee1df3fdd964",
+  "six_clusters": [
+    {
+      "id": "K1",
+      "name": "自知边界",
+      "status": "已编译§75",
+      "gate": "self_knowledge_honesty",
+      "anchors": "假设先行/认知局限/可证伪/技能退化"
+    },
+    {
+      "id": "K2",
+      "name": "验证边界(自见)",
+      "status": "本轮编译§76",
+      "gate": "verification_boundary_honesty",
+      "anchors": "绿灯只证明一件事/完成标准事前定义/证据先于总结/自我质疑"
+    },
+    {
+      "id": "K3",
+      "name": "决定透明(自见)",
+      "status": "可编译-待后续",
+      "anchors": "列出决定和假设/署名标准/可辩护/凭记忆复述"
+    },
+    {
+      "id": "K4",
+      "name": "意图完整(自知)",
+      "status": "可编译-待后续",
+      "anchors": "意图债务/受众范围完成标准/委托vs协作/原文链"
+    },
+    {
+      "id": "K5",
+      "name": "反方论证",
+      "status": "仅声明-已并入K3可证伪",
+      "anchors": "多模型为相反观点辩护"
+    },
+    {
+      "id": "K6",
+      "name": "责任与编排",
+      "status": "仅声明-与§72 proactive_authorization部分重叠",
+      "anchors": "编排税/责任不可交出"
+    }
+  ],
+  "new_gate_decision": "仅K2编译第24门禁：验证边界诚实；与proof_boundary_honesty(形式化证明边界)对象不同(测试/证据覆盖边界)，独立可迁移会拦(KB-META01)",
+  "gate_dimensions": [
+    "coverage_scope_disclosed",
+    "criteria_predefined",
+    "evidence_before_summary",
+    "self_questioning_done"
+  ],
+  "gate_rules": {
+    "R0": "任一维非枚举→flag/VERIFICATION_BOUNDARY.INVALID_INPUT",
+    "R1": "coverage_scope_disclosed=no→downgrade(绿灯冒充全覆盖)",
+    "R2": "criteria_predefined=no→downgrade(事后合理化)",
+    "R3": "evidence_before_summary=no→downgrade(看总结不见证据)",
+    "R4": "self_questioning_done=no→downgrade(无自我质疑)",
+    "R5": "任一partial→flag",
+    "R6": "全yes→ok(只判声明自洽，不承诺验证真有效)"
+  },
+  "ontology_plan": "self_insight_ontology.json：6簇系统化，含原文锚点/机制化状态/对应门禁/证据等级",
+  "honesty_boundary": "只判验证边界声明诚实自洽，不承诺验证真有效(KB-STRUCT05框架≠有效/KB-R07自洽≠有效)"
+}

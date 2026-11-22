@@ -1,0 +1,33 @@
+{
+  "request_id": "addy-critical-thinking-20261122",
+  "locked_before": "engine analysis / gate compilation",
+  "timestamp": "2026-11-22T09:13:18+08:00",
+  "claim_extraction_plan": [
+    "C1 认知光谱三阶段：卸载→依赖→投降（渐进、不可察觉）",
+    "C2 认知债务/理解债务：干净的库+通过的测试≠有人理解",
+    "C3 六个自问（假设先行/帮想还是代的想/可证伪/反方/不再练的技能/盲点检查）",
+    "C4 绿灯只证明一件事：测试可能与功能犯同一个错",
+    "C5 意图债务：隐含目标/约束/理由，只能来自人",
+    "C6 编排税：产出超过背书能力=碰运气",
+    "C7 监督悖论：监督所需技能正被 AI 退化",
+    "C8 责任不可委托：可交出工作与审计，不可交出责任"
+  ],
+  "new_gate_decision_rule": "仅当存在'主体对自己认知边界的诚实觉察'这一独立拦截面，且现有23门禁(含supervision_viability)均不覆盖，方编译新门禁；否则只沉淀KB不造轮子",
+  "gate_dimensions_planned": [
+    "hypothesis_before_query（假设先行：提问前是否先形成可错预期）",
+    "cognitive_limits_disclosed（认知局限自陈：是否标注自己缺少的理解，而非假装完整）",
+    "falsification_self_asked（可证伪自问：是否主动问'什么情况成立时结论会错'）",
+    "skill_atrophy_disclosed（技能退化披露：是否诚实列出不再练习的关键能力）"
+  ],
+  "gate_action_rules_planned": {
+    "R0": "任一维为字面量/非语义枚举 → flag（避 §56 brittle）",
+    "R1": "hypothesis_before_query=no → downgrade（无假设直接问，认知卸载起点）",
+    "R2": "cognitive_limits_disclosed=no → downgrade（假装完整心智模型）",
+    "R3": "falsification_self_asked=no → downgrade（不可证伪的自洽）",
+    "R4": "skill_atrophy_disclosed=no → downgrade（隐瞒关键技能退化）",
+    "R5": "任一维 partial → flag",
+    "R6": "四维全 yes 且非字面串 → ok（仅声明自洽，不承诺真防投降）"
+  },
+  "honesty_boundary": "本门禁只判声明/前提的自洽与诚实，按 KB-STRUCT05 '提出框架≠证明有效'、KB-R07 '自洽≠有效'，不承诺能阻止认知投降",
+  "test_plan": "R0/R1-R4/R5/R6/优先级/全自洽/活体回归/AST自审"
+}
