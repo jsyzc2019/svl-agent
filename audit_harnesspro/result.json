@@ -1,0 +1,149 @@
+{
+  "request_id": "harnesspro-20261122",
+  "prereg_sha256": "69850798b3d02d02641f4af487c8444211f51c844ff2bd664851bc19f8587610",
+  "manifest_sha256": "07d46012bd136dc8d8985706083d378f910f13e2440483d836c178d3023ae33d",
+  "gate_prereg_sha256": "ecf7d724974c64bfbb95999a1b1258f22f1f12f1bc2c30760ed81ed19c2bd517",
+  "claim_anchors": {
+    "per_claim": {
+      "C1_harness_def": "3/3",
+      "C2_dual_objective": "3/3",
+      "C3_label_free": "4/4",
+      "C4_recall_boundary": "4/4",
+      "C5_criterion_boundary": "4/4",
+      "C6_leakage_control": "3/3",
+      "C7_main_result": "4/4",
+      "C8_repro_boundary": "3/3"
+    },
+    "detail": {
+      "C1_harness_def": {
+        "hits": 3,
+        "total": 3,
+        "matched": [
+          "An agent harness is the software infrastructure that manages interactions",
+          "prompts, tools and skills, context and memory mechanisms, hooks",
+          "Recursive self-improvement uses trajectories from previous tasks"
+        ],
+        "missed": []
+      },
+      "C2_dual_objective": {
+        "hits": 3,
+        "total": 3,
+        "matched": [
+          "min (−PR(h), C(h))",
+          "Pareto frontier and select three representative operating",
+          "cost-focused (lite), balanced (medium), and performance-focused (heavy)"
+        ],
+        "missed": []
+      },
+      "C3_label_free": {
+        "hits": 4,
+        "total": 4,
+        "matched": [
+          "label-free",
+          "without access to ground-truth solutions or",
+          "without access to ground-truth so-",
+          "These generated tests remain fixed throughout the self-"
+        ],
+        "missed": []
+      },
+      "C4_recall_boundary": {
+        "hits": 4,
+        "total": 4,
+        "matched": [
+          "overly optimistic",
+          "treating flawed implementations as suc-",
+          "failure recall increasing from 41.7% to",
+          "83.3% compared with direct LLM judgments (Figure 2)"
+        ],
+        "missed": []
+      },
+      "C5_criterion_boundary": {
+        "hits": 4,
+        "total": 4,
+        "matched": [
+          "No separate reviewer is part of this run.",
+          "do not launch another reviewer.",
+          "answer key. Public sample programs",
+          "what was not checked, and limitations"
+        ],
+        "missed": []
+      },
+      "C6_leakage_control": {
+        "hits": 3,
+        "total": 3,
+        "matched": [
+          "we partition tasks into training, validation, and test sets",
+          "use only validation metrics, with no access to test-set results",
+          "on the held-out test set Dtest only after all rounds"
+        ],
+        "missed": []
+      },
+      "C7_main_result": {
+        "hits": 4,
+        "total": 4,
+        "matched": [
+          "average pass-rate gain of 2.0 percentage points",
+          "task cost reduction of 26.1%",
+          "4.5 percent-",
+          "33.9% lower mean cost"
+        ],
+        "missed": []
+      },
+      "C8_repro_boundary": {
+        "hits": 3,
+        "total": 3,
+        "matched": [
+          "does not reproduce",
+          "not included in this release",
+          "not part of this package"
+        ],
+        "missed": []
+      }
+    },
+    "total": "28/28",
+    "all_hit": true
+  },
+  "crosscheck": {
+    "S03_release_scope_honest": true,
+    "S03_glm_snapshot_missing": true,
+    "S03_no_repro_with_mismatch": true,
+    "S01_ai_use_selfreported": true,
+    "S01_preprint_status": true
+  },
+  "evidence_grade": {
+    "S01": "preprint under review(未评审)折1；实验作者自报3次运行mean±std、无第三方复现；Table2数字为论文声称本机未重跑",
+    "S03": "一手release文档，诚实披露不含benchmark数据/镜像/权重/凭据、GLM-5.2 snapshots缺失、错配不复现——复现边界诚实(加分)",
+    "结论": "证据支持『作者实现框架并报告数字』，不支持『已独立复现/方法普遍有效』"
+  },
+  "novelty_check": {
+    "covered_by_existing": [
+      "proof_boundary_honesty(§71):形式化/密码学证明边界(承诺锚独立/证明范围)",
+      "verification_boundary_honesty(§76):绿灯覆盖边界(经验性通过声明)",
+      "finance_blind_test/retrospective:文本出现label-free/召回词但非判据"
+    ],
+    "gap": "无门禁判『自生成判据评估自生成改进』的判据来源/召回边界/外部锚定/独立评审缺口——对象评估判据本身的可信度前提",
+    "decision": "编译第25门禁 criterion_origin_honesty(KB-META01会拦才入)"
+  },
+  "gate_live_regression": {
+    "checks": {
+      "self_as_anchor": true,
+      "recall_hidden": true,
+      "no_external_anchor": true,
+      "fake_independent": true,
+      "partial_disclosure": true,
+      "literal_enum": true,
+      "all_good": true
+    },
+    "cases": {
+      "self_as_anchor": "downgrade/CRITERION_ORIGIN.SELF_AS_ANCHOR",
+      "recall_hidden": "downgrade/CRITERION_ORIGIN.RECALL_HIDDEN",
+      "no_external_anchor": "downgrade/CRITERION_ORIGIN.NO_EXTERNAL_ANCHOR",
+      "fake_independent": "downgrade/CRITERION_ORIGIN.FAKE_INDEPENDENT_REVIEW",
+      "partial_disclosure": "flag/CRITERION_ORIGIN.PARTIAL",
+      "literal_enum": "flag/CRITERION_ORIGIN.INVALID_INPUT",
+      "all_good": "ok/CRITERION_ORIGIN.SELF_CONSISTENT"
+    },
+    "all_passed": true
+  },
+  "honesty_boundary": "本门禁只判声明自洽，不承诺评估判据真可靠(KB-STRUCT05框架≠有效、KB-R07自洽≠有效、KB-RSI07自述折扣、preprint折1)"
+}

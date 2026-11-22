@@ -1,0 +1,33 @@
+{
+  "request_id": "harnesspro-20261122",
+  "locked_before": "engine analysis / gate compilation",
+  "timestamp": "2026-11-22T09:33:51+08:00",
+  "claim_extraction_plan": [
+    "C1 问题设定：harness=模型与环境交互的软件运行时层(prompts/tools/skills/context/memory/hooks/verification)；RSI用历史轨迹改进harness",
+    "C2 双目标：min(-PR,C) s.t. PR≥PR(h0)；Pareto前沿选lite/medium/heavy三档(归一化加权平方距离)",
+    "C3 label-free评估：候选用LLM生成的固定测试S(x)=TestSynth(x,τ_h0(x))评估，无ground-truth/official tests/grader feedback",
+    "C4 关键诚实证据(Fig2)：LLM judge过度乐观(把有缺陷实现判成功)，失败召回41.7%；自生成测试83.3%(仍漏16.7%)；混淆矩阵用Official outcome做横轴",
+    "C5 判据生成边界：test-synth指令明写'No separate reviewer is part of this run'/'do not launch another reviewer'/Empty非oracle；coverage.json要求记录'what was not checked, and limitations'",
+    "C6 防泄漏：Dtrain/Dval/Dtest划分，过滤选择只用val，test只在evolution结束后评估一次",
+    "C7 主结果：GPT-5.5×Codex heavy平均+2.0pp pass rate、-26.1% cost(vs RHO)；TB2 +4.5pp/-33.9%；GLM-5.2同趋势",
+    "C8 复现边界(evaluation.md)：release不含benchmark数据/镜像/权重/凭据；GLM-5.2 evolved snapshots不在release，用GPT-5.5 harness配Claude Code不复现GLM结果"
+  ],
+  "new_gate_decision_rule": "仅当存在'自生成判据评估自生成改进时的诚实披露'这一独立拦截面，且现有25门禁(含proof_boundary_honesty/verification_boundary_honesty/finance_blind_test)均不覆盖，方编译新门禁；否则只沉淀KB",
+  "gate_dimensions_planned": [
+    "criterion_origin_disclosed（判据来源披露：评估判据是自生成还是外部锚定，是否诚实标注）",
+    "recall_boundary_disclosed（召回边界披露：自生成判据的失败检出率/漏检率是否披露，而非声称全覆盖）",
+    "external_anchor_disclosed（外部锚定披露：label-free声称的有效性是否用外部锚[如官方测试]事后校验并披露）",
+    "independent_reviewer_gap_disclosed（独立评审缺口披露：判据自审无独立评审者的事实是否披露）"
+  ],
+  "gate_action_rules_planned": {
+    "R0": "任一维非{yes,no,partial}→flag/CRITERION_HONESTY.INVALID_INPUT",
+    "R1": "criterion_origin_disclosed=no→downgrade(自生成判据冒充外部锚定)",
+    "R2": "recall_boundary_disclosed=no→downgrade(判据召回边界隐藏)",
+    "R3": "external_anchor_disclosed=no→downgrade(label-free有效性无外部锚定披露)",
+    "R4": "independent_reviewer_gap_disclosed=no→downgrade(自审冒充独立评审)",
+    "R5": "任一partial→flag",
+    "R6": "四维全yes→ok(只判声明自洽，不承诺评估判据真可靠)"
+  },
+  "honesty_boundary": "本门禁只判自生成判据/无标签声称的声明自洽与诚实，不承诺评估真的可靠(KB-STRUCT05框架≠有效、KB-R07自洽≠有效、KB-RSI07自述折扣、preprint折1)",
+  "test_plan": "R0/R1-R4/R5/R6/优先级/全自洽/活体回归/AST自审"
+}

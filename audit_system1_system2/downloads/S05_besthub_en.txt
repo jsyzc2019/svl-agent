@@ -1,0 +1,86 @@
+Artificial Intelligence
+8 min read
+System 1 Gating System 2: Tsinghua's Conditional Interaction Paradigm for AGI Scaling
+A Tsinghua perspective paper proposes conditional interaction where System 1 predicts utility before System 2 executes, enabling compute-efficient AGI scaling across training, reasoning, and agent actions, with theoretical speedups bounded by valuable interaction density ρu but requiring audit loops to correct gating errors.
+PaperAgent
+PaperAgent
+Published Nov 19, 2026 · 03:05 UTC
+Why Scaling System 2 Alone Is Not Enough
+Past scaling focused on larger models, more data, and more compute, but the marginal returns of interaction are diminishing. The paper summarizes the post-2026 roadmap as co-design of System 1 and System 2.
+Three concrete failure modes illustrate the bottleneck:
+In RLVR, if a group of answers receives identical rewards, GRPO advantage is zero, yet rollout compute is still spent.
+In robotic random sampling, many trajectories repeatedly cover already-mastered scenarios.
+At inference time, continued thinking does not always change the answer.
+The bottleneck shifts from how much can be executed to how much is worth executing.
+Core Mechanism: Predict, Then Pay
+The paper introduces conditional interaction, decomposing a task into four steps:
+Figure 5 | Rejected candidates incur only prediction cost; a few audit samples catch missed judgments.
+Figure 5: Rejected candidates only pay prediction cost; few audit samples detect missed judgments.
+Predict : System 1 estimates the utility of candidate interactions, outputting only a value score, not solving the task.
+Gate : Only candidates exceeding a threshold proceed; when execution costs differ, cost is factored into ranking.
+Execute : System 2 processes only approved interactions.
+Update : Real outcomes feed back to recalibrate System 1.
+The key requirement is that prediction cost must be far lower than execution cost ; otherwise the filtering itself loses value.
+Not Simple Routing, But Co-Evolution
+Static cascades can route from small to large models, but they are typically used only at inference, trained once, and execution results do not return.
+Figure 4 | Presence or absence of result feedback and joint optimization distinguishes static routing from co-design.
+Figure 4: Result feedback and joint optimization separate static routing from co-design.
+Co-design differs in three ways:
+System 1 schedules compute and storage for both training and inference.
+System 2's rewards, gradients, and execution results continuously correct System 1.
+As System 2 grows stronger, the set of valuable interactions changes, so gating must adapt.
+The focus is not stitching large and small models, but two systems mutually shaping each other.
+Benefit Ceiling Determined by Valuable Interaction Density
+Let ρu denote the fraction of candidates in the pool whose utility meets the threshold.
+Figure 3 | Goal: same success rate at lower cost, or higher success rate under same budget.
+Figure 3: Targeting same success rate cheaper or higher success rate under same budget.
+Under ideal conditions—perfect filtering, free prediction, uniform execution cost—execution cost reduces to ρu of original, yielding a speedup near 1/ρu . If only 20% of interactions are valuable, the theoretical ceiling is ~5×.
+This is not an empirical guarantee: mis-gating, missed judgments, prediction overhead, and distribution drift all erode gains. The authors further propose informative compute , measuring scaling by compute that actually buys utility, not total compute.
+One Closed Loop Covering Four Scenarios
+The paper's unity lies in reusing the decision pattern, not forcing a single utility definition.
+Table 1 | Interaction, feedback, utility, and cost vary by scenario; predict–gate–execute stays constant.
+Table 1: Interaction, feedback, utility, cost vary by scenario; predict-gate-execute loop unchanged.
+Digital Training : Prioritize prompts that yield non-zero learning signals.
+Physical Training : Prioritize task configurations with high adaptation risk.
+Test-Time Reasoning : Predict whether continued computation brings gain, then decide to think or stop.
+Agent Action : Compare tool-call information value against latency, cost, tokens, and risk.
+Key Insight and Open Verification
+This is a Perspective, not a benchmark paper. Cost and regret bounds rest on explicit assumptions; existing applications provide only indirect support. Whether ρu decays as capabilities rise, and whether the scaling exponent changes, remain hypotheses to test.
+A thornier issue: gating audits its own training data. Rejected interactions have no outcomes, making misjudgments hard to correct. Therefore, independent audit and exploration are not optional—they are the fuse that keeps the loop working long-term.
+Figure 6 | Full architecture includes threshold control, rejected-sample audit, and dual-system updates.
+Figure 6: Complete architecture with threshold control, rejected-sample audit, and dual-system updates.
+The most valuable takeaway:
+The next round of scaling is not just making System 2 larger, but making System 1 better at choosing. The critical next experiment is to measure ρu's real trajectory and compare learning curves under equal informative compute.
+https://arxiv.org/pdf/2610.39497
+Does Scaling Toward AGI Depend on What System-1 Lets System-2 Execute?
+Original Source
+Signed-in readers can open the original source through BestHub's protected redirect.
+Sign in to view source
+Republication Notice
+This article has been distilled and summarized from source material, then republished for learning and reference. If you believe it infringes your rights, please contact
+adm
+in
+@
+best
+hub
+.
+dev
+and we will review it promptly.
+compute efficiency
+System 1
+System 2
+Tsinghua
+AGI scaling
+conditional interaction
+informative compute
+predict-gate-execute
+Reader feedback
+How this landed with the community
+Sign in to like
+Rate this article
+Was this worth your time?
+Sign in to rate
+Discussion
+0 Comments
+Thoughtful readers leave field notes, pushback, and hard-won operational detail here.
+Sign in to comment

@@ -1,0 +1,68 @@
+[
+  {
+    "id": "S01_arxiv_abs",
+    "url": "https://arxiv.org/abs/2610.39497",
+    "final_url": "https://arxiv.org/abs/2610.39497",
+    "status": 200,
+    "ct": "text/html; charset=utf-8",
+    "bytes": 42369,
+    "sha256": "dfa28b2d9f223f38a14059060c6af31f0776e4b0d1b534cf3fdb4b88f2c701ed",
+    "file": "S01_arxiv_abs.html",
+    "ok": true
+  },
+  {
+    "id": "S01_arxiv_pdf",
+    "url": "https://arxiv.org/pdf/2610.39497",
+    "final_url": "https://arxiv.org/pdf/2610.39497",
+    "status": 200,
+    "ct": "application/pdf",
+    "bytes": 4228363,
+    "sha256": "a7b5b7e4109bed6e534b5d94785f05e6e5588285e63574b935f94969c6cb872c",
+    "file": "S01_arxiv_pdf.pdf",
+    "ok": true
+  },
+  {
+    "id": "S02_paperagent_wx",
+    "url": "http://mp.weixin.qq.com/s?__biz=Mzk0MTYzMzMxMA==&mid=2247513795&idx=2&sn=50cc3e0c803307ae186c1f013a4559e4&chksm=c3eb83149823e512f5658f6158775ec5d01af2a58cda7e280913552ec3a0b54a80df1c9f5dbd",
+    "final_url": "https://mp.weixin.qq.com/s?__biz=Mzk0MTYzMzMxMA==&mid=2247513795&idx=2&sn=50cc3e0c803307ae186c1f013a4559e4&chksm=c3eb83149823e512f5658f6158775ec5d01af2a58cda7e280913552ec3a0b54a80df1c9f5dbd",
+    "status": 200,
+    "ct": "text/html; charset=UTF-8, text/html; charset=UTF-8",
+    "bytes": 3921898,
+    "sha256": "b7926f6ae9a0b5c4a000e932ad46dfafdf879e327307fea13f60fb187143cbf8",
+    "file": "S02_paperagent_wx.html",
+    "ok": true
+  },
+  {
+    "id": "S03_gair_wx",
+    "url": "http://mp.weixin.qq.com/s?__biz=MzIxMzY0OTQyNQ==&mid=2247564601&idx=1&sn=97bd609f2545041b751befd936857f00",
+    "final_url": "https://mp.weixin.qq.com/mp/wappoc_appmsgcaptcha?poc_token=HOhJAmuj7amz5ohVRvstcE68lTPxWcaiPZUv9HSc&target_url=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzIxMzY0OTQyNQ%3D%3D%26mid%3D2247564601%26idx%3D1%26sn%3D97bd609f2545041b751befd936857f00",
+    "status": 200,
+    "ct": "text/html; charset=UTF-8",
+    "bytes": 18243,
+    "sha256": "8fca6cf9203af269f246f485c863afd1e4f5df074d13d17a07056bb2514c195d",
+    "file": "S03_gair_wx.html",
+    "ok": true
+  },
+  {
+    "id": "S04_toutiao",
+    "url": "https://www.toutiao.com/a7703939786024698383",
+    "final_url": "https://www.toutiao.com/article/7703939786024698383/",
+    "status": 200,
+    "ct": "text/html",
+    "bytes": 72914,
+    "sha256": "9b56a6acdcb27eb620b5ee1ad870ad67964c70131b6fc31e8bd946b39c1e309e",
+    "file": "S04_toutiao.html",
+    "ok": true
+  },
+  {
+    "id": "S05_besthub_en",
+    "url": "https://www.besthub.dev/articles/system-1-gating-system-2-tsinghua-s-conditional-interaction-paradigm-for-agi-scaling-eaf601a8ab5d",
+    "final_url": "https://www.besthub.dev/articles/system-1-gating-system-2-tsinghua-s-conditional-interaction-paradigm-for-agi-scaling-eaf601a8ab5d",
+    "status": 200,
+    "ct": "text/html; charset=utf-8",
+    "bytes": 70598,
+    "sha256": "fa52707bce2719bbc947a2b95706b9905715a49a353ed0c4a733bd9ebe121f2a",
+    "file": "S05_besthub_en.html",
+    "ok": true
+  }
+]

@@ -3403,3 +3403,67 @@ K2 簇的独立拦截面：绿灯只证明一件事——"一个通过的测试�
 S02 明标"華頓研究證明的是認知投降會發生，並沒有證明這六個自問能防止它"——本体与门禁都只把自问系统化为可判定维度，不承诺这些自问能防认知投降、不承诺门禁能让验证真有效。K3 决定透明、K4 意图完整识别为候选但未硬编译（对象层级需与现有门禁辨析），K6 与 §72 部分重叠故仅声明。区分"能机制化"与"该现在造牙"——前者是能力，后者要过会拦才入与不重复造轮子两道闸。
 
 一句话收束：**用户要的"洞悉本体即自见自知"，落到本仓不是一篇感悟，而是一张可判定的本体清单——自见（看见产出的真相：验证边界、决定透明）+ 自知（知道自身的状态：假设、局限、意图、责任）。整篇六个自问簇，能编译成会拦门禁的编译（§75 认知边界、§76 验证边界），该识别为候选的挂账（决定透明、意图完整），该并入的并入（反方论证归可证伪），该仅声明的声明（责任编排与§72重叠）。第24牙 verification_boundary_honesty 咬住那句最容易被忽略的话——绿灯只证明一件事，它检查了什么、没检查什么；测试可能和功能犯同一个错还照样通过；看完总结前先看命令和返回；收尾再问一句我遗漏了什么。能机制化尽量机制化，但只机制化会拦且独立的拦截面——不为"认知很重要"的宏大叙事造一把量不出东西的尺子。**
+
+---
+
+## 77. 精研 HarnessPro（arXiv:2610.26770v2 + 开源仓库 + 评估说明）——编译第 25 道门禁 criterion_origin_honesty（114 条，新+1）
+
+用户请求下载并精研 HarnessPro 论文 PDF、开源仓库、评估与复现说明三个一手来源。全部抓取成功：论文 abs+PDF（arXiv:2610.26770v2，Under review，Tsinghua/Z.AI/SJTU/Warwick/Kling AI，2836 行文本）、仓库页+README（pzs19/HarnessPro@6fd2d4d，README 因 raw 超时改用 GitHub API 补取）、evaluation.md。三份预注册锁存（清单 07d46012… / 分析前 69850798… / 门实现前 ecf7d724…），28/28 锚点命中、交叉 5/5、活体全通过。
+
+### 77.1 精研核心：自生成判据评估自生成改进的诚实性
+
+HarnessPro 把 agent harness（模型与环境的软件运行时层）当可进化对象，多 Agent 读轨迹→诊断→规划→editor 实现候选→test-synthesis 生成测试评估→Pareto 选 lite/medium/heavy 三档→下一轮。整个优化是 label-free（无 ground-truth/official tests），候选用 LLM 合成固定测试 S(x)=TestSynth(x,τ_h₀(x)) 评估——即用系统自己生成的判据评估系统自己生成的改进。论文 Figure 2 自己给出最强诚实证据：LLM judge 失败召回仅 41.7%（overly optimistic，把缺陷实现判成功），自生成测试升至 83.3% 但仍漏 16.7%；混淆矩阵横轴却用 Official outcome——「无标签」方法的有效性恰恰靠官方测试这个外部锚事后校验；Appendix C.3 指令明写「No separate reviewer is part of this run」「do not launch another reviewer」，answer key 禁用，coverage.json 要求记录「what was not checked, and limitations」——判据生成与评审同一主体且作者诚实披露。这是「提出能力≠证明有效」「自洽≠有效」的教科书样本。
+
+### 77.2 证据分级：preprint 折1 + 复现边界诚实加分
+
+S01 是未评审 preprint（Under review），Table 2 数字作者自报（3 次运行 mean±std），本机未重跑基准，AI use statement 属 self-reported（KB-RSI07），折1。S03 evaluation.md 罕见诚实：明标 release 不含 benchmark 数据/镜像/权重/凭据；GLM-5.2 evolved harness snapshots 不在 release；用 GPT-5.5 harness 配 Claude Code 不复现 GLM-5.2 结果——复现边界诚实披露（加分），但同时也意味着论文 GLM-5.2 结果本机无法核。证据只支持「作者实现框架并报告数字」，不支持「已独立复现/方法普遍有效」。
+
+### 77.3 核心缺口：25 道门禁无一判「判据来源可信度前提」
+
+编译前核验：proof_boundary_honesty(§71) 判形式化/密码学证明边界（承诺锚独立/证明范围）；verification_boundary_honesty(§76) 判「绿灯只证明一件事」经验性通过声明；finance_blind_test/retrospective 只是文本出现 label-free/召回词非判据。无一判「自生成判据评估自生成改进时，判据本身的可信度前提是否诚实披露」——比「通过声明」「证明边界」更前一层的拦截面。四维度：①判据来源披露（自生成还是外部锚定）；②召回边界披露（失败检出率/漏检率而非声称全覆盖）；③外部锚定披露（label-free 有效性靠什么事后校验）；④独立评审缺口披露（判据自审无独立评审者的事实）。对象独立可迁移（任何 self-assessed/self-generated criterion 系统适用），V 会拦才入通过。
+
+### 77.4 断言落到代码：第 25 道门禁 criterion_origin_honesty
+
+`svagent/criterion_origin_honesty.py:check_criterion_origin_honesty`：四维 criterion_origin_disclosed / recall_boundary_disclosed / external_anchor_disclosed / independent_reviewer_gap_disclosed ∈ {yes,no,partial}。R0 字面串→flag；R1 自生成冒充外部锚/R2 召回边界隐藏/R3 无外部锚定披露/R4 自审冒充独立评审→downgrade；R5 部分→flag；R6 全自洽→ok（只判声明诚实自洽，不承诺评估判据真可靠——KB-STRUCT05/R07/RSI07/preprint折1）。37 项测试 + 7 活体回归 + AST 自审 PASS，惰性导入登记，遵循 §58 选 A 不接 run_loop。KB 113→114（新增 AUDIT20，加固 STRUCT02/STRUCT05/RSI07/AUDIT17）。全量 650→687 passed。
+
+### 77.5 三处判据自咬（修工具不放水）
+
+锚点三处断字错配：C5「never an answer key」原文跨行「never an」/「answer key.」→取真实单行；C7「average per-task cost reduction 26.1%」原文「average per-」/「task cost reduction of 26.1%」跨行→取真实子串；C6「Filtering and selection」/「held-out test set」跨行、交叉「checked by the authors」跨行→均按原文单行修正。三处均为工具修正，判定规则一字未放水，零漂移。
+
+task_content：下载 HarnessPro 三来源、通读论文、辨析判据来源缺口、编译会拦门禁。process：顶住「benchmark 数字很亮眼该造多牙」诱惑，只认「自生成判据可信度前提诚实性」一个独立拦截面编译一牙；preprint 自报折1、复现边界诚实加分但 GLM 结果不可核如实标注；与 proof_boundary_honesty(形式化证明)/verification_boundary_honesty(通过声明)辨析对象层级防重复；三处断字锚点自咬现场修工具不放水。边界：论文方法是否普遍有效、新门禁是否真能让评估可靠，均未一手可核；不宣称有效性，只编译声明诚实性拦截面。
+
+一句话收束：**这篇最该带走的不是「harness 自改进省了 26.1% 成本」，而是 Figure 2 那三个自曝的诚实细节——LLM judge 失败召回只有 41.7%、自生成测试升到 83.3% 却仍漏 16.7%、混淆矩阵横轴还得靠官方测试这个外部锚；再加上一句「No separate reviewer is part of this run」。用自己造的尺子量自己造的改进，还标榜 label-free——可真正让这把尺子有点可信的，恰恰是被它宣称不需要的官方测试。本仓 25 道门禁量过形式化证明边界、绿灯覆盖边界、评审者能力、认知边界，却没一道问过「你这个评估判据从哪来、能照出多少失败、靠什么锚定、有没有独立评审？」于是一把新尺子 criterion_origin_honesty 落地：自生成冒充外部锚、召回边界隐藏、无外部锚定、自审冒充独立评审一律降级，部分/字面串待核，全自洽也只判声明诚实。尺子会断会跨行，三处自咬留痕——信规则、改工具、不放水。**
+
+---
+
+## 78. 精研 PaperAgent《清华 AGI 新范式 System1+System2》——编译第 26 道门禁 selective_supervision_honesty（115 条，新+1）
+
+用户请求精研微信公众号 PaperAgent 文章《清华 AGI 新范式=System1+System2》。定位其一手源论文：清华自动化系/计算机系季向阳团队 Perspective《Does Scaling Toward AGI Depend on What System-1 Lets System-2 Execute?》(arXiv:2610.39497v1, 29 Oct 2026)。PaperAgent 公众号原文、论文 PDF/abs 全抓取成功；GAIR 公众号验证墙、头条空正文标 unavailable；英文 BestHub 交叉。三份预注册锁存（清单 dfc6d66a… / 分析前 0dc64f44… / 门实现前 7976b4e1…），论文锚点 29/29、公众号 7/7、交叉 5/5。
+
+### 78.1 核心：Predict before you pay 与条件交互四步
+
+瓶颈从"能执行多少交互"转向"多少交互值得执行"。条件交互四步闭环：System-1（轻量语义预测器）给候选交互价值分不解任务→门控（超阈值放行、成本计入排序）→System-2（昂贵执行器）只处理获准交互→真实结果回流校准 System-1。前提：预测成本必须远低于执行成本。与静态路由之别是共同进化——System-2 的奖励/梯度/结果持续修正 System-1，System-2 变强后有价值交互变化、门控须跟着变。
+
+### 78.2 真正值得带走的一节：门控审查自己的训练数据
+
+论文 §7.2 "Selective Supervision: The Gate Censors Its Own Training Data" 是全篇最有分量处：门控决定执行哪些交互就决定训练于哪些交互——p_train(i)∝p_cand(i)·e(i)≠p_cand(i)，标签非随机缺失(MNAR)；被判低价值者压制、结果永不观测、分数永不修正。§2.4 regime(5)：效用误设时预测器系统性压制恰好能揭示误设的交互，"errors concentrate precisely where it has no data and the interactions that would reveal them are never executed"。Theorem19："blind spots, not average error, dominate"，且明确"The theorem does not imply a self-improving loop"。解法：探索混合 π_ε=(1−ε)π_CI+επ_0 或独立审计率 a（e(i)≥e_min>0）、IPW/doubly-robust，审计率须 independent of predictor scores。PaperAgent 译作极佳的一句「独立审计与探索不是可选项，而是闭环能长期工作的保险丝」。
+
+### 78.3 证据分级：Perspective 折1 + 公众号编辑添加诚实记录
+
+S01 是 Perspective 观点文非实证刷榜：论文自述 qualified yes / central hypothesis / under ideal screening and equal execution costs / prediction errors·exploration·distribution shift reduce the saving；Figure 标 illustrative；无第三方复现无实测加速——折1。S02 PaperAgent 自身诚实标注「这不是实测承诺」「待验证假设」「保险丝」，但添加了一个论文没有的通俗量化「若仅 20% 交互有价值，理论上限约 5 倍」——核验论文只有符号 1/ρu、无 20%/5倍具体数字，作为编辑添加写入 result.json 的 editorial_additions，不据此下断言。证据只支持「提出框架+有条件理论分析」，不支持「已实现新 AGI 能力/1/ρu 实测/ρu 衰减确立」。
+
+### 78.4 核心缺口：26 道门禁无一判"筛选器审查自身训练数据"的结构性机制
+
+辨析：§77 criterion_origin_honesty 判自评估系统判据来源/召回/外部锚/独立评审缺口（声明诚实）；§74 判评审者能力前提；§71 判形式化证明边界。本批拦截面是结构性机制——筛选器决定自身训练数据→标签 MNAR→盲点自强化→反事实不可观测，即使主体诚实声明也仍存在。核验确认 MNAR/选择性监督、探索与独立审计作为保险丝两项零门禁覆盖。四维：①压制区非零概率（探索混合或独立审计率使 e(i)≥e_min>0）；②审计独立于分数（否则审计被自审污染）；③盲点披露（平均误差掩盖盲点主导）；④反事实损失承认（被拒交互漏判损失，尤其安全关键）。
+
+### 78.5 断言落到代码：第 26 道门禁 selective_supervision_honesty
+
+`svagent/selective_supervision_honesty.py:check_selective_supervision_honesty`：四维 propensity_reaches_suppressed / audit_independent_of_score / blind_spot_disclosed / counterfactual_loss_acknowledged ∈ {yes,no,partial}。R0 字面串→flag；R1 压制区零概率/R2 审计自审污染/R3 盲点隐藏/R4 反事实隐藏→downgrade；R5 部分→flag；R6 全自洽→ok（只判机制声明自洽，不承诺筛选真带来收益——KB-STRUCT05/R07/RSI07/Perspective折1）。37 项测试 + 7 活体回归 + AST 自审 PASS，惰性导入登记，遵循 §58 选 A 不接 run_loop。KB 114→115（新增 AUDIT21，加固 STRUCT02/STRUCT05/RSI07/AUDIT17）。全量 687→724 passed。
+
+### 78.6 判据自咬（修工具不放水）
+
+三处初判 miss 经诊断：C6 论文用全称 "missing not at random" 非缩写 MNAR；C4「20%/5倍」经核为公众号编辑添加、论文无此数字（非锚点错配而是证据分级发现，单独记录）；C4 收益上限改用论文真实符号 "1/ρu"+"density of utility-relevant interactions"。均为工具/分级修正，判定规则一字未放水，零漂移。
+
+task_content：下载 PaperAgent 文与源论文、通读、辨析选择性监督缺口、编译会拦门禁。process：顶住「AGI 宏大叙事该造多牙」诱惑，只认「筛选器审查自身训练数据」一个独立结构性拦截面编译一牙；Perspective 折1、公众号编辑添加「20%→5倍」诚实记录不据以断言；与 §77 声明诚实门禁辨析对象层级（声明自洽vs结构性偏差）防重复造轮子；三处锚点/分级自咬现场修工具不放水。边界：条件交互是否真能带来 scalable 收益、门控审计是否长期有效，均未一手可核；不宣称有效性，只编译机制声明诚实性拦截面。
+
+一句话收束：**这篇最该带走的不是「System-1 门控 System-2 省算力」的愿景，而是 §7.2 那句冷静的结构性警告——门控决定执行哪些交互，就决定了它训练于哪些交互；被它判为不值得的交互，结果永不观测、分数永不修正，于是误差恰好集中在它没有数据、也永远不会去看的地方。PaperAgent 译得好：独立审计与探索不是可选项，是让闭环不自我欺骗的保险丝。更要记住证据分级——这是 Perspective，qualified yes、central hypothesis、理想假设下的 1/ρu，公众号那句「20%→5倍」论文本无此数字。本仓 26 道门禁量过判据来源声明、评审者能力、证明边界，却没一道判过「筛选器在审查自己训练数据」这个即使诚实声明也存在的结构性偏差。于是一把新尺子 selective_supervision_honesty 落地：压制区零概率、审计被自审污染、盲点隐藏、反事实损失不承认一律降级，部分/字面串待核，全自洽也只判机制声明自洽。尺子会断会错配，三处自咬留痕——信规则、改工具、不放水。**

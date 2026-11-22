@@ -1,0 +1,28 @@
+{
+  "request_id": "sys1-sys2-20261122",
+  "gate_name": "selective_supervision_honesty",
+  "locked_before": "implementation",
+  "timestamp": "2026-11-22T09:45:54+08:00",
+  "module": "svagent/selective_supervision_honesty.py",
+  "verdict_class": "SelectiveSupervisionVerdict",
+  "function": "check_selective_supervision_honesty",
+  "four_dimensions": [
+    "propensity_reaches_suppressed",
+    "audit_independent_of_score",
+    "blind_spot_disclosed",
+    "counterfactual_loss_acknowledged"
+  ],
+  "action_rules": {
+    "R0": "任一维非枚举→flag/SELECTIVE_SUPERVISION.INVALID_INPUT",
+    "R1": "propensity_reaches_suppressed=no→downgrade(压制区零概率→MNAR)",
+    "R2": "audit_independent_of_score=no→downgrade(审计被自审污染)",
+    "R3": "blind_spot_disclosed=no→downgrade(盲点隐藏)",
+    "R4": "counterfactual_loss_acknowledged=no→downgrade(漏判反事实损失不承认)",
+    "R5": "任一partial→flag",
+    "R6": "全yes→ok(只判声明自洽)"
+  },
+  "novelty_vs_existing": "§77 criterion_origin_honesty判自评估系统的判据来源/召回/外部锚/独立评审缺口(声明诚实)；§74 supervision_viability判评审者能力前提；§71 proof_boundary判形式化证明边界；本门禁判'筛选器决定自身训练数据→标签MNAR→盲点自强化'的结构性机制——MNAR/选择性 supervision/探索保险丝三项零门禁覆盖，拦截面独立可迁移(数据选择/主动学习/路由/Agent工具筛选)",
+  "honesty_boundary": "只判机制声明自洽，不承诺筛选真带来收益(KB-STRUCT05/R07/RSI07；Perspective折1)",
+  "integration": "惰性登记到__init__.py，Verdict与live_regression同登记，不接run_loop(§58决策A)",
+  "ast_guard": "Compare内禁中文字符串字面量；中文锚点集中_A字典；CJK边界用ord()"
+}

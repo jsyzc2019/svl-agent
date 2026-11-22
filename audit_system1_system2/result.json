@@ -1,0 +1,122 @@
+{
+  "request_id": "sys1-sys2-20261122",
+  "prereg_sha256": "0dc64f4461a843a78bd17f9a556403056a97517b3411e90802c0c1539eeeeb61",
+  "manifest_sha256": "dfc6d66a60df79c1ca0e8f1e454d0d08dec3f687bec20b52384231c1d546e401",
+  "gate_prereg_sha256": "7976b4e1d3237b7173ca778918bee1c9818558724c6054bc5f19f4da2067e76e",
+  "claim_anchors": {
+    "per_claim": {
+      "C1_交互成本": "3/3",
+      "C2_条件交互四步": "4/4",
+      "C3_共同进化": "3/3",
+      "C4_收益上限": "3/3",
+      "C5_证据分级": "4/4",
+      "C6_选择性监督": "4/4",
+      "C7_盲点反事实": "4/4",
+      "C8_保险丝": "4/4"
+    },
+    "detail": {
+      "C1_交互成本": {
+        "hits": 3,
+        "total": 3,
+        "missed": []
+      },
+      "C2_条件交互四步": {
+        "hits": 4,
+        "total": 4,
+        "missed": []
+      },
+      "C3_共同进化": {
+        "hits": 3,
+        "total": 3,
+        "missed": []
+      },
+      "C4_收益上限": {
+        "hits": 3,
+        "total": 3,
+        "missed": []
+      },
+      "C5_证据分级": {
+        "hits": 4,
+        "total": 4,
+        "missed": []
+      },
+      "C6_选择性监督": {
+        "hits": 4,
+        "total": 4,
+        "missed": []
+      },
+      "C7_盲点反事实": {
+        "hits": 4,
+        "total": 4,
+        "missed": []
+      },
+      "C8_保险丝": {
+        "hits": 4,
+        "total": 4,
+        "missed": []
+      }
+    },
+    "total": "29/29",
+    "all_hit": true
+  },
+  "paperagent_wx_anchors": {
+    "detail": {
+      "每一次交互，都值得执行吗": true,
+      "独立审计与探索不是可选项，而是闭环能长期工作的保险丝": true,
+      "门控会审查自己的训练数据：被拒绝的交互没有结果，误判也就难以纠正": true,
+      "这是一篇 Perspective，不是新 benchmark 的刷榜论文": true,
+      "这不是实测承诺": true,
+      "仍是待验证假设": true,
+      "若仅 20% 交互有价值，理论上限约为 5 倍": true
+    },
+    "total": "7/7",
+    "all_hit": true
+  },
+  "editorial_additions": {
+    "20%有价值→理论5倍": true,
+    "note": "公众号作者把 ρu=0.2→1/ρu=5 通俗化为『20%有价值→5倍』；论文本身仅有符号 1/ρu 表述，无具体数字。此为解读添加，非论文实测或原文断言。"
+  },
+  "crosscheck": {
+    "S05_en_perspective": true,
+    "S05_en_audit_fuse": true,
+    "S05_en_not_empirical": true,
+    "S03_gair_unavailable": true,
+    "S04_toutiao_unavailable": true
+  },
+  "evidence_grade": {
+    "S01": "Perspective 观点文(非实证刷榜)；定理在明确假设下成立、非实测；central hypothesis/qualified yes；Figure标illustrative；无第三方复现——折1",
+    "S02": "PaperAgent公众号中文解读，含多处诚实标注(非实测/待验证/保险丝)；但对ρu做了『20%→5倍』通俗量化添加，论文无此数字",
+    "结论": "证据支持『作者提出条件交互框架并给出有条件的理论分析』，不支持『双系统已实现新AGI能力/1/ρu是实测/ρu衰减已确立』"
+  },
+  "novelty_check": {
+    "covered_by_existing": [
+      "criterion_origin_honesty(§77):自评估系统的判据来源/召回/外部锚/独立评审缺口——声明诚实",
+      "supervision_viability(§74):评审者能力前提",
+      "proof_boundary_honesty(§71):形式化证明边界"
+    ],
+    "gap": "筛选器决定自身训练数据→标签MNAR→盲点自强化→反事实不可观测的选择性监督结构性机制；MNAR/选择性监督/探索保险丝三项零门禁覆盖",
+    "decision": "编译第26门禁 selective_supervision_honesty(KB-META01会拦才入)"
+  },
+  "gate_live_regression": {
+    "checks": {
+      "mnar_zero_propensity": true,
+      "audit_self_censored": true,
+      "blind_spot_hidden": true,
+      "counterfactual_hidden": true,
+      "partial_disclosure": true,
+      "literal_enum": true,
+      "all_good": true
+    },
+    "cases": {
+      "mnar_zero_propensity": "downgrade/SELECTIVE_SUPERVISION.MNAR_ZERO_PROPENSITY",
+      "audit_self_censored": "downgrade/SELECTIVE_SUPERVISION.AUDIT_SELF_CENSORED",
+      "blind_spot_hidden": "downgrade/SELECTIVE_SUPERVISION.BLIND_SPOT_HIDDEN",
+      "counterfactual_hidden": "downgrade/SELECTIVE_SUPERVISION.COUNTERFACTUAL_HIDDEN",
+      "partial_disclosure": "flag/SELECTIVE_SUPERVISION.PARTIAL",
+      "literal_enum": "flag/SELECTIVE_SUPERVISION.INVALID_INPUT",
+      "all_good": "ok/SELECTIVE_SUPERVISION.SELF_CONSISTENT"
+    },
+    "all_passed": true
+  },
+  "honesty_boundary": "本门禁只判选择性监督机制的声明自洽，不承诺筛选真带来收益(KB-STRUCT05框架≠有效、KB-R07自洽≠有效、KB-RSI07自述折扣；Perspective折1)"
+}

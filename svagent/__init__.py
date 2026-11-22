@@ -167,6 +167,14 @@ _LAZY: dict[str, tuple[str, str]] = {
     "check_verification_boundary_honesty": ("svagent.verification_boundary_honesty", "check_verification_boundary_honesty"),
     "VerificationBoundaryVerdict": ("svagent.verification_boundary_honesty", "VerificationBoundaryVerdict"),
     "verification_boundary_honesty_live_regression": ("svagent.verification_boundary_honesty", "live_regression"),
+    # 判据来源诚实性门禁（§77：从 HarnessPro 论文"自生成判据评估自生成改进"编译——判据来源/召回边界/外部锚定/独立评审缺口）
+    "check_criterion_origin_honesty": ("svagent.criterion_origin_honesty", "check_criterion_origin_honesty"),
+    "CriterionOriginVerdict": ("svagent.criterion_origin_honesty", "CriterionOriginVerdict"),
+    "criterion_origin_honesty_live_regression": ("svagent.criterion_origin_honesty", "live_regression"),
+    # 选择性监督诚实性门禁（§78：从清华 System1/System2 Perspective"门控审查自身训练数据"编译——压制区概率/审计独立/盲点披露/反事实损失）
+    "check_selective_supervision_honesty": ("svagent.selective_supervision_honesty", "check_selective_supervision_honesty"),
+    "SelectiveSupervisionVerdict": ("svagent.selective_supervision_honesty", "SelectiveSupervisionVerdict"),
+    "selective_supervision_honesty_live_regression": ("svagent.selective_supervision_honesty", "live_regression"),
 }
 
 

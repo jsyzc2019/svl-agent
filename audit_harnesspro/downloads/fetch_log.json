@@ -1,0 +1,52 @@
+[
+  {
+    "id": "S01_arxiv_abs",
+    "url": "https://arxiv.org/abs/2610.26770v2",
+    "final_url": "https://arxiv.org/abs/2610.26770v2",
+    "status": 200,
+    "content_type": "text/html; charset=utf-8",
+    "bytes": 44933,
+    "sha256": "67d3279a3d9bd0ed57e537a48128e74698b70b4d497680c93cc3b68c6a012f04",
+    "file": "S01_arxiv_abs.html",
+    "ok": true
+  },
+  {
+    "id": "S01_arxiv_pdf",
+    "url": "https://arxiv.org/pdf/2610.26770v2",
+    "final_url": "https://arxiv.org/pdf/2610.26770v2",
+    "status": 200,
+    "content_type": "application/pdf",
+    "bytes": 1070461,
+    "sha256": "c633082abff0c6cd4fa3d63f21e689c34f92369068ee0ed13c74be0f2f54b093",
+    "file": "S01_arxiv_pdf.pdf",
+    "ok": true
+  },
+  {
+    "id": "S03_evaluation_raw",
+    "url": "https://raw.githubusercontent.com/pzs19/HarnessPro/6fd2d4dbc3b73881b2b48833764fcd803aacb7b8/docs/evaluation.md",
+    "final_url": "https://raw.githubusercontent.com/pzs19/HarnessPro/6fd2d4dbc3b73881b2b48833764fcd803aacb7b8/docs/evaluation.md",
+    "status": 200,
+    "content_type": "text/plain; charset=utf-8",
+    "bytes": 7522,
+    "sha256": "ed99c5c96f665a1b44dd2c1f658c9fb4049bc323128309901d33ca1a05b1e457",
+    "file": "S03_evaluation_raw.md",
+    "ok": true
+  },
+  {
+    "id": "S02_github_repo_page",
+    "url": "https://github.com/pzs19/HarnessPro",
+    "final_url": "https://github.com/pzs19/HarnessPro",
+    "status": 200,
+    "content_type": "text/html; charset=utf-8",
+    "bytes": 269262,
+    "sha256": "e2a3a7d2dd156260372b07094793730fa42f56a76d40ef47627edbbf70fe8a15",
+    "file": "S02_github_repo_page.html",
+    "ok": true
+  },
+  {
+    "id": "S02_github_readme_raw",
+    "url": "https://raw.githubusercontent.com/pzs19/HarnessPro/6fd2d4dbc3b73881b2b48833764fcd803aacb7b8/README.md",
+    "error": "HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Read timed out. (read timeout=60)",
+    "ok": false
+  }
+]

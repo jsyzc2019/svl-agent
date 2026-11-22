@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§78 PaperAgent 清华 AGI 新范式精研报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1060px;margin:32px auto;padding:0 20px;color:#222;line-height:1.7}
+h1{border-bottom:3px solid #6a5;padding-bottom:8px} h2{color:#465;margin-top:32px;border-left:4px solid #6a5;padding-left:10px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px} th,td{border:1px solid #ddd;padding:6px 9px;text-align:left;vertical-align:top} th{background:#f2f6f2}
+.pass{color:#0a7;font-weight:bold} .fail{color:#c22;font-weight:bold} .unav{color:#999}
+.note{background:#f5f9f5;border-left:4px solid #6a5;padding:10px 14px;margin:14px 0}
+.core{background:#fbf6ef;border-left:4px solid #b85;padding:12px 16px;margin:16px 0}
+code{background:#f4f4f4;padding:2px 5px;border-radius:3px;font-size:12px} .dim{color:#555}
+</style></head><body>
+<h1>§78 PaperAgent《清华 AGI 新范式=System1+System2》精研报告</h1>
+<p class="dim">生成 2026-11-22　|　源论文 arXiv:2610.39497v1 (Perspective, 29 Oct 2026)　|　清单 <code>dfc6d66a…</code>　|　预注册 <code>0dc64f44…</code>　|　门预注册 <code>7976b4e1…</code>　|　论文锚点 29/29 · 公众号 7/7　|　交叉 5/5　|　KB 114→115　|　全量 687→724</p>
+
+<h2>一、三来源抓取与证据分级</h2>
+<p>用户指定精研 PaperAgent 公众号文；同时下载其一手源论文交叉核验。PaperAgent 公众号原文、论文 PDF/abs 全部抓取成功；GAIR 公众号触发验证墙、头条返回空正文，如实标 unavailable；英文 BestHub 作第三方交叉。</p>
+<table><tr><th>来源</th><th>等级</th><th>SHA256</th></tr>
+<tr><td>S01 源论文 arXiv:2610.39497v1（清华自动化系/计算机系，季向阳团队，Perspective，2648 行）</td><td>未评审观点文；定理在假设下成立、非实测；折1</td><td>a7b5b7e4109b…</td></tr>
+<tr><td>S02 PaperAgent 公众号原文（用户指定，1791 字）</td><td>中文解读，含多处诚实标注；二手折1</td><td>b7926f6ae9a0…</td></tr>
+<tr><td>S05 BestHub 英文解读</td><td>第三方交叉验证</td><td>fa52707bce27…</td></tr>
+<tr><td>S03 GAIR 公众号 / S04 头条</td><td class="unav">unavailable（验证墙 / 空正文）</td><td>—</td></tr></table>
+<div class="note"><b>证据分级的关键诚实：</b>S01 是 <span class="fail">Perspective 观点文，不是实证刷榜论文</span>。论文自述 "Our answer is a <b>qualified yes</b>"、"central <b>hypothesis</b>"、"Under <b>ideal screening and equal execution costs</b>, execution compute falls by a factor approaching 1/ρu"、"prediction errors, exploration, and distribution shift <b>reduce the saving</b>"；Figure 1 标 "Illustrative Roadmap"。<b>无第三方复现、无实测加速数字</b>。S02 公众号本身也诚实标注「这不是实测承诺」「待验证假设」「独立审计与探索是保险丝」——<b>但添加了一个论文没有的通俗量化</b>（见第四节）。故证据只支持「作者提出条件交互框架并给出有条件的理论分析」，<b>不支持「双系统已实现新 AGI 能力 / 1/ρu 是实测 / ρu 随能力衰减已确立」</b>。</div>
+
+<h2>二、论文核心：Predict before you pay（先预测，再付费）</h2>
+<div class="core">
+系统瓶颈从"能执行多少交互"转向"多少交互值得执行"。论文提出<b>条件交互（conditional interaction）</b>四步闭环：①<b>预测</b>——System-1（轻量、语义感知）估计候选交互效用，只给价值分不解任务；②<b>门控</b>——超阈值才放行，成本不同时计入排序；③<b>执行</b>——System-2（昂贵执行器）只处理获准交互；④<b>更新</b>——真实结果回流校准 System-1。关键前提：<b>预测成本必须远低于执行成本</b>，否则筛选本身失去意义。<br><br>
+与静态路由的区别是<b>共同进化</b>：System-2 的奖励/梯度/执行结果持续修正 System-1；System-2 变强后有价值的交互会变化，门控必须跟着变——不是大小模型拼接，而是两个系统互相塑造。统一性在于复用"预测—门控—执行"决策模式，不强行统一效用定义（数字训练/物理训练/测试时推理/Agent 行动四场景）。
+</div>
+
+<h2>三、真正值得带走的一节：门控审查自己的训练数据</h2>
+<p>论文 §7.2 标题即结论：<b>"Selective Supervision: The Gate Censors Its Own Training Data"</b>。这是全篇最有分量的技术限制，也是最锋利的认知点：</p>
+<div class="core">
+门控一旦决定<b>执行哪些交互</b>，就同时决定了它<b>训练于哪些交互</b>：<br>
+<code>p_train(i) ∝ p_cand(i)·e(i) ≠ p_cand(i)</code><br>
+于是标签<b>非随机缺失（missing not at random, MNAR）</b>：一个被判低价值的候选被压制，其<b>结果永不观测</b>，其分数<b>永不修正</b>。更棘手的是 §2.4 regime (5)：效用被误设时，预测器会<b>系统性压制那些恰好能揭示误设的交互</b>——"the predictor's errors concentrate precisely where it has no data and the interactions that would reveal them are never executed"。Theorem 19 更直接："<b>blind spots, not average error, dominate</b> once the predictor is otherwise accurate"，并明确"The theorem does <b>not</b> imply a self-improving loop"。<br><br>
+论文给出解法：探索混合 <code>π_ε=(1−ε)π_CI+επ_0</code>（全池非零概率）或<b>独立审计采样率 a</b>（使 e(i)≥e_min>0），配 IPW / doubly-robust 得无偏误差；关键约束——审计率必须 <b>fixed independently of the predictor's scores</b>。作者诚实收尾："we regard this as the one <b>most in need of theory</b>"。PaperAgent 公众号把它译作一句极好的话：「独立审计与探索不是可选项，而是闭环能长期工作的<b>保险丝</b>」。
+</div>
+
+<h2>四、证据分级发现：公众号添加项</h2>
+<p>公众号写「若仅 20% 交互有价值，理论上限约为 5 倍」。核验源论文：论文<b>只有符号 1/ρu 表述，没有 "20%" 或 "5倍" 这两个具体数字</b>——这是解读作者做的通俗化量化举例，<b>非论文实测或原文断言</b>。作为诚实记录写入 <code>result.json</code> 的 editorial_additions，不据此处下任何有效性断言。</p>
+
+<h2>五、命题提取与锚点命中</h2>
+<table><tr><th>命题</th><th>核心</th><th>锚点</th></tr>
+<tr><td>C1 交互成本</td><td>成本先行、价值后置；System-2 无法自主判断价值</td><td class="pass">3/3</td></tr>
+<tr><td>C2 条件交互四步</td><td>predict→gate→execute→update</td><td class="pass">4/4</td></tr>
+<tr><td>C3 共同进化</td><td>互相塑造，门控随 System-2 变强而变</td><td class="pass">3/3</td></tr>
+<tr><td>C4 收益上限</td><td>理想下 1/ρu；误差/探索/漂移侵蚀收益</td><td class="pass">3/3</td></tr>
+<tr><td>C5 证据分级</td><td>qualified yes / hypothesis / illustrative</td><td class="pass">4/4</td></tr>
+<tr><td>C6 选择性监督</td><td>p_train≠p_cand；MNAR；结果永不观测</td><td class="pass">4/4</td></tr>
+<tr><td>C7 盲点反事实</td><td>盲点主导；误设时压制揭示错误的交互</td><td class="pass">4/4</td></tr>
+<tr><td>C8 保险丝</td><td>探索混合/独立审计/IPW；审计率独立于分数</td><td class="pass">4/4</td></tr></table>
+<p class="dim">论文锚点 29/29；公众号锚点 7/7。三处初判 miss 经诊断：C6 论文用全称 "missing not at random" 非缩写 MNAR；C4 的 20%/5倍为公众号添加（非论文），已按真实措辞与证据分级修正工具，判定规则一字未放水。</p>
+
+<h2>六、缺口判定：26 道门禁无一判"筛选器审查自身训练数据"</h2>
+<p>编译前核验：§77 criterion_origin_honesty 判自评估系统的判据来源/召回/外部锚/独立评审缺口——那是<b>声明是否诚实</b>；§74 supervision_viability 判评审者能力前提；§71 proof_boundary_honesty 判形式化证明边界。而本批的拦截面是<b>结构性机制</b>：筛选器决定自身训练数据→标签 MNAR→盲点自强化→反事实不可观测——即使主体诚实声明也仍存在。核验确认 <b>MNAR/选择性监督、探索与独立审计作为保险丝两项零门禁覆盖</b>。拦截面独立可迁移（数据选择/主动学习/路由/Agent 工具筛选），会拦才入通过。</p>
+
+<h2>七、断言落到代码：第 26 道门禁 selective_supervision_honesty</h2>
+<p><code>svagent/selective_supervision_honesty.py:check_selective_supervision_honesty</code>，四维语义枚举 ∈ {yes,no,partial}：</p>
+<table><tr><th>维度</th><th>=no 动作</th><th>论文依据</th></tr>
+<tr><td>propensity_reaches_suppressed（压制区非零概率）</td><td class="fail">downgrade · MNAR_ZERO_PROPENSITY</td><td>π_ε / 审计率 a 使 e(i)≥e_min&gt;0</td></tr>
+<tr><td>audit_independent_of_score（审计独立于分数）</td><td class="fail">downgrade · AUDIT_SELF_CENSORED</td><td>审计率须 independent of predictor scores</td></tr>
+<tr><td>blind_spot_disclosed（盲点披露）</td><td class="fail">downgrade · BLIND_SPOT_HIDDEN</td><td>blind spots not average error dominate</td></tr>
+<tr><td>counterfactual_loss_acknowledged（反事实损失承认）</td><td class="fail">downgrade · COUNTERFACTUAL_HIDDEN</td><td>压制揭示误设的交互 / 安全关键不可逆</td></tr></table>
+<p>R0 字面串→flag，R5 部分→flag，R6 全自洽→ok。<b>诚实边界</b>：只判机制声明自洽，不承诺筛选真带来收益。惰性导入登记，遵循 §58 选 A 不接 run_loop。</p>
+
+<h2>八、验证结果</h2>
+<table><tr><th>检查</th><th>结果</th></tr>
+<tr><td>论文锚点 / 公众号锚点 / 交叉</td><td class="pass">29/29 · 7/7 · 5/5</td></tr>
+<tr><td>门禁测试（新）</td><td class="pass">37 项展开全通过</td></tr>
+<tr><td>活体回归 / AST 自审</td><td class="pass">7 样例全通过 · Compare 内无中文字面量</td></tr>
+<tr><td>全量 pytest</td><td class="pass">687 → 724 passed</td></tr>
+<tr><td>三份 SHA256 锁存</td><td class="pass">manifest/prereg/gate_prereg 全部一致</td></tr>
+<tr><td>KB / 文档</td><td class="pass">114→115（KB-AUDIT21）· commentary §78 · REPOSITORY_MAP</td></tr></table>
+
+<h2>九、诚实边界与不可核</h2>
+<p><b>不宣称：</b>双系统已实现新 AGI 能力、1/ρu 是实测加速、ρu 随能力衰减已确立、新门禁能让筛选真有效——只编译「选择性监督机制声明诚实性」这一可迁移拦截面。S01 为未评审 Perspective、定理在假设下成立、作者自称 central hypothesis，折1；GAIR/头条来源不可达标 unavailable；公众号"20%→5倍"为编辑添加已单独记录。三处锚点诊断留痕——信规则、改工具、不放水。</p>
+<p class="dim">版本控制：本地提交 <code>734aa6c</code>（§78 成对，两批次一推）。远端推送失败——HTTPS 凭据/网络不可用（git push 60s 超时无输出，PUSH_RC=124；ls-remote 显示远端 main 停在 38aff7b，本地领先多个提交），与 §72/§73-74 同根因，非本轮代码问题；不再重试，如实记录。</p>
+</body></html>

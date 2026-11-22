@@ -1,0 +1,44 @@
+{
+  "request_id": "sys1-sys2-20261122",
+  "target": "PaperAgent 公众号文《清华AGI新范式=System1+System2》+ 源论文 arXiv:2610.39497（清华季向阳团队 Perspective）",
+  "collection_time": "2026-11-22T09:45:54+08:00",
+  "sources": {
+    "S01_paper": {
+      "url": "https://arxiv.org/abs/2610.39497",
+      "abs_sha256": "dfa28b2d9f223f38a14059060c6af31f0776e4b0d1b534cf3fdb4b88f2c701ed",
+      "pdf_sha256": "a7b5b7e4109bed6e534b5d94785f05e6e5588285e63574b935f94969c6cb872c",
+      "text_sha256": "dca3c17f041aa7f4157915e52356e8631aa48931dcfca9f04accbccff29a2ca7",
+      "title": "Does Scaling Toward AGI Depend on What System-1 Lets System-2 Execute?",
+      "authors": "Qi Wang, Yun Qu, ... Xiangyang Ji (Tsinghua Automation/CS)",
+      "version": "arXiv:2610.39497v1 [cs.AI] 29 Oct 2026 (v1, Perspective)",
+      "lines": 2648
+    },
+    "S02_paperagent_wx": {
+      "url": "http://mp.weixin.qq.com/s?__biz=Mzk0MTYzMzMxMA==&mid=2247513795&idx=2&sn=50cc3e0c...",
+      "html_sha256": "b7926f6ae9a0b5c4a000e932ad46dfafdf879e327307fea13f60fb187143cbf8",
+      "text_sha256": "1818b5aeec6d0a24b799c6f9143e2a1a609a6f14d2b26627560daee920a5ac7b",
+      "account": "PaperAgent（用户指定）",
+      "text_len": 1791
+    },
+    "cross": {
+      "S03_gair_wx": {
+        "status": "unavailable",
+        "reason": "微信环境验证墙（环境异常/去验证），正文不可得"
+      },
+      "S04_toutiao": {
+        "status": "unavailable",
+        "reason": "返回空正文（动态渲染/反爬）"
+      },
+      "S05_besthub_en": {
+        "html_sha256": "fa52707bce2719bbc947a2b95706b9905715a49a353ed0c4a733bd9ebe121f2a",
+        "text_sha256": "4f91849800bb5863018c1b04cd4029a8ff3fc7a2f345b2691d6c14d74248f33d",
+        "type": "英文第三方解读，交叉验证"
+      }
+    }
+  },
+  "evidence_grade": {
+    "S01": "Perspective 观点文（非实证刷榜）；定理在明确假设下成立、非实测；central claim 标 hypothesis/qualified yes；Figure1 标 illustrative；无第三方复现——折1",
+    "S02": "公众号中文解读（PaperAgent），含'这不是实测承诺/待验证假设/门控审查自己的训练数据/独立审计是保险丝'等诚实标注；二手折1",
+    "结论": "证据支持『作者提出条件交互框架并给出有条件的理论分析』，不支持『双系统已实现新AGI能力/1/ρu加速是实测/ρu随能力衰减已确立』"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "request_id": "harnesspro-20261122",
+  "target": "HarnessPro 论文(arXiv:2610.26770v2) + 开源仓库(pzs19/HarnessPro@6fd2d4d) + 评估复现说明",
+  "collection_time": "2026-11-22T09:33:51+08:00",
+  "sources": {
+    "S01_paper": {
+      "url": "https://arxiv.org/abs/2610.26770v2",
+      "abs_sha256": "67d3279a3d9bd0ed57e537a48128e74698b70b4d497680c93cc3b68c6a012f04",
+      "pdf_sha256": "c633082abff0c6cd4fa3d63f21e689c34f92369068ee0ed13c74be0f2f54b093",
+      "text_sha256": "6cc23e37ede5b315ab63c4834f16a5606cf93637c761fa2612b85e6d5793a78e",
+      "title": "HarnessPro: Recursive Harness Self-Improvement with Pareto Optimization for Performance-Cost Trade-offs",
+      "authors": "Zhuoshi Pan, ZhiYuan Feng, Yukuo Cen, et al. (Tsinghua/Z.AI/SJTU/Warwick/Kling AI)",
+      "status": "Under review (preprint, 20 Oct 2026)",
+      "lines": 2836
+    },
+    "S02_repo": {
+      "url": "https://github.com/pzs19/HarnessPro",
+      "commit": "6fd2d4dbc3b73881b2b48833764fcd803aacb7b8",
+      "page_sha256": "e2a3a7d2dd156260372b07094793730fa42f56a76d40ef47627edbbf70fe8a15",
+      "readme_sha256": "9fda146460cfa18b129af4123e5f37b3e88eecbbc353f00dbec90756c094b4fc",
+      "license": "MIT (code); bundled evaluators retain own licenses"
+    },
+    "S03_eval": {
+      "url": "https://github.com/pzs19/HarnessPro/blob/6fd2d4d/docs/evaluation.md",
+      "raw_sha256": "ed99c5c96f665a1b44dd2c1f658c9fb4049bc323128309901d33ca1a05b1e457"
+    }
+  },
+  "evidence_grade": {
+    "S01": "preprint under review(未评审)折1；实验为作者自报、3次运行mean±std、无第三方复现；Table2数字为论文声称，本机未重跑",
+    "S03": "评估说明一手(release文档)，明确 release 不含 benchmark数据/镜像/权重/凭据，GLM-5.2 evolved snapshots 不在release、用GPT-5.5 harness配Claude Code不复现GLM结果——复现边界诚实披露(加分)",
+    "结论": "证据支持『作者实现了该框架并报告了这些数字』，不支持『已独立复现/方法普遍有效』"
+  }
+}

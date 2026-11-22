@@ -18,6 +18,7 @@ audit_*/repo/
 audit_*/r1_git/
 audit_*/r2_git/
 audit_*/*.pdf
+audit_*/downloads/*.pdf
 downloads/*.pdf
 audit_*/repo.zip
 audit_random/allrepos.json

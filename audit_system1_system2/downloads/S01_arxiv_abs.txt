@@ -1,0 +1,187 @@
+Computer Science > Artificial Intelligence
+arXiv:2610.39497
+(cs)
+[Submitted on 29 Oct 2026]
+Title:
+Does Scaling Toward AGI Depend on What System-1 Lets System-2 Execute?
+Authors:
+Qi Wang
+,
+Yun Qu
+,
+Lizhou Cai
+,
+Heming Zou
+,
+Haoang Chi
+,
+Yiqin Lv
+,
+Xiang Li
+,
+Haiyan Feng
+,
+Mengyu Ge
+,
+Yize Geng
+,
+Yuhang Jiang
+,
+Yixiu Mao
+,
+Xiangyang Ji
+View a PDF of the paper titled Does Scaling Toward AGI Depend on What System-1 Lets System-2 Execute?, by Qi Wang and 12 other authors
+View PDF
+HTML (experimental)
+Abstract:
+Progress toward artificial general intelligence (AGI) has largely relied on scaling a resource-intensive executive, System-2, through larger models, more data and compute, longer reasoning, and more agents. We ask whether the next stage may come instead from co-designing it with System-1, a lightweight, semantically aware predictor that evaluates candidate interactions before execution, so that System-2 acts only on those worth their cost. Our answer is a qualified yes. We study \textit{conditional interaction}, a predict--gate--execute--update loop: System-1 estimates each candidate's utility, System-2 executes those admitted by an adaptive threshold, and the outcomes update System-1. The loop spans training, test-time reasoning, adaptive decision-making, and agentic tool use, with utility and cost defined by the application. Under ideal screening and equal execution costs, execution compute falls by a factor approaching $1/\rho_u$, where $\rho_u$ is the density of utility-relevant interactions (cost-weighted when costs differ); prediction errors, exploration, and distribution shift reduce the saving. We bound selection regret by predictor error and the utility margin. These results motivate our central hypothesis: $\rho_u$ is a measurable coordinate of scaling efficiency and makes informative compute a better description of scaling than total compute.
+Subjects:
+Artificial Intelligence (cs.AI)
+Cite as:
+arXiv:2610.39497
+[cs.AI]
+(or
+arXiv:2610.39497v1
+[cs.AI]
+for this version)
+https://doi.org/10.48550/arXiv.2610.39497
+Focus to learn more
+arXiv-issued DOI via DataCite
+Submission history
+From: Yun Qu [
+view email
+]
+[v1]
+Thu, 29 Oct 2026 07:00:32 UTC (3,514 KB)
+Full-text links:
+Access Paper:
+View a PDF of the paper titled Does Scaling Toward AGI Depend on What System-1 Lets System-2 Execute?, by Qi Wang and 12 other authors
+View PDF
+HTML (experimental)
+TeX Source
+view license
+Additional Features
+Audio Summary
+Current browse context:
+cs.AI
+< prev
+|
+next >
+new
+|
+recent
+|
+2026-10
+Change to browse by:
+cs
+References & Citations
+SciX
+Google Scholar
+Semantic Scholar
+export BibTeX citation
+Loading...
+BibTeX formatted citation
+×
+loading...
+Data provided by:
+Bookmark
+Bibliographic Tools
+Bibliographic and Citation Tools
+Bibliographic Explorer Toggle
+Bibliographic Explorer
+(
+What is the Explorer?
+)
+Connected Papers Toggle
+Connected Papers
+(
+What is Connected Papers?
+)
+Litmaps Toggle
+Litmaps
+(
+What is Litmaps?
+)
+scite.ai Toggle
+scite Smart Citations
+(
+What are Smart Citations?
+)
+Code, Data, Media
+Code, Data and Media Associated with this Article
+alphaXiv Toggle
+alphaXiv
+(
+What is alphaXiv?
+)
+Links to Code Toggle
+CatalyzeX Code Finder for Papers
+(
+What is CatalyzeX?
+)
+DagsHub Toggle
+DagsHub
+(
+What is DagsHub?
+)
+GotitPub Toggle
+Gotit.pub
+(
+What is GotitPub?
+)
+Huggingface Toggle
+Hugging Face
+(
+What is Huggingface?
+)
+ScienceCast Toggle
+ScienceCast
+(
+What is ScienceCast?
+)
+Demos
+Demos
+Replicate Toggle
+Replicate
+(
+What is Replicate?
+)
+Spaces Toggle
+Hugging Face Spaces
+(
+What is Spaces?
+)
+Spaces Toggle
+TXYZ.AI
+(
+What is TXYZ.AI?
+)
+Related Papers
+Recommenders and Search Tools
+Link to Influence Flower
+Influence Flower
+(
+What are Influence Flowers?
+)
+Core recommender toggle
+CORE Recommender
+(
+What is CORE?
+)
+Author
+Venue
+Institution
+Topic
+About arXivLabs
+arXivLabs: experimental projects with community collaborators
+arXivLabs is a framework that allows collaborators to develop and share new arXiv features directly on our website.
+Both individuals and organizations that work with arXivLabs have embraced and accepted our values of openness, community, excellence, and user data privacy. arXiv is committed to these values and only works with partners that adhere to them.
+Have an idea for a project that will add value for arXiv's community?
+Learn more about arXivLabs
+.
+Which authors of this paper are endorsers?
+|
+Disable MathJax
+(
+What is MathJax?
+)

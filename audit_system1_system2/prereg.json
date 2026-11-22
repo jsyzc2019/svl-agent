@@ -1,0 +1,33 @@
+{
+  "request_id": "sys1-sys2-20261122",
+  "locked_before": "engine analysis / gate compilation",
+  "timestamp": "2026-11-22T09:45:54+08:00",
+  "claim_extraction_plan": [
+    "C1 问题：交互成本先发生、价值事后确认；System-2 无法自主判断交互价值（评估成本须远低于执行成本）→ 需 System-1 协同",
+    "C2 条件交互四步：predict（System-1 给价值分不解任务）→ gate（阈值放行、成本计入排序）→ execute（System-2 只处理获准）→ update（结果回流校准 System-1）；预测成本须远低于执行成本",
+    "C3 非静态路由：System-2 奖励/梯度/结果持续修正 System-1；System-2 变强→有价值交互变化→门控须跟着变（共同进化）",
+    "C4 收益上限：理想条件（筛选完美/预测免费/执行成本同）下执行成本降至 ρu、加速比 1/ρu；20%有价值→理论5倍；但误放/漏判/预测开销/分布漂移吃掉收益",
+    "C5 证据分级（诚实）：Perspective 非 benchmark 刷榜；成本与遗憾界建立在明确假设上；ρu 随能力衰减、scaling 指数改变仍是待验证假设；Figure 是示意/假说",
+    "C6 选择性监督（核心）：门控决定执行哪些交互=决定训练于哪些交互；p_train∝p_cand·e≠p_cand→标签 MNAR；被判低价值者被压制、结果永不观测、分数永不修正（§7.2）",
+    "C7 反事实与盲点：Theorem19 盲点而非平均误差主导；utility misspecified 时预测器系统性压制能揭示错误设定的交互（§2.4 regime5）；blind spots 区正好无数据",
+    "C8 保险丝：探索混合 π_ε=(1-ε)π_CI+επ_0（全池非零）或独立审计采样率 a（e(i)≥a）；IPW/ doubly-robust 得无偏误差；rate 须独立于预测分数；'most in need of theory'"
+  ],
+  "new_gate_decision_rule": "仅当存在'筛选器决定自身训练数据导致标签MNAR/盲点自强化'这一独立拦截面，且现有26门禁(含§77声明诚实/§71证明边界/§74能力前提)均不覆盖，方编译新门禁",
+  "gate_dimensions_planned": [
+    "propensity_reaches_suppressed（压制区是否有非零执行概率/探索流，避免标签MNAR）",
+    "audit_independent_of_score（审计采样率是否独立于预测器分数，避免审计被自审污染）",
+    "blind_spot_disclosed（盲点/错误集中区是否披露，而非只报平均误差）",
+    "counterfactual_loss_acknowledged（被拒交互的漏判反事实损失是否承认/估计，尤其安全关键）"
+  ],
+  "gate_action_rules_planned": {
+    "R0": "任一维非{yes,no,partial}→flag/SELECTIVE_SUPERVISION.INVALID_INPUT",
+    "R1": "propensity_reaches_suppressed=no→downgrade(压制区零概率→标签MNAR)",
+    "R2": "audit_independent_of_score=no→downgrade(审计率依赖分数→审计被自审污染)",
+    "R3": "blind_spot_disclosed=no→downgrade(盲点隐藏，平均误差掩盖)",
+    "R4": "counterfactual_loss_acknowledged=no→downgrade(漏判反事实损失不承认)",
+    "R5": "任一partial→flag",
+    "R6": "四维全yes→ok(只判机制声明自洽，不承诺闭环真有效)"
+  },
+  "honesty_boundary": "只判选择性监督机制的声明自洽与诚实，不承诺筛选真带来收益(KB-STRUCT05框架≠有效、KB-R07自洽≠有效、KB-RSI07自述折扣；Perspective折1)",
+  "test_plan": "R0/R1-R4/R5/R6/优先级/全自洽/活体回归/AST自审"
+}

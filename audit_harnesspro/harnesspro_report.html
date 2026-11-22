@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§77 HarnessPro 精研报告</title>
+<style>
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:1060px;margin:32px auto;padding:0 20px;color:#222;line-height:1.7}
+h1{border-bottom:3px solid #6a5;padding-bottom:8px} h2{color:#465;margin-top:32px;border-left:4px solid #6a5;padding-left:10px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px} th,td{border:1px solid #ddd;padding:6px 9px;text-align:left;vertical-align:top} th{background:#f2f6f2}
+.pass{color:#0a7;font-weight:bold} .fail{color:#c22;font-weight:bold} .unav{color:#999}
+.note{background:#f5f9f5;border-left:4px solid #6a5;padding:10px 14px;margin:14px 0}
+.core{background:#fbf6ef;border-left:4px solid #b85;padding:12px 16px;margin:16px 0}
+code{background:#f4f4f4;padding:2px 5px;border-radius:3px;font-size:12px} .dim{color:#555}
+</style></head><body>
+<h1>§77 HarnessPro 论文 + 开源仓库 + 评估说明 精研报告</h1>
+<p class="dim">生成 2026-11-22　|　arXiv:2610.26770v2 (Under review)　|　清单 <code>07d46012…</code>　|　预注册 <code>69850798…</code>　|　门预注册 <code>ecf7d724…</code>　|　锚点 28/28　|　交叉 5/5　|　活体全通过　|　KB 113→114　|　全量 650→687</p>
+
+<h2>一、三来源抓取与证据分级</h2>
+<p>本批按用户给定三个一手来源抓取：论文 abs + PDF（arXiv:2610.26770v2）、GitHub 仓库页 + README（pzs19/HarnessPro@<code>6fd2d4d</code>，README 因 raw 超时改用 GitHub API 补取）、评估复现说明（docs/evaluation.md）。PDF 用 pdftotext 转文本（2836 行）后通读。</p>
+<table><tr><th>来源</th><th>等级</th><th>SHA256</th></tr>
+<tr><td>S01 论文 PDF（arXiv:2610.26770v2，Tsinghua/Z.AI/SJTU/Warwick/Kling AI，20 Oct 2026）</td><td>preprint，Under review（未评审）折1；实验作者自报</td><td>c633082abff0…</td></tr>
+<tr><td>S01 论文文本（pdftotext -layout，2836 行）</td><td>派生自 PDF</td><td>6cc23e37ede5…</td></tr>
+<tr><td>S02 仓库页 + README（@6fd2d4d，MIT）</td><td>一手 code-adjacent</td><td>e2a3a7d2dd15… / 9fda146460ca…</td></tr>
+<tr><td>S03 evaluation.md（含复现边界说明）</td><td>一手 release 文档，诚实披露缺口（加分）</td><td>ed99c5c96f66…</td></tr></table>
+<div class="note"><b>证据分级的关键诚实：</b>S01 是<span class="fail">未评审 preprint</span>，Table 2 的 pass-rate/cost/latency 数字均为作者自报（3 次运行 mean±std，ProgramBench 2 次），本机<b>未重跑基准</b>；AI use statement 自述「all reported results were checked by the authors」属 self-reported（KB-RSI07）。S03 则<b>罕见地诚实</b>：明标 release 不含 benchmark 数据/任务镜像/模型权重/API 凭据；「The paper's GLM-5.2 evolved harness snapshots are not included in this release」；「Using the GPT-5.5 harness files with the Claude Code backend does not reproduce those GLM-5.2 results」。故证据只支持「作者实现了框架并报告这些数字」，<b>不支持「已独立复现/方法普遍有效」</b>。</div>
+
+<h2>二、论文核心：自生成判据评估自生成改进</h2>
+<div class="core">
+HarnessPro 把「agent harness」（管理 LLM 与环境交互的软件运行时层：prompts/tools/skills/context/memory/hooks/verification）当作可进化对象。多 Agent 框架读执行轨迹→诊断失败与冗余→规划不同性能/成本优先级的更新→editor 实现候选→<b>test-synthesis agent 生成测试评估候选</b>→Pareto 过滤与 lite/medium/heavy 三档选择→进入下一轮。目标 <code>min(−PR, C) s.t. PR ≥ PR(h₀)</code>。宣称 GPT-5.5×Codex 下 heavy 相对 RHO 平均 +2.0pp pass-rate、-26.1% cost。<br><br>
+<b>但精研的锋利处不在这些数字，而在它的评估判据结构</b>：整个优化过程是 <b>label-free</b>（无 ground-truth/official tests/grader feedback），候选用 LLM 合成的固定测试 <code>S(x)=TestSynth(x,τ_h₀(x))</code> 评估。也就是说——<b>用系统自己生成的判据，去评估系统自己生成的改进</b>。
+</div>
+
+<h2>三、关键诚实证据：Figure 2 自曝判据召回边界</h2>
+<p>论文 Figure 2（混淆矩阵，pooled across Terminal-Bench 2 + SWE-Bench Pro 训练任务）是它自己给出的最强诚实证据：</p>
+<table><tr><th>评估方式</th><th>失败召回（Official Fail 判 Fail）</th><th>论文原话</th></tr>
+<tr><td>LLM Judge（RHO 原用）</td><td class="fail">41.7%</td><td>"overly optimistic when assessing the execution trajectories, often treating flawed implementations as successful"</td></tr>
+<tr><td>LLM-generated tests（HarnessPro）</td><td>83.3%（仍漏 16.7%）</td><td>"failure recall increasing from 41.7% to 83.3% compared with direct LLM judgments"</td></tr></table>
+<div class="note"><b>三层自曝，层层关键：</b>①自生成判据比 LLM 直判强（41.7%→83.3%），但仍<b>漏检 16.7%</b>——它不是全知的；②混淆矩阵横轴用 <b>Official outcome</b>——「无标签」方法的有效性<b>恰恰靠官方测试这个外部锚</b>事后校验；③ Appendix C.3 的 test-synth 指令明写「<b>No separate reviewer is part of this run</b>」「do not launch another reviewer」，Empty 产品「never an answer key」，coverage.json 要求记录「what was not checked, and limitations」——<b>判据生成与评审是同一主体，且作者诚实披露了</b>。这三点合起来，正是「提出能力 ≠ 证明有效」「自洽 ≠ 有效」的教科书样本。</div>
+
+<h2>四、八个命题提取（28/28 原文锚点命中）</h2>
+<table><tr><th>命题</th><th>核心</th><th>锚点</th></tr>
+<tr><td>C1 harness 定义</td><td>软件运行时层；RSI 用历史轨迹改进 harness</td><td class="pass">3/3</td></tr>
+<tr><td>C2 双目标</td><td>min(−PR,C) s.t. PR≥PR(h₀)；Pareto 选三档</td><td class="pass">3/3</td></tr>
+<tr><td>C3 label-free</td><td>LLM 合成固定测试，无 ground-truth/official tests</td><td class="pass">4/4</td></tr>
+<tr><td>C4 召回边界</td><td>LLM judge 41.7%；自生成测试 83.3%（仍漏 16.7%）</td><td class="pass">4/4</td></tr>
+<tr><td>C5 判据生成边界</td><td>No separate reviewer；answer key 禁用；记录未检查项</td><td class="pass">4/4</td></tr>
+<tr><td>C6 防泄漏</td><td>train/val/test 划分；选择只用 val；test 最后评估一次</td><td class="pass">3/3</td></tr>
+<tr><td>C7 主结果</td><td>平均 +2.0pp / −26.1%；TB2 +4.5pp/−33.9%</td><td class="pass">4/4</td></tr>
+<tr><td>C8 复现边界</td><td>release 不含数据/权重；GLM-5.2 snapshots 缺失、错配不复现</td><td class="pass">3/3</td></tr></table>
+<p class="dim">三处锚点经诊断均为 pdftotext 断行/跨行（"never an/answer key"、"average per-/task cost reduction 26.1%"、"Filtering and selec-/tion"、"checked by the authors"），按真实单行修正工具；判定规则一字未放水，零漂移。</p>
+
+<h2>五、缺口判定：25 道门禁无一判「判据来源可信度前提」</h2>
+<p>编译前核验覆盖差集：<code>proof_boundary_honesty</code>(§71) 判形式化/密码学证明边界（承诺锚独立/证明范围）；<code>verification_boundary_honesty</code>(§76) 判「绿灯只证明一件事」的经验性通过声明；<code>finance_blind_test</code>/<code>retrospective</code> 只是文本出现 label-free/召回词，非判据。<b>无一判「一个用自生成判据评估自生成改进的系统，是否诚实披露判据本身的可信度前提」</b>——这是比「通过声明」「证明边界」更前一层的拦截面：评估判据从哪来、召回多少、外部锚定否、有无独立评审。拦截面独立、会拦、可迁移（任何 self-assessed/self-generated criterion 系统适用），KB-META01 会拦才入通过。</p>
+
+<h2>六、断言落到代码：第 25 道门禁 criterion_origin_honesty</h2>
+<p><code>svagent/criterion_origin_honesty.py:check_criterion_origin_honesty</code>，四维语义枚举 ∈ {yes,no,partial}：</p>
+<table><tr><th>维度</th><th>=no 动作</th><th>对应论文证据</th></tr>
+<tr><td>criterion_origin_disclosed（判据来源）</td><td class="fail">downgrade · SELF_AS_ANCHOR</td><td>自生成测试 S(x) 冒充外部锚</td></tr>
+<tr><td>recall_boundary_disclosed（召回边界）</td><td class="fail">downgrade · RECALL_HIDDEN</td><td>41.7%/83.3%，仍漏 16.7%</td></tr>
+<tr><td>external_anchor_disclosed（外部锚定）</td><td class="fail">downgrade · NO_EXTERNAL_ANCHOR</td><td>混淆矩阵横轴 Official outcome</td></tr>
+<tr><td>independent_reviewer_gap_disclosed（独立评审缺口）</td><td class="fail">downgrade · FAKE_INDEPENDENT_REVIEW</td><td>No separate reviewer is part of this run</td></tr></table>
+<p>R0 字面串→flag，R5 部分→flag，R6 全自洽→ok。<b>诚实边界写进代码</b>：只判声明诚实自洽，不承诺评估判据真可靠。惰性导入登记，遵循 §58 选 A 不接 run_loop。</p>
+
+<h2>七、验证结果</h2>
+<table><tr><th>检查</th><th>结果</th></tr>
+<tr><td>原文锚点 / 交叉证据</td><td class="pass">28/28 · 5/5</td></tr>
+<tr><td>门禁测试（新）</td><td class="pass">37 项展开全通过</td></tr>
+<tr><td>活体回归 / AST 自审</td><td class="pass">7 样例全通过 · Compare 内无中文字面量</td></tr>
+<tr><td>全量 pytest</td><td class="pass">650 → 687 passed</td></tr>
+<tr><td>三份 SHA256 锁存</td><td class="pass">manifest/prereg/gate_prereg 全部一致</td></tr>
+<tr><td>KB / 文档</td><td class="pass">113→114（KB-AUDIT20）· commentary §77 · REPOSITORY_MAP</td></tr></table>
+
+<h2>八、诚实边界与不可核</h2>
+<p><b>不宣称：</b>论文方法普遍有效、Table 2 数字已被独立复现、新门禁能让评估真可靠——只编译「判据来源声明诚实性」这一可迁移拦截面。S01 为未评审 preprint、自报实验，按 KB-RSI07/preprint 折1 处理；S03 明标 GLM-5.2 evolved snapshots 不在 release、错配不复现，作为复现边界诚实加分但<b>同时意味着论文 GLM-5.2 结果本机无法核</b>。三处断字锚点修正留痕——信规则、改工具、不放水。</p>
+
+<p class="dim">版本控制：本地提交 <code>734aa6c</code>（§77-§78 成对，两批次一推）。远端推送失败——HTTPS 凭据/网络不可用（git push 60s 超时无输出，PUSH_RC=124；ls-remote 显示远端 main 停在 38aff7b，本地领先多个提交），与 §72/§73-74 同根因，非本轮代码问题；不再重试，如实记录。</p>
+</body></html>

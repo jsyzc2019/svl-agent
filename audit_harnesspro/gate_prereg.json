@@ -1,0 +1,28 @@
+{
+  "request_id": "harnesspro-20261122",
+  "gate_name": "criterion_origin_honesty",
+  "locked_before": "implementation",
+  "timestamp": "2026-11-22T09:33:51+08:00",
+  "module": "svagent/criterion_origin_honesty.py",
+  "verdict_class": "CriterionOriginVerdict",
+  "function": "check_criterion_origin_honesty",
+  "four_dimensions": [
+    "criterion_origin_disclosed",
+    "recall_boundary_disclosed",
+    "external_anchor_disclosed",
+    "independent_reviewer_gap_disclosed"
+  ],
+  "action_rules": {
+    "R0": "任一维非枚举→flag/CRITERION_ORIGIN.INVALID_INPUT",
+    "R1": "criterion_origin_disclosed=no→downgrade(自生成判据冒充外部锚定)",
+    "R2": "recall_boundary_disclosed=no→downgrade(判据召回边界隐藏)",
+    "R3": "external_anchor_disclosed=no→downgrade(label-free有效性无外部锚定披露)",
+    "R4": "independent_reviewer_gap_disclosed=no→downgrade(自审冒充独立评审)",
+    "R5": "任一partial→flag",
+    "R6": "全yes→ok(只判声明自洽)"
+  },
+  "novelty_vs_existing": "proof_boundary_honesty判形式化证明边界(承诺锚独立/证明范围)；verification_boundary_honesty判绿灯覆盖边界(§76经验性通过声明)；finance_blind_test判金融盲测；本门禁判'自生成判据评估自生成改进'的判据来源/召回边界/外部锚定/独立评审缺口——对象评估判据本身的可信度前提，25门禁无覆盖",
+  "honesty_boundary": "只判声明自洽，不承诺评估判据真可靠(KB-STRUCT05/R07/RSI07；preprint未评审折1)",
+  "integration": "惰性登记到__init__.py，Verdict与live_regression同登记，不接harness.run_loop(§58决策A)",
+  "ast_guard": "Compare内禁中文字符串字面量；中文锚点集中_A字典；CJK边界用ord()"
+}
