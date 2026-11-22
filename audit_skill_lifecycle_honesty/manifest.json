@@ -1,0 +1,32 @@
+{
+  "request_id": "skill-lifecycle-honesty-20261122",
+  "five_piece": [
+    "manifest.json",
+    "prereg.json",
+    "gate_prereg.json",
+    "engine.py",
+    "result.json"
+  ],
+  "files": [
+    {
+      "id": "S01",
+      "path": "downloads/S01_arxiv_abs.html",
+      "sha256": "ccff60b273f9d52f27f3ffac29c3ccc08cd07b8a81e0c64b956ad6166324b3bc"
+    },
+    {
+      "id": "S02",
+      "path": "downloads/S02_arxiv_full.html",
+      "sha256": "e7068e27c3a1ef046963567fa75c7768cbc8356646cdfe9b126c828562b8b996"
+    },
+    {
+      "id": "FLAT",
+      "path": "downloads/paper_flat.txt",
+      "sha256": "cd45da7b1da27727b795623cf8b59dc60fc79c9c302ce0cd15581845c4dfe8a5"
+    },
+    {
+      "id": "FETCH",
+      "path": "downloads/fetch_log.json",
+      "sha256": "ed69c025bef5e591a7648fb203cd06b82546018c2bf2269e79b4c34043c41107"
+    }
+  ]
+}

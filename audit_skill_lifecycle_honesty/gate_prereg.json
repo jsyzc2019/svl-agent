@@ -1,0 +1,19 @@
+{
+  "gate": "svagent.skill_lifecycle_honesty.check_skill_lifecycle_honesty",
+  "verdict": "SkillLifecycleVerdict(claim,lifecycle_stages_disclosed,credit_assignment_audited,mutation_teacher_controlled,retirement_failure_attributed,action,code,message)",
+  "input_enum": "四维∈{yes,no,partial}",
+  "rules": {
+    "R0": "任一非枚举(含字面串)→flag(SKILL_LIFE.INVALID_INPUT)",
+    "R1": "lifecycle_stages_disclosed=no→downgrade(无fitness驱动四态/无pre-retire,obsolete或harmful技能累积mislead agent)",
+    "R2": "credit_assignment_audited=no→downgrade(共享reward给co-retrieved技能近似未审/无leave-one-out或K=1压力测,把近似当精确)",
+    "R3": "mutation_teacher_controlled=no→flag(LLM变异未做matched-teacher-budget对照/无teacher能力消融,把teacher增益当lifecycle增益)",
+    "R4": "retirement_failure_attributed=no→flag(退役事件无失败类别归因/只报退役数不解释过时原因)",
+    "R5": "任一partial→flag(演化治理边界披露覆盖不全,待核)",
+    "R6": "全yes→ok(只判声明自洽,不承诺lifecycle有效;self-reported 7.8%折1)"
+  },
+  "forensic_spec": {
+    "gate": "forensic.skill_lifecycle",
+    "dimensions": "四维逐字锚点取自S02摘要+附录H;disclose必中红旗零误中"
+  },
+  "implementation_lock_time": "2026-11-22T14:05:25.468143+08:00"
+}

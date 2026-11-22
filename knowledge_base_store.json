@@ -3482,6 +3482,44 @@
       "evidence": "theory",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT38",
+      "kind": "reasoning_lesson",
+      "mechanism": "技能演化生命周期诚实性(skill lifecycle honesty)是把『虚高指标拆穿+self-reported折1』迁移到技能演化领域的独立尺子(arXiv:2610.09832 SkillForge,NeurIPS2026)：与KB-AUDIT25准入统计校准(试用/配对反事实/共享预算/退役机制)区分,本尺判演化治理四边界是否诚实披露——(1)lifecycle_stages_disclosed:fitness驱动trial/active/stable/retired四态+pre-retire低适配 vs 无差别保留(obsolete/harmful累积mislead);(2)credit_assignment_audited:Eq(7)共享reward给K个co-retrieved技能的近似须leave-one-out边际/K=1压力测 vs 把近似当精确;(3)mutation_teacher_controlled:LLM变异须matched-teacher-budget对照(88/55/70 rewrites同给基线)+teacher能力消融(None/self/GLM/MiniMax/Kimi) vs 把teacher增益当lifecycle增益;(4)retirement_failure_attributed:退役事件须失败类别归因(318事件人工标注,96.9%含不一致处方,rigid ordering/hallucinated/overfit/self-contradiction) vs 只报退役数。只判声明自洽不承诺lifecycle有效(self-reported 7.8%提升折1,scoped)。",
+      "trigger": [
+        "技能演化",
+        "skill lifecycle",
+        "skill library",
+        "技能库",
+        "技能生命周期",
+        "fitness",
+        "退役",
+        "retirement",
+        "信用分配",
+        "credit assignment",
+        "leave-one-out",
+        "变异",
+        "mutation",
+        "teacher依赖",
+        "matched teacher budget",
+        "失败类别",
+        "failure taxonomy",
+        "SkillForge",
+        "技能过时"
+      ],
+      "action": "遇到声称『技能库可自演化/技能与模型co-evolve』的系统，按 skill_lifecycle_honesty 四维权证(法官读一手原文逐字锚点)：无fitness四态/无pre-retire→downgrade；信用分配近似未审→downgrade；teacher未做matched-budget对照/无消融→flag；退役无失败类别归因→flag；partial→flag；全yes→ok(只判自洽,7.8%折1)。与KB-AUDIT25准入校准/KB-STRUCT04退役低频检查/KB-AUDIT27概率因果配套——本门禁补『演化治理边界』独立维度。",
+      "provenance": "自主运维第七轮：用户『继续飞』→P0技能演化话题WebSearch自主发现arXiv:2610.09832v2(SkillForge,NeurIPS2026)→arXiv abs+HTML一手→fetch_log+SHA256→预注册锁存(prereg 0cc74aa1/gate 90082a02/manifest 7ede8fbd)→摘要+附录H逐字锚点全命中→编译第35道门禁+第10道FJ取证入口",
+      "timestamp": "2026-11-22T06:06:35.427341+00:00",
+      "support": [
+        "svagent/skill_lifecycle_honesty.py:check_ + tests/test_skill_lifecycle_honesty.py(25项) — KB-AUDIT38编译为活体门禁;7活体+AST自审0中文字面量",
+        "svagent/forensic_gates_ext7.py:adjudicate_skill_lifecycle_honesty — 第10道FJ取证入口,真实证据ok/删披露flag/红旗downgrade/链失配拒判4/4",
+        "arXiv:2610.09832v2一手锚点:fitness lifecycle四态+Eq(7)leave-one-out审计+matched-teacher-budget对照+318退役事件失败类别归因,逐字命中",
+        "独立性核验:KB-AUDIT25准入校准/KB-STRUCT04退役低频/KB-AUDIT27概率因果均不判演化治理四边界;KB-META01通过"
+      ],
+      "evidence": "audit",
+      "addressable": true,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {

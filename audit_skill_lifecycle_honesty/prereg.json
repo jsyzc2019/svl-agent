@@ -1,0 +1,36 @@
+{
+  "request_id": "skill-lifecycle-honesty-20261122",
+  "target": "arXiv:2610.09832v2 SkillForge: Co-Evolving Skills and Agents via Dynamic Skill Lifecycles (NeurIPS 2026)",
+  "acquisition": {
+    "channel": "自主运维第七轮：P0技能演化话题自主发现(WebSearch)→arXiv abs+HTML一手下载(WORKPLACES已验证渠道)",
+    "primary": [
+      {
+        "id": "S01",
+        "url": "https://arxiv.org/abs/2610.09832",
+        "file": "downloads/S01_arxiv_abs.html"
+      },
+      {
+        "id": "S02",
+        "url": "https://arxiv.org/html/2610.09832v2",
+        "file": "downloads/S02_arxiv_full.html"
+      }
+    ],
+    "flat": "downloads/paper_flat.txt",
+    "collection_time": "2026-11-22T14:05:25.468143+08:00"
+  },
+  "analysis_before_prereg": "摘要14锚点+正文局限段逐字命中;disclose必中红旗零误中;四维措辞直取SkillForge摘要+附录H真实表述(非第三方转载版)",
+  "cognitive_increment": "独立于已有133条:KB-AUDIT25 skill_admission_calibration判『准入统计校准(试用/配对反事实/共享预算/退役机制)』,KB-STRUCT04判退役低频用途检查,KB-AUDIT27判PN/PS概率因果——均不判『一个技能库自演化系统是否诚实披露四演化治理边界』。新四维:(1)lifecycle_stages_disclosed:fitness驱动trial/active/stable/retired四态+pre-retire低适配 vs 无差别保留(obsolete/harmful累积mislead);(2)credit_assignment_audited:Eq(7)共享reward给K个co-retrieved技能的近似须用leave-one-out边际/K=1压力测 vs 把近似当精确归因;(3)mutation_teacher_controlled:LLM变异须matched-teacher-budget对照(排除多花钱混淆)+teacher能力消融(None/self/GLM/MiniMax) vs 把teacher增益当lifecycle增益;(4)retirement_failure_attributed:退役事件须失败类别归因(318事件人工标注,96.9%含不一致处方) vs 只报退役数不解释为何过时。KB-META01独立性通过",
+  "four_dimensions": [
+    "lifecycle_stages_disclosed",
+    "credit_assignment_audited",
+    "mutation_teacher_controlled",
+    "retirement_failure_attributed"
+  ],
+  "kb_rules": [
+    "KB-RSI07 self-reported折1",
+    "KB-R07 自洽≠有效",
+    "KB-META01 独立核验",
+    "§58选A不接run_loop"
+  ],
+  "honest_scope": "只判一个技能库自演化研究是否诚实披露四演化治理边界;尺子可迁移到任何skill-library evolution/技能生命周期声明;不判本仓;不承诺lifecycle真实有效;论文self-reported 7.8%提升/显著性按KB-RSI07折1"
+}

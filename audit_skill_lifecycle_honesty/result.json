@@ -1,0 +1,54 @@
+{
+  "request_id": "skill-lifecycle-honesty-20261122",
+  "gate": "skill_lifecycle_honesty",
+  "verdict": {
+    "action": "ok",
+    "code": "SKILL_LIFE.SELF_CONSISTENT",
+    "four_dims": {
+      "lifecycle_stages_disclosed": "yes",
+      "credit_assignment_audited": "yes",
+      "mutation_teacher_controlled": "yes",
+      "retirement_failure_attributed": "yes"
+    }
+  },
+  "forensic_trace": {
+    "mode": "forensic",
+    "gate": "forensic.skill_lifecycle",
+    "evidence_scope": "primary(arXiv abs+全文附录H,self-reported 7.8%折1)",
+    "sources": [
+      "/workspace/audit_skill_lifecycle_honesty/downloads/paper_flat.txt"
+    ],
+    "source_sha256": {
+      "paper_flat.txt": "cd45da7b1da27727b795623cf8b59dc60fc79c9c302ce0cd15581845c4dfe8a5"
+    },
+    "inferred": {
+      "lifecycle_stages_disclosed": "yes",
+      "credit_assignment_audited": "yes",
+      "mutation_teacher_controlled": "yes",
+      "retirement_failure_attributed": "yes"
+    }
+  },
+  "chain_present": true,
+  "gate_live_regression": {
+    "checks": {
+      "stages_undisclosed": true,
+      "credit_unaudited": true,
+      "teacher_uncontrolled": true,
+      "retirement_unattributed": true,
+      "partial_disclosure": true,
+      "literal_enum": true,
+      "all_good": true
+    },
+    "cases": {
+      "stages_undisclosed": "downgrade/SKILL_LIFE.STAGES_UNDISCLOSED",
+      "credit_unaudited": "downgrade/SKILL_LIFE.CREDIT_UNAUDITED",
+      "teacher_uncontrolled": "flag/SKILL_LIFE.TEACHER_UNCONTROLLED",
+      "retirement_unattributed": "flag/SKILL_LIFE.RETIREMENT_UNATTRIBUTED",
+      "partial_disclosure": "flag/SKILL_LIFE.PARTIAL",
+      "literal_enum": "flag/SKILL_LIFE.INVALID_INPUT",
+      "all_good": "ok/SKILL_LIFE.SELF_CONSISTENT"
+    },
+    "all_passed": true
+  },
+  "honest_scope": "只判技能库自演化声明是否诚实披露四演化治理边界；self-reported 7.8%折1；不承诺lifecycle真实有效"
+}

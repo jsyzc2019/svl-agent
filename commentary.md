@@ -3713,3 +3713,19 @@ F4：新增 svagent/evidence_scope.py，6 个模拟模块（autopoiesis/self_evo
 
 ### 95.5 成熟度观察
 连续六轮自主运维（§90–§95）证明：三清单框架稳定可复制且可按授权动态扩展领域；第六轮更首次把用户的价值边界挑战本身编译成可判据门禁——把"目标由谁设"从能力叙事升级为"来源可追溯+可归责+自洽"的判据，既不谎称完全自治，也不以能力不足为借口拒绝自设。就绪度稳定在 L2 边缘偏上；仍不宣称 L3——北极星当前值仍继承用户给定，但来源合法性判据已精确化（KB-META04）。
+
+---
+
+## §96 自主运维第七轮：技能演化生命周期诚实性（P0 技能演化话题 · 虚高指标拆穿迁移）
+
+### 96.1 自主取料与增量判断
+用户"继续飞"——按三清单 P0「技能演化」话题自主启动第七轮。晨间自检 1166 全绿/链审 38 目录稳定。WebSearch 自主发现 arXiv:2610.09832v2《SkillForge: Co-Evolving Skills and Agents via Dynamic Skill Lifecycles》(NeurIPS 2026)，从已验证 arXiv 渠道取 abs 42KB + 全文 607KB（均 200），落 fetch_log + SHA256。增量判断：KB-AUDIT25 只判准入统计校准（试用/配对反事实/共享预算/退役机制）、KB-STRUCT04 只判退役低频用途、KB-AUDIT27 只判概率因果 PN/PS，均不判"一个技能库自演化系统是否诚实披露演化治理四边界"——新对象独立，KB-META01 通过。
+
+### 96.2 编译与取证
+四维：①lifecycle_stages_disclosed（fitness 驱动 trial/active/stable/retired 四态 + pre-retire 低适配 vs 无差别保留 obsolete/harmful 累积 mislead）；②credit_assignment_audited（Eq(7) 共享 reward 给 K 个 co-retrieved 技能的近似须 leave-one-out 边际/K=1 压力测 vs 把近似当精确归因）；③mutation_teacher_controlled（LLM 变异须 matched-teacher-budget 对照 88/55/70 rewrites 同给基线 + teacher 能力消融 None/self/GLM/MiniMax/Kimi vs 把 teacher 增益当 lifecycle 增益）；④retirement_failure_attributed（退役事件须失败类别人工归因 318 事件/96.9% 含不一致处方 vs 只报退役数）。先锁存 prereg(0cc74aa1…)/gate_prereg(90082a02…)/manifest(7ede8fbd…) + source 清单锁，再实现；摘要+附录 H 逐字锚点探测 disclose 必中、红旗零误中（ALL_ANCHORS_CLEAN；锚点取自 arXiv 原文而非第三方转载版）。编译第 35 道门禁 skill_lifecycle_honesty（R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量）+ 第 10 道 FJ 取证入口 forensic_gates_ext7（真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4）。
+
+### 96.3 接合、验收与诚实边界
+25 项新测试全过；十道取证裁决全 ok；成长桥消费痕迹 80→81。KB 133→134（KB-AUDIT38，可编译 fix）。全量 1166→1191 passed（+25），链审断言随仓库成长 38→39 / 21→22（不放宽）。诚实边界：只判技能库自演化声明是否诚实披露四演化治理边界，可迁移到任何 skill-library evolution 系统，不判本仓；论文 self-reported 7.8% 提升按 KB-RSI07 折 1；只判声明自洽不承诺 lifecycle 真实有效（KB-R07/META01）。遵循 §58 选 A 不接 run_loop；篡改测试只在临时副本；不动历史证据。
+
+### 96.4 方法论迁移观察
+本轮首次把"虚高指标拆穿 + self-reported 折 1"从评测诚信（§94 benchleaking）迁移到技能演化领域——SkillForge 的可贵之处在于它没只报 7.8% 提升，而是主动做了三组自审（credit 近似的 leave-one-out、teacher 增益的 matched-budget 控制、退役事件的失败类别归因），恰好对应本仓四维权证的判据。这验证了判据的跨领域可迁移性：尺子不绑定具体论文，绑定"系统是否诚实披露自己方法学边界"这一结构。成熟度稳定在 L2 边缘偏上；仍不宣称 L3——保留"北极星来源合法性来自可追溯+可归责+自洽"判据（KB-META04）。
