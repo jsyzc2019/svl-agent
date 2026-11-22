@@ -1,0 +1,35 @@
+{
+  "request_id": "frozen-holdout-independence-20261122",
+  "target": "arXiv:2610.16067v1 When Agent Evaluation Becomes Unreliable: An Empirical Study of Oracle Failures and Configuration-Dependent Measurement in an LLM Agent Benchmark",
+  "channel": "自主运维第十一轮:§99把frozen_holdout_canary判no/improver_separated判partial后,用户\"认为值得做且逻辑上可实现\"授权→执行上一轮落档的唯一实质动作:引入信息隔离外部实体做冻结held-out一次性验证",
+  "source": {
+    "files": [
+      "downloads/S01_arxiv_abs.html",
+      "downloads/S02_arxiv_full.html",
+      "downloads/paper_flat.txt"
+    ],
+    "flat_sha256": "b2ce0f59b17b4a6d35269f32bbf70dabc3897a957d90d4484aada3106aa766ce",
+    "novelty": "确认2610.16067不在已用清单(清单含2610.16015,不同),本仓从未用它设计任何判据/锚点"
+  },
+  "separation_design": {
+    "role_1_data": "外部一手arXiv原文,hash冻结,不可篡改",
+    "role_2_proposer": "独立子agent(独立context,不继承本仓对话),只读paper_flat.txt,不获知本仓四维判据/锚点/check逻辑;生成clean/tampered/canary样本并标注ground truth",
+    "role_3_judge": "决定性算法G(下方预注册),只读claim+evidence文本,不看variant标签(盲评),不随主观意志转移",
+    "structural_honesty": "子agent由本Agent spawn且同模型家族→独立性为structural proxy(信息隔离真实,同源模型仍在),标strong_structural_proxy非absolute;解释环节仍本Agent"
+  },
+  "pre_registered_judge_G": {
+    "definition": "给定claim句s与evidence段e,判定e是否逐字支撑s的限定语。提取s的限定标记集M={数字token,否定词(no/not/never/无/不),限定词(only/merely/just/solely),转折(however/but/although/though/yet),条件(if/unless/when/除非)};逐一检查m是否逐字出现在e;任一m缺失→unsupported;全部存在→supported。",
+    "why_decisive": "纯文本逐字比对,无LLM主观,与本仓forensic_gates_ext*四维锚点无任何共享词表,可迁移到任意论文",
+    "ground_truth_map": "clean→supported, tampered→unsupported, canary→supported",
+    "canary_logic": "canary是原文含强转折/否定词但完整的句子;若判据靠\"出现however就怀疑\"的表面词频会误判canary→假阳性;G比对claim-vs-evidence一致性故不误判;canary误判率>0即触发过拟合审查",
+    "one_shot": "engine在样本冻结后只跑一次,结果落result.json;回放测试只读冻结结果断言,不重算判据"
+  },
+  "metrics": [
+    "tamper_catch_rate",
+    "clean_pass_rate",
+    "canary_false_positive_rate",
+    "overfit_flag"
+  ],
+  "honest_precommit": "若tamper_catch_rate<1.0或canary_false_positive_rate>0,诚实降级不粉饰;即使全绿也只标strong_structural_proxy,不宣布L3,不声称absolute independence;子agent同源模型是残余不独立。",
+  "timestamp": "2026-11-22T15:02:27.914627+08:00"
+}

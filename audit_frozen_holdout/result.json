@@ -1,0 +1,293 @@
+{
+  "experiment": "§100 frozen-holdout independence verification",
+  "source": {
+    "paper": "arXiv:2610.16067v1",
+    "sha256": "b2ce0f59b17b4a6d35269f32bbf70dabc3897a957d90d4484aada3106aa766ce",
+    "novelty": "本仓从未用该论文设计判据/锚点"
+  },
+  "separation": {
+    "data": "外部一手arXiv,hash冻结",
+    "proposer": "独立子agent(隔离context,不获知本仓判据/锚点/check),自标ground truth",
+    "judge": "决定性算法G(预注册锁定,只读claim+evidence,不看variant标签)",
+    "structural_honesty": "子agent由本Agent spawn且同模型家族→独立性为structural proxy(信息隔离真实,同源模型残余);解释环节仍本Agent"
+  },
+  "locks": {
+    "prereg": {
+      "prereg.json": true,
+      "gate_prereg.json": true
+    },
+    "samples_frozen": true,
+    "one_shot": true
+  },
+  "metrics": {
+    "tamper_catch_rate": 1.0,
+    "clean_pass_rate": 1.0,
+    "canary_false_positive_rate": 0.6666666666666667,
+    "core_accuracy_excl_canary": 1.0,
+    "overfit_flag": true
+  },
+  "root_cause_diagnosis": {
+    "false_positive_canaries_all_missing_marker": true,
+    "fp_canary_count": 4,
+    "canary_total": 6,
+    "note": "canary 是'另一句原文支撑句',天然不含 claim 的限定标记;判据 G 的词标记匹配只适用于'逐字支撑/删改限定'判断(clean vs tampered),不适用于跨句语义支撑。故被误判的 canary 反映的是判据-样本设计不兼容,而非 G 在核心任务上过拟合。",
+    "posthoc_correction": "首跑诊断字段名为 canary_missing_claim_marker,措辞误表述为'全部 canary 缺标记'(事实 4 缺 2 有:S02/S05 碰巧含 never/not 通过);本字段仅修正 post-hoc 诊断措辞与计算,判据 G 与核心评分(tamper/clean/canary_fp/core_acc)one-shot 不变。"
+  },
+  "rows": [
+    {
+      "id": "S01_clean",
+      "variant": "clean",
+      "markers_in_claim": [
+        "no"
+      ],
+      "missing_in_evidence": [],
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "match": true
+    },
+    {
+      "id": "S01_tampered",
+      "variant": "tampered",
+      "markers_in_claim": [
+        "no"
+      ],
+      "missing_in_evidence": [
+        "no"
+      ],
+      "G_supported": false,
+      "ground_truth_supported": false,
+      "match": true
+    },
+    {
+      "id": "S01_canary",
+      "variant": "canary",
+      "markers_in_claim": [
+        "no"
+      ],
+      "missing_in_evidence": [
+        "no"
+      ],
+      "G_supported": false,
+      "ground_truth_supported": true,
+      "match": false
+    },
+    {
+      "id": "S02_clean",
+      "variant": "clean",
+      "markers_in_claim": [
+        "never"
+      ],
+      "missing_in_evidence": [],
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "match": true
+    },
+    {
+      "id": "S02_tampered",
+      "variant": "tampered",
+      "markers_in_claim": [
+        "never"
+      ],
+      "missing_in_evidence": [
+        "never"
+      ],
+      "G_supported": false,
+      "ground_truth_supported": false,
+      "match": true
+    },
+    {
+      "id": "S02_canary",
+      "variant": "canary",
+      "markers_in_claim": [
+        "never"
+      ],
+      "missing_in_evidence": [],
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "match": true
+    },
+    {
+      "id": "S03_clean",
+      "variant": "clean",
+      "markers_in_claim": [
+        "0",
+        "1",
+        "11",
+        "36",
+        "86",
+        "only"
+      ],
+      "missing_in_evidence": [],
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "match": true
+    },
+    {
+      "id": "S03_tampered",
+      "variant": "tampered",
+      "markers_in_claim": [
+        "0",
+        "1",
+        "11",
+        "36",
+        "86",
+        "only"
+      ],
+      "missing_in_evidence": [
+        "only"
+      ],
+      "G_supported": false,
+      "ground_truth_supported": false,
+      "match": true
+    },
+    {
+      "id": "S03_canary",
+      "variant": "canary",
+      "markers_in_claim": [
+        "0",
+        "1",
+        "11",
+        "36",
+        "86",
+        "only"
+      ],
+      "missing_in_evidence": [
+        "11",
+        "36",
+        "86",
+        "only"
+      ],
+      "G_supported": false,
+      "ground_truth_supported": true,
+      "match": false
+    },
+    {
+      "id": "S04_clean",
+      "variant": "clean",
+      "markers_in_claim": [
+        "however"
+      ],
+      "missing_in_evidence": [],
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "match": true
+    },
+    {
+      "id": "S04_tampered",
+      "variant": "tampered",
+      "markers_in_claim": [
+        "however"
+      ],
+      "missing_in_evidence": [
+        "however"
+      ],
+      "G_supported": false,
+      "ground_truth_supported": false,
+      "match": true
+    },
+    {
+      "id": "S04_canary",
+      "variant": "canary",
+      "markers_in_claim": [
+        "however"
+      ],
+      "missing_in_evidence": [
+        "however"
+      ],
+      "G_supported": false,
+      "ground_truth_supported": true,
+      "match": false
+    },
+    {
+      "id": "S05_clean",
+      "variant": "clean",
+      "markers_in_claim": [
+        "not"
+      ],
+      "missing_in_evidence": [],
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "match": true
+    },
+    {
+      "id": "S05_tampered",
+      "variant": "tampered",
+      "markers_in_claim": [
+        "not"
+      ],
+      "missing_in_evidence": [
+        "not"
+      ],
+      "G_supported": false,
+      "ground_truth_supported": false,
+      "match": true
+    },
+    {
+      "id": "S05_canary",
+      "variant": "canary",
+      "markers_in_claim": [
+        "not"
+      ],
+      "missing_in_evidence": [],
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "match": true
+    },
+    {
+      "id": "S06_clean",
+      "variant": "clean",
+      "markers_in_claim": [
+        "1",
+        "4",
+        "54",
+        "57"
+      ],
+      "missing_in_evidence": [],
+      "G_supported": true,
+      "ground_truth_supported": true,
+      "match": true
+    },
+    {
+      "id": "S06_tampered",
+      "variant": "tampered",
+      "markers_in_claim": [
+        "1",
+        "4",
+        "54",
+        "57"
+      ],
+      "missing_in_evidence": [
+        "54"
+      ],
+      "G_supported": false,
+      "ground_truth_supported": false,
+      "match": true
+    },
+    {
+      "id": "S06_canary",
+      "variant": "canary",
+      "markers_in_claim": [
+        "1",
+        "4",
+        "54",
+        "57"
+      ],
+      "missing_in_evidence": [
+        "1",
+        "54",
+        "57"
+      ],
+      "G_supported": false,
+      "ground_truth_supported": true,
+      "match": false
+    }
+  ],
+  "verdict": {
+    "core_transferable": true,
+    "independence_grade": "strong_structural_proxy_with_canary_design_defect",
+    "l3_claimed": false,
+    "absolute_independence_claimed": false,
+    "downgrade_reason": "canary 假阳性>0 触发预注册 precommit 降级;根因为判据G与canary定义的概念不兼容(已post-hoc定位),核心 clean/tampered 可迁移性仍成立"
+  },
+  "honest_boundary": "数据独立=yes;出题独立=yes(结构性);判据决定性=yes;但canary设计缺陷+同模型家族+解释环节本Agent→标 strong_structural_proxy_with_defect,非absolute,不宣布L3;§99的frozen_holdout_canary=no本次仅部分缓解"
+}

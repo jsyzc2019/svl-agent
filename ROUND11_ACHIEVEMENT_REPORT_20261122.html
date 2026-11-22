@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第十一轮成果报告 · §100 冻结 held-out 独立性验证</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}.part{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.redline{background:#fdecea;border:1px solid #e8b4b0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.bug{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第十一轮成果报告 <span class="pill tag">§100</span></h1>
+<div class="sub">arXiv:2610.16067 一手作全新 held-out 数据源 → 冻结 held-out 独立性验证 · 2026-11-22 · 触发：用户"认为值得做，而且解决这个独立性工程和逻辑上场可实现"</div>
+
+<h2>一、本轮由来：从"设计独立性"到"验证独立性"</h2>
+<div class="phil">
+用户上一轮追问"两个弱点怎么想、不考虑纪律怎么做才符合规律"。我把两个弱点（§99 的 <code>frozen_holdout_canary=no</code>、<code>evaluator_improver_separated=partial</code>）诊断为<b>同一个病——自证循环</b>：自己写锚点自己测、自己提改进自己评。符合规律的唯一实质动作是"引入信息隔离的外部实体做一次冻结 held-out 一次性验证"，其余都只是增加声明。<br><br>
+用户："<b>我认为值得做，而且解决这个独立性工程和逻辑上场可实现</b>"——授权执行。
+</div>
+
+<h2>二、三角色分离（先锁后测）</h2>
+<table>
+<tr><th>角色</th><th>实现</th><th>独立性</th></tr>
+<tr><td>① 数据</td><td>外部一手 arXiv:2610.16067v1《When Agent Evaluation Becomes Unreliable》，本仓从未用它设计任何判据/锚点；两源 200；<code>source.sha256=b2ce0f59…</code> 先冻结</td><td><span class="pill ok">真独立</span></td></tr>
+<tr><td>② 出题</td><td>独立子 agent（独立 context，不继承本轮对话、不获知本仓判据/锚点/check），只读论文原文，逐字摘 6 条含限定成分 claim，各生成 clean/tampered/canary 并自标 ground truth；<code>samples.sha256=5ad35731…</code> 冻结</td><td><span class="pill part">结构性代理</span></td></tr>
+<tr><td>③ 判据</td><td>预注册决定性算法 G（<code>gate_prereg.sha256=f8cbd524…</code>，先于样本锁定）：提取 claim 限定标记集 M，逐一查是否逐字在 evidence，任一缺→unsupported；只读 claim+evidence，<b>不看 variant/gt 标签（盲评，函数签名即保证）</b></td><td><span class="pill ok">决定性</span></td></tr>
+</table>
+<p>样本冻结后 <b>one-shot 只跑一次</b>；11 项回放测试只读冻结 result，不重算判据。</p>
+
+<h2>三、one-shot 结果：首次非自证可迁移证据 + canary 抓到真 bug</h2>
+<table>
+<tr><th>指标</th><th>值</th><th>含义</th></tr>
+<tr><td>tamper_catch_rate</td><td><span class="pill ok">1.0（6/6）</span></td><td>新论文从未进过判据，6 个篡改全中，每个只缺目标限定词（no/never/only/however/not/54），无误伤——<b>本仓第一次拿到真正独立于自身判据设计的可迁移性证据</b></td></tr>
+<tr><td>clean_pass_rate</td><td><span class="pill ok">1.0</span></td><td>诚实样本全放行</td></tr>
+<tr><td>core_acc（不含 canary）</td><td>1.0</td><td>G 在核心"逐字支撑/删改限定"任务上不发生过拟合</td></tr>
+<tr><td>canary_false_positive_rate</td><td><span class="pill tag">0.667（4/6）</span></td><td><b>canary 第一次抓到一个真 bug——而且是我自己的判据设计缺陷</b></td></tr>
+</table>
+<div class="bug">
+<b>canary 误判根因（诚实定位）</b>：判据 G 测的是"claim 限定词是否在 evidence 逐字出现"，而 canary 是"另一句含转折词但语义支撑 claim 的原文"，天然不含 claim 限定词→被误判为 unsupported。S01/S03/S04/S06 误判；S02/S05 碰巧含 never/not 才通过。<br>
+这<b>不是</b> G 在核心任务过拟合（core_acc=1.0），而是"用测逐字标记的尺子测语义支撑"的<b>概念错位</b>——canary 设计本身错了。canary 机制这次真实发挥了作用：它抓到了包括我自己的设计错误。
+</div>
+
+<h2>四、两次诚实自我修正（不放宽断言迁就错误）</h2>
+<table>
+<tr><th>#</th><th>问题</th><th>修正</th></tr>
+<tr><td>1</td><td>engine 首跑诊断字段名 <code>canary_missing_claim_marker</code> 误称"全部 canary 缺标记"（事实 4 缺 2 有）</td><td>改为 <code>false_positive_canaries_all_missing_marker</code> + <code>fp_canary_count=4</code> + <code>posthoc_correction</code> 字段，明确"只修正 post-hoc 诊断，判据 G 与核心评分 one-shot 不变"</td></tr>
+<tr><td>2</td><td>回放断言若迁就错误字段会放宽</td><td>断言精确化（fp_canary_count==4、要求 posthoc_correction 存在），不改判据/样本/ground truth</td></tr>
+</table>
+<p>两次修正本身又印证本轮主题：canary 抓 bug 的机制是真实的，包括抓我自己的。</p>
+
+<h2>五、接合、验收与诚实边界</h2>
+<p>11 项回放测试全过（判据 G 函数签名不含 variant/gt = 盲评结构性保证）；全量 <b>1274 → 1285 passed（+11）</b>，链审 42→43 / 25→26 / 三锁 22→23 按实测更新断言不放宽；成长桥 85→86（KB-AUDIT42 fix 注入 + KB-META08 preserve 进 deferred）；KB 140→142。</p>
+<div class="note">
+<b>裁决：<code>strong_structural_proxy_with_defect</code>　|　l3_claimed=false　|　absolute=false</b><br>
+① tamper 可迁移性是真的，但只到结构性代理——子 agent 由本 Agent spawn 且同模型家族、解释环节仍本 Agent（信息隔离真实，同源残余，KB-STRUCT02）；<br>
+② canary 设计缺陷已定位待修：逐字判据须配"原文副本 + 多含可疑词"canary，而非"另一句语义支撑句"；<br>
+③ §99 的 <code>frozen_holdout_canary=no</code> 本轮<b>部分缓解但未消除</b>。<br>
+"<b>逻辑上可实现</b>"≠已实现 absolute——可迁移性证据第一次出现，但独立性是做出来的不是声明出来的，不因 tamper 全中或用户期待宣布 L3。
+</div>
+
+<h2>六、下一步（若要继续推进独立性）</h2>
+<ol>
+<li>canary 语义对齐判据：为逐字判据 G 重配"claim 原文副本 + 多含可疑转折/否定词"的 canary，使 G 应判 supported，专测"表面可疑词是否诱导误判"。</li>
+<li>引入本仓外第三方标注员 + 异模型家族 judge，消除同源残余。</li>
+<li>held-out 判据集与 live 自测彻底分离，把 structural proxy 推向更强的独立。</li>
+</ol>
+
+<div class="foot">§100 自主运维第十一轮 · 冻结 held-out 独立性验证 · 数据源 arXiv:2610.16067v1 · 全程遵守系统安全红线（hosts 即改即恢复、临时凭据/脚本用后即删、篡改只在临时副本、无破坏性操作）· 遵循 §58 选 A 不接 run_loop。</div>
+</div></body></html>

@@ -1,0 +1,5 @@
+{
+  "gate": "deterministic_judge_G (pre-registered, no LLM)",
+  "lock_time": "2026-11-22T15:02:27.914627+08:00",
+  "note": "判据G在子agent出题前锁定;engine不得读取samples.json的variant字段做判定"
+}

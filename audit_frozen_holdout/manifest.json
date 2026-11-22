@@ -1,0 +1,37 @@
+{
+  "request_id": "frozen-holdout-independence-20261122",
+  "five_piece": [
+    "manifest.json",
+    "prereg.json",
+    "gate_prereg.json",
+    "engine.py",
+    "result.json"
+  ],
+  "files": [
+    {
+      "id": "S01",
+      "path": "downloads/S01_arxiv_abs.html",
+      "sha256": "6506826568509d0abf5f7a82c3b602400f5e40426af9fd17e2d1b34d1caf59ea"
+    },
+    {
+      "id": "S02",
+      "path": "downloads/S02_arxiv_full.html",
+      "sha256": "5f59b329ba77cc5f9b10b92ecf7321fcada21f66206e9e9af5c9187b1d97049f"
+    },
+    {
+      "id": "FLAT",
+      "path": "downloads/paper_flat.txt",
+      "sha256": "b2ce0f59b17b4a6d35269f32bbf70dabc3897a957d90d4484aada3106aa766ce"
+    },
+    {
+      "id": "FETCH",
+      "path": "downloads/fetch_log.json",
+      "sha256": "de45d597ec5ac829af6b0be87ae064bbef2a39d28a0155d8ca35f92117fd0bed"
+    },
+    {
+      "id": "SAMPLES",
+      "path": "downloads/samples.json",
+      "sha256": "5ad35731d4c9608f846bf1131177e9480b527f150a6303a510fe0fba7d4b8f33"
+    }
+  ]
+}

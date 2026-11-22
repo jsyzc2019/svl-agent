@@ -3792,3 +3792,22 @@ engine.self_audit() 用 PROCTOR 四维对准本仓评估器（ForensicSpec + che
 
 ### 99.5 接合、验收与诚实边界
 全量 1217→1274 passed（+25 + 链审断言更新），链审 41→42 / 24→25 / 三锁 21→22 按实测更新断言不放宽；成长桥 84→85（KB-AUDIT41 fix 注入 + KB-META07 preserve 进 deferred）；KB 138→140。成果报告 ROUND10_ACHIEVEMENT_REPORT_20261122.html。诚实边界：新门禁可迁移到任何 LLM-as-judge/self-improvement 评估体系，论文四维全 yes 只判声明自洽不承诺真独立（论文自承 Teacher 仍是 judge、100%pass 含 68% 能力折 1），本仓自审 flag 未达完全独立，不因 §98 partial 就假称 yes，L3 仍由受控证据产生（KB-SIM03/META05）。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；不动历史证据。系统安全红线全程遵守：hosts 即改即恢复、无破坏性操作。
+
+---
+
+## §100 自主运维第十一轮：冻结 held-out 独立性验证（回应用户"值得做且逻辑上可实现"）
+
+### 100.1 本轮由来：从"设计独立性"到"验证独立性"
+用户上一轮问"那两个弱点怎么想、不考虑纪律怎么做才符合规律"，我给出的判断是：两个弱点（§99 的 frozen_holdout_canary=no、evaluator_improver_separated=partial）是同一个病——自证循环；符合规律的唯一动作是"引入信息隔离外部实体做一次冻结 held-out 一次性验证"，其余都是增加声明。用户："我认为值得做，而且解决这个独立性工程和逻辑上场可实现"——授权执行。
+
+### 100.2 三角色分离设计（先锁后测）
+数据=外部一手 arXiv:2610.16067v1《When Agent Evaluation Becomes Unreliable》(本仓从未用它设计任何判据/锚点；一手法源两源 200；source.sha256=b2ce0f59… 先冻结)。出题=独立子 agent（独立 context，不继承本轮对话、不获知本仓四维判据/锚点/check 逻辑，只读 paper_flat.txt），从论文逐字摘 6 条含限定成分的 claim，各生成 clean/tampered/canary 三变体（删 no/never/only/however/not/54）并自标 ground truth，samples.sha256=5ad35731… 冻结。判据=预注册决定性算法 G（gate_prereg.sha256=f8cbd524…，先于样本锁定）：提取 claim 限定标记集 M(数字/否定/限定/转折/条件)，逐一查 m 是否逐字在 evidence，任一缺→unsupported；G 只读 claim+evidence，**不看 variant/gt 标签（盲评，函数签名即结构性保证）**。样本冻结后 one-shot 只跑一次，回放测试只读冻结 result 不重算判据。
+
+### 100.3 one-shot 结果：首次非自证的可迁移证据 + canary 抓到真 bug
+实测：tamper_catch=**1.0**（6/6 精确抓到被删限定词，每个 tampered 只缺目标词、无误伤）、clean_pass=1.0、core_acc(excl canary)=1.0、canary_fp=**0.667**（4/6 误判）。前两项是本仓第一次拿到的**真正独立于自身判据设计**的可迁移性证据——新论文从未进过判据、出题方隔离、判据预注册盲评，与 §89–§99 的"自己写锚点自己测"有本质区别。后一项更重要：**canary 机制第一次真的抓到一个 bug，而且抓到的是我自己的判据设计缺陷**——判据 G 测的是"claim 限定词是否在 evidence 逐字出现"，而 canary 是"另一句含转折词但语义支撑 claim 的原文"，天然不含 claim 限定词→被误判。这不是 G 在核心任务上过拟合(core_acc=1.0)，是"用测逐字标记的尺子测语义支撑"的概念错位。S02/S05 碰巧含 never/not 才通过。
+
+### 100.4 两次诚实自我修正（不放宽断言迁就错误）
+① engine 首跑的诊断字段名 canary_missing_claim_marker 措辞误称"全部 canary 缺标记"（事实 4 缺 2 有），改为 false_positive_canaries_all_missing_marker + fp_canary_count=4 + posthoc_correction 字段，明确"只修正 post-hoc 诊断措辞，判据 G 与核心评分 one-shot 不变"；② 回放测试断言随之精确化（fp_canary_count==4、要求 posthoc_correction 存在），不放宽、不改判据、不改样本/ground truth。两次修正本身又印证本轮主题：canary 抓 bug 的机制是真实的，包括抓我自己的。
+
+### 100.5 接合、验收与诚实边界
+11 项回放测试全过（判据 G 函数签名不含 variant/gt=盲评结构性保证）；全量 1274→1285 passed（+11），链审 42→43 / 25→26 / 三锁 22→23 按实测更新断言不放宽；成长桥 85→86（KB-AUDIT42 fix 注入 + KB-META08 preserve 进 deferred，deferred 38→39）；KB 140→142。**裁决 strong_structural_proxy_with_defect，l3_claimed=false，absolute=false。** 诚实边界：tamper 可迁移性是真的但只到结构性代理（子 agent 由本 Agent spawn 且同模型家族、解释环节仍本 Agent→信息隔离真实但同源残余，KB-STRUCT02）；canary 设计缺陷已定位待修（逐字判据须配"原文副本+多含可疑词"canary，而非"另一句语义支撑句"）；§99 的 frozen_holdout_canary=no 本轮**部分缓解但未消除**。"逻辑上可实现"≠已实现 absolute——可迁移性证据第一次出现，但独立性是做出来的不是声明出来的，不因 tamper 全中或用户期待宣布 L3。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；不动历史证据；系统安全红线全程遵守（hosts 即改即恢复、无破坏性操作）。成果报告 ROUND11_ACHIEVEMENT_REPORT_20261122.html。

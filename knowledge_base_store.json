@@ -3700,6 +3700,64 @@
       "evidence": "theory",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT42",
+      "kind": "reasoning_lesson",
+      "mechanism": "冻结held-out独立性验证模式(frozen-holdout independence verification,arXiv:2610.16067一手作全新数据源):把\"判据是否过拟合开发集\"改造成可判据实验——三角色分离(数据=外部一手arXiv hash冻结/出题=独立子agent隔离context不获知本仓判据锚点check自标ground truth/判据=预注册决定性算法G只读claim+evidence不看variant标签)→先锁源哈希(b2ce0f59)+判据G词表(先于样本)→子agent从新论文生成clean/tampered/canary各6→冻结samples哈希(5ad35731)→one-shot评分。实测:tamper_catch=1.0(6/6,新论文可迁移非自证),clean_pass=1.0,canary_fp=0.667(4/6误判)。关键认知:canary机制这次真抓到一个bug——不是判据在核心任务过拟合(core_acc=1.0),而是判据G(词标记逐字匹配)与canary(另一句语义支撑句)概念不兼容,即\"用测逐字标记保留的尺子测语义支撑\"本身设计错了;子agent同模型家族+解释环节本Agent→独立性只能标strong_structural_proxy_with_defect非absolute",
+      "trigger": [
+        "held-out验证",
+        "冻结样本",
+        "one-shot",
+        "独立标注员",
+        "可迁移性",
+        "canary",
+        "判定过拟合",
+        "角色分离",
+        "预注册判据",
+        "设计不兼容"
+      ],
+      "action": "要验证任一判据是否真可迁移(非自证)时,复用本模式:①取从未用于判据设计的新数据源hash冻结;②独立子agent隔离出题自标ground truth;③预注册决定性判据G(先于样本,词表/逻辑锁定,盲评不看标签);④冻结样本后one-shot只跑一次;⑤canary必须语义对齐判据(若判据测逐字标记,canary应是\"claim原文副本+多含可疑词\"而非\"另一句语义支撑句\"),否则canary假阳性反映的是设计不兼容而非过拟合;⑥诚实标注独立性层级(信息隔离真实但同模型家族=structural proxy),不因部分成功宣布L3。回放测试只读冻结result不重算判据(判据G函数签名不含variant/gt字段=盲评结构性保证)。",
+      "provenance": "自主运维第十一轮:用户\"认为值得做且逻辑上可实现\"授权→执行上一轮落档唯一实质动作(引入信息隔离外部实体做冻结held-out一次性验证)→取arXiv:2610.16067(两源200)→先锁source+prereg判据G→独立子agent出题18样本→冻结→one-shot(回放11测试)→canary误判触发诚实降级;本条记录可复用模式",
+      "timestamp": "2026-11-22T07:06:10.694609+00:00",
+      "support": [
+        "arXiv:2610.16067v1:held-out上估不出就report none/跨模型家族blind adjudication/诚实承认judge仍读agent话语的residual leakage",
+        "audit_frozen_holdout/result.json:tamper1.0/clean1.0/canary_fp0.667/core_acc1.0→strong_structural_proxy_with_defect",
+        "KB-META07 §99本仓评估器自审frozen_holdout_canary=no——本轮是正面处理",
+        "KB-AUDIT09 检索污染同源——数据源隔离依据",
+        "KB-STRUCT02 同构≠独立佐证——子agent同模型家族残余不独立"
+      ],
+      "evidence": "theory",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META08",
+      "kind": "reasoning_lesson",
+      "mechanism": "冻结held-out验证的诚实结论(用户\"认为值得做且逻辑上可实现\"触发):第一次给出真正独立于本仓判据设计的tamper可迁移证据——新论文arXiv:2610.16067从未进过本仓判据,独立子agent隔离出题,预注册决定性判据G盲评,tamper_catch=1.0(6/6精确抓到被删限定词no/never/only/however/not/54,只删一个无误伤),clean_pass=1.0;但canary_fp=0.667(4/6误判:S01/S03/S04/S06),根因是我把判据G(检查claim限定词是否在evidence逐字出现)当成canary探针,而canary是\"另一句含转折词但语义支撑claim的原文\",天然不含claim限定词→被误判;这不是G在核心任务过拟合(core_acc=1.0),而是判据-样本语义错位的设计缺陷。两次自我修正均诚实落档:①首跑诊断字段名canary_missing_claim_marker误称\"全部canary缺标记\"(实4缺2有),改posthoc_correction字段;②不放宽回放断言迁就错误字段。裁决strong_structural_proxy_with_defect,l3_claimed=false,absolute=false。关键认知:①真正的独立性证据第一次出现(非自证)但只到结构性代理;②canary机制第一次抓到真bug(我自己的判据设计);③\"逻辑上可实现\"≠已实现absolute——同模型家族+解释环节本Agent的残余不独立是结构性的",
+      "trigger": [
+        "held-out诚实结论",
+        "可迁移性首次证据",
+        "canary抓到bug",
+        "判据设计缺陷",
+        "posthoc自我修正",
+        "strong_structural_proxy",
+        "不宣布L3",
+        "逻辑可实现≠absolute"
+      ],
+      "action": "评估本仓独立性时引用audit_frozen_holdout/result.json:tamper1.0证明§89取证流程判据可迁移到全新论文(非自证),但canary_fp0.667与同源残余→只能标strong_structural_proxy_with_defect;不得因tamper全中或用户\"可实现\"就宣布L3/absolute。要消defect须:①canary语义对齐判据(逐字判据配\"原文副本+多含可疑词\"canary);②引入本仓外第三方标注员+异模型家族judge;③held-out判据集与live自测彻底分离。坚持KB-META04价值边界(合法性=可追溯+可归责+自洽)、KB-SIM03无受控实验不认L3、KB-STRUCT02同构≠独立。",
+      "provenance": "自主运维第十一轮:用户\"认为值得做且逻辑上可实现\"→执行冻结held-out验证→tamper6/6可迁移(首次非自证证据)+canary抓到判据设计缺陷(4/6误判)→两次诚实自我修正(诊断字段措辞+不放宽断言)→裁决strong_structural_proxy_with_defect不宣布L3;本条记录诚实结论(preserve)",
+      "timestamp": "2026-11-22T07:06:10.694609+00:00",
+      "support": [
+        "audit_frozen_holdout/result.json:verdict.defect/ l3_claimed=false / metrics.tamper1.0 canary_fp0.667",
+        "KB-META07 §99评估器自审未达完全独立——本轮部分推进但未消除",
+        "KB-AUDIT42 frozen-holdout验证模式——本轮产出的可编译fix",
+        "KB-META05/§97/§98/§99 成熟度与独立性自审链——不抬级纪律一脉",
+        "KB-STRUCT02 同构≠独立——同源子agent残余"
+      ],
+      "evidence": "theory",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
