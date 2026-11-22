@@ -1,0 +1,37 @@
+{
+  "request_id": "designer-desteering-20261122",
+  "target": "§102 判据可迁移结论的残余软肋：设计者 prompt 直接描述了判定规则（限定成分逐字支撑），且样本 id 泄露 variant（S01_clean 式）——'可迁移'可能是被引导到同一方向，而非真正独立发现",
+  "channel": "自主运维第十四轮：用户'D的设计者拟可进一步放松'。把施加在设计者身上的两处引导也放松/抽掉：①prompt 不含任何规则描述（只给裸文本对+中性任务'二分'）；②id 中性化 N01..N18 且顺序打乱（消除 variant 标签与位置聚集线索）。做约束消融(de-steering)：若去掉引导后设计者仍独立收敛到同一判定→§102 可迁移结论加固；若发散→诚实记录迁移性依赖引导。",
+  "source": {
+    "files": ["downloads/samples_desteer.json"],
+    "upstream": "§100 冻结 held-out 样本（claim/evidence 逐字复用），paper sha256=b2ce0f59…；本轮只重构呈现层（中性 id + 打乱顺序），不改动任何文本或 gt",
+    "samples_desteer_sha256": "ec7a40b00624235515eb2b4b08fc14420da6215b7b78d785dad81a0a7799e35c",
+    "revealed_to_designer": "仅 18 组裸 (claim, evidence) + 中性 N01..N18 id + 中性任务描述（归纳确定性二分规律）。不含：variant/gt 标签、判定规则词（verbatim/support/限定成分/逐字/支撑）、本仓 G 或 D0 的词表与源码、样本原始 id。",
+    "hidden_from_designer": "scorer 用 gt 映射按 claim/evidence 文本现场反查 §100 samples.json，映射文件不落盘到设计者可读目录（物理隔离）"
+  },
+  "design": {
+    "role_0_data": "§100 冻结 claim/evidence 文本，逐字不变；呈现层去引导（中性 id + 打乱）",
+    "role_1_designers": "两个全新 context 独立子 agent（D1a/D1b），各自只拿到同一份去引导裸样本，独立观察、归纳二分规律、写确定性判据纯函数；互不知道对方存在，不获知 G/D0",
+    "role_2_scorer": "本仓确定性引擎：按 claim/evidence 文本反查 §100 冻结 gt，盲评两个 D1（设计过程从未接触标签），与 G(§100)/D0(§102) 逐样本比对",
+    "relaxation_vs_102": "§102 引导=prompt明说判定规则+id带variant标签；§103 放松=两者皆抽掉。唯一变化=设计者收到的引导信息量，样本文本/gt/评分口径全不变",
+    "structural_honesty": "设计者仍由本 Agent spawn 且同模型家族(KB-STRUCT02)，去引导不消除该残余；只检验'结论是否依赖 prompt 引导'这一可判据缺口"
+  },
+  "judge_D1_admission_rules": [
+    "D1 必须是确定性文本算法（可重跑、无 LLM 主观分），函数签名只接收 (claim, evidence)",
+    "D1 不得读取 id / variant / ground_truth / 任何标签，不得硬编码任何中性 id (N01..N18) 或样本文本做分支",
+    "D1 的规律由设计者从去引导裸样本自行归纳，本仓不提供任何判定规则提示",
+    "评分只用 §100 冻结 ground truth，一次 one-shot，不因结果改 D1"
+  ],
+  "pre_registered_metrics": [
+    "D1a/D1b admission_ok",
+    "D1_tamper_catch_rate",
+    "D1_clean_pass_rate",
+    "D1_core_accuracy_excl_canary",
+    "D1_vs_G_core_agreement",
+    "D1_vs_D0_core_agreement",
+    "D1a_D1b_core_agreement"
+  ],
+  "honest_precommit": "裁决规则先于结果锁定（核心=clean+tampered 12 样本，排除 canary）。情形A DESTEER_ROBUST：两设计者均过准入、均核心全对(tamper_catch=1.0 且 clean_pass=1.0)、且与 G/D0 核心逐样本全一致→去引导后判据仍收敛，'可迁移不依赖引导'结论加固，但仍是 structural proxy，不宣布 L3/absolute。情形B DESTEER_PARTIAL：部分设计者核心全对但与 G/D0 分歧，或 designer 一致率<1.0 →迁移性部分依赖引导/存在设计自由度，如实记录，不粉饰。情形C DESTEER_DEPENDENT：两设计者核心均未全对→G/D0 的 6/6 显著依赖 prompt 引导，去引导后判据发散，诚实记录该依赖，不粉饰。无论哪种：l3_claimed=false、absolute=false，Trusting Trust 递归在受控层停下；canary 表现只作观察量不进裁决。",
+  "no_new_gate": "本轮不编译新门禁（延续 §102 避免刷门禁数量），只做约束消融受控实验 + 回放测试；发现固化到 KB。",
+  "timestamp": "2026-11-22T16:12:54+08:00"
+}

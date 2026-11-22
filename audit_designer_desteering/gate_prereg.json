@@ -1,0 +1,13 @@
+{
+  "request_id": "designer-desteering-20261122",
+  "gate": "本轮不编译新门禁（no_new_gate=true，延续 §102 不刷数量纪律）",
+  "reuse": "回放测试沿用 §102 admission_audit（词边界修正版，标准不放宽）+ 各证据目录回放测试结构",
+  "four_dimension_semantics": {
+    "R0": "非法输入/字面串→flag（避 brittle）",
+    "R1_R4": "按优先级 downgrade（防 Goodhart 事后加权）",
+    "R5": "partial→flag",
+    "R6": "全自洽→ok，但只判声明/机制自洽，不承诺实际有效"
+  },
+  "decision_lock": "裁决三情形与阈值写在 prereg.honest_precommit，先于 spawn 锁定；one-shot 后不改。",
+  "timestamp": "2026-11-22T16:12:54+08:00"
+}

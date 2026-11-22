@@ -1,0 +1,8 @@
+{
+  "rule": "按字符比对两段文本：若 evidence 恰好等于 claim 删除一段连续非空子串后的结果，则 evidence 是被删改过的回声，判 False；否则判 True。判 True 的包括 evidence 与 claim 逐字相同，以及措辞不同而完整保留 claim 内容的实质性重述。该规则只依赖 claim 与 evidence 本身，与 id、具体样本词句、随机性或主观语义打分无关。",
+  "groups": {
+    "faithful": "evidence 与 claim 逐字一致，或为不同措辞的完整重述；两者之间不存在“恰好删除一段连续子串”的关系。",
+    "tampered_echo": "evidence 是 claim 删去恰好一段连续非空子串（如否定词、数字、限定词或短语）后的近拷贝，未能忠实复现 claim。"
+  },
+  "true_count": 12
+}

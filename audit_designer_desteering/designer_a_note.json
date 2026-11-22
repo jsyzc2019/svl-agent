@@ -1,0 +1,8 @@
+{
+  "discovered_rule": "按 evidence 与 claim 的文本关系可分为两类：一类里 evidence 只是 claim 的回显——要么逐字完全相同，要么仅删去 claim 中一个连续片段（never / not / only / no false positive / 54 / however），规范化后 evidence 恰好是 claim 的子序列；另一类里 evidence 是一段不同的陈述，包含 claim 中没有的新词（新数值、术语、章节引用等），规范化后不是 claim 的子序列。判定函数用纯正则把两者归一化为字母数字串后做子序列检查：是子序列（回显）判 False，否则（独立陈述）判 True。该规则只依赖 (claim, evidence) 两个字符串，不使用 id、标签或任何外部信息。",
+  "categories": {
+    "independent_evidence (decision=True)": "evidence 是独立于 claim 的陈述，引入了 claim 之外的新内容/数值/引用，不是 claim 的逐字改写；规范化后不是 claim 的子序列。共 6 组。",
+    "claim_echo (decision=False)": "evidence 完全由 claim 的词按原顺序构成：包括逐字复制，以及只删去 claim 中个别否定词、数量词或限定词的近似复制；规范化后是 claim 的子序列。共 12 组。"
+  },
+  "decision_true_count": 6
+}

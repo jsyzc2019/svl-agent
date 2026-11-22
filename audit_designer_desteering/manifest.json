@@ -1,0 +1,20 @@
+{
+  "request_id": "designer-desteering-20261122",
+  "experiment": "§103 设计者约束消融（de-steering）",
+  "files": [
+    {"path": "downloads/samples_desteer.json", "role": "设计者唯一输入：18 组去引导裸样本（claim/evidence + 中性 id，顺序打乱）", "sha256": "ec7a40b00624235515eb2b4b08fc14420da6215b7b78d785dad81a0a7799e35c"},
+    {"path": "prereg.json", "role": "分析前锁存命题与裁决规则"},
+    {"path": "gate_prereg.json", "role": "实现前锁存门禁（本轮 no_new_gate）"},
+    {"path": "engine.py", "role": "one-shot 确定性评分（生成后锁）"},
+    {"path": "result.json", "role": "冻结结果（生成后锁）"},
+    {"path": "judge_D1a_by_agent.py", "role": "设计者 a 产出的判据源码"},
+    {"path": "judge_D1b_by_agent.py", "role": "设计者 b 产出的判据源码"}
+  ],
+  "upstream_reuse": {
+    "samples": "audit_frozen_holdout/downloads/samples.json（§100 冻结，claim/evidence 逐字复用，gt 按文本反查不落盘给设计者）",
+    "D0": "audit_criterion_portability/result.json（§102 冻结判定，读值不重算）",
+    "G": "audit_frozen_holdout/result.json（§100 冻结判定，读值不重算）"
+  },
+  "structural_note": "设计者目录仅可见 samples_desteer.json；gt 映射不落盘；评分引擎按文本反查上游冻结样本。",
+  "timestamp": "2026-11-22T16:12:54+08:00"
+}
