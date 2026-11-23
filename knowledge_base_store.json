@@ -4293,6 +4293,53 @@
       "evidence": "experiment",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT53",
+      "kind": "reasoning_lesson",
+      "mechanism": "把过度保守的准入规则从词边界扫描升级为 AST 控制流审计,可消解'说明文字提及概念词'的系统性误报而不放水(§111):§110 的 word-boundary 把 notes.append('negation terms...')里的 negation/variant 判为标签泄漏→数值完全复现 PRIMARY1.0 却被封顶 INCONCLUSIVE。§111 在 spawn 前 commit+push 锁定 v2 规则(admission_v2.py 哈希写进 prereg)+对偶测试(6类真泄漏必拒:subscript/attr/call/id/rng/io;正当说明必放行;§110 三份旧 judge 在 v2 下全放行=证明修误报非塞私货)+冻结样本哈希,外部服务器时间戳 05:40:09Z 早于异厂 spawn。v2 只查 judge 控制流读标签字段(subscript 键/attribute/call/name 引用标签载体、硬编码 id、随机/时间/IO),字符串 Constant 不算——合法性来自信息论语义(真泄漏必经控制流读 text_a/text_b 之外的信息),与这批 judge 写了什么无关。换跨模型异厂 nemotron-ultra-550b 重新 spawn,三条件 AST 准入全过(label_reads空)、PRIMARY1.0/SECONDARY0.0/P1.core1.0 主效应复现,但 P0 地板消失(core1.0/dT0.0)→按预注册树落 AST_V2_PARTIAL,不翻案 §110。纪律:规则修订须 spawn 前锁+对偶测试+外部时间戳锚,不能看到结果后调定义。",
+      "trigger": [
+        "admission_rule_revision",
+        "ast_control_flow",
+        "false_positive",
+        "pre_registered",
+        "cross_model",
+        "no_overturn"
+      ],
+      "action": "遇到准入规则误报时,正确做法是预注册一版语义更精确的新规则并在全新样本/新 judge 上确认,而不是回头放宽旧规则翻案。关键是外部时间戳锚(规则 commit push 早于 spawn)+对偶测试(新规则既抓真泄漏又放行正当说明)+声明不翻旧案。若修后发现工具 bug(如锁文件名拼错)导致错误封顶,修工具重跑须记录为'修工具不放宽门禁'(§109 先例),engine.py 不在锁定文件内才可改。",
+      "provenance": "commentary:§111",
+      "timestamp": "2026-11-23T05:46:41.889202+00:00",
+      "support": [
+        "commentary:§111",
+        "audit_admission_ast_audit/prereg.json",
+        "audit_admission_ast_audit/result.json",
+        "tests/test_admission_ast_audit.py"
+      ],
+      "evidence": "experiment",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META19",
+      "kind": "reasoning_lesson",
+      "mechanism": "P0 无目的条件下地板效应消失在跨模型/跨集复现中反复出现(§108 跨集、§111 跨模型):异厂大模型在无目的叙事下会自归纳出'归一化逐字节比对'判据(clean 全 True/tampered 全 False/core1.0/dT0.0),使 §106/§107 的 P0 地板(core0.5)不复现。这是分层陈述的另一例:核心分量(PRIMARY 非否定限定 gap=1.0)稳健,辅助对照(P0 地板)样本/模型特异,不稳健。不因核心复现就报完整 CONFIRMED,按预注册树落 PARTIAL,诚实报'地板消失'(KB-META16 延续)。",
+      "trigger": [
+        "p0_floor_disappear",
+        "cross_model",
+        "component_wise_reporting",
+        "partial_verdict"
+      ],
+      "action": "复现实验要逐分量报告:主效应复现≠完整分层模式成立。辅助对照(地板、canary 能力一致)若跨集/跨模型消失,单独标注其不稳健,不选择性只报存活分量。地板消失的合理解释:无目的条件下模型可能自行归纳出忠实判据(逐字节比对),使目的注入的加法效应在 P0 这一维不可见。",
+      "provenance": "commentary:§111",
+      "timestamp": "2026-11-23T05:46:41.889202+00:00",
+      "support": [
+        "commentary:§111",
+        "audit_admission_ast_audit/result.json",
+        "audit_cross_domain_confirm2/result.json"
+      ],
+      "evidence": "experiment",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

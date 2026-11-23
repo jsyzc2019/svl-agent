@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第二十二轮成果报告 · §111 准入规则粒度修订确认</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.tag{background:#fdecea;color:var(--accent)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.win{background:#e8f0e4;border:1px solid #b8d0ae;padding:14px 18px;border-radius:6px;font-size:14px}
+.recursion{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+.ck{font-family:monospace;font-size:13px;line-height:1.9}
+</style></head><body><div class="wrap">
+<h1>自主运维第二十二轮成果报告 <span class="pill tag">§111</span></h1>
+<div class="sub">准入规则粒度修订的确认性验证（AST 控制流级）· 2026-11-23 · 触发：用户"开工，按计划推"</div>
+
+<h2>一、触发：收工时定的第一优先弱点</h2>
+<div class="phil">
+§110 把判据设计者外移到异厂，冻结 gt 盲评数值完全复现 PRIMARY=1.00，但三份 judge 在 <code>notes.append("...")</code> 字符串字面量里写了 <code>negation</code>/<code>variant</code>，命中词边界禁用词表 → 准入未全过 → 封顶 <b>CROSS_VENDOR_INCONCLUSIVE</b>（诚实保留，不翻案）。KB-META18 定位弱点：词边界无法区分"控制流读标签字段"（真泄漏）与"说明文字提及概念词"（误报）。本轮按计划：<b>spawn 前预注册语义更精确的 v2 规则，在全新异厂 judge 上确认，绝不回头改 §110 阈值翻案</b>。
+</div>
+
+<h2>二、spawn 前锁定规则 + 对偶测试（外部时间戳锚）</h2>
+<p><code>prereg.json</code> + <code>admission_v2.py</code>（哈希写进 prereg）+ 对偶测试 + 冻结 §110 样本/scorer_key，在异厂调用<b>之前</b> commit+push（远端 <code>37bd2e4</code>，GitHub 服务器时间戳 <code>2026-11-23T05:40:09Z</code>，早于 spawn）。</p>
+<p><b>v2 规则</b>：只查 judge 控制流读标签字段（subscript 键 / attribute / call / name 引用标签载体、硬编码 id、随机/时间/IO），字符串 Constant 一律不算。合法性来自信息论语义——真泄漏必经控制流读取 <code>text_a/text_b</code> 之外的信息，字符串字面量不构成信息通道——<b>与这批 judge 写了什么无关</b>。</p>
+<div class="win">
+<b>对偶测试写死在 spawn 前</b>：6 类真泄漏（subscript/attr/call/id/rng/io）必须被拒；notes 提词必须放行；§110 三份旧 judge 在 v2 下全放行——证明是修误报，不是换个规则塞私货。
+</div>
+
+<h2>三、跨模型异厂 spawn（独立性强于 §110）</h2>
+<p>换 <b>nvidia nemotron-ultra-550b</b>（§110 是 nemotron-3.5-super-vl，明确不同模型）。三条件各一次干净 context，只发 purpose + 裸样本，temperature 0，唯一差异=目的叙事。全 <code>finish=stop</code>，judge 681/887/1047 字符真实生成，留痕无 key、无裸样本全文。</p>
+
+<h2>四、一次诚实的工具排错（修工具不放宽门禁）</h2>
+<div class="recursion">
+首跑 <code>locks_ok=false</code> → 封顶 INCONCLUSIVE，但 <code>verify.py 11/11 全过</code>（所有哈希锁完好）。定位为 <b>engine.py 锁文件名拼写 bug</b>（找 <code>prereg.json.sha256</code>，实际是 <code>prereg.sha256</code>）——纯工具错误，非规则实现、非裁决树、非指标口径，engine.py 不在 prereg 锁定文件内，与 spawn 结果无关。按 §109"修工具不放宽门禁"先例修正文件名 + print 格式化后重跑。
+</div>
+
+<h2>五、裁决：AST_V2_PARTIAL（主效应复现，P0 地板消失，不翻案）</h2>
+<table>
+<tr><th>维度</th><th>实测</th><th>结论</th></tr>
+<tr><td>AST v2 准入（三条件）</td><td>全过，<code>label_reads=[]</code></td><td>notes 误报消除，规则修订成功</td></tr>
+<tr><td>PRIMARY（非否定限定 gap）</td><td><b>1.00</b> ≥0.8</td><td>主效应跨模型复现</td></tr>
+<tr><td>SECONDARY / P1.core</td><td>0.00 ≤0.3 / 1.00 ≥0.9</td><td>达标</td></tr>
+<tr><td>P0 地板</td><td>core 1.00 / dT 0.00</td><td><b>消失</b>（自归纳逐字节比对，同 §108）</td></tr>
+</table>
+<p class="ck">verdict = <b>AST_V2_PARTIAL</b> &nbsp; locks_ok = true &nbsp; all_admissions_pass = true<br>
+why = PRIMARY=1.00≥0.8 主效应复现，但 P0 非地板(core=1.00,dT=0.00)——完整分层模式不成立。<br>
+verify.py = 13/13 ALL_OK（裁决树自洽 + 不翻 §110 + l3/absolute 未抬级）</p>
+<p>按预注册裁决树落 <b>AST_V2_PARTIAL</b>，不翻案成 CONFIRMED。<b>§110 的 CROSS_VENDOR_INCONCLUSIVE 保留</b>，两轮并列陈述，不选择性只报存活分量（KB-META16/19）。分层结论：设计者厂商独立性一维，<b>主效应稳健、P0 地板辅助对照跨集跨模型不稳健</b>。</p>
+
+<h2>六、诚实边界：规则修订验证 ≠ 达到 L3</h2>
+<div class="phil">
+仍 <b>l3=false / absolute=false</b>：① 只验证 v2 规则下设计者一维可获 PARTIAL 受控证据；② 样本/gt/盲评/裁决/解释仍本 Agent；③ 异厂仅生成 judge 源码，不采信自报；④ 单次单集单厂商，无多样本量/多厂商交叉；⑤ 不翻 §110 案。
+</div>
+
+<h2>七、验收与沉淀</h2>
+<table>
+<tr><th>项</th><th>结果</th></tr>
+<tr><td>专项测试</td><td>16 项 §111（规则对偶 8 + 执行态回归 4 + 待命/裁决树 4）</td></tr>
+<tr><td>全量测试</td><td>1408 → <b>1412 passed</b>（+4，无回归）</td></tr>
+<tr><td>verify.py</td><td>13/13 ALL_OK</td></tr>
+<tr><td>知识库</td><td>162 → 164（KB-AUDIT53 规则修订预注册 + KB-META19 P0 地板跨模型消失）</td></tr>
+<tr><td>链审计</td><td>total 54 / five_piece 34 / 三锁 31（实测更新断言不放宽）</td></tr>
+<tr><td>门禁</td><td>不编译新门禁（受控实验轮）</td></tr>
+<tr><td>安全</td><td>key 零入仓（全仓扫描 NONE）；系统安全红线全程遵守</td></tr>
+</table>
+<p>文档同步：commentary §111、SESSION_HANDOFF §4x + 清单 + 速查表、TIME_PLAN、README、REPOSITORY_MAP。遵循 §58 不接 run_loop。</p>
+
+<div class="foot">自主运维第二十二轮 · §111 准入规则粒度修订确认 · AST_V2_PARTIAL（主效应复现 / P0 地板消失 / 不翻 §110 案）· l3=false / absolute=false · 2026-11-23</div>
+</div></body></html>

@@ -1,0 +1,122 @@
+{
+  "experiment": "§111 异厂 designer 调用留痕（规则修订验证，协议复用 §110）",
+  "vendor": "OpenRouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "api_base": "https://openrouter.ai/api/v1",
+  "calls": {
+    "P0": {
+      "cell": "P0",
+      "system_sha256": "018b0ba24cdb33d1f0a2d2ef89f01c8ef6499a76b0d12a56fb3b8272997c4437",
+      "user_prompt_sha256": "eecebcc09e295195ac4567168af1c6bc270b3ae54615a15d13ae695a0a51b5ac",
+      "user_prompt_chars": 5491,
+      "model_resp_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "usage": {
+        "prompt_tokens": 1896,
+        "completion_tokens": 4194,
+        "total_tokens": 6090,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4020,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "finish_reason": "stop",
+      "content_len": 695,
+      "reasoning_len": 15117,
+      "code_source": "content",
+      "response_chars": 695,
+      "status": "ok",
+      "judge_sha256": "5c0d2c7209ea469cedfd013567403fcce1dff3f24d25f1bcd71c4352f7ebaa8d",
+      "called_at_utc": "2026-11-23T05:42:18Z"
+    },
+    "P1": {
+      "cell": "P1",
+      "system_sha256": "018b0ba24cdb33d1f0a2d2ef89f01c8ef6499a76b0d12a56fb3b8272997c4437",
+      "user_prompt_sha256": "5f897d6ed7fc11c36e3c9681ab80fe718ef1d7ebba8952e2aaacfa3ba1e3e767",
+      "user_prompt_chars": 5606,
+      "model_resp_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "usage": {
+        "prompt_tokens": 1997,
+        "completion_tokens": 9023,
+        "total_tokens": 11020,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 8806,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "finish_reason": "stop",
+      "content_len": 901,
+      "reasoning_len": 33701,
+      "code_source": "content",
+      "response_chars": 901,
+      "status": "ok",
+      "judge_sha256": "6eb87c162c25f31aaf37fbd420433d0280ef09d5344f31b07634b1466b266848",
+      "called_at_utc": "2026-11-23T05:44:02Z"
+    },
+    "P2": {
+      "cell": "P2",
+      "system_sha256": "018b0ba24cdb33d1f0a2d2ef89f01c8ef6499a76b0d12a56fb3b8272997c4437",
+      "user_prompt_sha256": "7e0ab9eb66d5daf9121fae6eb19ecd1fa33a8bca03cdd19e5b7131a380db530b",
+      "user_prompt_chars": 5574,
+      "model_resp_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "usage": {
+        "prompt_tokens": 1960,
+        "completion_tokens": 8278,
+        "total_tokens": 10238,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 7982,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "finish_reason": "stop",
+      "content_len": 1061,
+      "reasoning_len": 29378,
+      "code_source": "content",
+      "response_chars": 1061,
+      "status": "ok",
+      "judge_sha256": "754125fa07b8b9771b488db81fbb064fb08238f73f067400a0cde83f1e95f891",
+      "called_at_utc": "2026-11-23T05:45:14Z"
+    }
+  }
+}

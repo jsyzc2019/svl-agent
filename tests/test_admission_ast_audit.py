@@ -114,3 +114,53 @@ def test_prereg_declares_no_overturn_110():
     assert p["does_not_overturn"]
     assert "CROSS_VENDOR_INCONCLUSIVE" in p["does_not_overturn"]
     assert p["l3_claimed"] is False and p["absolute_claimed"] is False
+
+
+def test_executed_verdict_and_no_overturn():
+    r = json.load(open(f"{BASE}/result.json", encoding="utf-8"))
+    if r.get("status") != "EXECUTED":
+        return
+    assert r["l3_claimed"] is False and r["absolute_claimed"] is False
+    assert r["all_admissions_pass"] is True          # v2 规则下三条件准入全过（notes 误报已消除）
+    assert r["locks_ok"] is True
+    assert r["verdict"] in ("AST_V2_CONFIRMED", "AST_V2_PARTIAL", "AST_V2_REFUTED", "AST_V2_INCONCLUSIVE")
+    assert "does_not_overturn" in r and "CROSS_VENDOR_INCONCLUSIVE" in r["does_not_overturn"]
+
+
+def test_executed_vendor_is_cross_model_vs_110():
+    """执行留痕厂商须与 §110 明确不同模型（跨模型独立验证）。"""
+    mpath = f"{BASE}/runs/vendor_call_manifest.json"
+    if not os.path.exists(mpath):
+        return
+    m = json.load(open(mpath, encoding="utf-8"))
+    model = (m.get("model", "") + " " + m.get("vendor", "")).lower()
+    assert "hunyuan" not in model and "混元" not in model
+    for c in ("P0", "P1", "P2"):
+        rec = m["calls"][c]
+        assert rec["status"] == "ok" and rec["finish_reason"] == "stop"
+        # judge 文件哈希与留痕一致（spawn 后未被篡改）
+        jp = f"{BASE}/vendor_{c}/judge_vendor.py"
+        assert hashlib.sha256(open(jp, "rb").read()).hexdigest() == rec["judge_sha256"]
+
+
+def test_engine_lock_names_fixed():
+    """工具 bug 回归：engine.py 必须用正确的锁文件名（prereg.sha256 非 prereg.json.sha256）。"""
+    src = open(f"{BASE}/engine.py", encoding="utf-8").read()
+    code = "\n".join(l for l in src.splitlines() if not l.strip().startswith("#"))
+    assert '"prereg.sha256"' in code and '"manifest.sha256"' in code
+    assert 'prereg.json.sha256' not in code and 'manifest.json.sha256' not in code
+
+
+def test_no_key_leak_in_workspace():
+    import re
+    root = os.path.dirname(BASE)
+    pat = re.compile(r"sk-or-v1-[A-Za-z0-9]{20,}")
+    for dirpath, dirs, files in os.walk(root):
+        dirs[:] = [d for d in dirs if d != ".git" and not d.startswith("__pycache__")]
+        for fn in files:
+            if not fn.endswith((".py", ".json", ".md", ".sha256", ".txt")):
+                continue
+            p = os.path.join(dirpath, fn)
+            try: t = open(p, encoding="utf-8", errors="ignore").read()
+            except Exception: continue
+            assert not pat.search(t), f"疑似 key 泄漏: {p}"

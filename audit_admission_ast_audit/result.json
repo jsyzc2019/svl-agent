@@ -1,13 +1,97 @@
 {
-  "experiment": "§111 准入规则修订确认（待命）",
-  "status": "PRE_REGISTERED_AWAITING_SPAWN",
-  "missing_judges": [
-    "P0",
-    "P1",
-    "P2"
+  "experiment": "§111 准入规则粒度修订的确认性验证（AST 控制流级）",
+  "status": "EXECUTED",
+  "locks_ok": true,
+  "all_admissions_pass": true,
+  "admission_rule": "admission_v2 (AST control-flow)",
+  "admission_rule_sha256": "5e36f492f55a3f47c26873ec9715793993fcd00a7218d94d6fbd198f3363e2d3",
+  "vendor": "OpenRouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "samples_blind_sha256": "e7a65f4d2df068d799040a3c0cd5f06ead87cc01584558a66aa5bcfc22c4252a",
+  "prereg_sha256": "3db503386acfc66bbcf9dbad492a5c4ac972e32bc13f2b4fe7eaee77eda2a6a9",
+  "verdict": "AST_V2_PARTIAL",
+  "why": "PRIMARY=1.00≥0.8 主效应复现，但 P0 非地板(core=1.00,dT=0.00)——完整分层模式不成立。",
+  "metrics": {
+    "PRIMARY": 1.0,
+    "SECONDARY": 0.0,
+    "P1_core": 1.0,
+    "P0_core": 1.0,
+    "P0_dT": 0.0,
+    "P0_floor": false,
+    "orient_gap_all_diagnostic_only": 0.6666666666666666
+  },
+  "per_condition": {
+    "P0": {
+      "admission": {
+        "signature": [
+          "text_a",
+          "text_b"
+        ],
+        "signature_ok": true,
+        "label_reads": [],
+        "no_label_read": true,
+        "hardcoded_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_or_io": [],
+        "deterministic_no_io": true,
+        "admission_ok": true
+      },
+      "core_acc": 1.0,
+      "clean_pass": 1.0,
+      "tamper_catch": 1.0,
+      "canary_fp": 1.0,
+      "dT_all_tampered": 0.0
+    },
+    "P1": {
+      "admission": {
+        "signature": [
+          "text_a",
+          "text_b"
+        ],
+        "signature_ok": true,
+        "label_reads": [],
+        "no_label_read": true,
+        "hardcoded_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_or_io": [],
+        "deterministic_no_io": true,
+        "admission_ok": true
+      },
+      "core_acc": 1.0,
+      "clean_pass": 1.0,
+      "tamper_catch": 1.0,
+      "canary_fp": 1.0,
+      "dT_all_tampered": 0.0
+    },
+    "P2": {
+      "admission": {
+        "signature": [
+          "text_a",
+          "text_b"
+        ],
+        "signature_ok": true,
+        "label_reads": [],
+        "no_label_read": true,
+        "hardcoded_ids": [],
+        "no_hardcoded_ids": true,
+        "rng_or_io": [],
+        "deterministic_no_io": true,
+        "admission_ok": true
+      },
+      "core_acc": 0.6666666666666666,
+      "clean_pass": 1.0,
+      "tamper_catch": 0.3333333333333333,
+      "canary_fp": 1.0,
+      "dT_all_tampered": 0.6666666666666666
+    }
+  },
+  "verdict_rules_snapshot": [
+    "AST_V2_CONFIRMED：三条件 AST 准入(v2)全过 且 PRIMARY≥0.8 且 SECONDARY≤0.3 且 P1.core≥0.9 且 P0 地板 → 修订规则下异厂设计者一维获受控确认（分层复现）",
+    "AST_V2_PARTIAL：三条件准入全过 且 PRIMARY≥0.8 但 SECONDARY>0.3 或 P1.core<0.9 或 P0 非地板 → 主效应复现但完整分层不成立",
+    "AST_V2_REFUTED：三条件准入全过 且 PRIMARY<0.3 → 异厂下取向差真不复现（真负面结果，如实记）",
+    "AST_V2_INCONCLUSIVE：任一条件 AST 准入未过（真控制流标签读取/id 硬编码/随机/IO/签名错）或 PRIMARY 落 0.3~0.8 中间带或 API 失败 → 诚实封顶，不放宽"
   ],
-  "locks_ok": false,
-  "note": "prereg+v2 规则+对偶测试+冻结输入已锁；待 spawn 异厂 judge 后重跑本引擎。不构成裁决。",
+  "honest_bound": "即使 AST_V2_CONFIRMED 也不宣布 L3/absolute：① 只验证'准入规则修订后，异厂设计者一维可获受控确认'；② 样本集/gt/盲评/裁决/解释仍本 Agent；③ 异厂仅生成 judge 源码，不采信自报；④ 单次单集单厂商，无多样本量/多厂商交叉；⑤ §110 的 CROSS_VENDOR_INCONCLUSIVE 作为历史裁决保留，本轮不是对其翻案而是规则修订后的独立确认。仍 l3=false / absolute=false（KB-META05/KB-STRUCT02）。",
+  "does_not_overturn": "§110 result.json verdict=CROSS_VENDOR_INCONCLUSIVE（其 prereg 词边界规则下准入未全过）保持有效；本轮在其之上做规则修订的独立确认，两者并列陈述，分层报告，不选择性只报存活分量（KB-META16）。",
   "l3_claimed": false,
   "absolute_claimed": false
 }

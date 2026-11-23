@@ -4027,3 +4027,27 @@ PRIMARY=1.0≥0.8（非否定限定 P1 dT=0/P2 dT=1，4/4 逐样本相反，**�
 仍 **l3=false/absolute=false**：① 只把"判据设计者"一维外移到异厂，且该维因准入误报未获受控确认（INCONCLUSIVE）；② 样本集/冻结 gt/盲评/裁决/解释仍本 Agent（§107 确认集）；③ 异厂仅生成 judge 源码，评估与裁决仍本 Agent；④ 单次单集单厂商，无多样本量/多厂商交叉；⑤ 异厂是不信任对象、不采信自报，只 import 源码盲评。设计者厂商独立性一维获"数值复现但准入封顶"的诚实记录，不是系统达 L3。
 
 验收：13 项专项测试 + 全量 1395→1400 passed（+5 执行态回归：异厂真实输出/非 Hunyuan/数值不翻案/泄漏词只在 notes 不进控制流/key 零泄漏）；verify.py 8/8 ALL_OK（裁决树自洽）；KB 160→162（KB-AUDIT52 异厂 designer 执行结论 + KB-META18 准入词边界误报定位）；链审与门禁本轮无新增 five_piece（受控实验轮不编译门禁）。API key 零入仓（全工作区模式扫描 NONE）。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。
+
+---
+
+## §111 准入规则粒度修订的确认性验证（2026-11-23，"开工，按计划推"）
+
+### 触发：收工时定的第一优先弱点
+§110 把设计者外移到异厂，数值完全复现 PRIMARY1.0/SECONDARY0.0/P1.core1.0，但三 judge 在 `notes.append("...")` 字符串字面量里写 negation/variant，命中词边界禁用词表→准入未全过→封顶 CROSS_VENDOR_INCONCLUSIVE（诚实保留）。KB-META18 定位弱点：词边界无法区分"控制流读标签字段"（真泄漏）与"说明文字提及概念词"（误报）。本轮按计划推：**spawn 前预注册语义更精确的 v2 规则，在全新异厂 judge 上确认，绝不回头改 §110 阈值翻案**。
+
+### 111.1 spawn 前锁定规则 + 对偶测试（外部时间戳锚）
+`audit_admission_ast_audit/prereg.json` + `admission_v2.py` + 对偶测试 + 冻结 §110 样本/scorer_key 哈希，在异厂调用**之前** commit+push（远端 `37bd2e4`，GitHub 服务器时间戳 `2026-11-23T05:40:09Z`）。v2 规则只查 judge 控制流读标签字段（subscript 键/attribute/call/name 引用标签载体、硬编码 id、随机/时间/IO），字符串 Constant 一律不算——合法性来自信息论语义（真泄漏必经控制流读 text_a/text_b 之外的信息），与这批 judge 写了什么无关。对偶测试写死：6 类真泄漏必拒、notes 提词必放行、§110 三份旧 judge 在 v2 下全放行（证明修误报非塞私货）。裁决树 AST_V2 四档 + 不翻 §110 案声明 + l3=false。
+
+### 111.2 跨模型异厂 spawn（独立性强于 §110）
+换 **nvidia nemotron-ultra-550b**（§110 是 nemotron-3.5-super-vl，明确不同模型），三条件各一次干净 context，只发 purpose+裸样本，temperature 0。全 `finish=stop`、judge 681/887/1047 字符真实生成，留痕无 key。
+
+### 111.3 一次诚实的工具排错（修工具不放宽门禁）
+首次 engine 执行得 `locks_ok=false`→封顶 INCONCLUSIVE，但 verify.py 11/11 全过（所有哈希锁完好）。定位为 **engine.py 锁文件名拼写 bug**（找 `prereg.json.sha256`，实际是 `prereg.sha256`），纯工具错误、非规则实现非裁决树非指标口径（engine.py 不在 prereg 锁定文件内），与 spawn 结果无关。按 §109"修工具不放宽门禁"先例修正文件名 + print 格式化后重跑。
+
+### 111.4 裁决：AST_V2_PARTIAL（主效应复现，P0 地板消失，不翻案）
+v2 规则下三条件 AST 准入**全过**（`label_reads=[]`，notes 误报消除——规则修订成功）；PRIMARY=1.00 / SECONDARY=0.00 / P1.core=1.00 主效应跨模型复现；但 **P0 地板消失**（无目的条件自归纳出归一化逐字节比对判据，core 1.00/dT 0.00，同 §108 跨集发现）→ 按预注册裁决树落 **AST_V2_PARTIAL**，不翻案成 CONFIRMED。**§110 的 CROSS_VENDOR_INCONCLUSIVE 保留**，两轮并列陈述不选择性只报存活分量（KB-META16/19）。分层结论：设计者厂商独立性一维，主效应稳健、P0 地板辅助对照跨集跨模型不稳健。
+
+### 111.5 诚实边界：规则修订验证 ≠ 达到 L3
+仍 **l3=false/absolute=false**：① 只验证 v2 规则下设计者一维可获 PARTIAL 受控证据；② 样本/gt/盲评/裁决/解释仍本 Agent；③ 异厂仅生成 judge 源码不采信自报；④ 单次单集单厂商，无多样本量/多厂商交叉；⑤ 不翻 §110 案。
+
+验收：16 项专项测试（§111）+ 全量 1408→1412 passed（+4 执行态回归：不翻案/跨模型/工具 bug 回归/key 零泄漏）；verify.py 13/13 ALL_OK；KB 162→164（KB-AUDIT53 规则修订预注册 + KB-META19 P0 地板跨模型消失）；链审 total 54/five_piece 34/三锁 31（实测更新断言不放宽）；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。

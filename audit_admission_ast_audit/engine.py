@@ -27,8 +27,13 @@ from admission_v2 import admit_source
 
 # ---- 哈希锁自检（spawn 前锁死，spawn 后任何改动都 FAIL）----
 locks_ok = True
-for f in ("prereg.json", "manifest.json", "scorer_key.json", "admission_v2.py"):
-    sp = f"{BASE}/{f}.sha256"
+# 排错记录（2026-11-23）：首次执行误用 prereg.json.sha256 / manifest.json.sha256 命名，
+# 实际锁文件是 prereg.sha256 / manifest.sha256（verify.py 用正确名，11/11 全过证明文件未篡改）。
+# 这是纯工具文件名 bug（非规则实现、非裁决树、非指标口径，engine.py 不在 prereg 锁定文件内），
+# 与 spawn 结果无关，按 §109"修工具不放宽门禁"先例修正后重跑。
+for f, lk in (("prereg.json", "prereg.sha256"), ("manifest.json", "manifest.sha256"),
+              ("scorer_key.json", "scorer_key.json.sha256"), ("admission_v2.py", "admission_v2.py.sha256")):
+    sp = f"{BASE}/{lk}"
     locks_ok = locks_ok and os.path.exists(sp) and sha(f"{BASE}/{f}") == open(sp).read().strip()
 for c in CELLS:
     for f in ("samples_blind.json", "purpose.md"):
@@ -105,7 +110,11 @@ elif PRIMARY >= 0.8 and SECONDARY <= 0.3 and core1 >= 0.9 and P0_floor:
            "规则修订（控制流级）后异厂设计者下分层效应复现，设计者厂商独立性一维获受控确认。" % (PRIMARY, SECONDARY, core1, core0, dT0))
 elif PRIMARY >= 0.8:
     verdict = "AST_V2_PARTIAL"
-    why = "PRIMARY=%.2f≥0.8 主效应复现，但 SECONDARY=%.2f>0.3 或 P1.core=%.2f<0.9 或 P0 非地板——完整分层模式不成立。" % (PRIMARY, SECONDARY, core1)
+    _fails = []
+    if SECONDARY > 0.3: _fails.append("SECONDARY=%.2f>0.3" % SECONDARY)
+    if core1 < 0.9: _fails.append("P1.core=%.2f<0.9" % core1)
+    if not P0_floor: _fails.append("P0 非地板(core=%.2f,dT=%.2f)" % (core0, dT0))
+    why = "PRIMARY=%.2f≥0.8 主效应复现，但 %s——完整分层模式不成立。" % (PRIMARY, "、".join(_fails))
 elif PRIMARY < 0.3:
     verdict = "AST_V2_REFUTED"
     why = "PRIMARY=%.2f<0.3，异厂设计者下取向差不复现——真负面结果，如实记。" % PRIMARY
@@ -139,4 +148,5 @@ result = {
     "l3_claimed": False, "absolute_claimed": False,
 }
 json.dump(result, open(f"{BASE}/result.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
-print("VERDICT:", verdict, "| PRIMARY=%.2f SECONDARY=%.2f P1.core=%.2f | admissions=", all_admit, sep="")
+print("VERDICT: %s | PRIMARY=%.2f SECONDARY=%.2f P1.core=%.2f | admissions=%s" %
+      (verdict, PRIMARY, SECONDARY, core1, all_admit))
