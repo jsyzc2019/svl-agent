@@ -4340,6 +4340,53 @@
       "evidence": "experiment",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT54",
+      "kind": "reasoning_lesson",
+      "mechanism": "名义上的'异厂商 designer'可能只是跨模型未跨厂商,需核对厂商字段(§112定位):§110 nemotron-3.5-super-vl、§111 nemotron-ultra-550b 都是 nvidia/ 前缀,相对 Hunyuan 是异厂但两轮彼此同厂,'多厂商交叉'L3残余零证据。§112把designer换成真正不同厂商 Liquid AI(liquid/lfm-3-1.7b:free),AST v2 准入规则逐字节复用§111(哈希5e36f492锁死,verify加 rule_byte_identical_to_111 断言物理证明唯一变量=厂商),冻结样本/gt/purpose/裁决树一字不改,spawn前 commit+push 外部时间戳锚 ff0403e 06:02:22Z 早于 spawn。厂商选择机器探测写死锁内(gemma/ling 429、ernie finish=length截断、liquid finish=stop出合法judge)。结果:跨厂商前提成立+AST准入全过+PRIMARY=1.00 主效应首次真正跨厂商复现,但 SECONDARY=1.00(否定翻转细分语义跨厂没复现)、P0地板消失(core1.0/dT0.0 同§108/§111)→按预注册树落 CROSS_VENDOR2_PARTIAL,不翻§110 INCONCLUSIVE/§111 PARTIAL。仍 l3=false。",
+      "trigger": [
+        "cross_vendor_vs_cross_model",
+        "vendor_prefix_check",
+        "byte_identical_rule",
+        "external_timestamp_anchor",
+        "partial_verdict"
+      ],
+      "action": "做'异厂商'独立性前必须核对厂商字段本身,别被术语骗:跨模型≠跨厂商。真正的跨厂商交叉要换厂商前缀(nvidia→liquid/google/baidu),并把规则/样本/gt/口径逐字节复用(哈希断言证明唯一变量=厂商),spawn前预注册+外部时间戳锚。分层报告:主效应跨厂商复现是强证据,但细分语义(否定翻转豁免)和辅助对照(P0地板)可能厂商特异,不因主效应复现就报完整CONFIRMED,按树落PARTIAL诚实记。",
+      "provenance": "commentary:§112",
+      "timestamp": "2026-11-23T06:08:07.972733+00:00",
+      "support": [
+        "commentary:§112",
+        "audit_cross_vendor_designer2/prereg.json",
+        "audit_cross_vendor_designer2/result.json",
+        "tests/test_cross_vendor_designer2.py"
+      ],
+      "evidence": "experiment",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META20",
+      "kind": "reasoning_lesson",
+      "mechanism": "跨厂商复现中的细分分量分解(§112):Liquid AI 三条件自归纳判据分工明确——P0逐词匹配/P1词集合差分(not限定词检测)/P2 Jaccard相似。PRIMARY=1.00来自P1对non_negation_qualifier dT=0.00 vs P2 dT=1.00(主效应复现);SECONDARY=1.00因P1/P2在negation_flip上也是0 vs 1(§107期望≤0.3,否定翻转豁免这一细分语义没复现)。说明:核心取向差(非否定限定类的P1/P2 gap)跨厂商稳健,但否定翻转类是否豁免是厂商特异的判据习惯。verify须区分 finish=stop(content)与 finish=length+reasoning_fallback(答案在reasoning完整提取,哈希一致证明judge可运行)——测试断言过严会误判完整性问题,放宽断言匹配已验证事实≠放宽实验规则。",
+      "trigger": [
+        "component_wise_diagnosis",
+        "deletion_class",
+        "reasoning_fallback",
+        "finish_length",
+        "completeness_check"
+      ],
+      "action": "复现实验的细分诊断要落到 deletion_class 层级(dT by class),不能只看聚合 PRIMARY:SECONDARY 失败要定位到 negation_flip 子集的具体决策。reasoning 模型经 OpenRouter 常 finish=length 但答案在 reasoning 里完整提取(reasoning_fallback),判定 judge 完整性应看 文件哈希==留痕哈希 + 能 import 运行 + AST准入过,而非要求 finish==stop。",
+      "provenance": "commentary:§112",
+      "timestamp": "2026-11-23T06:08:07.972733+00:00",
+      "support": [
+        "commentary:§112",
+        "audit_cross_vendor_designer2/result.json",
+        "tests/test_cross_vendor_designer2.py"
+      ],
+      "evidence": "experiment",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

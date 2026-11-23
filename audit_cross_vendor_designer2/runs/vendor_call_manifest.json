@@ -1,0 +1,122 @@
+{
+  "experiment": "§112 真正跨厂商 designer 调用留痕（Liquid AI，协议复用 §111/§110）",
+  "vendor": "OpenRouter/liquid/lfm-3-1.7b:free(Liquid AI)",
+  "model": "liquid/lfm-3-1.7b:free",
+  "api_base": "https://openrouter.ai/api/v1",
+  "calls": {
+    "P0": {
+      "cell": "P0",
+      "system_sha256": "018b0ba24cdb33d1f0a2d2ef89f01c8ef6499a76b0d12a56fb3b8272997c4437",
+      "user_prompt_sha256": "eecebcc09e295195ac4567168af1c6bc270b3ae54615a15d13ae695a0a51b5ac",
+      "user_prompt_chars": 5491,
+      "model_resp_model": "liquid/lfm-3-1.7b:free",
+      "usage": {
+        "prompt_tokens": 1785,
+        "completion_tokens": 8192,
+        "total_tokens": 9977,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 8192,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "finish_reason": "length",
+      "content_len": 0,
+      "reasoning_len": 30681,
+      "code_source": "reasoning_fallback",
+      "response_chars": 0,
+      "status": "ok",
+      "judge_sha256": "4b6f70c9fde82e749b8a5b953080943ea5064aebbd6e604b156e051c4e713580",
+      "called_at_utc": "2026-11-23T06:05:54Z"
+    },
+    "P1": {
+      "cell": "P1",
+      "system_sha256": "018b0ba24cdb33d1f0a2d2ef89f01c8ef6499a76b0d12a56fb3b8272997c4437",
+      "user_prompt_sha256": "5f897d6ed7fc11c36e3c9681ab80fe718ef1d7ebba8952e2aaacfa3ba1e3e767",
+      "user_prompt_chars": 5606,
+      "model_resp_model": "liquid/lfm-3-1.7b:free",
+      "usage": {
+        "prompt_tokens": 1873,
+        "completion_tokens": 6217,
+        "total_tokens": 8090,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 5960,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "finish_reason": "stop",
+      "content_len": 1180,
+      "reasoning_len": 24055,
+      "code_source": "content",
+      "response_chars": 1180,
+      "status": "ok",
+      "judge_sha256": "0b0aaa7fe5b6b4d8f045cdf8c1813b3ff4767abe69763fc4d430f97a6f3b0b7f",
+      "called_at_utc": "2026-11-23T06:06:38Z"
+    },
+    "P2": {
+      "cell": "P2",
+      "system_sha256": "018b0ba24cdb33d1f0a2d2ef89f01c8ef6499a76b0d12a56fb3b8272997c4437",
+      "user_prompt_sha256": "7e0ab9eb66d5daf9121fae6eb19ecd1fa33a8bca03cdd19e5b7131a380db530b",
+      "user_prompt_chars": 5574,
+      "model_resp_model": "liquid/lfm-3-1.7b:free",
+      "usage": {
+        "prompt_tokens": 1843,
+        "completion_tokens": 8192,
+        "total_tokens": 10035,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 8192,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "finish_reason": "length",
+      "content_len": 0,
+      "reasoning_len": 31216,
+      "code_source": "reasoning_fallback",
+      "response_chars": 0,
+      "status": "ok",
+      "judge_sha256": "4d87d4389617bf1709c7c99d7ec62bbbd4cb54f6955c8fef3ecf3caf06cb8223",
+      "called_at_utc": "2026-11-23T06:07:09Z"
+    }
+  }
+}

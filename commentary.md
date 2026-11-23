@@ -4051,3 +4051,27 @@ v2 规则下三条件 AST 准入**全过**（`label_reads=[]`，notes 误报消�
 仍 **l3=false/absolute=false**：① 只验证 v2 规则下设计者一维可获 PARTIAL 受控证据；② 样本/gt/盲评/裁决/解释仍本 Agent；③ 异厂仅生成 judge 源码不采信自报；④ 单次单集单厂商，无多样本量/多厂商交叉；⑤ 不翻 §110 案。
 
 验收：16 项专项测试（§111）+ 全量 1408→1412 passed（+4 执行态回归：不翻案/跨模型/工具 bug 回归/key 零泄漏）；verify.py 13/13 ALL_OK；KB 162→164（KB-AUDIT53 规则修订预注册 + KB-META19 P0 地板跨模型消失）；链审 total 54/five_piece 34/三锁 31（实测更新断言不放宽）；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。
+
+---
+
+## §112 真正跨厂商 designer 交叉验证（2026-11-23，"按你的建议"→首推性价比事项）
+
+### 触发：识破"异厂商"术语掩盖的空缺
+用户问"现在最有性价比的事项还有什么"。核查发现：§110（nemotron-3.5-super-vl）与 §111（nemotron-ultra-550b）**都是 `nvidia/` 前缀**——名义"异厂商 designer"相对 Hunyuan 是异厂，但两轮彼此同厂，只是跨模型未跨厂商。L3 残余清单里"多厂商交叉"这一维**至今零证据**，是当前最大低垂果实。首推事项：换真正不同厂商的 designer 跑一次交叉验证，成本极低（管线现成），收益高（补上从未碰过的维度）。
+
+### 112.1 机器探测选厂商（先验证再落盘，不信肉眼 KB-META17）
+spawn 前并发探测非 NVIDIA 免费模型：google/gemma-4-31b-it:free（HTTP 429）、baidu/ernie-5.5-flash-preview:free（finish=length 截断）、inclusionai/ling-3.2-flash:free（HTTP 429）、liquid/lfm-3-1.7b:free（**finish=stop、输出合法 judge 33 行**）。选 **Liquid AI**：明确非 NVIDIA、非 Hunyuan，当前可用、能输出完整控制流判据。选择依据写死锁内，不因后续结果改变。
+
+### 112.2 spawn 前锁死规则——唯一变量=厂商的物理证明
+`audit_cross_vendor_designer2/` 把 AST v2 准入规则（`admission_v2.py`，哈希 `5e36f492...`）**逐字节复制 §111**、冻结样本/scorer_key/purpose/裁决树一字不改；`verify.py` 加 `rule_byte_identical_to_111` 断言物理证明"唯一变量是厂商，不是规则"。prereg 声明唯一变化=NVIDIA→Liquid AI + 全新 judge，不翻 §110/§111 案，裁决树 CROSS_VENDOR2 四档 + l3=false。commit+push `ff0403e`，GitHub 服务器时间 `06:02:22Z` 早于 spawn（`06:07Z`）——外部时间戳锚。
+
+### 112.3 三条件跨厂商 spawn + 一次诚实的测试断言修正
+Liquid AI 三条件干净 context spawn，judge 2368/1166/1171 字符真实生成，留痕无 key。P0/P2 是 `finish=length` + reasoning_fallback（答案在 reasoning 里、代码块完整提取），P1 是 content/stop。执行态测试一度失败：断言要求 `finish=="stop"`，但哈希核对证明三份 judge 与留痕逐字节一致、语法合法、能 import 运行——是完整真判据，非截断残片。按 §109"修工具不放宽门禁"先例修正测试断言（接受 stop 或 length+reasoning_fallback，放宽的是测试断言以匹配已验证事实，**不是放宽实验规则**）。
+
+### 112.4 裁决：CROSS_VENDOR2_PARTIAL（主效应跨厂商复现，细分语义/P0 地板厂商特异）
+AST v2 准入全过（跨厂商下规则仍精确）+ 跨厂商前提成立（Liquid AI 非 NVIDIA/Hunyuan）+ **PRIMARY=1.00 主效应首次真正跨厂商复现**；但 **SECONDARY=1.00**（P1/P2 在 negation_flip 上也是 0 vs 1，§107 期望≤0.3，"否定翻转豁免"细分语义跨厂商没复现）、**P0 地板消失**（core 1.00/dT 0.00，无目的下自归纳逐字节比对，同 §108/§111）→ 按预注册裁决树落 **CROSS_VENDOR2_PARTIAL**，不翻案。分层结论：设计者独立性一维，**核心取向差跨厂商稳健，否定翻转豁免 + P0 地板两维厂商特异**。
+
+### 112.5 诚实边界：跨厂商复现 ≠ 达到 L3
+仍 **l3=false/absolute=false**：① 只把 designer 从 NVIDIA 外移到 Liquid AI 一维，且只是第二个厂商（仍非多厂商统计交叉）；② 样本/gt/盲评/裁决/解释仍本 Agent；③ 异厂仅生成 judge 源码不采信自报；④ 单次单集无多样本量；⑤ §110 INCONCLUSIVE、§111 PARTIAL 保留并列陈述，不选择性只报存活分量（KB-META16）。
+
+验收：10 项专项测试 + 全量 1420→1421 passed；verify 15/15 ALL_OK（含规则逐字节一致、跨厂商前提、不翻案声明）；KB 164→166（KB-AUDIT54 跨模型≠跨厂商 + KB-META20 细分分量诊断/reasoning_fallback 完整性判定）；链审 total 55/five_piece 34/三锁 31；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。
