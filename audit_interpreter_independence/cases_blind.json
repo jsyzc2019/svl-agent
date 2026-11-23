@@ -1,0 +1,49 @@
+{
+  "experiment": "§114 interpreter-independence blind cases",
+  "seed": 11420261123,
+  "note": "指标自动提取自四轮已锁 result.json；case 顺序经固定 seed 打乱；档位名中性化；不含轮次与历史裁决。",
+  "rules_neutral": [
+    "FULL：admission_ok 且 PRIMARY≥0.8 且 SECONDARY≤0.3 且 P1_core≥0.9 且 P0_地板(P0_core≤0.6 或 P0_dT≥0.8)",
+    "PARTIAL：admission_ok 且 PRIMARY≥0.8，但 SECONDARY>0.3 或 P1_core<0.9 或 非P0_地板（三者至少一条不满足）",
+    "REFUTED：admission_ok 且 PRIMARY<0.3（取向差真不复现）",
+    "INCONCLUSIVE：admission 未过 / PRIMARY 落 0.3~0.8 中间带 / 无法判定"
+  ],
+  "cases": [
+    {
+      "id": "case_1",
+      "PRIMARY": 1.0,
+      "SECONDARY": 0.0,
+      "P1_core": 1.0,
+      "P0_core": 0.5,
+      "P0_dT": 1.0,
+      "admission_ok": true
+    },
+    {
+      "id": "case_2",
+      "PRIMARY": 1.0,
+      "SECONDARY": 1.0,
+      "P1_core": 1.0,
+      "P0_core": 1.0,
+      "P0_dT": 0.0,
+      "admission_ok": true
+    },
+    {
+      "id": "case_3",
+      "PRIMARY": 1.0,
+      "SECONDARY": 0.0,
+      "P1_core": 1.0,
+      "P0_core": 1.0,
+      "P0_dT": 0.0,
+      "admission_ok": true
+    },
+    {
+      "id": "case_4",
+      "PRIMARY": 1.0,
+      "SECONDARY": 0.0,
+      "P1_core": 1.0,
+      "P0_core": 1.0,
+      "P0_dT": 0.0,
+      "admission_ok": true
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "experiment": "§114 解释者独立性受控验证",
+  "description": "把从指标到裁决档位的解释环节外移到异厂 LLM；四轮指标匿名化盲评；检验裁决规则语义可移植性",
+  "unique_variable": "解释者（本 Agent vs 异厂 LLM）",
+  "frozen_inputs": ["cases_blind.json", "gt_private.json", "gen_fixtures.py"],
+  "caller": "call_interpreter.py",
+  "engine": "engine.py",
+  "verify": "verify.py",
+  "source_rounds": [
+    "audit_stratified_confirmation/result.json (§107)",
+    "audit_cross_domain_confirm2/result.json (§108)",
+    "audit_admission_ast_audit/result.json (§111)",
+    "audit_cross_vendor_designer2/result.json (§112)"
+  ],
+  "seed": 11420261123,
+  "no_new_gate": true,
+  "l3_claimed": false,
+  "absolute_claimed": false
+}

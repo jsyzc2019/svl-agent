@@ -1,0 +1,51 @@
+{
+  "experiment": "§114 解释者独立性受控验证 —— 把裁决环节外移到异厂 LLM，检验裁决规则语义可移植性",
+  "timestamp_intent": "spawn 前 commit+push 锁死本文件与冻结输入，以 GitHub 服务器时间戳为外部锚，证明承诺先于执行",
+  "locked_before_spawn": true,
+  "status": "PRE_REGISTERED_AWAITING_SPAWN",
+  "lineage": "§98 shared-start → §99-§106 独立性消融（prompt/字段/id/gt/目的语义） → §107-§108 确认集/跨集 → §109 执行者独立 → §110-§112 设计者独立（异厂 judge 源码） → §113 跨集×跨厂商。本轮补最后一维：解释者独立（从指标到裁决档位的判断权）。",
+  "what_is_FIXED": [
+    "唯一变量 = 解释者：本 Agent 的历史裁决 vs 一个干净 context 异厂 LLM 按同一中性规则对匿名指标的独立判定",
+    "冻结输入 = 四轮已锁 result.json 的裁决充分统计量（PRIMARY/SECONDARY/P1_core/P0_core/P0_dT/admission_ok），由 gen_fixtures.py 自动提取、固定 seed=11420261123 打乱 case 顺序、档位名中性化，绝不手填",
+    "盲 = 异厂只收到 cases_blind.json（匿名指标 + 去前缀中性规则），绝不收到 gt_private.json（来源轮次/历史裁决/映射）",
+    "私有 gt = 本 Agent 四轮历史裁决映射到中性档：case_1=CONFIRMED, case_2/3/4=PARTIAL，仅在 engine 比对时读取"
+  ],
+  "what_is_HELD_FIXED": [
+    "四轮裁决规则语义（CONFIRMED/PARTIAL/REFUTED/INCONCLUSIVE 四档，条件 PRIMARY≥0.8/SECONDARY≤0.3/P1.core≥0.9/P0地板）逐字中性化，不改条件不改变阈值",
+    "样本/gt/盲评/designer/AST 准入全部沿用四轮冻结结果，本轮一个都不动",
+    "调用协议复用 §112：干净 context、key 仅环境变量、429 退避、reasoning 回退、失败不伪造"
+  ],
+  "locked_files_sha256": {
+    "prereg.json": "SELF",
+    "cases_blind.json": "172f808945302005a71bfebc626d2e19c3a35ea047e068a7b1c6d4497cbfd61e",
+    "gt_private.json": "407485c8f80a3cae10b42ee19bd133399491e80ffa393dfba873279c647bbba2",
+    "gen_fixtures.py": "75e3810d91b3390fc4447ac7b9db40efa2cbed571f5a10dae8cd67890a55b853",
+    "call_interpreter.py": "83f7113e322f78f87991213e9235145d19aaf9b839d012daefd49c50d9b30f98",
+    "manifest.json": "c6b075c032106fcb1b57c449db264dda70f1ea5868e5bcec29d96587cba4476f"
+  },
+  "vendor_selection_method": "spawn 前机器探测免费模型（先验证再落盘，不信肉眼 KB-META17）：gemma/ling 429 限流；选定 finish=stop 稳定的模型，选择依据写死，不因后续结果改变。",
+  "interpretation_protocol": "单个异厂解释者，一次性对四个匿名 case 分类；输出 id->tier 映射；解析失败按失败分支。",
+  "metrics": {
+    "agreement": "异厂 tier 与私有 gt 中性档逐 case 一致数 / 4",
+    "critical_case_2": "case_2=(PRIMARY1.0,SECONDARY1.0) 是 CONFIRMED/PARTIAL 的关键区分点（SECONDARY>0.3），检验解释者能否识别细分条件"
+  },
+  "verdict_rules": [
+    "INTERPRETER_CONFIRMED：agreement=4/4 且含 case_2 判对 → 异厂解释者按中性规则完全复现本 Agent 裁决，解释环节一维获受控外移证据（仍非 L3，见 hard_bound）",
+    "INTERPRETER_PARTIAL：agreement=3/4 → 解释者大体一致但有一处分歧，诚实标注（含 case_2 判错即落此档或更低）",
+    "INTERPRETER_DIVERGENT：agreement≤2/4 → 异厂解释者系统性分歧，裁决规则语义不可跨厂商移植（真负面结果，如实记，正说明解释环节是本 Agent 依赖）",
+    "INTERPRETER_INCONCLUSIVE：解析失败/API 失败/输出非法档位 → 诚实封顶，不放宽、不伪造"
+  ],
+  "pre_committed_rules_reuse": "中性规则是四轮 verdict_rules 去前缀后的逐字同构版本，条件与阈值一字不改；本轮不新造判据、不事后调规则。",
+  "hard_bound": "即使 INTERPRETER_CONFIRMED，也只是把解释者一维外移到异厂 LLM；样本/gt/盲评/designer/裁决树设计/最终 l3 判断仍本 Agent；异厂自报不采信（只采信其产出的 tier 标签，与冻结 gt 机械比对）；单一异厂单次运行无统计交叉。不宣布 L3、不宣布 absolute。",
+  "discipline": [
+    "不伪造证据：失败留痕不删，tier 解析不出不猜测、写 None",
+    "不翻案：§107-§113 四轮裁决全部保留并列陈述，本轮结果不修改任何历史 verdict",
+    "反 Goodhart：API 失败按失败分支封顶，不反复重跑到满意；修确定性工程 bug 与调参到跑通严格区分",
+    "不编译新门禁（延续 §105+ 受控实验轮惯例）",
+    "key 零入仓：仅环境变量读，留痕不含 key/prompt 全文/私有 gt"
+  ],
+  "no_new_gate": true,
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "does_not_overturn": ["§107 STRATIFIED_CONFIRMED", "§108 CROSS_SET_PARTIAL", "§109 EXECUTOR_INDEPENDENCE_CONFIRMED", "§110 CROSS_VENDOR_INCONCLUSIVE", "§111 AST_V2_PARTIAL", "§112 CROSS_VENDOR2_PARTIAL", "§113 SET_VENDOR2_INCONCLUSIVE"]
+}
