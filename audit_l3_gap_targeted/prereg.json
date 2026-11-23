@@ -80,9 +80,10 @@
     "required": true,
     "mechanism": "本 prereg + brief v2 + verify/engine + tests 先 commit+push，GitHub 服务器时间戳作为承诺先于第二家执行的外部锚",
     "anchor_must_precede_spawn": true,
-    "to_be_filled_after_push": {
-      "commit_sha": null,
-      "server_committer_date": null
+    "filled_after_push": {
+      "commit_sha": "f8e7f3f1ab32a94e2a33bee5141156fde4f08939",
+      "server_committer_date": "2026-11-23T10:03:40Z",
+      "note": "GitHub API 独立核验；承诺（本 prereg+brief v2+验收器+裁决树）先于第二家外家执行。第二家 spawn 时间须晚于此时刻。"
     }
   },
 
