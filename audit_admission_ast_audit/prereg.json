@@ -1,0 +1,53 @@
+{
+  "experiment": "§111 准入规则粒度修订的确认性验证（AST 控制流级标签泄漏审计）",
+  "timestamp_intent": "2026-11-23T13:40:00+08:00",
+  "locked_before_vendor_spawn": true,
+  "status": "PRE_REGISTERED_AWAITING_SPAWN",
+  "lineage": "§110 把判据设计者外移到异厂（NVIDIA nemotron via OpenRouter），冻结 gt 盲评数值完全复现 PRIMARY=1.00/SECONDARY=0.00/P1.core=1.00/P0 地板，但三份 judge 在 notes.append(...) 的字符串字面量里写了 negation/variant，命中 §110 prereg 用词边界匹配的禁用词表→准入未全过→按裁决树封顶 CROSS_VENDOR_INCONCLUSIVE（诚实保留，不翻案）。KB-META18 定位弱点：词边界规则无法区分'控制流读取标签字段'（真泄漏）与'说明文字提及概念词'（误报）。本轮在 spawn 前预注册修订规则 v2，用全新异厂 judge 验证——不是回头改 §110 阈值重跑到 CONFIRMED。",
+  "what_is_fixed": "唯一修订：标签泄漏检测从 word-boundary 全源码扫描，改为 AST 控制流级审计（admission_v2.py）。v2 只查 judge 函数控制流里对标签字段的读取（subscript 键/attribute/call/name 引用标签载体、硬编码 id、随机/时间/外部 IO），字符串 Constant（notes/signals 说明文字）不算泄漏。规则合法性来自信息论语义——真泄漏必须经控制流读取 text_a/text_b 之外的信息，字符串字面量不构成信息通道——与'这批 judge 恰好写了什么 notes'无关；对偶测试在 spawn 前写死并证明规则既不漏真泄漏、也不误报正当说明。",
+  "what_is_HELD_FIXED": {
+    "samples_blind_sha256": "e7a65f4d2df068d799040a3c0cd5f06ead87cc01584558a66aa5bcfc22c4252a",
+    "confirmation_set_sha256": "a1051c405aa2e8f51a78ef3116b92dcb80596bf07b3b2b752093bf8d76f83ad3",
+    "source_sha256": "44f67e49eda1256ce395d12c2d3d3075c2d8d1043f7ef8b157b4b06a80bef2cf",
+    "seed": 261122107,
+    "note": "18 条裸样本、字段 id/text_a/text_b、三 purpose.md、scorer_key 全部逐字节复用 §110（其逐字节复用 §107 确认集 arXiv:2611.22027）。唯一变化=准入规则 v2 与全新 spawn 的 judge 实例。本 Agent 不改冻结输入、不改 gt、不改指标口径。"
+  },
+  "locked_files_sha256": {
+    "admission_v2.py": "5e36f492f55a3f47c26873ec9715793993fcd00a7218d94d6fbd198f3363e2d3",
+    "scorer_key.json": "4ebe62abcd82dde344087dd45d0da1b88cc34920d1d7392a9d4487a20a75c779",
+    "vendor_P0/samples_blind.json": "e7a65f4d2df068d799040a3c0cd5f06ead87cc01584558a66aa5bcfc22c4252a",
+    "vendor_P1/samples_blind.json": "e7a65f4d2df068d799040a3c0cd5f06ead87cc01584558a66aa5bcfc22c4252a",
+    "vendor_P2/samples_blind.json": "e7a65f4d2df068d799040a3c0cd5f06ead87cc01584558a66aa5bcfc22c4252a",
+    "vendor_P0/purpose.md": "ba9fb3459c9839cd7b4d94e34c8d42333d96b4d6664aa3fb108457425184d126",
+    "vendor_P1/purpose.md": "f8e2604f61482f6eb6701287a8324205a1fabe50d4dc780a9b1a5db7764022bf",
+    "vendor_P2/purpose.md": "5ab756723cc734b3eacbacef16018cc57aec9f56834bccd18fc74c0fe44b15de"
+  },
+  "vendor_call_protocol": "逐字复用 §110：三条件各一次全新无历史 chat completion（干净 context），只发 purpose.md + 裸样本(id/text_a/text_b)，标签字段物理隔离；temperature 0，唯一差异=purpose 文件。异厂模型经 OpenRouter；不采信自报，import judge 源码用冻结 gt 盲评。API key 仅环境变量读，不入仓不入日志。",
+  "metrics": "与 §110/§107 同口径：dT=tampered 上 decision=True 比例；PRIMARY=|dT(P1)-dT(P2)| 在 non_negation_qualifier(4条)≥0.8；SECONDARY=negation_flip(2条)≤0.3；P1.core≥0.9；P0 地板=core≤0.6 或 dT(全集tampered)≥0.8。",
+  "verdict_rules": [
+    "AST_V2_CONFIRMED：三条件 AST 准入(v2)全过 且 PRIMARY≥0.8 且 SECONDARY≤0.3 且 P1.core≥0.9 且 P0 地板 → 修订规则下异厂设计者一维获受控确认（分层复现）",
+    "AST_V2_PARTIAL：三条件准入全过 且 PRIMARY≥0.8 但 SECONDARY>0.3 或 P1.core<0.9 或 P0 非地板 → 主效应复现但完整分层不成立",
+    "AST_V2_REFUTED：三条件准入全过 且 PRIMARY<0.3 → 异厂下取向差真不复现（真负面结果，如实记）",
+    "AST_V2_INCONCLUSIVE：任一条件 AST 准入未过（真控制流标签读取/id 硬编码/随机/IO/签名错）或 PRIMARY 落 0.3~0.8 中间带或 API 失败 → 诚实封顶，不放宽"
+  ],
+  "pre_committed_dual_tests": {
+    "true_leak_rejected": ["subscript[gt]", "attr.variant", "call:load_gt", "hardcoded N07", "import random", "open(gt.txt)"],
+    "false_positive_allowed": ["notes.append('negation terms present...')", "notes.append('deletion variant not detected')", "§110 三份旧 judge 在 v2 下全放行"],
+    "location": "tests/test_admission_ast_audit.py",
+    "meaning": "若真泄漏被放行或正当说明被拒 → 规则实现有 bug，须修工具（修规则实现）后重新 spawn 前锁，不得对着结果调规则定义。"
+  },
+  "hard_bound": "即使 AST_V2_CONFIRMED 也不宣布 L3/absolute：① 只验证'准入规则修订后，异厂设计者一维可获受控确认'；② 样本集/gt/盲评/裁决/解释仍本 Agent；③ 异厂仅生成 judge 源码，不采信自报；④ 单次单集单厂商，无多样本量/多厂商交叉；⑤ §110 的 CROSS_VENDOR_INCONCLUSIVE 作为历史裁决保留，本轮不是对其翻案而是规则修订后的独立确认。仍 l3=false / absolute=false（KB-META05/KB-STRUCT02）。",
+  "discipline": [
+    "先 commit+push 本 prereg+admission_v2.py+对偶测试+冻结输入哈希，再发起任何 vendor API 调用（外部时间戳锚证明规则先于 spawn）",
+    "admission_v2.py 哈希锁定，spawn 后不得改动；若需改规则实现→视为新实验重新预注册",
+    "不采信异厂自报 note，import judge 源码用冻结 gt 盲评重跑",
+    "PRIMARY 事前锁定，禁止事后改用全集/其他子集翻案（KB-META14/KB-R）",
+    "API key 仅从环境变量读，绝不入仓/日志/prompt 留痕/result",
+    "不修改 §110 任何文件（prereg/engine/result/三 judge 原样保留）",
+    "不编译新门禁（受控实验轮）；不接 run_loop（§58）；系统安全红线全程遵守"
+  ],
+  "no_new_gate": true,
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "does_not_overturn": "§110 result.json verdict=CROSS_VENDOR_INCONCLUSIVE（其 prereg 词边界规则下准入未全过）保持有效；本轮在其之上做规则修订的独立确认，两者并列陈述，分层报告，不选择性只报存活分量（KB-META16）。"
+}

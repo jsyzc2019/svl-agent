@@ -1,0 +1,13 @@
+{
+  "experiment": "§111 准入规则修订确认（待命）",
+  "status": "PRE_REGISTERED_AWAITING_SPAWN",
+  "missing_judges": [
+    "P0",
+    "P1",
+    "P2"
+  ],
+  "locks_ok": false,
+  "note": "prereg+v2 规则+对偶测试+冻结输入已锁；待 spawn 异厂 judge 后重跑本引擎。不构成裁决。",
+  "l3_claimed": false,
+  "absolute_claimed": false
+}
