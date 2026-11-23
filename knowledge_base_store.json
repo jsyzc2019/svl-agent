@@ -4577,6 +4577,32 @@
       "evidence": "台账21轮数据驱动生成,复盘报告11738bytes零占位符,专项20/20;收尾后verdict保持GAP_INCONCLUSIVE/FULLCHAIN_PARTIAL,l3/absolute仍false",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META27",
+      "kind": "reasoning_lesson",
+      "mechanism": "用户剧透第二家=智谱Agent后的揭盲能力评估:关键纪律认知=身份剧透对能力评估几乎无增量,因为画像本就来自完全匿名盲评下的行为数据(两张作业书相同、身份对验收方隐藏),剧透唯一价值是把画像与公开产品路线对号入号判断'稳定特征vs单次偶然'。证据分三层:A本仓实测(带SHA256可复现身份盲,核心依据)/B厂商官方自报(Qoder官网/Qwen3.8-Max通义benchmark表/GLM-5.3 HF模型卡,用于印证定位但数字非独立复现)/C二级来源转述(仅背景不采信为事实)。",
+      "trigger": "当外部身份/背景在评估完成后才揭晓、需要评估对方能力而不污染已定格裁决时",
+      "action": "先划纪律边界(不因剧透翻案改verdict),再声明'画像来自盲态行为数据故身份零增量',再按证据分层使用材料(A做判断B做印证C只做背景),明确拒绝用厂商自报benchmark排'谁更强'。两家A级画像:Qoder=数值层手写解析器159行+主动披露prereg偏差+自报PARTIAL+拒绝补洞(工程执行者);智谱=三层词类多重集86行抓断言结构+自报CONFIRMED满阈值+coverage_plan照抄模板示例(规律归纳者);两家镜像互补且都在canary栽,整体均11/18。与B级产品路线(Qoder端到端自验证闭环/GLM同基座重后训练)互相印证。五条借鉴:反Goodhart诚实/先找结构再写代码/警惕判据-任务语义错配/自报分数不可靠只信盲评/自动化边界=执行做满裁定留人。",
+      "provenance": "AGENT_CAPABILITY_ASSESSMENT_20261123.html+本仓两家received交付物(身份盲)+qoder.com官网+tongyi.ai Qwen3.8-Max+huggingface.co/zai-org/GLM-5.3模型卡",
+      "timestamp": "2026-11-23T11:04:47Z",
+      "support": 1,
+      "evidence": "两家身份盲评期间仓库无任何身份字段(仅Qoder自报于prereg evaluator,智谱全匿名);A级回放两家均11/18,CONFIRMED/PARTIAL自报与回放结果不相关;报告headless渲染无乱码;不翻案l3仍false",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT62",
+      "kind": "reasoning_lesson",
+      "mechanism": "两家顶尖Agent(阿里Qoder/智谱)在同一五权力外置作业书下判据镜像互补:Qoder深挖数值层(手写数值字面量解析器处理科学计数法/符号/区间,159行)得数值2/2但断言0/4canary3/6;智谱归纳断言层(否定/连接/内容词三层多重集,86行)得断言4/4但数值1/2canary0/6;两家整体均11/18都在canary栽。抽象层级选对则代码更少覆盖更广(智谱86行> Qoder159行的迁移面),但两家都忠实于自己归纳的那层语义而没意识到评测集混了两种任务。",
+      "trigger": "当两家强Agent在同一任务给出看似矛盾的判据结果、需要判断是能力差异还是任务定义问题时",
+      "action": "不要急于排高低:先看判据抽象的层级(数值层vs断言层)与目标样本语义的对应,再看两家是否在同一维(canary)系统性失败——若是,则根因是评测集任务异质性而非判据优劣(呼应KB-AUDIT60三簇分离鸿沟15)。自我评估信号不可靠:Qoder自报PARTIAL保守/智谱自报CONFIRMED乐观,回放后实际同分11/18——坚持不采信自报只import源码盲评。抽象深度借鉴:遇新任务先问'结构是什么'再写代码,胜过堆特例。",
+      "provenance": "AGENT_CAPABILITY_ASSESSMENT_20261123.html第二节A级证据+audit_l3_fullchain_external/received/criterion.py+audit_l3_gap_targeted/received/criterion.py",
+      "timestamp": "2026-11-23T11:04:47Z",
+      "support": 1,
+      "evidence": "Qoder判据159行数值解析器 vs 智谱判据86行三层多重集;两家整体均11/18;Qoder canary3/6断言0/4,智谱断言4/4 canary0/6;自报PARTIAL vs CONFIRMED但回放同分",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

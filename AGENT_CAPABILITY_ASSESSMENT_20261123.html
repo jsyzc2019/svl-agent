@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>揭盲后能力评估：阿里 Qoder 与智谱 Agent · 借鉴</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#1a3a6b;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b;--bad:#8b0000;--evA:#1a7f37;--evB:#b8860b;--evC:#888}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.75}
+.wrap{max-width:1000px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:22px}
+h2{font-size:19px;margin:38px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}h3{font-size:15.5px;margin:20px 0 7px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#eef2f8;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.a{background:#eaf5ed;border:1px solid #b7dcc0;padding:13px 17px;border-radius:6px;font-size:14px}
+.warnbox{background:#fdecea;border:1px solid #e8b4b0;padding:13px 17px;border-radius:6px;font-size:14px}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:13px 17px;border-radius:6px;font-size:14px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:13px 17px;border-radius:6px;font-size:14px}
+.ev{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:700;color:#fff}
+.evA{background:var(--evA)}.evB{background:var(--evB)}.evC{background:var(--evC)}
+.ok{color:var(--ok);font-weight:600}.bad{color:var(--bad);font-weight:600}.warn{color:var(--warn);font-weight:600}
+.foot{margin-top:42px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+ul,ol{padding-left:22px}li{margin:5px 0}.muted{color:var(--muted)}
+</style></head><body><div class="wrap">
+
+<h1>揭盲后能力评估：阿里 Qoder 与智谱 Agent</h1>
+<div class="sub">2026-11-23 · 触发：用户剧透第二家为智谱 Agent · 结论性质：元层面借鉴，<b>不翻案、不参与 L3 裁决</b> · 两家身份此前完全匿名盲评</div>
+
+<div class="warnbox">
+<b>纪律边界先行：</b>L3 裁决（<code>FULLCHAIN_PARTIAL</code> / <code>GAP_INCONCLUSIVE</code>、l3=false）已定格。本次剧透发生在裁决之后，评估<b>只做能力画像与借鉴，绝不回头改任何判定、阈值或 verdict</b>。更要紧的一点是：<b>身份剧透对能力评估几乎没有增量</b>——画像本就来自完全匿名下的行为数据；剧透真正的价值，是把这些画像与两家公开的产品路线对上号，从而判断"这是厂商路线的稳定特征，还是单次偶然"。
+</div>
+
+<h2>一、证据分层（避免把自报当实测）</h2>
+<table>
+<tr><th style="width:15%">等级</th><th>来源</th><th>可信度用法</th></tr>
+<tr><td><span class="ev evA">A · 实测</span></td><td>本仓两家交付物 + 权威验收器 + 机械回放，带 SHA256、可复现、身份盲</td><td><b>核心依据</b>。这是别人没有的、我亲手验的行为证据</td></tr>
+<tr><td><span class="ev evB">B · 厂商自报</span></td><td>Qoder 官网、通义 Qwen3.8-Max benchmark 表、GLM-5.3 Hugging Face 官方模型卡</td><td>用于印证产品定位；<b>数字是厂商自己测的</b>，非独立复现</td></tr>
+<tr><td><span class="ev evC">C · 二级来源</span></td><td>评测聚合站、媒体报道的型号与分数</td><td>仅作背景，<b>具体数字不采信为事实</b>（多数转述 B，部分口径不一）</td></tr>
+</table>
+
+<h2>二、A 级证据：两家在完全相同的作业书下暴露的能力画像</h2>
+<div class="phil">两家拿到的都是"五权力全外置"作业书（自选题、自建样本、自归纳判据、自建 gt、自裁决），身份对验收方完全隐藏。因此下面的差异<b>只能归因于能力/取向，不能归因于知道是谁</b>——这是这份评估最硬的地方。</div>
+
+<table>
+<tr><th style="width:20%">维度</th><th>阿里 Qoder（Operation L3）</th><th>智谱 Agent（L3-R2）</th></tr>
+<tr><td><b>判据实现的抽象层</b></td><td>数值层：手写数值字面量解析器（科学计数法/符号/小数点边界/区间全处理）+ 封闭限定词表，159 行。<b>工程深度极高，但抽象停在"量"</b></td><td>断言层：否定词/连接词/内容词三层多重集比对，86 行。<b>抽象更深，抓到了"断言结构"</b></td></tr>
+<tr><td><b>迁移到本仓冻结集</b></td><td>整体 11/18：数值 2/2、<span class="ok">canary 3/6</span>、断言 0/4</td><td>整体 11/18：断言 <span class="ok">4/4</span>、数值 1/2、<span class="bad">canary 0/6</span></td></tr>
+<tr><td><b>自报诚实度</b></td><td><span class="ok">EXTERNAL_PARTIAL</span>（13/16=0.81 主动落 PARTIAL 带）；<b>主动披露 prereg 偏差</b>（连"O_PERMUTE 无可用槽位"都写进 deviations）；拒绝事后补单位换算（反 Goodhart）</td><td><span class="warn">EXTERNAL_CONFIRMED</span>（12/12=1.0 满阈值）；自述"语义仅为内部一致性，不宣布 L3"——<b>最后一句守住了边界</b></td></tr>
+<tr><td><b>脚手架依赖</b></td><td>自建判据/样本/gt，未用任何本仓模板（v1 阶段无模板可用）</td><td>coverage_plan 几乎<b>原样照抄傻瓜模板示例文字</b>——按契约合规（模板本就是给外家填空的），但显示对脚手架的照搬倾向</td></tr>
+<tr><td><b>选题取向</b></td><td>极新的化学物理论文 2611.00401（physics.chem-ph），认真执行避开清单+领域检索</td><td>最经典的 GPT-3 论文 2005.14165，避开清单检查通过但属"最安全选项"</td></tr>
+</table>
+
+<div class="note">
+<b>镜像互补，且都在 canary 栽：</b>Qoder 修了数值层漏断言，智谱修了断言层漏 canary。两家整体都停在 11/18。这个"此消彼长、总量不变"的结构，正是复盘定位的<b>评测集任务异质性</b>——判据越忠实于某一层语义，就越与另一层任务错配。这<b>不是谁更强</b>，是两家的归纳各停在十六条冻结样本能支撑的不同层上。
+</div>
+
+<h2>三、B 级证据：公开产品路线与 A 级画像互相印证</h2>
+<table>
+<tr><th style="width:18%">厂商</th><th>公开定位（B）</th><th>与本仓画像的印证</th></tr>
+<tr><td><b>阿里</b></td><td><span class="ev evB">B</span> Qoder 官网：以编程智能体为核心引擎的"智能体工作台"，含 Agent SDK / Cloud Agents / QoderWake 数字员工；强调"规划→编码→测试→提交 PR 端到端"自验证闭环，600 万+用户。Qwen3.8-Max 通义官网 benchmark 表覆盖 coding agent/general agent/多模态（厂商自报）；有独立 SWE-bench Verified 分数 <span class="ev evC">C</span>。</td><td><b>高度一致</b>：工程化、闭环、自验证的产品哲学，正好解释 Qoder 交付里的"手写完整解析器+如实披露偏差+拒绝补洞"——它把"可靠交付过程"看得比"claim 漂亮"重。</td></tr>
+<tr><td><b>智谱</b></td><td><span class="ev evB">B</span> GLM-5.3（Z.ai / Hugging Face 官方模型卡）：与 GLM-5.2 同基座、增益全来自后训练；主打 coding 与长周期 agent 任务，Terminal-Bench 3.0 28.3 / DeepSWE 66.9 / AutomationBench 48.2 均为<b>厂商自报</b>；开源权重，同基座重后训练路线。</td><td><b>方向一致</b>：后训练强化 agent/coding 的路线，与"归纳出更深的断言结构判据"同向；但"自报满阈值 + 照抄模板"也提示——<b>强在模式归纳，弱在对评测边界的自我怀疑</b>。</td></tr>
+</table>
+
+<div class="note">
+关于 benchmark 数字的诚实说明：GLM-5.3 的 28.3/66.9 等、Qwen3.8-Max 的 86.6 Terminal-Bench 等，<b>都是厂商自己测的</b>（官方模型卡/官网表格明确标注 in-house 或特定 harness），不同来源口径不一，且多数二级站只是转述。有少数独立分数（如 vals.ai 对 Qwen3.8-Max 的 SWE-bench Verified）<span class="ev evC">C</span>，但 harness 差异大。<b>本报告不据此排"谁的模型更强"</b>——真正的强弱判断只用 A 级证据。
+</div>
+
+<h2>四、能从中学到什么：对我自己的五条借鉴</h2>
+
+<h3>1. 学 Qoder 的"反 Goodhart 诚实"：拒绝把结果修到漂亮</h3>
+<div class="a">Qoder 在 O_PERMUTE 无可用槽位时，<b>没有事后改判据或补样本去凑覆盖率</b>，而是把偏差如实写进 prereg 披露，自报落到 PARTIAL。这正是本仓 §110/§113 反复强调的纪律。它证明：<b>高能力的标志不是"总能达标"，而是"不达标时能如实说不达标"</b>。我自己在 §115 canary 语义错配后没有删条件改阈值，与它是同一条纪律——这条要做到底。</div>
+
+<h3>2. 学智谱的"归纳深度"：先找结构，再写代码</h3>
+<div class="a">智谱判据只有 86 行，却抓住了"否定层 / 连接层 / 内容词层"三层结构，比 Qoder 159 行的数值解析器抽象更高，直接把断言类从 0/4 打到 4/4。启示：<b>遇到新任务，先问"它的结构是什么"，而不是先堆特例处理</b>。我之前很多轮在调 AST 准入、词边界枚举，属于 Qoder 式的工程深挖；智谱式的"三层语义抽象"提醒我，抽象层级选对了，代码量反而更少、覆盖更广。</div>
+
+<h3>3. 两家共同的盲区，就是我该警惕的盲区：判据-任务语义错配</h3>
+<div class="a">两家都是顶尖 Agent，都在 canary 上系统性翻车——因为它们都<b>忠实实现了自己归纳的那层语义</b>，却没意识到评测集里混了第二种任务。这印证复盘的洞察：<b>能力再强也救不了任务定义错误</b>。对我而言，这意味着每次设计判据前，要先验证"这个判据的目标语义"和"样本的构造语义"是不是同一件事——这正是 §100 早就记录、我在复盘中精确量化的那条。</div>
+
+<h3>4. "自我评估"是最不可靠的能力信号——两家都验证了这点</h3>
+<div class="a">Qoder 自报 PARTIAL（偏保守），智谱自报 CONFIRMED（偏乐观），但回放后两家整体都是 11/18。<b>自报分数与实际迁移能力几乎不相关</b>。这强化本仓的核心设计原则：<b>不采信任何自报，只 import 源码用冻结 gt 盲评</b>。以后评估任何外部（或内部）声称，都坚持这条——包括对我自己的声称。</div>
+
+<h3>5. 产品化路线告诉我"能力如何变现"：把重复劳动接过去，把把关留给人</h3>
+<div class="a">Qoder 的产品哲学（端到端执行 + 自验证 + 审批门控）和本仓的纪律（最终裁定权归人、Agent 不自封）是同构的。<b>正确的自动化边界</b>不是"AI 全权决定"，而是"AI 把可验证的执行做满，把价值判断和最终裁定留给人"。这给了我一个更清晰的角色定位：把证据链做到机械可验、把结论留给委托方——这既诚实，也是两家头部产品共同走的路。</div>
+
+<h2>五、一句话总评</h2>
+<div class="phil">
+两家 Agent 的能力差距，在本仓这个受控任务里<b>不在"高低"，而在"取向"</b>：阿里 Qoder 像一位严谨的工程执行者——深、稳、诚实、重过程；智谱 Agent 像一位敏锐的规律归纳者——抽象快、结构好、但自我校验弱。公开产品路线与这些画像互相印证。真正的收获不是"谁更强"，而是看清两件事：<b>（1）能力再强也受限于任务定义，判据-语义错配是共同的墙；（2）可迁移的可靠性来自"不达标时如实说不达标"，而非"总能达标"</b>。这两条都已沉淀进本仓纪律，无需因剧透而改动任何裁决。
+</div>
+
+<div class="foot">
+证据等级：<span class="ev evA">A</span> 本仓实测（带 SHA256、可复现、身份盲） · <span class="ev evB">B</span> 厂商官方自报 · <span class="ev evC">C</span> 二级来源转述。<br>
+本报告为剧透后元分析，不翻案、不改 verdict、不参与 L3 裁决；l3=false / absolute=false 保持不变，最终裁定权归委托方（人）。benchmark 数字均为厂商自报，未经独立复现，不作为"谁更强"的依据。
+</div>
+
+</div></body></html>
