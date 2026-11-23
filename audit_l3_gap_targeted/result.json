@@ -1,0 +1,38 @@
+{
+  "experiment": "L3_GAP_TARGETED_EXTERNAL",
+  "status": "PRE_REGISTERED_AWAITING_EXTERNAL_EXECUTION",
+  "verdict": null,
+  "metrics": null,
+  "baseline": {
+    "source": "audit_l3_fullchain_external/result.json + received/l3_external_audit/criterion.py",
+    "evaluator": "Qoder 异种大模型",
+    "commit": "09c7109",
+    "frozen_samples": "audit_frozen_holdout/downloads/samples.json (18 组: clean6/tampered6/canary6)",
+    "replay_total": "11/18",
+    "clean": "6/6",
+    "tampered_by_family": {
+      "ASSERTION_TAIL": "0/1",
+      "NEGATION": "0/2",
+      "CONNECTOR": "0/1",
+      "NUMERIC_QUANT": "2/2"
+    },
+    "assertion_family_total": "0/4",
+    "numeric_family_total": "2/2",
+    "canary": "3/6",
+    "verification": "本轮 spawn 前用上一轮 criterion.py 对冻结样本逐 case 重跑核验；族标注依据逐字文本事实，非从结果反推。"
+  },
+  "does_not_overturn": [
+    "§107 STRATIFIED_CONFIRMED",
+    "§108 CROSS_SET_PARTIAL",
+    "§109 EXECUTOR_INDEPENDENCE_CONFIRMED",
+    "§110 CROSS_VENDOR_INCONCLUSIVE",
+    "§111 AST_V2_PARTIAL",
+    "§112 CROSS_VENDOR2_PARTIAL",
+    "§113 SET_VENDOR2_INCONCLUSIVE",
+    "§114 INTERPRETER_CONFIRMED",
+    "§115 INTERPRETER_CROSS_INCONCLUSIVE",
+    "§L3 FULLCHAIN_PARTIAL"
+  ],
+  "l3_claimed": false,
+  "absolute_claimed": false
+}

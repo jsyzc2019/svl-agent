@@ -67,7 +67,8 @@ def test_audit_all_counts():
     # §114 解释者独立性受控验证目录（受控轮不编译门禁）→ total 56→57，five_piece/三锁不变
     # §115 解释者跨厂商交叉确认目录（受控轮不编译门禁）→ total 57→58，five_piece/三锁不变
     # L3 外家 Agent 全链外置验收目录（计划/契约+验收器，不编译门禁）→ total 58→59，five_piece/三锁不变
-    assert a["total"] == 59
+    # §L3-R2 缺口定向外置验收目录（契约+验收器+裁决引擎，不编译门禁）→ total 59→60，five_piece/三锁不变
+    assert a["total"] == 60
     assert a["five_piece_complete"] == 34
     assert a["three_locks_intact"] == 31
     assert 0 < a["three_locks_intact"] <= a["total"]
