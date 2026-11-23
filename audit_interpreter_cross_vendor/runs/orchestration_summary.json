@@ -1,0 +1,35 @@
+{
+  "experiment": "§115 三厂商解释者编排留痕",
+  "key_in_trace": false,
+  "caller_byte_identical_to_114": "call_interpreter.py",
+  "results": {
+    "dots": {
+      "model": "dots-studio/dots-3-note-preview:free",
+      "status": "ok",
+      "tiers": {
+        "case_1": "FULL",
+        "case_2": "PARTIAL",
+        "case_3": "PARTIAL",
+        "case_4": "PARTIAL"
+      },
+      "finish_reason": "stop"
+    },
+    "ling": {
+      "model": "inclusionai/ling-3.2-flash:free",
+      "status": "failed_error",
+      "tiers": null,
+      "finish_reason": null
+    },
+    "liquid": {
+      "model": "liquid/lfm-3-1.7b:free",
+      "status": "ok",
+      "tiers": {
+        "case_1": "FULL",
+        "case_2": "PARTIAL",
+        "case_3": "PARTIAL",
+        "case_4": "PARTIAL"
+      },
+      "finish_reason": "stop"
+    }
+  }
+}

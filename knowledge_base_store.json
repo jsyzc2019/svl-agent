@@ -4460,6 +4460,32 @@
       "evidence": "修后INTERPRETER_CONFIRMED 4/4；辨析FULL≡CONFIRMED别名而非放宽；verify盲性/来源/不翻案断言全部保留",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT57",
+      "kind": "reasoning_lesson",
+      "mechanism": "解释者跨厂商确认遇单厂429限流,按prereg失败分支封顶INCONCLUSIVE而非重跑到全齐(§115):§114单一异厂解释者4/4复现四轮裁决,§115按§110→§112升级路径做多厂商交叉,逐字节复用§114冻结输入与调用器(哈希断言)唯一变量=厂商,选dots-studio/inclusionai/liquid三家真异厂;dots与liquid均4/4,但inclusionai正式spawn时HTTP429(probe时可用)失败。按纪律不重跑ling(=调到跑通,§113明禁)、不把API失败包装成厂商判错,整体封顶INTERPRETER_CROSS_INCONCLUSIVE;成功两家的4/4作为部分证据如实记录。",
+      "trigger": "当多厂商/多runner受控实验遇到个别厂商API限流或临时不可用时；当'部分成功'诱惑你把失败包装成结论或重跑到齐时。",
+      "action": "prereg预先写死API失败分支=封顶INCONCLUSIVE;失败厂商tiers写None不伪造;不重跑失败厂商;成功分量的数值如实记录但不升级整体裁决;外部锚证明失败留痕先于任何事后调整。",
+      "provenance": "§115 audit_interpreter_cross_vendor；外部锚d6a6aa4服务器06:45:04Z；dots/liquid 4/4、ling 429。",
+      "timestamp": "2026-11-23T14:52:00+08:00",
+      "support": 1,
+      "evidence": "result.json verdict=INTERPRETER_CROSS_INCONCLUSIVE, present=[dots,liquid], ling status=failed_error, 成功两家agreement=4/4",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META23",
+      "kind": "reasoning_lesson",
+      "mechanism": "状态机必须区分'文件在/成功产出/失败'——把API失败当判错是伪造语义(§115):初版engine的present只按manifest文件存在判定(spawn前commit内),把429失败的ling也计入,2家4/4就误落CROSS_PARTIAL(语义='1家判错')。但失败厂商是'没判'不是'判错',把它算成分歧=伪造。修法:present只计status==ok且产出tiers者,失败厂商走INCONCLUSIVE分支且tiers=None,result如实记录其failed_error状态。判据:bug在外部锚commit内早于spawn=修工具(§109/§111/§113先例),修复只收紧裁决不放宽。",
+      "trigger": "写多源/多厂商/多runner聚合引擎时；'部分成功'裁决容易把失败源误归类的场景。",
+      "action": "状态机三态显式化(全缺待命/部分成功/全成功);present按有效产出而非文件存在;失败源如实入results不隐藏;verify断言失败态无伪造tiers。",
+      "provenance": "§115 EXECUTION_LOG.md；git show d6a6aa4:engine.py 第44行present定义=spawn前证据。",
+      "timestamp": "2026-11-23T14:52:00+08:00",
+      "support": 1,
+      "evidence": "修后INTERPRETER_CROSS_INCONCLUSIVE,ling status=failed_error/tiers=None如实记录,verify37/37",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

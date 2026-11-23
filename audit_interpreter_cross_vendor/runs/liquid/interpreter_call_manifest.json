@@ -1,0 +1,50 @@
+{
+  "experiment": "§114 异厂解释者调用留痕（唯一变量=解释者）",
+  "vendor": "liquid",
+  "model": "liquid/lfm-3-1.7b:free",
+  "api_base": "https://openrouter.ai/api/v1",
+  "system_sha256": "781ad0fc13d419aed47ce70c74732e6150e15b44adb8b400c876fdf4786c7a98",
+  "user_prompt_sha256": "c3aa974d5ef2696e3fa547de8496b96a102dc1eaf2ecb22aa7de4def835647b6",
+  "cases_blind_sha256": "172f808945302005a71bfebc626d2e19c3a35ea047e068a7b1c6d4497cbfd61e",
+  "gt_private_in_prompt": false,
+  "calls": [
+    {
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 624,
+        "completion_tokens": 2479,
+        "total_tokens": 3103,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2440,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "content_len": 87,
+      "reasoning_len": 6201,
+      "parse_source": "json",
+      "model_resp_model": "liquid/lfm-3-1.7b:free",
+      "status": "ok",
+      "tiers": {
+        "case_1": "FULL",
+        "case_2": "PARTIAL",
+        "case_3": "PARTIAL",
+        "case_4": "PARTIAL"
+      }
+    }
+  ],
+  "called_at_utc": "2026-11-23T06:47:34Z"
+}

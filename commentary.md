@@ -4127,3 +4127,27 @@ L3 尺子 `independent_tests` 维里，执行者（§109 GitHub runner）、设�
 仍 **l3=false/absolute=false**：① 只外移解释者一维，样本/gt/盲评/designer/裁决树设计/最终 l3 判断仍本 Agent；② 单一异厂单次运行、四 case 全来自既有四轮、无统计交叉；③ 档位同构四轮，未覆盖 REFUTED 等未出现档位；④ 异厂自报不采信，只采信 tier 标签与冻结 gt 机械比对；⑤ §107–§113 七案全部保留并列不翻案。四轮裁决本身多为 PARTIAL/INCONCLUSIVE，其余维度仍本 Agent——不宣布 L3。
 
 验收：verify 30/30（盲性七项 banned + 来源一致四 case + 档位合法 + 不翻案 7 案 + gt 未进 prompt + 失败态无伪造）；专项 10/10；全量见提交记录；KB 168→170（KB-AUDIT56 解释者外移 + KB-META22 字段 bug vs Goodhart）；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。
+
+---
+
+## §115 解释者跨厂商交叉确认（2026-11-23，"继续"→§114 单厂商证据升级为交叉）
+
+### 触发：单厂商 4/4 可能是偶然
+§114 证明单一异厂解释者（baidu/ernie）能把四轮裁决 4/4 复现，但单点单厂商无法排除"恰好这家厂商能正确应用规则"。按 §110→§112 设计者独立的单厂商→跨厂商升级路径，本轮对解释者一维做同样升级。
+
+### 115.1 逐字节复用锁死唯一变量=厂商
+`audit_interpreter_cross_vendor/` 把 §114 的 cases_blind.json（172f8089…）/gt_private.json（407485c8…）/gen_fixtures.py（75e3810d…）/call_interpreter.py（83f7113e…）**逐字节复制**，verify 加跨目录哈希断言物理证明。编排器 run_all.py 逐字节调用同一 call_interpreter.py，唯一变化=INTERPRETER_MODEL/NAME 环境变量。空间探测排除 429 的 gemma，选 dots-studio（阶跃星辰）/inclusionai（蚂蚁）/liquid（Liquid AI）三家真异厂（与 baidu 不同厂、彼此不同厂）。commit+push `d6a6aa4` 服务器 `06:45:04Z` 早于 spawn=外部锚。
+
+### 115.2 执行：两家 4/4，一家 429
+dots-studio 与 liquid 均 finish=stop、JSON 解析、tiers 4/4（case_1=FULL,case_2/3/4=PARTIAL）；inclusionai/ling 正式 spawn 时 HTTP 429（probe 时可用）失败、无 tiers。按纪律不重跑 ling（=调到跑通，§113 明禁）、不把 API 失败包装成厂商判错。
+
+### 115.3 确定性 bug 修复：失败厂商 ≠ 判错厂商
+初版 engine 的 `present` 只按 manifest 文件存在判定（`git show d6a6aa4:engine.py` 第 44 行，spawn 前已锁），把 429 失败的 ling 也计入，2 家 4/4 就误落 CROSS_PARTIAL（语义="1 家判错"）。但 ling 是 API 失败没判、不是判了判错——算分歧=伪造语义。prereg 原文已写"任一厂商 API 失败 → INTERPRETER_CROSS_INCONCLUSIVE"。按 §109/§111/§113 先例修工具：`present` 只计 status==ok 且产出 tiers 者，失败厂商 tiers=None 如实记录，走 INCONCLUSIVE 分支；不改 prereg/不重跑/不放宽（KB-META23 状态机纪律）。
+
+### 115.4 裁决：INTERPRETER_CROSS_INCONCLUSIVE（诚实的不完整结果）
+2/3 家成功且都 4/4，但一家 429 失败 → 按 prereg 失败分支封顶，**不宣布"三家交叉确认"**。分层结论：解释规则语义在成功的两家真异厂上可移植，但第三家未完成、整体证据不完整。§114 单厂商 INTERPRETER_CONFIRMED 保持不变不翻案。
+
+### 115.5 诚实边界：仍未达到 L3
+仍 **l3=false/absolute=false**：① 三家仅两家完成，未达多厂商确认门槛；② 即便全完成也只解释者一维，样本/gt/盲评/designer/裁决树设计/最终 l3 判断仍本 Agent；③ 四 case 全来自既有四轮、档位同构（未覆盖 REFUTED 等未出现档位）；④ 异厂自报不采信，只采信 tier 标签与冻结 gt 机械比对；⑤ §107-§114 八案全部保留并列不翻案。
+
+验收：verify 37/37（哈希锁+跨目录逐字节复用+厂商多样性+盲性+失败态无伪造+不翻案8案+l3=false）；专项 9/9；全量 1429 passed；KB 170→172（KB-AUDIT57 单厂限流封顶 + KB-META23 失败厂商≠判错厂商状态机）；链审 total 58/five 34/三锁 31；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。

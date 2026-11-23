@@ -65,7 +65,8 @@ def test_audit_all_counts():
     # §112 真正跨厂商 designer 交叉目录（受控轮不编译门禁）→ total 54→55
     # §113 跨集×跨厂商 2×2 闭合目录（受控轮不编译门禁）→ total 55→56，five_piece/三锁不变
     # §114 解释者独立性受控验证目录（受控轮不编译门禁）→ total 56→57，five_piece/三锁不变
-    assert a["total"] == 57
+    # §115 解释者跨厂商交叉确认目录（受控轮不编译门禁）→ total 57→58，five_piece/三锁不变
+    assert a["total"] == 58
     assert a["five_piece_complete"] == 34
     assert a["three_locks_intact"] == 31
     assert 0 < a["three_locks_intact"] <= a["total"]

@@ -40,8 +40,18 @@ def main():
         sp = f"{BASE}/{lk}"
         locks_ok = locks_ok and os.path.exists(sp) and sha(f"{BASE}/{f}") == open(sp).read().strip()
 
-    # 三态：全缺待命 / 部分缺 / 全齐
-    present = [t for t in TAGS if os.path.exists(f"{BASE}/runs/{t}/interpreter_call_manifest.json")]
+    # 三态：全缺待命 / 部分成功 / 全成功
+    # 修确定性状态机 bug（§109/§111/§113 先例，见 EXECUTION_LOG.md）：
+    # present 只计 status==ok 且产出 tiers 的厂商；失败厂商（如 429）不算"已判"，
+    # 否则会把 API 失败误当"厂商判错"落 PARTIAL——那是伪造语义。
+    # 该 bug 在 spawn 前 commit d6a6aa4 的 engine.py 第44行已存在，与结果无关。
+    def _ok(tag):
+        p = f"{BASE}/runs/{tag}/interpreter_call_manifest.json"
+        if not os.path.exists(p):
+            return False
+        rec = load(p).get("calls", [{}])[0]
+        return rec.get("status") == "ok" and "tiers" in rec
+    present = [t for t in TAGS if _ok(t)]
     if not present:
         result = {"experiment": "§115", "status": "PRE_REGISTERED_AWAITING_SPAWN", "locks_ok": locks_ok,
                   "verdict": None, "metrics": None, "does_not_overturn": prereg["does_not_overturn"],
@@ -51,7 +61,9 @@ def main():
         return 0
 
     per_vendor = {}
-    for tag in present:
+    # 遍历所有有留痕的厂商（含失败），如实记录失败状态，不隐藏 429
+    all_present = [t for t in TAGS if os.path.exists(f"{BASE}/runs/{t}/interpreter_call_manifest.json")]
+    for tag in all_present:
         mf = load(f"{BASE}/runs/{tag}/interpreter_call_manifest.json")
         rec = mf.get("calls", [{}])[0]
         ok = rec.get("status") == "ok" and "tiers" in rec

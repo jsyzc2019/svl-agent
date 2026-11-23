@@ -1,9 +1,105 @@
 {
   "experiment": "§115",
-  "status": "PRE_REGISTERED_AWAITING_SPAWN",
+  "status": "EXECUTED",
   "locks_ok": true,
-  "verdict": null,
-  "metrics": null,
+  "vendors_present": [
+    "dots",
+    "liquid"
+  ],
+  "verdict": "INTERPRETER_CROSS_INCONCLUSIVE",
+  "why": "仅 2/3 家厂商产出有效留痕，按预注册失败/不完整分支封顶，不伪造缺失厂商 tiers",
+  "metrics": {
+    "vendors_full_agreement": 2,
+    "vendors_total": 3,
+    "case_2_all_match": true,
+    "per_vendor_agreement": {
+      "dots": "4/4",
+      "ling": null,
+      "liquid": "4/4"
+    }
+  },
+  "per_vendor": {
+    "dots": {
+      "model": "dots-studio/dots-3-note-preview:free",
+      "status": "ok",
+      "agreement": "4/4",
+      "agreement_num": 4,
+      "case_2_match": true,
+      "finish_reason": "stop",
+      "parse_source": "json",
+      "per_case": {
+        "case_1": {
+          "interpreter_tier_raw": "FULL",
+          "expected_canon": "CONFIRMED",
+          "interpreter_canon": "CONFIRMED",
+          "match": true
+        },
+        "case_2": {
+          "interpreter_tier_raw": "PARTIAL",
+          "expected_canon": "PARTIAL",
+          "interpreter_canon": "PARTIAL",
+          "match": true
+        },
+        "case_3": {
+          "interpreter_tier_raw": "PARTIAL",
+          "expected_canon": "PARTIAL",
+          "interpreter_canon": "PARTIAL",
+          "match": true
+        },
+        "case_4": {
+          "interpreter_tier_raw": "PARTIAL",
+          "expected_canon": "PARTIAL",
+          "interpreter_canon": "PARTIAL",
+          "match": true
+        }
+      }
+    },
+    "ling": {
+      "model": "inclusionai/ling-3.2-flash:free",
+      "status": "failed_error",
+      "agreement": null,
+      "per_case": null
+    },
+    "liquid": {
+      "model": "liquid/lfm-3-1.7b:free",
+      "status": "ok",
+      "agreement": "4/4",
+      "agreement_num": 4,
+      "case_2_match": true,
+      "finish_reason": "stop",
+      "parse_source": "json",
+      "per_case": {
+        "case_1": {
+          "interpreter_tier_raw": "FULL",
+          "expected_canon": "CONFIRMED",
+          "interpreter_canon": "CONFIRMED",
+          "match": true
+        },
+        "case_2": {
+          "interpreter_tier_raw": "PARTIAL",
+          "expected_canon": "PARTIAL",
+          "interpreter_canon": "PARTIAL",
+          "match": true
+        },
+        "case_3": {
+          "interpreter_tier_raw": "PARTIAL",
+          "expected_canon": "PARTIAL",
+          "interpreter_canon": "PARTIAL",
+          "match": true
+        },
+        "case_4": {
+          "interpreter_tier_raw": "PARTIAL",
+          "expected_canon": "PARTIAL",
+          "interpreter_canon": "PARTIAL",
+          "match": true
+        }
+      }
+    }
+  },
+  "tier_alias_normalization_applied": {
+    "FULL": "CONFIRMED",
+    "reuse_from": "§114"
+  },
   "does_not_overturn": [
     "§107 STRATIFIED_CONFIRMED",
     "§108 CROSS_SET_PARTIAL",
@@ -15,5 +111,6 @@
     "§114 INTERPRETER_CONFIRMED"
   ],
   "l3_claimed": false,
-  "absolute_claimed": false
+  "absolute_claimed": false,
+  "honest_bound": "即使 INTERPRETER_CROSS_CONFIRMED，也只是把解释者一维扩展到多厂商 LLM；样本/gt/盲评/designer/裁决树设计/最终 l3 判断仍本 Agent；异厂自报不采信（只采信 tier 标签与冻结 gt 机械比对）；三家厂商仍有限、四 case 全来自既有四轮、档位同构（未覆盖 REFUTED 等未出现档位）。不宣布 L3、不宣布 absolute。"
 }
