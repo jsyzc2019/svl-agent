@@ -1,0 +1,20 @@
+{
+  "experiment": "§112 真正跨厂商 designer 交叉验证",
+  "lineage": "复用 §111/§110/§107 冻结确认集 arXiv:2611.22027；AST v2 规则逐字节复用 §111（哈希 5e36f492...）；唯一变化=designer 厂商 NVIDIA→Liquid AI",
+  "source_sha256": "44f67e49eda1256ce395d12c2d3d3075c2d8d1043f7ef8b157b4b06a80bef2cf",
+  "confirmation_set_sha256": "a1051c405aa2e8f51a78ef3116b92dcb80596bf07b3b2b752093bf8d76f83ad3",
+  "samples_blind_sha256": "e7a65f4d2df068d799040a3c0cd5f06ead87cc01584558a66aa5bcfc22c4252a",
+  "admission_v2_sha256": "5e36f492f55a3f47c26873ec9715793993fcd00a7218d94d6fbd198f3363e2d3",
+  "seed": 261122107,
+  "locked_files": [
+    "prereg.json",
+    "admission_v2.py",
+    "scorer_key.json",
+    "vendor_P0/samples_blind.json",
+    "vendor_P0/purpose.md",
+    "vendor_P1/samples_blind.json",
+    "vendor_P1/purpose.md",
+    "vendor_P2/samples_blind.json",
+    "vendor_P2/purpose.md"
+  ]
+}

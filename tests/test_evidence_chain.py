@@ -61,8 +61,9 @@ def test_audit_all_counts():
     # 每新增一个完整证据目录，total 与 five_piece_complete 各 +1（随仓库成长更新，不放宽）
     # §108 跨集复现确认 + 外部 orchestrator 审计目录加入 → total 50→52 / five_piece 33→34 / 三锁 30→31
     # §110 异厂商 designer 受控实验目录（缺 gate_prereg，受控轮不编译新门禁）→ total 52→53，five_piece/三锁不变
-    # §111 准入规则 AST v2 修订验证目录（受控轮不编译门禁）→ total 53→54，five_piece/三锁不变
-    assert a["total"] == 54
+    # §111 准入规则 AST v2 修订验证目录（受控轮不编译门禁）→ total 53→54
+    # §112 真正跨厂商 designer 交叉目录（受控轮不编译门禁）→ total 54→55，five_piece/三锁不变
+    assert a["total"] == 55
     assert a["five_piece_complete"] == 34
     assert a["three_locks_intact"] == 31
     assert 0 < a["three_locks_intact"] <= a["total"]

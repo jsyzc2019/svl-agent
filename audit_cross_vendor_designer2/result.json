@@ -1,0 +1,13 @@
+{
+  "experiment": "§112 真正跨厂商 designer 交叉验证（待命）",
+  "status": "PRE_REGISTERED_AWAITING_SPAWN",
+  "missing_judges": [
+    "P0",
+    "P1",
+    "P2"
+  ],
+  "locks_ok": true,
+  "note": "prereg+复用 AST v2 规则+冻结输入已锁；待 spawn Liquid AI judge 后重跑本引擎。不构成裁决。",
+  "l3_claimed": false,
+  "absolute_claimed": false
+}
