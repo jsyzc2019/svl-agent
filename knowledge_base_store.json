@@ -4538,6 +4538,19 @@
       "evidence": "run_acceptance实跑:verifier_exit_code=0,passed_count=9,total_checks=9,verifier_accepted_marker=true→passed=true;测试断言passed字段必须来自实跑哈希一致",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT60",
+      "kind": "reasoning_lesson",
+      "mechanism": "§L3-R2 canary 0/6 的机制诊断:逐字量化冻结样本内容词多重集差异,发现clean=0、tampered=0-2、canary=17-48三簇完全分离(鸿沟15)。根因=评测集任务异质性:clean/tampered是同一句逐字保留/微调(断言保留任务),canary是claim/evidence几乎不重叠的不同句(跨句语义蕴含任务)。判据越忠实实现'断言逐字保留'语义(要求内容词一致)→canary越必然误判,负相关非调参可解——解释Qoder(不查内容词)canary3/6vs第二家(查内容词)canary0/6。此缺陷§100早已记录(prereg canary_logic+engine.py'判据-样本设计不兼容'),非事后借口。",
+      "trigger": "当独立方判据在目标维度突破却在能力对照(canary)系统性失败、考虑再换一家时",
+      "action": "先做机制诊断再决定要不要堆样本量:用逐字特征检验canary与目标样本是否正交任务。若正交,则任何忠实目标语义的判据都会在该canary上翻车,再找第三家大概率重复(数值型或断言型)且§101无限回归未破——改从评测工具设计层理解缺口,而非堆异家数量。诊断归诊断不翻案:verdict仍GAP_INCONCLUSIVE、l3/absolute仍false。",
+      "provenance": "audit_l3_gap_targeted/analyze_canary_orthogonality.py+tests/test_gap_targeted.py test_canary_task_heterogeneity+§100 prereg.json:24/engine.py:119早期诊断",
+      "timestamp": "2026-11-23T10:51:22Z",
+      "support": 1,
+      "evidence": "clean content_diff全0; tampered 0-2(均0.5); canary 17-48(均28.17); 最小鸿沟15; separated=true; §100 engine.py原文'判据-样本设计不兼容'",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

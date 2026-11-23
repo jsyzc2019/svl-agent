@@ -161,3 +161,37 @@ def test_canary_mismatch_is_judge_task_semantics_not_engine_bug():
     assert all(c["own_gt"] is True and c["external_judge"] is False for c in canary)
     # engine 未放宽：canary 0/6 如实落账，不因断言类突破而篡改
     assert all(c["match"] is False for c in canary)
+
+
+def test_canary_task_heterogeneity_is_pre_existing_design_defect():
+    """canary 0/6 的机制=评测集任务异质性，非判据缺陷/engine bug；§100早已记录。
+
+    内容词差异：clean=0、tampered 0-2、canary 17-48，完全分离(鸿沟15)。
+    这是 §100 prereg canary_logic + engine.py'判据-样本设计不兼容'的早期已知缺陷。
+    诊断不翻案：verdict 仍 GAP_INCONCLUSIVE、l3/absolute 仍 false。
+    """
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "diag", os.path.join(BASE, "analyze_canary_orthogonality.py"))
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    samples = json.load(open(os.path.join(
+        ROOT, "audit_frozen_holdout/downloads/samples.json"), encoding="utf-8"))["samples"]
+    rows = {}
+    for r in samples:
+        cd = m.mdiff(m.content(r["claim"]), m.content(r["evidence"]))
+        rows.setdefault(r["variant"], []).append(cd)
+    assert rows["clean"] == [0] * 6
+    assert max(rows["tampered"]) <= 2
+    assert min(rows["canary"]) >= 17
+    assert min(rows["canary"]) - max(rows["tampered"]) >= 15  # 完全分离
+    # §100 早期诊断证据存在（非事后借口）
+    prereg100 = open(os.path.join(ROOT, "audit_frozen_holdout/prereg.json"),
+                     encoding="utf-8").read()
+    engine100 = open(os.path.join(ROOT, "audit_frozen_holdout/engine.py"),
+                     encoding="utf-8").read()
+    assert "canary_logic" in prereg100
+    assert "判据-样本设计不兼容" in engine100
+    # 诊断不翻案
+    res = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE"

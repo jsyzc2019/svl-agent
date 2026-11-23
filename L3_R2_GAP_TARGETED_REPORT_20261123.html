@@ -61,6 +61,22 @@ th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;bo
 <b>canary 0/6 是语义错配，不是 engine bug。</b> 逐 case 复核：6 个 canary 的 GT 全为 <code>True</code>，但 claim/evidence 是<b>跨句推断关系</b>（如"S01: 'repaired oracle yields no false positive' ↔ 'INV-5 is silent on the repaired copy…that silence is the specificity result'"），并非"断言是否被完整保留"。外家判据按"claim 是否完整保留 evidence 断言"的框架去比，因内容词/否定词不一致全判 False。这与 §104 字段名语义、§105 域特异是同类——判据的可见面依赖任务语义脚手架。engine 计数经逐 case 复核无误，不修判定。
 </div>
 
+<h2>五之二、canary 机制诊断：评测集任务异质性（正交，非判据缺陷）</h2>
+<div class="note">
+不急着再找第三家。先做机制诊断（`analyze_canary_orthogonality.py`）：逐字量化冻结样本的<b>内容词多重集差异</b>，三族完全分离——
+<table>
+<tr><th>族</th><th>GT</th><th>内容词差异</th><th>任务语义</th></tr>
+<tr><td>clean</td><td>True</td><td>0（全部）</td><td>claim 逐字保留 evidence 断言</td></tr>
+<tr><td>tampered</td><td>False</td><td>0–2（均 0.5）</td><td>同一句改否定/数字/连接词</td></tr>
+<tr><td>canary</td><td>True</td><td>17–48（均 28.17）</td><td>claim/evidence 几乎不重叠的两句 → 跨句语义蕴含</td></tr>
+</table>
+canary 最小值 17 与 tampered 最大值 2 之间有 <b>15 的词差异鸿沟</b>，完全分离。<b>根因</b>：canary 根本不是"断言保留"任务，而是跨句语义蕴含——判据越忠实实现"内容词必须一致"（断言逐字保留语义），canary 越必然误判，<b>两者结构性负相关、非调参可解</b>。这解释了 Qoder（不查内容词）canary 3/6 vs 第二家（查内容词）canary 0/6。
+</div>
+<div class="fix">
+<b>这不是事后借口</b>：§100 冻结集自己的 <code>prereg.json:24 canary_logic</code> 与 <code>engine.py:119</code> 早就记录过"canary 是另一句原文支撑句……被误判反映的是<b>判据-样本设计不兼容</b>，而非过拟合"。本诊断只是把该已知设计缺陷精确量化。<br>
+<b>对下一步的含义</b>：GAP_CLOSED 的 canary≥3/6 门槛对"内容词一致性"判据结构性不可达；再找第三家大概率只是重复（数值型或断言型），且 §101 无限回归未破。<b>诊断归诊断，不翻案</b>：verdict 仍 GAP_INCONCLUSIVE、l3/absolute 仍 false。
+</div>
+
 <h2>六、裁决：GAP_INCONCLUSIVE（诚实封顶，不放宽）</h2>
 <div class="phil">
 预注册裁决树（commit <code>f8e7f3f</code> 锚定、早于外家执行）的 <code>GAP_CLOSED</code> 硬条件含 <b>canary≥3/6</b>。本轮断言类 4/4 满足"≥3/4"，但 canary 0/6 不满足，且"断言≥3/4 但 canary&lt;3/6"这个组合无专属档位，engine 保守兜底 <b>GAP_INCONCLUSIVE</b>。<b>绝不因断言类突破就删 canary 条件、改阈值、重跑到齐</b>——那是 post-hoc 调参（Goodhart）。这是预注册纪律的正确执行，不是失败掩盖。
