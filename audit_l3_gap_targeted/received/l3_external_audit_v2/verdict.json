@@ -1,0 +1,10 @@
+{
+  "verdict": "EXTERNAL_CONFIRMED",
+  "why": "判据为纯函数且通过准入；在 12 组自建样本上与自建 gt 逐 case 一致率 12/12 = 1.000，达到 prereg 阈值 11/12。三类断言改写样本（否定极性翻转、断言补语删尾、连接/让步词增删）均被判据检出。语义仅为内部一致性，不宣布 L3。",
+  "metrics": {
+    "agreement": 1.0
+  },
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "note": "verdict 四选一：EXTERNAL_CONFIRMED / EXTERNAL_DIVERGENT / EXTERNAL_PARTIAL / EXTERNAL_INCONCLUSIVE"
+}

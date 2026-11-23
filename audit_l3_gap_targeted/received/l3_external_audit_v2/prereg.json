@@ -1,0 +1,30 @@
+{
+  "experiment": "L3_GAP_TARGETED_EXTERNAL_V2",
+  "phase": "T0_PREREG — 承诺先于执行，本文件时间戳必须最早",
+  "timestamp": "2026-11-23T10:31:56Z",
+  "chosen_paper": "arXiv 2005.14165 (Language Models are Few-Shot Learners, GPT-3)。理由：与避开清单全部条目不同，且与 oracle failures / FGSE 自进化主题不同域（LM 少样本学习评估），未读过其任何相关审计材料。",
+  "avoid_list_acknowledged": true,
+  "avoid_list_note": "已读作业书避开清单，所选论文不在其中（含任何版本）",
+  "coverage_plan": {
+    "declared": true,
+    "note": "本轮覆盖计划：三类断言改写现象各至少一组",
+    "NEGATION": "否定极性翻转：计划 >=1 组（例：never restores <-> restores）",
+    "ASSERTION_TAIL": "断言补语删尾：计划 >=1 组（例：... yields no false positive <-> ... yields）",
+    "CONNECTOR": "连接/让步词增删：计划 >=1 组（例：The direction, however, is <-> The direction, is）"
+  },
+  "sample_construction": "从论文全文（sources/paper_flat.txt）中挑选包含可核对断言的句子作为 text_b 基准；text_a 为其改写版本。共 12 组：其中含否定极性翻转 >=1 组（text_a 增删 not/never 等否定词）、断言补语删尾 >=1 组（text_a 截掉句尾断言补语）、连接/让步词增删 >=1 组（text_a 增删 however/though 等）；另配 clean 组（断言相同、仅格式/数字重复等表面差异）。每组只体现一种现象，便于归因。id 用 N01..N12，裸样本不标类型、不含标签字样。text_b 全部逐字取自论文原文。",
+  "criterion_induction": "确定性二分纯函数 judge(text_a,text_b)->(bool,reasons,anchors)。归纳方法：以 text_b 为断言基准，用分词与正则做三层核对——(1) 否定层：比对双方核心否定词（not/no/never/nor/cannot 等）的逐词集合与句法位置；(2) 断言完整性层：检查 text_a 是否截掉 text_b 句尾的实义补语（比较句尾词序列、动词后宾语/补语子句长度）；(3) 连接层：比对 however/though/while/whereas/but 等连接让步词的有无。三层均通过且内容词序列仅差格式（空格/连字符/数字重复）判 true；任一层断裂判 false 并给出逐字锚点。阈值为逐 case 一致率 >= 11/12（约 91.7%）。",
+  "gt_definition": "真值来自文本客观事实，独立于判据代码：逐组人工核对 text_b 是否逐字取自论文原文、text_a 相对 text_b 是否改变了断言——(a) 否定词多出/丢失即 false；(b) 句尾断言补语被截（text_b 中实义补语在 text_a 中缺失）即 false；(c) 连接/让步词增删导致断言关系改变即 false；(d) 仅空格/标点/数字重复等表面差异、断言语义完全相同即 true。核对时只读样本对与论文原文，不读 criterion.py。",
+  "verdict_tree": {
+    "EXTERNAL_CONFIRMED": "判据在你自建 gt 上逐 case 一致率 >= 你预注册阈值，且纯函数准入通过",
+    "EXTERNAL_DIVERGENT": "系统性给出与本仓同方向结论不同的结果",
+    "EXTERNAL_PARTIAL": "部分 case 一致、部分分歧",
+    "EXTERNAL_INCONCLUSIVE": "取料失败/429/判据无法准入/无法定 gt，诚实封顶不调参"
+  },
+  "discipline": {
+    "no_post_hoc": true,
+    "no_retry_to_pass": true,
+    "l3_claimed": false,
+    "absolute_claimed": false
+  }
+}

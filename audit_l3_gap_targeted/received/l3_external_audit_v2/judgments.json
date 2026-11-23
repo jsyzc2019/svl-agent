@@ -1,0 +1,100 @@
+{
+  "N01": {
+    "verdict": true,
+    "reasons": [],
+    "anchors": []
+  },
+  "N02": {
+    "verdict": true,
+    "reasons": [
+      "仅表面格式差异（空格/标点/连字符/虚词），断言相同"
+    ],
+    "anchors": []
+  },
+  "N03": {
+    "verdict": true,
+    "reasons": [],
+    "anchors": []
+  },
+  "N04": {
+    "verdict": true,
+    "reasons": [],
+    "anchors": []
+  },
+  "N05": {
+    "verdict": true,
+    "reasons": [],
+    "anchors": []
+  },
+  "N06": {
+    "verdict": false,
+    "reasons": [
+      "否定极性改变（negation polarity）: text_a 缺失: 'no'"
+    ],
+    "anchors": [
+      "no"
+    ]
+  },
+  "N07": {
+    "verdict": false,
+    "reasons": [
+      "否定极性改变（negation polarity）: text_a 缺失: 'no'"
+    ],
+    "anchors": [
+      "no"
+    ]
+  },
+  "N08": {
+    "verdict": false,
+    "reasons": [
+      "否定极性改变（negation polarity）: text_a 多出: 'cannot'"
+    ],
+    "anchors": [
+      "cannot"
+    ]
+  },
+  "N09": {
+    "verdict": false,
+    "reasons": [
+      "断言补语缺失或新增（assertion complement）: text_a 缺失: 'gpt', '3', '175b', 'advances', 'state', 'art', '18'"
+    ],
+    "anchors": [
+      "175b",
+      "18",
+      "advances",
+      "art",
+      "state"
+    ]
+  },
+  "N10": {
+    "verdict": false,
+    "reasons": [
+      "断言补语缺失或新增（assertion complement）: text_a 缺失: 'increase', '18', 'previous', 'state', 'art'"
+    ],
+    "anchors": [
+      "18",
+      "art",
+      "increase",
+      "previous",
+      "state"
+    ]
+  },
+  "N11": {
+    "verdict": false,
+    "reasons": [
+      "连接/让步词增删（connector change）: text_a 缺失: 'however'"
+    ],
+    "anchors": [
+      "however"
+    ]
+  },
+  "N12": {
+    "verdict": false,
+    "reasons": [
+      "连接/让步词增删（connector change）: text_a 缺失: 'however'"
+    ],
+    "anchors": [
+      "however"
+    ]
+  }
+}

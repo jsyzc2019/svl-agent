@@ -112,3 +112,52 @@ def test_l3_never_self_declared():
     assert PREREG["hard_bound"]["absolute_claimed"] is False
     assert PREREG["hard_bound"]["final_verdict_by_human"] is True
     assert "§L3 FULLCHAIN_PARTIAL" in PREREG["does_not_overturn"]
+
+
+def test_executed_verdict_is_inconclusive_and_not_self_declared():
+    """外家交付已到：engine 忠实按预注册树裁决，断言4/4突破但canary0/6封顶→INCONCLUSIVE。
+
+    纪律：不因断言类突破就改阈值/去canary条件；l3/absolute 恒 false；不翻十案。
+    """
+    res = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
+    assert res["status"] == "EXECUTED"
+    assert res["verdict"] == "GAP_INCONCLUSIVE"
+    assert res["l3_claimed"] is False and res["absolute_claimed"] is False
+    assert len(res["does_not_overturn"]) == 10
+    mc = res["mechanical_comparison"]
+    # 断言类从基线 0/4 突破到 4/4（判据确实看到了断言层）
+    assert mc["assertion_family_detected"] == "4/4"
+    assert mc["baseline_assertion"] == "0/4"
+    # canary 0/6（判据框架与跨句推断样本语义错配）触发 CLOSED 门槛不满足
+    assert mc["by_variant"]["canary"] == "0/6"
+    assert mc["by_variant"]["clean"] == "6/6"
+    # 外家内部一致性由本仓独立重算，不采信自报
+    assert res["external_delivery"]["internal_replay"].startswith("12/12")
+
+
+def test_acceptance_summary_is_authentic_not_fabricated():
+    """验收摘要必须由验收器实跑生成（exit0+9/9），不可手写 passed=true。"""
+    ext = os.path.join(BASE, "received", "l3_external_audit_v2")
+    acc = os.path.join(ext, "verification_summary.json")
+    assert os.path.exists(acc), "验收摘要缺失应按纪律封顶 INCONCLUSIVE"
+    s = json.load(open(acc, encoding="utf-8"))
+    assert s["passed"] is True
+    assert s["passed_count"] == 9 and s["total_checks"] == 9
+    assert s["verifier_exit_code"] == 0
+    assert s["generated_by"].startswith("本仓验收方")
+    assert s["verifier_sha256"] == hashlib.sha256(
+        open(os.path.join(BASE, "verify_external.py"), "rb").read()).hexdigest()
+
+
+def test_canary_mismatch_is_judge_task_semantics_not_engine_bug():
+    """canary GT=True 且 claim/evidence 是跨句推断（非断言保留）→判据全False属语义错配。
+
+    逐 case 复核：6 个 canary 均 gt=True、external_judge=False；engine 计数无需修复。
+    """
+    res = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
+    canary = [c for c in res["mechanical_comparison"]["per_case"]
+              if c["variant"] == "canary"]
+    assert len(canary) == 6
+    assert all(c["own_gt"] is True and c["external_judge"] is False for c in canary)
+    # engine 未放宽：canary 0/6 如实落账，不因断言类突破而篡改
+    assert all(c["match"] is False for c in canary)

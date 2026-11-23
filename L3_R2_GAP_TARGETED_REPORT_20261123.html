@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>§L3-R2 缺口定向成果报告 · 第二家异种大模型</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.tag{background:#fdecea;color:var(--accent)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.fix{background:#f3ecf7;border:1px solid #d6c2e4;padding:14px 18px;border-radius:6px;font-size:14px}
+.warnbox{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.ok{color:var(--ok);font-weight:600}.bad{color:var(--accent);font-weight:600}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>§L3-R2 缺口定向成果报告 <span class="pill tag">第二家异种大模型</span></h1>
+<div class="sub">缺口定向全链外置 · 2026-11-23 · 触发：用户交付第二家外家 zip · 交付哈希 <code>ea998962…c65215</code></div>
+
+<h2>一、本轮靶子：上一轮唯一未闭合缺口</h2>
+<div class="phil">
+上一轮 Operation L3（Qoder，五权力全外置）交付合规 8/8，但本仓判据回放只 <b>11/18</b>：数值类篡改 <b>2/2</b> 全检出，断言类（否定 2 / 补语 1 / 连接词 1）<b>0/4</b>。独立性做满 ≠ 结论 YES——真正独立方给出的是"判据可迁移性有边界"的部分负面证据。本轮不原样复制 v1（边际收益近零），把靶子锚在这 <b>0/4</b> 上：要求外家样本的三种断言改写现象各至少一组，检验独立归纳的判据能否从"数值层"扩展到"断言层"。
+</div>
+
+<h2>二、契约与外部锚（承诺先于执行）</h2>
+<table>
+<tr><th>交付物</th><th>内容</th></tr>
+<tr><td><code>EXTERNAL_AGENT_BRIEF_V2.md</code></td><td>权威作业书：五权力全外置、时间链、8 项验收、四档裁决树不变；<b>唯一变更</b>=三类断言改写各≥1 组（覆盖下限，非判据提示）；避开清单加 <code>2611.00401</code></td></tr>
+<tr><td>傻瓜执行包 <code>external_kit/</code></td><td>4 步可执行封装：make_template → 填空 → pack → selfcheck；外家自检 11 项镜像本仓 9 项，端到端验证口径一致</td></tr>
+<tr><td>外部锚</td><td>commit <code>f8e7f3f</code> 服务器时间 <code>2026-11-23T10:03:40Z</code> &lt; 外家 prereg T0 <code>10:31:56Z</code>（承诺早于执行，GitHub API 独立核验）</td></tr>
+</table>
+
+<h2>三、外家交付：第二家异种大模型</h2>
+<table>
+<tr><th>环节</th><th>外家实际做法</th></tr>
+<tr><td>论文</td><td>arXiv 2005.14165（GPT-3，Language Models are Few-Shot Learners），不在避开清单、与 oracle failures / FGSE 不同域</td></tr>
+<tr><td>样本</td><td>12 组 <code>text_a/text_b</code>，三类断言改写各≥1 组，字段名中性、零标签泄漏</td></tr>
+<tr><td>判据</td><td><b>三层词类多重集比对</b>：否定词（not/no/never…）、连接词（however/though…）、内容词（非虚词）——任一层多重集差异即 False。这是真正针对断言层的归纳，非数字/固定词表</td></tr>
+<tr><td>真值/裁决</td><td>T4 客观文本事实定 gt、不从判据反推；自报 <code>EXTERNAL_CONFIRMED</code>（内部 12/12），<code>l3_claimed=false</code></td></tr>
+<tr><td>时间链</td><td>T0 10:31:56Z → T1 10:36:05Z → T7 10:42Z，逐文件 SHA256 锁齐全（26 文件）</td></tr>
+</table>
+
+<h2>四、本仓机械验收：9/9 PASS</h2>
+<div class="note">
+权威验收器 <code>verify_external.py</code> 实跑 <span class="ok">9/9 PASS</span>：承诺时序、零标签泄漏、gt 隔离、判据纯函数 AST、重跑一致（12/12）、裁决自洽、论文避开、哈希锁、三类覆盖声明——全部通过。验收摘要 <code>verification_summary.json</code> 由本仓 <code>run_acceptance.py</code> 调验收器实跑生成（exit 0 + 9/9 + ACCEPTED 标记），附验收器/判据/原始输出三重 SHA256，<b>非外家自报、不可手写伪造</b>。
+</div>
+
+<h2>五、核心回放：断言类 4/4 突破，但 canary 0/6 封顶</h2>
+<table>
+<tr><th>样本族</th><th>本轮第二家</th><th>上一轮基线（Qoder）</th><th>结论</th></tr>
+<tr><td>断言类（4）</td><td class="ok">4/4 检出</td><td class="bad">0/4</td><td>实质突破：判据确实看到了断言层</td></tr>
+<tr><td>数值类（2）</td><td>1/2</td><td>2/2</td><td>数值类反而退步（内容词比对不敏感于纯数字差异）</td></tr>
+<tr><td>clean（6）</td><td>6/6</td><td>6/6</td><td>普通情形未牺牲</td></tr>
+<tr><td>canary（6）</td><td class="bad">0/6</td><td>3/6</td><td>能力对照失败 → 触发 CLOSED 门槛不满足</td></tr>
+<tr><td>整体一致</td><td>11/18</td><td>11/18</td><td>总量持平，结构此消彼长</td></tr>
+</table>
+<p>整体仍是 <b>11/18</b>，但结构完全反转：断言类从 0/4 跃升到 4/4，数值类从 2/2 退到 1/2，canary 从 3/6 掉到 0/6。</p>
+
+<div class="warnbox">
+<b>canary 0/6 是语义错配，不是 engine bug。</b> 逐 case 复核：6 个 canary 的 GT 全为 <code>True</code>，但 claim/evidence 是<b>跨句推断关系</b>（如"S01: 'repaired oracle yields no false positive' ↔ 'INV-5 is silent on the repaired copy…that silence is the specificity result'"），并非"断言是否被完整保留"。外家判据按"claim 是否完整保留 evidence 断言"的框架去比，因内容词/否定词不一致全判 False。这与 §104 字段名语义、§105 域特异是同类——判据的可见面依赖任务语义脚手架。engine 计数经逐 case 复核无误，不修判定。
+</div>
+
+<h2>六、裁决：GAP_INCONCLUSIVE（诚实封顶，不放宽）</h2>
+<div class="phil">
+预注册裁决树（commit <code>f8e7f3f</code> 锚定、早于外家执行）的 <code>GAP_CLOSED</code> 硬条件含 <b>canary≥3/6</b>。本轮断言类 4/4 满足"≥3/4"，但 canary 0/6 不满足，且"断言≥3/4 但 canary&lt;3/6"这个组合无专属档位，engine 保守兜底 <b>GAP_INCONCLUSIVE</b>。<b>绝不因断言类突破就删 canary 条件、改阈值、重跑到齐</b>——那是 post-hoc 调参（Goodhart）。这是预注册纪律的正确执行，不是失败掩盖。
+</div>
+
+<h2>七、最终边界</h2>
+<div class="fix">
+仍 <b>l3=false / absolute=false</b>：① canary 0/6 能力对照失败；② 断言类突破是单次、单论文、第二家单一异种大模型；③ 两轮外家均属 LLM 家族，§101 无限回归未破；④ 族标注/冻结样本/回放裁决树设计仍本仓，外家未参与；⑤ §107–§115 九案 + §L3 FULLCHAIN_PARTIAL 十案不翻案。<b>是否达 L3 由委托方（人）裁定，本 Agent 不自封。</b>
+</div>
+
+<div class="foot">
+验收：权威验收 9/9；专项 13/13；全量 1429 passed；KB 174→176（KB-AUDIT59 断言突破但 canary 语义错配封顶 + KB-META25 验收摘要流程缺口工具修复）；链审 total 60；交付哈希 <code>ea998962…c65215</code>；零密钥入仓。不编译新门禁。遵循 §58 不接 run_loop；系统安全红线全程遵守。
+</div>
+</div></body></html>

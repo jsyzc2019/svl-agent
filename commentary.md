@@ -4197,6 +4197,14 @@ verify_external.py 复用 v1 的 8 项（路径参数化）+ 新增第 9 项三�
 
 验收：专项 10/10；全量 1429 passed；链审 total 60/five 34/三锁 31；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。
 
+### L3-R2.6 第二家外家交付：回放裁决 GAP_INCONCLUSIVE（断言突破但 canary 封顶）
+用户交来第二家异种大模型 zip（sha `ea998962…c65215`）。权威验收 **9/9 PASS**。外家判据=三层词类多重集比对（否定词/连接词/内容词），真正针对断言层归纳（非数字/固定词表）；自报 EXTERNAL_CONFIRMED、内部 12/12、l3=false。
+**核心回放（本仓冻结样本 18 组）**：断言类检出 **4/4**（基线 0/4，实质突破——覆盖下限让判据看到了断言层）；数值类 1/2（退步）、clean 6/6（守住）、canary **0/6**（退化），整体 11/18 结构反转。
+**canary 诊断**：6 个 canary GT=True 但 claim/evidence 是跨句推断关系（非"断言是否完整保留"），外家判据按其目标语义框架比对全判 False → 任务语义错配（同 §104 字段名语义 / §105 域特异），非 engine bug，逐 case 复核计数无误。
+**裁决 GAP_INCONCLUSIVE**：预注册树 GAP_CLOSED 含 canary≥3/6 硬条件，本轮 0/6 不满足；"断言≥3/4 但 canary<3/6"无专属档 → engine 保守兜底。**不因断言突破就删 canary 条件/改阈值/重跑**（post-hoc Goodhart）。
+**工具修复不放宽**：engine 要求的 verification_summary.json 全仓无人生成（v1/v2 契约缺口）；手写 passed 是伪造、绕过是放宽 → 写 run_acceptance.py 调权威验收器实跑，passed 由真实 exit0+9/9+ACCEPTED 决定并附三重 SHA256，已锚 verify_external.py 一字不改（§109/§111 同类）。
+验收：权威 9/9；专项 13/13；全量 1429 passed；KB 174→176（KB-AUDIT59/META25）；链审 total 60。仍 l3=false/absolute=false，不翻十案，由人裁定，不编译新门禁。
+
 ### L3-R2.5 傻瓜执行包（用户"越傻瓜越好"）
 外家执行文件要做到无脑照抄。`audit_l3_gap_targeted/external_kit/` 新增四文件，**不动已锚的 brief v2/prereg/verify**（锚 f8e7f3f 完整）：`README_FIRST.md`（4 步：make_template→填空→pack→selfcheck，逐文件填什么表 + 三条红线 + 四档裁决）；`make_template.py`（一键生成 11 文件空壳，决策点全留 `<<<FILL>>>`，prereg 时间戳自动最早）；`selfcheck.py`（本仓 9 项验收的本地镜像 + 占位符残留检查 = 11 项，规则在 brief 已公开、不含本仓判据/gt/历史裁决）；`pack.py`（补哈希锁 + 打 zip，幂等）。
 **端到端自测**：空壳自检正确 FAIL（5 项）；合规样例先 pack 后 selfcheck 11/11 PASS，交叉用本仓 verify_external.py 核同一交付 **9/9 PASS——两套检查器口径一致**。修两真问题：模板注释"如 N01"被硬编码 id 检查误伤→删；自检第8项查锁但锁由 pack 生成→顺序改"先 pack 后 selfcheck"。规则零放宽、五权力不变、l3/absolute 仍 false、最终人裁定。

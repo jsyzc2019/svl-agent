@@ -4512,6 +4512,32 @@
       "evidence": "修复后真实交付8/8 PASS,重建违规交付02/06/07三项FAIL不放宽;EXECUTION_LOG含五点论证",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT59",
+      "kind": "reasoning_lesson",
+      "mechanism": "§L3-R2第二家异种大模型缺口定向回放:外家判据(三层词类多重集比对:否定/连接/内容词)回放到本仓§100冻结样本,断言类检出从基线0/4突破到4/4(否定2/补语1/连接1全部判False),证明'提高样本覆盖下限(三类断言改写各≥1组)'确实让独立归纳的判据看到了断言层;但canary 6/6判据全False而GT=True——根因是canary样本claim/evidence为跨句推断关系(非'断言是否被完整保留'),与外家判据的目标语义框架错配,不是engine bug。",
+      "trigger": "当独立方的判据在目标维度突破、却在能力对照(canary)上系统性失败时,如何裁决",
+      "action": "忠实执行预注册裁决树,不因断言类4/4突破就删canary门槛或改阈值;GAP_CLOSED硬条件含canary≥3/6,本轮canary0/6不满足,且断言≥3/4但canary<3/6组合无专属档,engine保守兜底GAP_INCONCLUSIVE;落账repo11/18断言4/4数值1/2 clean6/6 canary0/6,l3/absolute仍false。教训:覆盖下限能扩判据可见面,但跨任务语义错配(断言保留vs跨句推断)是另一层脚手架依赖,与§104字段名语义/§105域特异同类。",
+      "provenance": "audit_l3_gap_targeted/result.json(EXECUTED/GAP_INCONCLUSIVE)+received/l3_external_audit_v2/criterion.py+engine.py逐case明细+prereg verdict_tree(f8e7f3f锚)",
+      "timestamp": "2026-11-23T10:46:09Z",
+      "support": 1,
+      "evidence": "断言类S01/S02/S04/S05_tampered judge=False/gt=False全检出;canary S01-S06 claim/evidence跨句推断,judge全False但gt=True;engine canary计数经逐case复核无误",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META25",
+      "kind": "reasoning_lesson",
+      "mechanism": "预注册裁决引擎依赖一个'验收摘要'文件(verification_summary.json)判断交付是否已过机械验收,但全仓无脚本生成它(v1/v2契约缺口):手写passed=true是伪造,绕过engine检查是放宽,两者都违反纪律。",
+      "trigger": "当裁决引擎要求的上游凭证无人生成、且不造假不放宽时如何补全",
+      "action": "写独立脚本run_acceptance.py调用权威验收器verify_external.py实跑,摘要的passed字段完全由真实退出码+9/9+ACCEPTED标记决定(任一FAIL即false),附验收器SHA256/判据SHA256/原始输出SHA256;已锚定的verify_external.py一字不改,补的是'生成凭证'的缺口而非判定逻辑;复跑后摘要passed=true来自exit0+9/9,engine据此如实裁决。与§109/§111'修工具不放宽'同类。",
+      "provenance": "audit_l3_gap_targeted/run_acceptance.py+tests/test_gap_targeted.py test_acceptance_summary_is_authentic_not_fabricated",
+      "timestamp": "2026-11-23T10:46:09Z",
+      "support": 1,
+      "evidence": "run_acceptance实跑:verifier_exit_code=0,passed_count=9,total_checks=9,verifier_accepted_marker=true→passed=true;测试断言passed字段必须来自实跑哈希一致",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

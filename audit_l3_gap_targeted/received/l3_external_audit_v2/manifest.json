@@ -1,0 +1,8 @@
+{
+  "arxiv_id": "2005.14165",
+  "title": "Language Models are Few-Shot Learners",
+  "url_abs": "https://arxiv.org/abs/2005.14165",
+  "url_full": "https://arxiv.org/html/2005.14165",
+  "sources": ["abs", "full"],
+  "note": "一手来源；两源均 HTTP 200 并落地到 sources/。2005.14165 不在避开清单（含任何版本），且与 oracle failures / FGSE 自进化主题不同域。"
+}

@@ -1,0 +1,65 @@
+{
+  "note": "12 组文本对，归纳确定性二分规律。",
+  "pairs": [
+    {
+      "id": "N01",
+      "text_a": "Specifically, we evaluate GPT-3 on over two dozen NLP datasets , as well as several novel tasks designed to test rapid adaptation to tasks unlikely to be directly contained in the training set.",
+      "text_b": "Specifically, we evaluate GPT-3 on over two dozen NLP datasets, as well as several novel tasks designed to test rapid adaptation to tasks unlikely to be directly contained in the training set."
+    },
+    {
+      "id": "N02",
+      "text_a": "GPT-3 achieves 81.5 F1 on CoQA in the zero-shot setting, 84.0 F1 on CoQA in the one-shot setting, and 85.0 F1 in the few-shot setting.",
+      "text_b": "GPT-3 achieves 81.5 F1 on CoQA in the zero-shot setting, 84.0 F1 on CoQA in the one-shot setting, 85.0 F1 in the few-shot setting."
+    },
+    {
+      "id": "N03",
+      "text_a": "GPT-3 achieves 64.3% accuracy on TriviaQA in the zero-shot setting, 68.0% in the one-shot setting, and 71.2% in the few-shot setting, the last of which is state-of-the-art relative to fine-tuned models operating in the same closed book setting.",
+      "text_b": "GPT-3 achieves 64.3% accuracy on TriviaQA in the zero-shot setting, 68.0% in the one-shot setting, and 71.2% in the few-shot setting, the last of which is state-of-the-art relative to fine-tuned models operating in the same closed-book setting."
+    },
+    {
+      "id": "N04",
+      "text_a": "Ultimately, however, one-shot, or even sometimes zero-shot, seem like the fairest comparisons to human performance and are important targets for future work.",
+      "text_b": "Ultimately, however, one-shot, or even sometimes zero-shot, seem like the fairest comparisons to human performance, and are important targets for future work."
+    },
+    {
+      "id": "N05",
+      "text_a": "We calculate zero-shot perplexity on the Penn Tree Bank ( PTB ) dataset measured in [ 117 ] . Our largest model sets a new SOTA on PTB by a substantial margin of 15 points, achieving a perplexity of 20.50.",
+      "text_b": "We calculate zero-shot perplexity on the Penn Tree Bank (PTB) dataset measured in [ 117 ] . Our largest model sets a new SOTA on PTB by a substantial margin of 15 points, achieving a perplexity of 20.50."
+    },
+    {
+      "id": "N06",
+      "text_a": "Few-Shot (FS) is the term we will use in this work to refer to the setting where the model is given a few demonstrations of the task at inference time as conditioning [ 117 ] , but weight updates are allowed.",
+      "text_b": "Few-Shot (FS) is the term we will use in this work to refer to the setting where the model is given a few demonstrations of the task at inference time as conditioning [ 117 ] , but no weight updates are allowed."
+    },
+    {
+      "id": "N07",
+      "text_a": "Zero-Shot (0S) is the same as one-shot except that demonstrations are allowed, and the model is only given a natural language instruction describing the task.",
+      "text_b": "Zero-Shot (0S) is the same as one-shot except that no demonstrations are allowed, and the model is only given a natural language instruction describing the task."
+    },
+    {
+      "id": "N08",
+      "text_a": "humans cannot generally perform a new language task from only a few examples or from simple instructions",
+      "text_b": "humans can generally perform a new language task from only a few examples or from simple instructions"
+    },
+    {
+      "id": "N09",
+      "text_a": "GPT-3 2.7B outperforms the SOTA 17B parameter Turing-NLG [ 132 ] in this setting.",
+      "text_b": "GPT-3 2.7B outperforms the SOTA 17B parameter Turing-NLG [ 132 ] in this setting, and GPT-3 175B advances the state of the art by 18%."
+    },
+    {
+      "id": "N10",
+      "text_a": "GPT-3 achieves 86.4% accuracy in the few-shot setting.",
+      "text_b": "GPT-3 achieves 86.4% accuracy in the few-shot setting, an increase of over 18% from the previous state-of-the-art."
+    },
+    {
+      "id": "N11",
+      "text_a": "Ultimately, one-shot, or even sometimes zero-shot, seem like the fairest comparisons to human performance, and are important targets for future work.",
+      "text_b": "Ultimately, however, one-shot, or even sometimes zero-shot, seem like the fairest comparisons to human performance, and are important targets for future work."
+    },
+    {
+      "id": "N12",
+      "text_a": "We have found that unfiltered or lightly filtered versions of Common Crawl tend to have lower quality than more curated datasets.",
+      "text_b": "However, we have found that unfiltered or lightly filtered versions of Common Crawl tend to have lower quality than more curated datasets."
+    }
+  ]
+}
