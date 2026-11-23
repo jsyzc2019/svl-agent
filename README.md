@@ -14,7 +14,7 @@
 | 知识库条目 | 174 | `knowledge_base_store.json` |
 | 会拦门禁（`check_*`） | 38 | `svagent/*.py` AST 扫描 |
 | 测试项 | 1429 | `pytest --collect-only` |
-| 证据目录 | 60（五件套齐全 34）+ §109 外部 workflow/attestation + §110/§111/§112 异厂 designer 调用/盲评+AST 准入规则修订 + §113 跨厂商/跨集 2×2 + §114 异厂解释者独立性盲评 + §115 解释者跨厂商交叉确认 + L3 真正异家 Agent 全链外置 + §L3-R2 缺口定向外置（v2 作业书/9项验收器/五档裁决引擎，待第二家执行） | `audit_*/` 实测 |
+| 证据目录 | 60（五件套齐全 34）+ §109 外部 workflow/attestation + §110/§111/§112 异厂 designer 调用/盲评+AST 准入规则修订 + §113 跨厂商/跨集 2×2 + §114 异厂解释者独立性盲评 + §115 解释者跨厂商交叉确认 + L3 真正异家 Agent 全链外置 + §L3-R2 缺口定向外置（v2 作业书/9项验收器/五档裁决引擎/傻瓜执行包，待第二家执行） | `audit_*/` 实测 |
 
 > 诚实边界：模拟线（autopoiesis/self_evolving/telos/axiology/mechanism/estimation）
 > 的输出均标注 `evidence_scope: synthetic`，是方法演示，不外推为真实世界自进化能力。

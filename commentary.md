@@ -4196,3 +4196,8 @@ verify_external.py 复用 v1 的 8 项（路径参数化）+ 新增第 9 项三�
 本轮**只准备契约与验收接口，不 spawn、不解读、不裁决第二家**——由用户找异家 Agent 执行 brief v2 并交回 l3_external_audit_v2/。补 KB、同步文档、提交推送做外部时间锚（承诺先于第二家执行）。仍 l3=false/absolute=false，不翻 §107-§115 九案 + §L3 FULLCHAIN_PARTIAL 十案。
 
 验收：专项 10/10；全量 1429 passed；链审 total 60/five 34/三锁 31；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。
+
+### L3-R2.5 傻瓜执行包（用户"越傻瓜越好"）
+外家执行文件要做到无脑照抄。`audit_l3_gap_targeted/external_kit/` 新增四文件，**不动已锚的 brief v2/prereg/verify**（锚 f8e7f3f 完整）：`README_FIRST.md`（4 步：make_template→填空→pack→selfcheck，逐文件填什么表 + 三条红线 + 四档裁决）；`make_template.py`（一键生成 11 文件空壳，决策点全留 `<<<FILL>>>`，prereg 时间戳自动最早）；`selfcheck.py`（本仓 9 项验收的本地镜像 + 占位符残留检查 = 11 项，规则在 brief 已公开、不含本仓判据/gt/历史裁决）；`pack.py`（补哈希锁 + 打 zip，幂等）。
+**端到端自测**：空壳自检正确 FAIL（5 项）；合规样例先 pack 后 selfcheck 11/11 PASS，交叉用本仓 verify_external.py 核同一交付 **9/9 PASS——两套检查器口径一致**。修两真问题：模板注释"如 N01"被硬编码 id 检查误伤→删；自检第8项查锁但锁由 pack 生成→顺序改"先 pack 后 selfcheck"。规则零放宽、五权力不变、l3/absolute 仍 false、最终人裁定。
+验收：专项 10/10；全量 1429 passed；链审 total 60（`external_kit/` 为子目录不改顶层计数，断言不放宽）；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。
