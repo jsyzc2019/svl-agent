@@ -1,0 +1,58 @@
+{
+  "experiment": "§115 解释者跨厂商交叉确认 —— 把 §114 的单一异厂解释者证据升级为多厂商交叉，检验裁决规则语义可移植性是否为单厂商偶然",
+  "timestamp_intent": "spawn 前 commit+push 锁死本文件与逐字节复用的冻结输入，以 GitHub 服务器时间戳为外部锚，证明承诺先于执行",
+  "locked_before_spawn": true,
+  "status": "PRE_REGISTERED_AWAITING_SPAWN",
+  "lineage": "§114 单一异厂解释者（baidu/ernie）盲评 4/4 复现四轮裁决 → INTERPRETER_CONFIRMED；但单点单厂商，无法排除'恰好这家厂商能正确应用规则'。§115 按 §110→§112 设计者独立的单厂商→跨厂商升级路径，对解释者一维做同样升级。",
+  "what_is_FIXED": [
+    "唯一变量 = 解释者厂商：§114 的 baidu/ernie → 三家与 baidu 不同、彼此不同厂的异厂 LLM；调用器 call_interpreter.py 逐字节复用 §114，唯一变化 = INTERPRETER_MODEL / INTERPRETER_NAME 环境变量",
+    "冻结输入逐字节复用 §114：cases_blind.json（哈希 172f8089…）、gt_private.json（407485c8…）、gen_fixtures.py（75e3810d…）、call_interpreter.py（83f7113e…）—— verify 加跨目录逐字节断言物理证明",
+    "同一 SYSTEM/user prompt、同一中性规则、同一匿名 case（固定 seed=11420261123），每家厂商各一次干净 context 盲评，互不通信",
+    "私有 gt（case_1=CONFIRMED，case_2/3/4=PARTIAL）物理隔离，绝不进任何厂商 prompt"
+  ],
+  "what_is_HELD_FIXED": [
+    "四轮裁决规则语义（去前缀中性化 FULL/PARTIAL/REFUTED/INCONCLUSIVE）与阈值一字不改",
+    "档位规范化映射（FULL≡CONFIRMED，§114 修的确定性字段 bug）逐字复用，不是本轮新规则",
+    "样本/gt/盲评/designer/AST 准入全部沿用四轮冻结结果，一个都不动"
+  ],
+  "locked_files_sha256": {
+    "prereg.json": "SELF",
+    "manifest.json": "569c541ccb710fc2c6f441878cd0de1f5b15b0b3188721a372fbadb3cd15e4ea",
+    "cases_blind.json": "172f808945302005a71bfebc626d2e19c3a35ea047e068a7b1c6d4497cbfd61e",
+    "gt_private.json": "407485c8f80a3cae10b42ee19bd133399491e80ffa393dfba873279c647bbba2",
+    "gen_fixtures.py": "75e3810d91b3390fc4447ac7b9db40efa2cbed571f5a10dae8cd67890a55b853",
+    "call_interpreter.py": "83f7113e322f78f87991213e9235145d19aaf9b839d012daefd49c50d9b30f98",
+    "run_all.py": "4ce2602b6b729aaf0dc46c09475c1e97fcec96901dc1d611a097283759b54946"
+  },
+  "vendor_selection_method": "spawn 前机器探测（§112/§114 先例，先验证再落盘不信肉眼 KB-META17）：用 §114 原 prompt 探测全部非 baidu 免费模型——gemma 429 排除；dots-studio/dots-3-note、inclusionai/ling-3.2、liquid/lfm-3、particle-ai/particle-1、recursive/flint 均 finish=stop+JSON 解析。选三家真正不同厂商：dots-studio（阶跃星辰）、inclusionai（蚂蚁）、liquid（Liquid AI）——与 baidu 不同厂、彼此不同厂；选择依据写死锁内，不因后续结果改变。",
+  "selected_vendors": [
+    "dots-studio/dots-3-note-preview:free",
+    "inclusionai/ling-3.2-flash:free",
+    "liquid/lfm-3-1.7b:free"
+  ],
+  "interpretation_protocol": "每家厂商各跑一次 call_interpreter.py（与 §114 逐字节同一调用器），产出 runs/interpreter_call_manifest_<tag>.json；engine 逐厂商与私有 gt 机械比对。探测仅用于排除 429/格式失败（可用性），不作为正式结果；正式结果以预注册后 spawn 的留痕为准。",
+  "metrics": {
+    "per_vendor_agreement": "每家厂商逐 case 一致数 / 4",
+    "cross_vendor_unanimous": "三家是否全部 4/4（语义可跨厂商一致移植）",
+    "critical_case_2": "case_2(SECONDARY=1.0) 三家是否都判 PARTIAL——细分条件解释的跨厂商稳健性"
+  },
+  "verdict_rules": [
+    "INTERPRETER_CROSS_CONFIRMED：三家全部 agreement=4/4 且 case_2 全判对 → 解释者独立一维获多厂商交叉确认，裁决规则语义跨厂商稳健移植（仍非 L3，见 hard_bound）",
+    "INTERPRETER_CROSS_PARTIAL：2 家 4/4、1 家 <4/4 → 多数厂商可移植但有厂商特异分歧，诚实标注分歧厂商与 case",
+    "INTERPRETER_CROSS_DIVERGENT：≥2 家 agreement<4/4 → 解释语义厂商特异，§114 的单厂商 4/4 可能是偶然，真负面结果如实记",
+    "INTERPRETER_CROSS_INCONCLUSIVE：任一厂商 API/解析失败且不达判定门槛 → 诚实封顶，不放宽、不伪造"
+  ],
+  "pre_committed_rules_reuse": "中性规则、档位规范化、冻结输入、调用器全部逐字节复用 §114/§111 已锁版本，本轮不新造判据、不事后调规则。",
+  "hard_bound": "即使 INTERPRETER_CROSS_CONFIRMED，也只是把解释者一维扩展到多厂商 LLM；样本/gt/盲评/designer/裁决树设计/最终 l3 判断仍本 Agent；异厂自报不采信（只采信 tier 标签与冻结 gt 机械比对）；三家厂商仍有限、四 case 全来自既有四轮、档位同构（未覆盖 REFUTED 等未出现档位）。不宣布 L3、不宣布 absolute。",
+  "discipline": [
+    "不伪造证据：失败留痕不删，tier 解析不出不猜测、写 None",
+    "不翻案：§107-§114 八案裁决全部保留并列陈述，本轮结果不修改任何历史 verdict",
+    "反 Goodhart：探测只排除可用性故障，不因结果挑厂商、不反复重跑到满意；API 失败按失败分支封顶",
+    "不编译新门禁（延续 §105+ 受控实验轮惯例）",
+    "key 零入仓：仅环境变量读，留痕不含 key/prompt 全文/私有 gt"
+  ],
+  "no_new_gate": true,
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "does_not_overturn": ["§107 STRATIFIED_CONFIRMED", "§108 CROSS_SET_PARTIAL", "§109 EXECUTOR_INDEPENDENCE_CONFIRMED", "§110 CROSS_VENDOR_INCONCLUSIVE", "§111 AST_V2_PARTIAL", "§112 CROSS_VENDOR2_PARTIAL", "§113 SET_VENDOR2_INCONCLUSIVE", "§114 INTERPRETER_CONFIRMED"]
+}

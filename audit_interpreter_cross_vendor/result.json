@@ -1,0 +1,19 @@
+{
+  "experiment": "§115",
+  "status": "PRE_REGISTERED_AWAITING_SPAWN",
+  "locks_ok": true,
+  "verdict": null,
+  "metrics": null,
+  "does_not_overturn": [
+    "§107 STRATIFIED_CONFIRMED",
+    "§108 CROSS_SET_PARTIAL",
+    "§109 EXECUTOR_INDEPENDENCE_CONFIRMED",
+    "§110 CROSS_VENDOR_INCONCLUSIVE",
+    "§111 AST_V2_PARTIAL",
+    "§112 CROSS_VENDOR2_PARTIAL",
+    "§113 SET_VENDOR2_INCONCLUSIVE",
+    "§114 INTERPRETER_CONFIRMED"
+  ],
+  "l3_claimed": false,
+  "absolute_claimed": false
+}

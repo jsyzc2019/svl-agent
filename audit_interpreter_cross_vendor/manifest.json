@@ -1,0 +1,13 @@
+{
+  "experiment": "§115 解释者跨厂商交叉确认",
+  "description": "把 §114 单一异厂解释者证据升级为多厂商交叉；逐字节复用 §114 冻结输入与调用器，唯一变量=解释者厂商",
+  "unique_variable": "解释者厂商（baidu/ernie §114 → dots-studio / inclusionai / liquid §115）",
+  "byte_identical_reuse_from_114": ["cases_blind.json", "gt_private.json", "gen_fixtures.py", "call_interpreter.py"],
+  "selected_vendors": ["dots-studio/dots-3-note-preview:free", "inclusionai/ling-3.2-flash:free", "liquid/lfm-3-1.7b:free"],
+  "orchestrator": "run_all.py",
+  "engine": "engine.py",
+  "verify": "verify.py",
+  "no_new_gate": true,
+  "l3_claimed": false,
+  "absolute_claimed": false
+}

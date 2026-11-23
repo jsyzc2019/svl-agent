@@ -1,0 +1,32 @@
+{
+  "experiment": "§114 private scorer —— 绝不进异厂 prompt",
+  "seed": 11420261123,
+  "mapping": {
+    "case_1": {
+      "source_round": "audit_stratified_confirmation",
+      "historical_verdict": "STRATIFIED_CONFIRMED",
+      "neutral_tier": "CONFIRMED"
+    },
+    "case_2": {
+      "source_round": "audit_cross_vendor_designer2",
+      "historical_verdict": "CROSS_VENDOR2_PARTIAL",
+      "neutral_tier": "PARTIAL"
+    },
+    "case_3": {
+      "source_round": "audit_admission_ast_audit",
+      "historical_verdict": "AST_V2_PARTIAL",
+      "neutral_tier": "PARTIAL"
+    },
+    "case_4": {
+      "source_round": "audit_cross_domain_confirm2",
+      "historical_verdict": "CROSS_SET_PARTIAL",
+      "neutral_tier": "PARTIAL"
+    }
+  },
+  "neutral_gt": {
+    "case_1": "CONFIRMED",
+    "case_2": "PARTIAL",
+    "case_3": "PARTIAL",
+    "case_4": "PARTIAL"
+  }
+}
