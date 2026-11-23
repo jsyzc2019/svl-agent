@@ -65,13 +65,18 @@ def test_executed_premises_and_verdict():
     if r.get("status") != "EXECUTED":
         return
     assert r["l3_claimed"] is False and r["absolute_claimed"] is False
-    assert r["locks_ok"] is True and r["all_admissions_pass"] is True
+    assert r["locks_ok"] is True
     assert r["vendor_cross_vendor_ok"] is True   # Liquid AI
     assert r["second_set_confirmed"] is True     # 第二集
     assert r["samples_blind_sha256"] == SECOND_SHA
     assert r["verdict"] in ("SET_VENDOR2_CONFIRMED", "SET_VENDOR2_PARTIAL",
                             "SET_VENDOR2_REFUTED", "SET_VENDOR2_INCONCLUSIVE")
     assert "does_not_overturn" in r
+    if r.get("metrics") is None:
+        # 部分失败态：缺 judge → 必须封顶 INCONCLUSIVE，且有缺 judge 记录，绝不伪造指标
+        assert r["verdict"] == "SET_VENDOR2_INCONCLUSIVE"
+        assert r.get("missing_judges")
+        assert r["all_admissions_pass"] is False
 
 
 def test_executed_judges_match_manifest():
@@ -81,7 +86,11 @@ def test_executed_judges_match_manifest():
     m = load(mpath)
     for c in CELLS:
         rec = m["calls"][c]
-        assert rec["status"] == "ok"
+        if rec["status"] != "ok":
+            # 部分失败态：failed 条件不产出 judge（绝不伪造），留痕须记录失败原因
+            assert rec["status"].startswith("failed")
+            assert not os.path.exists(f"{BASE}/vendor_{c}/judge_vendor.py")
+            continue
         assert rec["finish_reason"] in ("stop", "length")
         if rec["finish_reason"] == "length":
             assert rec.get("code_source") == "reasoning_fallback"

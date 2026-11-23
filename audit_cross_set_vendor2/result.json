@@ -1,14 +1,33 @@
 {
-  "experiment": "§113 跨集×跨厂商 2×2 闭合（待命）",
-  "status": "PRE_REGISTERED_AWAITING_SPAWN",
-  "missing_judges": [
-    "P0",
-    "P1",
-    "P2"
-  ],
+  "experiment": "§113 跨集×跨厂商 2×2 闭合验证（Liquid AI × §108 第二集）",
+  "status": "EXECUTED",
   "locks_ok": true,
   "second_set_confirmed": true,
-  "note": "prereg+复用 AST v2 规则+第二集冻结输入已锁；待 spawn Liquid AI judge 后重跑。不构成裁决。",
+  "samples_blind_sha256": "82c9966b990a9b641bf7e4e36f397115e6e2284893480bf2967e6193221cd2e8",
+  "vendor_cross_vendor_ok": true,
+  "all_admissions_pass": false,
+  "admission_rule": "admission_v2 (AST control-flow, byte-identical to §111/§112)",
+  "admission_rule_sha256": "5e36f492f55a3f47c26873ec9715793993fcd00a7218d94d6fbd198f3363e2d3",
+  "vendor": "OpenRouter/liquid/lfm-3-1.7b:free(Liquid AI)",
+  "model": "liquid/lfm-3-1.7b:free",
+  "confirmation_set_sha256": "5c9321251a23fcd1cb3033efbb7736824b2669ec300d06e3153e5aee96a22dd5",
+  "prereg_sha256": "f9ba1f401fe8d026716b96e1c008c21658e6e96c81f465629a58a5151f5c8d54",
+  "verdict": "SET_VENDOR2_INCONCLUSIVE",
+  "why": "执行态部分失败：条件 P0、P2 的 judge 生成失败（Liquid AI reasoning 模型在 max_tokens 上限处截断，代码块不完整或无 judge 定义）；prereg 裁决树规定生成/API 失败→INCONCLUSIVE。不伪造 judge、不重跑到满意（Goodhart）；保留全部失败留痕与 EXECUTION_LOG。",
+  "missing_judges": [
+    "P0",
+    "P2"
+  ],
+  "metrics": null,
+  "per_condition": {},
+  "verdict_rules_snapshot": [
+    "SET_VENDOR2_CONFIRMED：三条件 AST 准入(v2)全过 且 PRIMARY≥0.8 且 SECONDARY≤0.3 且 P1.core≥0.9 且 P0 地板 → 2×2 闭合格成立，设计者独立性跨集跨厂商受控确认（仍非 L3）",
+    "SET_VENDOR2_PARTIAL：三条件准入全过 且 PRIMARY≥0.8 但 SECONDARY>0.3 或 P1.core<0.9 或 P0 非地板 → 主效应跨集跨厂商复现但完整分层不成立（§108/§112 先例：P0 地板大概率消失）",
+    "SET_VENDOR2_REFUTED：三条件准入全过 且 PRIMARY<0.3 → 第二集×Liquid AI 下取向差不复现——真负面结果（说明 §112 跨厂商效应可能主集特异），如实记",
+    "SET_VENDOR2_INCONCLUSIVE：任一条件 AST 准入未过 或 PRIMARY 落 0.3~0.8 中间带 或 API 失败 → 诚实封顶，不放宽"
+  ],
+  "honest_bound": "即使 SET_VENDOR2_CONFIRMED 也不宣布 L3/absolute：① 只把 designer 换到 Liquid AI 一维、且只在第二集验证（四格矩阵仍每格单次单集）；② 样本集/gt/盲评/裁决/解释仍本 Agent；③ 异厂仅生成 judge 源码不采信自报；④ 无多样本量/多厂商统计交叉；⑤ §107/§108/§111/§112 四份历史裁决全部保留，本轮是 2×2 闭合格，不翻案。仍 l3=false / absolute=false（KB-META05/KB-STRUCT02）。",
+  "does_not_overturn": "§107 STRATIFIED_CONFIRMED、§108 CROSS_SET_PARTIAL、§111 AST_V2_PARTIAL、§112 CROSS_VENDOR2_PARTIAL 全部保持有效；本轮做 2×2 闭合格，四轮并列陈述、分层报告，不选择性只报存活分量（KB-META16）。",
   "l3_claimed": false,
   "absolute_claimed": false
 }

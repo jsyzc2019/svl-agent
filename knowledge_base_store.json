@@ -4387,6 +4387,53 @@
       "evidence": "experiment",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT55",
+      "kind": "reasoning_lesson",
+      "mechanism": "2×2证据矩阵闭合尝试遇异厂生成不稳定,诚实封顶INCONCLUSIVE而非重跑到满意(§113):§112证明主集×Liquid AI designer 主效应复现,但缺'第二集×Liquid AI'格。§113把AST v2规则+designer逐字节复用(哈希5e36f492,verify对§111/§112双断言),只换§108独立第二集冻结输入(82c9966b),spawn前锁7b9122d服务器06:14:10Z早于spawn。两次spawn(max_tokens16000/20000)各有不同条件成功(attempt1 P2 ok/attempt2 P1 ok)但三条件无法同时产出完整judge——Liquid AI 1.7B在第二集purpose下reasoning链常在代码块中途被token上限切断(finish=length,SyntaxError unterminated string)。关键纪律判断:这是异厂生成的不确定性(非确定性工程bug),§109/§111'修工具'先例只针对确定性bug(锁文件名拼错)一次到位;反复提token属'调参到跑通'=Goodhart,绝不第三次重跑。按prereg失败分支封顶SET_VENDOR2_INCONCLUSIVE,保留两次全部失败留痕+EXECUTION_LOG,缺judge条件不伪造、metrics=None。engine修一处二元状态bug(缺任一judge一律PENDING导致与已存在P1 judge状态矛盾)→三份全缺=PENDING/部分缺=EXECUTED+INCONCLUSIVE,只更严格不翻案。",
+      "trigger": [
+        "partial_failure",
+        "generation_instability",
+        "goodhart_no_rerun",
+        "inconclusive_honest",
+        "three_state_engine"
+      ],
+      "action": "复现实验遇异厂生成不稳定(partial failure)时:①区分确定性工程bug(可修,如文件名)与模型生成不确定性(不可调参到跑通,Goodhart);②按预注册的失败分支封顶INCONCLUSIVE,不无限重跑;③保留所有失败留痕与执行日志,不删不掩盖;④缺judge不伪造、metrics写None而非编造;⑤引擎二元状态(PENDING/EXECUTED)不足表达部分失败时,修为三态(全缺=待命/部分缺=EXECUTED+INCONCLUSIVE/全齐=正常裁决),修正只让裁决更严格。负面结果本身有价值:说明§112跨厂商效应可能主集特异、第二集不稳定=样本特异性又一例。",
+      "provenance": "commentary:§113",
+      "timestamp": "2026-11-23T06:22:31.763898+00:00",
+      "support": [
+        "commentary:§113",
+        "audit_cross_set_vendor2/result.json",
+        "audit_cross_set_vendor2/EXECUTION_LOG.md",
+        "tests/test_cross_set_vendor2.py"
+      ],
+      "evidence": "experiment",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META21",
+      "kind": "reasoning_lesson",
+      "mechanism": "跨集×跨厂商2×2矩阵的价值与边界(§113定位):四格=主集×NVIDIA(§107 CONFIRMED)、第二集×NVIDIA(§108 PARTIAL)、主集×Liquid(§112 PARTIAL)、第二集×Liquid(§113 INCONCLUSIVE未完成)。闭合矩阵能检验'设计者独立性'效应是跨集跨厂商稳健还是样本/厂商特异,但本次因异厂生成不稳定缺一格——诚实报告'未能填充'比伪造填充更有价值。fence未闭合的reasoning截断会让extract_code回退返回全文(含自然语言)→SyntaxError:这是提取器对'半截代码块'的已知处理弱点;但修提取器不足以解决生成截断(代码本身不完整),故不以此为由无限重跑。",
+      "trigger": [
+        "matrix_2x2",
+        "missing_cell",
+        "selective_survival",
+        "fence_truncation",
+        "completeness_check"
+      ],
+      "action": "设计2×2交叉实验时,若某格因工具/生成限制未完成,如实标注空格并解释原因,不要把其余三格的选择性存活包装成完整结论。extract_code依赖成对```fence;reasoning模型finish=length时若截在代码块中途,fence未闭合→回退逻辑脆弱。判定judge完整性应看AST能否parse+def judge存在+哈希一致,而非仅看status=ok。",
+      "provenance": "commentary:§113",
+      "timestamp": "2026-11-23T06:22:31.763898+00:00",
+      "support": [
+        "commentary:§113",
+        "audit_cross_set_vendor2/result.json",
+        "audit_cross_set_vendor2/EXECUTION_LOG.md"
+      ],
+      "evidence": "experiment",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

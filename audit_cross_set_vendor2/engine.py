@@ -57,13 +57,48 @@ if os.path.exists(callm_path):
 # ---- judge 是否存在 ----
 judge_files = {c: f"{BASE}/vendor_{c}/judge_vendor.py" for c in CELLS}
 missing = [c for c in CELLS if not os.path.exists(judge_files[c])]
-if missing:
+any_judge = any(os.path.exists(judge_files[c]) for c in CELLS)
+if missing and not any_judge:
+    # 真待命态：spawn 前，三份 judge 都不存在
     out = {"experiment": "§113 跨集×跨厂商 2×2 闭合（待命）", "status": "PRE_REGISTERED_AWAITING_SPAWN",
            "missing_judges": missing, "locks_ok": locks_ok, "second_set_confirmed": set_ok,
            "note": "prereg+复用 AST v2 规则+第二集冻结输入已锁；待 spawn Liquid AI judge 后重跑。不构成裁决。",
            "l3_claimed": False, "absolute_claimed": False}
     json.dump(out, open(f"{BASE}/result.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     print("AWAITING_SPAWN: missing judges", missing)
+    raise SystemExit(0)
+elif missing and any_judge:
+    # 执行态部分失败：已 spawn 但部分条件的 judge 生成失败（reasoning 截断/无 judge 函数）。
+    # 按 prereg 裁决树"API 失败→INCONCLUSIVE"分支封顶，不伪造 judge、不重跑到满意。
+    callm_partial = load_json(callm_path) if os.path.exists(callm_path) else {}
+    out = {
+        "experiment": "§113 跨集×跨厂商 2×2 闭合验证（Liquid AI × §108 第二集）",
+        "status": "EXECUTED",
+        "locks_ok": locks_ok,
+        "second_set_confirmed": set_ok,
+        "samples_blind_sha256": second_set_sha,
+        "vendor_cross_vendor_ok": vendor_ok,
+        "all_admissions_pass": False,
+        "admission_rule": "admission_v2 (AST control-flow, byte-identical to §111/§112)",
+        "admission_rule_sha256": sha(f"{BASE}/admission_v2.py"),
+        "vendor": callm_partial.get("vendor", "unknown"),
+        "model": callm_partial.get("model", "unknown"),
+        "confirmation_set_sha256": prereg["what_is_HELD_FIXED"]["confirmation_set_sha256"],
+        "prereg_sha256": sha(f"{BASE}/prereg.json"),
+        "verdict": "SET_VENDOR2_INCONCLUSIVE",
+        "why": ("执行态部分失败：条件 %s 的 judge 生成失败（Liquid AI reasoning 模型在 max_tokens 上限处截断，"
+                "代码块不完整或无 judge 定义）；prereg 裁决树规定生成/API 失败→INCONCLUSIVE。"
+                "不伪造 judge、不重跑到满意（Goodhart）；保留全部失败留痕与 EXECUTION_LOG。" % "、".join(missing)),
+        "missing_judges": missing,
+        "metrics": None,
+        "per_condition": {},
+        "verdict_rules_snapshot": prereg["verdict_rules"],
+        "honest_bound": prereg["hard_bound"],
+        "does_not_overturn": prereg["does_not_overturn"],
+        "l3_claimed": False, "absolute_claimed": False,
+    }
+    json.dump(out, open(f"{BASE}/result.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    print("VERDICT: SET_VENDOR2_INCONCLUSIVE | partial failure, missing judges", missing)
     raise SystemExit(0)
 
 

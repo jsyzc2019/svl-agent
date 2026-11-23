@@ -44,21 +44,27 @@ def main():
         checks["pending_has_no_verdict"] = "verdict" not in result
         print("STATE=PRE_REGISTERED_AWAITING_SPAWN")
     else:
-        m = result["metrics"]
-        P, S, c1, floor = m["PRIMARY"], m["SECONDARY"], m["P1_core"], m["P0_floor"]
-        adm = result["all_admissions_pass"]
         cvok = result.get("vendor_cross_vendor_ok", False)
         setok = result.get("second_set_confirmed", False)
-        if not (result["locks_ok"] and adm and cvok and setok):
+        m = result.get("metrics")
+        if m is None:
+            # 部分失败态：judge 生成不全 → prereg 失败分支封顶 INCONCLUSIVE
             expect = "SET_VENDOR2_INCONCLUSIVE"
-        elif P >= 0.8 and S <= 0.3 and c1 >= 0.9 and floor:
-            expect = "SET_VENDOR2_CONFIRMED"
-        elif P >= 0.8:
-            expect = "SET_VENDOR2_PARTIAL"
-        elif P < 0.3:
-            expect = "SET_VENDOR2_REFUTED"
+            checks["partial_failure_has_missing_judges"] = bool(result.get("missing_judges"))
+            checks["partial_failure_no_forged_metrics"] = result.get("metrics") is None
         else:
-            expect = "SET_VENDOR2_INCONCLUSIVE"
+            P, S, c1, floor = m["PRIMARY"], m["SECONDARY"], m["P1_core"], m["P0_floor"]
+            adm = result["all_admissions_pass"]
+            if not (result["locks_ok"] and adm and cvok and setok):
+                expect = "SET_VENDOR2_INCONCLUSIVE"
+            elif P >= 0.8 and S <= 0.3 and c1 >= 0.9 and floor:
+                expect = "SET_VENDOR2_CONFIRMED"
+            elif P >= 0.8:
+                expect = "SET_VENDOR2_PARTIAL"
+            elif P < 0.3:
+                expect = "SET_VENDOR2_REFUTED"
+            else:
+                expect = "SET_VENDOR2_INCONCLUSIVE"
         checks["verdict_matches_tree"] = result["verdict"] == expect
         checks["verdict_in_prereg_rules"] = any(result["verdict"] in r for r in prereg["verdict_rules"])
         checks["admission_rule_is_v2"] = result.get("admission_rule", "").startswith("admission_v2 (AST control-flow")

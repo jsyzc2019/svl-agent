@@ -4075,3 +4075,31 @@ AST v2 准入全过（跨厂商下规则仍精确）+ 跨厂商前提成立（Li
 仍 **l3=false/absolute=false**：① 只把 designer 从 NVIDIA 外移到 Liquid AI 一维，且只是第二个厂商（仍非多厂商统计交叉）；② 样本/gt/盲评/裁决/解释仍本 Agent；③ 异厂仅生成 judge 源码不采信自报；④ 单次单集无多样本量；⑤ §110 INCONCLUSIVE、§111 PARTIAL 保留并列陈述，不选择性只报存活分量（KB-META16）。
 
 验收：10 项专项测试 + 全量 1420→1421 passed；verify 15/15 ALL_OK（含规则逐字节一致、跨厂商前提、不翻案声明）；KB 164→166（KB-AUDIT54 跨模型≠跨厂商 + KB-META20 细分分量诊断/reasoning_fallback 完整性判定）；链审 total 55/five_piece 34/三锁 31；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。
+
+---
+
+## §113 跨集×跨厂商 2×2 闭合验证（2026-11-23，"按你认为最有性价比的推"）
+
+### 触发：证据链唯一没填的交叉格
+用户授权自主选最高性价比事项。核查发现证据链是一个缺一角的 2×2：主集×NVIDIA（§107 CONFIRMED / §111 PARTIAL）、第二集×NVIDIA（§108 PARTIAL）、主集×Liquid AI（§112 PARTIAL），**缺"第二集×Liquid AI"这一格**。§112 只证明跨厂商在主集上有效，没证明在独立集上稳健。填上则"设计者独立性"从单点升级为跨集×跨厂商矩阵——成本极低（管线现成，只换冻结输入为 §108 第二集）、收益高（闭合唯一未碰维度）。
+
+### 113.1 spawn 前锁死——唯一变量=确认集
+`audit_cross_set_vendor2/` 把 AST v2 规则（admission_v2.py，哈希 5e36f492）逐字节复用 §111/§112、designer=Liquid AI（同 §112）、三 purpose.md 逐字节相同，**唯一变化=确认集**（主集 e7a65f → §108 第二集 82c9966b）；verify 加 `rule_identical_to_audit_admission_ast_audit`、`rule_identical_to_audit_cross_vendor_designer2`、`samples_are_second_set`、`samples_not_main_set` 双重物理证明。prereg 裁决树 SET_VENDOR2 四档、不翻 §107/§108/§111/§112 四案、l3=false。commit+push `7b9122d`，服务器时间 `06:14:10Z` 早于 spawn——外部时间戳锚。
+
+### 113.2 两次 spawn 均部分失败——诚实的负面结果
+- attempt1（16000）：P0 代码截断 SyntaxError、P1 无 judge 函数、P2 ok
+- attempt2（20000，仍 prereg 协议内）：P0/P2 代码块中途截断 SyntaxError、P1 ok
+- 两次各有不同条件成功，但**无法让三条件同时产出完整 judge**。根因：Liquid AI 1.7B 在第二集 purpose 下 reasoning 链超长，常在代码块中途被 token 上限切断（`finish=length`）。
+
+### 113.3 关键纪律判断：不重跑到满意（反 Goodhart）
+区分两类问题：§109/§111 的"修工具"先例针对**确定性工程 bug**（锁文件名拼错），一次修到位；本例是**异厂生成的不确定性**，反复提高 token（16000→20000）属"调参到跑通"，是纪律禁止的 Goodhart 风险——**绝不第三次重跑**。保留两次全部失败留痕（`attempt1_manifest_16000.json`、`attempt1_P2_judge_16000.py`、`vendor_call_manifest.json`）+ `EXECUTION_LOG.md`，不删不掩盖；缺 judge 条件不伪造、metrics 写 None。
+
+engine.py 修一处二元状态 bug：原实现缺任一 judge 即写 PENDING，但 P1 judge 已存在导致状态矛盾；修为三态（三份全缺=PENDING 待命 / 部分缺=EXECUTED + SET_VENDOR2_INCONCLUSIVE / 全齐=正常裁决），按 prereg 失败分支封顶，只更严格不翻案。
+
+### 113.4 裁决：SET_VENDOR2_INCONCLUSIVE（2×2 格未填充，不翻案）
+按 prereg"生成/API 失败→INCONCLUSIVE"分支落 **SET_VENDOR2_INCONCLUSIVE**。这是诚实的负面结果：跨集×跨厂商 2×2 的"第二集×Liquid AI"格因异厂生成不稳定未能填充，说明 §112 的跨厂商效应可能主集特异、在独立第二集上不稳定——样本特异性的又一例（延续 §108/§111 P0 地板跨集消失）。四格矩阵如实陈述：§107 CONFIRMED / §108 PARTIAL / §112 PARTIAL / §113 INCONCLUSIVE（未完成），不把三格选择性存活包装成完整结论（KB-META21）。
+
+### 113.5 诚实边界：仍未达到 L3
+仍 **l3=false/absolute=false**：① 2×2 闭合尝试因生成不稳定未完成一格；② 样本/gt/盲评/裁决/解释仍本 Agent；③ 异厂仅生成 judge 源码不采信自报；④ 单次单集无多样本量；⑤ §107/§108/§111/§112 四份历史裁决全部保留并列，不翻案。
+
+验收：8 项专项测试 + 全量 1421→1429 passed；verify 19/19 ALL_OK（含部分失败态 `partial_failure_no_forged_metrics`）；KB 166→168（KB-AUDIT55 部分失败反 Goodhart + KB-META21 2×2 空格诚实标注）；链审 total 56/five_piece 34/三锁 31；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。
