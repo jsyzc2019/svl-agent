@@ -1,0 +1,20 @@
+{
+  "experiment": "§113 跨集×跨厂商 2×2 闭合验证",
+  "lineage": "复用 §108 独立第二确认集 samples(82c9966b)+scorer_key(42be0b88)+purpose；AST v2 规则逐字节复用 §111/§112（哈希5e36f492）；designer=Liquid AI（同 §112）；唯一变化=确认集（主集→第二集）",
+  "source_sha256": "5c9321251a23fcd1cb3033efbb7736824b2669ec300d06e3153e5aee96a22dd5",
+  "confirmation_set_sha256": "5c9321251a23fcd1cb3033efbb7736824b2669ec300d06e3153e5aee96a22dd5",
+  "samples_blind_sha256": "82c9966b990a9b641bf7e4e36f397115e6e2284893480bf2967e6193221cd2e8",
+  "admission_v2_sha256": "5e36f492f55a3f47c26873ec9715793993fcd00a7218d94d6fbd198f3363e2d3",
+  "seed": 261122108,
+  "locked_files": [
+    "prereg.json",
+    "admission_v2.py",
+    "scorer_key.json",
+    "vendor_P0/samples_blind.json",
+    "vendor_P0/purpose.md",
+    "vendor_P1/samples_blind.json",
+    "vendor_P1/purpose.md",
+    "vendor_P2/samples_blind.json",
+    "vendor_P2/purpose.md"
+  ]
+}

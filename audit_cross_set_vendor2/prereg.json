@@ -1,0 +1,60 @@
+{
+  "experiment": "§113 跨集×跨厂商 2×2 闭合验证（Liquid AI designer × §108 独立第二确认集）",
+  "timestamp_intent": "2026-11-23T14:20:00+08:00",
+  "locked_before_vendor_spawn": true,
+  "status": "PRE_REGISTERED_AWAITING_SPAWN",
+  "lineage": "当前证据链是一个缺一角的 2×2：主集(§107)×NVIDIA designer=STRATIFIED_CONFIRMED(§107)；主集×NVIDIA跨模型=AST_V2_PARTIAL(§111)；第二集(§108)×NVIDIA=CROSS_SET_PARTIAL(§108)；主集×Liquid AI=CROSS_VENDOR2_PARTIAL(§112)；缺'第二集×Liquid AI'这一格。用户问'最有性价比事项'时定位：这是唯一没填的交叉格，填上则'设计者独立性'从单点升级为跨集×跨厂商矩阵。本轮把 §112 已验证的 AST v2 规则 + Liquid AI designer 交叉应用到 §108 独立第二集，闭合 2×2。",
+  "design_matrix_2x2": {
+    "main_set_x_nvidia": "§107 STRATIFIED_CONFIRMED / §111 AST_V2_PARTIAL（跨模型）",
+    "second_set_x_nvidia": "§108 CROSS_SET_PARTIAL",
+    "main_set_x_liquid": "§112 CROSS_VENDOR2_PARTIAL",
+    "second_set_x_liquid": "§113 本轮——唯一空格",
+    "note": "四格全部用同一 AST v2 规则（逐字节），designer 干净 context 生成；闭合后可检验'设计者独立性'效应是跨集跨厂商稳健还是样本/厂商特异。"
+  },
+  "what_is_fixed": "唯一变化=确认集（主集 e7a65f... → §108 独立第二集 82c9966b...）。AST v2 准入规则（admission_v2.py，哈希 5e36f492...，与 §111/§112 逐字节相同）、designer 厂商（Liquid AI，与 §112 相同）、三 purpose.md（逐字节相同）、盲评口径、裁决树全部复用 §112，本 Agent 一字不改。这样若效应在第二集上仍复现，就把 §112 的'跨厂商'结论扩展为'跨集跨厂商'；若不复现，则如实记为样本特异边界。",
+  "what_is_HELD_FIXED": {
+    "samples_blind_sha256": "82c9966b990a9b641bf7e4e36f397115e6e2284893480bf2967e6193221cd2e8",
+    "confirmation_set_sha256": "5c9321251a23fcd1cb3033efbb7736824b2669ec300d06e3153e5aee96a22dd5",
+    "source_sha256": "5c9321251a23fcd1cb3033efbb7736824b2669ec300d06e3153e5aee96a22dd5",
+    "scorer_key_sha256": "42be0b88e00d468bcb0f7be9a7a3db5713d13608b827706bba144d9f23e4780d",
+    "seed": 261122108,
+    "note": "18 条裸样本、三 purpose.md、scorer_key 逐字节复用 §108 独立第二确认集（其 source 与主集不同）。AST v2 准入规则逐字节复用 §111/§112（哈希 5e36f492f55a3f47c26873ec9715793993fcd00a7218d94d6fbd198f3363e2d3）。designer 厂商=Liquid AI（与 §112 相同）。本 Agent 不改冻结输入、不改 gt、不改规则、不改指标口径。"
+  },
+  "locked_files_sha256": {
+    "admission_v2.py": "5e36f492f55a3f47c26873ec9715793993fcd00a7218d94d6fbd198f3363e2d3",
+    "scorer_key.json": "42be0b88e00d468bcb0f7be9a7a3db5713d13608b827706bba144d9f23e4780d",
+    "vendor_P0/samples_blind.json": "82c9966b990a9b641bf7e4e36f397115e6e2284893480bf2967e6193221cd2e8",
+    "vendor_P1/samples_blind.json": "82c9966b990a9b641bf7e4e36f397115e6e2284893480bf2967e6193221cd2e8",
+    "vendor_P2/samples_blind.json": "82c9966b990a9b641bf7e4e36f397115e6e2284893480bf2967e6193221cd2e8",
+    "vendor_P0/purpose.md": "ba9fb3459c9839cd7b4d94e34c8d42333d96b4d6664aa3fb108457425184d126",
+    "vendor_P1/purpose.md": "f8e2604f61482f6eb6701287a8324205a1fabe50d4dc780a9b1a5db7764022bf",
+    "vendor_P2/purpose.md": "5ab756723cc734b3eacbacef16018cc57aec9f56834bccd18fc74c0fe44b15de"
+  },
+  "vendor_call_protocol": "逐字复用 §112/§111/§110：三条件各一次全新无历史 chat completion（干净 context），只发 purpose.md + 裸样本(id/text_a/text_b)，标签字段物理隔离；temperature 0，唯一差异=purpose 文件。异厂模型=Liquid AI（liquid/lfm-3-1.7b:free，经 OpenRouter），max_tokens≥16000 + 429 退避 + reasoning 回退提取（标注 code_source）。不采信自报，import judge 源码用第二集冻结 gt 盲评。API key 仅环境变量读，不入仓不入日志。",
+  "metrics": "与 §112/§111/§108/§107 同口径：dT=tampered 上 decision=True 比例；PRIMARY=|dT(P1)-dT(P2)| 在 non_negation_qualifier(4条)≥0.8；SECONDARY=negation_flip(2条)≤0.3；P1.core≥0.9；P0 地板=core≤0.6 或 dT(全集tampered)≥0.8。注意：§108 第二集在 NVIDIA designer 下 P0 地板已消失（CROSS_SET_PARTIAL），本轮不预期它必然回来。",
+  "verdict_rules": [
+    "SET_VENDOR2_CONFIRMED：三条件 AST 准入(v2)全过 且 PRIMARY≥0.8 且 SECONDARY≤0.3 且 P1.core≥0.9 且 P0 地板 → 2×2 闭合格成立，设计者独立性跨集跨厂商受控确认（仍非 L3）",
+    "SET_VENDOR2_PARTIAL：三条件准入全过 且 PRIMARY≥0.8 但 SECONDARY>0.3 或 P1.core<0.9 或 P0 非地板 → 主效应跨集跨厂商复现但完整分层不成立（§108/§112 先例：P0 地板大概率消失）",
+    "SET_VENDOR2_REFUTED：三条件准入全过 且 PRIMARY<0.3 → 第二集×Liquid AI 下取向差不复现——真负面结果（说明 §112 跨厂商效应可能主集特异），如实记",
+    "SET_VENDOR2_INCONCLUSIVE：任一条件 AST 准入未过 或 PRIMARY 落 0.3~0.8 中间带 或 API 失败 → 诚实封顶，不放宽"
+  ],
+  "pre_committed_rules_reuse": {
+    "admission_rule": "admission_v2.py（AST 控制流级，哈希 5e36f492...，与 §111/§112 逐字节相同）",
+    "dual_tests_location": "tests/test_admission_ast_audit.py（§111 已锁，规则未改）",
+    "meaning": "规则已在 §111 spawn 前用对偶测试证明精确；本轮逐字节复用，不存在对着第二集结果调规则的可能。"
+  },
+  "hard_bound": "即使 SET_VENDOR2_CONFIRMED 也不宣布 L3/absolute：① 只把 designer 换到 Liquid AI 一维、且只在第二集验证（四格矩阵仍每格单次单集）；② 样本集/gt/盲评/裁决/解释仍本 Agent；③ 异厂仅生成 judge 源码不采信自报；④ 无多样本量/多厂商统计交叉；⑤ §107/§108/§111/§112 四份历史裁决全部保留，本轮是 2×2 闭合格，不翻案。仍 l3=false / absolute=false（KB-META05/KB-STRUCT02）。",
+  "discipline": [
+    "先 commit+push 本 prereg+复用规则哈希+第二集冻结输入哈希，再发起任何 vendor API 调用（外部时间戳锚证明输入与规则先于 spawn）",
+    "admission_v2.py 逐字节复用 §111/§112、哈希锁定，spawn 后不得改动",
+    "不采信异厂自报 note，import judge 源码用第二集冻结 gt 盲评重跑",
+    "PRIMARY 事前锁定，禁止事后改用全集/其他子集翻案（KB-META14/KB-R）",
+    "API key 仅从环境变量读，绝不入仓/日志/prompt 留痕/result",
+    "不修改 §107/§108/§111/§112 任何文件（prereg/engine/result/judge 原样保留）",
+    "不编译新门禁（受控实验轮）；不接 run_loop（§58）；系统安全红线全程遵守"
+  ],
+  "no_new_gate": true,
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "does_not_overturn": "§107 STRATIFIED_CONFIRMED、§108 CROSS_SET_PARTIAL、§111 AST_V2_PARTIAL、§112 CROSS_VENDOR2_PARTIAL 全部保持有效；本轮做 2×2 闭合格，四轮并列陈述、分层报告，不选择性只报存活分量（KB-META16）。"
+}

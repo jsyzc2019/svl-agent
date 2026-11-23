@@ -1,0 +1,14 @@
+{
+  "experiment": "§113 跨集×跨厂商 2×2 闭合（待命）",
+  "status": "PRE_REGISTERED_AWAITING_SPAWN",
+  "missing_judges": [
+    "P0",
+    "P1",
+    "P2"
+  ],
+  "locks_ok": true,
+  "second_set_confirmed": true,
+  "note": "prereg+复用 AST v2 规则+第二集冻结输入已锁；待 spawn Liquid AI judge 后重跑。不构成裁决。",
+  "l3_claimed": false,
+  "absolute_claimed": false
+}
