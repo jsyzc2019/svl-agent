@@ -66,12 +66,25 @@ def main():
         return 0
 
     tiers = calls[0]["tiers"]
+
+    # 档位规范化（修确定性字段 bug，§109/§111 先例）：
+    # 中性规则给异厂的词表是 FULL/PARTIAL/REFUTED/INCONCLUSIVE，私有 gt 从历史 verdict
+    # 后缀提取写成 CONFIRMED/PARTIAL/...；FULL 与 CONFIRMED 语义同指"确认档"，仅命名不同。
+    # 两词表在 spawn 前已锁文件里就不一致（见 EXECUTION_LOG.md），与异厂输出无关。
+    # 该映射对全部档位一视同仁，不改异厂标签/不改 gt/不改裁决树阈值。
+    CANON = {"FULL": "CONFIRMED", "CONFIRMED": "CONFIRMED",
+             "PARTIAL": "PARTIAL", "REFUTED": "REFUTED", "INCONCLUSIVE": "INCONCLUSIVE"}
+    def canon(t):
+        return CANON.get(t, t) if t is not None else None
+
     per_case, agree = {}, 0
-    for cid, exp in sorted(gt_map.items()):
-        got = tiers.get(cid)
+    for cid, exp_raw in sorted(gt_map.items()):
+        got_raw = tiers.get(cid)
+        got, exp = canon(got_raw), canon(exp_raw)
         match = (got == exp)
         agree += int(match)
-        per_case[cid] = {"expected_neutral_tier": exp, "interpreter_tier": got, "match": match,
+        per_case[cid] = {"expected_neutral_tier_raw": exp_raw, "interpreter_tier_raw": got_raw,
+                         "expected_canon": exp, "interpreter_canon": got, "match": match,
                          "source_round": gt["mapping"][cid]["source_round"],
                          "historical_verdict": gt["mapping"][cid]["historical_verdict"]}
     total = len(gt_map)
@@ -96,6 +109,7 @@ def main():
               "gt_private_in_prompt": manifest.get("gt_private_in_prompt"),
               "finish_reason": calls[0].get("finish_reason"),
               "parse_source": calls[0].get("parse_source"),
+              "tier_alias_normalization_applied": {"FULL": "CONFIRMED", "reason": "修确定性字段命名bug，见EXECUTION_LOG.md；不改异厂标签/gt/裁决树"},
               "verdict": verdict, "why": why,
               "metrics": {"agreement": f"{agree}/{total}", "agreement_num": agree,
                           "total": total, "critical_case_2_match": case2_ok},

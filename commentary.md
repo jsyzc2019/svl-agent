@@ -4103,3 +4103,27 @@ engine.py 修一处二元状态 bug：原实现缺任一 judge 即写 PENDING，
 仍 **l3=false/absolute=false**：① 2×2 闭合尝试因生成不稳定未完成一格；② 样本/gt/盲评/裁决/解释仍本 Agent；③ 异厂仅生成 judge 源码不采信自报；④ 单次单集无多样本量；⑤ §107/§108/§111/§112 四份历史裁决全部保留并列，不翻案。
 
 验收：8 项专项测试 + 全量 1421→1429 passed；verify 19/19 ALL_OK（含部分失败态 `partial_failure_no_forged_metrics`）；KB 166→168（KB-AUDIT55 部分失败反 Goodhart + KB-META21 2×2 空格诚实标注）；链审 total 56/five_piece 34/三锁 31；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。
+
+---
+
+## §114 解释者独立性受控验证（2026-11-23，"请继续下一步"→L3 唯一未外移维度）
+
+### 触发：独立性矩阵里最后一维——解释权
+L3 尺子 `independent_tests` 维里，执行者（§109 GitHub runner）、设计者（§110–§112 异厂 judge 源码）、样本（§107–§108 独立确认集）都已外移，**唯独"从指标数字到裁决档位的解释权"始终本 Agent**：§107–§113 即使 judge 由异厂生成，verdict 一律本 Agent 按预注册树解读。这是从未碰过的低垂果实，且探针已提示异厂对判据语义的理解有偏差（把应判 PARTIAL 的误判 CONFIRMED）——值得实证检验。
+
+### 114.1 spawn 前锁死——唯一变量=解释者
+`audit_interpreter_independence/` 用 `gen_fixtures.py` 从四轮已锁 result.json **自动提取**裁决充分统计量（PRIMARY/SECONDARY/P1.core/P0_core/P0_dT，绝不手填），固定 seed=11420261123 打乱 case 顺序、档位名中性化（FULL/PARTIAL/REFUTED/INCONCLUSIVE）；私有 gt（case_1=CONFIRMED，case_2/3/4=PARTIAL）物理隔离，verify 七项 banned 词断言证明不进 prompt。prereg 裁决树 INTERPRETER 四档 + 不翻 §107–§113 七案 + l3=false。commit+push `7b1f1644`，GitHub 服务器时间 `06:29:30Z` 早于 spawn——外部时间戳锚。spawn 前 verify 26/26、engine 待命态、专项测试 10/10。
+
+### 114.2 异厂解释者一次盲评——四轮全部复现
+异厂 `baidu/ernie-5.5-flash-preview:free`（非 NVIDIA/Hunyuan，机器探测 429 排除 gemma/ling 后选 finish=stop 稳定者），干净 context、key 仅环境变量、留痕不含 key/prompt 全文/私有 gt。输出 `case_1=FULL, case_2/3/4=PARTIAL`，finish=stop、JSON 解析。关键 case_2（SECONDARY=1.0，CONFIRMED/PARTIAL 的区分点）正确判 PARTIAL。一次调用成功即止，不反复重跑（反 Goodhart）。
+
+### 114.3 确定性 bug 修复——修工具不放宽门禁
+初版 engine 字符串精确匹配把 case_1 异厂 `FULL` 与 gt `CONFIRMED` 判为不等（假 3/4）。根因：spawn 前已锁的 `cases_blind.json`（规则侧 FULL）与 `gt_private.json`（gt 侧 CONFIRMED）档位词表就不一致，FULL≡CONFIRMED 仅命名不同——确定性字段 bug，与异厂输出无关，证据在外部锚 commit 内。按 §109/§111 先例修工具：FULL↔CONFIRMED 归一化对全部档位一视同仁，不改异厂标签/不改 gt/不改裁决树阈值，原始值+归一值全写 result 留痕（KB-META22 辨析修工具 vs Goodhart 调参）。verify 盲性/来源/不翻案断言全部保留。
+
+### 114.4 裁决：INTERPRETER_CONFIRMED（解释一维获受控外移证据）
+档位归一后 agreement=4/4、case_2 判对，落 **INTERPRETER_CONFIRMED**。异厂解释者按中性化规则完整复现本 Agent 四轮裁决——解释环节一维首次获受控外移证据。这是正面结果，但按 prereg hard_bound 只判"一维外移"，不升级为 L3。
+
+### 114.5 诚实边界：解释一维外移 ≠ 达到 L3
+仍 **l3=false/absolute=false**：① 只外移解释者一维，样本/gt/盲评/designer/裁决树设计/最终 l3 判断仍本 Agent；② 单一异厂单次运行、四 case 全来自既有四轮、无统计交叉；③ 档位同构四轮，未覆盖 REFUTED 等未出现档位；④ 异厂自报不采信，只采信 tier 标签与冻结 gt 机械比对；⑤ §107–§113 七案全部保留并列不翻案。四轮裁决本身多为 PARTIAL/INCONCLUSIVE，其余维度仍本 Agent——不宣布 L3。
+
+验收：verify 30/30（盲性七项 banned + 来源一致四 case + 档位合法 + 不翻案 7 案 + gt 未进 prompt + 失败态无伪造）；专项 10/10；全量见提交记录；KB 168→170（KB-AUDIT56 解释者外移 + KB-META22 字段 bug vs Goodhart）；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。

@@ -1,9 +1,63 @@
 {
   "experiment": "§114",
-  "status": "PRE_REGISTERED_AWAITING_SPAWN",
+  "status": "EXECUTED",
   "locks_ok": true,
-  "verdict": null,
-  "metrics": null,
+  "vendor": "Baidu ERNIE 5.5 flash (异厂解释者)",
+  "model": "baidu/ernie-5.5-flash-preview:free",
+  "call_status": "ok",
+  "gt_private_in_prompt": false,
+  "finish_reason": "stop",
+  "parse_source": "json",
+  "tier_alias_normalization_applied": {
+    "FULL": "CONFIRMED",
+    "reason": "修确定性字段命名bug，见EXECUTION_LOG.md；不改异厂标签/gt/裁决树"
+  },
+  "verdict": "INTERPRETER_CONFIRMED",
+  "why": "异厂解释者按中性规则逐 case 复现本 Agent 裁决 4/4，关键 case_2(SECONDARY=1.0)判对；解释环节一维获受控外移证据（非 L3）",
+  "metrics": {
+    "agreement": "4/4",
+    "agreement_num": 4,
+    "total": 4,
+    "critical_case_2_match": true
+  },
+  "per_case": {
+    "case_1": {
+      "expected_neutral_tier_raw": "CONFIRMED",
+      "interpreter_tier_raw": "FULL",
+      "expected_canon": "CONFIRMED",
+      "interpreter_canon": "CONFIRMED",
+      "match": true,
+      "source_round": "audit_stratified_confirmation",
+      "historical_verdict": "STRATIFIED_CONFIRMED"
+    },
+    "case_2": {
+      "expected_neutral_tier_raw": "PARTIAL",
+      "interpreter_tier_raw": "PARTIAL",
+      "expected_canon": "PARTIAL",
+      "interpreter_canon": "PARTIAL",
+      "match": true,
+      "source_round": "audit_cross_vendor_designer2",
+      "historical_verdict": "CROSS_VENDOR2_PARTIAL"
+    },
+    "case_3": {
+      "expected_neutral_tier_raw": "PARTIAL",
+      "interpreter_tier_raw": "PARTIAL",
+      "expected_canon": "PARTIAL",
+      "interpreter_canon": "PARTIAL",
+      "match": true,
+      "source_round": "audit_admission_ast_audit",
+      "historical_verdict": "AST_V2_PARTIAL"
+    },
+    "case_4": {
+      "expected_neutral_tier_raw": "PARTIAL",
+      "interpreter_tier_raw": "PARTIAL",
+      "expected_canon": "PARTIAL",
+      "interpreter_canon": "PARTIAL",
+      "match": true,
+      "source_round": "audit_cross_domain_confirm2",
+      "historical_verdict": "CROSS_SET_PARTIAL"
+    }
+  },
   "does_not_overturn": [
     "§107 STRATIFIED_CONFIRMED",
     "§108 CROSS_SET_PARTIAL",
@@ -14,5 +68,6 @@
     "§113 SET_VENDOR2_INCONCLUSIVE"
   ],
   "l3_claimed": false,
-  "absolute_claimed": false
+  "absolute_claimed": false,
+  "honest_bound": "即使 INTERPRETER_CONFIRMED，也只是把解释者一维外移到异厂 LLM；样本/gt/盲评/designer/裁决树设计/最终 l3 判断仍本 Agent；异厂自报不采信（只采信其产出的 tier 标签，与冻结 gt 机械比对）；单一异厂单次运行无统计交叉。不宣布 L3、不宣布 absolute。"
 }

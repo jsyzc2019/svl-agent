@@ -4434,6 +4434,32 @@
       "evidence": "experiment",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT56",
+      "kind": "reasoning_lesson",
+      "mechanism": "解释者独立性外移首次获受控确认但不达L3(§114):L3尺子independent_tests四维里,执行者(§109)/设计者(§110-§112)/样本(§107-§108)三维已外移,唯一从未外移的是'从指标数字到裁决档位的解释权'——§107-§113即使judge由异厂生成,verdict始终本Agent按预注册树解读。§114把四轮裁决充分统计量(PRIMARY/SECONDARY/P1.core/P0地板)由gen_fixtures自动提取固定seed打乱匿名化、档位名中性化(FULL/PARTIAL),私有gt物理隔离不进prompt,交干净context异厂LLM(ernie-5.5-flash)按同一中性规则独立判档;结果4/4逐case复现本Agent裁决(含关键case_2 SECONDARY=1.0正确判PARTIAL)→INTERPRETER_CONFIRMED,解释者一维获受控外移证据。",
+      "trigger": "当L3独立性消融已完成执行者/设计者/样本三维,剩'解释/裁决权'仍本Agent时；当需检验裁决规则语义是否可移植到异厂而非只移植judge源码时。",
+      "action": "把裁决充分统计量匿名化+档位词表中性化后交异厂独立判档;私有gt物理隔离;按agreement与关键case逐case比对;即便4/4也只记'解释者一维获证',样本/gt/盲评/designer/裁决树设计仍本Agent→l3=false,不宣布达到L3。",
+      "provenance": "§114 audit_interpreter_independence；外部锚commit 7b1f1644 服务器06:29:30Z早于spawn；异厂ernie f=stop JSON解析。",
+      "timestamp": "2026-11-23T14:35:00+08:00",
+      "support": 1,
+      "evidence": "result.json verdict=INTERPRETER_CONFIRMED agreement=4/4 case2_ok=True；verify 30/30；不翻案7案",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META22",
+      "kind": "reasoning_lesson",
+      "mechanism": "确定性字段命名bug与调参到跑通的严格区分(§114):异厂4/4全判对,但初版engine用字符串精确匹配把case_1异厂标签FULL与gt档CONFIRMED判为不等(假3/4)。根因是spawn前已锁的两个文件里档位词表就不一致(规则侧FULL/PARTIAL,gt侧CONFIRMED/PARTIAL),FULL≡CONFIRMED仅命名不同——确定性工程bug,与异厂输出无关。修复方式:FULL↔CONFIRMED归一化映射对全部档位一视同仁,不改异厂标签/不改gt/不改裁决树阈值,异厂原始标签+gt原始档+归一化结果三者全写result留痕。判据:bug在spawn前的外部锚commit里已存在可证=修工具(§109/§111锁文件名先例);若为拿到好结果临时改阈值或手改标签=Goodhart调参,禁止。",
+      "trigger": "当结果'看起来不对'时判断该修工具还是该认负面结果：先查不一致是否预先锁定、是否与新输出无关、修复是否对全部情况一视同仁。",
+      "action": "用外部时间锚证明bug先于执行存在;修机械映射而非阈值;原始值与归一值全部留痕可回放;在EXECUTION_LOG记录'为何是修工具不是调参'五点论证。",
+      "provenance": "§114 EXECUTION_LOG.md；两文件哈希172f8089/407485c8在commit 7b1f1644内早于spawn。",
+      "timestamp": "2026-11-23T14:35:00+08:00",
+      "support": 1,
+      "evidence": "修后INTERPRETER_CONFIRMED 4/4；辨析FULL≡CONFIRMED别名而非放宽；verify盲性/来源/不翻案断言全部保留",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
