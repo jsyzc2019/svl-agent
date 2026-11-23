@@ -1,0 +1,46 @@
+{
+  "artifact": "T1 manifest - primary source of record",
+  "written_utc": "2026-11-23T09:29:38Z",
+  "arxiv_id": "2611.00401",
+  "arxiv_id_version_used": "2611.00401v1",
+  "avoid_list_check": {
+    "brief_list_contains_chosen_id": false,
+    "checked_against": "the 30 ids in EXTERNAL_AGENT_BRIEF.md section 4, plus both transcriptions 2611.07961 / 2611.07962 mentioned in prereg",
+    "note": "2611.00401 is not in the avoid list in any version."
+  },
+  "title": "VESPER: Online Learning of Free Energies with a Multi-Tempered Variational Objective",
+  "primary_subject": "Chemical Physics (physics.chem-ph)",
+  "domain_constraint_check": "Subject matter is molecular-simulation free-energy estimation (statistical mechanics, enhanced sampling). It is not about oracle failures, LLM/agent benchmark evaluation, or self-evolving agents. The word 'learning' in the title refers to variational parameter optimisation in a thermodynamic integrator, not to agent self-improvement. Selection was made by the preregistered first-accept rule, so no topic preference was exercised.",
+  "sources": {
+    "abs": {
+      "url": "https://arxiv.org/abs/2611.00401",
+      "http_status": 200,
+      "bytes": 43773,
+      "fetched_utc": "2026-11-23T09:25:49Z",
+      "file": "sources/2611.00401_abs.html",
+      "sha256": "ea335dddfd6c4f4f4722fd8965a464a91c44f5f729ceb4cdb8a61ee60b80a532"
+    },
+    "full": {
+      "url": "https://arxiv.org/html/2611.00401v1",
+      "http_status": 200,
+      "bytes": 824303,
+      "fetched_utc": "2026-11-23T09:25:57Z",
+      "file": "sources/2611.00401_full.html",
+      "sha256": "759351e5c175f59aa644ba206244b7bc928ce6d47b9b61f4f15b7f0e95c32e82"
+    },
+    "flattened_text": {
+      "file": "sources/paper_flat.txt",
+      "sha256": "734ce63c8a6739b18aa12b7a9fb4fa4977afa97844f1609dfdeceb44f27e6e4f",
+      "characters": 131581,
+      "numeric_tokens": 2224,
+      "number_plus_unit_sentences_before_format_filter": 60,
+      "flattening_rule": "remove script/style; replace every <math> element by its alttext (LaTeX source) so formulas stay literal; strip remaining tags; unescape entities; NBSP to space; en/em dash to hyphen; collapse horizontal whitespace. Deterministic, re-runnable."
+    }
+  },
+  "byte_fidelity_check": "At 09:26-09:27Z the two endpoints were re-downloaded once with curl -o and their SHA256 compared with the archived files: abs ea335d..., full 759351... identical. This second contact was an archival integrity check, not a retry to force a failed fetch.",
+  "selection_run_notes": [
+    "First run of the preregistered selection loop (09:23:49Z-09:24Z) aborted with 'no paper accepted' because of a harness defect: the listing-page test for the presence of a View-HTML link compared against the wrong string form, so every candidate was rejected before any primary source was contacted (its fetch log records only the listing page). The defect was repaired and the same preregistered procedure was run at 09:25:25Z, consuming 2 of the 5-candidate budget. No candidate primary text was seen in the aborted run.",
+    "Run 2 order: 2611.00377 rejected by the content-sufficiency condition (a long review with 1332 numeric tokens but only 2 sentences matching the number+unit pool pattern); 2611.00401 accepted. First-accept rule, no content preference beyond the preregistered thresholds."
+  ],
+  "chain": {"prereg_utc": "2026-11-23T09:22:41Z", "primary_fetch_utc": "2026-11-23T09:25:49Z", "prereg_earlier_than_fetch": true, "typo_note": "An earlier draft of this line and of written_utc above carried the month as 2026-01 instead of 2026-11. Both were fixed before this file was SHA256-locked, and the fix is disclosed in EXECUTION_LOG.md; the authoritative timestamps live in prereg.json and sources/fetch_log.json, not in this derived summary."}
+}

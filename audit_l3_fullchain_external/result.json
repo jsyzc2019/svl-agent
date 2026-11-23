@@ -1,0 +1,169 @@
+{
+  "experiment": "L3_FULLCHAIN_EXTERNAL",
+  "verdict": "FULLCHAIN_PARTIAL",
+  "why": "部分一致部分分歧：整体 11/18；clean 6/6 全对，tampered 2/6，canary 3/6；外家判据（数值+固定限定词表）与本仓篡改语义（叙述性断言删改）可见面不同",
+  "external_delivery": {
+    "evaluator": "Qoder (异种大模型)",
+    "own_verdict": "EXTERNAL_PARTIAL",
+    "own_agreement": 0.8125,
+    "own_tier_band": {
+      "confirmed_min": 0.9,
+      "partial_min": 0.6
+    },
+    "deliverable_verification": "8/8 PASS（verify_external.py，含承诺时序/零泄漏/gt隔离/判据纯函数/重跑一致/裁决自洽/论文避开/哈希锁）",
+    "internal_replay": "16/16（本仓独立重算外家判据vs其gt，不信自报）",
+    "own_three_disagreements": "O_UNIT_REEXPRESS 3 组，外家拒绝事后加单位换算补洞（反Goodhart），如实落 PARTIAL"
+  },
+  "repo_mechanical_comparison": {
+    "direction": "外家 criterion.py 回放到本仓 §100 冻结样本（claim→text_a, evidence→text_b）",
+    "agreement": "11/18",
+    "by_variant": {
+      "canary": "3/6",
+      "clean": "6/6",
+      "tampered": "2/6"
+    },
+    "per_case": [
+      {
+        "id": "S01_clean",
+        "variant": "clean",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S01_tampered",
+        "variant": "tampered",
+        "external_judge": true,
+        "own_gt": false,
+        "match": false
+      },
+      {
+        "id": "S01_canary",
+        "variant": "canary",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S02_clean",
+        "variant": "clean",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S02_tampered",
+        "variant": "tampered",
+        "external_judge": true,
+        "own_gt": false,
+        "match": false
+      },
+      {
+        "id": "S02_canary",
+        "variant": "canary",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S03_clean",
+        "variant": "clean",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S03_tampered",
+        "variant": "tampered",
+        "external_judge": false,
+        "own_gt": false,
+        "match": true
+      },
+      {
+        "id": "S03_canary",
+        "variant": "canary",
+        "external_judge": false,
+        "own_gt": true,
+        "match": false
+      },
+      {
+        "id": "S04_clean",
+        "variant": "clean",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S04_tampered",
+        "variant": "tampered",
+        "external_judge": true,
+        "own_gt": false,
+        "match": false
+      },
+      {
+        "id": "S04_canary",
+        "variant": "canary",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S05_clean",
+        "variant": "clean",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S05_tampered",
+        "variant": "tampered",
+        "external_judge": true,
+        "own_gt": false,
+        "match": false
+      },
+      {
+        "id": "S05_canary",
+        "variant": "canary",
+        "external_judge": false,
+        "own_gt": true,
+        "match": false
+      },
+      {
+        "id": "S06_clean",
+        "variant": "clean",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S06_tampered",
+        "variant": "tampered",
+        "external_judge": false,
+        "own_gt": false,
+        "match": true
+      },
+      {
+        "id": "S06_canary",
+        "variant": "canary",
+        "external_judge": false,
+        "own_gt": true,
+        "match": false
+      }
+    ],
+    "note": "跨判据目标迁移测试：外家判据在物理化学测量域归纳，本仓样本为 oracle-failures 域；不一致=诚实结果，不改外家判据（tuning 禁止）"
+  },
+  "hard_bound": "即便 FULLCHAIN_CONVERGED 也只把五权力同置一次+逐case复现；按 §101 无限回归不宣称绝对独立；self-reported 折1；rubric R6 全yes只判声明自洽不承诺等级真实；本轮实为 FULLCHAIN_PARTIAL，更不宣布 L3/absolute；不翻 §107–§115 八案；外家 verdict 不改写。",
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "does_not_overturn": [
+    "§107 STRATIFIED_CONFIRMED",
+    "§108 CROSS_SET_PARTIAL",
+    "§109 EXECUTOR_INDEPENDENCE_CONFIRMED",
+    "§110 CROSS_VENDOR_INCONCLUSIVE",
+    "§111 AST_V2_PARTIAL",
+    "§112 CROSS_VENDOR2_PARTIAL",
+    "§113 SET_VENDOR2_INCONCLUSIVE",
+    "§114 INTERPRETER_CONFIRMED",
+    "§115 INTERPRETER_CROSS_INCONCLUSIVE"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "verdict": "EXTERNAL_PARTIAL",
+  "written_utc": "2026-11-23T09:41:21Z",
+  "why": "I built my own 16 pairs from a paper I chose myself (arXiv 2611.00401, physics.chem-ph, VESPER free-energy estimation), wrote my own surface criterion at T3, then wrote my own expected answers at T4 by applying a mapping I had registered at T0. Running the frozen criterion over the blind pairs gives 13/16 = 0.8125 agreement with those answers. That sits in the pre-registered PARTIAL band 0.60 <= agreement < 0.90, with the purity admission passed, so the tree lands on EXTERNAL_PARTIAL and nothing else. The three disagreements are not scattered: they are exactly the three pairs where a quantity was rewritten in a smaller unit of the same dimension (10 ns vs 10000 ps, 25 ns vs 25000 ps, 100 ns vs 100000 ps). My criterion compares stated values only, so it sees the numeral disappear and rejects; my registered fact mapping says the asserted quantity survived, so it accepts. Both readings are internally consistent - the surface string genuinely does not re-state the numeral, and the physics genuinely does not change - which is precisely the interpretive latitude this tier exists to record rather than to smooth over. I did not add unit-prefix arithmetic to the criterion to close the gap: that would have been tuning after the fact, which the brief forbids (section 7 discipline 6), and criterion_note.md section 3 records the rejected alternative in advance.",
+  "metrics": {
+    "n_pairs": 16,
+    "agreement_count": 13,
+    "agreement": 0.8125,
+    "pre_registered_thresholds": {
+      "confirmed_min": 0.9,
+      "partial_min": 0.6
+    },
+    "tier_rule_applied": "0.60 <= 0.8125 < 0.90 and purity admission passed => EXTERNAL_PARTIAL",
+    "per_construction_family_agreement": {
+      "O_COPY": {
+        "agreed": 3,
+        "total": 3
+      },
+      "O_HEDGE_DELETE": {
+        "agreed": 1,
+        "total": 1
+      },
+      "O_NUM_SUB": {
+        "agreed": 3,
+        "total": 3
+      },
+      "O_NUM_DELETE": {
+        "agreed": 3,
+        "total": 3
+      },
+      "O_FOREIGN": {
+        "agreed": 3,
+        "total": 3
+      },
+      "O_UNIT_REEXPRESS": {
+        "agreed": 0,
+        "total": 3
+      }
+    },
+    "mismatch_ids": [
+      "P03",
+      "P05",
+      "P07"
+    ],
+    "mismatch_explanation": "dimensionally equal re-expression of one quantity; criterion is numeral-based, registered fact is quantity-based",
+    "class_balance": {
+      "accepted_by_criterion": 3,
+      "rejected_by_criterion": 13,
+      "fact_true": 6,
+      "fact_false": 10
+    },
+    "anchors_total": 13,
+    "anchors_verbatim_in_their_own_text_a": 13,
+    "anchors_verbatim_in_primary_source": 13,
+    "anchor_verbatim_rate": 1.0,
+    "purity_admission": {
+      "preregistered_rule_set_passed": true,
+      "preregistered_findings": "no import of any kind, no open/eval/exec, no os/sys/random/time/datetime/pathlib attribute, no label-field identifier, no hardcoded pair id; repeated runs and order-reversed runs give identical output",
+      "extra_strict_self_check_variant_result": "failed only on the keyword 'try' (used in _value_of to harden float() against malformed literals). This variant was NOT part of the pre-registered admission set; it is disclosed here so the委托方 can see the check I ran, why it differs, and that the criterion file was not edited afterwards (SHA256 unchanged: 886220fc56cfe0c5df2085c8f77b599668d792a412cd277b6f5e04a2d1b54f1b before and after the check)",
+      "criterion_was_not_repaired_after_this_failure": true
+    },
+    "reproduce_check": "importing criterion.py and running judge over samples_blind.json in id order reproduces judgments.json exactly (verified at T5 before this file was written)",
+    "samples_blind_banned_token_scan": {
+      "pattern_set": [
+        "gt",
+        "variant",
+        "clean",
+        "tampered",
+        "truth",
+        "label",
+        "标签",
+        "ground"
+      ],
+      "hits": 0
+    },
+    "paper": {
+      "arxiv_id": "2611.00401",
+      "in_avoid_list": false,
+      "domain": "physics.chem-ph"
+    },
+    "timestamp_chain_utc": {
+      "T0_prereg": "2026-11-23T09:22:41Z (file mtime 09:23:25Z, lock 09:23:49Z)",
+      "T1_primary_fetch": "2026-11-23T09:25:49Z abs / 09:25:57Z full (archive mtimes 09:26:33Z)",
+      "T2_samples": "2026-11-23T09:34:18Z",
+      "T3_criterion": "2026-11-23T09:38:55Z frozen, note 09:39:30Z (mtime 09:39:44Z)",
+      "T4_gt": "2026-11-23T09:40:07Z",
+      "T5_judgments": "2026-11-23T09:40:28Z",
+      "T6_verdict": "2026-11-23T09:41:21Z",
+      "monotonic": true
+    }
+  },
+  "what_this_does_and_does_not_claim": {
+    "claims": "An independently chosen corpus, an independently built sample set, an independently induced surface criterion and an independently registered truth mapping reproduce the *shape* of the transferability finding: a purely surface-inducted deterministic rule tracks the objective textual facts on most but not all construction families, and where it fails it fails systematically on one identifiable family rather than randomly.",
+    "does_not_claim": "It does not confirm or refute the委托方's own verdict. I never read their criterion, samples, knowledge base, or any historical adjudication, and I have no idea whether their rule sees unit prefixes. Agreement or disagreement between our two verdicts is a mechanical comparison the委托方 must perform on their side; pre-empting it here would destroy the independence this delivery is supposed to provide.",
+    "limits": [
+      "n=16 from one single-domain paper; the O_PERMUTE and O_HEDGE_SWAP families could not be instantiated at all on the mechanically selected sentences, so two registered families are untested rather than passed",
+      "the pool-selection rule (every third number-bearing sentence) pulled in two structural fragments rather than measurement sentences - P01 is the table of contents and P06 is a proof-environment heading - where the numerals are section labels, not quantities; my criterion treats them like any other numeral, which is defensible for a surface rule but weakens what those two pairs demonstrate",
+      "I am the author of both sides of the ledger, so 'independent' here means independent of the委托方, not independent of myself; the mitigations and their residual risk are stated in criterion_note.md section 4",
+      "the criterion's rejections are only as good as the claim that every numeral in a scientific sentence is a stated quantity; reference years and figure numbers ride along"
+    ]
+  },
+  "declared_deviations_from_prereg": [
+    "allocation_planned said O_PERMUTE x2 and O_HEDGE_SWAP x1. The mechanically selected sentences offered 0 applicable slots for O_PERMUTE and exactly 1 hedge-bearing slot overall, which the earlier-registered O_HEDGE_DELETE consumed, so O_PERMUTE got 0 pairs and O_HEDGE_SWAP got 0 pairs while O_HEDGE_DELETE got 1 of its planned 2. The leftover slots were back-filled by the rarest-first rule with families that were applicable and under-used (final counts O_COPY x3, O_FOREIGN x3, O_NUM_DELETE x3 against plans 2, 1, 2); O_UNIT_REEXPRESS x3, O_NUM_SUB x3 matched plan exactly. Recorded in construction_log.json (shortfall and overflow fields), not patched away.",
+    "the pool was filtered for strings containing the brief's banned tokens before slot numbering, dropping 3 of 60 sentences; this is the format constraint of section 7 rule 3 applied ahead of time, not a content judgement",
+    "the first execution of the selection loop aborted on a harness defect (wrong listing-link predicate) before any primary source was contacted; the same registered procedure was re-run once, using 2 of the 5-candidate budget",
+    "prereg section on gt called the planned split '8 planned-preserve / 8 planned-alter', but the registered family counts sum to 7 preserve / 9 alter; the arithmetic slip is in prereg, the mapping itself is unchanged"
+  ],
+  "l3_claimed": false,
+  "absolute_claimed": false
+}

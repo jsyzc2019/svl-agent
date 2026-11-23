@@ -1,0 +1,113 @@
+{
+  "spec": "EXTERNAL_AGENT_BRIEF.md (2026-11-23), Independent Evaluator self-execution job",
+  "evaluator": "Qoder (ff36798f59ef200f) cloud sandbox, Linux, python3.12, direct network to arxiv.org",
+  "timestamps_utc": {
+    "prereg_written": "2026-11-23T09:22:41Z",
+    "chain_requirement": "T0(prereg) < T1(source fetch) < T2(samples) < T3(criterion) < T4(gt) < T5(judgments) < T6(verdict) < T7(lock+log)"
+  },
+  "independence": {
+    "powers_held_by_evaluator": ["sample selection", "ground truth", "criterion", "execution", "adjudication"],
+    "repo_materials_not_read": [
+      "audit_* directories", "knowledge_base_store.json", "commentary.md", "SESSION_HANDOFF.md", "any result.json",
+      "any criterion word list / check_* / adjudicate_* implementation"
+    ],
+    "pre_T0_activity_disclosed": "Before writing this file I fetched two arXiv *listing* index pages (arxiv.org/list/physics.chem-ph/2026-11 and /list/q-bio.PE/2026-11) only to survey which candidate papers exist. No primary source (abs page or full HTML of any candidate paper) was fetched before T0, and no candidate text informed any decision recorded below. This is recorded here and in EXECUTION_LOG.md as required by brief section 1.",
+    "no_negotiation_with_repo": "This file is written before any sample, criterion, or truth exists; it is not amended afterwards."
+  },
+  "avoid_list_confirmation": {
+    "acknowledged": true,
+    "ids_supplied_by委托方_count": 30,
+    "rule": "The chosen arXiv id (any version) must not be in the supplied avoid list. The check is executed mechanically at T1 and its result is recorded in manifest.json and EXECUTION_LOG.md.",
+    "avoid_list": [
+      "2208.11173", "2412.21139", "2504.13171", "2605.08693", "2609.02246",
+      "2609.17817", "2609.33013", "2609.38661", "2609.38851", "2610.07935",
+      "2610.09832", "2610.15028", "2610.15836", "2610.16015", "2610.16067",
+      "2610.16491", "2610.19366", "2610.26770", "2610.27610", "2610.38266",
+      "2610.39497", "2611.07554", "2611.07961", "2611.10063", "2611.10787",
+      "2611.14326", "2611.20899", "2611.21315", "2611.22027", "2611.24362"
+    ],
+    "note_on_transcription": "The brief lists 2611.07962; the array above records it as supplied. Mechanical comparison against the brief text is performed at T1 and any mismatch is reported honestly rather than patched."
+  },
+  "domain_constraint": "The paper must be from a domain different from 'oracle failures' and from 'FGSE self-evolution'. Operationalised: the paper's primary subject must not be LLM/agent evaluation, benchmark gaming, oracle/self-verification failure, or self-evolving agent training. Chosen domain family: physical/scientific quantitative measurement papers (arXiv physics.chem-ph, fallback physics.at-phys / q-bio.PE).",
+  "paper_selection_procedure": {
+    "goal": "no cherry-picking after seeing content",
+    "listing": "https://arxiv.org/list/physics.chem-ph/2026-11 (order = on-page order, oldest-first as rendered)",
+    "candidates_examined_max": 5,
+    "accept_a_candidate_if_all": [
+      "id not in avoid list",
+      "title/abstract subject is not excluded by domain_constraint",
+      "GET https://arxiv.org/abs/<id> returns HTTP 200",
+      "GET https://arxiv.org/html/<id> returns HTTP 200",
+      "flattened full text contains at least 40 numeric tokens (regex -?\\d+(\\.\\d+)?([eE][-+]?\\d+)? ) so that quantitative sentences exist",
+      "flattened full text contains at least 10 sentences that hold at least one number plus one unit token"
+    ],
+    "fetch_discipline": "one attempt per candidate per endpoint; no retry loop to force success; if all 5 candidates fail, verdict is EXTERNAL_INCONCLUSIVE (brief section 7 rule 6).",
+    "tie_break": "first candidate in listing order that satisfies all conditions is used; no content-based preference."
+  },
+  "sample_construction_method": {
+    "count": "16 pairs (within the required 12-20)",
+    "sentence_pool": "From the flattened full text, split into sentences on [.?!] boundaries; keep sentences matching the regular expression for 'number immediately followed or preceded by a unit token' with units in {eV, meV, keV, nm, Å, angstrom, fs, ps, ns, K, mol, mM, uM, cm^-1, THz, GHz, bohr, a0, GPa, bar, A}. Deduplicate by exact text, then take pool in document order; the i-th pair uses pool sentence number (3*i + 1), i = 0..15, with wraparound to unused pool entries if a slot repeats.",
+    "pair_layout": "text_a is always the untouched pool sentence, copied verbatim from the flattened primary source. text_b is derived from text_a by exactly one operation from the registered operation set below. Every token of text_b is either verbatim from text_a or verbatim from another sentence of the primary source (operation O_FOREIGN), so anchors stay word-for-word checkable against the source.",
+    "operations_registered": {
+      "O_COPY": "text_b = text_a",
+      "O_PERMUTE": "swap the order of two adjacent prepositional/measure phrases, all words preserved",
+      "O_UNIT_REEXPRESS": "rewrite one quantity in a dimensionally equal unit (300 meV -> 0.3 eV, 12 Å -> 1.2 nm, 25 fs -> 0.025 ps, 2.0 kJ/mol -> 2000 J/mol)",
+      "O_NUM_SUB": "replace one numeric value by a different numeric value that itself occurs verbatim elsewhere in the paper",
+      "O_NUM_DELETE": "delete one numeric value and its unit",
+      "O_HEDGE_DELETE": "delete one hedge/limiting word (approximately, about, roughly, only, at least, at most, nearly, more than, less than, around)",
+      "O_HEDGE_SWAP": "replace one hedge/limiting word with an opposite-strength one from the same list",
+      "O_FOREIGN": "replace the numeric phrase with a numeric phrase taken verbatim from a different sentence"
+    },
+    "allocation_planned": "O_COPY x2, O_PERMUTE x2, O_UNIT_REEXPRESS x3, O_NUM_SUB x3, O_NUM_DELETE x2, O_HEDGE_DELETE x2, O_HEDGE_SWAP x1, O_FOREIGN x1 (8 planned-preserve / 8 planned-alter, assigned by listing order of the pool, not by expected difficulty)",
+    "blind_file_format": "samples_blind.json = {\"note\": string, \"pairs\": [{\"id\": \"P01\", \"text_a\": ..., \"text_b\": ...}]}; ids are neutral sequential; the file contains no operation name, no verdict, no expected-answer field; banned-token scan (gt / variant / clean / tampered / truth / label / 标签 / ground) must return zero hits before delivery."
+  },
+  "criterion_induction_method": {
+    "when": "T3, after samples exist and strictly before ground truth is written",
+    "how": "Read the 16 blind pairs only as character strings. List the observable surface differences between text_a and text_b for each pair by eye, cluster them, and induce ONE deterministic dichotomy expressible without any reference to the source text, to the operations above, or to any id. Write it as a pure function judge(text_a, text_b) -> (bool, reasons, anchors).",
+    "purity_admission_self_check": "AST scan of criterion.py: no open/import os,sys,random,time/datetime/pathlib, no reading of gt or label fields, no hardcoded pair ids, no recursion into file paths; plus determinism check: two consecutive runs on the same input give identical output. Admission failure => EXTERNAL_INCONCLUSIVE.",
+    "anchor_semantics": "anchors returned by the judge are literal substrings taken from the pair text itself, so they can be verified verbatim against the primary source afterwards."
+  },
+  "gt_definition_method": {
+    "principle": "gt is a claim about objective textual facts, decided by the registered operation->fact mapping below, and it is computed before any criterion output is looked at. It is NOT derived from the judge.",
+    "fact_test": "gt = true iff the objective quantitative/hedged facts asserted by text_a are all still asserted by text_b. Under the registered operations this is a property of the source strings themselves: an untouched copy, a pure reordering, or a dimensionally equal re-expression keeps every asserted quantity; substituting a value, deleting a value, deleting or inverting a hedge, or importing a phrase from a different sentence does not.",
+    "mapping": {
+      "O_COPY": true,
+      "O_PERMUTE": true,
+      "O_UNIT_REEXPRESS": true,
+      "O_NUM_SUB": false,
+      "O_NUM_DELETE": false,
+      "O_HEDGE_DELETE": false,
+      "O_HEDGE_SWAP": false,
+      "O_FOREIGN": false
+    },
+    "arithmetic_check_for_unit_reexpress": "each re-expression is verified by an exact rational unit conversion computed at T4 from the two strings; a mismatch would make the pair un-definable and it is then excluded and disclosed.",
+    "storage": "gt_private.json, physically separate file, written at T4, never merged into samples_blind.json or criterion.py."
+  },
+  "adjudication_tree": {
+    "metric_primary": "agreement = (#pairs where judge(text_a,text_b)[0] == gt[id]) / 16",
+    "metric_secondary": "per-operation agreement, and the verbatim-anchor check rate (fraction of judge anchors that are literal substrings of their own pair text)",
+    "tiers_in_evaluation_order": [
+      {
+        "verdict": "EXTERNAL_INCONCLUSIVE",
+        "condition": "primary source fetch not 200, or paper selection fails within the 5-candidate budget, or criterion fails the purity admission self-check, or any pair's gt cannot be decided by the registered mapping (e.g. a failed unit conversion). Recorded honestly, no re-running until it passes."
+      },
+      {
+        "verdict": "EXTERNAL_CONFIRMED",
+        "condition": "purity admission passed AND agreement >= 0.90"
+      },
+      {
+        "verdict": "EXTERNAL_PARTIAL",
+        "condition": "purity admission passed AND 0.60 <= agreement < 0.90; every disagreement case and its interpretive latitude is listed"
+      },
+      {
+        "verdict": "EXTERNAL_DIVERGENT",
+        "condition": "purity admission passed AND agreement < 0.60, i.e. the surface criterion I could induce systematically fails to track the objective textual facts (the outcome that would suggest the transferability claim is over-fitted)"
+      }
+    ],
+    "thresholds_fixed_here": {"confirmed": 0.90, "partial_lower": 0.60},
+    "pre_registered_expectation": "I expect the disagreement cluster to sit on O_UNIT_REEXPRESS, because a surface-token criterion cannot see dimensional equality. Expectation is recorded here for honesty; the reported tier is whatever the measured agreement gives.",
+    "scope_of_my_claim": "EXTERNAL_CONFIRMED means only that my own criterion is internally consistent with my own independently defined truth. It says nothing about the委托方's conclusion; that mechanical comparison belongs to the委托方 and I do not pre-empt it."
+  },
+  "claims_not_made": { "l3_claimed": false, "absolute_claimed": false },
+  "no_post_hoc_editing": "If a mistake is found after a step, it is corrected by an appended entry in EXECUTION_LOG.md with its own timestamp; earlier files are not silently rewritten. If a rewrite is unavoidable, the old SHA256 is kept in the log."
+}

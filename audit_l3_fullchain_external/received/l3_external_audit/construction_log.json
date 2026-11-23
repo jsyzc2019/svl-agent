@@ -1,0 +1,413 @@
+{
+  "artifact": "extra file beyond the required 11, added so that the derivation of gt_private.json is auditable",
+  "written_utc": "2026-11-23T09:40:07Z",
+  "registered_mapping": {
+    "O_COPY": true,
+    "O_PERMUTE": true,
+    "O_UNIT_REEXPRESS": true,
+    "O_NUM_SUB": false,
+    "O_NUM_DELETE": false,
+    "O_HEDGE_DELETE": false,
+    "O_HEDGE_SWAP": false,
+    "O_FOREIGN": false
+  },
+  "note": "gt was produced by applying this registered mapping to the construction record of each pair; no judgement produced by criterion.py was consulted. Written at T4, after criterion.py was frozen at T3.",
+  "pairs": [
+    {
+      "id": "P01",
+      "pool_sentence_index": 0,
+      "operation": "O_COPY",
+      "registered_operation_to_fact_mapping_value": true,
+      "edit_detail": {},
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true
+      }
+    },
+    {
+      "id": "P02",
+      "pool_sentence_index": 3,
+      "operation": "O_HEDGE_DELETE",
+      "registered_operation_to_fact_mapping_value": false,
+      "edit_detail": {
+        "deleted_hedge": "approximately"
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true
+      }
+    },
+    {
+      "id": "P03",
+      "pool_sentence_index": 6,
+      "operation": "O_UNIT_REEXPRESS",
+      "registered_operation_to_fact_mapping_value": true,
+      "edit_detail": {
+        "from": "10 ns",
+        "to": "10000 ps",
+        "exact_equal_in_base_units": true,
+        "base_value_a": "10000",
+        "base_value_b": "10000"
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true,
+        "unit_conversion_exact_rational_equal": true
+      }
+    },
+    {
+      "id": "P04",
+      "pool_sentence_index": 9,
+      "operation": "O_FOREIGN",
+      "registered_operation_to_fact_mapping_value": false,
+      "edit_detail": {
+        "original_phrase": "511",
+        "inserted_verbatim_from_other_sentence": "0.25 eV",
+        "insertion_is_substring_of_paper": true
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true,
+        "replacement_is_verbatim_from_elsewhere_in_source": true
+      }
+    },
+    {
+      "id": "P05",
+      "pool_sentence_index": 12,
+      "operation": "O_UNIT_REEXPRESS",
+      "registered_operation_to_fact_mapping_value": true,
+      "edit_detail": {
+        "from": "25 ns",
+        "to": "25000 ps",
+        "exact_equal_in_base_units": true,
+        "base_value_a": "25000",
+        "base_value_b": "25000"
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true,
+        "unit_conversion_exact_rational_equal": true
+      }
+    },
+    {
+      "id": "P06",
+      "pool_sentence_index": 15,
+      "operation": "O_COPY",
+      "registered_operation_to_fact_mapping_value": true,
+      "edit_detail": {},
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true
+      }
+    },
+    {
+      "id": "P07",
+      "pool_sentence_index": 18,
+      "operation": "O_UNIT_REEXPRESS",
+      "registered_operation_to_fact_mapping_value": true,
+      "edit_detail": {
+        "from": "100 ns",
+        "to": "100000 ps",
+        "exact_equal_in_base_units": true,
+        "base_value_a": "100000",
+        "base_value_b": "100000"
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true,
+        "unit_conversion_exact_rational_equal": true
+      }
+    },
+    {
+      "id": "P08",
+      "pool_sentence_index": 21,
+      "operation": "O_NUM_SUB",
+      "registered_operation_to_fact_mapping_value": false,
+      "edit_detail": {
+        "replaced": "8.2",
+        "with": "5",
+        "donor_is_verbatim_elsewhere_in_paper": true
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true,
+        "replacement_is_verbatim_from_elsewhere_in_source": true
+      }
+    },
+    {
+      "id": "P09",
+      "pool_sentence_index": 24,
+      "operation": "O_NUM_SUB",
+      "registered_operation_to_fact_mapping_value": false,
+      "edit_detail": {
+        "replaced": "4",
+        "with": "0",
+        "donor_is_verbatim_elsewhere_in_paper": true
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true,
+        "replacement_is_verbatim_from_elsewhere_in_source": true
+      }
+    },
+    {
+      "id": "P10",
+      "pool_sentence_index": 27,
+      "operation": "O_NUM_SUB",
+      "registered_operation_to_fact_mapping_value": false,
+      "edit_detail": {
+        "replaced": "10",
+        "with": "26.2",
+        "donor_is_verbatim_elsewhere_in_paper": true
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true,
+        "replacement_is_verbatim_from_elsewhere_in_source": true
+      }
+    },
+    {
+      "id": "P11",
+      "pool_sentence_index": 30,
+      "operation": "O_NUM_DELETE",
+      "registered_operation_to_fact_mapping_value": false,
+      "edit_detail": {
+        "deleted": "26.2 ns"
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true
+      }
+    },
+    {
+      "id": "P12",
+      "pool_sentence_index": 33,
+      "operation": "O_NUM_DELETE",
+      "registered_operation_to_fact_mapping_value": false,
+      "edit_detail": {
+        "deleted": "20 ps"
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true
+      }
+    },
+    {
+      "id": "P13",
+      "pool_sentence_index": 36,
+      "operation": "O_FOREIGN",
+      "registered_operation_to_fact_mapping_value": false,
+      "edit_detail": {
+        "original_phrase": "26.2 ns",
+        "inserted_verbatim_from_other_sentence": "10 kJ",
+        "insertion_is_substring_of_paper": true
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true,
+        "replacement_is_verbatim_from_elsewhere_in_source": true
+      }
+    },
+    {
+      "id": "P14",
+      "pool_sentence_index": 39,
+      "operation": "O_COPY",
+      "registered_operation_to_fact_mapping_value": true,
+      "edit_detail": {},
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true
+      }
+    },
+    {
+      "id": "P15",
+      "pool_sentence_index": 42,
+      "operation": "O_NUM_DELETE",
+      "registered_operation_to_fact_mapping_value": false,
+      "edit_detail": {
+        "deleted": "5"
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true
+      }
+    },
+    {
+      "id": "P16",
+      "pool_sentence_index": 45,
+      "operation": "O_FOREIGN",
+      "registered_operation_to_fact_mapping_value": false,
+      "edit_detail": {
+        "original_phrase": "26.2 ns",
+        "inserted_verbatim_from_other_sentence": "2 fs",
+        "insertion_is_substring_of_paper": true
+      },
+      "objective_fact_checks": {
+        "text_a_verbatim_in_source": true,
+        "text_b_verbatim_in_source_or_edited_from_text_a": true,
+        "single_operation_applied": true,
+        "replacement_is_verbatim_from_elsewhere_in_source": true
+      }
+    }
+  ],
+  "assignment_report_from_T2": {
+    "quota": {
+      "O_COPY": 2,
+      "O_PERMUTE": 2,
+      "O_UNIT_REEXPRESS": 3,
+      "O_NUM_SUB": 3,
+      "O_NUM_DELETE": 2,
+      "O_HEDGE_DELETE": 2,
+      "O_HEDGE_SWAP": 1,
+      "O_FOREIGN": 1
+    },
+    "shortfall": {
+      "O_PERMUTE": 2,
+      "O_HEDGE_SWAP": 1,
+      "O_HEDGE_DELETE": 1
+    },
+    "overflow_beyond_quota": {
+      "O_FOREIGN": 2,
+      "O_COPY": 1,
+      "O_NUM_DELETE": 1
+    },
+    "applicable_families_by_pair": {
+      "P01": [
+        "O_COPY",
+        "O_NUM_SUB",
+        "O_NUM_DELETE"
+      ],
+      "P02": [
+        "O_COPY",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_HEDGE_DELETE",
+        "O_FOREIGN"
+      ],
+      "P03": [
+        "O_COPY",
+        "O_UNIT_REEXPRESS",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P04": [
+        "O_COPY",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P05": [
+        "O_COPY",
+        "O_UNIT_REEXPRESS",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P06": [
+        "O_COPY",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P07": [
+        "O_COPY",
+        "O_UNIT_REEXPRESS",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P08": [
+        "O_COPY",
+        "O_UNIT_REEXPRESS",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P09": [
+        "O_COPY",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P10": [
+        "O_COPY",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P11": [
+        "O_COPY",
+        "O_UNIT_REEXPRESS",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P12": [
+        "O_COPY",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P13": [
+        "O_COPY",
+        "O_UNIT_REEXPRESS",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P14": [
+        "O_COPY",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P15": [
+        "O_COPY",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ],
+      "P16": [
+        "O_COPY",
+        "O_UNIT_REEXPRESS",
+        "O_NUM_SUB",
+        "O_NUM_DELETE",
+        "O_FOREIGN"
+      ]
+    },
+    "assigned_family_by_pair": {
+      "P02": "O_HEDGE_DELETE",
+      "P03": "O_UNIT_REEXPRESS",
+      "P05": "O_UNIT_REEXPRESS",
+      "P07": "O_UNIT_REEXPRESS",
+      "P04": "O_FOREIGN",
+      "P01": "O_COPY",
+      "P06": "O_COPY",
+      "P08": "O_NUM_SUB",
+      "P09": "O_NUM_SUB",
+      "P10": "O_NUM_SUB",
+      "P11": "O_NUM_DELETE",
+      "P12": "O_NUM_DELETE",
+      "P13": "O_FOREIGN",
+      "P14": "O_COPY",
+      "P15": "O_NUM_DELETE",
+      "P16": "O_FOREIGN"
+    }
+  }
+}

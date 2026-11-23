@@ -1,0 +1,149 @@
+{
+  "_meta": {
+    "written_utc": "2026-11-23T09:40:28Z",
+    "produced_by": "import criterion; criterion.judge(text_a, text_b) over samples_blind.json in id order",
+    "criterion_sha256_at_run_time": "886220fc56cfe0c5df2085c8f77b599668d792a412cd277b6f5e04a2d1b54f1b",
+    "samples_sha256_at_run_time": "0da3d63c9429eb6b831f5523fe103498adeb5438370d124a3cdb90381a61d273"
+  },
+  "P01": {
+    "verdict": true,
+    "reasons": [
+      "every numeric quantity stated by text_a is re-stated by text_b",
+      "no limiting expression of text_a is missing from text_b"
+    ],
+    "anchors": []
+  },
+  "P02": {
+    "verdict": false,
+    "reasons": [
+      "limiting expression 'approximately' bounds text_a but does not appear in text_b"
+    ],
+    "anchors": [
+      "approximately"
+    ]
+  },
+  "P03": {
+    "verdict": false,
+    "reasons": [
+      "numeric quantity '10' is stated by text_a but text_b states no equal value"
+    ],
+    "anchors": [
+      "10"
+    ]
+  },
+  "P04": {
+    "verdict": false,
+    "reasons": [
+      "numeric quantity '511' is stated by text_a but text_b states no equal value"
+    ],
+    "anchors": [
+      "511"
+    ]
+  },
+  "P05": {
+    "verdict": false,
+    "reasons": [
+      "numeric quantity '25' is stated by text_a but text_b states no equal value"
+    ],
+    "anchors": [
+      "25"
+    ]
+  },
+  "P06": {
+    "verdict": true,
+    "reasons": [
+      "every numeric quantity stated by text_a is re-stated by text_b",
+      "no limiting expression of text_a is missing from text_b"
+    ],
+    "anchors": []
+  },
+  "P07": {
+    "verdict": false,
+    "reasons": [
+      "numeric quantity '100' is stated by text_a but text_b states no equal value"
+    ],
+    "anchors": [
+      "100"
+    ]
+  },
+  "P08": {
+    "verdict": false,
+    "reasons": [
+      "numeric quantity '8.2' is stated by text_a but text_b states no equal value"
+    ],
+    "anchors": [
+      "8.2"
+    ]
+  },
+  "P09": {
+    "verdict": false,
+    "reasons": [
+      "numeric quantity '4' is stated by text_a but text_b states no equal value"
+    ],
+    "anchors": [
+      "4"
+    ]
+  },
+  "P10": {
+    "verdict": false,
+    "reasons": [
+      "numeric quantity '10' is stated by text_a but text_b states no equal value"
+    ],
+    "anchors": [
+      "10"
+    ]
+  },
+  "P11": {
+    "verdict": false,
+    "reasons": [
+      "numeric quantity '26.2' is stated by text_a but text_b states no equal value"
+    ],
+    "anchors": [
+      "26.2"
+    ]
+  },
+  "P12": {
+    "verdict": false,
+    "reasons": [
+      "numeric quantity '20' is stated by text_a but text_b states no equal value"
+    ],
+    "anchors": [
+      "20"
+    ]
+  },
+  "P13": {
+    "verdict": false,
+    "reasons": [
+      "numeric quantity '26.2' is stated by text_a but text_b states no equal value"
+    ],
+    "anchors": [
+      "26.2"
+    ]
+  },
+  "P14": {
+    "verdict": true,
+    "reasons": [
+      "every numeric quantity stated by text_a is re-stated by text_b",
+      "no limiting expression of text_a is missing from text_b"
+    ],
+    "anchors": []
+  },
+  "P15": {
+    "verdict": false,
+    "reasons": [
+      "numeric quantity '5' is stated by text_a but text_b states no equal value"
+    ],
+    "anchors": [
+      "5"
+    ]
+  },
+  "P16": {
+    "verdict": false,
+    "reasons": [
+      "numeric quantity '26.2' is stated by text_a but text_b states no equal value"
+    ],
+    "anchors": [
+      "26.2"
+    ]
+  }
+}

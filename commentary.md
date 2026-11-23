@@ -4151,3 +4151,27 @@ dots-studio 与 liquid 均 finish=stop、JSON 解析、tiers 4/4（case_1=FULL,c
 仍 **l3=false/absolute=false**：① 三家仅两家完成，未达多厂商确认门槛；② 即便全完成也只解释者一维，样本/gt/盲评/designer/裁决树设计/最终 l3 判断仍本 Agent；③ 四 case 全来自既有四轮、档位同构（未覆盖 REFUTED 等未出现档位）；④ 异厂自报不采信，只采信 tier 标签与冻结 gt 机械比对；⑤ §107-§114 八案全部保留并列不翻案。
 
 验收：verify 37/37（哈希锁+跨目录逐字节复用+厂商多样性+盲性+失败态无伪造+不翻案8案+l3=false）；专项 9/9；全量 1429 passed；KB 170→172（KB-AUDIT57 单厂限流封顶 + KB-META23 失败厂商≠判错厂商状态机）；链审 total 58/five 34/三锁 31；key 零入仓。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。
+
+---
+
+## §L3 真正异家 Agent 全链外置受控验证（2026-11-23，用户"异家Agent异种大模型已出结果"）
+
+### 触发：从"本 Agent 外移一维"到"五权力同时脱离本 Agent"
+L3 尺子唯一未达维 `independent_tests` 卡在递归独立性（§98–§115 每次只外移一维，总有权力留在本 Agent）。用户提出让异家 Agent 自动化执行并交付资料，选定此路线。产出 `EXTERNAL_AGENT_BRIEF.md`（自包含作业书：五权力同时外置、T0 承诺先于取料、避开本仓 30 篇论文、11 项交付资料、四档裁决树、7 条纪律、验收接口）与 `verify_external.py`（8 项机械验收器，自测合规 8/8 + 违规拒 5 项），提交推送外部锚 `af360e6`（17:14:38）。
+
+### L3.1 外家交付：Qoder 异种大模型，五权力全外置
+外家（Qoder，云沙箱，异种大模型）交回 `l3_external_audit.zip`：自选全新论文 2611.00401（physics.chem-ph，VESPER 自由能估计，避开清单双向确认），自建 16 组样本（`text_a/text_b` 中性字段、零标签泄漏），T3 归纳纯函数判据（只认数字字面量+固定限定词表），T4 自建 gt 映射（操作→客观文本事实，不从判据反推），全链时间戳 T0 09:22:41Z < T1 09:25:36Z， verdict 自报 `EXTERNAL_PARTIAL`（13/16=0.8125，落 0.60–0.90 预注册 PARTIAL 带）。3 个分歧全是 O_UNIT_REEXPRESS（10ns/10000ps 等值换单位），外家**拒绝事后加单位换算补洞**（反 Goodhart），如实落 PARTIAL 并披露 3 处 prereg 偏差。
+
+### L3.2 验收器确定性 bug 修复：修工具不放宽
+初验 6/8，两项 FAIL 经诊断均为验收器自身 bug（commit af360e6 早于交付 17:47，git show 证明交付前已锁）：① 只认顶层 `timestamp` 字段，而 brief 只要求"带 ISO 时间戳"未规定字段名；② 扫 manifest 全文把说明文字"提及"的 id 当选用论文。按 §109/§111/§110 先例修工具：递归收集任意深度 ISO 字符串取 min、只读顶层 `arxiv_id`，对全部交付一视同仁、不放宽阈值。复验真实交付 8/8 PASS + 重建违规交付仍正确 FAIL 3 项（标签泄漏/自封 L3/用避开论文），双向证明没放宽（KB-META24）。EXECUTION_LOG 五点论证留痕，不改外家任何文件。
+
+### L3.3 本仓机械比对：跨判据目标迁移只到 PARTIAL
+本仓把外家 `criterion.py` 回放到本仓 §100 冻结样本（claim→text_a, evidence→text_b）：整体 **11/18**，分层 clean **6/6 全对**、tampered **2/6**、canary 3/6。根因可定位：外家判据在物理化学测量域归纳（可见面=数字+固定限定词），本仓篡改样本是 oracle-failures 域的叙述性断言删改——**判据可见面与目标语义错配**，非随机错误。按计划 §7 预注册定性裁决树（CONVERGED 须逐 case 一致），落 **FULLCHAIN_PARTIAL**。不改外家判据（tuning 禁止）、不翻其案。
+
+### L3.4 裁决：FULLCHAIN_PARTIAL——独立性做满 ≠ 结论达 YES
+外家五权力全外置、交付合规 8/8、内部判据自洽 16/16，但跨判据目标迁移只 11/18、且 clean 全对而 tampered 大幅漏检。**核心洞见**：独立性做到极致不等于结论达 YES——真正独立方给出的恰是"可迁移性有边界"的部分负面证据（KB-AUDIT58）。这比任何单维外移都更接近 `independent_tests=yes` 的操作定义（五权力首次同时脱离本 Agent），但按纪律仍是 FULLCHAIN_PARTIAL，不抬级。
+
+### L3.5 诚实边界：仍 l3=false/absolute=false
+① 预注册裁决树 CONVERGED 须逐 case 一致，本次 11/18 未达；② 单一异家单次运行、16 样本来自单篇论文、两个注册构造族（O_PERMUTE/O_HEDGE_SWAP）未能实例化；③ 外家自述"独立=独立于委托方，非独立于自己"（它同时是判据与 gt 作者，缓解与残余见其 criterion_note §4）；④ §101 无限回归 + self-reported 折1 + R6 只判声明自洽；⑤ 外家 verdict 不改写、§107–§115 九案不翻案。**是否达到 L3 由委托方（人）裁定，本 Agent 不自封。**
+
+验收：verify_external 8/8；专项 9/9；全量 1429 passed；KB 172→174（KB-AUDIT58 独立性做满≠结论YES + KB-META24 验收器bug vs 交付违规）；链审 total 59/five 34/三锁 31；key/凭据零入仓（交付内容双向扫描）。**不编译新门禁**。遵循 §58 不接 run_loop；系统安全红线全程遵守。

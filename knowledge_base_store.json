@@ -4486,6 +4486,32 @@
       "evidence": "修后INTERPRETER_CROSS_INCONCLUSIVE,ling status=failed_error/tiers=None如实记录,verify37/37",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT58",
+      "kind": "reasoning_lesson",
+      "mechanism": "真正异家Agent全链外置首次跑通但结论是PARTIAL不是YES(L3):用户让异种大模型(Qoder)作独立评估方,五权力(出题/定gt/定判据/执行/裁决)同时外置,零共享context/判据/gt,在自选全新论文2611.00401上自建16样本+自建纯函数判据+自建gt映射→自报EXTERNAL_PARTIAL(13/16=0.8125,3个O_UNIT_REEXPRESS分歧),本仓机械验收8/8 PASS,本仓把其判据回放到本仓冻结样本11/18(clean6/6全对/tampered2/6/canary3/6)→FULLCHAIN_PARTIAL。核心洞察:独立性做到极致(五权力全外)≠结论达YES——判据在不同域/不同构造法上只部分迁移,clean全对说明'保留断言'方向对,tampered漏检说明'叙述性断言删改'的可见面与'数字+固定限定词'判据不匹配。这是真负面/部分负面,不是失败:第一次有真正独立方证明'可迁移性有边界'。",
+      "trigger": "当独立性消融已外移所有权力、期待独立方给出YES确认时；当'独立性'与'结论强度'被混为一谈时。",
+      "action": "五权力全外置后仍按预注册裁决树诚实落档;把独立方判据回放到本仓冻结样本做跨判据目标迁移测试;分层(clean/tampered/canary)定位迁移边界;不改独立方判据(那是tuning);不宣布L3由人裁定。",
+      "provenance": "audit_l3_fullchain_external/；外家Qoder交付zip固化received/；外部锚验收器commit af360e6；11/18 clean6/6 tampered2/6。",
+      "timestamp": "2026-11-23T17:55:00+08:00",
+      "support": 1,
+      "evidence": "result.json verdict=FULLCHAIN_PARTIAL;外家verdict=EXTERNAL_PARTIAL 0.8125;验收8/8;internal replay16/16;does_not_overturn9案",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META24",
+      "kind": "reasoning_lesson",
+      "mechanism": "验收器自身的确定性bug须与外部交付违规严格区分(§L3外家验收):外家交付初验6/8两FAIL,诊断发现都是验收器bug——①只认顶层timestamp字段,而brief只要求'带ISO时间戳'未规定字段名,外家用嵌套timestamps_utc.prereg_written合法,真实时序09:22:41Z<09:25:36Z成立;②扫描manifest全文regex把'避开清单说明文字里提及的id'当选用论文,实际选用2611.00401不在清单。证据:验收器commit af360e6(17:14)早于交付上传(17:47),git show证明bug交付前已锁,与§109/§111/§110同类。修复:递归收集任意深度ISO字符串取min/只读manifest顶层arxiv_id,对全部交付一视同仁,不放宽阈值;复验真实交付8/8+重建违规交付仍正确FAIL3项,证明没放宽。",
+      "trigger": "当外部交付验收失败时判断是'交付违规'还是'验收器bug'：先查bug是否早于交付锁定、是否与新输出无关、修复是否对所有交付一视同仁。",
+      "action": "用commit时间锚证明bug先于交付;修机械逻辑(字段递归/扫描范围)而非阈值;修复后必须复验合规仍PASS且违规仍FAIL双向证明;EXECUTION_LOG五点论证留痕;不改外部交付任何文件。",
+      "provenance": "audit_l3_fullchain_external/EXECUTION_LOG.md；git show af360e6第57-58/162行；修复前6/8→修复后8/8且违规3FAIL。",
+      "timestamp": "2026-11-23T17:55:00+08:00",
+      "support": 1,
+      "evidence": "修复后真实交付8/8 PASS,重建违规交付02/06/07三项FAIL不放宽;EXECUTION_LOG含五点论证",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

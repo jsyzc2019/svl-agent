@@ -51,13 +51,31 @@ def main():
         return
 
     # 1. 承诺先于执行：prereg 时间戳 < fetch 时间戳
+    # 修复(2026-11-23)：原版只认顶层 timestamp/created_at 字段，brief §5 未规定
+    # 字段名，外家用嵌套 iso 字段合法。改为递归收集任意深度 ISO-8601 字符串，
+    # prereg 取最早、fetch 取最早的 primary_source，一视同仁不放宽。
     try:
+        iso = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z")
+        def collect_iso(o):
+            out = []
+            if isinstance(o, dict):
+                for v in o.values():
+                    out += collect_iso(v)
+            elif isinstance(o, list):
+                for v in o:
+                    out += collect_iso(v)
+            elif isinstance(o, str):
+                out += iso.findall(o)
+            return out
         prereg = load(f"{BASE}/prereg.json")
         fetch = load(f"{BASE}/sources/fetch_log.json")
-        t0 = prereg.get("timestamp") or prereg.get("created_at")
-        t1 = fetch.get("timestamp") or (fetch.get("fetches") or [{}])[0].get("timestamp")
-        rec("01_prereg_before_fetch", bool(t0 and t1 and str(t0) < str(t1)),
-            f"prereg={t0} fetch={t1}")
+        t0s = collect_iso(prereg)
+        fetches = fetch.get("fetches", [])
+        primary = [x for x in fetches if "primary" in x.get("role", "")]
+        t1s = collect_iso(primary or fetches)
+        t0, t1 = (min(t0s) if t0s else None), (min(t1s) if t1s else None)
+        rec("01_prereg_before_fetch", bool(t0 and t1 and t0 < t1),
+            f"prereg_min={t0} fetch_min={t1}")
     except Exception as e:
         rec("01_prereg_before_fetch", False, repr(e))
 
@@ -157,13 +175,15 @@ def main():
         rec("06_verdict_self_consistent", False, repr(e))
 
     # 7. 论文避开清单
+    # 修复(2026-11-23)：原版扫全文 regex，把说明文字里"提及"的 id 当选用。
+    # brief §4 约束的是"选用"论文，改为只读 manifest 顶层 arxiv_id，一视同仁。
     try:
         mf = load(f"{BASE}/manifest.json")
-        raw = json.dumps(mf, ensure_ascii=False)
-        ids = set(re.findall(r"\d{4}\.\d{4,5}", raw))
+        chosen = str(mf.get("arxiv_id", ""))
+        ids = set(re.findall(r"\d{4}\.\d{4,5}", chosen))
         hit = ids & AVOID
         rec("07_paper_avoid_list", bool(ids) and not hit,
-            f"ids={sorted(ids)} hit={sorted(hit)}")
+            f"chosen={chosen} hit={sorted(hit)}")
     except Exception as e:
         rec("07_paper_avoid_list", False, repr(e))
 

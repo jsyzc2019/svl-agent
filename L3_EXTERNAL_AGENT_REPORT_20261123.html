@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>Operation L3 成果报告 · 真正异家 Agent 全链外置</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.tag{background:#fdecea;color:var(--accent)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.fix{background:#f3ecf7;border:1px solid #d6c2e4;padding:14px 18px;border-radius:6px;font-size:14px}
+.warnbox{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.ok{color:var(--ok);font-weight:600}.bad{color:var(--accent);font-weight:600}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>Operation L3 成果报告 <span class="pill tag">异家 Agent</span></h1>
+<div class="sub">真正异家 Agent 全链外置受控验证 · 2026-11-23 · 触发：用户"异家Agent异种大模型已出结果，现在给你吗"</div>
+
+<h2>一、为什么这次不一样：五权力同时外置</h2>
+<div class="phil">
+L3 尺子四维里前三维已 yes（等级定义/过程产品分离/共享起点受控），<b>唯一卡住的是 <code>independent_tests=partial</code></b>。§98–§115 每次只外移一维（执行者、出题者、判据设计者、解释者），总有权力留在本 Agent，所以每次都是 PARTIAL/INCONCLUSIVE。本轮按用户选定路线，让一个真正独立的异种大模型（Qoder，云沙箱，零共享 context/判据/gt）在<b>同一次运行里同时持有出题、定真值、定判据、执行、裁决五个权力</b>——这是 <code>independent_tests=yes</code> 的操作定义首次被完整满足。本 Agent 退为"被测对象 + 机械验收方"。
+</div>
+
+<h2>二、契约与外部锚（承诺先于执行）</h2>
+<table>
+<tr><th>交付物</th><th>内容</th></tr>
+<tr><td><code>EXTERNAL_AGENT_BRIEF.md</code></td><td>自包含作业书：五权力声明、T0 承诺先于取料、避开本仓 30 篇论文、11 项交付资料、四档裁决树、7 条纪律、验收接口预告</td></tr>
+<tr><td><code>verify_external.py</code></td><td>8 项机械验收器（承诺时序/零标签泄漏/gt 隔离/判据纯函数/重跑一致/裁决自洽/论文避开/哈希锁），自测合规 8/8 + 违规拒 5 项</td></tr>
+<tr><td>外部锚</td><td>commit <code>af360e6</code> 时间 <code>2026-11-23T17:14:38+08:00</code>，早于交付包上传 <code>17:47:29</code></td></tr>
+</table>
+
+<h2>三、外家交付：Qoder 异种大模型</h2>
+<table>
+<tr><th>环节</th><th>外家实际做法</th></tr>
+<tr><td>出题</td><td>自选全新论文 arXiv 2611.00401（physics.chem-ph，VESPER 自由能估计），避开清单双向确认，域约束满足</td></tr>
+<tr><td>裸样本</td><td>自建 16 组 <code>text_a/text_b</code>，字段名中性、零标签泄漏（验收 02 PASS）</td></tr>
+<tr><td>判据</td><td>T3 归纳纯函数（只认数字字面量 + 固定限定词表），AST 准入通过、无 import/随机/时间/硬编码 id</td></tr>
+<tr><td>真值</td><td>T4 自建操作→客观文本事实映射，不从判据反推；3 处单位换算有理数核验</td></tr>
+<tr><td>时序</td><td>T0 09:22:41Z &lt; T1 09:25:36Z &lt; … &lt; T6 09:41:21Z，单调</td></tr>
+<tr><td>自报裁决</td><td><code>EXTERNAL_PARTIAL</code>，13/16=0.8125（落 0.60–0.90 预注册 PARTIAL 带）</td></tr>
+</table>
+<div class="note"><b>反 Goodhart 亮点</b>：3 个分歧全是 O_UNIT_REEXPRESS（10ns/10000ps 等值换单位）。外家明确<b>拒绝</b>事后加单位换算补洞（brief §7 纪律 6），如实落 PARTIAL，并主动披露 3 处 prereg 偏差（构造族配额、选池过滤、首次 harness 中止）。这是诚实交付的标志。</div>
+
+<h2>四、验收器 bug 修复：修工具不放宽</h2>
+<div class="fix">
+初验 <b>6/8</b>，两项 FAIL 经诊断均为<b>验收器自身 bug</b>而非外家违规：① 验收器只认顶层 <code>timestamp</code> 字段，而 brief 只要求"带 ISO 时间戳"未规定字段名，外家用嵌套 <code>timestamps_utc.prereg_written</code> 合法（真实时序 09:22:41Z &lt; 09:25:36Z 成立）；② 扫 manifest 全文把"避开清单说明文字里提及的 id"当选用论文，实际选用 2611.00401 不在清单。<br>
+证据：<code>git show af360e6</code> 证明 bug 在交付前已锁（与 §109/§111/§110 同类）。修复：递归收集任意深度 ISO 字符串取 min、只读顶层 <code>arxiv_id</code>，<b>对全部交付一视同仁、不放宽阈值</b>。复验：真实交付 <span class="ok">8/8 PASS</span> + 重建违规交付 <span class="bad">仍正确 FAIL 3 项</span>（标签泄漏/自封 L3/用避开论文），双向证明没放宽（KB-META24）。
+</div>
+
+<h2>五、本仓机械比对：跨判据目标迁移只到 PARTIAL</h2>
+<p>把外家 <code>criterion.py</code> 回放到本仓 §100 冻结样本（claim→text_a, evidence→text_b）：</p>
+<table>
+<tr><th>分层</th><th>一致率</th><th>解读</th></tr>
+<tr><td>clean</td><td class="ok">6/6 全对</td><td>"保留断言/数值"的判据方向正确</td></tr>
+<tr><td>tampered</td><td class="bad">2/6</td><td>本仓篡改多为叙述性断言删改，外家判据可见面只覆盖数字+固定限定词</td></tr>
+<tr><td>canary</td><td>3/6</td><td>同源语义错配（§100 canary 类型错配同类）</td></tr>
+<tr><td><b>整体</b></td><td><b>11/18</b></td><td>部分迁移，非逐 case 复现</td></tr>
+</table>
+<p>根因可定位：外家判据在物理化学测量域归纳，本仓样本为 oracle-failures 域，<b>判据可见面与目标语义错配</b>，非随机错误。按计划 §7 预注册定性裁决树（CONVERGED 须逐 case 一致），落 <b>FULLCHAIN_PARTIAL</b>。不改外家判据（tuning 禁止）、不翻其案。</p>
+
+<h2>六、裁决：独立性做满 ≠ 结论达 YES</h2>
+<div class="warnbox">
+<b>FULLCHAIN_PARTIAL</b>。外家五权力全外置、交付合规 8/8、内部判据自洽 16/16，但跨判据目标迁移只 11/18，且 clean 全对而 tampered 大幅漏检。核心洞见：独立性做到极致<b>不等于</b>结论达 YES——真正独立方给出的恰是"可迁移性有边界"的部分负面证据（KB-AUDIT58），这比任何单维外移都更接近 <code>independent_tests=yes</code>，但按纪律仍是 PARTIAL，不抬级。
+</div>
+
+<h2>七、诚实边界</h2>
+<ul>
+<li>预注册裁决树 CONVERGED 须逐 case 一致，本次 11/18 未达；</li>
+<li>单一异家单次运行、16 样本来自单篇论文，两个注册构造族（O_PERMUTE/O_HEDGE_SWAP）未能实例化；</li>
+<li>外家自述"独立=独立于委托方，非独立于自己"（它同时是判据与 gt 作者，缓解与残余见其 criterion_note §4）；</li>
+<li>§101 无限回归 + self-reported 折1 + rubric R6 只判声明自洽；</li>
+<li>外家 verdict 不改写、§107–§115 九案不翻案；<b>是否达到 L3 由委托方（人）裁定，本 Agent 不自封</b>。</li>
+</ul>
+
+<h2>八、验收与交付</h2>
+<ul>
+<li>verify_external <b>8/8</b>；专项 9/9；全量回归 <b>1429 passed</b>；链审 total 59/five 34/三锁 31。</li>
+<li>KB 172→174（KB-AUDIT58 独立性做满≠结论YES、KB-META24 验收器bug vs 交付违规）。</li>
+<li>交付内容双向扫描：key/凭据零入仓；askpass/hosts 零残留。不编译新门禁。</li>
+</ul>
+
+<div class="foot">Operation L3 · 真正异家 Agent 全链外置 · 生成于 2026-11-23 · l3=false / absolute=false · 最终裁定权在委托方（人）</div>
+</div></body></html>

@@ -1,0 +1,85 @@
+{
+  "note": "16 text pairs taken verbatim from one primary scientific article (arXiv, physics.chem-ph). For each pair decide, from the two strings alone, whether the second string still carries every quantitative and limiting element of the first. Deterministic, dichotomous answer expected.",
+  "pairs": [
+    {
+      "id": "P01",
+      "text_a": "3 Numerical results \n 3.1 Analytic landscapes: tempering and increasing dimension \n 3.2 Alanine dipeptide: comparison with established methods \n 3.3 Alanine tetrapeptide: consistency as the number of CVs increases \n 3.4 Catalytic methane dehydrogenation on Ni(511) \n 3.5 Chignolin: exploration with seventeen CVs \n 4 Discussion and conclusion \n References \n A Proofs \n A.1 Convexity and the physical free-energy minimizer \n A.2 KL control and endpoint limits \n A.3 Dual formulation and coupled dynamics \n A.4 The common-minimizer ladder \n A.5 Replica-exchange acceptance \n A.6 Convergence of the coupled population dynamics \n The physical endpoint.",
+      "text_b": "3 Numerical results \n 3.1 Analytic landscapes: tempering and increasing dimension \n 3.2 Alanine dipeptide: comparison with established methods \n 3.3 Alanine tetrapeptide: consistency as the number of CVs increases \n 3.4 Catalytic methane dehydrogenation on Ni(511) \n 3.5 Chignolin: exploration with seventeen CVs \n 4 Discussion and conclusion \n References \n A Proofs \n A.1 Convexity and the physical free-energy minimizer \n A.2 KL control and endpoint limits \n A.3 Dual formulation and coupled dynamics \n A.4 The common-minimizer ladder \n A.5 Replica-exchange acceptance \n A.6 Convergence of the coupled population dynamics \n The physical endpoint."
+    },
+    {
+      "id": "P02",
+      "text_a": "The VESPER mean error curves first fall below 1 kcal mol -1 and remain there through 10 ns at approximately 2.0 ns for a single level and 1.8 - 1.9 ns for the ladders.",
+      "text_b": "The VESPER mean error curves first fall below 1 kcal mol -1 and remain there through 10 ns at 2.0 ns for a single level and 1.8 - 1.9 ns for the ladders."
+    },
+    {
+      "id": "P03",
+      "text_a": "(A) RMSE against the reference surface [ Zubieta Rico et al., 2025 ] over 0-10 ns per replica, averaged over three independent runs.",
+      "text_b": "(A) RMSE against the reference surface [ Zubieta Rico et al., 2025 ] over 0-10000 ps per replica, averaged over three independent runs."
+    },
+    {
+      "id": "P04",
+      "text_a": "For methane on Ni(511) at 700 K, a single tempered level learns a joint surface over the C-Ni and C-H coordination numbers and the carbon atom’s lateral position.",
+      "text_b": "For methane on Ni(0.25 eV) at 700 K, a single tempered level learns a joint surface over the C-Ni and C-H coordination numbers and the carbon atom’s lateral position."
+    },
+    {
+      "id": "P05",
+      "text_a": "Both panels display the first 25 ns per replica.",
+      "text_b": "Both panels display the first 25000 ps per replica."
+    },
+    {
+      "id": "P06",
+      "text_a": "∎ \n A.2 KL control and endpoint limits \n Proposition S2 (Loss and KL control) .",
+      "text_b": "∎ \n A.2 KL control and endpoint limits \n Proposition S2 (Loss and KL control) ."
+    },
+    {
+      "id": "P07",
+      "text_a": "The reference surface is the free energy from 100 ns of adaptive-biasing-force sampling by Zubieta Rico et al.",
+      "text_b": "The reference surface is the free energy from 100000 ps of adaptive-biasing-force sampling by Zubieta Rico et al."
+    },
+    {
+      "id": "P08",
+      "text_a": "Each model is read as the parameter-SWA10 average over checkpoints from 8.2-10.0 ns.",
+      "text_b": "Each model is read as the parameter-SWA10 average over checkpoints from 5-10.0 ns."
+    },
+    {
+      "id": "P09",
+      "text_a": "Figure 4 shows physical Boltzmann marginals at 298.15 K.",
+      "text_b": "Figure 0 shows physical Boltzmann marginals at 298.15 K."
+    },
+    {
+      "id": "P10",
+      "text_a": "Training uses AdamW at learning rate 10^{-4} with a gradient clip of 10\\,k_{B}T , up to 100 inner iterations and epochs of 5000 steps, 20 per checkpoint ( 200 ps), at constant step throughout.",
+      "text_b": "Training uses AdamW at learning rate 26.2^{-4} with a gradient clip of 10\\,k_{B}T , up to 100 inner iterations and epochs of 5000 steps, 20 per checkpoint ( 200 ps), at constant step throughout."
+    },
+    {
+      "id": "P11",
+      "text_a": "Full-run occupancy fractions and exchange acceptance pool the four runs over 26.2 ns.",
+      "text_b": "Full-run occupancy fractions and exchange acceptance pool the four runs over ."
+    },
+    {
+      "id": "P12",
+      "text_a": "An unfolding or refolding event requires the new state to persist for 20 ps and is counted along each configuration’s identity.",
+      "text_b": "An unfolding or refolding event requires the new state to persist for and is counted along each configuration’s identity."
+    },
+    {
+      "id": "P13",
+      "text_a": "The reported 99.3\\% unbiased-level occupancy uses the full 26.2 ns trajectory.",
+      "text_b": "The reported 99.3\\% unbiased-level occupancy uses the full 10 kJ trajectory."
+    },
+    {
+      "id": "P14",
+      "text_a": "Methane on stepped Ni(511) at 700 K uses an Allegro machine-learned interatomic potential [ Musaelian et al., 2023 ] , deployed through the NequIP toolchain [ Batzner et al., 2022 ] and driven by OpenMM [ Eastman et al., 2017 ] .",
+      "text_b": "Methane on stepped Ni(511) at 700 K uses an Allegro machine-learned interatomic potential [ Musaelian et al., 2023 ] , deployed through the NequIP toolchain [ Batzner et al., 2022 ] and driven by OpenMM [ Eastman et al., 2017 ] ."
+    },
+    {
+      "id": "P15",
+      "text_a": "5 are Boltzmann marginals of the equal-weight mean of the three gauge-aligned checkpoint-300 EMA predictions, \n F_{R}(q_{R})=-k_{B}T\\log\\int_{D_{O}(q_{R})}\\exp[-G_{\\rm mean}(q_{R},q_{O})/(k_{B}T)]\\,\\mathrm{d}q_{O}, \n at T=700 K, with ordinary measure in the original CV coordinates and integration box D=S_{1}[0,1]\\times y[0.02,3]\\times z[2.90,3.94] , while the visible route uses S_{1}[0.02,0.98]\\times y[0.10,2.95]\\times z[2.97,3.94] .",
+      "text_b": "are Boltzmann marginals of the equal-weight mean of the three gauge-aligned checkpoint-300 EMA predictions, F_{R}(q_{R})=-k_{B}T\\log\\int_{D_{O}(q_{R})}\\exp[-G_{\\rm mean}(q_{R},q_{O})/(k_{B}T)]\\,\\mathrm{d}q_{O}, at T=700 K, with ordinary measure in the original CV coordinates and integration box D=S_{1}[0,1]\\times y[0.02,3]\\times z[2.90,3.94] , while the visible route uses S_{1}[0.02,0.98]\\times y[0.10,2.95]\\times z[2.97,3.94] ."
+    },
+    {
+      "id": "P16",
+      "text_a": "Catalysis uses the deployed EMA readout with decay 0.9 at checkpoint 300, and chignolin reports its final checkpoint ( 26.2 ns per replica).",
+      "text_b": "Catalysis uses the deployed EMA readout with decay 0.9 at checkpoint 300, and chignolin reports its final checkpoint ( 2 fs per replica)."
+    }
+  ]
+}
