@@ -4551,6 +4551,32 @@
       "evidence": "clean content_diff全0; tampered 0-2(均0.5); canary 17-48(均28.17); 最小鸿沟15; separated=true; §100 engine.py原文'判据-样本设计不兼容'",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT61",
+      "kind": "reasoning_lesson",
+      "mechanism": "§L3探索21轮全面复盘(机械台账从21份真实result.json提取裁决,18个显式l3标志全false):裁决分布3CONFIRMED/8PARTIAL/6INCONCLUSIVE/4能力演示,3个CONFIRMED全是单维消融(§107分层确认/§109执行者/§114解释者)且全部l3=false,跨集/跨厂商/全链必掉PARTIAL——独立性做满≠结论YES(必要条件非充分条件)。四维尺子前三维§98即yes,唯一缺口independent_tests卡了18轮。",
+      "trigger": "当逐维外移独立性反复得到单维CONFIRMED却始终无法整体达标、考虑是否继续投入时",
+      "action": "把PARTIAL/INCONCLUSIVE归为六类失败模式:①样本特异性/地板效应(§107→§108 P0地板消失)②脚手架依赖/语义取向(§103-106正类取向依赖任务目的语义)③厂商/路由特异性(§112 SECONDARY跨厂不复现/§115一家429)④判据可见面错配(Qoder数字✓断言✗vs第二家断言✓数值✗)⑤评测集任务异质性(canary跨句蕴含vs断言保留,内容词差异17-48,鸿沟15,判据越忠实越必然误判)⑥元层无限回归(§101 Trusting Trust,absolute恒false)。第①②⑤⑥类是结构性,非外家数量可解;两轮外家走完①→④后撞上⑤的实证。据此收尾:缺口定位在评测工具设计层,再找第三家只能重复数值型或断言型,按边际收益定格交付由人裁定。",
+      "provenance": "audit_l3_gap_targeted/L3_EVIDENCE_LEDGER.json+build_evidence_ledger.py+build_final_retrospective.py+L3_FINAL_RETROSPECTIVE_20261123.html",
+      "timestamp": "2026-11-23T10:57:50Z",
+      "support": 1,
+      "evidence": "21轮18个显式l3全false;3CONFIRMED=§107/§109/§114且l3非true;非确认裁决14/21(67%);六类失败模式均可定位到具体轮次与真实result证据",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META26",
+      "kind": "reasoning_lesson",
+      "mechanism": "收尾决策的方法论:当逐维消融型探索在结构上撞墙(无限回归+评测集任务异质性),继续增加同类样本(第三家异家Agent)的边际收益近零,因为新样本只会重新命中已定位的结构墙。',全面复盘'的价值不在罗列流水账,而在把失败按可解性分类——区分'再试一次有机会'(样本特异性/可见面错配)与'原则上无解'(语义取向/任务异质性/无限回归)。",
+      "trigger": "当用户支持继续、但数据显示缺口性质是结构性而非资源性时,如何决定停手并诚实交付",
+      "action": "先做数据驱动的机械台账(从真实result.json提取裁决+SHA256,不手抄),再从分布中找规律(CONFIRMED全单维+l3全false),再把失败按'能否靠再找一家解决'分类,最后诚实评估三条路径(收尾/换判据/换评测工具)的收益与纪律风险。收尾≠放弃:是把结论定格为'当前判据+冻结集组合下L3未达且缺口已精确定位',最终裁定权交还人。复盘脚本与数据分离(数字读台账、洞察为标注),保证可复现且不产生新判定、不改任何verdict。",
+      "provenance": "audit_l3_gap_targeted/build_final_retrospective.py(数据与洞察分离)+tests/test_gap_targeted.py test_retrospective_*6项",
+      "timestamp": "2026-11-23T10:57:50Z",
+      "support": 1,
+      "evidence": "台账21轮数据驱动生成,复盘报告11738bytes零占位符,专项20/20;收尾后verdict保持GAP_INCONCLUSIVE/FULLCHAIN_PARTIAL,l3/absolute仍false",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

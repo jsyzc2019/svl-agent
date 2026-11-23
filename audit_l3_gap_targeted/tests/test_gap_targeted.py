@@ -195,3 +195,83 @@ def test_canary_task_heterogeneity_is_pre_existing_design_defect():
     # 诊断不翻案
     res = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
     assert res["verdict"] == "GAP_INCONCLUSIVE"
+
+
+# ---------- §L3 全面复盘定格（陈述归纳，不产生新判定） ----------
+
+def test_evidence_ledger_covers_all_21_rounds():
+    """台账机械覆盖 §97–§115 + Operation L3 + L3-R2 共 21 轮，每轮有 SHA256。"""
+    led = json.load(open(os.path.join(BASE, "L3_EVIDENCE_LEDGER.json"), encoding="utf-8"))
+    assert led["n_rounds"] == 21
+    assert len(led["rounds"]) == 21
+    secs = [r["section"] for r in led["rounds"]]
+    assert secs[0] == "§97" and secs[-1] == "L3-R2"
+    assert "L3" in secs and "§115" in secs
+    # 每轮都有真实 result 的 SHA256（64 位十六进制）
+    for r in led["rounds"]:
+        assert not r.get("missing"), f"轮次缺 result.json: {r['section']}"
+        sha = r.get("result_sha256", "")
+        assert re.fullmatch(r"[0-9a-f]{64}", sha), f"SHA256 异常: {r['section']}={sha}"
+
+
+def test_all_explicit_l3_flags_are_false():
+    """18 个显式 l3_claimed 全部 false，absolute 无一 true——复盘不翻案。"""
+    led = json.load(open(os.path.join(BASE, "L3_EVIDENCE_LEDGER.json"), encoding="utf-8"))
+    st = led["stats"]
+    assert st["explicit_l3_flags"] >= 18
+    assert st["all_l3_false"] is True
+    assert st["violating_sections"] == []
+    explicit = [r for r in led["rounds"] if r.get("l3_flag_present")]
+    assert all(r["l3_claimed"] is False for r in explicit)
+
+
+def test_only_three_confirmed_all_single_dimension():
+    """3 个 CONFIRMED 全是单维消融，无一宣称系统达 L3。"""
+    led = json.load(open(os.path.join(BASE, "L3_EVIDENCE_LEDGER.json"), encoding="utf-8"))
+    dist = led["stats"]["verdict_distribution"]
+    assert dist.get("CONFIRMED") == 3
+    confirmed = [r for r in led["rounds"]
+                 if "CONFIRMED" in str(r.get("verdict", "")).upper()]
+    # 3 个 CONFIRMED 轮次各有独立维度，且 l3 均非 true
+    assert len(confirmed) == 3
+    sections = {r["section"] for r in confirmed}
+    assert sections == {"§107", "§109", "§114"}
+    for r in confirmed:
+        assert r["l3_claimed"] is not True
+
+
+def test_partial_inconclusive_dominates():
+    """PARTIAL+INCONCLUSIVE 占多数——边际收益递减的机械证据。"""
+    led = json.load(open(os.path.join(BASE, "L3_EVIDENCE_LEDGER.json"), encoding="utf-8"))
+    dist = led["stats"]["verdict_distribution"]
+    n = led["n_rounds"]
+    non_yes = dist.get("PARTIAL/受依赖", 0) + dist.get("INCONCLUSIVE", 0)
+    assert non_yes > n / 2, f"非确认裁决未占多数: {non_yes}/{n}"
+
+
+def test_retrospective_changes_no_verdict_and_keeps_l3_false():
+    """复盘是陈述归纳：不改任何 result verdict，l3/absolute 仍 false。"""
+    # L3-R2 与 Operation L3 的 verdict 保持原样
+    r2 = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
+    assert r2["verdict"] == "GAP_INCONCLUSIVE"
+    assert r2["l3_claimed"] is False and r2["absolute_claimed"] is False
+    l3 = json.load(open(os.path.join(ROOT, "audit_l3_fullchain_external", "result.json"),
+                        encoding="utf-8"))
+    assert l3["verdict"] == "FULLCHAIN_PARTIAL"
+    assert l3["l3_claimed"] is False and l3["absolute_claimed"] is False
+
+
+def test_retrospective_html_is_data_driven_and_clean():
+    """复盘报告存在、无占位符、含数据驱动标记与定格结论。"""
+    html = open(os.path.join(ROOT, "L3_FINAL_RETROSPECTIVE_20261123.html"),
+                encoding="utf-8").read()
+    assert "L3 探索全面复盘" in html
+    assert "定格收尾" in html
+    assert "数据驱动，读自台账" in html
+    assert "<<<FILL>>>" not in html and "TODO" not in html
+    # 定格结论段落在场
+    assert "由人裁定" in html
+    assert "GAP_INCONCLUSIVE" in html and "FULLCHAIN_PARTIAL" in html
+    # 六类失败模式分类学完整
+    for kw in ("样本特异性", "脚手架依赖", "厂商", "判据可见面", "任务异质性", "无限回归"):
+        assert kw in html, f"复盘缺失败模式: {kw}"

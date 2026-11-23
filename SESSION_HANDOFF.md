@@ -321,6 +321,14 @@ Post-hoc 分层取证（解释主指标为何未达，**不改裁决**）：非�
 **裁决与边界**：独立性做满≠结论达YES——首次五权力同时外置+交付合规8/8+内部自洽16/16，但跨判据目标迁移只11/18，真正独立方给出的是"可迁移性有边界"的部分负面证据（KB-AUDIT58）。仍 **l3=false/absolute=false**：CONVERGED未达、单异家单次单论文、两构造族未实例化、外家自述"独立于委托方非独立于自己"、§101无限回归+折1+R6、§107-§115九案不翻。**是否达L3由委托方（人）裁定，本Agent不自封**。
 **验收**：verify_external 8/8；专项9/9；全量1429 passed；KB172→174（KB-AUDIT58/META24）；链审total59/five34/三锁31；key/凭据零入仓；askpass/hosts零残留。报告`L3_EXTERNAL_AGENT_REPORT_20261123.html`。**不编译新门禁**。遵循§58不接run_loop;系统安全红线全程遵守。
 
+### §4ah §L3 探索全面复盘与定格收尾（2026-11-23，用户"按你的倾向办，同时全面复盘，思考清楚"）
+采纳倾向=不再找第三家、定格交付。先做数据驱动机械台账 `audit_l3_gap_targeted/build_evidence_ledger.py`：从 §97–§115 + Operation L3 + L3-R2 共 **21 轮真实 result.json** 提取裁决/四维/l3标志 + 每份 SHA256 → `L3_EVIDENCE_LEDGER.json`（18 个显式 l3 标志**全部 false**、裁决分布 3 CONFIRMED/8 PARTIAL/6 INCONCLUSIVE/4 能力演示，非确认 14/21=67%）。**核心发现**：3 个 CONFIRMED 全是单维消融（§107 分层确认/§109 执行者/§114 解释者）且全部 l3=false；四维尺子前三维 §98 即 yes，唯一缺口 independent_tests 卡了 18 轮——独立性做满≠结论 YES（必要条件非充分）。
+**六类失败模式分类学（复盘核心增量）**：①样本特异性/地板效应（§107→§108 P0 地板消失）②脚手架依赖/语义取向（§103-106）③厂商/路由特异性（§112/§115）④判据可见面错配（两轮外家）⑤评测集任务异质性（canary 内容词差异 17-48 vs clean0/tampered0-2，鸿沟15，判据越忠实越必然误判）⑥元层无限回归（§101 Trusting Trust，absolute 恒 false）。①②⑤⑥结构性非外家数量可解；两轮外家走完①→④后撞⑤的实证。
+**三个洞察**：独立性做满≠YES（Operation L3 五权力全外置合规8/8但回放11/18，独立方给的是"可迁移性有边界"部分负面证据）；无限回归决定 absolute 恒 false（结构非能力）；真卡点在评测工具设计层（canary 缺陷 §100 prereg:24/engine.py:119 早已记录非事后借口）。
+**收尾三理由**：边际收益递减已被21轮证明（每次再外移一维都掉 PARTIAL）；无限回归未破；缺口已定位在设计层再找第三家只能重复数值型或断言型。三路径评估：①收尾定格（采纳）②第三家语义蕴含判据（泄露 canary 语义独立性打折+仍 LLM 家族，低性价比）③换评测工具（动 §100 冻结样本 post-hoc 嫌疑，纪律风险最高）。
+**产物**：`build_final_retrospective.py`（数字读台账、洞察为标注，数据与判断分离）+ `L3_FINAL_RETROSPECTIVE_20261123.html`（九节：收尾理由/21轮全景/CONFIRMED真相/四维演进/六类失败模式/三洞察/三路径评估/定格结论/仓库快照，headless 渲染核验无乱码表格对齐）。专项 +6（覆盖台账21轮+SHA256/18 l3全false/3 CONFIRMED单维/非确认占多数/不改verdict/报告数据驱动），专项20/20、全量1429、KB179（KB-AUDIT61 六类失败模式分类+KB-META26 收尾方法论）。
+**定格**：l3=false/absolute=false 21轮无一例外；§107-§115 九案 + FULLCHAIN_PARTIAL + GAP_INCONCLUSIVE 全保留，不翻案不放宽不改阈值、不编译新门禁、不 spawn；是否达 L3 由人裁定，本 Agent 不自封。系统安全红线全程遵守。
+
 ### §4ad §L3-R2 缺口定向全链外置契约就绪（2026-11-23，"再另找异家 Agent 是否可行"）
 用户问能否再找第二家异种大模型。判定可行但不该原样复制 v1（边际收益近零）→锚定上一轮唯一未闭合缺口：Qoder 判据对数值类篡改 2/2 全检出、对断言类（否定2/补语1/连接词1）**0/4**。`audit_l3_gap_targeted/` 产出：`EXTERNAL_AGENT_BRIEF_V2.md`（五权力全外置/时间链/8项验收/四档裁决树不变，**唯一变更**=样本三类断言改写各≥1组；避开清单加2611.00401）；`prereg.json`（基线0/4vs2/2 spawn前可复现、五档阈值分母=断言类4个、阈值brief§9逐字一致、不翻十案）；`verify_external.py`（v1的8项+第9项覆盖声明结构检查）；`engine.py`（回放外家判据到冻结样本按五档树裁决、验收摘要缺失即INCONCLUSIVE）。自测：合规9/9 PASS、注入违规(去覆盖声明+避开论文)FAIL2项、三判据分档验证正确(0/4→NOT_CLOSED/4/4→CLOSED)。**本轮只备契约不 spawn**：等用户找第二家执行 brief v2 交回 `l3_external_audit_v2/` 后再验收裁决。仍 l3=false/absolute=false，不翻§107-§115九案+§L3 FULLCHAIN_PARTIAL。专项10/10、全量1429 passed、链审total60/five34/三锁31、key零入仓。
 
