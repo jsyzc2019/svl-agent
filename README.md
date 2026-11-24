@@ -14,7 +14,7 @@
 | 知识库条目 | 174 | `knowledge_base_store.json` |
 | 会拦门禁（`check_*`） | 38 | `svagent/*.py` AST 扫描 |
 | 测试项 | 1429 | `pytest --collect-only` |
-| 证据目录 | 60（五件套齐全 34）+ §109 外部 workflow/attestation + §110/§111/§112 异厂 designer 调用/盲评+AST 准入规则修订 + §113 跨厂商/跨集 2×2 + §114 异厂解释者独立性盲评 + §115 解释者跨厂商交叉确认 + L3 真正异家 Agent 全链外置 + §L3-R2 缺口定向外置（v2 作业书/9项验收器/五档裁决引擎/傻瓜执行包，第二家已执行→断言4/4突破但canary0/6封顶GAP_INCONCLUSIVE）+ L3全面复盘定格收尾（21轮机械台账/六类失败模式分类/三洞察/数据驱动HTML报告，l3全false由人裁定）+ 揭盲后能力评估（阿里Qoder vs 智谱Agent画像/证据三层分级/五条借鉴，A级实测vs B级厂商自报分离，不翻案） | `audit_*/` 实测 |
+| 证据目录 | 60（五件套齐全 34）+ §109 外部 workflow/attestation + §110/§111/§112 异厂 designer 调用/盲评+AST 准入规则修订 + §113 跨厂商/跨集 2×2 + §114 异厂解释者独立性盲评 + §115 解释者跨厂商交叉确认 + L3 真正异家 Agent 全链外置 + §L3-R2 缺口定向外置（v2 作业书/9项验收器/五档裁决引擎/傻瓜执行包，第二家已执行→断言4/4突破但canary0/6封顶GAP_INCONCLUSIVE）+ L3全面复盘定格收尾（21轮机械台账/六类失败模式分类/三洞察/数据驱动HTML报告，l3全false由人裁定）+ 揭盲后能力评估（阿里Qoder vs 智谱Agent画像/证据三层分级/五条借鉴，A级实测vs B级厂商自报分离，不翻案）+ 方法论沉淀与外部印证（L3_METHODOLOGY_LESSONS：本仓五条方法论+Inkling/GLM/GitHub日榜"先查结构后定细节"同构对照，扬长避短，l3仍false） | `audit_*/` 实测 |
 
 > 诚实边界：模拟线（autopoiesis/self_evolving/telos/axiology/mechanism/estimation）
 > 的输出均标注 `evidence_scope: synthetic`，是方法演示，不外推为真实世界自进化能力。

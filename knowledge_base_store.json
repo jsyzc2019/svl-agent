@@ -4603,6 +4603,32 @@
       "evidence": "Qoder判据159行数值解析器 vs 智谱判据86行三层多重集;两家整体均11/18;Qoder canary3/6断言0/4,智谱断言4/4 canary0/6;自报PARTIAL vs CONFIRMED但回放同分",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META28",
+      "kind": "reasoning_lesson",
+      "mechanism": "方法论沉淀的外部印证:用户指出Inkling 2 Mini(AINLP B级第三方研究译文)、GLM-5.4(智谱官方B级自报)、GitHub日榜前四(多多AI工具箱C级二级)都体现'先查结构后定细节',与本仓21轮方法论相近。关键认知=三条异源材料与本仓独立走到的方法论同构,是外部佐证而非新判定:①Inkling/Goodfire先分解信息流(每层输入=此前各层输出加权和)再谈benchmark≈本仓先做canary机制诊断再谈分数;②GLM在1B→4B→30B→750B逐级验证'架构放大后仍成立'(Scaling Correctness)≈判据须跨集/跨厂商/全链成立才算数,单维CONFIRMED如'1B好看'不可外推;③ponytail的YAGNI/rustdesk数据自主/ECC纪律模块/pi可插拔契约≈本仓不堆样本+五权力外置+纪律模块化。",
+      "trigger": "当外部出现与自身方法论相近的同行成果、需要判断是否借鉴及如何不污染已定格结论时",
+      "action": "先划边界(陈述归纳不改verdict,l3/absolute仍false),再按证据分层使用(A本仓实测为核心/B厂商与第三方一手做印证/C二级仅背景不采信),再做同构对照表与'扬长避短'定位:本仓长=盲评信息流/反Goodhart克制/证据分层;短=缺'逐级规模验证ladder'(外家判据只在单一冻结集验,无难度梯度)、未引入'计算深度'视角(判据仍一次性字符串匹配)。明确两条借鉴均为诊断性洞察落方法论层,触§100冻结集或verdict需用户授权,今天不做。",
+      "provenance": "L3_METHODOLOGY_LESSONS_20261124.md+zhipuai.cn/zh/research/164+AINKLP公众号Inkling2Mini解读+多多AI工具箱GitHub日榜11/23",
+      "timestamp": "2026-11-24T00:37:47Z",
+      "support": 1,
+      "evidence": "台账21轮18显式l3全false;方法论文档76行零占位符,l3=false边界2处,证据分层标注6处;headless渲染无乱码表格对齐;三份旧报告重渲染正常",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT63",
+      "kind": "reasoning_lesson",
+      "mechanism": "Loop Transformer( Inkling 2 Mini 24物理层跑48逻辑层、GLM-5.4 28层两轮循环750B达2-3T效果)的'结构复用换深度'与本仓缺口诊断深层呼应:两轮外家判据镜像互补(数值型vs断言型)却都在canary栽,根因是评测集混了两种正交任务(断言保留vs跨句蕴含);Inkling的N-Hop Lookup发现'链条越长需越多内部循环'、GLM发现'一部分推理从token流转移到循环深度',提示跨句蕴含类任务或许本就需要多步内部处理而非更大词表——这是第⑤类任务异质性的更深层解释。",
+      "trigger": "当判据在跨句蕴含类样本系统性失败、考虑'换个更全的词表'还是'换任务处理范式'时",
+      "action": "把'加词表'与'加推演深度'区分为两种不同解法:前者是判据可见面(第④类,可补),后者触及任务语义与评测工具设计(第⑤类,结构性)。本仓canary内容词差异17-48(鸿沟15)证明clean/tampered是字面保留而canary是跨句蕴含,加词表只会让判据更忠实于错误任务框架。结论:不因外部材料改判定,诊断落方法论层;若未来重开需用户授权设计'难度梯度replay'对照维度而非找第三家。",
+      "provenance": "L3_METHODOLOGY_LESSONS_20261124.md第三节+analyze_canary_orthogonality.py+AINLP Inkling解读N-Hop/GLM-5.4研究页循环深度",
+      "timestamp": "2026-11-24T00:37:47Z",
+      "support": 1,
+      "evidence": "canary content_diff min17 vs tampered max2鸿沟15;GLM官方'推理链越长Loop帮助越大/输出token降10-14%';Inkling N-Hop收益延续到训练未见10遍;verdict仍GAP_INCONCLUSIVE l3仍false",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
