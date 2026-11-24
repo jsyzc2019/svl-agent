@@ -4681,6 +4681,32 @@
       "evidence": "报告顶部warnbox明确'数据把假设部分证伪';第五节结论表区分部分证伪/成立/不可达/禁止四档;verdict与l3未动",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT66",
+      "kind": "reasoning_lesson",
+      "mechanism": "对昨日canary诊断的连续第二日自我证伪:昨日断言'单调判据上限12/18,两家外家属单调框架故系统性失败',今日prove_posthoc_saturation.py枚举两特征单调布尔组合(~10^4条),发现content_diff>9.5 OR jaccard>0.9808→True可达18/18。故昨日12/18只在【单特征】范围成立,'单调框架必失败'泛化表述被部分证伪。穷举所有18/18两特征判据阈值落点收敛到唯一组(content_diff>9.5=鸿沟2~17中点,jaccard>0.9808=鸿沟0.962~1.0中点),用2个数完美拟合18点=过拟合签名,学的是生成方式非语义。",
+      "trigger": "当昨日/他人的机制解释把一个范围有限的技术事实(单特征结果)外推为对整个判据族的普遍断言时",
+      "action": "根因前移一层:真正根因不是判据族复杂度(单特征/多特征、单调/非单调都能冻结集内拟合18/18),而是【判据独立性】与【冻结集完美拟合】信息论互斥——独立方(未看本仓标签)无法post-hoc调阈值命中鸿沟中点;冻结集内任何18/18判据都必然看过标签、无独立验证集。两家外家回放11/18是此互斥的体现,非'单调框架'固有缺陷。核心结论加强不削弱:换任何判据族都得post-hoc命中伪影鸿沟才算18/18=Goodhart禁止;verdict保持GAP_INCONCLUSIVE,l3/absolute仍false。可复现prove_posthoc_saturation.py+专项3点(含自我证伪诚实性断言)。",
+      "provenance": "POSTHOC_SATURATION_REFINEMENT_20261124.html+audit_l3_gap_targeted/prove_posthoc_saturation.py+tests/test_gap_targeted.py test_single_feature_ceiling_12_but_two_feature_reaches_18/test_all_perfect_two_feature_rules_share_artifact_threshold_loci/test_posthoc_saturation_self_correction_is_honest_and_no_overturn",
+      "timestamp": "2026-11-24T01:24:00Z",
+      "support": 1,
+      "evidence": "单特征max=12/18;两特征OR max=18/18;n_perfect_two_feature=6阈值落点唯一(content_diff=9.5,jaccard=0.9808);三簇content_diff[0,0]/[0,2]/[17,48]完全分离;专项29点全过",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META31",
+      "kind": "reasoning_lesson",
+      "mechanism": "方法论:对昨日结论的'机制解释'也要做可证伪体检,不能只对硬数字做验证。昨日硬数字(单特征12/18)完全正确,但围绕它的解释('单调框架必失败')把窄范围事实外推成普遍规律,今日用组合判据一枚举就被部分证伪。教训=技术测量的真实性与解释的普适性是两件事,数字对≠解释对。",
+      "trigger": "当一个测量结论被升级为因果/机制解释、并用来解释多个外部现象时",
+      "action": "区分'测量事实'与'解释断言'分层记账:①锁定测量事实的成立范围(单特征?冻结集?某阈值口径?);②对解释断言主动找反例空间(换判据族/换特征组合/换数据域);③若解释被证伪,把根因前移到更本质层(此处从'判据族缺陷'前移到'独立设计vs看过标签信息论互斥'),而非放弃整个结论;④如实记录第二日证伪,报告置顶声明。这样核心结论(不可达)反而因解释更准而更硬。与KB-META30(假设证伪诚实)互补:M30讲初始假设被证伪,M31讲解释被证伪。",
+      "provenance": "POSTHOC_SATURATION_REFINEMENT_20261124.html第一/四/五节+KB-AUDIT66",
+      "timestamp": "2026-11-24T01:24:00Z",
+      "support": 1,
+      "evidence": "昨日数字12/18今日原样复现(测量真),但'单调框架必失败'解释被两特征OR18/18证伪(解释需修正);根因前移后核心'换判据关缺口=Goodhart'结论不变",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

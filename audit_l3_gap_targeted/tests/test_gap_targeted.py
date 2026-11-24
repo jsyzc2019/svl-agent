@@ -389,3 +389,66 @@ def test_u_shaped_is_post_hoc_perfect_but_forbidden():
     res = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
     assert res["verdict"] == "GAP_INCONCLUSIVE"
     assert res["l3_claimed"] is False and res["absolute_claimed"] is False
+
+
+# ---------- §L3 post-hoc 饱和精确化（诚实修正昨日"单调上限"范围，不产生新判定） ----------
+
+def _load_sat():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "sat", os.path.join(BASE, "prove_posthoc_saturation.py"))
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+def test_single_feature_ceiling_12_but_two_feature_reaches_18():
+    """诚实修正：昨日12/18只在单特征成立；两特征单调OR可达18/18。"""
+    m = _load_sat()
+    rows = m.P.load()
+    atoms = m.build_atoms(rows)
+    one, two, perfect = m.enumerate_up_to_two(rows, atoms)
+    assert one == 12                      # 单特征上限（昨日技术事实）
+    assert two["acc"] == 18               # 两特征组合达上界
+    assert two["op"] == "OR"
+    assert len(perfect) >= 1              # 存在多少个 18/18 判据
+    # 阈值落点落在三簇伪影鸿沟内，非语义边界
+    a, b = two["a"], two["b"]
+    assert a[0] == "content_diff" and a[2] == "gt" and 2 < a[1] < 17
+    assert b[0] == "jaccard_sim" and b[2] == "gt" and 0.962 < b[1] < 1.0
+
+
+def test_all_perfect_two_feature_rules_share_artifact_threshold_loci():
+    """所有18/18两特征判据的阈值落点唯一=生成伪影鸿沟中点（过拟合签名）。"""
+    m = _load_sat()
+    rep = m.build_report()
+    loci = rep["perfect_threshold_loci"]
+    assert loci["n_perfect_two_feature"] >= 1
+    # 落点收敛到极窄集合（content_diff 9.5, jaccard 0.9808），非多样语义边界
+    assert loci["content_diff_gt_thresholds"] == [9.5]
+    assert len(loci["jaccard_gt_thresholds"]) <= 2
+    # 三簇区间完全分离（伪影结构在场）
+    iv = rep["cluster_intervals"]
+    assert iv["clean"]["content_diff"] == [0, 0]
+    assert iv["tampered"]["content_diff"][1] <= 2
+    assert iv["canary"]["content_diff"][0] >= 17
+    assert iv["tampered"]["jaccard_sim"][0] > iv["canary"]["jaccard_sim"][1]
+
+
+def test_posthoc_saturation_self_correction_is_honest_and_no_overturn():
+    """脚本如实记录对昨日泛化表述的证伪，且核心结论/判定一律不动。"""
+    m = _load_sat()
+    rep = m.build_report()
+    sc = rep["self_correction"]
+    assert "12/18" in sc["yesterday_claim"]
+    assert "18/18" in sc["today_finding"]
+    assert "部分证伪" in sc["correction"]
+    # 核心结论仍在：独立性互斥 + post-hoc 禁止翻案
+    joined = " ".join(rep["refined_conclusion"])
+    assert "互斥" in joined and "Goodhart" in joined
+    # 诊断不翻案、不触冻结集
+    assert "l3=false" in rep["does_not_change"]
+    assert "不动§100冻结样本" in rep["does_not_change"]
+    res = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE"
+    assert res["l3_claimed"] is False and res["absolute_claimed"] is False

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>post-hoc 饱和精确化 · 对昨日单调上限结论的自我修正</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#1a3a6b;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b;--bad:#8b0000}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.75}
+.wrap{max-width:1000px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:24px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#eef2f8;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:3px 11px;border-radius:13px;font-size:12px;font-weight:600;background:#eef2f8;color:var(--accent)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:14px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14.5px}
+.warnbox{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.okbox{background:#eaf5ed;border:1px solid #b7dcc0;padding:14px 18px;border-radius:6px;font-size:14px}
+.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+.big{font-size:15px}.num{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent)}
+ul,ol{padding-left:22px}li{margin:5px 0}
+.foot{margin-top:44px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+
+<h1>post-hoc 饱和精确化 <span class="pill">对昨日结论的自我修正 · 不翻案</span></h1>
+<div class="sub">2026-11-24 · 晨间自主深挖：检验昨日"单调判据上限 12/18、单调框架必失败"是否经得起组合判据推敲 · 结论：12/18 仅在单特征成立，两特征 OR 可达 18/18，但核心"不可达"结论加强而非动摇</div>
+
+<div class="warnbox big">
+<b>诚实声明（连续第二日自我证伪）：</b>昨日我断言"单调判据上限 12/18，两家外家判据都属单调一致性框架，故系统性失败"。
+今日在冻结集上枚举<b>两特征单调布尔组合</b>，发现 <code>content_diff&gt;9.5 OR jaccard&gt;0.9808 → True</code> 可达 <b>18/18</b>。
+这说明"12/18"只在<b>单特征</b>范围成立，"单调框架必失败"的泛化表述被数据<b>部分证伪</b>——正如昨日部分证伪了"字面不可分"。
+我没有掩盖，而是修正机制解释。所有 verdict 不变，<code>l3=false</code>、<code>absolute=false</code>，最终裁定权在用户。
+</div>
+
+<h2>一、检验设计：从单特征到组合判据</h2>
+<p>昨日 <code>prove_canary_unreachability.py</code> 只枚举了<b>单特征 × 全阈值 × 两方向</b>，得上限 12/18。但两家外家判据（Qoder 数值+限定词、智谱三层词类多重集）其实是<b>多特征组合</b>。为检验昨日解释是否严谨，今日把判据空间扩展到：</p>
+<ul>
+<li><b>自由度 1</b>：单特征阈值（昨日口径）—— 6 特征 × 全阈值 × {≤, &gt;}；</li>
+<li><b>自由度 2</b>：两特征布尔组合 —— 任意两不同特征的原子作 <b>AND / OR</b>，共约 10⁴ 条判据全枚举。</li>
+</ul>
+<p>只读 §100 冻结样本 18 条，不联网、不 spawn、不改判据、不改裁决。</p>
+
+<h2>二、结果：自由度决定上限，2 个数即可完美拟合 18 点</h2>
+<table>
+<tr><th>判据族</th><th>自由度</th><th>冻结集内最优</th><th>性质</th></tr>
+<tr><td>单特征单调阈值</td><td>1</td><td><span class="num">12/18</span></td><td>昨日技术事实（范围有限）</td></tr>
+<tr><td>两特征单调 AND / OR</td><td>2</td><td><span class="num bad">18/18</span></td><td>OR 组合；post-hoc 伪影拟合</td></tr>
+</table>
+<div class="phil">
+<b>过拟合签名：</b>仅用 <b>2 个数值参数</b>（<code>content_diff&gt;9.5</code> 与 <code>jaccard&gt;0.9808</code>）就完美拟合 18 个样本。
+更关键——穷举所有 18/18 的两特征判据，其阈值落点<b>收敛到唯一一组</b>（见下表），这不是"发现了 semantic 边界"，而是精确命中了构造三簇时的<b>鸿沟中点</b>。
+</div>
+
+<h2>三、铁证：达标阈值 = 生成伪影鸿沟中点</h2>
+<table>
+<tr><th>族</th><th>GT</th><th>content_diff 区间</th><th>jaccard 区间</th></tr>
+<tr><td>clean</td><td class="ok">True</td><td><span class="num">[0, 0]</span></td><td><span class="num">[1.0, 1.0]</span></td></tr>
+<tr><td>tampered</td><td class="bad">False</td><td><span class="num">[0, 2]</span></td><td><span class="num">[0.80, 0.962]</span></td></tr>
+<tr><td>canary</td><td class="ok">True</td><td><span class="num">[17, 48]</span></td><td><span class="num">[0.098, 0.235]</span></td></tr>
+</table>
+<p>达标判据 <code>content_diff&gt;9.5</code>（落在 tampered 上界 2 与 canary 下界 17 之间）与 <code>jaccard&gt;0.9808</code>（落在 tampered 上界 0.962 与 clean 1.0 之间）——两阈值都精确位于簇间空隙。
+它学的是<b>生成方式</b>（clean=逐字复制 / tampered=删限定词 / canary=另一句原文），不是语义蕴含。换一批按不同方式构造的样本立刻失效。</p>
+
+<h2>四、修正后的机制解释（根因前移一层）</h2>
+<div class="okbox">
+<b>昨日解释：</b>"两家外家用单调一致性框架，面对 U 型标签必然只抓一端"——<b class="warn">范围过宽</b>，被两特征 OR 证伪。
+</div>
+<div class="phil">
+<b>今日精确解释：</b>真正根因不是判据族的复杂度（单特征/多特征、单调/非单调都能在冻结集内拟合到 18/18），
+而是<b>判据独立性</b>与<b>冻结集完美拟合</b>在信息论上互斥——
+<ul>
+<li>独立方（Qoder / 智谱）按作业书<b>独立设计</b>判据，<b>未看本仓冻结标签</b>，因此无法 post-hoc 调阈值去命中鸿沟中点；</li>
+<li>冻结集内任何 18/18 判据都必然是<b>看过标签后</b>设计的（阈值取自三簇空隙），无独立验证集；</li>
+<li>两家外家命中率低（回放 11/18）是上述互斥的体现，<b>不是"单调框架"这一判据族的固有缺陷</b>。</li>
+</ul>
+</div>
+
+<h2>五、对核心结论的影响：加强，不削弱</h2>
+<table>
+<tr><th style="width:34%">命题</th><th>判定</th></tr>
+<tr><td>"单特征单调上限 12/18"?</td><td class="warn">成立但范围有限</td><td>仅对自由度 1 成立；不可外推为"单调框架必失败"。</td></tr>
+<tr><td>"换判据能关缺口"?</td><td class="bad">更明确不能</td><td>换任何判据族都得 post-hoc 命中伪影鸿沟才算 18/18，仍是 Goodhart。</td></tr>
+<tr><td>"可泛化语义判据可达"?</td><td class="bad">不可达</td><td>来源信息被排除；达标阈值是构造签名，换构造即失效。</td></tr>
+<tr><td>"据此可翻案"?</td><td class="bad">禁止</td><td>verdict 保持 GAP_INCONCLUSIVE，l3/absolute 保持 false。</td></tr>
+</table>
+<p>这次修正把缺口性质钉得更死：<b>不是判据不够复杂，而是"独立设计"与"看过标签"是两回事</b>。
+任何第三方只要真正独立（不看本仓标签），就不可能达到冻结集内的完美拟合；反过来，任何完美拟合都不是独立方交出的。这比昨日"单调框架缺陷"的说法更接近 L3 独立性缺口的本质。</p>
+
+<h2>六、纪律边界</h2>
+<ul>
+<li><b>纯诊断</b>：只读 §100 冻结样本，不产生新判定，不改任何 result.json 的 verdict。</li>
+<li><b>不翻案</b>：<code>FULLCHAIN_PARTIAL</code> / <code>GAP_INCONCLUSIVE</code> / 九案全保留，<code>l3=false</code>、<code>absolute=false</code> 未动。</li>
+<li><b>不触冻结集</b>：18/18 判据仅作诊断演示，绝不作为裁决输入。</li>
+<li><b>可复现</b>：<code>audit_l3_gap_targeted/prove_posthoc_saturation.py</code> 一行命令复现；专项测试 +3 点固化（含自我证伪诚实性断言）。</li>
+</ul>
+
+<div class="foot">
+生成：2026-11-24 · 数据来源：<code>prove_posthoc_saturation.py</code>（自由度 1/2 判据全枚举 + 阈值落点诊断）+ §100 冻结样本 18 条 ·
+本报告如实记录对昨日结论的连续第二日自我证伪，诊断不产生新判定 · 最终裁定权在用户。
+</div>
+
+</div></body></html>
