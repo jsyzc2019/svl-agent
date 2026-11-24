@@ -4655,6 +4655,32 @@
       "evidence": "49.4%major结论被执行审查推翻;文本审查11/16vs10/16;20/62自纠中位21.4h;总体优势全来自Lab1;报告三长两短表完整l3=false表述4处",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT65",
+      "kind": "reasoning_lesson",
+      "mechanism": "§L3 canary可判定性严格诊断:初始假设'canary对字面判据数学不可分'被数据部分证伪。prove_canary_unreachability.py从§100冻结18样本提6类字面特征,穷举单调判据(单特征×全阈值×2方向)最优仅12/18(6clean+6canary或6clean+6tampered),严格量化单调判据上限;关键发现=标签是U型非单调:Jaccard相似度clean=1.0>tampered0.80-0.96>canary0.10-0.24三簇完全分离但GT=True/False/True两端真中间假;构造U型判据(相似度>0.98或<0.52→True)冻结集内18/18可达。解释力:两家外家判据(Qoder数值限定词/智谱词类多重集)都属单调一致性框架,面对U型标签必然只抓一端,系统性失败非偶然。",
+      "trigger": "当判断某评测维度是'换判据可达'还是'结构性不可达'、需要区分字面可分性与语义可泛化性时",
+      "action": "区分三层命题:①字面可分性(U型判据18/18可达,假设部分证伪)②单调判据可达性(上限12/18,严格不可达)③可泛化语义判据可达性(不可达:canary GT=True源自来源关系同论文另一句,冻结集只给claim/evidence两串排除来源信息,U型判据是post-hoc伪影拟合无独立验证集)。用U型判据关缺口=Goodhart过拟合纪律禁止;verdict保持GAP_INCONCLUSIVE l3/absolute仍false。重开L3两条路都不通:单调框架上限12/18必栽canary,U型判据过拟合不合规;杠杆仍在评测工具设计层动§100需用户授权。可复现prove_canary_unreachability.py+专项3项。",
+      "provenance": "CANARY_DECIDABILITY_DIAGNOSIS_20261124.html+audit_l3_gap_targeted/prove_canary_unreachability.py+tests/test_gap_targeted.py test_canary_label_is_u_shaped/test_monotone_judges_cap_at_12/test_u_shaped_is_post_hoc_perfect_but_forbidden",
+      "timestamp": "2026-11-24T01:05:24Z",
+      "support": 1,
+      "evidence": "单调最优12/18 fails恒6同族;U型18/18 is_perfect=True;三簇jaccard区间clean[1.0,1.0]tampered[0.8,0.962]canary[0.098,0.235]完全分离;专项26点全过",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META30",
+      "kind": "reasoning_lesson",
+      "mechanism": "方法论:带着预设假设去做验证时,若数据证伪假设,必须如实记录证伪过程并修正结论,而非隐瞒有利数据只报符合预期的部分。本次预设'canary数学不可分'想夯实l3=false,但穷举发现U型判据18/18可达——若只报'单调12/18'会误导为完全不可分,诚实做法是同时报出证伪证据并重构结论为更精确的'可泛化语义判据不可达'。",
+      "trigger": "当验证结果部分推翻自己的初始假设、且初始假设恰好支持自己想要的结论时",
+      "action": "把'假设被证伪'作为发现而非失败:①明确写出初始假设与预期;②呈现所有数据包括不利数据(U型18/18);③修正结论到数据支持的最精确形式(三层命题拆分);④说明为何修正后的结论仍支撑原纪律决定(不可达的是语义泛化非字面可分,故不翻案)。这与反Goodhart同构:不为得到想要结论而选择性报告。工具修复同理(检测器bug误报时先修工具再下结论)。报告设'诚实声明'置顶披露证伪。",
+      "provenance": "CANARY_DECIDABILITY_DIAGNOSIS_20261124.html首段诚实声明+KB-AUDIT65三层命题拆分",
+      "timestamp": "2026-11-24T01:05:24Z",
+      "support": 1,
+      "evidence": "报告顶部warnbox明确'数据把假设部分证伪';第五节结论表区分部分证伪/成立/不可达/禁止四档;verdict与l3未动",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

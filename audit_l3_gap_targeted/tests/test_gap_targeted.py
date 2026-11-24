@@ -333,3 +333,59 @@ def test_cross_validation_report_is_evidence_graded_and_clean():
         assert kw in html, f"报告缺关键机制点: {kw}"
     # 纪律边界在场
     assert "不翻案" in html and "l3=false" in html
+
+
+# ---------- §L3 canary 可判定性严格诊断（初始假设被部分证伪，不产生新判定） ----------
+
+def test_canary_label_is_u_shaped_not_monotone():
+    """诚实发现：GT=True 在字面相似度两端(clean1.0/canary~0.1)，False 在中间(tampered~0.9)。"""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "unreach", os.path.join(BASE, "prove_canary_unreachability.py"))
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    rows = m.load()
+    by = {v: [r["jaccard_sim"] for r in rows if r["variant"] == v]
+          for v in ("clean", "tampered", "canary")}
+    # 三簇 jaccard 相似度区间完全分离且顺序为 高/中/低
+    assert min(by["clean"]) > max(by["tampered"])   # clean 最相似
+    assert max(by["tampered"]) > max(by["canary"])  # tampered 中间
+    assert max(by["canary"]) < min(by["tampered"])  # canary 最不相似
+    # 但 GT：clean=True、tampered=False、canary=True —— 两端 True 中间 False（U 型）
+    gt = {v: set(r["gt"] for r in rows if r["variant"] == v) for v in by}
+    assert gt["clean"] == {True} and gt["canary"] == {True} and gt["tampered"] == {False}
+
+
+def test_monotone_judges_cap_at_12_of_18():
+    """单调判据最优仅 12/18——解释两家外家单调一致性框架判据必然栽在 canary。"""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "unreach", os.path.join(BASE, "prove_canary_unreachability.py"))
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    rows = m.load()
+    best = m.best_monotone(rows)
+    assert best[0]["acc"] == 12  # 最优单调 = 12/18
+    assert best[0]["total"] == 18
+    # 失败样本全是同一族（6 个 tampered 或 6 个 clean），证实单调阈值覆盖不了三簇
+    assert len(best[0]["fails"]) == 6
+    assert all("tampered" in x or "clean" in x for x in best[0]["fails"])
+
+
+def test_u_shaped_is_post_hoc_perfect_but_forbidden():
+    """U 型伪影判据能 18/18，但属 post-hoc 过拟合，不构成缺口关闭、不改 verdict。"""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "unreach", os.path.join(BASE, "prove_canary_unreachability.py"))
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    rows = m.load()
+    u = m.u_shaped(rows)
+    assert u["is_perfect"] is True and u["acc"] == 18  # 冻结集内可达
+    # 三区间完全分离（伪影签名）
+    iv = u["intervals"]
+    assert iv["clean"][0] > iv["tampered"][1] > iv["canary"][1]
+    # 纪律：诊断不翻案
+    res = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE"
+    assert res["l3_claimed"] is False and res["absolute_claimed"] is False

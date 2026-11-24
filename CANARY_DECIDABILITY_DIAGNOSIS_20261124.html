@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>canary 可判定性严格诊断 · 假设部分证伪</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#1a3a6b;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b;--bad:#8b0000}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.75}
+.wrap{max-width:1000px;margin:0 auto}h1{font-size:27px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:24px}
+h2{font-size:19px;margin:38px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+h3{font-size:16px;margin:22px 0 8px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#eef2f8;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:3px 11px;border-radius:13px;font-size:12px;font-weight:600;background:#eef2f8;color:var(--accent)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:14px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14.5px}
+.warnbox{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.okbox{background:#eaf5ed;border:1px solid #b7dcc0;padding:14px 18px;border-radius:6px;font-size:14px}
+.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+.big{font-size:15px}.num{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent)}
+ul,ol{padding-left:22px}li{margin:5px 0}
+.foot{margin-top:44px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+.tag{display:inline-block;background:#f0f0f0;border-radius:4px;padding:1px 7px;font-size:12px;color:#555}
+</style></head><body><div class="wrap">
+
+<h1>canary 可判定性严格诊断 <span class="pill">假设部分证伪 · 不翻案</span></h1>
+<div class="sub">2026-11-24 · 自主深挖：在"任务说明书"方案前，先厘清 canary 是"换判据可达"还是"结构性不可达" · 结论：单调判据上限 12/18，U 型伪影判据 18/18 但属 post-hoc 过拟合</div>
+
+<div class="warnbox big">
+<b>诚实声明（纪律核心）：</b>我带着"canary 对字面判据数学不可分"的预期开始，<b>数据把这个假设部分证伪了</b>——存在一个 U 型判据在冻结集内做到 18/18。
+我没有掩盖这一点，而是修正结论：不可达的不是"字面可分性"，而是"<b>可泛化的语义判据</b>"。本报告如实呈现证伪过程与修正后的精确结论。
+所有 result verdict 不变，<code>l3=false</code>、<code>absolute=false</code>，最终裁定权在用户。
+</div>
+
+<h2>一、初始假设与验证设计</h2>
+<p><b>假设 H₀</b>：canary 样本（GT=True，claim/evidence 为同论文不同句）对任何确定性字面判据都不可分——若成立，则 l3=false 是结构结论，"换判据"无意义。</p>
+<p><b>验证方法</b>：从 §100 冻结样本的 18 条记录提取 6 类纯字面特征（内容词差异、否定词差异、连接词差异、数字差异、Jaccard 相似度、长度比），做两件事：</p>
+<ol>
+<li><b>枚举所有单调判据</b>（单特征 × 全阈值 × 两种方向），求最优准确率上限；</li>
+<li><b>构造非单调判据</b>，检验能否突破该上限，并判断其性质。</li>
+</ol>
+
+<h2>二、关键数据：标签是 U 型，不是单调的</h2>
+<table>
+<tr><th>族</th><th>GT</th><th>Jaccard 相似度区间</th><th>语义</th></tr>
+<tr><td>clean</td><td class="ok">True</td><td><span class="num">1.00 – 1.00</span></td><td>claim 逐字复制 evidence 断言</td></tr>
+<tr><td>tampered</td><td class="bad">False</td><td><span class="num">0.80 – 0.96</span></td><td>同一句改了否定/数字/连接词</td></tr>
+<tr><td>canary</td><td class="ok">True</td><td><span class="num">0.10 – 0.24</span></td><td>claim/evidence 是不同句（跨句蕴含）</td></tr>
+</table>
+<div class="phil">
+<b>三簇相似度区间完全分离且单调排列</b>（clean 1.0 &gt; tampered 0.8–0.96 &gt; canary 0.10–0.24），
+但标签是 <b>True / False / True</b>——<b>两端为真、中间为假的 U 型（非单调）</b>。
+单调函数（"越像越真"或"越不像越真"）无法用单一阈值覆盖两端而排除中间。
+</div>
+
+<h2>三、结果①：单调判据上限 = 12/18（假设的前半成立）</h2>
+<p>穷举 6 特征 × 全阈值 × 2 方向，最优单调判据：<b>12/18</b>（恰好是 6 clean + 6 canary，或 6 clean + 6 tampered）。失败样本总是完整的 6 个同族——证实单调阈值<b>系统性</b>覆盖不了三簇。</p>
+<div class="okbox">
+<b>这精确解释了两家外家的失败，不是偶然：</b>Qoder 的"数值+限定词一致性"与智谱的"词类多重集一致性"都属于<b>单调一致性框架</b>——"字面越一致越判真"。面对 U 型标签，它们必然只能抓到一端（clean 或 canary），丢掉另一端。两轮回放在此有了统一机制解释。
+</div>
+
+<h2>四、结果②：U 型判据 18/18（假设的后半被证伪）</h2>
+<p>构造判据 <code>相似度 &gt; 0.98 或 &lt; 0.52 → True；中间 → False</code>，在冻结集内 <b class="ok">18/18</b>。参数取自三簇区间中点，无需任何语义信息。</p>
+<div class="warnbox">
+<b>但这个判据是 post-hoc 伪影拟合，不能用来"关闭缺口"：</b>
+<ul>
+<li>它只在<b>看过标签后</b>才设计得出（阈值取三簇中点），无独立验证集——违反预注册纪律；</li>
+<li>它学的是<b>生成方式</b>（clean=逐字复制 / tampered=轻微改写 / canary=另一句原文），不是"语义蕴含"；换个构造方式立刻失效；</li>
+<li>canary 的 GT=True 源自<b>来源关系</b>（同一论文的支撑句），而冻结集只给 claim/evidence 两串文本，<b>来源信息被排除</b>；判据无从计算真正的语义蕴含；</li>
+<li>用它翻案 = Goodhart 过拟合（为通过测试而拟合测试），纪律明令禁止。</li>
+</ul>
+</div>
+
+<h2>五、修正后的精确结论</h2>
+<table>
+<tr><th style="width:30%">命题</th><th>判定</th></tr>
+<tr><td>"字面不可分"?</td><td class="bad">部分证伪</td><td>U 型判据在冻结集内字面可分（18/18）。</td></tr>
+<tr><td>"单调判据不可达"?</td><td class="ok">成立</td><td>上限 12/18，严格量化；解释两家外家系统性失败。</td></tr>
+<tr><td>"可泛化语义判据可达"?</td><td class="bad">不可达</td><td>来源信息被冻结集排除，U 型判据是伪影拟合，无泛化力。</td></tr>
+<tr><td>"据此可翻案/关缺口"?</td><td class="bad">禁止</td><td>等于 post-hoc Goodhart；verdict 保持 GAP_INCONCLUSIVE。</td></tr>
+</table>
+<p>因此缺口性质进一步精确：<b>不是"判据不够聪明"，而是"冻结集把三种生成机制混作一类评判，且排除了 canary 判定所需的来源信息"</b>。这与 §100 早期诊断"判据-样本设计不兼容"一致，只是现在有了 U 型标签与 12/18 上限的量化证据。</p>
+
+<h2>六、对"是否重开 L3"的直接影响</h2>
+<div class="okbox">
+<b>维持收尾决定，且理由更硬：</b>若重开走"第三家换判据"路线，它若用单调一致性框架（最自然的选择），上限就是 12/18，必然栽 canary；若它归纳出 U 型判据，那是过拟合冻结集构造方式，不可泛化、也不合规。<b>两条路都走不通</b>——这比之前"边际收益递减"的经验判断更接近机制证明。真正的杠杆仍在评测工具设计层（第⑤类），动 §100 冻结样本需用户授权。
+</div>
+
+<h2>七、纪律边界</h2>
+<ul>
+<li><b>纯诊断</b>：只读 §100 冻结样本，不产生新判定，不改任何 result.json 的 verdict。</li>
+<li><b>不翻案</b>：<code>FULLCHAIN_PARTIAL</code> / <code>GAP_INCONCLUSIVE</code> / 九案全保留，<code>l3=false</code>、<code>absolute=false</code> 未动。</li>
+<li><b>不触冻结集</b>：U 型判据仅用于诊断演示，绝不作为裁决输入。</li>
+<li><b>可复现</b>：<code>audit_l3_gap_targeted/prove_canary_unreachability.py</code> 一行命令复现全部数字；专项测试 3 项固化结论。</li>
+</ul>
+
+<div class="foot">
+生成：2026-11-24 · 数据来源：<code>prove_canary_unreachability.py</code>（6 类字面特征 + 单调判据穷举 + U 型判据构造）+ §100 冻结样本 18 条 · 本报告如实记录初始假设被部分证伪的过程，诊断不产生新判定 · 最终裁定权在用户。
+</div>
+
+</div></body></html>
