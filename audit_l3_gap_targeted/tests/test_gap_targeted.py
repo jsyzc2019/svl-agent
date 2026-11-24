@@ -391,6 +391,58 @@ def test_u_shaped_is_post_hoc_perfect_but_forbidden():
     assert res["l3_claimed"] is False and res["absolute_claimed"] is False
 
 
+# ---------- §L3 独立性互斥 A 级实证（真实外家判据 + post-hoc 补丁，不产生新判定） ----------
+
+def _load_mutex():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "mutex", os.path.join(BASE, "prove_independence_mutex.py"))
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+def test_real_vendor_criteria_both_11_baseline_and_18_with_posthoc_patches():
+    """两家真实判据框架不同却基线同11/18,叠加同一组post-hoc双端补丁都达18/18。"""
+    m = _load_mutex()
+    rep = m.build_report()
+    res = rep["results"]
+    qk = [k for k in res if "Qoder" in k][0]
+    zk = [k for k in res if "智谱" in k][0]
+    # 框架确实不同（行数不同）
+    assert res[qk]["framework_lines"] == 159
+    assert res[zk]["framework_lines"] == 86
+    # 基线同为 11/18
+    assert res[qk]["baseline"] == 11 and res[zk]["baseline"] == 11
+    # 单一 canary 补丁不足以满血（tampered 端仍独立错位）
+    assert res[qk]["plus_canary_patch"] == 14
+    assert res[zk]["plus_canary_patch"] == 17
+    # 双端补丁都达 18/18
+    assert res[qk]["plus_both_patches"] == 18
+    assert res[zk]["plus_both_patches"] == 18
+
+
+def test_independence_mutex_uses_no_label_leak_and_no_overturn():
+    """补丁阈值取自看过标签的鸿沟=独立性互斥铁证；诊断不翻案、不改判据源码。"""
+    m = _load_mutex()
+    rep = m.build_report()
+    # 方法声明补丁是 post-hoc 构造签名，阈值来自三簇鸿沟
+    assert "post-hoc" in rep["method"]
+    assert "content_diff>9.5" in rep["method"] and "jaccard<0.24" in rep["method"]
+    joined = " ".join(rep["refined_conclusion"])
+    assert "互斥" in joined and "与判据族复杂度无关" in joined
+    # 不改判据源码、不触冻结集、不翻案
+    assert "不改两家判据源码" in rep["does_not_change"]
+    assert "不动§100冻结样本" in rep["does_not_change"]
+    assert "l3=false" in rep["does_not_change"]
+    # 两家 result verdict 原样
+    r2 = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
+    l3 = json.load(open(os.path.join(ROOT, "audit_l3_fullchain_external", "result.json"),
+                        encoding="utf-8"))
+    assert r2["verdict"] == "GAP_INCONCLUSIVE" and l3["verdict"] == "FULLCHAIN_PARTIAL"
+    assert r2["l3_claimed"] is False and l3["l3_claimed"] is False
+
+
 # ---------- §L3 post-hoc 饱和精确化（诚实修正昨日"单调上限"范围，不产生新判定） ----------
 
 def _load_sat():

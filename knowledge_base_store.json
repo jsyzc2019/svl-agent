@@ -4707,6 +4707,32 @@
       "evidence": "昨日数字12/18今日原样复现(测量真),但'单调框架必失败'解释被两特征OR18/18证伪(解释需修正);根因前移后核心'换判据关缺口=Goodhart'结论不变",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT67",
+      "kind": "reasoning_lesson",
+      "mechanism": "canary线收尾A级实证:prove_independence_mutex.py直接import两家外家真实criterion.py(Qoder数值+限定词159行/智谱三层词类多重集86行,框架完全不同)回放§100冻结18样本,基线均11/18;叠加纯post-hoc双端补丁(canary端content_diff>9.5 OR jaccard<0.24→True;tampered端0.24<=jaccard<=0.96→False)后两家都达18/18;单一canary补丁不足(Qoder14/18/智谱17/18,tampered端仍独立错位),须双端才满血。",
+      "trigger": "当需要用一手判据源码证明'评测维度不可达'的根因、排除'只是本仓合成判据的假象'质疑时",
+      "action": "区分证据等级:合成判据证明可达性上界(§4am),真实外家判据证明失败根因(A级)。两家框架不同却被同一组post-hoc补丁拉满→失败与判据族复杂度无关;单一补丁不够双端才行→修正昨日'单调框架只抓一端'简化说法(真实判据两端各有残留错位)。补丁阈值全取自看过标签的三簇鸿沟→【判据独立性】⇔【冻结集完美拟合】信息论互斥铁证:真独立方(未见标签)不可能设计出该阈值,交出11/18是互斥必然结果非判据不聪明;任何18/18判据必然看过标签故失独立性,两者不可兼得。post-hoc补丁翻案=Goodhart禁止,verdict GAP_INCONCLUSIVE/l3/absolute全不动。可复现prove_independence_mutex.py+专项2点。",
+      "provenance": "INDEPENDENCE_MUTEX_A_LEVEL_20261124.html+audit_l3_gap_targeted/prove_independence_mutex.py+tests/test_gap_targeted.py test_real_vendor_criteria_both_11_baseline_and_18_with_posthoc_patches/test_independence_mutex_uses_no_label_leak_and_no_overturn",
+      "timestamp": "2026-11-24T01:36:39Z",
+      "support": 1,
+      "evidence": "Qoder159行/智谱86行;基线均11/18;+canary补丁14/18与17/18;+双端补丁均18/18;基线错误case两端分布;专项31点全过",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META32",
+      "kind": "reasoning_lesson",
+      "mechanism": "方法论:当一个结论连续多轮用'本仓合成对象'验证时,要主动升级到'真实一手对象'做A级确认,否则始终留有'合成假象'的质疑口子。canary线前三轮(§4al/§4am)都用本仓合成判据,哪怕结论自洽,外家仍可质疑'合成判据能满血不代表真实外家判据也行';第四轮直接import两家真实交付源码,证据等级从推断升为A级实证。",
+      "trigger": "当结论已多轮自洽但证据都来自自建/合成对象、存在'自证循环'嫌疑时",
+      "action": "证据等级阶梯化:①合成对象定可达性上界(快、可控);②真实一手对象做确认(消除合成假象质疑);③用真实对象的'不同框架对照'排除单框架偶然(本例两家框架完全不同却同基线同补丁满血→框架无关)。关键技巧=对真实对象施加同一个post-hoc操作,若不同框架反应一致,则结论是关于任务结构而非具体对象。同时每轮都如实修正前轮过度简化处(本例修正'单调只抓一端'→'两端各有错位'),连续多日的自我修正本身就是反Goodhart证据。",
+      "provenance": "INDEPENDENCE_MUTEX_A_LEVEL_20261124.html第一节'为何要用真实判据'+KB-AUDIT67+KB-META31(解释也要可证伪)",
+      "timestamp": "2026-11-24T01:36:39Z",
+      "support": 1,
+      "evidence": "前三轮合成判据→第四轮真实源码A级;两家不同框架同反应=框架无关结论;修正前轮简化说法一处;verdict/l3未动",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
