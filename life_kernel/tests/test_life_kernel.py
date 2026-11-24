@@ -650,3 +650,111 @@ def test_v6_never_changes_verdict_constitution_or_aas_honesty(tmp_path):
     diag = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(diag)
     assert diag.build_report()["has_idle_daemon"] is False
+
+
+# ---------- §4aw v7 觉时者：对自身承诺的元认知审视 ----------
+def _v7_paths(tmp_path):
+    """v7 单一路径契约：脚印/契约/审计台账全从同目录派生，零污染。"""
+    d = str(tmp_path)
+    return (os.path.join(d, "traces.jsonl"),
+            os.path.join(d, "wake_contract.json"),
+            os.path.join(d, "circadian_log.jsonl"),
+            os.path.join(d, "entrainment_audit.jsonl"))
+
+
+def test_v7_audit_unproven_without_external_evidence(tmp_path):
+    """v6 遗留记录无 woken_by → 如实判 UNPROVEN，不把手动/自驱刷成兑现。"""
+    fp, cp, cl, ap = _v7_paths(tmp_path)
+    import datetime
+    # 写一份契约 + 一条"无外部源"的 WAKE 记录（模拟 v6 历史数据）
+    K.wake_contract(now=_v6_time(2), wake_path=cp)
+    with open(cl, "w", encoding="utf-8") as f:
+        f.write(json.dumps({"at": "2026-11-24T03:09:55Z", "step": 1,
+                            "intent": "WAKE", "chosen": "SEEK", "woken_by": None}) + "\n")
+    r = K.entrainment_audit(contract_path=cp, log_path=fp, now=_v6_time(4))
+    assert r["verdict"] == "UNPROVEN"
+    assert r["wake_observations"] == 1 and r["externally_evidenced_wakes"] == 0
+    assert r["last_woken_by"] is None
+    assert "无法证明" in r["honest"]
+
+
+def test_v7_no_wake_observations_reports_zero_honestly(tmp_path):
+    """无 WAKE 记录 → 判 NO_WAKE_OBSERVED，不虚构活跃。"""
+    fp, cp, cl, ap = _v7_paths(tmp_path)
+    K.wake_contract(now=_v6_time(2), wake_path=cp)
+    r = K.entrainment_audit(contract_path=cp, log_path=fp, now=_v6_time(4))
+    assert r["verdict"] == "NO_WAKE_OBSERVED"
+    assert r["wake_observations"] == 0 and r["idle_gap_hours"] is None
+
+
+def test_v7_external_waker_evidence_is_recognized(tmp_path):
+    """外部唤醒器写入 woken_by → 判 EXTERNALLY_EVIDENCED，记录可追溯源。"""
+    fp, cp, cl, ap = _v7_paths(tmp_path)
+    K.wake_contract(now=_v6_time(2), wake_path=cp)
+    with open(cl, "w", encoding="utf-8") as f:
+        f.write(json.dumps({"at": "2026-11-24T03:09:55Z", "intent": "WAKE",
+                            "woken_by": "external_alarm:07:15"}) + "\n")
+        f.write(json.dumps({"at": "2026-11-24T03:20:00Z", "intent": "WAKE",
+                            "woken_by": None}) + "\n")
+    r = K.entrainment_audit(contract_path=cp, log_path=fp, now=_v6_time(4))
+    assert r["verdict"] == "EXTERNALLY_EVIDENCED"
+    assert r["wake_observations"] == 2 and r["externally_evidenced_wakes"] == 1
+
+
+def test_v7_kernel_never_fabricates_woken_by(tmp_path):
+    """内核自驱 circadian_live 不传 woken_by → 台账记为 None，审计不误判兑现。"""
+    fp, cp, cl, ap = _v7_paths(tmp_path)
+    K.circadian_live(max_steps=2, now=_v6_time(2), log_path=fp,
+                     auto_seek=False, record=True)
+    rows = [json.loads(x) for x in open(cl, encoding="utf-8") if x.strip()]
+    assert rows and all(r.get("woken_by") is None for r in rows)
+    r = K.entrainment_audit(contract_path=cp, log_path=fp, now=_v6_time(4))
+    assert r["verdict"] != "EXTERNALLY_EVIDENCED"
+
+
+def test_v7_external_woken_by_propagates_to_ledger(tmp_path):
+    """外部调度器显式传 woken_by → 台账携带证据源，审计可兑现。"""
+    fp, cp, cl, ap = _v7_paths(tmp_path)
+    K.circadian_live(max_steps=1, now=_v6_time(2), log_path=fp,
+                     auto_seek=False, record=True,
+                     woken_by="external_alarm:sunrise-0715")
+    rows = [json.loads(x) for x in open(cl, encoding="utf-8") if x.strip()]
+    assert any(r.get("woken_by") == "external_alarm:sunrise-0715" for r in rows)
+    r = K.entrainment_audit(contract_path=cp, log_path=fp, now=_v6_time(4))
+    assert r["verdict"] == "EXTERNALLY_EVIDENCED" and r["externally_evidenced_wakes"] >= 1
+
+
+def test_v7_idle_gap_honest_and_record_isolated(tmp_path):
+    """Idle-Gap 如实计算；record=True 只写隔离审计台账，不碰真实数据。"""
+    import datetime
+    fp, cp, cl, ap = _v7_paths(tmp_path)
+    K.wake_contract(now=_v6_time(2), wake_path=cp)
+    with open(cl, "w", encoding="utf-8") as f:
+        f.write(json.dumps({"at": "2026-11-24T03:00:00Z", "intent": "WAKE",
+                            "woken_by": "external_alarm:07:15"}) + "\n")
+    # 真实审计台账运行前行数
+    real = os.path.join(os.path.dirname(K.CIRCADIAN_LOG), "entrainment_audit.jsonl")
+    before = sum(1 for _ in open(real, encoding="utf-8")) if os.path.exists(real) else 0
+    r = K.entrainment_audit(contract_path=cp, log_path=fp,
+                            now=datetime.datetime(2026, 11, 24, 6, 0, 0),
+                            record=True, audit_path=ap)
+    assert r["audit_recorded"] is True and os.path.exists(ap)
+    assert r["idle_gap_hours"] == 3.0
+    after = sum(1 for _ in open(real, encoding="utf-8")) if os.path.exists(real) else 0
+    assert after == before  # 零污染
+
+
+def test_v7_report_exposes_entrainment_and_never_changes_verdict():
+    """报告主动暴露 v7 元认知段与 UNPROVEN 真相；判定/宪法/AAS 全不动。"""
+    r = K.build_report()
+    assert r["round"] == "§4aw" and r["kernel_version"] == "6.1.0"
+    v7 = r["v7_entrainment"]
+    assert "UNPROVEN" in v7["current_truth"] and "绝不代填" in v7["honesty_core"]
+    assert r["constitution"]["ok"] is True
+    res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE"
+    assert res["l3_claimed"] is False and res["absolute_claimed"] is False
+    spec = importlib.util.spec_from_file_location("aasdiag3", os.path.join(HERE, "diagnose_volition_aas.py"))
+    diag = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(diag)
+    assert diag.build_report()["has_idle_daemon"] is False
