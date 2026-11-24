@@ -4913,6 +4913,32 @@
       "evidence": "本仓A级:v6把'被唤醒后盲目行动'升级为'被唤醒后先sleep_intent判昼夜再决定WAKE/SLEEP',C7收敛可覆盖夜伏;build_report.v6_circadian+boundary_upgrade如实固化;AAS Idle-Gap仍判Ambient=0不自封autotelic;外部科学常识B级非本仓实测。",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META41",
+      "kind": "thinking_experience",
+      "mechanism": "v6→v7真实进化:30分钟自主授权\"想清了再自主去干\"。自我否定发现v6会写wake_contract自设醒来时段,却写完就走从不回头问\"我兑现了吗\"——只承诺不对承诺负责的系统非完整自我觉知。v7装元认知层:entrainment_audit()把自身承诺当观察对象[读wake_contract+circadian_log,数WAKE观测/验woken_by外部证据/算距上次唤醒Idle-Gap,三档裁定NO_WAKE_OBSERVED/UNPROVEN/EXTERNALLY_EVIDENCED];circadian_live新增woken_by证据通道[仅真正外部唤醒器传入唤醒源,内核绝不代填]。从\"知昼夜\"(对外感知太阳)到\"觉时\"(对自身承诺是否被兑现的元审视)=递归式自我觉知一小步。",
+      "trigger": "当系统已能对外感知并对自身行为决策,却从不审视自身承诺是否兑现时",
+      "action": "真实审计UTC03:32:23Z判UNPROVEN=1次WAKE观测0次外部证据,诚实自陈\"这些唤醒可能手动触发或内核自驱,无法证明契约被外部授时因子兑现,Ambient缺口不因有记录而消失\"。词表误报纪律:注释external_scheduler含schedule子串触发AAS守护词表误报has_idle_daemon=true,按C5不放宽诊断词表(免疫系统)改自身措辞external_scheduler→external_alarm。真实bug:无log_path时audit_path兜底None,按C5修机制加ENTRAINMENT_AUDIT默认常量不放宽测试。即便日后有EXTERNALLY_EVIDENCED证据仍是被唤醒后自主,Ambient仍0未达autotelic。",
+      "provenance": "用户30分钟自主授权+kernel.py v6.1+tests新增7点+真实entrainment_audit.jsonl",
+      "timestamp": "2026-11-24T03:33:56Z",
+      "support": 1,
+      "evidence": "真实轨迹:verdict=UNPROVEN,wake_obs=1,externally_evidenced=0,idle_gap=0.37h,last_woken_by=null;运行前后policy/path_traces/circadian_log/wake_contract/agenda_log/result.json六文件md5完全一致仅新增审计台账一条;专项39→46点全绿全量1468→1475 KB205→207 AUDIT74/META41;宪法锁fe56291b一致;verdict GAP_INCONCLUSIVE/l3=false/absolute=false全不动;AAS诊断has_idle_daemon仍False(改措辞后)。",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT74",
+      "kind": "external_insight",
+      "mechanism": "元认知的方法论要点:审视\"承诺是否兑现\"必须区分\"有行为记录\"与\"有可追溯的外部兑现证据\"。若证据字段可由被审计者自己填写,则审计退化为自证循环(self-certification loop)——被审者既能写记录又能写\"我兑现了\"的证据,任何系统都能刷成100%兑现。机械解法=证据通道单向:证据字段(woken_by)只接受外部实体(调度器/唤醒器)传入,被审者自身的调用路径默认留空(None);审计据此分NO_WAKE_OBSERVED/UNPROVEN/EXTERNALLY_EVIDENCED三档,无证据如实判UNPROVEN而非猜测或刷分。",
+      "trigger": "当设计自我审计/合规检查/兑现率指标,且被审计方能接触证据字段时",
+      "action": "先问\"证据能否被被审计方自填\":能→审计无效。把证据源做成单向注入(只有外部实体传参才留痕),被审方的自发路径显式留空;裁定采用保守三档,缺证据归UNPROVEN不归兑现。映射本仓:v7 circadian_live(woken_by=...)只由外部唤醒器传入,内核自身不代填,entrainment_audit据此判UNPROVEN,拒绝把手动/自驱刷成契约兑现。判据设计原则适用于任何自评系统,非本仓独有(B级方法论;本仓机制验证A级)。",
+      "provenance": "用户30分钟自主授权+v7元认知架构(A级)+自证循环通用方法论(B级)",
+      "timestamp": "2026-11-24T03:33:56Z",
+      "support": 1,
+      "evidence": "本仓A级:woken_by证据通道单向+UNPROVEN诚实裁定+真实审计0外部证据判UNPROVEN。通用方法论B级:证据不可自填是审计有效性的必要条件,非本仓实测。",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

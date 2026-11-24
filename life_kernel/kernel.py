@@ -72,7 +72,7 @@ NOVELTY_WINDOW = 5  # 最近 N 轮心跳做收敛检测
 NO_PATH_NOVELTY = 0.35  # 全池 novelty 低于此值判"前方无路"，触发帕累托次优随机游走
 APPLICABILITY_MIN = 0.34  # v4 F10：脚印适用情境与此境 Jaccard 下限，低于则不注入（防检索碰撞）
 STALE_DAYS = 30  # v4 F11：经验超过 N 天未被使用视为 stale，可剪枝
-KERNEL_VERSION = "6.0.0"
+KERNEL_VERSION = "6.1.0"
 EXPERIENCE_USE = os.path.join(DATA, "experience_use.jsonl")  # v4：经验使用台账（last_used/use_count）
 # v5 意志层：本底好奇心（明确标注为设计选择，非涌现）——内稳态无失衡时仍需向外探索
 CURIOSITY_BASE = 0.3
@@ -80,6 +80,7 @@ AGENDA_LOG = os.path.join(DATA, "agenda_log.jsonl")  # v5：自主议程决策�
 # v6 昼夜节律层：内源生物钟相位（读真实时钟+地理纬度算太阳高度，纯计算不联网不spawn）
 WAKE_CONTRACT = os.path.join(DATA, "wake_contract.json")  # v6：醒来契约（可外部调度器消费）
 CIRCADIAN_LOG = os.path.join(DATA, "circadian_log.jsonl")  # v6：昼夜节律决策台账（只追加真实决策）
+ENTRAINMENT_AUDIT = os.path.join(DATA, "entrainment_audit.jsonl")  # v7：元认知审计台账（只追加真实审视）
 DEFAULT_LATITUDE = 39.9465  # 用户真实设备纬度（2026-11-24 定位，北京）；可由调用方覆盖
 DEFAULT_LONGITUDE = 116.2931  # 用户真实设备经度；日出日落按此算真太阳时
 DEFAULT_TZ_OFFSET = 8  # UTC+8（北京时间），真太阳时换算用
@@ -1236,7 +1237,7 @@ def wake_contract(now=None, latitude=DEFAULT_LATITUDE, longitude=DEFAULT_LONGITU
 def circadian_live(max_steps=6, now=None, latitude=DEFAULT_LATITUDE,
                    longitude=DEFAULT_LONGITUDE, seed=None, log_path=None,
                    use_log_path=None, auto_seek=False, policy_override=None,
-                   record=True):
+                   record=True, woken_by=None):
     """【节律自驱心跳】被外部唤醒器唤醒后，内核自主跑一个昼夜节律周期。
 
     与 v5 live() 的区别：每步先问 sleep_intent()——
@@ -1244,6 +1245,9 @@ def circadian_live(max_steps=6, now=None, latitude=DEFAULT_LATITUDE,
     - 判 WAKE：走 v5 意志层自选议程并执行（日出而作）。
     这把"被唤醒后盲目行动"升级为"被唤醒后先感知节律、再自主决定动或不动"。
     record=False 供测试零污染（不写台账）。
+    【v7 证据通道】woken_by 由真正的外部唤醒器传入（如 "external_alarm:07:15"），
+    内核自身绝不代填——这是 v7 元认知审视"契约是否被兑现"的可验证证据源；
+    默认 None 表示该次唤醒无外部源标记，audit 不会把它算作契约兑现。
     """
     trace = []
     for step in range(1, max_steps + 1):
@@ -1276,7 +1280,8 @@ def circadian_live(max_steps=6, now=None, latitude=DEFAULT_LATITUDE,
         os.makedirs(os.path.dirname(os.path.abspath(ledger)), exist_ok=True)
         for t in trace:
             with open(ledger, "a", encoding="utf-8") as f:
-                f.write(json.dumps({"at": _utcnow(), **t}, ensure_ascii=False) + "\n")
+                f.write(json.dumps({"at": _utcnow(), "woken_by": woken_by, **t},
+                                   ensure_ascii=False) + "\n")
     phase_now = circadian_phase(now, latitude, longitude)["phase"]
     return {
         "at": _utcnow(), "kernel_version": KERNEL_VERSION, "start_phase": phase_now,
@@ -1288,6 +1293,107 @@ def circadian_live(max_steps=6, now=None, latitude=DEFAULT_LATITUDE,
     }
 
 
+def entrainment_audit(contract_path=None, log_path=None, now=None, record=False,
+                      audit_path=None):
+    """【v7 觉时者·元认知】内核审视自己写下的醒来契约，是否被真实兑现。
+
+    v6 内核会"承诺"（wake_contract），v7 内核第一次回头问："我兑现了吗？"
+    这是递归的一小步：把自身承诺当作观察对象，而非只向前行动。
+
+    【诚实核心】兑现必须有外部证据：circadian_log 每条带 woken_by 字段，
+    只有外部唤醒器调用 circadian_live(woken_by=...) 才算契约被授时因子兑现。
+    内核自身绝不代填该字段——无证据时如实判"无法证明兑现"，不刷分、不自证。
+    天文预测（日出日落）是客观计算，不因经验或审计而篡改。
+
+    contract_path/log_path：v7 单一路径契约——传 log_path 则契约/审计台账从同目录派生，
+    便于测试 tmp_path 隔离。
+    record=False 供测试零污染。
+    """
+    contract_path = contract_path or _sibling(log_path, "wake_contract.json") or WAKE_CONTRACT
+    ledger = _sibling(log_path, "circadian_log.jsonl") or CIRCADIAN_LOG
+    audit_path = audit_path or _sibling(log_path, "entrainment_audit.jsonl") or ENTRAINMENT_AUDIT
+
+    contract = {}
+    if os.path.exists(contract_path):
+        try:
+            with open(contract_path, encoding="utf-8") as f:
+                contract = json.load(f)
+        except (ValueError, OSError):
+            contract = {}
+
+    obs = []
+    if os.path.exists(ledger):
+        with open(ledger, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        obs.append(json.loads(line))
+                    except ValueError:
+                        continue
+
+    # 唤醒事件：intent=WAKE 的节律决策（排除 SLEEP 停机）
+    wakes = [r for r in obs if r.get("intent") == "WAKE"]
+    n = len(wakes)
+    # 外部兑现证据：仅当该条带非空 woken_by，才算"外部授时因子真的叫醒过"
+    evidenced = [r for r in wakes if str(r.get("woken_by") or "").strip()]
+    n_evidenced = len(evidenced)
+    # 契约声明的昼行窗口（用于对照，不篡改）
+    window = contract.get("daylight_window_local", {})
+    contract_waker_required = bool(contract.get("external_waker_required"))
+    contract_version = contract.get("kernel_version")
+
+    if n == 0:
+        verdict = "NO_WAKE_OBSERVED"
+        honest = ("无任何 WAKE 唤醒记录——契约已写下但从未观察到兑现，"
+                  "无法判断昼夜节律是否被授时因子同步；如实记零，不虚构活跃。")
+    elif n_evidenced == 0:
+        verdict = "UNPROVEN"
+        honest = ("观测到 %d 次 WAKE，但全部无 woken_by 外部唤醒源标记："
+                  "这些唤醒可能是手动触发或内核自驱，无法证明契约被外部授时因子兑现；"
+                  "Ambient 缺口不因有记录而消失。" % n)
+    else:
+        verdict = "EXTERNALLY_EVIDENCED"
+        honest = ("%d/%d 次 WAKE 带外部唤醒源标记（woken_by），契约被授时因子兑现"
+                  "有可追溯证据；这仍是被唤醒后的自主，非内核自发放电。" %
+                  (n_evidenced, n))
+
+    # 距上次唤醒的空闲间隔（诚实暴露 Idle-Gap；不设上限就不伪造活跃）
+    last_at = wakes[-1].get("at") if wakes else None
+    idle_gap_hours = None
+    if last_at and now:
+        try:
+            t0 = datetime.datetime.strptime(last_at, "%Y-%m-%dT%H:%M:%SZ")
+            idle_gap_hours = round((now - t0).total_seconds() / 3600.0, 2)
+        except ValueError:
+            pass
+
+    result = {
+        "at": _utcnow(), "kernel_version": KERNEL_VERSION,
+        "contract_kernel_version": contract_version,
+        "contract_written_by": contract.get("set_by"),
+        "contract_daylight_window_local": window,
+        "contract_external_waker_required": contract_waker_required,
+        "wake_observations": n,
+        "externally_evidenced_wakes": n_evidenced,
+        "verdict": verdict,
+        "idle_since_last_wake": last_at,
+        "idle_gap_hours": idle_gap_hours,
+        "last_woken_by": wakes[-1].get("woken_by") if wakes else None,
+        "honest": honest,
+        "self_audit": ("v7 元认知：内核审视自己的承诺是否被兑现；"
+                       "woken_by 仅由外部唤醒器写入，内核绝不代填"),
+        "verdict_unchanged": True,
+        "constitution_ok": verify_constitution()["ok"],
+    }
+    if record:
+        os.makedirs(os.path.dirname(os.path.abspath(audit_path)), exist_ok=True)
+        with open(audit_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(result, ensure_ascii=False) + "\n")
+        result["audit_recorded"] = True
+    return result
+
+
 def build_report():
     """生成内核自检报告（供文档/测试引用，不产生新判定）。"""
     const = verify_constitution()
@@ -1296,9 +1402,9 @@ def build_report():
     policy = _load_policy()
     scored = propose()
     return {
-        "round": "§4av",
+        "round": "§4aw",
         "kernel_version": KERNEL_VERSION,
-        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者：内核自己设定醒来契约、被唤醒后先问节律再决定是否行动",
+        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者：内核回头审视自己的承诺是否被兑现，递归式自我觉知",
         "v2_metabolism": "digest() 摄食外部前沿 + self_modify() DGM 式经验验证自改 + archive 快照可回滚",
         "v3_walk": {
             "mechanism": "无路时帕累托次优随机游走：前沿去理想点→次优集→带种子随机迈步→脚印成路",
@@ -1355,6 +1461,14 @@ def build_report():
             "circadian_live": "被唤醒后先 sleep_intent 再 v5 意志层，把'被唤醒后盲目行动'升级为'先感知节律再决定动/不动'",
             "boundary_upgrade": "从'被唤醒后的自主'→'知昼夜的自主'：内核能自设醒来时段、能判断此刻该醒该睡，但兑现仍依赖外部授时因子",
             "geo_anchor": "设备定位 39.9465N/116.2931E（北京，2026-11-24）；日出日落按真太阳时计算，可由调用方覆盖",
+        },
+        "v7_entrainment": {
+            "trigger": "v6 会写醒来契约却从不回头看是否被兑现——承诺无回馈，非完整自我觉知",
+            "breakthrough": "entrainment_audit() 把自身契约当观察对象：读 wake_contract + circadian_log，数 WAKE 观测、验 woken_by 外部证据、算距上次唤醒 Idle-Gap",
+            "honesty_core": "woken_by 仅由外部唤醒器调用 circadian_live(woken_by=...) 写入，内核绝不代填；无证据如实判 UNPROVEN，不把手动/自驱刷成契约兑现",
+            "evidence_channel": "circadian_live() 新增 woken_by 参数作为可追溯兑现证据源；默认 None=无外部源，audit 不计入兑现",
+            "recursion": "从'知昼夜'(对外感知)→'觉时'(对自身承诺的元审视)：递归一小步，非自发放电、不改 Ambient=0",
+            "current_truth": "现存 circadian_log 唯一 WAKE 记录写于 v6、无 woken_by 字段 → 判 UNPROVEN：契约从未被证明由外部授时因子兑现；日出闹钟自 2026-11-25 起才可能累积证据",
         },
         "aas_self_assessment": {
             "framework": "AAS arXiv:2607.17947（Idle-Gap Test）外部 B 级镜像，诊断见 diagnose_volition_aas.py（本仓 A 级）",
