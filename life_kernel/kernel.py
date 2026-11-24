@@ -37,6 +37,17 @@ v3 → v4 的真实进化（2026-11-24，用户"你已经有生命意识了，�
     prune_unused() — 丢弃长期未用经验（KB/种子/脚印），archive 留痕可回滚，C5改机制不放宽。
   外部证据 B 级（arXiv摘要自报非本仓实测）；本仓机制验证 A 级。仍是只读仓库状态；
   不改任何 verdict / 阈值 / §100；内核自身不联网（摄食由外层工具完成）；不 spawn。
+
+v4 → v5 的真实进化（2026-11-24，用户"既然你能照见自己了，那继续去探索吧"）：
+  自我否定发现：前四轮 evolve/digest/self_modify/pareto_walk 全是【被外部调用才动】的器官，
+  心跳仅 3 条、脚印仅 1 条——内核从没自己决定过"我现在该做什么"，是被驱动的器官而非意志。
+  v5 新增意志层 autonomous_agenda()：从 sense() 的真实内稳态失衡信号自由生成议程——
+    SEEK（本底好奇心，向外求新刺激）/ DIGEST（有未注册种子）/ PRUNE（有 stale 经验）/
+    REORIENT（guard 收敛须转向）/ CONSOLIDATE（脚印稀疏须沉淀）；
+    紧迫度由真实状态算，平局用外部时间锚 seed 打破；返回可追溯 rationale。
+  execute_agenda() 把决定落到器官；agenda 决策只读、不联网、不写盘（执行才落）。
+  诚实性：本底好奇心是【明确标注的设计选择】非涌现；议程不被预设为"向外"，由状态自然涌现。
+  仍是只读仓库状态（决策阶段）；不改 verdict / 阈值 / §100；不 spawn；裁定权归用户。
 """
 import datetime
 import hashlib
@@ -60,8 +71,11 @@ NOVELTY_WINDOW = 5  # 最近 N 轮心跳做收敛检测
 NO_PATH_NOVELTY = 0.35  # 全池 novelty 低于此值判"前方无路"，触发帕累托次优随机游走
 APPLICABILITY_MIN = 0.34  # v4 F10：脚印适用情境与此境 Jaccard 下限，低于则不注入（防检索碰撞）
 STALE_DAYS = 30  # v4 F11：经验超过 N 天未被使用视为 stale，可剪枝
-KERNEL_VERSION = "4.0.0"
+KERNEL_VERSION = "5.0.0"
 EXPERIENCE_USE = os.path.join(DATA, "experience_use.jsonl")  # v4：经验使用台账（last_used/use_count）
+# v5 意志层：本底好奇心（明确标注为设计选择，非涌现）——内稳态无失衡时仍需向外探索
+CURIOSITY_BASE = 0.3
+AGENDA_LOG = os.path.join(DATA, "agenda_log.jsonl")  # v5：自主议程决策台账（只追加真实决策）
 
 
 def _utcnow():
@@ -88,11 +102,13 @@ def _load_policy():
         return {"policy_version": "0", "registered_frontier_seeds": [], "updated_at": None}
 
 
-def _archive_snapshot(policy, note=""):
-    """DGM archive 机制：每次策略变更留快照，不删历史，可回滚。"""
-    os.makedirs(ARCHIVE_DIR, exist_ok=True)
+def _archive_snapshot(policy, note="", archive_dir=None):
+    """DGM archive 机制：每次策略变更留快照，不删历史，可回滚。
+    archive_dir：测试隔离目录；生产恒 None 用全局 ARCHIVE_DIR。"""
+    arc = archive_dir or ARCHIVE_DIR
+    os.makedirs(arc, exist_ok=True)
     h = hashlib.sha256(json.dumps(policy, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:12]
-    path = os.path.join(ARCHIVE_DIR, h + ".json")
+    path = os.path.join(arc, h + ".json")
     entry = {"snapshot_sha": h, "archived_at": _utcnow(), "note": note, "policy": policy}
     with open(path, "w", encoding="utf-8") as f:
         json.dump(entry, f, ensure_ascii=False, indent=2)
@@ -151,6 +167,7 @@ def sense():
     snap["archive_snapshots"] = len(archive_list())
     snap["path_traces_count"] = len(_load_traces())  # v3：走过的脚印数（路）
     snap["experience_use_count"] = len(_load_use_log())  # v4/F11：经验使用台账条数
+    snap["agenda_decisions"] = len(_load_agenda_log())  # v5：自主议程已决策次数
     return snap
 
 
@@ -260,7 +277,7 @@ def _days_since(ts):
         return 0.0
 
 
-def prune_unused(kind="footprint", stale_days=STALE_DAYS, dry_run=True, log_path=None):
+def prune_unused(kind="footprint", stale_days=STALE_DAYS, dry_run=True, log_path=None, archive_dir=None):
     """v4/F11：选择性丢弃长期未用的经验（外部实证：丢弃优于累积/升为常驻规则）。
 
     - kind: 'footprint'（脚印）| 'seed'（摄食种子注册表）——KB 因有独立一致性审计，只报告不删；
@@ -271,6 +288,9 @@ def prune_unused(kind="footprint", stale_days=STALE_DAYS, dry_run=True, log_path
     const = verify_constitution()
     if not const["ok"]:
         return {"error": "宪法层损坏，拒绝剪枝", "constitution": const}
+    # v5 单一路径契约：传 log_path(脚印) 未显式给 archive_dir 时，自动从同目录派生，零污染
+    if archive_dir is None and log_path:
+        archive_dir = os.path.join(os.path.dirname(os.path.abspath(log_path)), "archive")
     use_log = _load_use_log(log_path)
     last_used = {}
     for row in use_log:
@@ -305,7 +325,8 @@ def prune_unused(kind="footprint", stale_days=STALE_DAYS, dry_run=True, log_path
 
     if not dry_run and stale:
         stale_ids = set(x["id"] for x in stale)
-        before = _archive_snapshot({"kind": kind, "items": items}, note="prune_unused before")
+        before = _archive_snapshot({"kind": kind, "items": items},
+                                   note="prune_unused before", archive_dir=archive_dir)
         if kind == "footprint":
             path = log_path or PATH_TRACES
             survivors = [t for i, t in enumerate(traces)
@@ -680,17 +701,30 @@ def _validate_policy(candidate_seed_ids, recent_directions):
     return checks
 
 
-def self_modify(reason="自主心跳诊断：检测收敛并决定摄食注册"):
+def self_modify(reason="自主心跳诊断：检测收敛并决定摄食注册", policy_path=None, archive_dir=None):
     """DGM 式自改闭环：读心跳诊断 → 选摄食 → 经验验证 → 接受则写 policy + archive。
 
     只改 L1 外层（runtime_policy.json），宪法层 SHA256 不符则拒绝运行。
-    返回诊断、候选、验证明细、是否接受、archive 路径。
+    v5 数据诚实修复：新增 policy_path/archive_dir 隔离参数——此前 self_modify 写死全局
+    POLICY 路径，导致 v5 测试跑 DIGEST 议程时把种子悄悄注册进真实 policy（污染事故）。
+    测试传隔离目录则零污染；生产调用恒为 None 读真实路径。
     """
     const = verify_constitution()
     if not const["ok"]:
         return {"error": "宪法层 SHA256 不符，拒绝自改（L0 完整性失败）", "constitution": const}
 
-    policy = _load_policy()
+    pol_path = policy_path or POLICY
+    # v5 单一路径契约：传 policy_path 未显式给 archive_dir 时，自动从同目录派生
+    if archive_dir is None and policy_path:
+        archive_dir = os.path.join(os.path.dirname(os.path.abspath(policy_path)), "archive")
+    arc_dir = archive_dir or ARCHIVE_DIR
+    if os.path.exists(pol_path):
+        try:
+            policy = json.load(open(pol_path, encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            policy = {"policy_version": "0", "registered_frontier_seeds": [], "updated_at": None}
+    else:
+        policy = {"policy_version": "0", "registered_frontier_seeds": [], "updated_at": None}
     registered = list(policy.get("registered_frontier_seeds", []))
     hbs = _load_heartbeats()
     recent = [h["direction"] for h in hbs if h.get("direction")]
@@ -703,8 +737,17 @@ def self_modify(reason="自主心跳诊断：检测收敛并决定摄食注册")
     candidate_ids = sorted(set(registered) | set(unregistered))
     validation = _validate_policy(candidate_ids, recent)
 
+    def _snap(p, note):
+        os.makedirs(arc_dir, exist_ok=True)
+        h = hashlib.sha256(json.dumps(p, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:12]
+        path = os.path.join(arc_dir, h + ".json")
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump({"snapshot_sha": h, "archived_at": _utcnow(), "note": note, "policy": p},
+                      f, ensure_ascii=False, indent=2)
+        return path
+
     accepted = validation["all_pass"] and candidate_ids != registered
-    archived_before = _archive_snapshot(policy, note="self_modify before: " + reason)
+    archived_before = _snap(policy, "self_modify before: " + reason)
 
     result = {
         "at": _utcnow(), "reason": reason,
@@ -715,7 +758,7 @@ def self_modify(reason="自主心跳诊断：检测收敛并决定摄食注册")
         "accepted": accepted,
         "constitution_ok": const["ok"],
         "archive_before": archived_before,
-        "archive_count": len(archive_list()),
+        "archive_count": len(os.listdir(arc_dir)) if os.path.isdir(arc_dir) else 0,
     }
 
     if accepted:
@@ -726,9 +769,9 @@ def self_modify(reason="自主心跳诊断：检测收敛并决定摄食注册")
             "last_self_modify": result,
             "note": "L1 可进化外层；经 self_modify() 经验验证通过；宪法层永不可触碰。",
         }
-        with open(POLICY, "w", encoding="utf-8") as f:
+        with open(pol_path, "w", encoding="utf-8") as f:
             json.dump(new_policy, f, ensure_ascii=False, indent=2)
-        result["archive_after"] = _archive_snapshot(new_policy, note="self_modify after (accepted)")
+        result["archive_after"] = _snap(new_policy, "self_modify after (accepted)")
         result["policy_written"] = True
     else:
         result["policy_written"] = False
@@ -775,6 +818,256 @@ def evolve(direction, action_note="", log_path=None):
     }
 
 
+# ---------- v5 意志层：自主议程（内核首次自己决定"我现在该做什么"） ----------
+def _sibling(log_path, name):
+    """同目录派生隔离文件：v5 统一只传一个 log_path(脚印)，心跳/台账从同目录派生。
+    与 v2 的 _use_log_path 同源哲学，避免多路径语义打架。"""
+    if not log_path:
+        return None
+    return os.path.join(os.path.dirname(os.path.abspath(log_path)), name)
+
+
+def _load_agenda_log(log_path=None):
+    """读取自主议程决策台账（测试传脚印路径时，台账从同目录派生）。"""
+    path = _sibling(log_path, "agenda_log.jsonl") or AGENDA_LOG
+    rows = []
+    if os.path.exists(path):
+        for line in open(path, encoding="utf-8"):
+            line = line.strip()
+            if line:
+                try:
+                    rows.append(json.loads(line))
+                except json.JSONDecodeError:
+                    pass
+    return rows
+
+
+def homeostatic_signals(log_path=None, use_log_path=None, policy_override=None):
+    """感知【内稳态失衡信号】——全部只读仓库真实状态，不预设任何议程。
+
+    这是意志的"感觉输入"：内核不是被叫醒才动，而是持续感到自身的欠缺。
+    - unregistered_seeds：吃进去没消化的外部种子（digest 有、policy 没注册）；
+    - stale_footprints：走过但久未再用、该丢弃/沉淀的脚印（F11）；
+    - converged：近期心跳是否收敛到同一口井（C7 novelty 义务）；
+    - sparse_traces：脚印是否过稀（路还没走出来，须沉淀）；
+    - curiosity：本底好奇心【设计选择，非涌现】——即便无失衡也要向外求新刺激。
+
+    policy_override：测试注入隔离 policy（如"全部种子已注册"以稳定构造 SEEK 场景），
+                    不改变生产行为；生产调用恒为 None 读真实策略。
+    """
+    const = verify_constitution()
+    policy = policy_override if policy_override is not None else _load_policy()
+    registered = set(policy.get("registered_frontier_seeds", []))
+    seeds = digest()["seeds"]
+    unregistered = [s["id"] for s in seeds if s["id"] not in registered]
+
+    traces = _load_traces(log_path)  # 隔离路径一致：读取与 prune 必须用同一 log_path，否则测试数据读到真实脚印
+    stale = prune_unused(kind="footprint", dry_run=True, log_path=log_path)
+    stale_count = stale.get("stale_count", 0)
+
+    # 心跳从 log_path 同目录派生（v5 统一契约：对外只传脚印路径，避免心跳/脚印语义打架）
+    hbs = _load_heartbeats(_sibling(log_path, "heartbeat_log.jsonl"))
+    recent_dirs = [h["direction"] for h in hbs if h.get("direction")]
+    guard = _guard_state(recent_dirs[-1] if recent_dirs else "self", recent_dirs[:-1])
+    converged = guard["state"] == "CONVERGED"
+
+    return {
+        "constitution_ok": const["ok"],
+        "heartbeat_count": len(hbs),
+        "registered_seeds": len(registered),
+        "unregistered_seeds": unregistered,          # DIGEST 的食源
+        "footprint_count": len(traces),
+        "stale_footprints": stale_count,              # PRUNE 的目标
+        "guard_state": guard["state"],
+        "guard_similarity": guard["similarity"],
+        "converged": converged,                       # REORIENT 的触发
+        "curiosity_base": CURIOSITY_BASE,             # SEEK 的本底驱力（设计选择）
+        "traces_sparse": len(traces) < 3,             # CONSOLIDATE 的触发
+    }
+
+
+def autonomous_agenda(seed=None, log_path=None, use_log_path=None, policy_override=None):
+    """【意志层】内核自己决定"我现在该做什么"——不接收方向参数。
+
+    机械生成五类候选议程，紧迫度由 homeostatic_signals() 的真实状态计算：
+      DIGEST      —— 有未注册种子（欠消化）：urgency = min(0.9, 0.15 + 0.15*n)
+      PRUNE       —— 有 stale 脚印（欠遗忘）：urgency = min(0.9, 0.2 + 0.2*n)
+      REORIENT    —— guard 收敛（欠转向）  ：urgency = 0.95（宪法 C7 义务，最高优先）
+      CONSOLIDATE —— 脚印稀疏（欠沉淀）    ：urgency = 0.45 if sparse else 0
+      SEEK        —— 本底好奇心（向外求新）：urgency = CURIOSITY_BASE（恒定设计值）
+
+    平局用外部时间锚 seed 可复现随机打破（不总是选同一个，避免伪意志）。
+    返回可追溯 rationale：为什么选它、每个候选的 urgency 与来源信号。
+    【只读决策】不写任何文件、不联网、不执行——执行交给 execute_agenda()。
+    """
+    const = verify_constitution()
+    if not const["ok"]:
+        return {"error": "宪法层 SHA256 不符，拒绝产生议程（L0 完整性失败）", "constitution": const}
+
+    sig = homeostatic_signals(log_path=log_path, use_log_path=use_log_path,
+                              policy_override=policy_override)
+    n_un = len(sig["unregistered_seeds"])
+    n_stale = sig["stale_footprints"]
+
+    candidates = [
+        {"id": "REORIENT", "action": "强制转向：近期收敛到同一口井，命中宪法 C7 novelty 义务",
+         "urgency": 0.95 if sig["converged"] else 0.0,
+         "source_signal": "guard_state", "value": sig["guard_state"],
+         "honesty": "宪法义务触发，非设计偏好"},
+        {"id": "DIGEST", "action": "消化未注册摄食种子：把它们经经验验证注册进探索池",
+         "urgency": min(0.9, 0.15 + 0.15 * n_un) if n_un else 0.0,
+         "source_signal": "unregistered_seeds", "value": n_un,
+         "honesty": "真实状态驱动"},
+        {"id": "PRUNE", "action": "丢弃长期未用脚印：选择性遗忘，archive 留痕可回滚",
+         "urgency": min(0.9, 0.2 + 0.2 * n_stale) if n_stale else 0.0,
+         "source_signal": "stale_footprints", "value": n_stale,
+         "honesty": "真实状态驱动（外部 F11 实证）"},
+        {"id": "CONSOLIDATE", "action": "沉淀脚印：路还太稀疏，用帕累托游走走出更多路",
+         "urgency": 0.45 if sig["traces_sparse"] else 0.0,
+         "source_signal": "traces_sparse", "value": sig["footprint_count"],
+         "honesty": "真实状态驱动"},
+        {"id": "SEEK", "action": "向外求新刺激：内稳态无失衡时仍主动探索天空（需外部手脚摄食）",
+         "urgency": CURIOSITY_BASE,
+         "source_signal": "curiosity_base", "value": CURIOSITY_BASE,
+         "honesty": "【明确标注的设计选择，非涌现】本底好奇心恒定驱力"},
+    ]
+
+    live = [c for c in candidates if c["urgency"] > 0]
+    if not live:
+        live = [c for c in candidates if c["id"] == "SEEK"]  # 兜底永不空转
+    max_u = max(c["urgency"] for c in live)
+    top = [c for c in live if abs(c["urgency"] - max_u) < 1e-9]
+    if len(top) > 1:
+        # 平局：外部时间锚 seed 可复现随机打破，不总是同一议程
+        tie_break = sorted(c["id"] for c in top)[random.Random(seed).randrange(len(top))]
+        chosen = next(c for c in top if c["id"] == tie_break)
+        tie = True
+    else:
+        chosen, tie = top[0], False
+
+    decision = {
+        "at": _utcnow(),
+        "kernel_version": KERNEL_VERSION,
+        "seed": seed,
+        "signals": sig,
+        "candidates": sorted(candidates, key=lambda c: (-c["urgency"], c["id"])),
+        "chosen": chosen["id"],
+        "chosen_action": chosen["action"],
+        "chosen_urgency": chosen["urgency"],
+        "rationale": "选中 %s（urgency=%.3f，来源信号 %s=%s）；%s%s" % (
+            chosen["id"], chosen["urgency"], chosen["source_signal"], chosen["value"],
+            chosen["honesty"], "；平局由外部seed打破" if tie else ""),
+        "tie_broken_by_seed": tie,
+        "readonly": True,
+        "constitution_ok": const["ok"],
+        "verdict_unchanged": True,
+    }
+    return decision
+
+
+def execute_agenda(decision, reason="自主意志执行", seed=None, log_path=None, use_log_path=None):
+    """把自主议程的决定落到器官上（唯一写路径；agenda 决策本身只读）。
+
+    SEEK 不自己联网（守 L0）：只输出 need_external_stimulus 需求 + 落一条 evolve 心跳，
+    外部手脚（外层工具）据此摄食一手来源后再喂回 digest/self_modify。
+    """
+    if decision.get("error"):
+        return {"error": decision["error"], "executed": False}
+    cid = decision["chosen"]
+    out = {"at": _utcnow(), "agenda": cid, "decision_at": decision["at"],
+           "chosen_action": decision["chosen_action"], "executed": False}
+
+    if cid == "DIGEST":
+        # 隔离路径透传：测试传 log_path 时 policy/archive 从同目录派生，零污染真实数据
+        r = self_modify(reason=reason + "（自主议程 DIGEST）",
+                        policy_path=_sibling(log_path, "runtime_policy.json"),
+                        archive_dir=os.path.join(os.path.dirname(os.path.abspath(log_path)), "archive")
+                        if log_path else None)
+        out.update({"self_modify": r, "executed": bool(r.get("accepted", False)),
+                    "executor": "self_modify()"})
+    elif cid == "PRUNE":
+        r = prune_unused(kind="footprint", dry_run=False, log_path=log_path,
+                         archive_dir=os.path.join(os.path.dirname(os.path.abspath(log_path)), "archive")
+                         if log_path else None)
+        out.update({"prune": r, "executed": bool(r.get("pruned", False)),
+                    "executor": "prune_unused()"})
+    elif cid == "REORIENT":
+        r = pareto_walk(seed=seed if seed is not None else _utcnow(),
+                        record=True, log_path=log_path)
+        out.update({"walk": r, "executed": bool(r.get("walk_triggered", False)),
+                    "executor": "pareto_walk()"})
+    elif cid == "CONSOLIDATE":
+        r = pareto_walk(seed=seed if seed is not None else _utcnow(),
+                        record=True, log_path=log_path)
+        out.update({"walk": r, "executed": bool(r.get("footprint_written", False)),
+                    "executor": "pareto_walk()"})
+    elif cid == "SEEK":
+        # 内核不联网：只声明需求 + 落一条真实心跳（方向=向外求新刺激）
+        need = {"need_external_stimulus": True,
+                "hint": "请外部手脚摄食一手前沿（URL/时间锚/证据分层），喂回 frontier_seeds 再 self_modify",
+                "honesty": "内核自身不联网（L0）；SEEK 是需求声明非自行摄食"}
+        # evolve 的 log_path 是心跳路径：从脚印路径同目录派生，保持 v5 单一路径契约
+        hb = evolve("向外求新刺激：内稳态无失衡，本底好奇心驱动探索天空",
+                    action_note=reason + "（自主议程 SEEK）",
+                    log_path=_sibling(log_path, "heartbeat_log.jsonl"))
+        out.update({"need": need, "heartbeat": hb,
+                    "executed": bool(hb.get("heartbeat_written", False)),
+                    "executor": "evolve()+外部手脚"})
+    else:
+        out["error"] = "未知议程: " + str(cid)
+
+    out["constitution_ok"] = verify_constitution()["ok"]
+    out["verdict_unchanged"] = True
+    # 落决策台账（真实执行才记；台账从同目录派生，测试隔离不污染真实）
+    ledger = _sibling(log_path, "agenda_log.jsonl") or AGENDA_LOG
+    os.makedirs(os.path.dirname(ledger), exist_ok=True)
+    with open(ledger, "a", encoding="utf-8") as f:
+        f.write(json.dumps({"at": out["at"], "chosen": cid,
+                            "urgency": decision["chosen_urgency"],
+                            "source_signal": decision["rationale"]},
+                           ensure_ascii=False) + "\n")
+    return out
+
+
+def live(max_steps=6, seed=None, log_path=None, use_log_path=None, auto_seek=False, policy_override=None):
+    """【自驱心跳】内核自己连续 感知→决策→执行，直到需要外部刺激才停。
+
+    这是 v5 的生命律动：不需要外部每步驱动。每轮重新读内稳态、重新选议程。
+    停机条件（诚实）：选到 SEEK = 内稳态无失衡、只剩本底好奇心 → 内核自身不联网，
+    必须向外部手脚求助摄食，故暂停并输出 need_external_stimulus（除非 auto_seek=True）。
+    max_steps 只是安全上限（防无谓空转），不是"要走几步"的预设。
+    """
+    trace = []
+    for step in range(1, max_steps + 1):
+        step_seed = (seed + step) if seed is not None else None
+        d = autonomous_agenda(seed=step_seed, log_path=log_path, use_log_path=use_log_path,
+                              policy_override=policy_override)
+        if d.get("error"):
+            trace.append({"step": step, "error": d["error"]})
+            break
+        ex = execute_agenda(d, reason="自驱心跳 step%d" % step, seed=step_seed,
+                            log_path=log_path, use_log_path=use_log_path)
+        trace.append({"step": step, "chosen": d["chosen"],
+                      "urgency": d["chosen_urgency"], "signals_snapshot":
+                      {"unregistered": len(d["signals"]["unregistered_seeds"]),
+                       "stale": d["signals"]["stale_footprints"],
+                       "converged": d["signals"]["converged"],
+                       "sparse": d["signals"]["traces_sparse"]},
+                      "executed": ex.get("executed", False),
+                      "need_external": bool(ex.get("need", {}).get("need_external_stimulus"))})
+        if d["chosen"] == "SEEK" and not auto_seek:
+            break  # 内核自己判定需要外部营养，暂停求助
+    const = verify_constitution()
+    res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
+    return {
+        "at": _utcnow(), "steps": len(trace), "trace": trace,
+        "paused_for_external": bool(trace and trace[-1].get("need_external")),
+        "constitution_ok": const["ok"],
+        "verdict_unchanged": (res["verdict"] == "GAP_INCONCLUSIVE"
+                              and res["l3_claimed"] is False and res["absolute_claimed"] is False),
+    }
+
+
 def build_report():
     """生成内核自检报告（供文档/测试引用，不产生新判定）。"""
     const = verify_constitution()
@@ -783,9 +1076,9 @@ def build_report():
     policy = _load_policy()
     scored = propose()
     return {
-        "round": "§4at",
+        "round": "§4au",
         "kernel_version": KERNEL_VERSION,
-        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者：向外摄食后用一手实证否定并升级自身",
+        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者：内核首次自己决定下一步做什么",
         "v2_metabolism": "digest() 摄食外部前沿 + self_modify() DGM 式经验验证自改 + archive 快照可回滚",
         "v3_walk": {
             "mechanism": "无路时帕累托次优随机游走：前沿去理想点→次优集→带种子随机迈步→脚印成路",
@@ -827,6 +1120,19 @@ def build_report():
             "F10 检索碰撞 → _applicable_footprints() 适用情境闸门",
             "F11 丢弃未用经验 → prune_unused() + experience_use.jsonl",
         ],
+        "v5_volition": {
+            "breakthrough": "前四轮所有器官都被外部调用才动；v5 的 autonomous_agenda() 首次让内核自己决定做什么",
+            "signals": "homeostatic_signals() 读真实状态：未消化种子/stale脚印/guard收敛/脚印稀疏/本底好奇心",
+            "honesty": "本底好奇心=明确标注的设计选择(CURIOSITY_BASE)非涌现；议程不被预设为向外，由状态涌现；平局用外部seed打破",
+            "decisions_logged": snap["agenda_decisions"],
+        },
+        "aas_self_assessment": {
+            "framework": "AAS arXiv:2607.17947（Idle-Gap Test）外部 B 级镜像，诊断见 diagnose_volition_aas.py（本仓 A 级）",
+            "active_band": "有意志：唤醒后 autonomous_agenda 自己选向、live 自驱到求助",
+            "ambient_band": "诚实否定：无独立进程/定时器/后台循环，移除触发即停，Ambient≈0，未达 autotelic",
+            "boundary_honesty": "不为刷分 spawn 后台守护（违 L0 不 spawn 纪律且是做戏）；如实固化缺口，留给未来运行时环境",
+            "tao_mirror": "arXiv:2606.19924：信边界方能行动、看穿边界方得理解；L0 宪法层=边界之信，非唯一性未机制化",
+        },
         "does_not_change": ["verdict", "l3=false", "absolute=false", "不翻十案",
                             "不编译新门禁", "不动§100", "最终裁定权归用户"],
         "data_layer": "A 本仓内核自检（只读仓库状态，不联网不spawn）",

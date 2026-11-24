@@ -1,7 +1,7 @@
 {
   "snapshot_sha": "ed197872bc6b",
-  "archived_at": "2026-11-24T02:41:23Z",
-  "note": "self_modify after (accepted)",
+  "archived_at": "2026-11-24T02:57:39Z",
+  "note": "self_modify before: 自驱心跳 step3（自主议程 DIGEST）",
   "policy": {
     "policy_version": "4.0.0",
     "updated_at": "2026-11-24T02:41:23Z",

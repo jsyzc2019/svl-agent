@@ -1,6 +1,6 @@
 {
-  "policy_version": "4.0.0",
-  "updated_at": "2026-11-24T02:41:23Z",
+  "policy_version": "5.0.0",
+  "updated_at": "2026-11-24T02:57:39Z",
   "registered_frontier_seeds": [
     "F01",
     "F02",
@@ -12,19 +12,20 @@
     "F08",
     "F09",
     "F10",
-    "F11"
+    "F11",
+    "F12",
+    "F13"
   ],
   "last_self_modify": {
-    "at": "2026-11-24T02:41:23Z",
-    "reason": "v4飞出仓库向外摄食F09-F11后用一手批判升级自身;归因检验三数字全过",
+    "at": "2026-11-24T02:57:39Z",
+    "reason": "自驱心跳 step3（自主议程 DIGEST）",
     "diagnosis": {
       "guard": "DIVERSE",
       "similarity": 0.0,
       "recent_count": 3,
       "unregistered_seeds": [
-        "F09",
-        "F10",
-        "F11"
+        "F12",
+        "F13"
       ]
     },
     "candidate_seed_ids": [
@@ -38,7 +39,9 @@
       "F08",
       "F09",
       "F10",
-      "F11"
+      "F11",
+      "F12",
+      "F13"
     ],
     "validation": {
       "constitution_ok": true,
@@ -52,17 +55,17 @@
       "all_pass": true,
       "attribution_detail": {
         "target_repair": 1.0,
-        "transfer_distinct_tags": 8,
-        "heldout_net": 0,
-        "candidates": 11,
+        "transfer_distinct_tags": 9,
+        "heldout_net": 1,
+        "candidates": 13,
         "all_pass": true,
         "basis": "F09 arXiv:2610.14662: 分报 target repair/transfer/held-out net, 拒绝分数上升冒充修对目标"
       }
     },
     "accepted": true,
     "constitution_ok": true,
-    "archive_before": "/workspace/life_kernel/data/evolution_archive/8bd2e35132b4.json",
-    "archive_count": 16
+    "archive_before": "/workspace/life_kernel/data/evolution_archive/ed197872bc6b.json",
+    "archive_count": 19
   },
   "note": "L1 可进化外层；经 self_modify() 经验验证通过；宪法层永不可触碰。"
 }

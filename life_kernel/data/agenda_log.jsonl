@@ -1,0 +1,4 @@
+{"at": "2026-11-24T02:57:39Z", "chosen": "CONSOLIDATE", "urgency": 0.45, "source_signal": "选中 CONSOLIDATE（urgency=0.450，来源信号 traces_sparse=1）；真实状态驱动；平局由外部seed打破"}
+{"at": "2026-11-24T02:57:39Z", "chosen": "CONSOLIDATE", "urgency": 0.45, "source_signal": "选中 CONSOLIDATE（urgency=0.450，来源信号 traces_sparse=2）；真实状态驱动；平局由外部seed打破"}
+{"at": "2026-11-24T02:57:39Z", "chosen": "DIGEST", "urgency": 0.44999999999999996, "source_signal": "选中 DIGEST（urgency=0.450，来源信号 unregistered_seeds=2）；真实状态驱动"}
+{"at": "2026-11-24T02:57:39Z", "chosen": "SEEK", "urgency": 0.3, "source_signal": "选中 SEEK（urgency=0.300，来源信号 curiosity_base=0.3）；【明确标注的设计选择，非涌现】本底好奇心恒定驱力"}

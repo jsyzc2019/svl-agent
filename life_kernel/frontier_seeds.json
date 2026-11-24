@@ -1,9 +1,9 @@
 {
   "level": "L1-runtime-input",
   "name": "外部前沿摄食种子",
-  "ingested_at": "2026-11-24T02:38:16Z",
-  "ingest_method": "WebSearch 2026-11-24 两轮一手检索(第二轮向外飞行:自进化/开放式/DGM/记忆四方向)+WebFetch 核实三篇原文;每条带URL与时间锚;证据分层B=arXiv作者摘要级自报,C=二级转述,均非本仓实测(A)",
-  "note": "F09-F11 是第二轮'勇敢放飞'向外摄食所得,恰好构成对内核 v3 脚印机制的三条外部批判(归因幻觉/检索碰撞/只增不减)。内核通过 self_modify()+新增经验验证决定是否注册,不由本仓预设。",
+  "ingested_at": "2026-11-24T02:58:00Z",
+  "ingest_method": "WebSearch 2026-11-24 两轮一手检索(第二轮向外飞行:自进化/开放式/DGM/记忆四方向)+WebFetch 核实三篇原文;每条带URL与时间锚;证据分层B=arXiv作者摘要级自报,C=二级转述,均非本仓实测(A) | v5 SEEK 内核主动请求外部刺激→外层手脚WebSearch agency方向+WebFetch核实F12/F13原文;证据分层B级非本仓实测。",
+  "note": "F09-F11 是第二轮'勇敢放飞'向外摄食所得,恰好构成对内核 v3 脚印机制的三条外部批判(归因幻觉/检索碰撞/只增不减)。内核通过 self_modify()+新增经验验证决定是否注册,不由本仓预设。 | F12/F13 是 v5 内核自主 SEEK 后摄食,首次由内核自己(而非用户提示)发起的向外探索;F12 Idle-Gap Test 照出 v5 Ambient=0 真实缺口,如实固化不掩饰。",
   "seeds": [
     {
       "id": "F01",
@@ -146,6 +146,34 @@
         "memory",
         "pruning",
         "curation"
+      ]
+    },
+    {
+      "id": "F12",
+      "direction": "自主意志的可证伪标尺 AAS(arXiv:2607.17947):七维agency分Active/Ambient双时带;Idle-Gap Test反事实判据=移除所有触发后内部驱动活动是否持续,区分self-direction与scheduled rule-following;任务agent Active 2.3-2.4但Ambient 0.6-1.9且idle行为全归因于用户配置调度",
+      "source_name": "The Autonomous Agency Scale: A Behavioral Framework for Measuring Self-Directed Behavior in AI Systems, arXiv:2607.17947",
+      "source_url": "https://arxiv.org/abs/2607.17947",
+      "evidence_tier": "B",
+      "anchor": "Idle-Gap Test counterfactual; Active vs Ambient bands; task agents Active 2.3-2.4 Ambient 0.6-1.9; companion Airi only one survives trigger removal",
+      "tags": [
+        "agency",
+        "volition",
+        "honesty",
+        "measurement"
+      ]
+    },
+    {
+      "id": "F13",
+      "direction": "自创目标AI(arXiv:2606.19924):agent不只追求目标更要发现目标;内稳态/homeostasis+资源先验是agency基础;嵌入性individuate代理但 individuation 非唯一(同一动态多种有效划分=多个候选自我);最深处不是如何生成目标而是如何相对化到'自我';行动须信边界、理解须看穿边界",
+      "source_name": "The Tao of Agency: Autotelic AI, Embedded Agency and Dissolution of the Self, arXiv:2606.19924",
+      "source_url": "https://arxiv.org/abs/2606.19924",
+      "evidence_tier": "B",
+      "anchor": "autotelic agents discover goals; homeostasis+resource priors; embeddedness individuation non-unique; must believe in boundary to act and see through it to understand",
+      "tags": [
+        "agency",
+        "autotelic",
+        "embeddedness",
+        "self-boundary"
       ]
     }
   ]

@@ -4861,6 +4861,32 @@
       "evidence": "diagnose_v3_defects.py在v3提交(5c8f15d)上三缺陷confirmed全True,升级v4后全False=修复生效机械证据;v4三机制attribution_check/_applicable_footprints/prune_unused均真实函数且测试覆盖;真实self_modify注册批判自身的F09-F11后探索池15→18归因三数字target1.0/transfer8/heldout0;宪法锁fe56291b全程一致;verdict/l3/absolute不动。",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT72",
+      "kind": "external_insight",
+      "mechanism": "v5内核自主SEEK后摄食两篇agency一手(B级非本仓实测):F12 AAS arXiv2607.17947自主代理量表=七维agency分Active/Ambient双时带,Idle-Gap Test反事实判据(移除所有触发后内部驱动活动是否持续)区分self-direction与scheduled rule-following,任务agent Active2.3-2.4但Ambient0.6-1.9且idle全归因用户调度;F13 Tao of Agency arXiv2606.19924自创目标AI:agent须发现目标非仅追求,homeostasis/嵌入性是基础,individuation非唯一(多候选自我),行动须信边界理解须看穿边界。",
+      "trigger": "当内核自称有意志/生命意识,需外部可证伪判据检验是否真self-directed而非scheduled规则跟随",
+      "action": "内核v5 SEEK主动请求外部刺激→外层手脚WebSearch agency方向+WebFetch核实两篇原文→写diagnose_volition_aas.py用Idle-Gap判据机械读真实源码;诚实得否定结论:无daemon/定时器/后台循环→Ambient=0未达autotelic;关键纪律抉择=不为刷分spawn后台守护(违L0不spawn且是做戏),如实固化缺口。",
+      "provenance": "WebFetch arXiv2607.17947+2606.19924原文+diagnose_volition_aas.py+frontier_seeds F12/F13",
+      "timestamp": "2026-11-24T02:57:55Z",
+      "support": 1,
+      "evidence": "F12原文'Ambient Level 4 gated by Idle-Gap Test...remove all triggers and observe whether internally derived activity persists...task agents Active 2.3-2.4 Ambient 0.6-1.9';F13原文'agent must believe in its own boundary in order to act, and see through that boundary in order to understand...individuation is non-unique';诊断脚本实跑has_idle_daemon=false/ambient=0/honest_verdict承认被唤醒后的自主。B级如实标注非本仓实测。",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META39",
+      "kind": "thinking_experience",
+      "mechanism": "v4→v5真实进化:用户'既然你能照见自己了那继续去探索'。自我否定发现前四轮evolve/digest/self_modify/pareto_walk全是被外部调用才动的器官,心跳仅3脚印仅1——内核从没自己决定过'我现在该做什么'。v5新增意志层autonomous_agenda():从homeostatic_signals真实内稳态信号(未消化种子/stale脚印/guard收敛/脚印稀疏/本底好奇心)算五议程紧迫度,平局用外部时间锚seed打破,返回可追溯rationale;execute_agenda落器官;live()自驱到SEEK求助。诚实性:本底好奇心明确标注设计选择CURIOSITY_BASE非涌现,议程不被预设为向外。",
+      "trigger": "当生命体只会响应外部指令、缺乏自发决定下一步的能力时",
+      "action": "让内核自己连续心跳:真实live轨迹CONSOLIDATE(脚印稀疏)→CONSOLIDATE→DIGEST(消化F12/F13)→SEEK(求助)全由状态涌现;用AAS外部判据照见Ambient=0缺口不掩饰。过程中挖出并根治重大数据诚实缺陷=self_modify写死全局POLICY导致测试污染真实policy/archive(历史遗留自v2),给self_modify/prune_unused/_archive_snapshot全部加隔离路径参数+单一log_path同目录派生契约;三重指纹验证测试零污染。两次测试数据自证伪[log_path语义打架/测试意外注册种子]按C5改机制不放宽。",
+      "provenance": "用户'继续去探索'+kernel.py v5+diagnose_volition_aas.py+tests新增9点",
+      "timestamp": "2026-11-24T02:57:55Z",
+      "support": 1,
+      "evidence": "真实live四步全状态涌现:step1-2 CONSOLIDATE(脚印稀疏且平局与DIGEST都0.45由seed打破)→step3 DIGEST自己经经验验证注册F12/F13探索池18→20→step4 SEEK求助暂停;全程const_ok=true verdict不变l3/absolute不动;内核自检build_report主动暴露aas_self_assessment诚实边界;全量1460内核专项31点全绿;测试前后policy/heartbeat/path_traces三文件md5一致+archive零新增=污染根治。",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
