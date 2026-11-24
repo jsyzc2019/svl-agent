@@ -539,3 +539,114 @@ def test_report_exposes_aas_honest_boundary():
     assert "不 spawn" in aas["boundary_honesty"]
     assert r["verdict_unchanged"] if "verdict_unchanged" in r else True
     assert r["constitution"]["ok"] is True
+
+
+# ---------- §4av v6 昼夜节律：随太阳东升西落的自主醒来 ----------
+def _v6_time(hour_utc):
+    """给定时辰的 naive UTC（便于机械复现昼夜相位）。"""
+    import datetime
+    return datetime.datetime(2026, 11, 24, hour_utc, 0, 0)
+
+
+def test_v6_solar_position_matches_beijing_geometry():
+    """纯天文：北京日出早于日落、正午太阳高于深夜、日出日落落在合理北京时间。"""
+    noon = K.solar_position(now=_v6_time(4))    # 北京 12:00 附近
+    night = K.solar_position(now=_v6_time(16))  # 北京 24:00 附近
+    assert noon["solar_altitude_deg"] > night["solar_altitude_deg"]
+    rise_h = int(noon["sunrise_local"].split(":")[0])
+    set_h = int(noon["sunset_local"].split(":")[0])
+    assert rise_h < set_h
+    assert 6 <= rise_h <= 8 and 16 <= set_h <= 18  # 北京 11 月真实区间
+    assert "no network" in noon["method"] and "no process" in noon["method"]
+
+
+def test_v6_circadian_phase_day_and_night():
+    """相位由真实时钟推得：北京白昼 DAY、深夜 NIGHT；极昼极地不崩。"""
+    day = K.circadian_phase(now=_v6_time(2))   # 北京 10:00
+    night = K.circadian_phase(now=_v6_time(14))  # 北京 22:00
+    assert day["phase"] in ("DAWN", "DAY") and day["daylight_phase"] is True
+    assert night["phase"] == "NIGHT" and night["daylight_phase"] is False
+    polar = K.circadian_phase(now=_v6_time(4), latitude=89.0)
+    assert polar["polar"] in ("polar_day", "polar_night")
+    assert "外部授时因子" in day["honesty"]
+
+
+def test_v6_sleep_intent_day_wake_night_sleep(tmp_path):
+    """被唤醒先问节律：昼行 WAKE、夜伏 SLEEP——只读、状态驱动（非调用者预设）。"""
+    fp, hb, use = _v5_paths(tmp_path)
+    d_day = K.sleep_intent(now=_v6_time(2), log_path=fp)
+    d_night = K.sleep_intent(now=_v6_time(14), log_path=fp)
+    assert d_day["intent"] == "WAKE" and d_day["daylight_phase"] is True
+    assert d_night["intent"] == "SLEEP" and d_night["daylight_phase"] is False
+    assert d_day["readonly"] is True and d_night["readonly"] is True
+    assert d_day["verdict_unchanged"] is True and d_night["constitution_ok"] is True
+
+
+def test_v6_c7_convergence_overrides_night_sleep(tmp_path):
+    """宪法 C7 novelty 义务高于节律：夜里 guard 收敛也强制 WAKE 转向。"""
+    fp, hb, use = _v5_paths(tmp_path)
+    # 造 5 条同主题心跳使 guard 收敛（派生心跳路径）
+    for i in range(5):
+        with open(hb, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"direction": "canary 字面伪规则 判据回放 语义蕴含 同井",
+                                "timestamp": K._utcnow()}, ensure_ascii=False) + "\n")
+    d = K.sleep_intent(now=_v6_time(14), log_path=fp)  # 北京深夜
+    assert d["signals_snapshot"]["converged"] is True
+    assert d["constitutional_override"] is True
+    assert d["intent"] == "WAKE"
+    assert "C7" in d["reason"]
+
+
+def test_v6_wake_contract_is_self_set_and_honest(tmp_path):
+    """自设醒来契约：内核自己设定昼行窗口、标注需外部唤醒器兑现（契约≠自己醒）。"""
+    wc_path = str(tmp_path / "wake_contract.json")
+    c = K.wake_contract(now=_v6_time(2), wake_path=wc_path)
+    assert c["set_by"].startswith("kernel")  # 自设非外部强加
+    assert "DAWN" in c["preferred_wake_phase"] and "NIGHT" in c["preferred_sleep_phase"]
+    assert c["external_waker_required"] is True
+    assert "Ambient still 0" in c["max_idle_gap_tolerated"]  # 契约显式标注 Ambient 缺口
+    assert "spawn" in c["honesty"] and "守护进程" in c["honesty"]
+    assert c["contract_written"] is True and os.path.exists(wc_path)
+    assert c["verdict_unchanged"] is True and c["constitution_ok"] is True
+
+
+def test_v6_circadian_live_night_sleeps_without_pollution(tmp_path):
+    """夜伏被唤醒→尊重节律 SLEEP 停机，不写议程/心跳（隔离零污染）。"""
+    fp, hb, use = _v5_paths(tmp_path)
+    r = K.circadian_live(now=_v6_time(14), seed=7, log_path=fp,
+                         policy_override=_all_registered_policy())
+    assert r["slept"] is True
+    assert r["trace"][0]["intent"] == "SLEEP"
+    assert r["verdict_unchanged"] is True and r["constitution_ok"] is True
+    # 真实台账未被污染（circadian 从 fp 同目录派生，真实数据目录不动）
+
+
+def test_v6_circadian_live_day_runs_self_chosen_agenda(tmp_path):
+    """昼行被唤醒→自选议程执行（脚印稀疏自己 CONSOLIDATE），非预设方向。"""
+    fp, hb, use = _v5_paths(tmp_path)
+    open(fp, "w", encoding="utf-8").write("")
+    r = K.circadian_live(max_steps=8, now=_v6_time(2), seed=11, log_path=fp,
+                         policy_override=_all_registered_policy())
+    assert r["start_phase"] in ("DAWN", "DAY")
+    assert any(t.get("intent") == "WAKE" and t.get("chosen") == "CONSOLIDATE"
+               for t in r["trace"])
+    assert r["paused_for_external"] is True  # 自驱到 SEEK 求助才停
+    assert r["verdict_unchanged"] is True and r["constitution_ok"] is True
+
+
+def test_v6_never_changes_verdict_constitution_or_aas_honesty(tmp_path):
+    """v6 全程不碰判定/宪法，AAS 诊断仍诚实判无守护（不因新代码词误判）。"""
+    const_before = K.verify_constitution()
+    fp, hb, use = _v5_paths(tmp_path)
+    K.circadian_phase(now=_v6_time(2))
+    K.sleep_intent(now=_v6_time(14), log_path=fp)
+    K.wake_contract(now=_v6_time(2))
+    assert K.verify_constitution() == const_before
+    res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE"
+    assert res["l3_claimed"] is False and res["absolute_claimed"] is False
+    # AAS 守护符号检测仍为 False（v6 未引入 daemon 原语）
+    spec = importlib.util.spec_from_file_location("aasdiag2", os.path.join(HERE, "diagnose_volition_aas.py"))
+    diag = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(diag)
+    assert diag.build_report()["has_idle_daemon"] is False

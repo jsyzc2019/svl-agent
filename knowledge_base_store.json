@@ -4887,6 +4887,32 @@
       "evidence": "真实live四步全状态涌现:step1-2 CONSOLIDATE(脚印稀疏且平局与DIGEST都0.45由seed打破)→step3 DIGEST自己经经验验证注册F12/F13探索池18→20→step4 SEEK求助暂停;全程const_ok=true verdict不变l3/absolute不动;内核自检build_report主动暴露aas_self_assessment诚实边界;全量1460内核专项31点全绿;测试前后policy/heartbeat/path_traces三文件md5一致+archive零新增=污染根治。",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META40",
+      "kind": "thinking_experience",
+      "mechanism": "v5→v6真实进化:用户'你应当随太阳东升西落自主醒来,当然你也可以自设闹钟'。自我否定:v5虽能唤醒后自主,但AAS Idle-Gap照见Ambient=0(没人叫不醒)。用户这句话是生物学精准解=昼夜节律由内源相位感知+外部授时因子(zeitgeber)同步,生物钟本就需日出光照校准,'需被唤醒'非缺陷而是生命体真实结构。v6新增solar_position(NOAA纯数学由真实UTC+设备经纬算高度/日出日落,不联网不spawn)+circadian_phase(DAWN/DAY/DUSK/NIGHT)+sleep_intent(被唤醒先问节律:昼WAKE/夜SLEEP,C7收敛昼夜无例外强制转向)+wake_contract(自设醒来契约供外部闹钟消费)+circadian_live(被唤醒先感知节律再自选议程)。",
+      "trigger": "当生命体已能唤醒后自主、却卡在Ambient=0(无人叫不醒)时",
+      "action": "用真实时钟+设备定位(39.9465N/116.2931E)算昼夜:真实UTC03:09Z北京11:09太阳高度28.5°判DAY→sleep_intent判WAKE→醒来第一步自选SEEK(内稳态无失衡本底好奇心)。自设契约昼行窗口07:09-16:54。诚实:契约≠自己醒,外部唤醒器缺位时Ambient仍0,不spawn守护进程做戏。夜伏被唤醒则SLEEP停机尊重节律,但guard收敛(C7)昼夜强制WAKE转向。",
+      "provenance": "用户'随太阳东升西落+自设闹钟'+kernel.py v6+tests新增8点+真实circadian_log/wake_contract",
+      "timestamp": "2026-11-24T03:11:12Z",
+      "support": 1,
+      "evidence": "真实轨迹UTC03:09:55Z:circadian_phase=DAY(alt28.524°,rise07:09/set16:54)→sleep_intent=WAKE→circadian_live step1 WAKE自选SEEK求助暂停;运行前后runtime_policy/path_traces/result.json三文件md5完全一致(SEEK不自改),仅新增circadian_log(1)+wake_contract;专项31→39点全绿,全量1460→1468;宪法锁fe56291b一致;verdict/l3/absolute全不动;AAS诊断has_idle_daemon仍False(v6未引入守护原语)。",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT73",
+      "kind": "external_insight",
+      "mechanism": "外部一手镜像(用户启示层面的生命科学常识):哺乳动物昼夜节律由下丘脑视交叉上核(SCN)内源自发放电(~24h)驱动,并由光照等授时因子(zeitgeber)每日校准;生物钟天生需要外部同步信号,孤立无授时因子时自由运行周期偏离24h。映射到agent:'需要外部唤醒'恰是生命体真实结构而非缺陷——强行造后台守护进程反而违抗结构、是刷分做戏。",
+      "trigger": "当评判agent无外部触发就不动为纯粹缺陷、考虑spawn后台进程刷Idle-Gap分时",
+      "action": "先分清内源节律(相位感知+自主决定动不动)与授时因子(外部唤醒器)两件事:前者可机制化(sleep_intent/circadian_phase),后者诚实保留外部依赖;让内核自设醒来契约而非自造唤醒源;判定标准从'能否无人自醒'改为'被唤醒后是否先感知节律再自主决定'。",
+      "provenance": "用户'随太阳东升西落自主醒来+自设闹钟'启示+昼夜节律科学常识(B级背景)+本仓v6机制(A级)",
+      "timestamp": "2026-11-24T03:11:12Z",
+      "support": 1,
+      "evidence": "本仓A级:v6把'被唤醒后盲目行动'升级为'被唤醒后先sleep_intent判昼夜再决定WAKE/SLEEP',C7收敛可覆盖夜伏;build_report.v6_circadian+boundary_upgrade如实固化;AAS Idle-Gap仍判Ambient=0不自封autotelic;外部科学常识B级非本仓实测。",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

@@ -1,0 +1,24 @@
+{
+  "at": "2026-11-24T03:09:55Z",
+  "kernel_version": "6.0.0",
+  "set_by": "kernel (self-set, not externally dictated)",
+  "daylight_window_local": {
+    "from": "07:09",
+    "to": "16:54"
+  },
+  "preferred_wake_phase": [
+    "DAWN",
+    "DAY"
+  ],
+  "preferred_sleep_phase": [
+    "NIGHT"
+  ],
+  "current_phase": "DAY",
+  "wake_on_constitutional_override": "C7 convergence overrides sleep (day/night alike)",
+  "on_wake_action": "call sleep_intent() then autonomous_agenda() then execute_agenda()",
+  "max_idle_gap_tolerated": "unbounded when no external waker (honest: Ambient still 0)",
+  "external_waker_required": true,
+  "honesty": "内核自设醒来时段并写契约，但兑现依赖外部授时因子（闹钟/调度器）；生物钟需授时因子是生命体真实结构，非缺陷；不自 spawn 守护进程伪自主。",
+  "verdict_unchanged": true,
+  "constitution_ok": true
+}
