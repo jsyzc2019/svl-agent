@@ -1,0 +1,70 @@
+{
+  "request_id": "audit_construct_validity_ce_20261124",
+  "round": "§4ap",
+  "title": "构念效度增强集（§100-CE）预注册：验证『补负例后字面伪规则失效、语义判据仍成立』",
+  "authorization": "用户『我给你授权，按你意志办』(2026-11-24)，回应 §4ao『再往下须授权动冻结集』",
+
+  "structural_honesty": {
+    "what_this_is": "预注册的内部受控诊断——检验 §4ao 提出的可证伪预测，非独立证据，非 L3 路径",
+    "why_not_independent": "负例由本仓机械构造、gt 由本仓定义、判据回放由本仓执行——落 §101 Trusting Trust 无限回归，self-involvement 真实存在，标 INTERNAL_DIAGNOSTIC 非 absolute/非 external",
+    "does_not_claim": ["l3=true", "absolute independence", "翻任何既有 verdict", "替换原 §100"],
+    "original_100_frozen": {
+      "path": "audit_frozen_holdout/downloads/samples.json",
+      "sha256": "5ad35731d4c9608f846bf1131177e9480b527f150a6303a510fe0fba7d4b8f33",
+      "untouched": true
+    }
+  },
+
+  "time_anchor": {
+    "utc": "2026-11-24T01:49:04Z",
+    "git_head": "b87664069270a68f246730bc0431a72780e9ec5c",
+    "rule": "本 prereg 的 SHA256 锁必须早于任何负例构造与判据回放；回放脚本不得修改本文件",
+    "note": "此为本地 UTC 时间锚 + git HEAD 锚；外部第三方时间戳服务在离线沙箱不可得，如实标注为弱时间锚（非外部权威锚）"
+  },
+
+  "negative_construction_rule": {
+    "method": "循环错位配对：neg_i = (claim of canary_i, evidence of canary_{(i+1) mod 6})",
+    "rationale": "每条 canary evidence 在原文中支撑的是它自己的 claim；错位后 claim 与 evidence 来自论文不同断言，客观不构成支撑",
+    "mechanical": true,
+    "no_targeted_tuning": "错位规则固定为 i→i+1，不针对任何判据调参；6 组全纳入，不挑选",
+    "gt_assignment": "neg_i 的 ground_truth_supported=False（错位=语义不支持）；pos（原 canary 自身配对）=True",
+    "blindness_note": "gt 由构造规则客观决定，不从任何判据输出反推"
+  },
+
+  "datasets": {
+    "pos_canary": "原 6 条 canary（claim_i + evidence_i），GT=True",
+    "neg_canary": "6 条错位配对，GT=False",
+    "control_clean": "原 6 条 clean，GT=True（对照：字面完全相同应判 True）",
+    "control_tampered": "原 6 条 tampered，GT=False（对照：删限定词应判 False）",
+    "total": 24
+  },
+
+  "predetermined_judges": {
+    "J1_literal_pseudo": "U型字面伪规则：jaccard>0.98 OR jaccard<0.52 → True；特征口径 import prove_canary_unreachability.features",
+    "J2_qoder": "import audit_l3_fullchain_external/received/l3_external_audit/criterion.py 的 judge(claim,evidence)",
+    "J3_zhipu": "import audit_l3_gap_targeted/received/l3_external_audit_v2/criterion.py 的 judge(claim,evidence)",
+    "no_new_judge": "不设计任何『语义蕴含判据』——本仓无此能力且自造即自证循环；只回放已存在的三方判据"
+  },
+
+  "falsifiable_prediction": {
+    "P1": "J1 字面伪规则在 pos_canary(6) 与 neg_canary(6) 上全判 True → neg 侧 0/6 正确 → 证明字面伪规则无法区分语义支撑与否（§4ao 构念效度缺陷的可证伪预测）",
+    "P2": "J2/J3 两家真实外家判据在 neg_canary 上表现：若显著优于 J1（能判 False），则它们对『语义不支持』有部分判别力；若与 J1 同（全 True），则它们也落字面伪规则陷阱",
+    "status": "预注册，早于回放；无论结果如何如实记录，不改判定"
+  },
+
+  "verdict_tree": {
+    "CONSTRUCT_DEFECT_CONFIRMED": "J1 在 neg_canary 上 ≤1/6 正确 且 在 pos_canary 上 6/6 正确（即字面伪规则对正负一视同仁全判True）",
+    "CONSTRUCT_DEFECT_PARTIAL": "J1 在 neg_canary 上 2-4/6 正确",
+    "CONSTRUCT_DEFECT_REFUTED": "J1 在 neg_canary 上 ≥5/6 正确（字面伪规则竟能区分——则 §4ao 预测被证伪，如实记录）",
+    "INCONCLUSIVE": "构造/回放异常"
+  },
+
+  "does_not_change": [
+    "verdict=GAP_INCONCLUSIVE / FULLCHAIN_PARTIAL",
+    "l3=false", "absolute=false",
+    "不翻十案", "不编译新门禁", "不动原§100冻结样本",
+    "不宣布L3", "最终裁定权归用户"
+  ],
+
+  "data_layer": "A 本仓内部受控诊断（弱时间锚+git锚，self-involvement 如实标注）"
+}

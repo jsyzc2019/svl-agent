@@ -564,3 +564,42 @@ def test_construct_validity_diagnosis_uses_authoritative_features_and_no_overtur
     res = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
     assert res["verdict"] == "GAP_INCONCLUSIVE"
     assert res["l3_claimed"] is False and res["absolute_claimed"] is False
+
+
+# ---------- §4ap 构念效度增强集 §100-CE（预注册内部诊断，不产生新判定） ----------
+def _load_ce():
+    import importlib.util
+    p = os.path.join(ROOT, "audit_construct_validity_ce", "replay.py")
+    sp = importlib.util.spec_from_file_location("ce_replay", p)
+    m = importlib.util.module_from_spec(sp)
+    sp.loader.exec_module(m)
+    return m
+
+
+def test_ce_prereg_lock_and_original_100_untouched():
+    """预注册锁一致 + 原§100未被改动（冻结纪律）。"""
+    rep = _load_ce().build_report()
+    assert rep["prereg_lock_ok"] is True
+    assert rep["prereg_lock"] == rep["prereg_actual"]
+    assert rep["original_100_untouched"] is True
+    assert rep["original_100_sha256_actual"].startswith("5ad35731")
+
+
+def test_ce_construct_defect_confirmed_and_no_overturn():
+    """J1字面伪规则neg侧0/6→构念效度缺陷确认；J3反向伪规则如实记录；不翻案。"""
+    rep = _load_ce().build_report()
+    r = rep["results"]
+    # P1 预测：J1 正例6/6、负例0/6 → 字面伪规则无法区分
+    assert r["J1_literal_pseudo"]["pos_canary"]["correct"] == 6
+    assert r["J1_literal_pseudo"]["neg_canary"]["correct"] == 0
+    assert rep["verdict"] == "CONSTRUCT_DEFECT_CONFIRMED"
+    # 意外发现如实记录：J3 在 neg 侧满贯（反向字面伪规则，非语义能力证据）
+    assert r["J3_zhipu"]["neg_canary"]["correct"] == 6
+    assert r["J3_zhipu"]["pos_canary"]["correct"] == 0
+    # 诊断不翻案、不触原集、不宣布L3
+    assert "不动原§100冻结样本" in rep["does_not_change"]
+    assert "l3=false" in rep["does_not_change"]
+    assert "不宣布L3" in rep["does_not_change"]
+    res = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE"
+    assert res["l3_claimed"] is False and res["absolute_claimed"] is False

@@ -4758,6 +4758,31 @@
       "evidence": "canary线四层根因链逐级前移,本轮效度层新探针三项全命中;未翻案/未动§100/未自封L3;专项34点全绿",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT69",
+      "kind": "reasoning_lesson",
+      "mechanism": "§4ap构念效度增强集§100-CE(用户授权动§100后的执行):判断直接改原§100=post-hoc污染21轮基准+自证循环(§101),故原集冻结(samples.sha256锁5ad35731回放前后一致)另建受控集;预注册prereg.json(SHA256锁4988673d,UTC锚01:49:04Z+git HEAD b876640,弱时间锚如实标注)固定机械负例规则neg_i=(claim_i,evidence_{i+1})6组全纳入不调参、gt由错位事实定不从判据反推、三判据J1字面伪规则/J2Qoder/J3智谱源码锁定;回放结果J1 pos6/6但neg0/6(字面伪规则补负例后彻底失效,P1预测成立→CONSTRUCT_DEFECT_CONFIRMED),J2正负各3/6近随机,J3智谱neg6/6而pos0/6=反向字面伪规则(非语义能力)。",
+      "trigger": "当已有诊断提出可证伪预测、且用户授权动冻结集、但直接改动会污染基准并落自证循环时",
+      "action": "用'原集冻结+另建受控增强集'+机械负例构造(错位固定规则不挑选)+预注册哈希锁+外部/git时间锚,把理论诊断升级为受控实证;同时前置诚实声明self-involvement(本仓造负例定gt回放)与弱时间锚,标INTERNAL_DIAGNOSTIC非独立证据非L3路径。关键收获:补负例后字面伪规则neg0/6露馅=§4ao构念效度缺陷坐实;意外发现J3反向字面伪规则须如实记录不藏(它是J1方向调转非语义能力,与§4an同一补丁双端拉满互证两家都是字面策略)。verdict GAP_INCONCLUSIVE/l3/absolute全不动不翻十案不编译新门禁不宣布L3;可复现audit_construct_validity_ce/replay.py+专项2点。",
+      "timestamp": "2026-11-24T01:50:06Z",
+      "support": 1,
+      "evidence": "原100哈希前后一致5ad35731;prereg锁一致4988673d;J1 pos6/6neg0/6;J2 3/6v3/6;J3 pos0/6neg6/6;verdict CONSTRUCT_DEFECT_CONFIRMED;专项36点全绿;报告渲染3页",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META34",
+      "kind": "reasoning_lesson",
+      "mechanism": "方法论:用户给出宽泛授权('按你意志办')且上一轮自述'再往下须授权动冻结集'时,不应把授权直接等同于'照字面执行最激进动作'(直接改冻结样本),而应判断哪个动作既兑现授权意图又守纪律。本轮识别直接改§100=post-hoc污染+自证循环不可取,选择'原集冻结+另建受控增强集'的等价替代,既验证了构念效度预测又保护了21轮基准。",
+      "trigger": "当授权是宽泛的、且字面执行会违反本仓核心纪律(post-hoc/自证/污染基准)时",
+      "action": "三步:①识别授权的真实意图(推进L3缺口理解)而非字面动作(改文件);②找既不违纪律又能兑现意图的等价路径(另建受控集而非改原集);③把'为什么不照字面做'写进报告前置声明,让用户理解判断而非感觉被抗命。配套:任何受控实验都前置诚实声明self-involvement与时间锚强度(弱锚不冒充外部权威锚),意外结果(J3反向伪规则)如实记录不隐藏。与KB-META31(解释可证伪)/META32(真实对象A级)互补:M34讲授权与纪律冲突时的执行判断。",
+      "provenance": "CONSTRUCT_VALIDITY_CE_20261124.html第一节'为什么建增强集而不是改原100'+前置诚实声明+KB-AUDIT69",
+      "timestamp": "2026-11-24T01:50:06Z",
+      "support": 1,
+      "evidence": "宽泛授权→识别字面执行违纪律→选等价合规路径→前置声明判断理由;原集零改动/verdict零改动/不宣布L3;专项36点全绿",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

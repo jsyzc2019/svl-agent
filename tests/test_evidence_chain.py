@@ -68,7 +68,9 @@ def test_audit_all_counts():
     # §115 解释者跨厂商交叉确认目录（受控轮不编译门禁）→ total 57→58，five_piece/三锁不变
     # L3 外家 Agent 全链外置验收目录（计划/契约+验收器，不编译门禁）→ total 58→59，five_piece/三锁不变
     # §L3-R2 缺口定向外置验收目录（契约+验收器+裁决引擎，不编译门禁）→ total 59→60，five_piece/三锁不变
-    assert a["total"] == 60
+    # §4ao prove_canary_construct_validity 诊断脚本归入 gap_targeted 目录未增审计目录
+    # §4ap 构念效度增强集 §100-CE 目录（预注册+回放器，内部受控诊断不编译门禁）→ total 60→61，five_piece/三锁不变
+    assert a["total"] == 61
     assert a["five_piece_complete"] == 34
     assert a["three_locks_intact"] == 31
     assert 0 < a["three_locks_intact"] <= a["total"]

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>§4ap 构念效度增强集 §100-CE 预注册诊断</title>
+<style>
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;max-width:980px;margin:40px auto;padding:0 24px;line-height:1.75;color:#1a1a1a;background:#fafafa}
+  h1{font-size:26px;border-bottom:3px solid #2c3e50;padding-bottom:12px}
+  h2{font-size:20px;margin-top:34px;border-left:5px solid #2980b9;padding-left:12px}
+  h3{font-size:16px;margin-top:22px;color:#34495e}
+  table{border-collapse:collapse;width:100%;margin:16px 0;background:#fff}
+  th,td{border:1px solid #d0d7de;padding:9px 12px;text-align:left;font-size:14px}
+  th{background:#eef3f8}
+  .honest{background:#fff4e5;border:1px solid #f0b429;border-left:5px solid #f0b429;padding:14px 18px;border-radius:6px;margin:18px 0}
+  .concl{background:#eaf5ea;border:1px solid #27ae60;border-left:5px solid #27ae60;padding:14px 18px;border-radius:6px;margin:18px 0}
+  .surprise{background:#eef2ff;border:1px solid #5b6ee1;border-left:5px solid #5b6ee1;padding:14px 18px;border-radius:6px;margin:18px 0}
+  .redline{background:#fdecea;border:1px solid #c0392b;border-left:5px solid #c0392b;padding:14px 18px;border-radius:6px;margin:18px 0}
+  code{background:#f0f2f5;padding:2px 6px;border-radius:4px;font-size:13px}
+  .small{font-size:13px;color:#666}
+  .ok{color:#c0392b;font-weight:bold}
+</style>
+</head>
+<body>
+
+<h1>§4ap 构念效度增强集 §100-CE —— 预注册内部诊断</h1>
+<p class="small">2026-11-24 · 用户授权"我给你授权，按你意志办" · 证据层 A（本仓内部受控诊断，弱时间锚+git锚） · 可复现 <code>audit_construct_validity_ce/replay.py</code></p>
+
+<div class="honest">
+<b>诚实声明（前置，最重要）</b>：这是<b>内部受控诊断</b>，不是独立证据，更不是 L3 路径。负例由本仓机械构造、gt 由本仓定义、判据回放由本仓执行——落入 §101 Trusting Trust 无限回归，self-involvement 真实存在。我<b>没有</b>直接修改原 §100（那会污染 21 轮回放基准且是 post-hoc 自证），而是原集完全冻结、另建增强集。时间锚为本地 UTC + git HEAD（离线沙箱无第三方权威时间戳），属<b>弱时间锚</b>。全程不改任何 verdict、不宣布 L3，最终裁定权在用户。
+</div>
+
+<h2>一、为什么建增强集，而不是改原 §100</h2>
+<p>§4ao 定位到 canary 的构念效度缺陷：三类标签全退化（canary 6/6 全 True），U 型字面伪规则 <code>jaccard&gt;0.98 OR &lt;0.52→True</code> 即可 18/18，冻结集无 canary 负例。修复的理论正解是"补负例"，但由本仓直接改原 §100 有两个致命问题：①原集哈希 <code>5ad35731…</code> 是 21 轮回放基准，改动即 post-hoc 污染；②本仓自标负例+自定 gt+自回放 = 自证循环。因此选择<b>原集冻结、另建受控增强集</b>，仅用于检验 §4ao 的可证伪预测。</p>
+
+<h2>二、预注册（早于回放，哈希锁定）</h2>
+<ul>
+  <li>时间锚：<code>2026-11-24T01:49:04Z</code>，git HEAD <code>b876640</code>；prereg SHA256 <code>4988673d…</code>，锁时间 <code>01:49:19Z</code> 晚于锚，顺序正确；</li>
+  <li>负例构造<b>机械规则</b>：循环错位 <code>neg_i = (claim_i, evidence_{i+1 mod 6})</code>，固定 i→i+1、6 组全纳入、不挑选、不针对任何判据调参；</li>
+  <li>gt 由错位客观事实定（错位=语义不支持→False；原配对=True），<b>不从判据输出反推</b>；</li>
+  <li>三个判据预注册锁定：J1 字面伪规则（阈值沿用 §4al 公开值）、J2 Qoder 真实判据源码、J3 智谱真实判据源码；不新造"语义蕴含判据"（自造即自证）。</li>
+</ul>
+
+<h2>三、回放结果（预注册裁决树）</h2>
+<table>
+  <tr><th>判据</th><th>pos_canary (GT=True)</th><th>neg_canary (GT=False)</th><th>control_clean</th><th>control_tampered</th></tr>
+  <tr><td>J1 字面伪规则</td><td class="ok">6/6</td><td class="ok">0/6</td><td>6/6</td><td>6/6</td></tr>
+  <tr><td>J2 Qoder</td><td>3/6</td><td>3/6</td><td>6/6</td><td>2/6</td></tr>
+  <tr><td>J3 智谱</td><td>0/6</td><td class="ok">6/6</td><td>6/6</td><td>5/6</td></tr>
+</table>
+<p>错位负例的字面特征：jaccard 全部 <code>0.022–0.122</code>（仍低），所以 J1 对正负 canary <b>一视同仁全判 True</b>——负例侧 0/6，按其预注册阈值落 <code>CONSTRUCT_DEFECT_CONFIRMED</code>。</p>
+
+<div class="concl">
+<b>核心结论（P1 预测成立）</b>：字面伪规则在补入负例后<b>彻底失效</b>（neg 0/6），精确证实 §4ao 的可证伪预测——原 §100 上"18/18 满分"的伪规则，一旦有负例立刻露馅，其"通过"确非语义能力。这把 §4ao 的构念效度诊断从理论推断升级为受控实证。
+</div>
+
+<div class="surprise">
+<b>意外发现（如实记录，不藏）</b>：J3 智谱判据在 neg_canary 上 <b>6/6 全判 False</b>，而在 pos_canary 上 0/6——它像是一个<b>反向字面伪规则</b>（"字面不像→判 False"）。这<b>不是</b>语义能力证据：它只是把 J1 的伪规则方向调转，同样无法真正理解语义支撑。J2 Qoder 正负各 3/6，近似随机。这提示：两家真实外家判据在 canary 维度上都是<b>字面策略的不同方向</b>，没有一家实现跨句语义蕴含判断——与 §4an"同一补丁双端拉满"的结论互相印证。
+</div>
+
+<h2>四、边界与纪律</h2>
+<div class="redline">
+<b>红线（全部守住）</b>：原 §100 <code>samples.sha256</code> 回放前后均 <code>5ad35731…</code>（脚本内校验 <code>original_100_untouched=true</code>）；verdict 保持 <code>GAP_INCONCLUSIVE</code>/<code>FULLCHAIN_PARTIAL</code>；<code>l3=false</code>、<code>absolute=false</code>；不翻十案、不编译新门禁、不宣布 L3、最终裁定权在用户。self-involvement 与弱时间锚已在前置声明披露——本结果<b>仅供内部诊断参考，不构成独立证据</b>。
+</div>
+
+<h2>五、验收</h2>
+<ul>
+  <li>专项测试 +2（共 <b>36 点全绿</b>）：预注册锁一致 + 原集未动；构念效度缺陷确认 + J3 反向伪规则如实记录 + 不翻案断言。</li>
+  <li>全量测试通过；零密钥入仓；hosts/askpass 零残留。</li>
+  <li>可复现：<code>python3.11 audit_construct_validity_ce/replay.py</code>（脚本运行时校验 prereg 哈希锁）。</li>
+</ul>
+
+<p class="small">证据分层：A 本仓内部受控诊断（弱时间锚，self-involvement 标注）｜ 本报告所有数字来自机械回放，解读层（J3反向伪规则）为明确标注的判断，数据与判断分离。</p>
+
+</body>
+</html>
