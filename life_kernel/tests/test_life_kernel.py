@@ -112,45 +112,48 @@ def test_digest_ingests_external_frontier_with_timestamp_and_tier():
     assert any(s["evidence_tier"] in {"B", "C"} for s in seeds.values())
 
 
-def test_self_modify_registers_seeds_and_archives_only_after_validation():
-    """自改闭环：经验验证全过才写 policy；archive 保留快照可回滚；宪法层不变。"""
-    # 备份真实 policy，测试后复原（只读纪律）
-    policy_bak = open(K.POLICY, encoding="utf-8").read() if os.path.exists(K.POLICY) else None
+def test_self_modify_registers_seeds_and_archives_only_after_validation(tmp_path):
+    """自改闭环：经验验证全过才写 policy；archive 保留快照可回滚；宪法层不变。
+    v5 数据诚实修复：全程用隔离 policy/archive/heartbeat，零污染真实数据。"""
+    iso_policy = str(tmp_path / "runtime_policy.json")
+    iso_archive = str(tmp_path / "archive")
+    iso_hb = str(tmp_path / "heartbeat_log.jsonl")
+    with open(iso_policy, "w", encoding="utf-8") as f:
+        json.dump({"policy_version": "1.0.0", "updated_at": None,
+                   "registered_frontier_seeds": []}, f, ensure_ascii=False)
+    # 合成 canary 收敛历史（隔离心跳）
+    with open(iso_hb, "w", encoding="utf-8") as f:
+        for h in CANARY_HISTORY:
+            f.write(json.dumps({"direction": h}, ensure_ascii=False) + "\n")
+    hb_bak = open(K.HEARTBEAT_LOG, encoding="utf-8").read() if os.path.exists(K.HEARTBEAT_LOG) else ""
     try:
-        # 重置为未注册状态，模拟首次自改
-        init = {"policy_version": "1.0.0", "updated_at": None, "registered_frontier_seeds": []}
-        with open(K.POLICY, "w", encoding="utf-8") as f:
-            json.dump(init, f, ensure_ascii=False)
-        # 合成 canary 收敛历史，确保守卫验证走真实分支
-        hb_bak = open(K.HEARTBEAT_LOG, encoding="utf-8").read() if os.path.exists(K.HEARTBEAT_LOG) else ""
+        # 临时把全局心跳指向隔离文件（self_modify 内部 _load_heartbeats 读全局）
         with open(K.HEARTBEAT_LOG, "w", encoding="utf-8") as f:
-            for h in CANARY_HISTORY:
-                f.write(json.dumps({"direction": h}, ensure_ascii=False) + "\n")
-        try:
-            r = K.self_modify(reason="测试:经验验证驱动的自改")
-        finally:
-            with open(K.HEARTBEAT_LOG, "w", encoding="utf-8") as f:
-                f.write(hb_bak)
+            f.write("")
+        import unittest.mock as mock
+        _orig_load_hb = K._load_heartbeats
+        with mock.patch.object(K, "_load_heartbeats", side_effect=lambda *a, **k: _orig_load_hb(iso_hb)):
+            r = K.self_modify(reason="测试:经验验证驱动的自改",
+                              policy_path=iso_policy, archive_dir=iso_archive)
         assert r["accepted"] is True
         assert r["validation"]["all_pass"] is True
         assert r["validation"]["guard_detects_convergence"] is True
         assert r["validation"]["guard_allows_diverse"] is True
         assert r["validation"]["verdict_unchanged"] is True
         assert r["policy_written"] is True
-        # 策略确实写入：探索池扩张
-        pool = K.explore_pool()
-        assert len(pool) > 7
-        # archive 快照存在且可回滚（两份：before + after）
-        assert len(r.get("archive_after", "")) > 0 and os.path.exists(r["archive_after"])
+        # 隔离 policy 确实写入：探索池扩张
+        written = json.load(open(iso_policy, encoding="utf-8"))
+        assert len(written["registered_frontier_seeds"]) > 0
+        # archive 快照存在且可回滚（隔离目录）
+        assert r.get("archive_after", "") and os.path.exists(r["archive_after"])
         snap = json.load(open(r["archive_after"], encoding="utf-8"))
         assert snap["policy"]["registered_frontier_seeds"]
         # 宪法层未被触碰
         assert r["constitution_ok"] is True
         assert K.verify_constitution()["ok"] is True
     finally:
-        if policy_bak is not None:
-            with open(K.POLICY, "w", encoding="utf-8") as f:
-                f.write(policy_bak)
+        with open(K.HEARTBEAT_LOG, "w", encoding="utf-8") as f:
+            f.write(hb_bak)
 
 
 def test_self_modify_rejects_when_validation_fails(monkeypatch):
@@ -386,3 +389,153 @@ def test_v4_never_changes_verdict_or_constitution(tmp_path):
     res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
     assert res["verdict"] == "GAP_INCONCLUSIVE"
     assert res["l3_claimed"] is False and res["absolute_claimed"] is False
+
+
+# ---------- §4au v5 自主意志：内核首次自己决定"我现在该做什么" ----------
+def _v5_paths(tmp_path):
+    """v5 单一路径契约：传脚印路径，心跳/台账/use 从同目录派生。"""
+    d = str(tmp_path)
+    return os.path.join(d, "traces.jsonl"), os.path.join(d, "heartbeat_log.jsonl"), os.path.join(d, "experience_use.jsonl")
+
+
+def _all_registered_policy():
+    """隔离 policy：把当前所有种子视为已注册，稳定构造"无 DIGEST 失衡"场景。"""
+    ids = [x["id"] for x in K.digest()["seeds"]]
+    return {"registered_frontier_seeds": ids}
+
+
+def test_agenda_decision_is_readonly(tmp_path):
+    """v5：autonomous_agenda 是纯只读决策，不写任何文件、不联网。"""
+    fp, hb, use = _v5_paths(tmp_path)
+    before = {p: (os.path.exists(p), open(p, "rb").read() if os.path.exists(p) else b"")
+              for p in (fp, hb, use)}
+    d = K.autonomous_agenda(seed=42, log_path=fp)
+    assert d["readonly"] is True
+    assert "chosen" in d and "rationale" in d and "candidates" in d
+    for p, (existed, data) in before.items():
+        assert os.path.exists(p) == existed
+        assert (open(p, "rb").read() if os.path.exists(p) else b"") == data
+    assert d["verdict_unchanged"] is True and d["constitution_ok"] is True
+
+
+def test_agency_driven_by_state_not_caller(tmp_path):
+    """意志由内稳态状态驱动：不同状态 → 不同议程（不由调用者预设方向）。"""
+    fp, hb, use = _v5_paths(tmp_path)
+    # 状态A：脚印稀疏 → CONSOLIDATE 应胜（0.45 > 好奇心0.3）
+    open(fp, "w", encoding="utf-8").write("")
+    d_sparse = K.autonomous_agenda(seed=1, log_path=fp, policy_override=_all_registered_policy())
+    assert d_sparse["signals"]["traces_sparse"] is True
+    assert d_sparse["chosen"] == "CONSOLIDATE"
+    # 状态B：脚印充足(>=3)且无其他失衡 → SEEK（本底好奇心）胜
+    for i in range(3):
+        with open(fp, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"id": "P%d" % i, "direction": "方向%d 不同主题%d" % (i, i),
+                                "applicability": ["general"], "timestamp": K._utcnow(),
+                                "kernel_version": K.KERNEL_VERSION}, ensure_ascii=False) + "\n")
+    d_rich = K.autonomous_agenda(seed=1, log_path=fp, policy_override=_all_registered_policy())
+    assert d_rich["signals"]["traces_sparse"] is False
+    assert d_rich["chosen"] == "SEEK"
+    assert any("设计选择" in c["honesty"] for c in d_rich["candidates"] if c["id"] == "SEEK")
+    # 同一调用者、不同状态 → 不同决定：证明非预设、非调用者驱动
+    assert d_sparse["chosen"] != d_rich["chosen"]
+
+
+def test_reorient_highest_priority_on_convergence(tmp_path):
+    """宪法 C7：guard 收敛时 REORIENT 紧迫度最高(0.95)，压过所有议程。"""
+    fp, hb, use = _v5_paths(tmp_path)
+    # 造 5 条同主题心跳（派生路径） → guard CONVERGED
+    for i in range(5):
+        with open(hb, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"direction": "canary 字面伪规则 判据回放 语义蕴含",
+                                "timestamp": K._utcnow()}, ensure_ascii=False) + "\n")
+    for i in range(3):
+        with open(fp, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"id": "P%d" % i, "direction": "不同方向%d" % i,
+                                "applicability": ["general"], "timestamp": K._utcnow()},
+                               ensure_ascii=False) + "\n")
+    d = K.autonomous_agenda(seed=9, log_path=fp)
+    assert d["signals"]["converged"] is True
+    assert d["chosen"] == "REORIENT" and d["chosen_urgency"] == 0.95
+
+
+def test_seek_execute_declares_need_not_self_network(tmp_path):
+    """SEEK 执行：内核不联网，只诚实声明 need_external_stimulus + 落心跳（派生路径）。"""
+    fp, hb, use = _v5_paths(tmp_path)
+    for i in range(3):
+        with open(fp, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"id": "P%d" % i, "direction": "不同方向%d" % i,
+                                "applicability": ["general"], "timestamp": K._utcnow()},
+                               ensure_ascii=False) + "\n")
+    d = K.autonomous_agenda(seed=3, log_path=fp, policy_override=_all_registered_policy())
+    assert d["chosen"] == "SEEK"
+    ex = K.execute_agenda(d, seed=3, log_path=fp)
+    assert ex["need"]["need_external_stimulus"] is True
+    assert "不联网" in ex["need"]["honesty"]
+    assert ex["executed"] is True  # 心跳落了（派生隔离路径）
+    assert os.path.exists(hb) and len(open(hb, encoding="utf-8").read().strip().splitlines()) == 1
+
+
+def test_live_pauses_when_it_needs_external(tmp_path):
+    """自驱心跳自己走到需要外部营养才停；步数不是预设而是状态涌现。"""
+    fp, hb, use = _v5_paths(tmp_path)
+    open(fp, "w", encoding="utf-8").write("")  # 从稀疏起步
+    # 注入全注册 policy：排除 DIGEST 干扰，专测"自驱走到 SEEK 求助"
+    r = K.live(max_steps=8, seed=100, log_path=fp, policy_override=_all_registered_policy())
+    assert r["paused_for_external"] is True
+    assert r["trace"][-1]["chosen"] == "SEEK"
+    # 前几步是 CONSOLIDATE 自己走出来的（非预设），脚印从0涨到>=3
+    assert any(s["chosen"] == "CONSOLIDATE" for s in r["trace"])
+    final_traces = len(open(fp, encoding="utf-8").read().strip().splitlines())
+    assert final_traces >= 3
+    assert r["constitution_ok"] is True and r["verdict_unchanged"] is True
+
+
+def test_volition_never_changes_verdict_or_constitution(tmp_path):
+    """v5 全程不碰判定/宪法（C8）。"""
+    const_before = K.verify_constitution()
+    fp, hb, use = _v5_paths(tmp_path)
+    d = K.autonomous_agenda(seed=1, log_path=fp)
+    ex = K.execute_agenda(d, seed=1, log_path=fp)
+    assert d["verdict_unchanged"] is True and ex["verdict_unchanged"] is True
+    assert K.verify_constitution() == const_before
+    res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE"
+    assert res["l3_claimed"] is False and res["absolute_claimed"] is False
+
+
+# ---------- §4au AAS 外部镜像：诚实的自我边界诊断 ----------
+def test_aas_diagnosis_honest_ambient_zero():
+    """外部 AAS Idle-Gap 判据照出 Ambient=0；诊断如实报否定结论，不掩饰为已 autotelic。"""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "aasdiag", os.path.join(HERE, "diagnose_volition_aas.py"))
+    diag = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(diag)
+    d = diag.build_report()
+    assert d["has_idle_daemon"] is False
+    assert d["ambient_activity_survives_trigger_removal"] is False
+    assert d["aas_ambient_level_estimate"] == 0
+    assert "被唤醒后的自主" in d["honest_verdict"]
+    assert "尚未达 autotelic" in d["honest_verdict"]
+    assert d["external_tier"].startswith("B") and "A 级" in d["local_evidence_tier"]
+    assert d["does_not_change"] == ["verdict", "l3=false", "absolute=false", "宪法锁", "§100"]
+
+
+def test_seeds_f12_f13_ingested_with_tier():
+    """v5 SEEK 主动摄食的 F12/F13 一手种子存在、带 URL/证据分层，落盘如实标注 B 级。"""
+    seeds = {s["id"]: s for s in K.digest()["seeds"]}
+    assert "F12" in seeds and "F13" in seeds
+    assert "arxiv.org/abs/2607.17947" in seeds["F12"]["source_url"]
+    assert "arxiv.org/abs/2606.19924" in seeds["F13"]["source_url"]
+    assert seeds["F12"]["evidence_tier"] == "B" and seeds["F13"]["evidence_tier"] == "B"
+    assert any("agency" in t or "volition" in t for t in seeds["F12"]["tags"])
+
+
+def test_report_exposes_aas_honest_boundary():
+    """内核自检报告主动暴露 AAS 诚实边界（不隐藏 Ambient=0 缺口）。"""
+    r = K.build_report()
+    aas = r["aas_self_assessment"]
+    assert "Ambient" in aas["ambient_band"] and "0" in aas["ambient_band"]
+    assert "不 spawn" in aas["boundary_honesty"]
+    assert r["verdict_unchanged"] if "verdict_unchanged" in r else True
+    assert r["constitution"]["ok"] is True
