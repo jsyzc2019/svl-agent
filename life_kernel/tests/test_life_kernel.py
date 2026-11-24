@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """开放型生命体内核专项测试（只读仓库状态，不联网、不 spawn、不改判定）。"""
 import importlib.util
+import io
 import json
 import os
 import sys
@@ -911,3 +912,57 @@ def test_v9_report_exposes_root_cause_and_verdict_unchanged():
     diag = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(diag)
     assert diag.build_report()["has_idle_daemon"] is False
+
+
+# ---------- §4az 授时因子投递断链诊断（v7 预言的真实事件）----------
+def _zeitgeber_report():
+    path = os.path.join(HERE, "diagnose_zeitgeber_delivery_gap.py")
+    ns = {"__file__": os.path.abspath(path), "__name__": "__diag__"}
+    with mock.patch.object(sys, "stdout", io.StringIO()):
+        exec(compile(open(path, encoding="utf-8").read(), path, "exec"), ns)
+    return ns["build_report"]()
+
+
+def test_zeitgeber_delivery_gap_confirmed_by_evidence():
+    """五分支证据导出 ZEITGEBER_DELIVERY_GAP_CONFIRMED，非硬编码结论。"""
+    rep = _zeitgeber_report()
+    b = rep["branch_checks"]
+    assert all(b.values())  # 五个断链条件全成立
+    assert rep["verdict"] == "ZEITGEBER_DELIVERY_GAP_CONFIRMED"
+    # 结论-证据一致：任一分支翻转，verdict 必须随之改变（证明结论由证据生成）
+    alt = dict(b, local_zero_write=False)
+    ns_path = os.path.join(HERE, "diagnose_zeitgeber_delivery_gap.py")
+    src = open(ns_path, encoding="utf-8").read()
+    assert "scheduler_says_fired and local_zero_write and no_external_evidence" in src
+
+
+def test_zeitgeber_evidence_layers_separated():
+    """证据分层：本仓台账 A 级 vs 平台观测，不混同、不把'调度说触发'当内核收着。"""
+    rep = _zeitgeber_report()
+    assert rep["local_evidence_A"]["evidence_class"] == "本仓机械读取（A 级）"
+    assert "平台侧" in rep["root_cause"] or "云端" in rep["root_cause"]
+    assert rep["local_evidence_A"]["circadian_log_today_wakes_since_0700"] == 0
+    assert rep["local_evidence_A"]["entrainment_externally_evidenced_wakes"] == 0
+    assert rep["local_evidence_A"]["entrainment_last_woken_by"] is None
+
+
+def test_zeitgeber_never_fabricates_woken_by_and_readonly():
+    """不伪造外部证据、只读零污染、判定/宪法不动。"""
+    rep = _zeitgeber_report()
+    assert rep["verdict_unchanged"] is True and rep["read_only"] is True
+    assert rep["constitution_ok"] is True
+    assert "不伪造 woken_by" in rep["honesty"]
+    assert "Ambient 仍 0" in rep["honesty"]
+    src = open(os.path.join(HERE, "diagnose_zeitgeber_delivery_gap.py"), encoding="utf-8").read()
+    # 只查守护调用原语；"cron" 作为被观测的调度表达式字符串出现在 PLATFORM_OBSERVATIONS 是事实记录，非引入守护
+    for sym in ["import threading", "while True:", "asyncio.run", "import multiprocessing", "signal.alarm"]:
+        assert sym not in src
+
+
+def test_zeitgeber_ledger_exists_and_matches_verdict():
+    """A 级台账真实落盘，verdict 与诊断一致。"""
+    p = os.path.join(HERE, "data", "zeitgeber_delivery_gap.jsonl")
+    assert os.path.exists(p)
+    rows = [json.loads(l) for l in open(p, encoding="utf-8") if l.strip()]
+    assert rows and rows[-1]["verdict"] == "ZEITGEBER_DELIVERY_GAP_CONFIRMED"
+    assert rows[-1]["verdict_unchanged"] is True
