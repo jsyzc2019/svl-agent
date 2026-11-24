@@ -275,3 +275,61 @@ def test_retrospective_html_is_data_driven_and_clean():
     # 六类失败模式分类学完整
     for kw in ("样本特异性", "脚手架依赖", "厂商", "判据可见面", "任务异质性", "无限回归"):
         assert kw in html, f"复盘缺失败模式: {kw}"
+
+
+# ---------- §L3 外部前沿交叉印证（诊断性陈述，不产生新判定） ----------
+
+def test_two_halves_mapping_reproducible_and_mirrored():
+    """外部前沿交叉印证脚本可复现：两家判据静态特征镜像互补，canary 三簇分离。"""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "mapping", os.path.join(BASE, "analyze_two_halves_mapping.py"))
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    q = m.static_features(m.QODER)
+    z = m.static_features(m.ZHIPU)
+    # Qoder: 数值解析 + 限定词表，无全局多重集
+    assert q["has_numeric_parse"] is True
+    assert q["has_neg_conn_sets"] is False
+    assert q["lines"] == 159
+    # 智谱: 三层词类 + 全局多重集，无数值解析
+    assert z["has_numeric_parse"] is False
+    assert z["has_global_multiset"] is True
+    assert z["has_neg_conn_sets"] is True
+    assert z["lines"] == 86
+    # canary 三簇分离（鸿沟 15）
+    sep = m.canary_separation()
+    assert sep["separated"] is True and sep["gap"] == 15
+    assert max(sep["tampered"]) < min(sep["canary"])
+
+
+def test_cross_validation_changes_no_verdict_and_keeps_discipline():
+    """两材料是外部佐证：不改判定，l3/absolute 仍 false，A 级回放数字不变。"""
+    r2 = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
+    assert r2["verdict"] == "GAP_INCONCLUSIVE"
+    assert r2["l3_claimed"] is False and r2["absolute_claimed"] is False
+    l3 = json.load(open(os.path.join(ROOT, "audit_l3_fullchain_external", "result.json"),
+                        encoding="utf-8"))
+    assert l3["verdict"] == "FULLCHAIN_PARTIAL"
+    assert l3["l3_claimed"] is False and l3["absolute_claimed"] is False
+    # A 级回放硬证据未动
+    mc = r2["mechanical_comparison"]
+    assert mc["assertion_family_detected"] == "4/4"
+    assert mc["by_variant"]["canary"] == "0/6"
+    assert mc["agreement"] == "11/18"
+
+
+def test_cross_validation_report_is_evidence_graded_and_clean():
+    """交叉印证报告存在、无占位符、证据分层标注齐、不翻案表述在场。"""
+    html = open(os.path.join(ROOT, "EXTERNAL_FRONTIER_CROSS_VALIDATION_20261124.html"),
+                encoding="utf-8").read()
+    assert "外部前沿交叉印证" in html
+    assert "<<<FILL>>>" not in html and "TODO" not in html
+    # 证据分层三档在场
+    for tag in ("evA", "evB", "evC"):
+        assert tag in html, f"报告缺证据等级标签: {tag}"
+    # 外部材料关键机制点在场
+    for kw in ("两半拼图", "claim ledger", "A community, not autonomy", "元信息引导", "49.4%"):
+        assert kw in html, f"报告缺关键机制点: {kw}"
+    # 纪律边界在场
+    assert "不翻案" in html and "l3=false" in html

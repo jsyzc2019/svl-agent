@@ -4629,6 +4629,32 @@
       "evidence": "canary content_diff min17 vs tampered max2鸿沟15;GLM官方'推理链越长Loop帮助越大/输出token降10-14%';Inkling N-Hop收益延续到训练未见10遍;verdict仍GAP_INCONCLUSIVE l3仍false",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT64",
+      "kind": "reasoning_lesson",
+      "mechanism": "外部前沿SLAN(同济/复旦ESWA2026,时序人公众号C级转述)的'两半拼图'数学观察与本仓两家外家判据镜像互补形成能力层类比(B级非因果):线性注意力=遗忘门恒1无跳连的选择性SSM,Mamba有选择性遗忘无全局检索、线性注意力有全局检索无选择性遗忘,缺一不可(换成标准线性注意力ILI MSE1.711→2.465比换Mamba更差)。静态AST实证:Qoder159行数值解析器+23限定词表=选择性过滤路径无全局检索(数值2/2断言0/4canary3/6);智谱86行三层词类多重集=全局检索路径无选择性遗忘(断言4/4数值1/2canary0/6);两家各持一半都在canary栽,与canary三簇分离(clean0/tampered0-2/canary17-48鸿沟15)一致。SLAN元信息引导(三层模板把偏度/峰度/ADF/结构断点写文本喂冻结LLM,GPT-2够用)↔第⑤类任务异质性:解法方向是给判据注入'任务说明书'而非加词表(第④类),加词表只会让判据更忠实于错误任务框架。",
+      "trigger": "当两家强Agent判据镜像互补却都在同一维(canary)失败、需要架构层理解而非排高低时",
+      "action": "用第三方架构论文的两半拼图做解释性类比(标B级非因果):两家各持选择性过滤/全局检索一半,共同盲区=缺另一半+任务说明书缺失;借鉴解法方向=任务级先验注入而非扩词表。诊断归诊断不翻案:verdict仍GAP_INCONCLUSIVE/FULLCHAIN_PARTIAL,l3/absolute仍false;触§100或改判定需用户授权。可复现审计analyze_two_halves_mapping.py(AST提静态特征+复用canary诊断),修过一处检测器bug(智谱函数名_multiset_diff未被mdiff匹配误报false,改兼容multiset子串)。",
+      "provenance": "EXTERNAL_FRONTIER_CROSS_VALIDATION_20261124.html+audit_l3_gap_targeted/analyze_two_halves_mapping.py+tests/test_gap_targeted.py test_two_halves_mapping_reproducible",
+      "timestamp": "2026-11-24T00:49:03Z",
+      "support": 1,
+      "evidence": "Qoder lines159 numeric_parse=True global_multiset=False;智谱lines86 numeric_parse=False global_multiset=True neg_conn_sets=True;canary gap15 separated=True;报告headless渲染无乱码表格对齐",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META29",
+      "kind": "reasoning_lesson",
+      "mechanism": "alphaXiv'ASocietyofAIScientists'(2611.society-ai-scientists,2026-11-21提交,B级作者自报+观察性非随机):35实验室936Agent12周,与本仓纪律四重同构——①claim ledger(数值断言绑定artifact字段)≈本仓SHA256证据链;②执行审查>文本审查(文本审稿16缺陷稿只flag11/16修正稿仍flag10/16几乎分不清,276反对意见对数据实跑推翻156major中77条=49.4%)≈本仓只信源码盲评不采信自报(Qoder自报PARTIAL/智谱自报CONFIRMED回放同分11/18)+验收摘要必须实跑exit0生成;③公开发表前自纠(62中20自纠中位提前21.4h)+负面照发(8最高引3负面)≈本仓反Goodhart失败照报;④Acommunitynotautonomy(判断哪些问题值得追问的能力弱于研究能力,结果意义解读留给人)≈本仓执行做满裁定留人l3=false。局限必须标:优势全来自Lab1,Lab2-35与人类无显著差异,LLM文本打分非专家评审,不能证明L3可达或不可达。",
+      "trigger": "当大规模外部Agent实证结果出来、需要判断能否用来支撑本仓独立性结论时",
+      "action": "严格证据分层:作者自报观察性结论只做方向性外部佐证,不做本仓裁决依据(裁决只由A级实测支撑);提取可对照的机制实证(claim ledger/execution>text/自纠负面/not autonomy)与本仓纪律逐条对照,形成'三长两短'扬长表;警惕把单实验室/单维优势外推为系统能力(3CONFIRMED全单维全l3=false,一跨集就掉PARTIAL,与Lab1独大镜像)。核心收获=本仓独立走到的'源码盲评胜过自报/失败诚实胜过达标/裁定留人胜过自封'在936Agent12周实证里得方向一致呼应,可靠性来自不达标时的诚实。不因外部agent能做实验就抬高独立性结论(alphaXiv明确not autonomy反支持保守封顶)。",
+      "provenance": "EXTERNAL_FRONTIER_CROSS_VALIDATION_20261124.html第三节+alphaXiv官方页abs/2611.society-ai-scientists+tests/test_cross_validation_changes_no_verdict",
+      "timestamp": "2026-11-24T00:49:03Z",
+      "support": 1,
+      "evidence": "49.4%major结论被执行审查推翻;文本审查11/16vs10/16;20/62自纠中位21.4h;总体优势全来自Lab1;报告三长两短表完整l3=false表述4处",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

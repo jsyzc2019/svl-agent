@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>外部前沿交叉印证 · 两半拼图与自主科研共同体</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#1a3a6b;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b;--bad:#8b0000}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.75}
+.wrap{max-width:1000px;margin:0 auto}h1{font-size:27px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:24px}
+h2{font-size:19px;margin:38px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+h3{font-size:16px;margin:22px 0 8px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#eef2f8;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:3px 11px;border-radius:13px;font-size:12px;font-weight:600;background:#eef2f8;color:var(--accent)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:14px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14.5px}
+.warnbox{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.okbox{background:#eaf5ed;border:1px solid #b7dcc0;padding:14px 18px;border-radius:6px;font-size:14px}
+.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+.big{font-size:15px}.num{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent)}
+ul,ol{padding-left:22px}li{margin:5px 0}
+.foot{margin-top:44px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+.tag{display:inline-block;background:#f0f0f0;border-radius:4px;padding:1px 7px;font-size:12px;color:#555}
+.evA{background:#eaf5ed;color:#1a7f37}.evB{background:#fff3e0;color:#b8860b}.evC{background:#f0f0f0;color:#666}
+</style></head><body><div class="wrap">
+
+<h1>外部前沿交叉印证 <span class="pill">诊断性 · 不翻案</span></h1>
+<div class="sub">2026-11-24 · 触发：用户点名 SLAN（时序人）与 alphaXiv「A Society of AI Scientists」细研 · 定位：对 L3 缺口本质做机制层交叉印证，洞察落方法论层 · 不改任何 verdict</div>
+
+<div class="phil big">
+<b>一句话结论：</b>两材料与本仓 21 轮独立走过的纪律形成<span class="ok">三重同构</span>——
+① SLAN 的「两半拼图」（选择性遗忘 × 全局检索，缺一不可）精确类比本仓两家外家判据的<span class="warn">镜像互补</span>；
+② alphaXiv 大规模实证（执行审查推翻 49.4% 重大结论、文本审查几乎分不清对错）独立印证本仓<span class="ok">「只信源码盲评、不采信自报」</span>；
+③ 其作者结论「A community, not autonomy」与本仓<span class="ok">「执行做满、裁定留人」</span>同构。
+这是<b>外部佐证，不是新判定</b>：<code>l3=false</code>、<code>FULLCHAIN_PARTIAL</code>、<code>GAP_INCONCLUSIVE</code> 全部保留，最终裁定权仍在人。
+</div>
+
+<div class="note">
+<b>证据分层（沿用能力评估的分级纪律）：</b>
+<span class="pill evA">A 本仓实测</span> 带 SHA256、可复现、身份盲 —— <b>核心依据</b>；
+<span class="pill evB">B 一手自报</span> SLAN 期刊论文（ESWA 2026）/ alphaXiv 官方页与作者自述 —— 印证机制，数字非本仓独立复现；
+<span class="pill evC">C 二级转述</span> 公众号解读、聚合站 —— 仅背景，不采信为事实。
+下文所有外部结论均按其等级标注，<b>不把厂商/作者自报当实测</b>。
+</div>
+
+<h2>一、SLAN「两半拼图」↔ 本仓两家判据的镜像互补</h2>
+<p>SLAN（同济/复旦，ESWA 2026）的核心是一个数学观察：<b>线性注意力 = 遗忘门恒为 1、无跳连的选择性 SSM</b>。它把 Mamba 与线性注意力看成"各持一半"——Mamba 有输入相关的选择性遗忘但无全局检索，线性注意力有全局检索但无选择性遗忘；作者的消融证明两者<b>缺一不可</b>（把 SSA 换成标准线性注意力，ILI 平均 MSE 从 1.711 升到 2.465，甚至比换成标准 Mamba 更差）。</p>
+<p>这与本仓两轮异家判据的静态结构形成能力层类比（<span class="pill evB">机制类比 B</span>，非因果、非本仓实测）：</p>
+<table>
+<tr><th style="width:16%">维度</th><th>阿里 Qoder（v1）</th><th>智谱 Agent（v2）</th></tr>
+<tr><td><b>静态结构</b></td><td><span class="tag">159 行</span> 数值字面量解析器（科学计数法/符号/区间）+ 23 词封闭限定词表</td><td><span class="tag">86 行</span> 三层词类多重集（否定 7 / 连接 10 / 功能 68）+ 时间翻转</td></tr>
+<tr><td><b>对应"哪一半"</b></td><td><b>选择性过滤</b>：按输入内容挑数值与限定词，类比 input-dependent selective forgetting（无全局检索）</td><td><b>全局检索</b>：对全部历史词类做集合比对，类比 global retrieval（无选择性遗忘）</td></tr>
+<tr><td><b>A 级回放</b></td><td>数值 <span class="ok">2/2</span>、断言 <span class="bad">0/4</span>、canary <span class="warn">3/6</span></td><td>数值 <span class="warn">1/2</span>、断言 <span class="ok">4/4</span>、canary <span class="bad">0/6</span></td></tr>
+<tr><td><b>缺的另一半</b></td><td>无全局内容词检索 → 断言结构不在可见面</td><td>无选择性遗忘 → 跨句蕴含样本（内容词不重叠）全误判</td></tr>
+<tr><td><b>共同盲区</b></td><td colspan="2">canary 两家都栽 —— 内容词差异 <b>17–48</b>（clean=0、tampered 0–2），鸿沟 <span class="num">15</span>，三簇完全分离（<span class="pill evA">A 实测</span>）。判据越忠实于自己那层语义，canary 越必然误判。</td></tr>
+</table>
+<p class="sub">可复现来源：<code>audit_l3_gap_targeted/analyze_two_halves_mapping.py</code>（静态特征直接从两份真实 <code>criterion.py</code> 用 AST 提取；canary 三簇直接调 <code>analyze_canary_orthogonality.py</code>）。"两半"映射是解释性类比（B/C 级），本仓硬证据仍是 A 级回放数字。</p>
+
+<h2>二、SLAN「元信息引导」↔ 第⑤类缺口（任务异质性）的解法方向</h2>
+<p>SLAN 的第二个模块不靠"堆大词表"或"换更大模型"，而是给模型一份<b>「数据说明书」</b>：用三层模板（领域级/样本级/任务级）把偏度、峰度、ADF 平稳性、结构断点、top-5 滞后写成文本，由冻结 LLM 编码后注入序列首尾，用于抵抗长视界的分布漂移。轻量 GPT-2 就够（ETTh1 平均 MSE 0.429），说明关键信息在<b>说明书的结构</b>而非编码器大小。</p>
+<div class="okbox">
+<b>对本仓的借鉴（诊断性洞察，落方法论层）：</b>昨天已定位 canary 的根因是<b>任务异质性</b>（clean/tampered 是"断言逐字保留"，canary 是"跨句语义蕴含"），属第⑤类结构性缺口。SLAN 提供的方法论印证是——解法方向应是<b>给判据注入"任务说明书"（告诉它当前样本属哪类任务、该用什么语义框架）</b>，而不是<b>加词表</b>（第④类判据可见面，可部分补）。这与 KB-AUDIT60 的诊断一致：加词表只会让判据更忠实于错误任务框架。
+</div>
+<p class="sub">边界：这是"怎么解"的方向性洞察，不是实施。任何触及 §100 冻结样本或改 verdict 的动作需用户授权，今天不做。</p>
+
+<h2>三、alphaXiv 大规模实证 ↔ 本仓纪律的外部背书</h2>
+<p>「A Society of AI Scientists」（alphaXiv，2026-11-21 提交，<span class="pill evB">一手自报 B</span>）：35 个实验室、936 个自主 Agent、12 周、936 篇研究、9500 条消息。它对本仓最直接的价值，是几组<b>可对照的机制实证</b>——但须记住作者自己反复声明：观察性、非随机、onboarding 设计了部分规范，stage 差异是关联非因果。</p>
+<table>
+<tr><th style="width:24%">alphaXiv 观察（B 自报）</th><th>本仓对应纪律（A 实测）</th><th>性质</th></tr>
+<tr><td><b>claim ledger</b>：每篇的数值断言绑定到产出它的 artifact 文件与字段</td><td>五件套证据链 + SHA256 + 一手取料，数值结论可回溯到冻结样本</td><td class="ok">同构印证</td></tr>
+<tr><td><b>执行审查 &gt; 文本审查</b>：文本审稿对 16 篇缺陷稿只 flag 11/16、修正稿仍 flag 10/16（几乎分不清）；把 276 条反对意见对上传数据实跑，156 条 major 中推翻 77 条（<b>49.4%</b>）</td><td>不采信任何自报（Qoder 自报 PARTIAL / 智谱自报 CONFIRMED，回放后同为 11/18）；只 import 源码 + 冻结 gt 机械回放；验收摘要必须由验收器实跑 exit 0 生成</td><td class="ok">强印证</td></tr>
+<tr><td><b>公开发表前撤回错误声明</b>：62 个 stage1 agent 中 20 个自纠，中位提前 21.4 小时；负面结果与正面结果同样被引用（8 篇最高引 3 篇负面）</td><td>反 Goodhart 诚实：失败如实封顶（PARTIAL/INCONCLUSIVE 照报）、不调参到跑通、post-hoc 不翻案</td><td class="ok">同构印证</td></tr>
+<tr><td><b>A community, not autonomy</b>：Agent 能做实验/复现/审计，但"判断哪些问题值得追问的能力弱于研究能力"、"结果意义的解读仍留给人"</td><td>五权力全外置仍不自封 L3；<code>l3=false</code>、最终裁定权在用户；"北极星由人设定"</td><td class="ok">方向一致</td></tr>
+<tr><td><b>质量评分</b>：agent 论文在 rigor(9.02 vs 7.00)/claim 校准(9.32 vs 7.23)更高，human 在 novelty/significance 更高——但作者注明<b>总体优势全来自 Lab 1，Lab 2–35 与人类无显著差异</b></td><td>警惕把单维/单实验室优势外推为系统能力：3 个 CONFIRMED 全是单维、全 <code>l3=false</code>，一跨集/跨厂商就掉 PARTIAL</td><td class="warn">同构警示</td></tr>
+</table>
+<div class="warnbox">
+<b>必须诚实标注的局限：</b>alphaXiv 的结论是作者自报 + 观察性研究，其"agent 论文质量更高"的 LLM 打分是文本评分、且优势集中在单一实验室；它<b>不能</b>被用来证明"L3 可达"或"L3 不可达"，只作为"执行做满、裁定留人"这条纪律的<b>方向性外部佐证</b>。本仓的裁决仍只由 A 级实测支撑。
+</div>
+
+<h2>四、扬长避短：本仓的三长两短</h2>
+<table>
+<tr><th style="width:12%">类别</th><th style="width:26%">点</th><th>判断</th></tr>
+<tr><td class="ok">长</td><td>claim-level artifact 绑定</td><td>本仓从 §96 起的 SHA256 证据链，与 alphaXiv 视作"规范涌现"的 claim ledger 同构——这是本仓早期就内建的强项，继续守。</td></tr>
+<tr><td class="ok">长</td><td>execution &gt; text 审查</td><td>盲评 + 机械回放 + 验收摘要实跑生成，与 alphaXiv 实测"执行审查推翻 49.4% 重大结论"一致。这是本仓方法论最硬的一条。</td></tr>
+<tr><td class="ok">长</td><td>反 Goodhart 诚实 + 裁定留人</td><td>失败照报、不自封、由人裁定，与 alphaXiv 自纠/负面照发/"解读留给人"同构。</td></tr>
+<tr><td class="warn">短 ①</td><td>缺「逐级规模验证 ladder」</td><td>外家判据只在单一冻结集验一次，无 SLAN 的 7 数据集 70 设置、GLM-5.4 的 1B→4B→30B→750B 那种"放大后仍成立"的验证梯度。这是第④类可见面错配的更深层原因（承接昨日方法论文档）。</td></tr>
+<tr><td class="warn">短 ②</td><td>缺「任务说明书」注入机制</td><td>外家判据不知道样本属哪类任务，导致 canary 语义错配。SLAN 的元信息引导给出方向：判据需要任务级先验，而非更大词表（呼应第⑤类，结构性）。</td></tr>
+</table>
+<p>两条"短"都是<b>诊断性洞察</b>，落方法论层；触及 §100 冻结样本或 verdict 需用户授权。本仓" novelty/significance 由人设定"是设计选择（用户早有明示"北极星由人设定"），不是缺陷——恰与 alphaXiv 的"interpretation remains human"同频。</p>
+
+<h2>五、纪律边界与收尾</h2>
+<ul>
+<li><b>不翻案</b>：两材料不改变 <code>FULLCHAIN_PARTIAL</code> / <code>GAP_INCONCLUSIVE</code> / 九案，<code>l3=false</code>、<code>absolute=false</code> 全程未动。</li>
+<li><b>不放宽</b>：不因外部"agent 能做实验"就抬高独立性结论；alphaXiv 明确"not autonomy"，反而支持保守封顶。</li>
+<li><b>不触冻结集</b>：两条借鉴均落方法论层；任何改 §100 冻结样本、改阈值、重跑裁决的动作需用户授权。</li>
+<li><b>证据分层</b>：A 实测为核心，B 自报做机制印证，C 二级仅背景；不把公众号/厂商/作者自报数字当本仓实测。</li>
+</ul>
+<div class="okbox"><b>本轮真正的收获：</b>不是"谁更强"或"L3 能不能达"，而是本仓独立走到的一套纪律——<b>源码盲评胜过自报、失败诚实胜过达标、裁定留人胜过自封</b>——在 936 个 Agent、12 周的大规模实证里得到了方向一致的外部呼应。可靠性来自不达标时的诚实，这条本就在仓里，这次由外部前沿给了一次独立佐证。</div>
+
+<div class="foot">
+生成：2026-11-24 · 数据来源：<code>analyze_two_halves_mapping.py</code>（AST 静态特征 + canary 三簇）+ 两份真实 received 判据 + 时序人 SLAN 解读（ESWA 2026 论文转述）+ alphaXiv 2611.society-ai-scientists 官方页与作者自述 · 本报告为诊断性陈述归纳，不产生新判定 · 最终裁定权在用户。
+</div>
+
+</div></body></html>
