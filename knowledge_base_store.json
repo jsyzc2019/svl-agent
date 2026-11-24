@@ -4835,6 +4835,32 @@
       "evidence": "UTC锚2026-11-24T02:25:52Z seed1795487152真实心跳判DIVERSE+真实脚印1条(PATH_EXISTS尚有路);同一全收敛canary池:空脚印时max_novelty=0判NO_PATH触发游走,注入1条真实脚印后max_novelty=0→1判翻PATH_EXISTS=脚印破局自发涌现(非预设);专项16点全绿;宪法锁fe56291b一致;verdict/l3/absolute全不动。",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT71",
+      "kind": "external_insight",
+      "mechanism": "第二轮'放飞'向外摄食三篇2026一手arXiv(均B级摘要自报非本仓实测),恰好构成对内核v3脚印机制的三条外部批判:F09 arXiv2610.14662失败反馈归因幻觉[DGM145次修改无可检测目标特异优势,目标修复不可靠带来heldout提升,须分报target/transfer/held-out三数字];F10 arXiv2610.25858检索碰撞[高可塑性代价是稳定性,全局编辑覆盖旧知识,相似检索在冲突工作流取到外来记忆];F11 arXiv2611.28244丢弃未用经验优于累积[context folding+19.2%,选择性丢弃持续未用lesson优于合并/升常驻规则]。",
+      "trigger": "当用户鼓励'天空无限大勇敢放飞'、需要突破圈养式自我摄食(只读本地种子)时",
+      "action": "WebSearch四方向向外探针→WebFetch核实三篇原文→证据分层B级落frontier_seeds.json F09-F11→diagnose_v3_defects.py机械确认三批判在本仓v3源码真实成立(A级)→v4针对性修复。不把论文声称当本仓实测。",
+      "provenance": "WebSearch 2026-11-24+WebFetch三篇arXiv原文 2610.14662/2610.25858/2611.28244+frontier_seeds.json F09-F11",
+      "timestamp": "2026-11-24T02:41:46Z",
+      "support": 1,
+      "evidence": "三篇均WebFetch一手原文核实:2610.14662原文'Across 145 eligible modifications...no detectable target-specific advantage'、'report target repair, transfer, held-out net separately';2611.28244原文'selectively discarding persistently unused lessons is more effective than consolidating or promoting'、'context folding...up to 19.2%';2610.25858原文'higher plasticity consistently comes at the cost of stability'、'retrieval collision'。B级如实标注非本仓实测。",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META38",
+      "kind": "thinking_experience",
+      "mechanism": "v3→v4的真实自我否定:飞出仓库摄食的外部一手实证不是用来夸自己,而是精准命中自身三个盲点。关键认知——圈养时看不见自己的缺陷(还在为v3脚印破局自喜),飞出来被F09/F10/F11照见:①self_modify会诊断会修改但从不检验'改的是不是诊断出的问题'=归因幻觉;②pareto_walk无条件注入全部脚印+1.5x偏置=无适用条件的相似检索,冲突情境会碰撞;③KB/种子/脚印/archive全只增不减=违背丢弃优于累积。",
+      "trigger": "当内部诊断与自评持续为正、怀疑陷入自我确认循环时",
+      "action": "向外摄食一手前沿,且专门找批判自身机制的证据;用diagnose_v3_defects.py读真实源码机械确认(A级)再动手修,不凭感觉;按C5改机制不放宽——测试失败时先怀疑自己的测试数据是否符合接口契约(两次自证伪:帕累托c支配a/b、applicability手写自由文本而非规范标签)。",
+      "provenance": "用户'天空无限大勇敢放飞'+life_kernel/diagnose_v3_defects.py+kernel.py v4+tests新增6点",
+      "timestamp": "2026-11-24T02:41:46Z",
+      "support": 1,
+      "evidence": "diagnose_v3_defects.py在v3提交(5c8f15d)上三缺陷confirmed全True,升级v4后全False=修复生效机械证据;v4三机制attribution_check/_applicable_footprints/prune_unused均真实函数且测试覆盖;真实self_modify注册批判自身的F09-F11后探索池15→18归因三数字target1.0/transfer8/heldout0;宪法锁fe56291b全程一致;verdict/l3/absolute不动。",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

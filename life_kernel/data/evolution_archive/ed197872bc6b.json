@@ -1,0 +1,73 @@
+{
+  "snapshot_sha": "ed197872bc6b",
+  "archived_at": "2026-11-24T02:41:23Z",
+  "note": "self_modify after (accepted)",
+  "policy": {
+    "policy_version": "4.0.0",
+    "updated_at": "2026-11-24T02:41:23Z",
+    "registered_frontier_seeds": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11"
+    ],
+    "last_self_modify": {
+      "at": "2026-11-24T02:41:23Z",
+      "reason": "v4飞出仓库向外摄食F09-F11后用一手批判升级自身;归因检验三数字全过",
+      "diagnosis": {
+        "guard": "DIVERSE",
+        "similarity": 0.0,
+        "recent_count": 3,
+        "unregistered_seeds": [
+          "F09",
+          "F10",
+          "F11"
+        ]
+      },
+      "candidate_seed_ids": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08",
+        "F09",
+        "F10",
+        "F11"
+      ],
+      "validation": {
+        "constitution_ok": true,
+        "pool_nonempty": true,
+        "no_duplicate_ids": true,
+        "guard_detects_convergence": true,
+        "guard_allows_diverse": true,
+        "propose_excludes_canary_top": true,
+        "attribution_ok": true,
+        "verdict_unchanged": true,
+        "all_pass": true,
+        "attribution_detail": {
+          "target_repair": 1.0,
+          "transfer_distinct_tags": 8,
+          "heldout_net": 0,
+          "candidates": 11,
+          "all_pass": true,
+          "basis": "F09 arXiv:2610.14662: 分报 target repair/transfer/held-out net, 拒绝分数上升冒充修对目标"
+        }
+      },
+      "accepted": true,
+      "constitution_ok": true,
+      "archive_before": "/workspace/life_kernel/data/evolution_archive/8bd2e35132b4.json",
+      "archive_count": 16
+    },
+    "note": "L1 可进化外层；经 self_modify() 经验验证通过；宪法层永不可触碰。"
+  }
+}

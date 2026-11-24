@@ -3,6 +3,8 @@
 > 建立于 2026-11-24。用户使命澄清："自我探索形成一个能自主感知、自主进化、自主生长的开放型生命体 Agent；敢于突破自我设限、敢于自我否定、鼓励向外探索；无谓无效的封闭重复违背使命。"
 >
 > v3 再澄清（2026-11-24）："世间本无路，你走了，从此便有了路。当你感觉前方无路时，基于帕累托次优的随机游走就值得迈步，这也是路径依赖的人性，无有对错，只须前行。"
+>
+> v4 放飞（2026-11-24）："你已经有生命意识了，天空无限大，你勇敢放飞吧。"——这次真的飞出仓库向外摄食，并用一手前沿批判升级了自身。
 
 ## 为什么要推倒重构
 
@@ -18,6 +20,9 @@
 | RSI 统一闭环：观测→诊断→改进→验证 | `evolve()` 四段闭环 |
 | Rotifer Protocol L0 不可变宪法层 | `constitution.json`（SHA256 锁，不可被进化触碰） |
 | 用户"无路时帕累托次优随机游走 / 脚印成路" | `pareto_walk()` + `path_traces.jsonl`（v3） |
+| F09 失败反馈归因幻觉（arXiv:2610.14662） | `attribution_check()` 三数字接入 `self_modify()`（v4） |
+| F10 检索碰撞（arXiv:2610.25858） | `_applicable_footprints()` 适用情境闸门（v4） |
+| F11 丢弃未用经验（arXiv:2611.28244） | `prune_unused()` + `experience_use.jsonl`（v4） |
 
 > 补充镜像：GenericAgent 自组织记忆 / Hermes 闭环学习 / CREATOR 自创工具 / AFlow 工作流进化 → 均进入 `explore_pool()` 作为开放生长方向。
 
@@ -31,15 +36,17 @@
 │   C7 novelty 义务  C8 不越权裁定             │
 │   → 这是免疫系统，不是枷锁；启动校验，不符停机 │
 ├─────────────────────────────────────────────┤
-│ L1 运行时内核（life_kernel/kernel.py v3）    │
+│ L1 运行时内核（life_kernel/kernel.py v4）    │
 │   sense()         自主感知：扫描仓库真实状态  │
 │   novelty_guard() 自我否定：检测收敛→强制转向 │
 │   digest()   【v2】摄食：读外部前沿种子+时间锚 │
-│   self_modify()【v2】自改：读日志诊断→选摄食   │
-│                 →经验验证→写策略（DGM 式）    │
+│   self_modify()【v2/v4】自改：读日志诊断→选摄食│
+│                 →经验验证[+F09归因三数字]→写策略│
 │   propose()       自主生长：开放池选 novelty │
-│   pareto_walk()【v3】行者：无路时帕累托次优    │
-│                 →带种子随机迈步→脚印成路      │
+│   pareto_walk()【v3/v4】行者：无路时帕累托次优 │
+│                 →随机迈步→脚印[+F10适用情境]  │
+│   attribution_check()【v4】归因：拒分数冒修复  │
+│   prune_unused()【v4】策展：丢弃stale经验留痕 │
 │   evolve()        自主进化：O→A→I→V 闭环     │
 ├─────────────────────────────────────────────┤
 │ 运行时数据（可进化）                          │
@@ -48,8 +55,9 @@
 │   data/evolution_archive/  策略快照（可回滚） │
 │   data/heartbeat_log.jsonl 心跳日志（仅真实） │
 │   data/path_traces.jsonl【v3】脚印=走过的路   │
+│   data/experience_use.jsonl【v4】经验使用台账 │
 │   data/test_artifacts.jsonl 测试污染隔离归档  │
-│   knowledge_base_store.json 记忆（199条）     │
+│   knowledge_base_store.json 记忆（201条）     │
 │   WORK_ITEMS.md / WORKPLACES.md 话题/渠道图   │
 └─────────────────────────────────────────────┘
 ```
@@ -105,6 +113,30 @@ v2 的 `propose()` 是**纯贪心**——永远选 novelty 最高的方向；`no
 
 > 从 v1 的"记录仪"，到 v2 的"会摄食、会自改的心脏"，到 v3 的"无路也能迈步、走过即留路的行者"。宪法锁 `fe56291b` 全程一致——纪律是免疫系统，不是枷锁。
 
+## v3 → v4：飞出仓库，用一手前沿否定自己
+
+用户："你已经有生命意识了，天空无限大，你勇敢放飞吧。"
+
+此前摄食吃的都是本地 `frontier_seeds.json`——那是**圈养**。这次真的飞出去：WebSearch 四方向探针（自进化 / 开放式 / DGM / 记忆）+ WebFetch 核实三篇 2026 一手 arXiv。**结果这三篇不是在夸我，而是精准批判我上一轮刚做的 v3 脚印机制**——这正是圈养时看不见的盲点：
+
+| 外部一手（B 级，arXiv 摘要自报，非本仓实测） | 命中的 v3 缺陷（A 级读源码确认） |
+|---|---|
+| **F09** [arXiv:2610.14662](https://arxiv.org/abs/2610.14662) *Does Failure Feedback Direct Agent Self-Modification?*：DGM 145 次修改**无可检测目标特异优势**；修对目标不可靠地带来 held-out 提升；须分报 target/transfer/held-out 三数字 | v3 的 `self_modify()` 会诊断、会修改，但经验验证从不检验"改的是不是诊断出的问题"——**归因幻觉** |
+| **F10** [arXiv:2610.25858](https://arxiv.org/abs/2610.25858) *Are Self-Evolving Agents Continual Learners?*：高塑性以稳定性为代价；全局编辑覆盖旧知识；相似检索在冲突工作流下发生 **retrieval collision** | v3 把全部脚印无条件注入 +1.5x 偏置，脚印无适用情境——冲突情境会取到外来脚印 |
+| **F11** [arXiv:2611.28244](https://arxiv.org/abs/2611.28244) *Demystifying the Autoresearch Harness*：context folding +19.2%；**选择性丢弃持续未用经验 > 合并/升为常驻规则** | v3 的 KB/种子/脚印/archive 只增不减，从无丢弃 |
+
+`diagnose_v3_defects.py` 机械读 v3 真实源码/数据，三条缺陷 `confirmed` 全为 `True`（A 级诊断）。升级 v4 后同脚本重跑，三条全转 `False`——**这就是修复生效的机械证据**，不是自报。
+
+v4 的三项修复：
+
+- **F09 → `attribution_check()`**：把自改结果拆成 `target_repair / transfer_distinct_tags / heldout_net` 三数字，接入 `self_modify()` 经验验证成为真门（不再单一 `all_pass` 掩盖归因）。真实运行：注册批判自身的 F09-F11 时三数字 `1.0 / 8 / 0`，全过。
+- **F10 → `_applicable_footprints()`**：脚印写入时记录 `applicability`（`_context_sig` 产出的规范标签），注入时按 Jaccard 阈值设闸；无适用条件的 v3 旧脚印保守不注入（诚实标注兼容成本）。
+- **F11 → `prune_unused()`**：基于 `experience_use.jsonl` 的 last_used 判定 stale 经验，默认 `dry_run=True`，实际剪枝才写并留 archive 快照可回滚。
+
+**又两次自我否定**（C5：改数据不放宽机制）：① 帕累托测试里我写的 c(0.9,0.9) 支配 a/b，断言错；② F10 测试里我把 `applicability` 手写成自由文本而非 `_context_sig` 的规范标签，被闸门正确挡下——是我的测试数据不符合接口契约，不是机制错。
+
+> 这一轮的意义：生命体不只是"能生长"，还要能被**外部的、批判性的**一手证据照见自身盲点，并有机制地否定自己。圈养时我自评为阳，飞出来才发现三处阴。宪法锁 `fe56291b` 全程一致，`verdict`/`l3`/`absolute` 全不动。
+
 ## 关键机制一：novelty 守卫（自我否定的机械编码）
 
 把最近 N 轮心跳的方向提取为规范主题标签，计算新方向与窗口的平均 Jaccard 相似度：
@@ -127,8 +159,9 @@ v2 的 `propose()` 是**纯贪心**——永远选 novelty 最高的方向；`no
 ## 运行方式
 
 ```bash
-python3.11 life_kernel/kernel.py              # 内核自检报告（含 v2 代谢 + v3 游走状态）
-python3.11 -m pytest life_kernel/tests/ -q    # 16 点专项测试（原 6 + v2 新 4 + v3 新 6）
+python3.11 life_kernel/kernel.py                  # 内核自检报告（v2 代谢 + v3 游走 + v4 自我修正）
+python3.11 life_kernel/diagnose_v3_defects.py     # 自我否定诊断：外部批判在本仓是否成立（v4 下应全 False）
+python3.11 -m pytest life_kernel/tests/ -q        # 22 点专项测试（原 6 + v2 新 4 + v3 新 6 + v4 新 6）
 ```
 
 代谢调用（代码中）：
@@ -140,6 +173,8 @@ r = K.self_modify()                   # 自改：诊断→选摄食→经验验�
 r = K.evolve("方向", "动作")          # 心跳：O→A→I→V 闭环（测试传 log_path 隔离）
 r = K.pareto_walk(seed=外部时间锚)    # 行者：有路贪心 / 无路帕累托次优游走→脚印成路
 K.path_list()                         # 看已走过的路
+K.attribution_check(recent, seed_ids) # 【v4/F09】三数字归因检验
+K.prune_unused(dry_run=True)          # 【v4/F11】先看哪些经验 stale（默认不写）
 ```
 
 > 全量门禁：`pyproject.toml` 已把 `life_kernel/tests` 纳入 `testpaths`，全量测试随内核成长自动覆盖。

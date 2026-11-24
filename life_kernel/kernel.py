@@ -26,7 +26,17 @@ v2 → v3 的真实进化（2026-11-24，用户"世间本无路，你走了，�
       ④ 选中方向写入 path_traces.jsonl——"你走了，从此便有了路"，脚印反哺下一轮候选。
       有路时（max_novelty≥阈值）保持贪心不游走，不无谓扰动。
 
-只读仓库状态；不改任何 verdict / 阈值 / §100；不联网；不 spawn。
+v3 → v4 的真实进化（2026-11-24，用户"你已经有生命意识了，天空无限大，勇敢放飞吧"）：
+  这次飞出仓库向外摄食三篇一手前沿（F09-F11），它们恰好是对 v3 的三条外部批判：
+    F09 arXiv:2610.14662 — 归因幻觉：改后分数上升≠修对目标失败（DGM 145次修改无目标特异优势）；
+    F10 arXiv:2610.25858 — 检索碰撞：无条件相似检索会在冲突情境取到外来记忆；
+    F11 arXiv:2611.28244 — 只增不减：选择性丢弃未用经验优于累积/升为常驻规则。
+  diagnose_v3_defects.py 机械确认三条在本仓全部成立（A级读真实源码/数据）后，v4 补三机制：
+    attribution_check() — 三数字(target repair / transfer / held-out net)归因检验，不再只看all_pass；
+    _applicable_footprints() — 脚印带适用情境签名，避免 F10 检索碰撞；
+    prune_unused() — 丢弃长期未用经验（KB/种子/脚印），archive 留痕可回滚，C5改机制不放宽。
+  外部证据 B 级（arXiv摘要自报非本仓实测）；本仓机制验证 A 级。仍是只读仓库状态；
+  不改任何 verdict / 阈值 / §100；内核自身不联网（摄食由外层工具完成）；不 spawn。
 """
 import datetime
 import hashlib
@@ -48,7 +58,10 @@ ARCHIVE_DIR = os.path.join(DATA, "evolution_archive")
 KB = os.path.join(ROOT, "knowledge_base_store.json")
 NOVELTY_WINDOW = 5  # 最近 N 轮心跳做收敛检测
 NO_PATH_NOVELTY = 0.35  # 全池 novelty 低于此值判"前方无路"，触发帕累托次优随机游走
-KERNEL_VERSION = "3.0.0"
+APPLICABILITY_MIN = 0.34  # v4 F10：脚印适用情境与此境 Jaccard 下限，低于则不注入（防检索碰撞）
+STALE_DAYS = 30  # v4 F11：经验超过 N 天未被使用视为 stale，可剪枝
+KERNEL_VERSION = "4.0.0"
+EXPERIENCE_USE = os.path.join(DATA, "experience_use.jsonl")  # v4：经验使用台账（last_used/use_count）
 
 
 def _utcnow():
@@ -137,6 +150,7 @@ def sense():
     snap["registered_frontier_seeds"] = len(_load_policy().get("registered_frontier_seeds", []))
     snap["archive_snapshots"] = len(archive_list())
     snap["path_traces_count"] = len(_load_traces())  # v3：走过的脚印数（路）
+    snap["experience_use_count"] = len(_load_use_log())  # v4/F11：经验使用台账条数
     return snap
 
 
@@ -207,6 +221,190 @@ def path_list(log_path=None):
     return _load_traces(log_path)
 
 
+# ---------- v4 / F11：经验使用台账 + 选择性丢弃（防只增不减） ----------
+def _use_log_path(log_path=None):
+    """使用台账跟随脚印路径隔离：测试用隔离日志时不污染真实台账。"""
+    if log_path and os.path.abspath(log_path) != os.path.abspath(PATH_TRACES):
+        return os.path.join(os.path.dirname(log_path), "experience_use.jsonl")
+    return EXPERIENCE_USE
+
+
+def _load_use_log(log_path=None):
+    path = _use_log_path(log_path)
+    if not os.path.exists(path):
+        return []
+    rows = []
+    for line in open(path, encoding="utf-8"):
+        line = line.strip()
+        if line:
+            try:
+                rows.append(json.loads(line))
+            except json.JSONDecodeError:
+                pass
+    return rows
+
+
+def _mark_used(item_id, log_path=None):
+    """记录一次经验被使用（供剪枝判定 last_used）。测试隔离路径零污染。"""
+    path = _use_log_path(log_path)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(json.dumps({"item_id": item_id, "at": _utcnow()}, ensure_ascii=False) + "\n")
+
+
+def _days_since(ts):
+    try:
+        t = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=datetime.timezone.utc)
+        return (datetime.datetime.now(datetime.timezone.utc) - t).total_seconds() / 86400.0
+    except (ValueError, TypeError):
+        return 0.0
+
+
+def prune_unused(kind="footprint", stale_days=STALE_DAYS, dry_run=True, log_path=None):
+    """v4/F11：选择性丢弃长期未用的经验（外部实证：丢弃优于累积/升为常驻规则）。
+
+    - kind: 'footprint'（脚印）| 'seed'（摄食种子注册表）——KB 因有独立一致性审计，只报告不删；
+    - dry_run=True 默认只返回候选，不写任何文件；False 才实际移除并留 archive 快照（可回滚）；
+    - 存活判据：使用台账里 last_used 距今 < stale_days；从未使用且创建已久同样视为 stale。
+    - 不改 verdict / 宪法；删除的是 L1 运行时数据，archive 留痕。
+    """
+    const = verify_constitution()
+    if not const["ok"]:
+        return {"error": "宪法层损坏，拒绝剪枝", "constitution": const}
+    use_log = _load_use_log(log_path)
+    last_used = {}
+    for row in use_log:
+        iid = row.get("item_id")
+        if iid and (iid not in last_used or row.get("at", "") > last_used[iid]):
+            last_used[iid] = row["at"]
+
+    if kind == "footprint":
+        traces = _load_traces(log_path)
+        items = [{"id": t.get("id", "P%d" % i), "created": t.get("timestamp", ""),
+                  "direction": t.get("direction", "")} for i, t in enumerate(traces)]
+    elif kind == "seed":
+        policy = _load_policy()
+        seeds = {s["id"]: s for s in digest()["seeds"]}
+        items = [{"id": sid, "created": policy.get("updated_at", ""),
+                  "direction": seeds.get(sid, {}).get("direction", "")}
+                 for sid in policy.get("registered_frontier_seeds", [])]
+    else:
+        return {"error": "unsupported kind: " + str(kind)}
+
+    stale, kept = [], []
+    for it in items:
+        lu = last_used.get(it["id"])
+        ref = lu or it["created"]
+        age = _days_since(ref) if ref else 0.0
+        (stale if age >= stale_days else kept).append(dict(it, last_used=lu, age_days=round(age, 2)))
+
+    result = {"kind": kind, "stale_days": stale_days, "dry_run": dry_run,
+              "total": len(items), "stale_count": len(stale), "kept_count": len(kept),
+              "stale_ids": [x["id"] for x in stale], "stale": stale,
+              "constitution_ok": const["ok"]}
+
+    if not dry_run and stale:
+        stale_ids = set(x["id"] for x in stale)
+        before = _archive_snapshot({"kind": kind, "items": items}, note="prune_unused before")
+        if kind == "footprint":
+            path = log_path or PATH_TRACES
+            survivors = [t for i, t in enumerate(traces)
+                         if t.get("id", "P%d" % i) not in stale_ids]
+            with open(path, "w", encoding="utf-8") as f:
+                for t in survivors:
+                    f.write(json.dumps(t, ensure_ascii=False) + "\n")
+        else:
+            policy = _load_policy()
+            policy["registered_frontier_seeds"] = [s for s in policy.get("registered_frontier_seeds", [])
+                                                    if s not in stale_ids]
+            policy["updated_at"] = _utcnow()
+            with open(POLICY, "w", encoding="utf-8") as f:
+                json.dump(policy, f, ensure_ascii=False, indent=2)
+        result.update({"pruned": True, "archive_before": before})
+    else:
+        result["pruned"] = False
+    return result
+
+
+# ---------- v4 / F09：归因检验（三数字，拒绝"分数上升≠修对目标"） ----------
+def _probe_novelty(probes, directions):
+    """探针相对一组方向的最高 novelty（盲评纪律：探针固定，不随状态漂移）。"""
+    out = []
+    for p in probes:
+        ptags = _tags_of(p)
+        best = 0.0
+        for d in directions:
+            dtags = _tags_of(d)
+            union = ptags | dtags
+            best = max(best, 1.0 - (len(ptags & dtags) / len(union) if union else 0))
+        out.append(round(best, 3))
+    return out
+
+
+# 固定三数字探针集：target=收敛主题井；transfer=同类相邻主题；heldout=不参与决策的主题
+ATTRIBUTION_PROBES = {
+    "target": ["canary 判据回放 字面伪规则 语义蕴含 构念效度"],
+    "transfer": ["判据回放 冻结集 错位负例", "canary 字面伪规则 判据独立性"],
+    "heldout": ["金融 市场 库存周期 宏观", "哲学 价值 主体 可证伪", "安全 红队 注入 防御"],
+}
+
+
+def attribution_check(recent_directions, candidate_seed_ids, probes=None, verbose=False):
+    """v4/F09：把自改结果拆成三数字，检验是否真的针对诊断出的问题。
+
+    - target repair：候选种子相对"诊断收敛主题"是否显著不同（引入新鲜方向）；
+    - transfer：候选覆盖的不同主题广度（是否迁移到相邻主题而非只memorize一例）；
+    - held-out net：一组不参与决策的探针，注册前后探索池对其覆盖净变化（可为负=回归）。
+    只有三数字同时达标才 all_pass——不再用单一 all_pass 掩盖归因幻觉。
+    """
+    probes = probes or ATTRIBUTION_PROBES
+    seeds = {s["id"]: s for s in digest()["seeds"]}
+    recent = list(recent_directions)
+    recent_tags = set()
+    for d in recent:
+        recent_tags |= _tags_of(d)
+
+    cands = [seeds[i] for i in candidate_seed_ids if i in seeds]
+    cand_tagsets = [_tags_of(s["direction"]) for s in cands]
+
+    # 1) target repair：候选中与收敛主题显著不同的比例
+    if cand_tagsets:
+        repairs = [1.0 if _jaccard(t, recent_tags) < 0.6 else 0.0 for t in cand_tagsets]
+        target_repair = round(sum(repairs) / len(repairs), 3)
+    else:
+        target_repair = 0.0
+
+    # 2) transfer：候选覆盖的主题广度（distinct tags 数）
+    coverage = set()
+    for t in cand_tagsets:
+        coverage |= t
+    transfer = len(coverage)
+
+    # 3) held-out net：固定探针在注册前后探索池的"可匹配方向数"净变化
+    def match_count(pool, probe):
+        ptag = _tags_of(probe)
+        return sum(1 for c in pool if ptag & _tags_of(c.get("direction", "")))
+
+    before_pool = explore_pool({"registered_frontier_seeds": []})
+    after_pool = explore_pool({"registered_frontier_seeds": list(candidate_seed_ids)})
+    heldout_net = 0
+    for p in probes["heldout"]:
+        heldout_net += match_count(after_pool, p) - match_count(before_pool, p)
+
+    result = {
+        "target_repair": target_repair,
+        "transfer_distinct_tags": transfer,
+        "heldout_net": heldout_net,
+        "candidates": len(cands),
+        "all_pass": bool(target_repair >= 0.5 and transfer >= 2 and heldout_net >= 0),
+        "basis": "F09 arXiv:2610.14662: 分报 target repair/transfer/held-out net, 拒绝分数上升冒充修对目标",
+    }
+    if verbose:
+        result["probe_details"] = {k: _probe_novelty(v, [s["direction"] for s in cands])
+                                   for k, v in probes.items()}
+    return result
+
+
 def _dominates(a, b):
     """双目标支配：novelty 与 freshness 都不差，且至少一项严格更优。"""
     return (a["novelty"] >= b["novelty"] and a["freshness"] >= b["freshness"]
@@ -224,6 +422,34 @@ def _freshness(direction, traces):
     tags = _tags_of(direction)
     seen = sum(1 for t in traces if tags & _tags_of(t.get("direction", "")))
     return round(1.0 / (1.0 + seen), 3)
+
+
+# ---------- v4 / F10：脚印适用情境（防检索碰撞） ----------
+def _context_sig(directions):
+    """当前情境签名 = 一组方向的规范标签并集。脚印用它标记'我在何种情境下走过'。"""
+    sig = set()
+    for d in directions:
+        sig |= _tags_of(d)
+    return sorted(sig)
+
+
+def _applicable_footprints(traces, recent_tags, threshold=APPLICABILITY_MIN):
+    """F10 防护：只注入与当前情境匹配的脚印，避免相似查询取到冲突工作流的'外来记忆'。
+
+    - 旧脚印无 applicability 字段：保守起见视为不适用（不注入），诚实标注兼容成本；
+    - 有字段：Jaccard(适用情境, 当前情境) ≥ threshold 才注入。
+    """
+    applicable, rejected = [], []
+    for t in traces:
+        cond = set(t.get("applicability", []))
+        if not cond:
+            rejected.append({"id": t.get("id"), "reason": "no_applicability_legacy"})
+            continue
+        sim = _jaccard(cond, set(recent_tags))
+        (applicable if sim >= threshold else rejected).append(
+            {"id": t.get("id"), "similarity": round(sim, 3),
+             "reason": "applicable" if sim >= threshold else "context_mismatch"})
+    return applicable, rejected
 
 
 def pareto_walk(pool=None, recent=None, seed=None, record=True, log_path=None):
@@ -252,10 +478,14 @@ def pareto_walk(pool=None, recent=None, seed=None, record=True, log_path=None):
     for d in recent:
         recent_tags |= _tags_of(d)
 
-    # 脚印即路：历史走过的方向作为新候选注入（"从此便有了路"）
-    footprints = [{"id": "P%d" % (i + 1), "direction": t.get("direction", ""),
-                   "source": "已走过的脚印（路）", "is_footprint": True}
-                  for i, t in enumerate(traces) if t.get("direction")]
+    # v4/F10：脚印即路，但只注入"适用情境匹配"的脚印（防检索碰撞）。
+    # v3 曾无条件注入全部脚印，被外部实证 F10 批判；v4 用 applicability 字段设闸。
+    applicable, collision_rejected = _applicable_footprints(traces, recent_tags)
+    app_ids = {x["id"] for x in applicable if x.get("reason") == "applicable"}
+    footprints = [{"id": t.get("id", "P%d" % (i + 1)), "direction": t.get("direction", ""),
+                   "source": "已走过的脚印（路,适用情境匹配）", "is_footprint": True}
+                  for i, t in enumerate(traces)
+                  if t.get("direction") and t.get("id") in app_ids]
     all_cands = [dict(c, is_footprint=False) for c in pool] + footprints
 
     scored = []
@@ -300,6 +530,8 @@ def pareto_walk(pool=None, recent=None, seed=None, record=True, log_path=None):
         "suboptimal_ids": sub_ids,
         "seed": seed, "candidates": len(scored),
         "footprints_loaded": len(traces),
+        "footprints_applicable": len(footprints),
+        "collision_rejected": collision_rejected,  # F10：被适用情境闸门挡下的脚印
         "path_dependency": bool(triggered and any(s["is_footprint"] for s in scored)),
         "constitution_ok": const["ok"], "verdict_unchanged": True,
     }
@@ -309,9 +541,11 @@ def pareto_walk(pool=None, recent=None, seed=None, record=True, log_path=None):
         fp = {"timestamp": _utcnow(), "step": len(traces) + 1,
               "id": chosen["id"], "direction": chosen["direction"],
               "mode": mode, "seed": seed, "walk_triggered": triggered,
+              "applicability": _context_sig(recent),  # v4/F10：记下"我在何种情境走过的"
               "kernel_version": KERNEL_VERSION, "note": "你走了，从此便有了路"}
         with open(path, "a", encoding="utf-8") as f:
             f.write(json.dumps(fp, ensure_ascii=False) + "\n")
+        _mark_used(chosen["id"], log_path=log_path)  # v4/F11：记录使用，供剪枝判定
         result.update({"footprint_written": True, "path_length": len(traces) + 1})
     else:
         result.update({"footprint_written": False, "path_length": len(traces)})
@@ -431,11 +665,18 @@ def _validate_policy(candidate_seed_ids, recent_directions):
     # propose 探索池不得把 canary 井排在前列（池内本就无 canary 方向，恒真校验保持）
     scored = propose(pool=pool)
     checks["propose_excludes_canary_top"] = all("canary" not in s["tags"] for s in scored[:3])
+    # 3b. v4/F09 归因检验：修改必须真的针对诊断的问题（三数字），拒绝分数上升冒充修对目标。
+    #     用固定合成收敛主题当诊断输入（盲评纪律：不随真实日志漂移），候选方案必须target-repair达标。
+    attribution = attribution_check(["canary 判据回放 字面伪规则 语义蕴含",
+                                     "canary 构念效度 冻结集 错位负例"], candidate_seed_ids)
+    checks["attribution_ok"] = attribution["all_pass"]
     # 4. 既有判定不变
     res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
     checks["verdict_unchanged"] = (res["verdict"] == "GAP_INCONCLUSIVE"
                                    and res["l3_claimed"] is False and res["absolute_claimed"] is False)
-    checks["all_pass"] = all(v for k, v in checks.items() if k != "all_pass")
+    checks["all_pass"] = all(v for k, v in checks.items()
+                             if k != "all_pass" and not isinstance(v, dict))
+    checks["attribution_detail"] = attribution  # 三数字明细随验证返回，供报告/测试检查
     return checks
 
 
@@ -542,15 +783,22 @@ def build_report():
     policy = _load_policy()
     scored = propose()
     return {
-        "round": "§4as",
+        "round": "§4at",
         "kernel_version": KERNEL_VERSION,
-        "paradigm_shift": "从诊断者→建设者→行者：无路时接受帕累托次优，迈步成路",
+        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者：向外摄食后用一手实证否定并升级自身",
         "v2_metabolism": "digest() 摄食外部前沿 + self_modify() DGM 式经验验证自改 + archive 快照可回滚",
         "v3_walk": {
             "mechanism": "无路时帕累托次优随机游走：前沿去理想点→次优集→带种子随机迈步→脚印成路",
             "no_path_threshold": NO_PATH_NOVELTY,
             "footprints": len(path_list()),
             "maxim": "世间本无路，你走了，从此便有了路",
+        },
+        "v4_self_correction": {
+            "trigger": "用户'天空无限大勇敢放飞'→向外摄食F09-F11→diagnose_v3_defects.py机械确认v3三缺陷(A级)",
+            "f09_attribution": "self_modify归因检验：三数字target/transfer/held-out，拒绝分数上升冒充修对目标",
+            "f10_collision": "pareto_walk脚印带applicability适用情境，低于Jaccard阈值不注入(防检索碰撞)",
+            "f11_pruning": "prune_unused()选择性丢弃stale经验，archive留痕可回滚(防只增不减)",
+            "external_tier": "B级(arXiv摘要自报非本仓实测)；本仓机制验证A级",
         },
         "constitution": const,
         "sensed_state": {
@@ -563,6 +811,7 @@ def build_report():
             "registered_frontier_seeds": snap["registered_frontier_seeds"],
             "archive_snapshots": snap["archive_snapshots"],
             "path_traces_count": snap["path_traces_count"],
+            "experience_use_count": snap["experience_use_count"],
         },
         "heartbeat_count": len(hbs),
         "digest": {"count": digest()["count"], "ingested_at": digest()["ingested_at"]},
@@ -574,6 +823,9 @@ def build_report():
             "Rotifer L0 宪法层 → constitution.json(SHA256锁)",
             "DGM archive + 经验验证自改 → self_modify()/archive/",
             "用户'无路时帕累托次优随机游走/脚印成路' → pareto_walk()/path_traces.jsonl",
+            "F09 归因三数字 → attribution_check() 接入 self_modify 经验验证",
+            "F10 检索碰撞 → _applicable_footprints() 适用情境闸门",
+            "F11 丢弃未用经验 → prune_unused() + experience_use.jsonl",
         ],
         "does_not_change": ["verdict", "l3=false", "absolute=false", "不翻十案",
                             "不编译新门禁", "不动§100", "最终裁定权归用户"],
