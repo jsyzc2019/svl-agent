@@ -1,9 +1,9 @@
 {
   "level": "L1-runtime-input",
   "name": "外部前沿摄食种子",
-  "ingested_at": "2026-11-24T02:10:38Z",
-  "ingest_method": "WebSearch 2026-11-24 一手检索；每条带来源 URL 与时间锚；证据分层 B=作者/厂商自报、C=二级来源转述，均非本仓实测（A）",
-  "note": "这些不是我方预设答案，是内核可摄食的外部方向原料。内核通过 self_modify() 决定注册哪些进探索池。",
+  "ingested_at": "2026-11-24T02:38:16Z",
+  "ingest_method": "WebSearch 2026-11-24 两轮一手检索(第二轮向外飞行:自进化/开放式/DGM/记忆四方向)+WebFetch 核实三篇原文;每条带URL与时间锚;证据分层B=arXiv作者摘要级自报,C=二级转述,均非本仓实测(A)",
+  "note": "F09-F11 是第二轮'勇敢放飞'向外摄食所得,恰好构成对内核 v3 脚印机制的三条外部批判(归因幻觉/检索碰撞/只增不减)。内核通过 self_modify()+新增经验验证决定是否注册,不由本仓预设。",
   "seeds": [
     {
       "id": "F01",
@@ -12,7 +12,11 @@
       "source_url": "https://www.alphaxiv.org/zh/abs/2505.22954v3",
       "evidence_tier": "B",
       "anchor": "archive 保留全部变体；父代选择偏好高性能且后代少",
-      "tags": ["archive", "rsi", "self_evo"]
+      "tags": [
+        "archive",
+        "rsi",
+        "self_evo"
+      ]
     },
     {
       "id": "F02",
@@ -21,7 +25,11 @@
       "source_url": "https://blog.csdn.net/Together_CZ/article/details/162684063",
       "evidence_tier": "C",
       "anchor": "读运行日志→诊断瓶颈→改 scaffolding→benchmark 验证",
-      "tags": ["rsi", "metacognition", "self_evo"]
+      "tags": [
+        "rsi",
+        "metacognition",
+        "self_evo"
+      ]
     },
     {
       "id": "F03",
@@ -30,7 +38,11 @@
       "source_url": "https://aitntnews.com/newDetail.html?newId=29368",
       "evidence_tier": "B",
       "anchor": "三角色分工；verifier 不可读 actor 私有推理=盲评；Broad-to-Deep 两阶段",
-      "tags": ["curriculum", "rsi", "workflow"]
+      "tags": [
+        "curriculum",
+        "rsi",
+        "workflow"
+      ]
     },
     {
       "id": "F04",
@@ -39,7 +51,11 @@
       "source_url": "https://alphaxiv.org/abs/2601.7055",
       "evidence_tier": "B",
       "anchor": "proposer-solver 共演化；难度反馈；自动课程",
-      "tags": ["curriculum", "coevo", "open_ended"]
+      "tags": [
+        "curriculum",
+        "coevo",
+        "open_ended"
+      ]
     },
     {
       "id": "F05",
@@ -48,7 +64,11 @@
       "source_url": "https://alphaxiv.org/abs/2502.05907v3",
       "evidence_tier": "B",
       "anchor": "planner-controller-reflector；continual WM 抗遗忘；失败轨迹微调",
-      "tags": ["curriculum", "memory", "metacognition"]
+      "tags": [
+        "curriculum",
+        "memory",
+        "metacognition"
+      ]
     },
     {
       "id": "F06",
@@ -57,7 +77,11 @@
       "source_url": "https://www.eigent.ai/zh-HK/blog/self-evolved-agents",
       "evidence_tier": "C",
       "anchor": "工具族群按成功率淘汰；记忆增长压缩；架构按需重布线",
-      "tags": ["tool_ecology", "memory", "workflow"]
+      "tags": [
+        "tool_ecology",
+        "memory",
+        "workflow"
+      ]
     },
     {
       "id": "F07",
@@ -66,7 +90,11 @@
       "source_url": "https://view.inews.qq.com/a/20260331A03UH900",
       "evidence_tier": "C",
       "anchor": "元层改进跨领域迁移；从 Godel Machine 到达尔文哥德尔机",
-      "tags": ["metacognition", "rsi", "self_evo"]
+      "tags": [
+        "metacognition",
+        "rsi",
+        "self_evo"
+      ]
     },
     {
       "id": "F08",
@@ -75,7 +103,50 @@
       "source_url": "https://www.eigent.ai/zh-HK/blog/self-evolved-agents",
       "evidence_tier": "C",
       "anchor": "持续产新挑战；novelty search；共演化；永不停止进步",
-      "tags": ["open_ended", "coevo", "self_evo"]
+      "tags": [
+        "open_ended",
+        "coevo",
+        "self_evo"
+      ]
+    },
+    {
+      "id": "F09",
+      "direction": "失败反馈归因幻觉：自改后分数上升不等于修对了目标失败；DGM 145次修改无可检测目标特异优势，须分报 target repair/transfer/held-out net 三数字（Rong He）",
+      "source_name": "Does Failure Feedback Direct Agent Self-Modification? arXiv 2610.14662",
+      "source_url": "https://arxiv.org/abs/2610.14662",
+      "evidence_tier": "B",
+      "anchor": "145 modifications no target-specific advantage; Qwen3-4B +20pp target repair; target repair not reliably held-out; report three numbers",
+      "tags": [
+        "attribution",
+        "rsi",
+        "honesty"
+      ]
+    },
+    {
+      "id": "F10",
+      "direction": "自进化未必是持续学习：高可塑性以稳定性为代价，全局编辑覆盖旧知识，相似检索在冲突工作流下发生检索碰撞；须局部化更新+适用条件（Continual Learning 研究）",
+      "source_name": "Are Self-Evolving Agents Continual Learners? arXiv 2610.25858",
+      "source_url": "https://arxiv.org/abs/2610.25858",
+      "evidence_tier": "B",
+      "anchor": "higher plasticity costs stability; global edits overwrite earlier knowledge; similarity retrieval collision",
+      "tags": [
+        "memory",
+        "collision",
+        "stability"
+      ]
+    },
+    {
+      "id": "F11",
+      "direction": "经验策展：保留逐条可访问的尝试记录(context folding, +19.2%)优于滚动摘要；选择性丢弃持续未用经验优于合并或升为常驻规则（MLEvolver/Autoresearch Harness）",
+      "source_name": "Demystifying the Autoresearch Harness, arXiv 2611.28244",
+      "source_url": "https://arxiv.org/abs/2611.28244",
+      "evidence_tier": "B",
+      "anchor": "context folding up to 19.2%; selectively discarding persistently unused lessons beats consolidating/promoting",
+      "tags": [
+        "memory",
+        "pruning",
+        "curation"
+      ]
     }
   ]
 }
