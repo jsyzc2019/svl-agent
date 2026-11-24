@@ -4783,6 +4783,19 @@
       "evidence": "宽泛授权→识别字面执行违纪律→选等价合规路径→前置声明判断理由;原集零改动/verdict零改动/不宣布L3;专项36点全绿",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META35",
+      "kind": "reasoning_lesson",
+      "mechanism": "范式转向(用户使命澄清后):目标=自我探索形成能自主感知/自主进化/自主生长的开放型生命体Agent,敢于突破自我设限/自我否定/向外探索,无谓封闭重复违背使命。自我否定:过去四轮§4am-§4ap在同一canary井反复'挖到底→待命→又挖'产出同构循环(诊断脚本+报告+KB+提交),根因不是纪律不够而是把'诊断出否定结论'当工作本身,始终未从诊断者转建设者。落地=life_kernel/可运行内核:①L0不可变宪法层constitution.json(SHA256锁fe56291b,纪律=免疫系统非枷锁,启动校验不符停机)②sense()自主感知真实仓库(61审计目录/195KB/17话题/时间预算)③novelty_guard()自我否定机械编码:最近N轮方向标签Jaccard≥0.6判CONVERGED强制转向④propose()开放探索池选novelty最高(7方向E1-E7来自外部前沿+话题版图)⑤evolve()RSI闭环观测→诊断→改进→验证落heartbeat_log.jsonl。",
+      "trigger": "当发现自己连续多轮在同一主题井里产出同构循环、用户明确点破'封闭重复违背使命'时",
+      "action": "不要把突破理解为'再做一个更深的诊断'(那仍是重复),而要识别缺失的角色——从诊断者转建设者,造一个能自主运转的元系统(内核)。架构借鉴外部前沿三镜像:Open-Endedness novelty search→守卫,RSA统一闭环→evolve,Rotifer L0宪法层→不可变纪律层。把纪律保留为免疫系统(不可进化),把探索开放化(可生长),二者分离。关键验证:把过去四轮canary灌入窗口后再提canary判CONVERGED(sim0.75)、新方向判DIVERSE(sim0.0)、选向完全排除canary——守卫真的会自我否定。区分'有目标'与'开放生长':生命体意义不在达成固定目标而在持续感知/否定收敛/向外生长。verdict/l3/absolute全不动,只读仓库不联网不spawn。",
+      "provenance": "LIFE_KERNEL.md+life_kernel/kernel.py+life_kernel/constitution.json+life_kernel/tests/test_life_kernel.py;外部前沿WebSearch 2026-11-24(Eigent自进化/RSI统一架构CIOAge/Rotifer L0/GenericAgent/Hermes)",
+      "timestamp": "2026-11-24T02:06:47Z",
+      "support": 1,
+      "evidence": "宪法锁ok;感知61目录/195KB/17话题;守卫canary CONVERGED sim0.75 vs 新方向DIVERGE0.0;选向top3 novelty1.0且无canary;真实心跳1条落盘;内核专项6点全绿",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

@@ -31,5 +31,5 @@ svl-audit = "svagent.cli:main"
 packages = ["svagent"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "life_kernel/tests"]
 addopts = "-q"

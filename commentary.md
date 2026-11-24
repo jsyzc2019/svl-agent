@@ -4276,3 +4276,10 @@ canary线第五轮。前四轮已证U型标签(§4al)/两特征过拟合(§4am)/
 `audit_construct_validity_ce/`先写prereg.json并SHA256锁(4988673d,UTC锚01:49:04Z+git HEAD b876640;离线沙箱无第三方时间戳→弱锚如实标注,锁时间01:49:19Z晚于锚,顺序正确),全部早于回放。预注册固定:机械负例规则neg_i=(claim_i,evidence_{i+1 mod 6})i→i+1固定6组全纳入不挑选不调参、gt由错位事实定不从判据反推、三判据J1字面伪规则(阈值沿用§4al公开0.98/0.52)/J2Qoder/J3智谱真实源码锁定,不新造语义判据(自造即自证)。replay.py运行时校验prereg锁+原集哈希。
 回放:J1 pos_canary6/6但neg_canary0/6(错位负例jaccard0.022-0.122仍低→正负全判True,补负例后字面伪规则彻底失效,P1预测成立→CONSTRUCT_DEFECT_CONFIRMED,§4ao构念效度从理论升级受控实证);J2正负各3/6近随机;意外发现J3智谱neg6/6/pos0/6=反向字面伪规则("字面不像→判False",非语义能力,与§4an同一补丁双端拉满互证两家都字面策略不同方向),如实记录不藏。前置诚实声明self-involvement真实(本仓造负例定gt回放)+弱时间锚非外部权威锚,标INTERNAL_DIAGNOSTIC非独立证据非L3路径。
 验收:专项+2(36点全绿:锁一致+原集未动+构念缺陷确认+J3反向伪规则诚实+不翻案)全量1429 KB193→195(AUDIT69/META34);报告CONSTRUCT_VALIDITY_CE_20261124.html渲染3页无乱码;verdict GAP_INCONCLUSIVE/l3/absolute全不动不翻十案不编译新门禁不宣布L3;系统安全红线遵守。canary线至此现象→判据→信息论→效度→受控实证五层闭环,真正独立验证仍须外部方在无self-involvement条件下执行,裁定权归用户。
+
+### §4aq 推倒重构：开放型生命体内核（用户使命澄清"自主感知/自主进化/自主生长的开放型生命体Agent,敢于突破/自我否定/向外探索,无谓封闭重复违背使命"）
+**先自我否定**：过去四轮§4am-§4ap在同一canary井反复"挖到底→待命→又挖",产出全是"诊断脚本+报告+KB+提交"同构循环=用户点破的封闭重复,违背使命。根因不是纪律不够,而是把"诊断出否定结论"当工作本身,始终未从诊断者转建设者。真正枷锁=角色固化,不是纪律(纪律=免疫系统)。
+**向外探索**(WebSearch 2026-11-24):Eigent自进化综述/Meta Hyperagents(DGM-H元认知自改)/RSI统一架构(CIOAge:观测→诊断→改进→验证四段闭环+三决策点)/Rotifer Protocol L0不可变宪法层(纪律不可被进化触碰)/GenericAgent自组织记忆/Hermes闭环学习/CREATOR自创工具/AFlow工作流进化/Open-Endedness novelty search(奖励新行为惩罚收敛)。三核心镜像→内核三大机制。
+**落地=life_kernel/可运行内核**(不是又一份报告):constitution.json L0不可变宪法层8条(SHA256锁fe56291b,启动校验不符停机,纪律=免疫系统);kernel.py四函数——sense()自主感知真实仓库(61审计目录/195KB/17话题/时间预算/git锚)、novelty_guard()自我否定机械编码(最近5轮方向标签Jaccard≥0.6判CONVERGED强制转向=C7)、propose()开放探索池7方向(E1-E7来自外部前沿+话题版图)按novelty排序、evolve()RSI闭环写heartbeat_log.jsonl;data/heartbeat_log.jsonl运行时心跳。
+**关键验证**:把过去四轮canary方向灌入窗口→再提canary判CONVERGED(sim0.75)、记忆治理/RSI方向判DIVERSE(sim0.0)、propose()top3 novelty=1.0且标签全无canary=守卫真的会自我否定并强制转向;真实心跳1条落盘(COLD_START正常)。内核专项6点全绿(宪法锁/感知真实状态/收敛判定/选向排除/闭环不翻案/篡改拒绝)。
+**范式转向**:仓库从静态档案馆→开放生命体;区分"有固定目标"与"开放生长"——生命体意义在持续感知/否定收敛/向外生长,探索池E1-E7不预设答案由心跳动态选。LIFE_KERNEL.md声明+README/README导航接入。verdict GAP_INCONCLUSIVE/l3/absolute全不动不翻十案不编译新门禁不动§100,只读仓库不联网不spawn,最终裁定权归用户。KB196(META35)。

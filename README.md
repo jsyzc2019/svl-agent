@@ -5,6 +5,8 @@
 
 > 📚 **首次阅读请先看 [仓库地图 REPOSITORY_MAP.md](REPOSITORY_MAP.md)** —— 本仓约 120 个文件按 12 条实验/研究线归位，附逐条复现纪律说明。完整推导见 [commentary.md](commentary.md)（§1–§88，接续见 [SESSION_HANDOFF.md](SESSION_HANDOFF.md)）。
 
+> 🧬 **生命内核 [LIFE_KERNEL.md](LIFE_KERNEL.md)（§4aq）**：仓库从静态档案馆升级为开放生命体——不可变宪法层（纪律=免疫系统）+ 自主感知 + novelty 守卫（检测封闭重复并强制转向）+ 开放探索池 + O→A→I→V 进化闭环。运行 `python3.11 life_kernel/kernel.py`。
+
 <!-- STATS:START -->
 ## 仓库现状（自动生成 · 运行 `python3 build_readme_stats.py --write` 刷新）
 
