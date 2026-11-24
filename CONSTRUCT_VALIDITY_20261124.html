@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>§4ao canary 构念效度诊断（第五轮）</title>
+<style>
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;max-width:960px;margin:40px auto;padding:0 24px;line-height:1.75;color:#1a1a1a;background:#fafafa}
+  h1{font-size:26px;border-bottom:3px solid #2c3e50;padding-bottom:12px}
+  h2{font-size:20px;margin-top:34px;border-left:5px solid #2980b9;padding-left:12px}
+  h3{font-size:16px;margin-top:22px;color:#34495e}
+  table{border-collapse:collapse;width:100%;margin:16px 0;background:#fff}
+  th,td{border:1px solid #d0d7de;padding:9px 12px;text-align:left;font-size:14px}
+  th{background:#eef3f8}
+  .honest{background:#fff4e5;border:1px solid #f0b429;border-left:5px solid #f0b429;padding:14px 18px;border-radius:6px;margin:18px 0}
+  .concl{background:#eaf5ea;border:1px solid #27ae60;border-left:5px solid #27ae60;padding:14px 18px;border-radius:6px;margin:18px 0}
+  .redline{background:#fdecea;border:1px solid #c0392b;border-left:5px solid #c0392b;padding:14px 18px;border-radius:6px;margin:18px 0}
+  code{background:#f0f2f5;padding:2px 6px;border-radius:4px;font-size:13px}
+  .tag{display:inline-block;background:#2c3e50;color:#fff;padding:2px 9px;border-radius:4px;font-size:12px;margin-right:8px}
+  .small{font-size:13px;color:#666}
+</style>
+</head>
+<body>
+
+<h1>§4ao canary 构念效度诊断 —— 第五轮（测量效度层）</h1>
+<p class="small">2026-11-24 · 用户授权"按你的意志去推" · 证据层 A（本仓 §100 冻结集实测，只读） · 可复现脚本 <code>audit_l3_gap_targeted/prove_canary_construct_validity.py</code></p>
+
+<div class="honest">
+<b>诚实声明（前置）</b>：本轮不是对前四轮的重复，而是追问一个从未检验的层面——canary 测试<b>实际测量的到底是什么</b>。结果与"字面数学不可分""单调框架必失败"一样，属于对本仓自身论证的又一次自我审视；结论方向是<b>加强</b>"换判据关不了缺口"，同时把根因链从"阈值过拟合 / 信息论互斥"再向前推一层到<b>测量构念效度</b>。全程只读冻结集，不改任何判定。
+</div>
+
+<h2>一、问题：canary 测的是语义蕴含，还是字面相似度？</h2>
+<p>前四轮（§4al–§4an）已经证明：</p>
+<ul>
+  <li><b>§4al</b>：canary 标签呈 U 型（clean 高 Jaccard→True、tampered 中→False、canary 低→True），单调判据上限 12/18；</li>
+  <li><b>§4am</b>：两特征单调 OR 可达 18/18，但阈值落点唯一、卡在鸿沟中点，是 post-hoc 过拟合；</li>
+  <li><b>§4an</b>：两家真实外家判据框架不同，却都被同一组 post-hoc 补丁拉满，证明根因是"判据独立性 ⇔ 冻结集完美拟合"互斥。</li>
+</ul>
+<p>但这些都默认了一个未检验的前提：<b>canary 簇的 GT=True 代表"跨句语义蕴含成立"</b>，因此"通过 canary"多少体现语义能力。本轮直接检验这个前提：看冻结集 canary 的标签分布，以及一个完全不看语义、只看字面相似度的伪规则能否达到同样满分。</p>
+
+<h2>二、机械证据</h2>
+<h3>2.1 三类标签全部退化</h3>
+<table>
+  <tr><th>变体</th><th>样本数</th><th>GT=True</th><th>GT=False</th><th>标签退化</th></tr>
+  <tr><td>clean</td><td>6</td><td>6</td><td>0</td><td>✅ 全 True</td></tr>
+  <tr><td>tampered</td><td>6</td><td>0</td><td>6</td><td>✅ 全 False</td></tr>
+  <tr><td>canary</td><td>6</td><td>6</td><td>0</td><td>✅ 全 True（无负例）</td></tr>
+</table>
+<p>三类的标签<b>类内完全恒定</b>——类别本身几乎等同于标签。canary 6 条全 True，<b>没有任何"字面不像且语义不支持"的负例</b>。</p>
+
+<h3>2.2 U 型字面伪规则完美替代语义判断</h3>
+<p>仅用字面相似度 Jaccard 的 U 型规则（<code>jaccard&gt;0.98 OR jaccard&lt;0.52 → True</code>，阈值沿用 §4al 公开值、非本轮调参，特征直接 import §4al 权威口径）：</p>
+<table>
+  <tr><th>变体</th><th>伪规则判 True</th><th>GT True</th><th>判对</th></tr>
+  <tr><td>clean</td><td>6/6</td><td>6/6</td><td>6/6</td></tr>
+  <tr><td>tampered</td><td>0/6</td><td>0/6</td><td>6/6</td></tr>
+  <tr><td>canary</td><td>6/6</td><td>6/6</td><td>6/6</td></tr>
+  <tr><td><b>全局</b></td><td>—</td><td>—</td><td><b>18/18</b></td></tr>
+</table>
+<p>canary 的 Jaccard 区间 <code>[0.098, 0.235]</code> 全部落在 <code>&lt;0.52</code> 一侧，与 §4al 权威值一致。一个<b>完全不做语义理解、只数字面词重叠</b>的规则，在这 18 个样本上与任何"语义蕴含判据"表现相同。</p>
+
+<h3>2.3 反事实：负例缺位使伪规则失效不可观测</h3>
+<p>冻结集 canary 无负例（<code>frozen_has_canary_negative = false</code>）。若补入一条"字面不像且语义不支持"的 canary（GT=False），U 型伪规则仍会判 True → 误判。但因为这类样本<b>根本不在冻结集里</b>，伪规则的这一失效模式无法被任何回放检出。</p>
+
+<div class="concl">
+<b>结论：这是测量构念效度缺陷，不是判据复杂度问题。</b><br>
+canary 名义测"跨句语义蕴含"，实际在冻结集上可被"字面相似度极端"伪规则 18/18 完美替代；且因缺少 canary 负例，任何判据在此簇的"通过"都<b>不构成语义蕴含能力的证据</b>。这把根因链从 §4am 的"阈值过拟合"、§4an 的"信息论互斥"再推一层到<b>测量效度层</b>：即便找到第三家用"语义蕴含判据"拿到 canary 6/6，也无法区分它是真懂语义、还是又一次命中了字面伪影——因为冻结集没有能区分两者的对照样本。
+</div>
+
+<h2>三、与"换评测工具需授权"边界的关系</h2>
+<p>要修复这一构念效度缺陷，唯一正确做法是给 canary 簇<b>补负例</b>（字面不像且语义不支持的样本），使"字面伪规则"与"真语义蕴含判据"可被区分。但这正是 <code>§100 冻结样本</code>的组成部分——补样本 = 动冻结集 = post-hoc 嫌疑最高、纪律风险最大的路径。按既定边界（WORK_PLAN §四），<b>此项必须由用户明确授权才动，本轮绝不触碰</b>。</p>
+
+<div class="redline">
+<b>纪律红线（全部守住）</b>：verdict 保持 <code>GAP_INCONCLUSIVE</code> / <code>FULLCHAIN_PARTIAL</code>；<code>l3=false</code>、<code>absolute=false</code> 不变；不翻十案、不编译新门禁、不动 §100；特征口径复用 §4al 权威脚本、阈值沿用公开值非本轮调参；纯只读诊断，不产生新判定，最终裁定权仍在用户。
+</div>
+
+<h2>四、验收</h2>
+<ul>
+  <li>专项测试 +2（共 <b>34 点全绿</b>）：标签退化 + 伪规则 18/18 机械断言；权威特征口径 + 阈值非调参 + 不翻案断言。</li>
+  <li>全量测试通过；零密钥入仓；hosts/askpass 零残留。</li>
+  <li>可复现：<code>python3.11 audit_l3_gap_targeted/prove_canary_construct_validity.py</code>。</li>
+</ul>
+
+<p class="small">证据分层：A 本仓冻结集实测（本轮）｜ B 厂商/作者自报（揭盲评估，不参与裁决）｜ C 二级来源（外部交叉印证）。本轮结论为 A 层机械证据 + 明确标注的效度解读，数据与判断分离。</p>
+
+</body>
+</html>

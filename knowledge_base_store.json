@@ -4733,6 +4733,31 @@
       "evidence": "前三轮合成判据→第四轮真实源码A级;两家不同框架同反应=框架无关结论;修正前轮简化说法一处;verdict/l3未动",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT68",
+      "kind": "reasoning_lesson",
+      "mechanism": "canary线第五轮=构念效度诊断(prove_canary_construct_validity.py,只读§100冻结18样本,特征import§4al权威口径):冻结集三类标签全部类内退化(clean6/6True,tampered6/6False,canary6/6True无负例);U型字面伪规则(jaccard>0.98 OR <0.52→True,阈值沿用§4al公开值非本轮调参)达18/18,完全不做语义理解只看字面词重叠即可与任何语义判据同分;反事实:若补入字面不像且语义不支持的canary负例(GT=False),伪规则必误判,但冻结集无此负例故失效模式不可观测。",
+      "trigger": "当一个测试簇的『通过』被用来声称某种能力(如跨句语义蕴含)、却发现类内标签恒定且表面伪规则可完美替代时",
+      "action": "根因链再前移一层:§4am阈值过拟合→§4an信息论互斥→本轮测量构念效度缺陷。canary名义测语义蕴含,实际在冻结集上被字面相似度极端伪规则18/18替代,且无负例区分『真懂语义』与『命中字面伪影』,故第三家拿canary6/6也无法证明语义能力。修复唯一正解=给canary补负例=动§100冻结集=纪律风险最高路径,须用户授权,本轮绝不碰。核心结论再加强:换判据关缺口不仅post-hoc禁止(前四轮),更因构念效度缺陷使『通过』本身不构成能力证据。特征复用权威脚本/阈值非调参/verdict GAP_INCONCLUSIVE与l3/absolute全不动/专项34点。provenance脚本+报告CONSTRUCT_VALIDITY_20261124.html。",
+      "timestamp": "2026-11-24T01:43:14Z",
+      "support": 1,
+      "evidence": "三类标签全degenerate=true;U型伪规则全局18/18;canary jaccard区间[0.098,0.235]与§4al权威一致;frozen_has_canary_negative=false;报告渲染3页无乱码;专项34点全过",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META33",
+      "kind": "reasoning_lesson",
+      "mechanism": "方法论:机制诊断有层次,根因可以逐层前移而非一次到位。canary线五轮:§4al现象层(U型标签)→§4am判据层(两特征18/18过拟合)→§4an信息论层(独立性⇔完美拟合互斥)→§4ao测量效度层(标签退化+伪规则替代+负例缺位)。每层都成立且不矛盾,但越深越根本、越难被『换个判据/找第三家』绕开。",
+      "trigger": "当一个负面结论已有多层解释、看似已挖到底,却仍留有『换个X就能绕开』的质疑时",
+      "action": "追问『这个测试实际测的是什么』而非只问『判据能否通过测试』。技术判据满分≠构念成立:若测试集标签退化、表面伪规则可完美替代、缺关键对照负例,则通过只证明拟合了伪影。识别构念效度缺陷的三探针=①类内标签是否恒定②是否有不看目标能力的表面规则同分③缺不缺能证伪伪规则的负例。与前四轮自我修正一脉相承:每轮都如实标注前轮表述的边界(现象→判据→信息论→效度),根因越准结论越硬。注意区分『可诊断』与『可修复』:效度缺陷可诊断,但修复要动冻结集=需授权,诊断不越权。",
+      "provenance": "CONSTRUCT_VALIDITY_20261124.html第一/二/三节+KB-AUDIT68+KB-META31(解释可证伪)/KB-META32(真实对象A级)",
+      "timestamp": "2026-11-24T01:43:14Z",
+      "support": 1,
+      "evidence": "canary线四层根因链逐级前移,本轮效度层新探针三项全命中;未翻案/未动§100/未自封L3;专项34点全绿",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

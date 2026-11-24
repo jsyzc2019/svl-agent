@@ -523,3 +523,44 @@ def test_posthoc_saturation_self_correction_is_honest_and_no_overturn():
     res = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
     assert res["verdict"] == "GAP_INCONCLUSIVE"
     assert res["l3_claimed"] is False and res["absolute_claimed"] is False
+
+
+# ---------- §4ao canary 构念效度诊断（第五轮：测量效度层，不产生新判定） ----------
+def _load_cv():
+    import importlib.util
+    p = os.path.join(BASE, "prove_canary_construct_validity.py")
+    sp = importlib.util.spec_from_file_location("prove_canary_construct_validity", p)
+    m = importlib.util.module_from_spec(sp)
+    sp.loader.exec_module(m)
+    return m
+
+
+def test_canary_labels_degenerate_and_pseudo_rule_saturates():
+    """三类标签全退化 + U型字面伪规则18/18 = 构念效度缺陷的机械证据。"""
+    rep = _load_cv().build_report()
+    gd = rep["gt_distribution"]
+    for v in ("clean", "tampered", "canary"):
+        assert gd[v]["degenerate"] is True  # 每类标签单一值
+    assert gd["clean"]["n_true"] == 6 and gd["tampered"]["n_false"] == 6
+    assert gd["canary"]["n_true"] == 6  # canary 无负例
+    assert rep["pseudo_rule_global"] == "18/18"
+    assert rep["counterfactual"]["frozen_has_canary_negative"] is False
+
+
+def test_construct_validity_diagnosis_uses_authoritative_features_and_no_overturn():
+    """口径复用§4al权威特征；阈值非本轮调参；诊断不翻案。"""
+    rep = _load_cv().build_report()
+    assert "prove_canary_unreachability.features" in rep["feature_source"]
+    assert "非本轮调参" in rep["threshold_provenance"]
+    assert rep["threshold"] == {"HI": 0.98, "LO": 0.52}
+    # canary jaccard 区间须与 §4al 权威一致（0.098–0.235）
+    lo, hi = rep["canary_jaccard_range"]
+    assert 0.09 < lo < 0.11 and 0.22 < hi < 0.25
+    assert rep["canary_gt_values"] == ["True"]
+    # 不翻案、不触冻结集、不改判定
+    assert "l3=false" in rep["does_not_change"]
+    assert "不动§100冻结样本" in rep["does_not_change"]
+    assert "构念效度" in rep["conclusion"]
+    res = json.load(open(os.path.join(BASE, "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE"
+    assert res["l3_claimed"] is False and res["absolute_claimed"] is False

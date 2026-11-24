@@ -66,7 +66,7 @@ def build_report():
         "handoff_kb_declared": handoff_kb,
         "all_consistent": all_ok,
         "failed": [k for k, v in assertions.items() if not v],
-        "note": "今日三份诊断报告刻意不写死 KB 数字，只引用脚本/判定，从源头避免数字漂移。",
+        "note": "今日四份诊断报告刻意不写死 KB 数字，只引用脚本/判定，从源头避免数字漂移。",
     }
 
 
