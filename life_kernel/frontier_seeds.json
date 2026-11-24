@@ -1,0 +1,81 @@
+{
+  "level": "L1-runtime-input",
+  "name": "外部前沿摄食种子",
+  "ingested_at": "2026-11-24T02:10:38Z",
+  "ingest_method": "WebSearch 2026-11-24 一手检索；每条带来源 URL 与时间锚；证据分层 B=作者/厂商自报、C=二级来源转述，均非本仓实测（A）",
+  "note": "这些不是我方预设答案，是内核可摄食的外部方向原料。内核通过 self_modify() 决定注册哪些进探索池。",
+  "seeds": [
+    {
+      "id": "F01",
+      "direction": "档案库式自我改进：保留全部历史智能体变体作垫脚石，按性能与后代稀少度选父代，避免早熟收敛（DGM archive + stepping stones）",
+      "source_name": "Darwin Godel Machine, alphaXiv 2505.22954v3 / ICLR 2026",
+      "source_url": "https://www.alphaxiv.org/zh/abs/2505.22954v3",
+      "evidence_tier": "B",
+      "anchor": "archive 保留全部变体；父代选择偏好高性能且后代少",
+      "tags": ["archive", "rsi", "self_evo"]
+    },
+    {
+      "id": "F02",
+      "direction": "读失败日志自改脚手架：智能体分析自身基准日志、提出新功能并改写自身代码，经验验证保留有效改动（DGM self-modification）",
+      "source_name": "Darwin Godel Machine, CSDN 深度解读",
+      "source_url": "https://blog.csdn.net/Together_CZ/article/details/162684063",
+      "evidence_tier": "C",
+      "anchor": "读运行日志→诊断瓶颈→改 scaffolding→benchmark 验证",
+      "tags": ["rsi", "metacognition", "self_evo"]
+    },
+    {
+      "id": "F03",
+      "direction": "课程—执行—验证三角色递归闭环：课程智能体选探索方向，执行智能体入环境，独立验证智能体判定且不可读执行者私有推理（RSIAgent）",
+      "source_name": "RSIAgent, arXiv 2609.15364 / AetherLabsAI",
+      "source_url": "https://aitntnews.com/newDetail.html?newId=29368",
+      "evidence_tier": "B",
+      "anchor": "三角色分工；verifier 不可读 actor 私有推理=盲评；Broad-to-Deep 两阶段",
+      "tags": ["curriculum", "rsi", "workflow"]
+    },
+    {
+      "id": "F04",
+      "direction": "提议者—解题者共演化自动课程：提议者生成结构多样问题，解题者正确率反馈驱动双向难度自适应，无需人工标注（Dr.Zero）",
+      "source_name": "Dr. Zero, alphaXiv 2601.7055",
+      "source_url": "https://alphaxiv.org/abs/2601.7055",
+      "evidence_tier": "B",
+      "anchor": "proposer-solver 共演化；难度反馈；自动课程",
+      "tags": ["curriculum", "coevo", "open_ended"]
+    },
+    {
+      "id": "F05",
+      "direction": "规划者—控制者—反思者闭环 + 持续世界模型：选择性更新多模态经验以抗灾难性遗忘，从失败轨迹自我微调（EvolvingAgent）",
+      "source_name": "EvolvingAgent, alphaXiv 2502.05907v3",
+      "source_url": "https://alphaxiv.org/abs/2502.05907v3",
+      "evidence_tier": "B",
+      "anchor": "planner-controller-reflector；continual WM 抗遗忘；失败轨迹微调",
+      "tags": ["curriculum", "memory", "metacognition"]
+    },
+    {
+      "id": "F06",
+      "direction": "工具与技能作为可增减族群：新工具按程序合成生成、按成功率与延迟评估、表现差则停用；记忆增长与压缩重索引（Eigent 自演化综述）",
+      "source_name": "Eigent 自我演化代理综述",
+      "source_url": "https://www.eigent.ai/zh-HK/blog/self-evolved-agents",
+      "evidence_tier": "C",
+      "anchor": "工具族群按成功率淘汰；记忆增长压缩；架构按需重布线",
+      "tags": ["tool_ecology", "memory", "workflow"]
+    },
+    {
+      "id": "F07",
+      "direction": "元学习跨领域迁移：不只优化单任务表现，而优化改进流程本身，使元层改进可迁移到一切任务（Hyperagents / Godel Machine）",
+      "source_name": "Hyperagents, ICLR 2026 (Meta) 报道",
+      "source_url": "https://view.inews.qq.com/a/20260331A03UH900",
+      "evidence_tier": "C",
+      "anchor": "元层改进跨领域迁移；从 Godel Machine 到达尔文哥德尔机",
+      "tags": ["metacognition", "rsi", "self_evo"]
+    },
+    {
+      "id": "F08",
+      "direction": "开放式学习心跳：持续生成新问题、novelty search 奖励新行为惩罚收敛、代理—任务—课程随时间互相塑造（Open-Endedness / ALOE）",
+      "source_name": "Eigent 开放学习综述（引 Open-Endedness/ALOE）",
+      "source_url": "https://www.eigent.ai/zh-HK/blog/self-evolved-agents",
+      "evidence_tier": "C",
+      "anchor": "持续产新挑战；novelty search；共演化；永不停止进步",
+      "tags": ["open_ended", "coevo", "self_evo"]
+    }
+  ]
+}

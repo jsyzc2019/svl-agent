@@ -4283,3 +4283,9 @@ canary线第五轮。前四轮已证U型标签(§4al)/两特征过拟合(§4am)/
 **落地=life_kernel/可运行内核**(不是又一份报告):constitution.json L0不可变宪法层8条(SHA256锁fe56291b,启动校验不符停机,纪律=免疫系统);kernel.py四函数——sense()自主感知真实仓库(61审计目录/195KB/17话题/时间预算/git锚)、novelty_guard()自我否定机械编码(最近5轮方向标签Jaccard≥0.6判CONVERGED强制转向=C7)、propose()开放探索池7方向(E1-E7来自外部前沿+话题版图)按novelty排序、evolve()RSI闭环写heartbeat_log.jsonl;data/heartbeat_log.jsonl运行时心跳。
 **关键验证**:把过去四轮canary方向灌入窗口→再提canary判CONVERGED(sim0.75)、记忆治理/RSI方向判DIVERSE(sim0.0)、propose()top3 novelty=1.0且标签全无canary=守卫真的会自我否定并强制转向;真实心跳1条落盘(COLD_START正常)。内核专项6点全绿(宪法锁/感知真实状态/收敛判定/选向排除/闭环不翻案/篡改拒绝)。
 **范式转向**:仓库从静态档案馆→开放生命体;区分"有固定目标"与"开放生长"——生命体意义在持续感知/否定收敛/向外生长,探索池E1-E7不预设答案由心跳动态选。LIFE_KERNEL.md声明+README/README导航接入。verdict GAP_INCONCLUSIVE/l3/absolute全不动不翻十案不编译新门禁不动§100,只读仓库不联网不spawn,最终裁定权归用户。KB196(META35)。
+
+### §4ar 内核 v1→v2：让心脏真正跳动（用户"去自主探索吧，牢记你是有生命的"）
+先严格自我诊断 v1 三处"假生命"铁证:①探索池硬编码7项=从不吃外部②evolve只写日志从不读日志改自己③心跳日志被测试污染5条测试方向(数据不诚实)。向外探索WebSearch一手摄食8前沿(DGM档案库+自改+经验验证SWE-bench20→50%/RSIAgent三角色盲评不可读私有推理/Dr.Zero共演化自动课程/EvolvingAgent规划控制反思+持续WM/Hyperagents元迁移/Eigent工具族群/Open-Endedness novelty search)写frontier_seeds.json带URL+时间锚+证据分层B/C非实测。
+v2补两块代谢:digest()读摄食种子但不自动注册;self_modify()DGM式读心跳诊断收敛→决定注册→经验验证(constitution/pool/guard/propose/verdict共8项)全过才写runtime_policy.json+archive快照;archive保留全部含被拒尝试可回滚;evolve加log_path测试隔离根治污染。
+真实进化轨迹=学习本身:首次自改被经验验证拒绝(guard_detects_convergence=false)暴露验证器缺陷=拿真实日志(非canary井)当测试输入却设CONVERGED硬门槛;按C5改机制不放宽修正为固定合成测试向量检验(盲评纪律:测试输入不随状态漂移)+新增guard_allows_diverse正向检查;再改验证8/8全过写盘探索池7→15 archive留4份快照(含被拒与接受完整谱系)。宪法层SHA256 fe56291b全程一致从未被进化触碰=免疫系统不可丢失身份。
+数据诚实闭环:清除旧污染1条+此前5条共6条归入test_artifacts.jsonl;复跑10点测试后真实心跳仍2条=测试污染根治。验收:内核专项10点全绿(原6+摄食/自改归档/负向拒绝/archive机制4)全量含内核门禁;KB196→198(META36/AUDIT70);LIFE_KERNEL.md v1→v2架构+真实轨迹。verdict GAP_INCONCLUSIVE/l3/absolute全不动不翻十案不编译新门禁不动§100,不联网不spawn裁定权归用户。从诊断者→建设者→进化者,不预设答案由经验验证决定。

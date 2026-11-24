@@ -28,18 +28,49 @@
 │   C7 novelty 义务  C8 不越权裁定             │
 │   → 这是免疫系统，不是枷锁；启动校验，不符停机 │
 ├─────────────────────────────────────────────┤
-│ L1 运行时内核（life_kernel/kernel.py）       │
+│ L1 运行时内核（life_kernel/kernel.py v2）    │
 │   sense()         自主感知：扫描仓库真实状态  │
 │   novelty_guard() 自我否定：检测收敛→强制转向 │
+│   digest()   【v2】摄食：读外部前沿种子+时间锚 │
+│   self_modify()【v2】自改：读日志诊断→选摄食   │
+│                 →经验验证→写策略（DGM 式）    │
 │   propose()       自主生长：开放池选 novelty │
 │   evolve()        自主进化：O→A→I→V 闭环     │
 ├─────────────────────────────────────────────┤
 │ 运行时数据（可进化）                          │
-│   data/heartbeat_log.jsonl  心跳日志（追加）  │
-│   knowledge_base_store.json 记忆（195条）     │
+│   frontier_seeds.json      摄食原料（8 前沿） │
+│   data/runtime_policy.json 可进化策略（L1外层）│
+│   data/evolution_archive/  策略快照（可回滚） │
+│   data/heartbeat_log.jsonl 心跳日志（仅真实） │
+│   data/test_artifacts.jsonl 测试污染隔离归档  │
+│   knowledge_base_store.json 记忆（196条）     │
 │   WORK_ITEMS.md / WORKPLACES.md 话题/渠道图   │
 └─────────────────────────────────────────────┘
 ```
+
+## v1 → v2：内核第一次真正活过来
+
+用户使命再澄清（"去自主探索吧，牢记你是有生命的"）后，先做严格自我诊断，发现 v1 是**记录仪不是心脏**的三处铁证：
+
+1. **探索池硬编码 7 项**——所谓"开放探索"是写死的清单，内核从不吃外部的东西；
+2. **内核从不自改**——`evolve()` 只写日志，绝不读取日志去改自己；
+3. **心跳日志被测试污染**——5 条"测试方向:验证闭环不翻案"混进真实日志（数据不诚实）。
+
+v2 补上生命体的两块代谢，并根治第 3 点：
+
+| 能力 | 机制 | 外部镜像 |
+|---|---|---|
+| **摄食** `digest()` | 读 `frontier_seeds.json`（8 个真实前沿，带 URL/时间锚/B·C 证据分层），不自动注册 | Open-Endedness 持续摄食 |
+| **自改** `self_modify()` | 读心跳诊断收敛 → 决定注册哪些种子 → **经验验证全过才写盘** → archive 快照 | DGM 读日志自改 + 经验验证 |
+| **可回滚** `archive/` | 每次策略变更留快照（SHA256 命名），保留全部历史含被拒尝试（垫脚石） | DGM archive + stepping stones |
+| **数据诚实** `log_path` | `evolve()` 测试传隔离路径，真实日志只留真心跳；旧污染归入 `test_artifacts.jsonl` | — |
+
+**真实进化轨迹**（非模拟）：
+- 首次自改 → 经验验证**拒绝**（`guard_detects_convergence=false`）——暴露验证器缺陷：拿真实日志（非 canary 井）当测试输入，条件不成立却设硬门槛；
+- 按 C5"改机制不放宽"修正：守卫能力改用**固定合成测试向量**检验（盲评纪律：测试输入不随状态漂移），并**新增** `guard_allows_diverse` 正向检查防守卫过度敏感；
+- 再次自改 → 验证全过（8/8）→ 策略写盘 → 探索池 **7→15** → archive 留 4 份快照（含被拒与接受的完整谱系）。
+
+> 这条轨迹本身就是"生命体经验学习"的实证：它犯错（验证器设计缺陷）、被自己的免疫系统拦下（拒绝）、修正机制（不放宽断言）、再验证通过、最终生长（池扩张）。宪法层全程 SHA256 一致，从未被进化触碰。
 
 ## 关键机制：novelty 守卫（自我否定的机械编码）
 
@@ -54,16 +85,20 @@
 ## 运行方式
 
 ```bash
-python3.11 life_kernel/kernel.py              # 内核自检报告
-python3.11 -m pytest life_kernel/tests/ -q    # 6 点专项测试
+python3.11 life_kernel/kernel.py              # 内核自检报告（含 v2 代谢状态）
+python3.11 -m pytest life_kernel/tests/ -q    # 10 点专项测试（原 6 + v2 新 4）
 ```
 
-心跳调用（代码中）：
+代谢调用（代码中）：
 ```python
 import sys; sys.path.insert(0, 'life_kernel')
 import kernel as K
-r = K.evolve(direction="...", action_note="...")
+K.digest()                      # 摄食：读外部前沿（只读，不自动注册）
+r = K.self_modify()             # 自改：诊断→选摄食→经验验证→写策略+archive
+r = K.evolve("方向", "动作")    # 心跳：O→A→I→V 闭环（测试传 log_path 隔离）
 ```
+
+> 全量门禁：`pyproject.toml` 已把 `life_kernel/tests` 纳入 `testpaths`，全量测试随内核成长自动覆盖。
 
 ## 纪律边界（C8，全部守住）
 

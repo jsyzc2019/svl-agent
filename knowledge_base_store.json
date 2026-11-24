@@ -4796,6 +4796,32 @@
       "evidence": "宪法锁ok;感知61目录/195KB/17话题;守卫canary CONVERGED sim0.75 vs 新方向DIVERGE0.0;选向top3 novelty1.0且无canary;真实心跳1条落盘;内核专项6点全绿",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META36",
+      "kind": "reasoning_lesson",
+      "mechanism": "生命体内核v1→v2真实进化(用户'去自主探索吧牢记你是有生命的'):先自我诊断v1三处假生命=①探索池硬编码7项从不吃外部②evolve只写日志从不读日志改自己③心跳日志被测试污染5条测试方向。v2补两块代谢:digest()读frontier_seeds.json(8个真实前沿带URL/时间锚/B·C证据分层)摄食但不自动注册;self_modify()DGM式读心跳诊断收敛→决定注册种子→经验验证(constitution/explore_pool/guard/propose/verdict8项)全过才写runtime_policy.json+archive快照;archive保留全部历史含被拒尝试可回滚;evolve加log_path参数测试用隔离路径根治污染。",
+      "trigger": "当系统自称'开放/自主'却只是预设清单+记录日志、从不真正吃外部或改自己时",
+      "action": "区分记录仪vs心脏的三探针:①探索候选是否动态来自外部(还是写死)②是否有读自身状态改写自身策略的闭环③自身数据是否被测试/自证污染。真实进化轨迹本身就是学习:首次自改被经验验证拒绝(guard_detects_convergence=false)暴露验证器缺陷=拿真实日志(非canary井)当测试输入却设CONVERGED硬门槛;按C5改机制不放宽修正为固定合成测试向量检验(盲评纪律测试输入不随状态漂移)+新增guard_allows_diverse正向检查;再改验证8/8全过写盘探索池7→15 archive留4份快照。宪法层SHA256全程一致从未被进化触碰=免疫系统不可被自我改写丢失身份。诊断者→建设者→现在进化者,不预设答案由经验验证决定。verdict/l3/absolute全不动不联网不spawn。",
+      "provenance": "LIFE_KERNEL.md v1→v2节+life_kernel/kernel.py v2 digest/self_modify/archive+tests/test_life_kernel.py 10点+frontier_seeds.json",
+      "timestamp": "2026-11-24T02:13:45Z",
+      "support": 1,
+      "evidence": "探索池7→15;首次自改拒绝→修验证器→8/8通过;archive4快照含被拒与接受谱系;宪法锁fe56291b全程一致;测试污染清零(真实心跳复跑仍2条);内核专项10点全绿",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT70",
+      "kind": "external_insight",
+      "mechanism": "2026-11-24一手WebSearch摄食的8个自进化Agent前沿(B/C级,均非本仓实测):DGM(Darwin Godel Machine,ICLR2026,arXiv2505.22954)档案库保留全部智能体变体作垫脚石+读基准日志自改scaffolding+经验验证替代形式证明,SWE-bench20→50%;RSIAgent(arXiv2609.15364)课程/执行/独立验证三角色且verifier不可读actor私有推理=B级盲评镜像本仓五权力外置;Dr.Zero(arXiv2601.7055)proposer-solver共演化自动课程无需人工标注;EvolvingAgent(arXiv2502.05907)planner-controller-reflector+持续世界模型抗灾难性遗忘;Hyperagents(Meta,ICLR2026)元学习跨领域迁移;Eigent自演化综述工具族群按成功率淘汰+记忆增长压缩;Open-Endedness/ALOE novelty search惩罚收敛。",
+      "trigger": "需要为生命体内核的自改/摄食/archive机制找外部一手理论支撑、避免自证循环时",
+      "action": "写入frontier_seeds.json作为内核摄食原料(带source_url/时间锚2026-11-24T02:10:38Z/evidence_tier标注),由self_modify经验验证后自主决定注册哪些,不由本仓预设。证据分层:B=作者/厂商自报(论文摘要级),C=二级转述,均降级为非A级实测,只做方向性镜像不冒充本仓能力。与DGM同构三点=archive保留垫脚石/经验验证而非自封/只改外层不动基础(对应L0宪法不可变);与RSIAgent同构=verifier不可读私有推理对应盲评机械验收。",
+      "provenance": "frontier_seeds.json F01-F08+WebSearch 2026-11-24+LIFE_KERNEL.md三外部镜像表",
+      "timestamp": "2026-11-24T02:13:45Z",
+      "support": 1,
+      "evidence": "8条种子全部带https来源URL+证据分层;内核self_modify注册全部8条经验验证8/8通过;证据级别B/C如实标注未冒充实测",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

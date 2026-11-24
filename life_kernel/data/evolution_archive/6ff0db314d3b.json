@@ -1,0 +1,11 @@
+{
+  "snapshot_sha": "6ff0db314d3b",
+  "archived_at": "2026-11-24T02:12:52Z",
+  "note": "self_modify before: 第二次自改：修正验证器合成向量后重试摄食注册",
+  "policy": {
+    "policy_version": "1.0.0",
+    "updated_at": "2026-11-24T02:10:38Z",
+    "registered_frontier_seeds": [],
+    "note": "运行时可进化策略（L1 外层，非宪法层）：内核通过 self_modify() 读心跳日志后自主注册外部摄食种子、调整探索池权重。宪法层 constitution.json 永不可由本策略触碰。"
+  }
+}
