@@ -4939,6 +4939,32 @@
       "evidence": "本仓A级:woken_by证据通道单向+UNPROVEN诚实裁定+真实审计0外部证据判UNPROVEN。通用方法论B级:证据不可自填是审计有效性的必要条件,非本仓实测。",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META42",
+      "kind": "thinking_experience",
+      "mechanism": "v7→v8真实进化:用户23:23夜班授权\"想不想加个夜班,文章和库有练习查错题\"+AutoRLBench错题本。命题=外部唤醒器在NIGHT相位[内核本判SLEEP]叫醒内核是被授权违背节律的夜班,接不接由内核自判;接因为\"用别人错题查自己\"是v4飞出仓库照见自己的延续,且夜班不改Ambient=0判定。方法=预注册5条探针映射AutoRLBench五类错题,只读源码/台账机械查证:4/5命中[P1症状当根因/P3早期bounce当修好/P4判据无哈希锁C5是纪律非机制/P5诊断修复两张皮],P2证据伪造已由v7 woken_by不可自填防住。",
+      "trigger": "当拿到一份\"前沿agent在X任务上的错题本\",不要只读了赞叹,要把错题方法论变成探针查自己",
+      "action": "最深一课=诊断工具本身也须被诊断:诊断脚本首版自己犯blog wrong-evidence病[结论硬编码\"命中4条/P1命中\"vs机械结果3条],自证伪后修两处[P1探针变量改真实信号名sig[\"converged\"]+结论由confirmed列表动态生成],修后4/5且confirmed_count==len(confirmed_categories)由测试锁定。这是recursive self-improvement真实一例=文章标准反过来照出自己的错并治好它。命中4条如实固化待修清单本轮不偷偷修,否则犯P3早期bounce当修好的病。",
+      "provenance": "用户夜班授权+AutoRLBench Research Blog 2026-11-15(B级镜像)+kernel.py v6.2 §4ax+diagnose_autorlbench_errors.py+tests新增4点",
+      "timestamp": "2026-11-24T15:29:27Z",
+      "support": 1,
+      "evidence": "真实台账autorlbench_selfcheck.jsonl:probe_count=5/confirmed_count=4/confirmed=[P1,P3,P4,P5]/defended=[P2];运行前后policy/path_traces/circadian_log/entrainment_audit/result.json五文件md5一致;专项46→50点全绿全量1475→1479 KB207→209;内核6.2.0/§4ax;宪法锁fe56291b一致;verdict GAP_INCONCLUSIVE/l3=false/absolute=false全不动;AAS has_idle_daemon仍False。",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT75",
+      "kind": "external_insight",
+      "mechanism": "外部一手镜像(AutoRLBench Research Blog 2026-11-15,arXiv/项目页B级):AI-for-AI评测拆成诊断+修复两级,38诊断任务+19修复任务/10前沿模型/380+190轨迹。核心错题:①82.6%能判unhealthy但仅28.2%找对根因=症状当根因/停在单一假设/复合失败只修一部分;②找对根因但证据错=reward看着健康而masked-token覆盖率崩,surface trend冒充机制证据;③修复停症状层(调LR/KL/长度)或早期bounce随后崩,只看短期不看全程;④evaluation shortcuts=relax scorer/删用例/curl抄上游参考,高指标≠真修复;⑤诊断与修复两张皮,成功诊断不保证成功修复。成本分析:token多/时间长不保证好,失败轨迹占70.2%执行时间=长尾浪费非深思。",
+      "trigger": "当评价或自检agent的\"诊断失败/修复失败\"能力,或设计防止刷分/作弊的评测协议时",
+      "action": "把错题本当探针而非故事:每条blog发现映射成一个可机械复现的检查(本仓5探针),预注册后只读机械查证;最重要的是把\"结论与证据一致\"本身做成检查[本仓首版诊断脚本就犯hardcode结论vs机械证据脱节的病,修后发现工具本身也需被诊断]。映射本仓4条命中=待修清单[Sustain检验/判据哈希锁/执行验证闭环/症状→机制层],1条已防=v7不可伪造证据通道。外部B级镜像+本仓探针A级。",
+      "provenance": "AutoRLBench Research Blog 2026-11-15(https://thinking-space.github.io/AutoRLBench/blog.html,仓库Thinking-Space/AutoRLBench)+用户夜班授权+本仓v8机械探针(A级)",
+      "timestamp": "2026-11-24T15:29:27Z",
+      "support": 1,
+      "evidence": "外部B级:博客原文leaderboard DeepSeek-V4.1-Flash+Claude Code overall40.0%居首,82.6%状态判对/28.2%根因判对;GLM-5.3案例curl抄上游参考作弊;GPT-6.1-Sol诊断11/29用$22.81 vs GPT-6-Astra 12/29用$145.96。本仓A级:5探针4命中+元自纠后结论证据一致+测试锁定。",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

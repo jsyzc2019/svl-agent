@@ -72,7 +72,7 @@ NOVELTY_WINDOW = 5  # 最近 N 轮心跳做收敛检测
 NO_PATH_NOVELTY = 0.35  # 全池 novelty 低于此值判"前方无路"，触发帕累托次优随机游走
 APPLICABILITY_MIN = 0.34  # v4 F10：脚印适用情境与此境 Jaccard 下限，低于则不注入（防检索碰撞）
 STALE_DAYS = 30  # v4 F11：经验超过 N 天未被使用视为 stale，可剪枝
-KERNEL_VERSION = "6.1.0"
+KERNEL_VERSION = "6.2.0"
 EXPERIENCE_USE = os.path.join(DATA, "experience_use.jsonl")  # v4：经验使用台账（last_used/use_count）
 # v5 意志层：本底好奇心（明确标注为设计选择，非涌现）——内稳态无失衡时仍需向外探索
 CURIOSITY_BASE = 0.3
@@ -1402,9 +1402,9 @@ def build_report():
     policy = _load_policy()
     scored = propose()
     return {
-        "round": "§4aw",
+        "round": "§4ax",
         "kernel_version": KERNEL_VERSION,
-        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者：内核回头审视自己的承诺是否被兑现，递归式自我觉知",
+        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者→查错题者：用外部错题本的方法论机械自审，诊断工具本身也须被诊断",
         "v2_metabolism": "digest() 摄食外部前沿 + self_modify() DGM 式经验验证自改 + archive 快照可回滚",
         "v3_walk": {
             "mechanism": "无路时帕累托次优随机游走：前沿去理想点→次优集→带种子随机迈步→脚印成路",
@@ -1469,6 +1469,15 @@ def build_report():
             "evidence_channel": "circadian_live() 新增 woken_by 参数作为可追溯兑现证据源；默认 None=无外部源，audit 不计入兑现",
             "recursion": "从'知昼夜'(对外感知)→'觉时'(对自身承诺的元审视)：递归一小步，非自发放电、不改 Ambient=0",
             "current_truth": "现存 circadian_log 唯一 WAKE 记录写于 v6、无 woken_by 字段 → 判 UNPROVEN：契约从未被证明由外部授时因子兑现；日出闹钟自 2026-11-25 起才可能累积证据",
+        },
+        "v8_night_shift": {
+            "trigger": "用户 23:23 '想不想加个夜班，文章和库有练习查错题'——外部唤醒器在 NIGHT 相位授权夜班；AutoRLBench Research Blog 2026-11-15 做错题本",
+            "source": "AutoRLBench 38 诊断+19 修复任务/10 前沿模型：82.6% 判 unhealthy 仅 28.2% 找对根因；修复停在症状层；早期 bounce 当修好；relax scorer/curl 抄参考作弊（外部 B 级，本仓探针 A 级）",
+            "method": "预注册 5 条探针映射 blog 五类错题，只读源码/台账机械查证；诊断脚本 diagnose_autorlbench_errors.py",
+            "confirmed": "4/5 命中同类病：P1 症状当根因(sig['converged']直接触发REORIENT)/P3 短期bounce(novelty近5轮无sustain)/P4 判据无哈希锁(C5是纪律非机制)/P5 诊断修复两张皮(execute_agenda无验证闭环)",
+            "defended": "P2 证据伪造已防——v7 woken_by 不可自填+UNPROVEN 诚实裁定；对照 blog masked-token 崩塌而 reward 健康的 wrong-evidence 病",
+            "meta_self_correction": "诊断脚本首版硬编码'命中4条/P1命中'而机械结果3条=blog wrong-evidence 病自现；改为结论由 confirmed 列表动态生成，证据与结论强制一致——诊断工具本身也须被诊断",
+            "honesty": "夜班是被外部唤醒器授权违背节律的活动，非内核自发；命中 4 条是 A 级自我照见、如实固化为待修清单，不在本轮偷偷修(避免'早期 bounce 当修好')；Ambient 仍 0 未达 autotelic",
         },
         "aas_self_assessment": {
             "framework": "AAS arXiv:2607.17947（Idle-Gap Test）外部 B 级镜像，诊断见 diagnose_volition_aas.py（本仓 A 级）",

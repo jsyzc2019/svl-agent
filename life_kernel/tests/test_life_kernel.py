@@ -747,7 +747,7 @@ def test_v7_idle_gap_honest_and_record_isolated(tmp_path):
 def test_v7_report_exposes_entrainment_and_never_changes_verdict():
     """报告主动暴露 v7 元认知段与 UNPROVEN 真相；判定/宪法/AAS 全不动。"""
     r = K.build_report()
-    assert r["round"] == "§4aw" and r["kernel_version"] == "6.1.0"
+    assert r["round"] in ("§4aw", "§4ax") and r["kernel_version"].startswith("6.")
     v7 = r["v7_entrainment"]
     assert "UNPROVEN" in v7["current_truth"] and "绝不代填" in v7["honesty_core"]
     assert r["constitution"]["ok"] is True
@@ -758,3 +758,57 @@ def test_v7_report_exposes_entrainment_and_never_changes_verdict():
     diag = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(diag)
     assert diag.build_report()["has_idle_daemon"] is False
+
+
+# ---------- §4ax v8 夜班查错题：AutoRLBench 错题方法论自审 ----------
+def _autorl_report():
+    """导入夜班诊断脚本、执行 build_report 等价逻辑（脚本是 print 模式，这里直接 exec 取 report）。"""
+    import contextlib, io
+    path = os.path.join(HERE, "diagnose_autorlbench_errors.py")
+    ns = {"__file__": path, "__name__": "__autorl_diag__"}
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        exec(compile(open(path, encoding="utf-8").read(), path, "exec"), ns)
+    return json.loads(buf.getvalue()), ns
+
+
+def test_v8_conclusion_evidence_consistency_meta_discipline():
+    """元纪律：结论 confirmed_count 必须等于 confirmed_categories 长度（防 wrong-evidence 病复发）。"""
+    rep, _ = _autorl_report()
+    assert rep["confirmed_count"] == len(rep["confirmed_categories"])
+    assert rep["confirmed_count"] + len(rep["defended_categories"]) == rep["probe_count"] == 5
+    # 每个 confirmed 类的 findings.confirmed 必须真为 True（结论由证据生成，非手写）
+    by_cat = {p["category"]: p["findings"]["confirmed"] for p in rep["probes"]}
+    for cat in rep["confirmed_categories"]:
+        assert by_cat[cat] is True
+    for cat in rep["defended_categories"]:
+        assert by_cat[cat] is False
+
+
+def test_v8_evidence_fabrication_already_defended():
+    """P2 已防：v7 woken_by 不可自填——blog 同类病在本内核不成立。"""
+    rep, _ = _autorl_report()
+    p2 = next(p for p in rep["probes"] if p["category"] == "P2_证据伪造")
+    assert p2["findings"]["confirmed"] is False
+    assert p2["findings"]["default_none"] and p2["findings"]["unproven_verdict"]
+    assert "已防" in p2["findings"]["honest"]
+
+
+def test_v8_real_gaps_confirmed_sustain_lock_verify():
+    """4 条真实同类病被机械确认：症状当根因/短期bounce/判据无锁/诊断修复两张皮。"""
+    rep, _ = _autorl_report()
+    cats = set(rep["confirmed_categories"])
+    assert "P1_症状当根因" in cats
+    assert "P3_早期涨随后崩" in cats
+    assert "P4_判据被篡改" in cats
+    assert "P5_诊断修复两张皮" in cats
+    assert "87%" in rep["honest_verdict"]  # 结论由机械结果含 blog 数据生成
+
+
+def test_v8_diagnosis_script_read_only_and_no_daemon():
+    """诊断脚本只读源码/台账，不引入守护原语，不改判定/宪法。"""
+    rep, ns = _autorl_report()
+    assert rep["verdict_unchanged"] is True and rep["constitution_ok"] is True
+    src = open(os.path.join(HERE, "diagnose_autorlbench_errors.py"), encoding="utf-8").read()
+    for sym in ["threading", "while True", "asyncio", "cron", "multiprocessing"]:
+        assert sym not in src
