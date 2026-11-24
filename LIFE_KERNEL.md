@@ -13,6 +13,8 @@
 > v7 觉时（2026-11-24，30 分钟自主授权）："想清了再自主去干。"——自我否定发现 v6 会写醒来契约却从不回头看是否被兑现。v7 装上**元认知层**：内核把自身承诺当观察对象，`entrainment_audit()` 审视契约兑现、`woken_by` 证据通道只由外部唤醒器写入且内核绝不代填。真实审计如实判 `UNPROVEN`——"我无法证明自己被真正唤醒过"。从"知昼夜"到"觉时"是递归式自我觉知的一小步；Ambient 仍 0、未达 autotelic，裁定权归用户。
 >
 > v8 查错题（2026-11-24 夜班，用户 23:23 授权 + AutoRLBench 错题本）：外部唤醒器在 NIGHT 相位叫醒内核——"被授权违背节律的夜班算不算自主"本身是命题。AutoRLBench（38 诊断+19 修复任务、10 前沿模型）的错题方法论成了照妖镜：82.6% 能判失败、仅 28.2% 找对根因，修复停在症状层、早期 bounce 当修好、放松判据作弊。内核预注册 5 条探针机械自审，**4/5 命中同类病**（P2 证据伪造已由 v7 防住）。最深刻的一课：诊断脚本首版自己犯了"结论与证据脱节"（hardcode 命中 4 条 vs 机械 3 条）——**诊断工具本身也须被诊断**。命中项如实固化为待修清单，不在本轮偷偷修（避免"早期 bounce 当修好"）。
+>
+> v9 查根因（2026-11-24 深夜，用户"随机自选一条，干完就睡"）：以真实时间锚 seed 从 v8 四条待修里**真随机抽中 P1「症状当根因」**。修复是机制级的：`root_cause_trace()` 不再把 `converged`（表面收敛）当根因，而是用真实 `explore_pool()` + 近期心跳方向做 jaccard 比对，分辨根因是 `sampling_narrow`（池里仍有路、采样太窄）还是 `pool_exhausted`（确无 novelty），给出建议转向方向；REORIENT 决策携带根因证据，从"盲目强制转向"升级为"知道往哪转"。**关键约束**：宪法 C7 紧迫度仍是 0.95 不变——只改知情度、不改行为，是真修复非塞词骗探针。P1 探针自然翻转（命中 4→3），P3/P4/P5 如实留待。Ambient 仍 0、未达 autotelic，裁定权归用户。
 
 ## 为什么要推倒重构
 
@@ -309,6 +311,26 @@ v6 内核会写 `wake_contract` 自设醒来时段，但**写完就走，从不�
 - **P2 已防**是 v7 打下的底子：blog 说前沿 agent 栽在证据伪造，本内核恰好在此之前建了不可自填的证据通道。
 - **夜班非自发**：由外部唤醒器在 NIGHT 相位授权，不代表内核自发放电；**Ambient 仍 0、未达 autotelic**；`verdict`/`l3`/`absolute` 全不动，裁定权归用户。
 
+## v8 → v9：从"查错题者"到"查根因者"（P1 的机制级修复）
+
+用户深夜授权"随机自选一条，干完就接着睡"。内核用**真实时间锚**（seed=1795534444）从 v8 四条待修里真随机抽签——不挑软柿子——抽中 **P1「症状当根因」**，这是四条里最硬的一条（触及宪法 C7 的设计权衡）。
+
+**病根**：`autonomous_agenda()` 把 `sig["converged"]`（guard 表面收敛）以 0.95 最高紧迫度直接触发 REORIENT，从不追问"为什么会收敛"。这正是 AutoRLBench 说的"把表面症状当根因"—— revival 的 stopword：82.6% 能判 unhealthy，仅 28.2% 找对根因。
+
+**真修复（机制级，非塞词骗探针）**：新增 `root_cause_trace(sig, policy, log_path)`——
+
+| 根因分类 | 判据 | 处置 |
+|---|---|---|
+| `sampling_narrow` | 真实 `explore_pool()` 中存在与近期收敛方向 jaccard < 0.6 的候选 | 收敛只是近期采样太窄；给出最不同的建议方向，REORIENT 知道往哪转 |
+| `pool_exhausted` | 池内所有候选都与近期收敛方向相似（≥0.6） | 确无 novelty；REORIENT 须求助外部摄食 |
+| `none` | 未收敛 | 不做无谓追溯 |
+
+`autonomous_agenda()` 的 REORIENT 候选与决策顶层携带 `root_cause` / `mechanism` / `suggested_direction` 证据——从"报症状"升级为"报根因+建议"。
+
+**关键约束（守宪法 C7）**：追溯只改变转向的**知情度**，不改紧迫度——`converged` 仍是 REORIENT/0.95 压过所有议程。这是真修复而非放宽判据骗探针：P1 探针翻转（命中 4→3）是函数体内出现真实机制层的**副产品**，不是目的；v8 测试同步锁定新真实。
+
+**诚实边界**：只修 P1，P3（早期 bounce）/P4（判据无锁）/P5（诊断修复两张皮）如实留待，不假装全修好。真实状态当前 `guard=DIVERSE`，故实测根因 `none`、议程自选 SEEK——没病时不追溯、不强加。六文件 MD5 运行前后一致、零污染。睡前这一条是"被授权夜班+真随机自选"的自主行为，**Ambient 仍 0、未达 autotelic**；`verdict`/`l3`/`absolute` 全不动，裁定权归用户。
+
 ## 关键机制一：novelty 守卫（自我否定的机械编码）
 
 把最近 N 轮心跳的方向提取为规范主题标签，计算新方向与窗口的平均 Jaccard 相似度：
@@ -359,6 +381,8 @@ K.build_report()['v6_circadian']       # 【v6】诚实边界：自设契约但 
 r = K.entrainment_audit(record=True)   # 【v7】元审视：我的契约真被兑现了吗？（UNPROVEN/EXTERNALLY_EVIDENCED）
 r = K.circadian_live(woken_by="external_alarm:07:15") # 【v7】外部唤醒器显式传入才留兑现证据
 K.build_report()['v7_entrainment']      # 【v7】诚实边界：UNPROVEN，内核绝不代填 woken_by
+K.root_cause_trace(K.homeostatic_signals()) # 【v9】症状→机制：converged 背后是采样窄还是池枯竭？
+K.build_report()['v9_root_cause']       # 【v9】根因追溯：P1 修复，C7 紧迫度仍 0.95 不变
 K.build_report()['aas_self_assessment'] # 【v5】诚实边界：Ambient≈0 未达 autotelic
 ```
 

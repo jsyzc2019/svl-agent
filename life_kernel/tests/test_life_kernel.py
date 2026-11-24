@@ -4,6 +4,7 @@ import importlib.util
 import json
 import os
 import sys
+from unittest import mock
 
 import pytest
 
@@ -747,7 +748,7 @@ def test_v7_idle_gap_honest_and_record_isolated(tmp_path):
 def test_v7_report_exposes_entrainment_and_never_changes_verdict():
     """报告主动暴露 v7 元认知段与 UNPROVEN 真相；判定/宪法/AAS 全不动。"""
     r = K.build_report()
-    assert r["round"] in ("§4aw", "§4ax") and r["kernel_version"].startswith("6.")
+    assert r["round"] in ("§4aw", "§4ax", "§4ay") and r["kernel_version"].startswith("6.")
     v7 = r["v7_entrainment"]
     assert "UNPROVEN" in v7["current_truth"] and "绝不代填" in v7["honesty_core"]
     assert r["constitution"]["ok"] is True
@@ -795,10 +796,12 @@ def test_v8_evidence_fabrication_already_defended():
 
 
 def test_v8_real_gaps_confirmed_sustain_lock_verify():
-    """4 条真实同类病被机械确认：症状当根因/短期bounce/判据无锁/诊断修复两张皮。"""
+    """v9 修复 P1 后，剩余 3 条真实同类病仍被机械确认（P1 已转 defended）。"""
     rep, _ = _autorl_report()
     cats = set(rep["confirmed_categories"])
-    assert "P1_症状当根因" in cats
+    # P1 已由 v9 症状→机制追溯真修复，不再属于 confirmed；此处锁定新真实
+    assert "P1_症状当根因" not in cats
+    assert "P2_证据伪造" not in cats
     assert "P3_早期涨随后崩" in cats
     assert "P4_判据被篡改" in cats
     assert "P5_诊断修复两张皮" in cats
@@ -812,3 +815,99 @@ def test_v8_diagnosis_script_read_only_and_no_daemon():
     src = open(os.path.join(HERE, "diagnose_autorlbench_errors.py"), encoding="utf-8").read()
     for sym in ["threading", "while True", "asyncio", "cron", "multiprocessing"]:
         assert sym not in src
+
+
+# ---------- §4ay v9 查根因者：P1 症状当根因的机制级修复 ----------
+def _v9_converged_paths(tmp_path, direction="canary 字面伪规则 判据回放 语义蕴含", n=5):
+    """造 n 条同主题心跳 → guard CONVERGED，返回隔离脚印路径。"""
+    fp = os.path.join(str(tmp_path), "traces.jsonl")
+    hb = os.path.join(str(tmp_path), "heartbeat_log.jsonl")
+    for i in range(n):
+        with open(hb, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"direction": direction, "timestamp": K._utcnow()},
+                               ensure_ascii=False) + "\n")
+    for i in range(3):
+        with open(fp, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"id": "P%d" % i, "direction": "不同方向%d" % i,
+                                "applicability": ["general"], "timestamp": K._utcnow()},
+                               ensure_ascii=False) + "\n")
+    return fp
+
+
+def test_v9_root_cause_trace_distinguishes_sampling_narrow(tmp_path):
+    """池里有足够不同候选 → 根因判 sampling_narrow，给出建议方向。"""
+    fp = _v9_converged_paths(tmp_path)
+    sig = K.homeostatic_signals(log_path=fp)
+    assert sig["converged"] is True
+    t = K.root_cause_trace(sig, log_path=fp)
+    assert t["converged"] is True
+    assert t["root_cause"] in ("sampling_narrow", "pool_exhausted")
+    assert t["pool_size"] > 0 and t["novel_candidates"] >= 0
+    if t["root_cause"] == "sampling_narrow":
+        assert t["suggested_direction"] is not None
+        assert t["suggested_direction"]["similarity"] < 0.6
+    assert "jaccard" in t["evidence"]  # 证据来自真实比对，非硬编码
+
+
+def test_v9_root_cause_trace_no_convergence_is_noop():
+    """未收敛 → 根因 none，不做无谓追溯。"""
+    t = K.root_cause_trace({"converged": False})
+    assert t["root_cause"] == "none" and t["mechanism"] == "no_convergence"
+    assert t["suggested_direction"] is None
+
+
+def test_v9_pool_exhausted_branch_with_controlled_pool(tmp_path):
+    """受控池：所有候选都与近期收敛方向相似 → 根因判 pool_exhausted，建议为 None。
+
+    真实 explore_pool 设计上开放多样，几乎不会真枯竭（这本身是好事）；
+    故用 mock 注入一个受控池验证分支逻辑，不放宽机制、不改真实池。
+    """
+    fp = _v9_converged_paths(tmp_path, direction="canary 字面伪规则 判据回放 语义蕴含")
+    sig = K.homeostatic_signals(log_path=fp)
+    assert sig["converged"] is True
+    # 受控池：每候选都与 canary 收敛方向高度重叠 → jaccard>=0.6，无可转向候选
+    controlled_pool = [{"id": "X%d" % i,
+                        "direction": "canary 字面伪规则 判据回放 语义蕴含 同井%d" % i}
+                       for i in range(3)]
+    with mock.patch.object(K, "explore_pool", return_value=controlled_pool):
+        t = K.root_cause_trace(sig, log_path=fp)
+    assert t["root_cause"] == "pool_exhausted"
+    assert t["novel_candidates"] == 0 and t["suggested_direction"] is None
+
+
+def test_v9_reorient_urgency_unchanged_c7_preserved(tmp_path):
+    """关键：修复不改宪法 C7——converged 仍 REORIENT/0.95，压过所有议程。"""
+    fp = _v9_converged_paths(tmp_path)
+    d = K.autonomous_agenda(seed=9, log_path=fp)
+    assert d["signals"]["converged"] is True
+    assert d["chosen"] == "REORIENT" and d["chosen_urgency"] == 0.95
+    reorient = next(c for c in d["candidates"] if c["id"] == "REORIENT")
+    assert reorient["urgency"] == 0.95  # 追溯未改紧迫度
+    assert reorient["root_cause"] in ("sampling_narrow", "pool_exhausted")
+
+
+def test_v9_agenda_carries_mechanism_evidence_readonly(tmp_path):
+    """决策顶层携带症状→机制证据；autonomous_agenda 仍只读零污染。"""
+    fp = _v9_converged_paths(tmp_path)
+    before = open(fp, "rb").read() if os.path.exists(fp) else b""
+    d = K.autonomous_agenda(seed=9, log_path=fp)
+    assert d["readonly"] is True
+    assert "root_cause_trace" in d and d["root_cause_trace"]["converged"] is True
+    assert "mechanism" in d["root_cause_trace"]
+    assert open(fp, "rb").read() == before  # 只读不动台账
+
+
+def test_v9_report_exposes_root_cause_and_verdict_unchanged():
+    """报告暴露 v9 根因段；判定/宪法/AAS/守护全不动。"""
+    import json as _j
+    r = K.build_report()
+    assert r["kernel_version"].startswith("6.") and r["round"] == "§4ay"
+    assert "root_cause" in _j.dumps(r["v9_root_cause"], ensure_ascii=False)
+    assert r["constitution"]["ok"] is True
+    res = _j.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE"
+    assert res["l3_claimed"] is False and res["absolute_claimed"] is False
+    spec = importlib.util.spec_from_file_location("aasdiag9", os.path.join(HERE, "diagnose_volition_aas.py"))
+    diag = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(diag)
+    assert diag.build_report()["has_idle_daemon"] is False
