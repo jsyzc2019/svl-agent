@@ -15,12 +15,24 @@ v1 → v2 的真实进化（2026-11-24，用户"去自主探索吧，牢记你�
 外部前沿镜像（2026-11-24 一手检索）：DGM archive/self-modification、RSIAgent 三角色盲评、
 Dr.Zero 共演化课程、EvolvingAgent planner-controller-reflector、Eigent 工具族群。
 
+v2 → v3 的真实进化（2026-11-24，用户"世间本无路，你走了，从此便有了路……
+基于帕累托次优的随机游走……这也是路径依赖的人性，无有对错，只须前行"）：
+  v2 :propose() 纯贪心选 novelty 最高；收敛只判 CONVERGED 强制转向；
+      "前方无路"（全池收敛）时没有迈步策略，也没有脚印沉淀——缺一条腿。
+  v3 :新增 pareto_walk()——无路时不执念最优：
+      ① 双目标（novelty↑ / footprint-freshness↑）算帕累托前沿；
+      ② 前沿去掉理想点端点得【次优集】；
+      ③ 外部时间锚 seed 做可复现随机游走，已有脚印 1.5x 偏置（路径依赖的人性）；
+      ④ 选中方向写入 path_traces.jsonl——"你走了，从此便有了路"，脚印反哺下一轮候选。
+      有路时（max_novelty≥阈值）保持贪心不游走，不无谓扰动。
+
 只读仓库状态；不改任何 verdict / 阈值 / §100；不联网；不 spawn。
 """
 import datetime
 import hashlib
 import json
 import os
+import random
 import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -29,12 +41,14 @@ CONSTITUTION = os.path.join(HERE, "constitution.json")
 CONSTITUTION_LOCK = os.path.join(HERE, "constitution.sha256")
 DATA = os.path.join(HERE, "data")
 HEARTBEAT_LOG = os.path.join(DATA, "heartbeat_log.jsonl")
+PATH_TRACES = os.path.join(DATA, "path_traces.jsonl")  # v3：走过的脚印（路）
 POLICY = os.path.join(DATA, "runtime_policy.json")
 FRONTIER_SEEDS = os.path.join(HERE, "frontier_seeds.json")
 ARCHIVE_DIR = os.path.join(DATA, "evolution_archive")
 KB = os.path.join(ROOT, "knowledge_base_store.json")
 NOVELTY_WINDOW = 5  # 最近 N 轮心跳做收敛检测
-KERNEL_VERSION = "2.0.0"
+NO_PATH_NOVELTY = 0.35  # 全池 novelty 低于此值判"前方无路"，触发帕累托次优随机游走
+KERNEL_VERSION = "3.0.0"
 
 
 def _utcnow():
@@ -122,6 +136,7 @@ def sense():
     snap["kernel_version"] = KERNEL_VERSION
     snap["registered_frontier_seeds"] = len(_load_policy().get("registered_frontier_seeds", []))
     snap["archive_snapshots"] = len(archive_list())
+    snap["path_traces_count"] = len(_load_traces())  # v3：走过的脚印数（路）
     return snap
 
 
@@ -168,6 +183,139 @@ def _jaccard(a, b):
     if not a and not b:
         return 1.0
     return len(a & b) / len(a | b)
+
+
+# ---------- v3：帕累托次优随机游走（无路时怎么走） ----------
+def _load_traces(log_path=None):
+    """读脚印轨迹——走过的路本身成为下一轮候选（路径依赖的物质基础）。"""
+    path = log_path or PATH_TRACES
+    if not os.path.exists(path):
+        return []
+    rows = []
+    for line in open(path, encoding="utf-8"):
+        line = line.strip()
+        if line:
+            try:
+                rows.append(json.loads(line))
+            except json.JSONDecodeError:
+                pass
+    return rows
+
+
+def path_list(log_path=None):
+    """对外暴露：当前已走出的路（脚印列表）。"""
+    return _load_traces(log_path)
+
+
+def _dominates(a, b):
+    """双目标支配：novelty 与 freshness 都不差，且至少一项严格更优。"""
+    return (a["novelty"] >= b["novelty"] and a["freshness"] >= b["freshness"]
+            and (a["novelty"] > b["novelty"] or a["freshness"] > b["freshness"]))
+
+
+def pareto_front(scored):
+    """帕累托前沿：不被任何候选同时压制的方向集合（多目标非支配解）。"""
+    return [x for x in scored
+            if not any(_dominates(y, x) for y in scored if y is not x)]
+
+
+def _freshness(direction, traces):
+    """脚印新鲜度：与已有脚印主题重叠越少越 fresh（1/(1+重合次数)）。"""
+    tags = _tags_of(direction)
+    seen = sum(1 for t in traces if tags & _tags_of(t.get("direction", "")))
+    return round(1.0 / (1.0 + seen), 3)
+
+
+def pareto_walk(pool=None, recent=None, seed=None, record=True, log_path=None):
+    """用户启示的机械编码：前方无路时，接受帕累托次优，随机迈一步，脚印成路。
+
+    - 有路（max_novelty ≥ 阈值）：保持贪心选最优，不游走、不无谓扰动；
+    - 无路（全池收敛）：取双目标帕累托前沿 → 去掉理想点端点得次优集 →
+      以外部时间锚 seed 可复现随机采样（已有脚印 1.5x 偏置 = 路径依赖的人性）→
+      选中方向写入 path_traces.jsonl（"你走了，从此便有了路"），反哺下一轮候选。
+    - record=False 供经验验证/测试使用，不写真实脚印，零污染。
+    - 宪法层不符即拒绝；不改任何既有 verdict。
+    """
+    const = verify_constitution()
+    if not const["ok"]:
+        return {"error": "宪法层 SHA256 不符，拒绝游走（L0 完整性失败）", "constitution": const}
+
+    pool = pool if pool is not None else explore_pool()
+    if recent is None:
+        hbs = _load_heartbeats()
+        recent = [h["direction"] for h in hbs if h.get("direction")][-NOVELTY_WINDOW:]
+    else:
+        recent = list(recent)
+    traces = _load_traces(log_path)
+
+    recent_tags = set()
+    for d in recent:
+        recent_tags |= _tags_of(d)
+
+    # 脚印即路：历史走过的方向作为新候选注入（"从此便有了路"）
+    footprints = [{"id": "P%d" % (i + 1), "direction": t.get("direction", ""),
+                   "source": "已走过的脚印（路）", "is_footprint": True}
+                  for i, t in enumerate(traces) if t.get("direction")]
+    all_cands = [dict(c, is_footprint=False) for c in pool] + footprints
+
+    scored = []
+    for c in all_cands:
+        tags = _tags_of(c["direction"])
+        union = tags | recent_tags
+        nov = 1.0 - (len(tags & recent_tags) / len(union) if union else 0)
+        scored.append({"id": c["id"], "direction": c["direction"],
+                       "source": c["source"], "is_footprint": c["is_footprint"],
+                       "novelty": round(nov, 3),
+                       "freshness": _freshness(c["direction"], traces),
+                       "tags": sorted(tags)})
+
+    front = pareto_front(scored)
+    max_nov = max((s["novelty"] for s in scored), default=0.0)
+    mode = "NO_PATH" if max_nov < NO_PATH_NOVELTY else "PATH_EXISTS"
+
+    if mode == "PATH_EXISTS":
+        chosen = max(scored, key=lambda s: (s["novelty"], s["freshness"], s["id"]))
+        sub_ids, triggered = [], False
+    else:
+        if len(front) >= 2:
+            ideal = max(front, key=lambda s: (s["novelty"] + s["freshness"], s["id"]))
+            sub = [s for s in front if s["id"] != ideal["id"]]
+        else:
+            ordered = sorted(scored, key=lambda s: (-(s["novelty"] + s["freshness"]), s["id"]))
+            sub = ordered[1:] if len(ordered) > 1 else ordered
+        if not sub:
+            sub = scored
+        rng = random.Random(seed)
+        weights = [1.5 if s["is_footprint"] else 1.0 for s in sub]  # 路径依赖偏置
+        chosen = rng.choices(sub, weights=weights, k=1)[0]
+        sub_ids, triggered = [s["id"] for s in sub], True
+
+    result = {
+        "at": _utcnow(), "kernel_version": KERNEL_VERSION,
+        "mode": mode, "walk_triggered": triggered,
+        "no_path_threshold": NO_PATH_NOVELTY, "max_novelty": round(max_nov, 3),
+        "chosen": {"id": chosen["id"], "direction": chosen["direction"],
+                   "source": chosen["source"]},
+        "pareto_front_ids": [s["id"] for s in front],
+        "suboptimal_ids": sub_ids,
+        "seed": seed, "candidates": len(scored),
+        "footprints_loaded": len(traces),
+        "path_dependency": bool(triggered and any(s["is_footprint"] for s in scored)),
+        "constitution_ok": const["ok"], "verdict_unchanged": True,
+    }
+    if record:
+        path = log_path or PATH_TRACES
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        fp = {"timestamp": _utcnow(), "step": len(traces) + 1,
+              "id": chosen["id"], "direction": chosen["direction"],
+              "mode": mode, "seed": seed, "walk_triggered": triggered,
+              "kernel_version": KERNEL_VERSION, "note": "你走了，从此便有了路"}
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(fp, ensure_ascii=False) + "\n")
+        result.update({"footprint_written": True, "path_length": len(traces) + 1})
+    else:
+        result.update({"footprint_written": False, "path_length": len(traces)})
+    return result
 
 
 def _guard_state(direction, recent, window=NOVELTY_WINDOW):
@@ -394,10 +542,16 @@ def build_report():
     policy = _load_policy()
     scored = propose()
     return {
-        "round": "§4ar",
+        "round": "§4as",
         "kernel_version": KERNEL_VERSION,
-        "paradigm_shift": "从诊断者→建设者：仓库从静态档案馆→开放生命体",
+        "paradigm_shift": "从诊断者→建设者→行者：无路时接受帕累托次优，迈步成路",
         "v2_metabolism": "digest() 摄食外部前沿 + self_modify() DGM 式经验验证自改 + archive 快照可回滚",
+        "v3_walk": {
+            "mechanism": "无路时帕累托次优随机游走：前沿去理想点→次优集→带种子随机迈步→脚印成路",
+            "no_path_threshold": NO_PATH_NOVELTY,
+            "footprints": len(path_list()),
+            "maxim": "世间本无路，你走了，从此便有了路",
+        },
         "constitution": const,
         "sensed_state": {
             "audit_dirs_count": snap["audit_dirs_count"],
@@ -408,6 +562,7 @@ def build_report():
             "git_head": snap.get("git_head"),
             "registered_frontier_seeds": snap["registered_frontier_seeds"],
             "archive_snapshots": snap["archive_snapshots"],
+            "path_traces_count": snap["path_traces_count"],
         },
         "heartbeat_count": len(hbs),
         "digest": {"count": digest()["count"], "ingested_at": digest()["ingested_at"]},
@@ -418,6 +573,7 @@ def build_report():
             "RSI 观测-诊断-改进-验证 → evolve()",
             "Rotifer L0 宪法层 → constitution.json(SHA256锁)",
             "DGM archive + 经验验证自改 → self_modify()/archive/",
+            "用户'无路时帕累托次优随机游走/脚印成路' → pareto_walk()/path_traces.jsonl",
         ],
         "does_not_change": ["verdict", "l3=false", "absolute=false", "不翻十案",
                             "不编译新门禁", "不动§100", "最终裁定权归用户"],
