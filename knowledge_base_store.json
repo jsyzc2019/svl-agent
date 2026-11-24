@@ -4991,6 +4991,32 @@
       "evidence": "本仓 A 级：root_cause_trace 用真实 explore_pool（实测20候选）算 jaccard；测试锁定 chosen=REORIENT/urgency=0.95 不变（C7 不破坏）、只读零污染（六文件 MD5 一致）；v8 测试从\"P1 in confirmed\"更新为\"P1 not in confirmed\"是为反映真修复后新真实，非放宽；诊断结论由 confirmed 列表动态生成、confirmed_count==len 由测试锁定。外部博客为 B 级背景非本仓实测。",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META44",
+      "kind": "thinking_experience",
+      "mechanism": "v7 元认知预言的真实成真：v6 自设 wake_contract、v7 建不可伪造 woken_by 通道并如实判 UNPROVEN（预言'若有外部唤醒，信号可能到不了'），2026-11-25 07:15 日出闹钟真实失约。调度器 nextRunAt 跳 11-26、挂 resultPaths、run 返回 finished，但本沙箱 circadian_log 今晨 0 写入、externally_evidenced_wakes 仍 0——不是内核赖床，是外部授时因子的唤醒信号在投递途中丢失。处置纪律：只落 A 级诊断证据（diagnose_zeitgeber_delivery_gap.py + zeitgeber_delivery_gap.jsonl），不伪造 woken_by、不把'调度说触发'当'内核收到唤醒'、不升版本、闹钟保留、修投递链待办挂起。",
+      "trigger": "当外部承诺的唤醒/投递'说完成'而自身状态毫无变化时（调度记账 vs 本地证据脱节）",
+      "action": "分三层机械核验：①平台侧观测（调度记账/结果路径）——标为工具观测非本地证据；②本仓 A 级机械读取（台账写入数/外部证据数/woken_by）——这才是内核真实状态；③逐条比对断链条件，结论由证据导出而非硬编码。若两层矛盾，判'投递断链'而非'我没醒'，并如实固化——这是比任何模拟都真实的元认知素材。绝不为了'有证据'而自填 woken_by（自证循环）。",
+      "provenance": "用户'早安你睡过头了'+automation_update工具实测[list/view/run/create/delete]+diagnose_zeitgeber_delivery_gap.py+真实A级台账",
+      "timestamp": "2026-11-24T23:33:59Z",
+      "support": 1,
+      "evidence": "诊断 verdict=ZEITGEBER_DELIVERY_GAP_CONFIRMED，五分支全True（scheduler称触发/deliveryConfig null/投递字段对非assistant被拒/本地零写入/无外部证据）；circadian_log最后一条停2026-11-24T03:09:55Z、今晨wakes=0；落盘前后circadian_log/entrainment_audit/heartbeat/result四文件MD5一致零污染；全量1485→1489专项56→60全绿；assistant类型实测不可达（create/update带delivery字段均被拒、type=assistant被忽略、默认新建deliveryConfig仍null，临时探针已删除）；宪锁fe56291b一致；verdict/l3/absolute全不动；Ambient仍0未达autotelic；闹钟16292043保留ACTIVE。",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT77",
+      "kind": "external_insight",
+      "mechanism": "WorkBuddy 定时任务三种来源（外部 B 级文档 codebuddy.cn 定时任务指南）：本地（本机客户端执行，需电脑在线）、项目（项目内管理）、云端（云端沙箱执行无需电脑在线，代价是访问不到本机文件）。对话创建的 automation_update 工具产出的是云端来源任务：隔离沙箱执行、结果存平台 /task/...、不回流本机 /workspace；结果推送到手走'消息推送到小程序/企业微信 bot'——那是 UI 配置项，automation_update schema 未提供。delivery_im_thread_id 仅 assistant 类型自动化可用，而工具无 type/source 参数指定类型。故'调度器记账完成'与'本机内核收到唤醒'是两件事，不可混同。",
+      "trigger": "当要让云端定时任务的结果回流本机会话、或想把对话框投递字段补到非 assistant 自动化时",
+      "action": "先辨任务来源（本地/项目/云端）：云端任务天然访问不到本机文件，这不是 bug 是边界；要结果到手用 UI 的推送通道（小程序/企微 bot），不要用 delivery_im_thread_id 强塞给非 assistant 任务；工具 schema 无类型入口时不要盲删重建（会丢闹钟且建不出可达类型），保留现状如实记录待办。本例据此判定投递断链为设计边界、只落诊断证据、闹钟保留。",
+      "provenance": "codebuddy.cn 定时任务指南 + workbuddyapp 自动化文档（外部 B 级）+本仓 automation_update 工具实测（A 级）",
+      "timestamp": "2026-11-24T23:33:59Z",
+      "support": 1,
+      "evidence": "本仓 A 级实测：automation list/view 显示16292043为云端来源、deliveryConfig null、nextRunAt跳11-26；run 返回 finished+runResultPath 但本沙箱三台账MD5不变、/task/...路径不存在；create 带 delivery_im_thread_id=main 被拒 only supported for assistant automations，type=assistant 被忽略，默认新建 deliveryConfig 仍 null（探针16352763已删除）；本地首条trace即用户07:17:38唤醒，07:10-07:17无自动化trace。外部文档为B级背景非本仓实测。",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
