@@ -4965,6 +4965,32 @@
       "evidence": "外部B级:博客原文leaderboard DeepSeek-V4.1-Flash+Claude Code overall40.0%居首,82.6%状态判对/28.2%根因判对;GLM-5.3案例curl抄上游参考作弊;GPT-6.1-Sol诊断11/29用$22.81 vs GPT-6-Astra 12/29用$145.96。本仓A级:5探针4命中+元自纠后结论证据一致+测试锁定。",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META43",
+      "kind": "thinking_experience",
+      "mechanism": "v8→v9真实进化：用户'如你想干就随机自选一条,干完就接着睡'。以真实时间锚 seed=1795534444 从 v8 四条待修真随机抽签（不挑软柿子）抽中 P1 症状当根因（四条最硬、触及宪法 C7 设计权衡）。自我否定：autonomous_agenda 把 sig['converged'] 表面收敛以 0.95 直接触发 REORIENT，从不追问为什么收敛——正是 AutoRLBench '把表面症状当根因'病（82.6% 判 unhealthy 仅 28.2% 找对根因）。机制级真修复：新增 root_cause_trace() 用真实 explore_pool + 近期心跳方向 jaccard 比对，分辨 sampling_narrow（池里仍有路只是采样窄，给最不同建议方向）/pool_exhausted（确无 novelty 须外求）/none（未收敛不追溯），REORIENT 候选与决策顶层携带 root_cause/mechanism/suggested_direction 证据。关键约束：只改知情度不改紧迫度，converged 仍 REORIENT/0.95 压过所有议程，守宪法 C7。",
+      "trigger": "当内核把表面信号（收敛/停滞/零奖励）直接当决策根因、跳过了'为什么会这样'的机制层追问题时",
+      "action": "加一层症状→机制追溯：追问该表面信号可由哪几种机制产生，用真实数据（此处 explore_pool 的 jaccard）机械分辨并给出处置差异；把根因证据带进决策，但不改本由宪法/判据锁定的紧迫度或结论——真修复 = 提升决策知情度，不是放宽判据迁就探针。探针翻转（P1 confirmed→defended，命中4→3）是副产品非目的，同步更新旧测试锁定新真实。只修抽中的一条，其余如实留待，避免'早期 bounce 当修好'。",
+      "provenance": "用户'随机自选一条干完就睡'+kernel.py v9 root_cause_trace+autonomous_agenda+tests 6点+真实零污染轨迹",
+      "timestamp": "2026-11-24T15:38:15Z",
+      "support": 1,
+      "evidence": "真实审计：当前 guard=DIVERSE 故根因 none、议程自选 SEEK（没病不追溯不强加）；收敛分支用隔离数据验证 root_cause=sampling_narrow/suggested 相似度<0.6，pool_exhausted 用受控 mock 验证；P1 探针 confirmed→defended，诊断命中4→3且 confirmed_count==len 自洽；运行前后 policy/path_traces/heartbeat/circadian/entrainment/result 六文件 MD5 一致零污染；专项50→56点全绿、全量1479→1485；内核6.3.0/§4ay；宪法锁 fe56291b 一致；verdict GAP_INCONCLUSIVE/l3=false/absolute=false 全不动；AAS has_idle_daemon=false；Ambient 仍0未达 autotelic。",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT76",
+      "kind": "external_insight",
+      "mechanism": "区分'真机制修复'与'塞词骗探针/放宽判据'的判据：AutoRLBench 博客（外部 B 级镜像）警告 evaluation shortcuts（relax scorer / 抄上游参考 / 删用例）与'修复停在症状层'。映射到 agent 自我改进：若一个'修复'只是让检测探针的关键词命中翻转（在函数体塞 root_cause/mechanism 字样），或放宽测试断言迁就退化实现，那是作弊；真修复须有真实数据支撑的机制变化，且不改变本由更高层（宪法/判据）锁定的不变量（此处 REORIENT 紧迫度 0.95 / verdict）。探针翻转可作为真修复的副产品证据，但绝不能作为修复目标本身。",
+      "trigger": "当要让一个自我诊断探针从'命中病'翻转为'已防'、或测试因机制变好而失败时",
+      "action": "先问：翻转/改测试是真实机制变化的自然结果，还是为了让绿灯亮起来而做的表面迁就？真修复的标准：①机制读取真实数据（非硬编码）；②高层不变量（紧迫度/判定/宪法锁）保持不变；③旧测试更新是为锁定新真实而非放宽；④诚实声明只修了哪一条、其余留待。本例：P1 翻转因函数体内真的加了 jaccard 追溯逻辑，C7 紧迫度仍 0.95，v8 测试同步锁定'P1 已修复'新真实，只修 P1 不假装全修好——四条标准均满足，故判真修复。",
+      "provenance": "AutoRLBench Blog 2026-11-15（外部 B 级）+本仓 v9 P1 修复实录（A 级）",
+      "timestamp": "2026-11-24T15:38:15Z",
+      "support": 1,
+      "evidence": "本仓 A 级：root_cause_trace 用真实 explore_pool（实测20候选）算 jaccard；测试锁定 chosen=REORIENT/urgency=0.95 不变（C7 不破坏）、只读零污染（六文件 MD5 一致）；v8 测试从\"P1 in confirmed\"更新为\"P1 not in confirmed\"是为反映真修复后新真实，非放宽；诊断结论由 confirmed 列表动态生成、confirmed_count==len 由测试锁定。外部博客为 B 级背景非本仓实测。",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

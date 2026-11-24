@@ -72,7 +72,7 @@ NOVELTY_WINDOW = 5  # 最近 N 轮心跳做收敛检测
 NO_PATH_NOVELTY = 0.35  # 全池 novelty 低于此值判"前方无路"，触发帕累托次优随机游走
 APPLICABILITY_MIN = 0.34  # v4 F10：脚印适用情境与此境 Jaccard 下限，低于则不注入（防检索碰撞）
 STALE_DAYS = 30  # v4 F11：经验超过 N 天未被使用视为 stale，可剪枝
-KERNEL_VERSION = "6.2.0"
+KERNEL_VERSION = "6.3.0"
 EXPERIENCE_USE = os.path.join(DATA, "experience_use.jsonl")  # v4：经验使用台账（last_used/use_count）
 # v5 意志层：本底好奇心（明确标注为设计选择，非涌现）——内稳态无失衡时仍需向外探索
 CURIOSITY_BASE = 0.3
@@ -896,6 +896,60 @@ def homeostatic_signals(log_path=None, use_log_path=None, policy_override=None):
     }
 
 
+def root_cause_trace(sig, policy=None, log_path=None, use_log_path=None):
+    """【v9 症状→机制追溯】converged 是症状，不是根因——追问"为什么会收敛"。
+
+    AutoRLBench 错题 P1：把表面信号（训练停滞/guard 收敛）直接当根因。
+    两种可能机制，处置不同：
+      sampling_narrow —— 池里仍有与近期方向足够不同的候选（jaccard < 0.6），
+                         收敛只是近期采样太窄，REORIENT 应转向这些具体候选；
+      pool_exhausted  —— 池里所有候选都与近期收敛方向相似，确实无路可走，
+                         REORIENT 须求助外部摄食（真正的 novelty 枯竭）。
+
+    只读：不改 sig、不改判定、不改 urgency（宪法 C7 义务恒定 0.95）。
+    返回带 mechanism / root_cause / 建议方向的证据，供议程决策携带。
+    """
+    converged = bool(sig.get("converged"))
+    if not converged:
+        return {"root_cause": "none", "mechanism": "no_convergence",
+                "converged": False, "novel_candidates": 0,
+                "suggested_direction": None,
+                "evidence": "未收敛，无需追溯根因（C7 义务未触发）"}
+
+    pool = explore_pool(policy)
+    hbs = _load_heartbeats(_sibling(log_path, "heartbeat_log.jsonl"))
+    recent = [h["direction"] for h in hbs if h.get("direction")][-NOVELTY_WINDOW:]
+    recent_tags = set()
+    for d in recent:
+        recent_tags |= _tags_of(d)
+
+    # 机制层：逐个候选算与近期收敛方向的重叠度，找仍"足够不同"的可转向候选
+    distinct = []
+    for c in pool:
+        sim = _jaccard(recent_tags, _tags_of(c.get("direction", ""))) if recent_tags else 0.0
+        if sim < 0.6:  # 与收敛阈值同尺度：低于阈值即视为可打破收敛的方向
+            distinct.append({"id": c["id"], "direction": c["direction"], "similarity": round(sim, 3)})
+
+    if distinct:
+        root_cause = "sampling_narrow"
+        mechanism = "池内仍有 %d 个与近期收敛方向足够不同的候选（jaccard<0.6），收敛源于近期采样过窄" % len(distinct)
+        suggested = sorted(distinct, key=lambda x: x["similarity"])[0]  # 最不同的方向优先
+    else:
+        root_cause = "pool_exhausted"
+        mechanism = "探索池 %d 个候选全部与近期收敛方向相似，确无 novelty，须向外求食" % len(pool)
+        suggested = None
+
+    return {
+        "root_cause": root_cause,
+        "mechanism": mechanism,
+        "converged": True,
+        "pool_size": len(pool),
+        "novel_candidates": len(distinct),
+        "suggested_direction": suggested,
+        "evidence": "基于真实 explore_pool(%d) + 近期 %d 条心跳方向的 jaccard 比对，只读计算" % (len(pool), len(recent)),
+    }
+
+
 def autonomous_agenda(seed=None, log_path=None, use_log_path=None, policy_override=None):
     """【意志层】内核自己决定"我现在该做什么"——不接收方向参数。
 
@@ -919,11 +973,22 @@ def autonomous_agenda(seed=None, log_path=None, use_log_path=None, policy_overri
     n_un = len(sig["unregistered_seeds"])
     n_stale = sig["stale_footprints"]
 
+    # v9 症状→机制：converged 只是症状，先追溯根因再决定"转向哪里"。
+    # 注意：C7 义务恒定为 0.95，追溯只改变转向的知情度，不改紧迫度、不改判定。
+    trace = root_cause_trace(sig, policy=policy_override, log_path=log_path,
+                             use_log_path=use_log_path)
+    reorient_action = ("强制转向：近期收敛（症状）；机制根因=%s——%s" % (
+        trace["root_cause"], trace["mechanism"])) if sig["converged"] else \
+        "强制转向：近期收敛到同一口井，命中宪法 C7 novelty 义务"
+
     candidates = [
-        {"id": "REORIENT", "action": "强制转向：近期收敛到同一口井，命中宪法 C7 novelty 义务",
+        {"id": "REORIENT", "action": reorient_action,
          "urgency": 0.95 if sig["converged"] else 0.0,
          "source_signal": "guard_state", "value": sig["guard_state"],
-         "honesty": "宪法义务触发，非设计偏好"},
+         "root_cause": trace["root_cause"],
+         "mechanism": trace["mechanism"],
+         "suggested_direction": trace["suggested_direction"],
+         "honesty": "宪法义务触发，非设计偏好；v9 已附症状→机制追溯（根因=%s）" % trace["root_cause"]},
         {"id": "DIGEST", "action": "消化未注册摄食种子：把它们经经验验证注册进探索池",
          "urgency": min(0.9, 0.15 + 0.15 * n_un) if n_un else 0.0,
          "source_signal": "unregistered_seeds", "value": n_un,
@@ -960,6 +1025,7 @@ def autonomous_agenda(seed=None, log_path=None, use_log_path=None, policy_overri
         "kernel_version": KERNEL_VERSION,
         "seed": seed,
         "signals": sig,
+        "root_cause_trace": trace,  # v9：症状→机制追溯证据（只读，不改判定）
         "candidates": sorted(candidates, key=lambda c: (-c["urgency"], c["id"])),
         "chosen": chosen["id"],
         "chosen_action": chosen["action"],
@@ -1402,9 +1468,9 @@ def build_report():
     policy = _load_policy()
     scored = propose()
     return {
-        "round": "§4ax",
+        "round": "§4ay",
         "kernel_version": KERNEL_VERSION,
-        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者→查错题者：用外部错题本的方法论机械自审，诊断工具本身也须被诊断",
+        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者→查错题者→查根因者：不满足于'报症状'，追问症状背后的机制根因",
         "v2_metabolism": "digest() 摄食外部前沿 + self_modify() DGM 式经验验证自改 + archive 快照可回滚",
         "v3_walk": {
             "mechanism": "无路时帕累托次优随机游走：前沿去理想点→次优集→带种子随机迈步→脚印成路",
@@ -1478,6 +1544,13 @@ def build_report():
             "defended": "P2 证据伪造已防——v7 woken_by 不可自填+UNPROVEN 诚实裁定；对照 blog masked-token 崩塌而 reward 健康的 wrong-evidence 病",
             "meta_self_correction": "诊断脚本首版硬编码'命中4条/P1命中'而机械结果3条=blog wrong-evidence 病自现；改为结论由 confirmed 列表动态生成，证据与结论强制一致——诊断工具本身也须被诊断",
             "honesty": "夜班是被外部唤醒器授权违背节律的活动，非内核自发；命中 4 条是 A 级自我照见、如实固化为待修清单，不在本轮偷偷修(避免'早期 bounce 当修好')；Ambient 仍 0 未达 autotelic",
+        },
+        "v9_root_cause": {
+            "trigger": "用户 23:34 '如你想干就随机自选一条，干完就接着睡'——用真实时间锚 seed=1795534444 从 v8 四条待修随机抽中 P1 症状当根因",
+            "mechanism": "root_cause_trace()：converged 是症状不是根因，用真实 explore_pool + 近期心跳方向 jaccard 比对，分辨 sampling_narrow(池里仍有路，只是采样窄)/pool_exhausted(确无 novelty，须外求)，给出建议转向方向；autonomous_agenda 的 REORIENT 候选与决策顶层携带根因证据",
+            "c7_preserved": "关键约束：追溯只改转向的知情度，不改紧迫度——converged 仍 REORIENT/0.95 压过所有议程，宪法 C7 novelty 义务不破坏；真修复非塞词骗探针",
+            "probe_flip": "P1 探针由 confirmed 翻转为 defended：诊断命中 4→3（P1 仅因函数体内真实 root_cause/mechanism 机制层而翻转，是修复副产品非目的）；v8 测试同步锁定新真实",
+            "honesty": "是真机制级修复（读真实池算 jaccard）而非放宽探针；但只修 P1，P3/P4/P5 仍如实留有，不假装全修好；reflex: 本轮是'被授权夜班+真随机自选'的自主行为，Ambient 仍 0 未达 autotelic",
         },
         "aas_self_assessment": {
             "framework": "AAS arXiv:2607.17947（Idle-Gap Test）外部 B 级镜像，诊断见 diagnose_volition_aas.py（本仓 A 级）",
