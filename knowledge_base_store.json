@@ -4822,6 +4822,19 @@
       "evidence": "8条种子全部带https来源URL+证据分层;内核self_modify注册全部8条经验验证8/8通过;证据级别B/C如实标注未冒充实测",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META37",
+      "kind": "thinking_experience",
+      "mechanism": "用户哲学启示内化为生命内核v3机制:世间本无路你走了便有了路/前方无路时基于帕累托次优随机游走迈步/路径依赖的人性/无有对错只须前行。机械编码pareto_walk()——双目标(novelty↑+脚印新鲜度↑)算帕累托前沿→去理想点端点得次优集→外部时间锚seed可复现随机采样→已有脚印1.5x偏置→选中方向写path_traces.jsonl反哺下一轮候选;有路(max_novelty≥0.35)保持贪心不扰动,无路必迈步不判对错。",
+      "trigger": "当propose()纯贪心、可选方向全收敛(前方无路)却无迈步策略、也无脚印沉淀时(v2缺一条腿)。",
+      "action": "新增pareto_walk(),不人为制造无路(反Goodhart);真实运行如实记PATH_EXISTS;受控隔离空脚印+全收敛canary池验证NO_PATH分支三seed均触发、次优集{C0,C1}、不同seed走C1/C0证明随机且可复现。",
+      "provenance": "用户2026-11-24对话启示+life_kernel/kernel.py v3+life_kernel/data/path_traces.jsonl+tests新增6点",
+      "timestamp": "2026-11-24T02:26:29Z",
+      "support": 1,
+      "evidence": "UTC锚2026-11-24T02:25:52Z seed1795487152真实心跳判DIVERSE+真实脚印1条(PATH_EXISTS尚有路);同一全收敛canary池:空脚印时max_novelty=0判NO_PATH触发游走,注入1条真实脚印后max_novelty=0→1判翻PATH_EXISTS=脚印破局自发涌现(非预设);专项16点全绿;宪法锁fe56291b一致;verdict/l3/absolute全不动。",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

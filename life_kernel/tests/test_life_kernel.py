@@ -189,3 +189,96 @@ def test_constitution_rejects_tamper():
     finally:
         os.remove(real)
         os.rename(bak, real)
+
+
+# ---------- §4as v3 帕累托次优随机游走（无路时的腿） ----------
+def test_pareto_front_identifies_nondominated():
+    """帕累托前沿：双目标不被同时压制者入列，被支配者出列。"""
+    # a/b/c 两两权衡互不支配（一高一低）；d 被 c 同时压制，应出列。
+    pts = [
+        {"id": "a", "novelty": 0.9, "freshness": 0.2},
+        {"id": "b", "novelty": 0.2, "freshness": 0.9},
+        {"id": "c", "novelty": 0.5, "freshness": 0.5},
+        {"id": "d", "novelty": 0.3, "freshness": 0.3},
+    ]
+    front = {x["id"] for x in K.pareto_front(pts)}
+    assert front == {"a", "b", "c"}
+
+
+def test_pareto_walk_walks_when_no_path(tmp_path):
+    """前方无路（全池收敛）：仍迈步，选次优，脚印写隔离路径不污染真实。"""
+    iso = str(tmp_path / "traces.jsonl")
+    pool = [
+        {"id": "X1", "direction": "canary 判据回放 字面伪规则 语义蕴含", "source": "t"},
+        {"id": "X2", "direction": "canary 构念效度 冻结集 错位负例", "source": "t"},
+        {"id": "X3", "direction": "canary 字面伪规则 判据回放", "source": "t"},
+    ]
+    recent = ["canary 判据回放 字面伪规则 语义蕴含", "canary 构念效度 冻结集 错位负例"]
+    r = K.pareto_walk(pool=pool, recent=recent, seed=42, record=True, log_path=iso)
+    assert r["constitution_ok"] is True and r["verdict_unchanged"] is True
+    assert r["mode"] == "NO_PATH" and r["max_novelty"] < K.NO_PATH_NOVELTY
+    assert r["walk_triggered"] is True and r["chosen"]["id"] in r["suboptimal_ids"]
+    assert r["footprint_written"] is True and r["path_length"] == 1
+    traces = K.path_list(iso)
+    assert len(traces) == 1 and traces[0]["note"] == "你走了，从此便有了路"
+
+
+def test_pareto_walk_deterministic_and_suboptimal(tmp_path):
+    """带种子可复现；选中项来自次优集而非理想点端点（不是最优执念）。"""
+    iso = str(tmp_path / "traces.jsonl")
+    pool = [
+        {"id": "Y1", "direction": "canary 判据回放 字面伪规则", "source": "t"},
+        {"id": "Y2", "direction": "canary 构念效度 冻结集", "source": "t"},
+        {"id": "Y3", "direction": "canary 错位负例 语义蕴含", "source": "t"},
+        {"id": "Y4", "direction": "canary 字面伪规则 判据回放", "source": "t"},
+    ]
+    recent = ["canary 判据回放 字面伪规则", "canary 构念效度 冻结集"]
+    a = K.pareto_walk(pool=pool, recent=recent, seed=20261124, record=False, log_path=iso)
+    b = K.pareto_walk(pool=pool, recent=recent, seed=20261124, record=False, log_path=iso)
+    assert a["chosen"]["id"] == b["chosen"]["id"]
+    assert a["chosen"]["id"] in a["suboptimal_ids"]
+    assert len(a["pareto_front_ids"]) >= 2
+    assert a["footprint_written"] is False  # record=False 零污染
+
+
+def test_pareto_walk_skips_when_path_exists(tmp_path):
+    """前方有路：保持贪心选最优，不游走、次优集为空（不无谓扰动）。"""
+    iso = str(tmp_path / "traces.jsonl")
+    pool = [
+        {"id": "Z1", "direction": "记忆治理 知识库 遗忘 压缩", "source": "t"},
+        {"id": "Z2", "direction": "自进化内核 RSI 元认知 自改", "source": "t"},
+    ]
+    r = K.pareto_walk(pool=pool, recent=["canary 判据回放 字面伪规则"],
+                      seed=1, record=True, log_path=iso)
+    assert r["mode"] == "PATH_EXISTS"
+    assert r["walk_triggered"] is False and r["suboptimal_ids"] == []
+
+
+def test_pareto_walk_footprints_become_next_candidates(tmp_path):
+    """路径依赖：上一步脚印成为下一步候选（路是走出来的），且被注入偏置。"""
+    iso = str(tmp_path / "traces.jsonl")
+    with open(iso, "w", encoding="utf-8") as f:
+        f.write(json.dumps({"direction": "工作流进化 多智能体 编排 三角色",
+                            "mode": "NO_PATH"}, ensure_ascii=False) + "\n")
+    pool = [{"id": "W1", "direction": "工作流进化 多智能体 编排 三角色", "source": "t"}]
+    r = K.pareto_walk(pool=pool, recent=["工作流 多智能体 编排 协作 三角色"],
+                      seed=7, record=False, log_path=iso)
+    assert r["footprints_loaded"] == 1
+    assert r["candidates"] == 2  # 1 内置候选 + 1 脚印候选
+    assert r["mode"] == "NO_PATH" and r["path_dependency"] is True
+
+
+def test_pareto_walk_never_changes_verdict_or_constitution(tmp_path):
+    """v3 新器官不碰判定、不碰宪法（C8），真实脚印零污染。"""
+    iso = str(tmp_path / "traces.jsonl")
+    real_trace = K.PATH_TRACES
+    before = open(real_trace, "rb").read() if os.path.exists(real_trace) else None
+    const_before = K.verify_constitution()
+    r = K.pareto_walk(seed=99, record=True, log_path=iso)
+    assert r["verdict_unchanged"] is True and r["constitution_ok"] is True
+    assert K.verify_constitution() == const_before
+    after = open(real_trace, "rb").read() if os.path.exists(real_trace) else None
+    assert after == before  # 真实脚印未被污染
+    res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE"
+    assert res["l3_claimed"] is False and res["absolute_claimed"] is False

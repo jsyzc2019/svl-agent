@@ -1,0 +1,63 @@
+{
+  "snapshot_sha": "934d467c7cf3",
+  "archived_at": "2026-11-24T02:27:50Z",
+  "note": "self_modify after (accepted)",
+  "policy": {
+    "policy_version": "3.0.0",
+    "updated_at": "2026-11-24T02:27:50Z",
+    "registered_frontier_seeds": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F08"
+    ],
+    "last_self_modify": {
+      "at": "2026-11-24T02:27:50Z",
+      "reason": "测试:经验验证驱动的自改",
+      "diagnosis": {
+        "guard": "CONVERGED",
+        "similarity": 0.667,
+        "recent_count": 4,
+        "unregistered_seeds": [
+          "F01",
+          "F02",
+          "F03",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "F08"
+        ]
+      },
+      "candidate_seed_ids": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ],
+      "validation": {
+        "constitution_ok": true,
+        "pool_nonempty": true,
+        "no_duplicate_ids": true,
+        "guard_detects_convergence": true,
+        "guard_allows_diverse": true,
+        "propose_excludes_canary_top": true,
+        "verdict_unchanged": true,
+        "all_pass": true
+      },
+      "accepted": true,
+      "constitution_ok": true,
+      "archive_before": "/workspace/life_kernel/data/evolution_archive/65b7ec3d3946.json",
+      "archive_count": 10
+    },
+    "note": "L1 可进化外层；经 self_modify() 经验验证通过；宪法层永不可触碰。"
+  }
+}
