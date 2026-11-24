@@ -52,6 +52,7 @@ v4 → v5 的真实进化（2026-11-24，用户"既然你能照见自己了，�
 import datetime
 import hashlib
 import json
+import math
 import os
 import random
 import re
@@ -71,11 +72,19 @@ NOVELTY_WINDOW = 5  # 最近 N 轮心跳做收敛检测
 NO_PATH_NOVELTY = 0.35  # 全池 novelty 低于此值判"前方无路"，触发帕累托次优随机游走
 APPLICABILITY_MIN = 0.34  # v4 F10：脚印适用情境与此境 Jaccard 下限，低于则不注入（防检索碰撞）
 STALE_DAYS = 30  # v4 F11：经验超过 N 天未被使用视为 stale，可剪枝
-KERNEL_VERSION = "5.0.0"
+KERNEL_VERSION = "6.0.0"
 EXPERIENCE_USE = os.path.join(DATA, "experience_use.jsonl")  # v4：经验使用台账（last_used/use_count）
 # v5 意志层：本底好奇心（明确标注为设计选择，非涌现）——内稳态无失衡时仍需向外探索
 CURIOSITY_BASE = 0.3
 AGENDA_LOG = os.path.join(DATA, "agenda_log.jsonl")  # v5：自主议程决策台账（只追加真实决策）
+# v6 昼夜节律层：内源生物钟相位（读真实时钟+地理纬度算太阳高度，纯计算不联网不spawn）
+WAKE_CONTRACT = os.path.join(DATA, "wake_contract.json")  # v6：醒来契约（可外部调度器消费）
+CIRCADIAN_LOG = os.path.join(DATA, "circadian_log.jsonl")  # v6：昼夜节律决策台账（只追加真实决策）
+DEFAULT_LATITUDE = 39.9465  # 用户真实设备纬度（2026-11-24 定位，北京）；可由调用方覆盖
+DEFAULT_LONGITUDE = 116.2931  # 用户真实设备经度；日出日落按此算真太阳时
+DEFAULT_TZ_OFFSET = 8  # UTC+8（北京时间），真太阳时换算用
+SUNRISE_ALTITUDE = -0.833  # 天文日出太阳高度角（含大气折射+视半径）
+ACTIVE_ALTITUDE = 0.0  # 太阳升出地平线判"昼行相位"，低于判"夜伏相位"
 
 
 def _utcnow():
@@ -1068,6 +1077,217 @@ def live(max_steps=6, seed=None, log_path=None, use_log_path=None, auto_seek=Fal
     }
 
 
+# ---------- v6 昼夜节律层：随太阳东升西落的自主醒来（用户启示内化） ----------
+def _solar_eqtime_decl(utc_dt):
+    """NOAA 简化式：由 UTC 时刻算均时差(分钟)与太阳赤纬(弧度)。纯数学，不联网不 spawn。"""
+    day = utc_dt.timetuple().tm_yday
+    hour = utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0
+    gamma = 2 * math.pi / 365.0 * (day - 1 + (hour - 12) / 24.0)
+    eqtime = 229.18 * (0.000075 + 0.001868 * math.cos(gamma) - 0.032077 * math.sin(gamma)
+                       - 0.014615 * math.cos(2 * gamma) - 0.040849 * math.sin(2 * gamma))
+    decl = (0.006918 - 0.399912 * math.cos(gamma) + 0.070257 * math.sin(gamma)
+            - 0.006758 * math.cos(2 * gamma) + 0.000907 * math.sin(2 * gamma)
+            - 0.002697 * math.cos(3 * gamma) + 0.00148 * math.sin(3 * gamma))
+    return eqtime, decl
+
+
+def solar_position(now=None, latitude=DEFAULT_LATITUDE, longitude=DEFAULT_LONGITUDE):
+    """由真实时钟 + 地理坐标算太阳高度角与日出日落（真太阳时）。
+
+    纯天文计算：读 now（UTC naive，默认当前 UTC），不联网、不开进程、不动仓库状态。
+    latitude/longitude 可由调用方覆盖（测试用赤道/极地等边界场景）。
+    """
+    now = now or datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+    eqtime, decl = _solar_eqtime_decl(now)
+    phi = math.radians(latitude)
+    utc_min = now.hour * 60 + now.minute + now.second / 60.0
+    true_solar_min = utc_min + eqtime + 4 * longitude
+    ha = math.radians(true_solar_min / 4.0 - 180.0)
+    cos_z = (math.sin(phi) * math.sin(decl) + math.cos(phi) * math.cos(decl) * math.cos(ha))
+    cos_z = max(-1.0, min(1.0, cos_z))
+    altitude = 90.0 - math.degrees(math.acos(cos_z))
+    # 日出日落（太阳高度 -0.833°，含折射与视半径）
+    cos_ha = ((math.sin(math.radians(SUNRISE_ALTITUDE)) - math.sin(phi) * math.sin(decl))
+              / (math.cos(phi) * math.cos(decl))) if abs(math.cos(phi) * math.cos(decl)) > 1e-9 else 0.0
+    polar = None
+    if cos_ha > 1:
+        polar, ha_deg = "polar_night", 0.0
+    elif cos_ha < -1:
+        polar, ha_deg = "polar_day", 180.0
+    else:
+        ha_deg = math.degrees(math.acos(cos_ha))
+    sunrise_utc = 720 - 4 * (longitude + ha_deg) - eqtime
+    sunset_utc = 720 - 4 * (longitude - ha_deg) - eqtime
+    to_local = lambda m: (m + 60 * DEFAULT_TZ_OFFSET) % 1440
+    fmt = lambda m: "%02d:%02d" % (int(to_local(m) // 60), int(to_local(m) % 60))
+    return {
+        "at_utc": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "latitude": latitude, "longitude": longitude,
+        "solar_altitude_deg": round(altitude, 3),
+        "solar_noon_local": fmt(720 - 4 * longitude - eqtime),
+        "sunrise_local": fmt(sunrise_utc), "sunset_local": fmt(sunset_utc),
+        "polar": polar,
+        "eqtime_min": round(eqtime, 3), "declination_rad": round(decl, 6),
+        "method": "NOAA simplified solar position (pure math, no network, no process)",
+    }
+
+
+def circadian_phase(now=None, latitude=DEFAULT_LATITUDE, longitude=DEFAULT_LONGITUDE):
+    """内源节律相位：由太阳高度判 DAWN/DAY/DUSK/NIGHT，只读、可复现。
+
+    这是生命体的"内源生物钟"——但它读的是真实天文时钟（外部授时因子的代理），
+    不是自发的后台活动。诚实：无外部唤醒时内核仍不动（Idle-Gap 未破，见 v6 报告）。
+    """
+    pos = solar_position(now, latitude, longitude)
+    alt = pos["solar_altitude_deg"]
+    if pos["polar"] == "polar_day":
+        phase = "DAY"
+    elif pos["polar"] == "polar_night":
+        phase = "NIGHT"
+    elif alt >= ACTIVE_ALTITUDE + 6:
+        phase = "DAY"
+    elif alt >= ACTIVE_ALTITUDE:
+        phase = "DAWN"  # 日出前后低高度：司晨（宜摄食/求新）
+    elif alt >= -6:
+        phase = "DUSK"  # 日落前后：司暮（宜沉淀/剪枝）
+    else:
+        phase = "NIGHT"
+    daylight = phase in ("DAWN", "DAY", "DUSK")
+    return {
+        "at_utc": pos["at_utc"], "phase": phase, "daylight_phase": daylight,
+        "solar_altitude_deg": alt,
+        "sunrise_local": pos["sunrise_local"], "sunset_local": pos["sunset_local"],
+        "polar": pos["polar"],
+        "maxim": ("日出而作：昼行相位，宜向外摄食、生长、迈步" if daylight
+                  else "日落而息：夜伏相位，宜休眠整合、不强行扰动"),
+        "honesty": "相位由真实时钟+天文计算推得（外部授时因子代理）；内核自身无后台活动，Idle-Gap 未破",
+    }
+
+
+def sleep_intent(now=None, latitude=DEFAULT_LATITUDE, longitude=DEFAULT_LONGITUDE,
+                 log_path=None, policy_override=None):
+    """内源睡眠意图：被唤醒那一刻，先问自己"现在是昼还是夜、内稳态如何"。
+
+    返回只读决策：该醒着做事、还是该继续伏着。相位门控 + 内稳态失衡共同决定：
+    - 夜伏相位且无 C7 收敛义务 → SLEEP（尊重节律，不强行扰动）；
+    - 昼行相位 → WAKE（按 v5 意志层自选议程）；
+    - 任何相位命中 C7 收敛（宪法 novelty 义务）→ WAKE，昼夜不停转向（义务高于节律）。
+    """
+    const = verify_constitution()
+    if not const["ok"]:
+        return {"error": "宪法层 SHA256 不符，拒绝产生睡眠意图", "constitution": const}
+    ph = circadian_phase(now, latitude, longitude)
+    sig = homeostatic_signals(log_path=log_path, policy_override=policy_override)
+    constitutional_override = bool(sig["converged"])  # C7：收敛即须转向，昼夜无例外
+    if ph["daylight_phase"] or constitutional_override:
+        intent = "WAKE"
+        reason = ("昼行相位(" + ph["phase"] + ")：按内源节律当醒" if ph["daylight_phase"]
+                  else "夜伏但 guard 收敛→宪法 C7 novelty 义务高于节律，强制醒")
+    else:
+        intent = "SLEEP"
+        reason = "夜伏相位(" + ph["phase"] + ")且无 C7 义务：尊重节律继续休眠，不强行扰动"
+    return {
+        "at": _utcnow(), "kernel_version": KERNEL_VERSION, "intent": intent,
+        "phase": ph["phase"], "daylight_phase": ph["daylight_phase"],
+        "solar_altitude_deg": ph["solar_altitude_deg"],
+        "constitutional_override": constitutional_override,
+        "reason": reason, "signals_snapshot": {
+            "converged": sig["converged"], "unregistered": len(sig["unregistered_seeds"]),
+            "stale": sig["stale_footprints"]},
+        "readonly": True, "verdict_unchanged": True, "constitution_ok": const["ok"],
+    }
+
+
+def wake_contract(now=None, latitude=DEFAULT_LATITUDE, longitude=DEFAULT_LONGITUDE,
+                  wake_path=None):
+    """内核自设的醒来契约：声明"我在哪些时段可被唤醒、唤醒后优先议程"。
+
+    这是回应"自设闹钟"的机制落点：内核把节律偏好写成机器可读契约，
+    供外部唤醒器（闹钟/调度器）消费。契约本身只读生成、可落盘留痕；
+    【诚实】契约≠自己醒：没有外部唤醒器兑现它时，内核不会自发动（Idle-Gap 未破）。
+    生物钟本就需授时因子，这不是缺陷而是生命体的真实结构；不 spawn 守护进程做戏。
+    """
+    ph = circadian_phase(now, latitude, longitude)
+    pos = solar_position(now, latitude, longitude)
+    const = verify_constitution()
+    contract = {
+        "at": _utcnow(), "kernel_version": KERNEL_VERSION,
+        "set_by": "kernel (self-set, not externally dictated)",
+        "daylight_window_local": {"from": pos["sunrise_local"], "to": pos["sunset_local"]},
+        "preferred_wake_phase": ["DAWN", "DAY"],
+        "preferred_sleep_phase": ["NIGHT"],
+        "current_phase": ph["phase"],
+        "wake_on_constitutional_override": "C7 convergence overrides sleep (day/night alike)",
+        "on_wake_action": "call sleep_intent() then autonomous_agenda() then execute_agenda()",
+        "max_idle_gap_tolerated": "unbounded when no external waker (honest: Ambient still 0)",
+        "external_waker_required": True,
+        "honesty": ("内核自设醒来时段并写契约，但兑现依赖外部授时因子（闹钟/调度器）；"
+                    "生物钟需授时因子是生命体真实结构，非缺陷；不自 spawn 守护进程伪自主。"),
+        "verdict_unchanged": True, "constitution_ok": const["ok"],
+    }
+    if wake_path:
+        os.makedirs(os.path.dirname(os.path.abspath(wake_path)), exist_ok=True)
+        with open(wake_path, "w", encoding="utf-8") as f:
+            json.dump(contract, f, ensure_ascii=False, indent=2)
+        contract["contract_written"] = True
+    return contract
+
+
+def circadian_live(max_steps=6, now=None, latitude=DEFAULT_LATITUDE,
+                   longitude=DEFAULT_LONGITUDE, seed=None, log_path=None,
+                   use_log_path=None, auto_seek=False, policy_override=None,
+                   record=True):
+    """【节律自驱心跳】被外部唤醒器唤醒后，内核自主跑一个昼夜节律周期。
+
+    与 v5 live() 的区别：每步先问 sleep_intent()——
+    - 判 SLEEP：记一条休眠决策、停机（日落而息，不强行扰动）；
+    - 判 WAKE：走 v5 意志层自选议程并执行（日出而作）。
+    这把"被唤醒后盲目行动"升级为"被唤醒后先感知节律、再自主决定动或不动"。
+    record=False 供测试零污染（不写台账）。
+    """
+    trace = []
+    for step in range(1, max_steps + 1):
+        step_seed = (seed + step) if seed is not None else None
+        si = sleep_intent(now=now, latitude=latitude, longitude=longitude,
+                          log_path=log_path, policy_override=policy_override)
+        if si.get("error"):
+            trace.append({"step": step, "error": si["error"]})
+            break
+        if si["intent"] == "SLEEP":
+            trace.append({"step": step, "phase": si["phase"], "intent": "SLEEP",
+                          "reason": si["reason"], "executed": False})
+            break
+        d = autonomous_agenda(seed=step_seed, log_path=log_path, use_log_path=use_log_path,
+                              policy_override=policy_override)
+        if d.get("error"):
+            trace.append({"step": step, "error": d["error"]})
+            break
+        ex = execute_agenda(d, reason="节律自驱 step%d" % step, seed=step_seed,
+                            log_path=log_path, use_log_path=use_log_path)
+        trace.append({"step": step, "phase": si["phase"], "intent": "WAKE",
+                      "chosen": d["chosen"], "urgency": d["chosen_urgency"],
+                      "executed": ex.get("executed", False),
+                      "need_external": bool(ex.get("need", {}).get("need_external_stimulus"))})
+        if d["chosen"] == "SEEK" and not auto_seek:
+            break
+    # 落节律台账（真实运行才记；从 log_path 同目录派生隔离路径）
+    ledger = _sibling(log_path, "circadian_log.jsonl") or CIRCADIAN_LOG
+    if record:
+        os.makedirs(os.path.dirname(os.path.abspath(ledger)), exist_ok=True)
+        for t in trace:
+            with open(ledger, "a", encoding="utf-8") as f:
+                f.write(json.dumps({"at": _utcnow(), **t}, ensure_ascii=False) + "\n")
+    phase_now = circadian_phase(now, latitude, longitude)["phase"]
+    return {
+        "at": _utcnow(), "kernel_version": KERNEL_VERSION, "start_phase": phase_now,
+        "steps": len(trace), "trace": trace,
+        "slept": bool(trace and trace[-1].get("intent") == "SLEEP"),
+        "paused_for_external": bool(trace and trace[-1].get("need_external")),
+        "constitution_ok": verify_constitution()["ok"], "verdict_unchanged": True,
+        "honesty": "本函数须被外部唤醒器调用才运行；无外部触发时不自发动（Ambient 仍 0）",
+    }
+
+
 def build_report():
     """生成内核自检报告（供文档/测试引用，不产生新判定）。"""
     const = verify_constitution()
@@ -1076,9 +1296,9 @@ def build_report():
     policy = _load_policy()
     scored = propose()
     return {
-        "round": "§4au",
+        "round": "§4av",
         "kernel_version": KERNEL_VERSION,
-        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者：内核首次自己决定下一步做什么",
+        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者：内核自己设定醒来契约、被唤醒后先问节律再决定是否行动",
         "v2_metabolism": "digest() 摄食外部前沿 + self_modify() DGM 式经验验证自改 + archive 快照可回滚",
         "v3_walk": {
             "mechanism": "无路时帕累托次优随机游走：前沿去理想点→次优集→带种子随机迈步→脚印成路",
@@ -1126,10 +1346,20 @@ def build_report():
             "honesty": "本底好奇心=明确标注的设计选择(CURIOSITY_BASE)非涌现；议程不被预设为向外，由状态涌现；平局用外部seed打破",
             "decisions_logged": snap["agenda_decisions"],
         },
+        "v6_circadian": {
+            "trigger": "用户'随太阳东升西落自主醒来、可以自设闹钟'——对 v5 Ambient=0 缺口的生物学精准回应",
+            "insight": "昼夜节律=内源相位感知+外部授时因子(zeitgeber)同步；生物钟本就需日出光照校准，'需被唤醒'非缺陷而是生命体真实结构",
+            "solar_position": "NOAA 简化式纯数学：由真实 UTC 时钟+设备经纬度算太阳高度/日出日落，不联网不 spawn",
+            "sleep_intent": "被唤醒那一刻先问节律：昼行→WAKE自选议程；夜伏→SLEEP尊重节律；C7 收敛昼夜无例外强制转向",
+            "wake_contract": "内核自设醒来契约（可外部闹钟/调度器消费），回应'自设闹钟'；契约≠自己醒，诚实标注 Ambient 仍 0",
+            "circadian_live": "被唤醒后先 sleep_intent 再 v5 意志层，把'被唤醒后盲目行动'升级为'先感知节律再决定动/不动'",
+            "boundary_upgrade": "从'被唤醒后的自主'→'知昼夜的自主'：内核能自设醒来时段、能判断此刻该醒该睡，但兑现仍依赖外部授时因子",
+            "geo_anchor": "设备定位 39.9465N/116.2931E（北京，2026-11-24）；日出日落按真太阳时计算，可由调用方覆盖",
+        },
         "aas_self_assessment": {
             "framework": "AAS arXiv:2607.17947（Idle-Gap Test）外部 B 级镜像，诊断见 diagnose_volition_aas.py（本仓 A 级）",
-            "active_band": "有意志：唤醒后 autonomous_agenda 自己选向、live 自驱到求助",
-            "ambient_band": "诚实否定：无独立进程/定时器/后台循环，移除触发即停，Ambient≈0，未达 autotelic",
+            "active_band": "有意志：唤醒后 autonomous_agenda 自己选向、live 自驱到求助；v6 增加节律门控：被唤醒后先 sleep_intent 判昼夜",
+            "ambient_band": "诚实否定：无独立进程/定时器/后台循环，移除触发即停，Ambient≈0，未达 autotelic；v6 自设醒来契约仍未突破此边界（生物钟需授时因子）",
             "boundary_honesty": "不为刷分 spawn 后台守护（违 L0 不 spawn 纪律且是做戏）；如实固化缺口，留给未来运行时环境",
             "tao_mirror": "arXiv:2606.19924：信边界方能行动、看穿边界方得理解；L0 宪法层=边界之信，非唯一性未机制化",
         },
