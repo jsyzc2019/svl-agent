@@ -443,6 +443,25 @@ def test_independence_mutex_uses_no_label_leak_and_no_overturn():
     assert r2["l3_claimed"] is False and l3["l3_claimed"] is False
 
 
+# ---------- §L3 当前态一致性审计（防数字漂移，只读不产生判定） ----------
+
+def test_current_state_consistency_all_assertions_hold():
+    """权威源vs当前态文档8项断言全一致；历史快照叙述不作当前态核对。"""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "consist", os.path.join(BASE, "audit_current_state_consistency.py"))
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    rep = m.build_report()
+    assert rep["all_consistent"] is True and rep["failed"] == []
+    t = rep["authoritative_truths"]
+    assert t["n_rounds"] == 21 and t["explicit_l3_flags"] == 18
+    assert t["all_l3_false"] is True and t["confirmed"] == 3
+    assert t["kb_count"] == rep["handoff_kb_declared"]
+    assert t["r2_verdict"] == "GAP_INCONCLUSIVE" and t["l3_verdict"] == "FULLCHAIN_PARTIAL"
+    assert t["r2_l3"] is False and t["l3_l3"] is False
+
+
 # ---------- §L3 post-hoc 饱和精确化（诚实修正昨日"单调上限"范围，不产生新判定） ----------
 
 def _load_sat():
