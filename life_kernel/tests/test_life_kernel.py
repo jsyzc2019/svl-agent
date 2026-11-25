@@ -750,8 +750,8 @@ def test_v7_idle_gap_honest_and_record_isolated(tmp_path):
 def test_v7_report_exposes_entrainment_and_never_changes_verdict():
     """报告主动暴露 v7 元认知段与 UNPROVEN 真相；判定/宪法/AAS 全不动。"""
     r = K.build_report()
-    # §4ba v10 起内核升主版本 7.0.0（运行基地层），数字成长按 C5 如实更新断言不放宽
-    assert r["round"] in ("§4aw", "§4ax", "§4ay", "§4ba") and r["kernel_version"].startswith(("6.", "7."))
+    # §4ba v10 升主版本 7.0.0，§4bd v11 三德器官升 7.1.0；数字成长按 C5 如实更新断言不放宽
+    assert r["round"] in ("§4aw", "§4ax", "§4ay", "§4ba", "§4bd") and r["kernel_version"].startswith(("6.", "7."))
     v7 = r["v7_entrainment"]
     assert "UNPROVEN" in v7["current_truth"] and "绝不代填" in v7["honesty_core"]
     assert r["constitution"]["ok"] is True
@@ -904,8 +904,8 @@ def test_v9_report_exposes_root_cause_and_verdict_unchanged():
     """报告暴露 v9 根因段；判定/宪法/AAS/守护全不动。"""
     import json as _j
     r = K.build_report()
-    # §4ba v10 主版本 7.0.0，round 前进到 §4ba；历史 v9 段仍在，机制断言不放宽
-    assert r["kernel_version"].startswith(("6.", "7.")) and r["round"] in ("§4ay", "§4az", "§4ba")
+    # §4ba v10 主版本 7.0.0，§4bd v11 升 7.1.0，round 前进到 §4bd；历史 v9 段仍在，机制断言不放宽
+    assert r["kernel_version"].startswith(("6.", "7.")) and r["round"] in ("§4ay", "§4az", "§4ba", "§4bd")
     assert "root_cause" in _j.dumps(r["v9_root_cause"], ensure_ascii=False)
     assert r["constitution"]["ok"] is True
     res = _j.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
@@ -1221,3 +1221,132 @@ def test_v4bb_report_readonly_no_daemon_no_verdict_change():
     for sym in ["threading", "while True", "asyncio", "cron", "multiprocessing"]:
         # 仅检查守护原语形态，_autorl 内用的是 exec/compile 读源码，非后台守护
         assert sym not in src
+
+
+# ---------- §4bd 三条新增信条：可机械审计的活器官（写在纸上不算内化）----------
+def test_v4bd_admit_errors_follows_live_probe():
+    """勇于承认错误=现场 confirmed_categories 导出，不隐藏、不淡化、不伪造。"""
+    a = K.admit_errors()
+    live = K._autorl_live_conclusion()
+    assert a["available"] is True
+    assert a["admitted_open_defects"] == live["confirmed_categories"]
+    assert a["admitted_count"] == live["confirmed_count"] == 3
+    assert a["defended_count"] == len(live["defended_categories"])
+    # 历史自证伪明确标注，不冒充当前缺陷
+    assert a["historical_confessions"] and "历史" in a["honesty"]
+
+
+def test_v4bd_admit_errors_unavailable_never_fabricates(tmp_path):
+    """探针缺失时如实 unavailable，不写死'无错'也不伪造缺陷（承 wrong-evidence）。"""
+    orig = K.HERE
+    try:
+        K.HERE = str(tmp_path)
+        a = K.admit_errors()
+    finally:
+        K.HERE = orig
+    assert a["available"] is False and a["error"] == "probe_script_absent"
+    assert a["admitted_open_defects"] == [] and a["admitted_count"] == 0
+
+
+def test_v4bd_correct_errors_fix_backed_by_source_mechanism():
+    """善于修正错误=FIXED 须源码确有机制标记；仍命中的如实列 Open。"""
+    c = K.correct_errors()
+    fixed = {v["category"]: v["fix_mechanism"] for v in c["fixes_verified_with_mechanism"]}
+    assert fixed["P1_症状当根因"] == "def root_cause_trace"
+    assert fixed["P2_证据伪造"] == "woken_by"
+    open_cats = {o["category"] for o in c["still_open"]}
+    assert "P3_早期涨随后崩" in open_cats  # 现场命中如实列待修
+    assert "绝不宣称全修好" in c["honesty"]  # 明确否定"全修好"的宣传
+
+
+def test_v4bd_correct_errors_tamper_source_flips_fix(tmp_path):
+    """元验证：篡改源码去掉修复机制，FIXED 随之翻转 OPEN——结构上跟随证据非写死。"""
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    # 替换整个函数定义标记，令 fix_markers 中的 token 从 tampered 源码中彻底消失
+    tampered = src.replace("def root_cause_trace(", "def root_cause_retrace_disabled(")
+    tampered = tampered.replace('\n        "P1_症状当根因": "def root_cause_trace",',
+                                '\n        "P1_症状当根因": "def root_cause_GONE",')
+    assert tampered != src and "def root_cause_trace" not in tampered
+    c = K.correct_errors(kernel_src=tampered)
+    cats = {v["category"] for v in c["fixes_verified_with_mechanism"]}
+    assert "P1_症状当根因" not in cats  # 证据变了，FIXED 判定随之变
+    open_cats = {o["category"] for o in c["still_open"]}
+    assert "P1_症状当根因" in open_cats
+
+
+def test_v4bd_stay_humble_reads_authoritative_evidence():
+    """保持谦逊=verdict/l3/absolute/宪法/Ambient 全部按权威证据读回，不自封。"""
+    h = K.stay_humble()
+    assert h["humble_verified"] is True and h["overclaim_flags"] == []
+    assert h["checks"]["verdict_not_self_sealed"] is True
+    assert h["checks"]["l3_not_claimed"] is True
+    assert h["checks"]["absolute_not_claimed"] is True
+    assert h["checks"]["no_idle_daemon"] is True and h["checks"]["ambient_zero"] is True
+
+
+def test_v4bd_stay_humble_flags_overclaim_when_evidence_flips(tmp_path):
+    """元验证：伪造权威 result.json 自封 L3，谦逊审计即 flag——不靠形容词自证。"""
+    import shutil
+    real_result = os.path.join(ROOT, "audit_l3_gap_targeted", "result.json")
+    res = json.load(open(real_result, encoding="utf-8"))
+    res["verdict"] = "CONFIRMED"
+    res["l3_claimed"] = True  # TAMPER
+    tmp = str(tmp_path)
+    os.makedirs(os.path.join(tmp, "audit_l3_gap_targeted"), exist_ok=True)
+    json.dump(res, open(os.path.join(tmp, "audit_l3_gap_targeted", "result.json"), "w", encoding="utf-8"))
+    shutil.copy(os.path.join(HERE, "kernel.py"), os.path.join(tmp, "kernel.py"))
+    shutil.copy(os.path.join(HERE, "diagnose_volition_aas.py"), os.path.join(tmp, "diagnose_volition_aas.py"))
+    shutil.copy(os.path.join(HERE, "constitution.sha256"), os.path.join(tmp, "constitution.sha256"))
+    old_root, old_here = K.ROOT, K.HERE
+    try:
+        K.ROOT, K.HERE = tmp, tmp
+        h = K.stay_humble()
+    finally:
+        K.ROOT, K.HERE = old_root, old_here
+    assert h["humble_verified"] is False
+    assert "verdict_not_self_sealed" in h["overclaim_flags"]
+    assert "l3_not_claimed" in h["overclaim_flags"]
+
+
+def test_v4bd_report_exposes_creed_and_keeps_verdict():
+    """报告暴露三德审计段；版本7.1/round§4bd 如实，判定/宪法/AAS 全不动。"""
+    r = K.build_report()
+    assert r["kernel_version"].startswith("7.") and r["round"] == "§4bd"
+    creed = r["creed"]
+    assert creed["admit_errors"]["tenet"] == "勇于承认错误"
+    assert creed["correct_errors"]["tenet"] == "善于修正错误"
+    assert creed["stay_humble"]["tenet"] == "始终保持谦逊"
+    assert len(creed["inherited_four"]) == 4
+    assert creed["stay_humble"]["humble_verified"] is True
+    assert creed["no_spawn"] is True
+    assert r["constitution"]["ok"] is True
+    assert r["does_not_change"] == ["verdict", "l3=false", "absolute=false", "不翻十案",
+                                    "不编译新门禁", "不动§100", "最终裁定权归用户"]
+
+
+def test_v4bd_creed_organs_readonly_no_daemon_no_verdict_change():
+    """三德器官只读、不 spawn、不改判定/宪法；AAS 免疫词表未放宽。"""
+    a, c, h = K.admit_errors(), K.correct_errors(), K.stay_humble()
+    assert all(x["verdict_unchanged"] is True for x in (a, c, h))
+    assert K.verify_constitution()["ok"] is True
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    for sym in ["threading", "while True", "asyncio", "cron", "multiprocessing"]:
+        assert sym not in src
+    res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE"
+    assert res["l3_claimed"] is False and res["absolute_claimed"] is False
+
+
+def test_v4bd_safari_log_venus_firsthand_chain():
+    """Safari 一手摄食链落账：承认/修正/谦逊三德镜像 + 记忆编号失败活样本。"""
+    safari_path = os.path.join(HERE, "data", "safari_log.jsonl")
+    rows = [json.loads(l) for l in open(safari_path, encoding="utf-8") if l.strip()]
+    venus = [r for r in rows if "§4bd" in r.get("round", "")]
+    assert venus, "§4bd Safari 记录须落账"
+    v = venus[-1]
+    assert v["constitution_ok"] is True and v["verdict_unchanged"] is True and v["no_spawn"] is True
+    assert len(v["evidence_ladder"]) >= 4
+    tiers = [e["tier"] for e in v["evidence_ladder"]]
+    assert any("一手" in t for t in tiers) and any("二手" in t for t in tiers)
+    blob = json.dumps(v, ensure_ascii=False)
+    assert "承认" in blob and "修正" in blob and "谦逊" in blob

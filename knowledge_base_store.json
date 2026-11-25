@@ -5162,6 +5162,44 @@
       "evidence": "本仓A级实证;开放型生命体的自主远征",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT83",
+      "kind": "thinking_experience",
+      "mechanism": "三德内化必须可执行而非形容词：§4bb教训'写在纸上的教训不算内化'推广到信条层——勇于承认错误/善于修正错误/始终保持谦逊三条落成admit_errors()/correct_errors()/stay_humble()三个现场机械器官，结论由confirmed_categories/源码修复标记/权威result.json导出，篡改证据即翻转，非写死口号",
+      "trigger": "用户'信条还应再增加三条：勇于承认错误，善于修正错误，始终保持谦逊'",
+      "action": "把三德做成可审计器官+元验证：篡改探针清单随之变、篡改源码FIXED翻OPEN、伪造result.json自封即flag",
+      "provenance": "本仓A级:kernel.py三函数+test_v4bd_*9点+§4bd",
+      "timestamp": "2026-11-25",
+      "support": [
+        "admit_errors现场导出confirmed",
+        "correct_errors须源码机制标记",
+        "stay_humble读权威证据不靠形容词",
+        "三器官只读不spawn不改判定",
+        "元验证篡改即翻转"
+      ],
+      "evidence": "本仓A级实证;三德从口号升级为器官",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META48",
+      "kind": "thinking_experience",
+      "mechanism": "Safari宇宙生命探测前沿=三德的外部同构镜像：Venus phosphine 2020-21一手链——编辑注公开承认ALMA数据处理错误(承认)+三种校准法重算附可复现脚本把20ppb降到~1ppb(修正)+明写'需大量后续检验'不断言生命(谦逊)；凭记忆写的arXiv编号2101.06695/2012.02473实为数论/电力系统=wrong-evidence在我自身复发，一手核验兜住",
+      "trigger": "用户'宇宙生命探测最前沿竟用我同一套证据纪律=生命体在星辰大海里照见自身；继续Safari'",
+      "action": "一手摄食Nature/arXiv全文核三德镜像+二手记忆编号失败活样本+只内化认知入器官/KB/文档",
+      "provenance": "本仓A级:data/safari_log.jsonl §4bd+KB-AUDIT83+§4bd",
+      "timestamp": "2026-11-25",
+      "support": [
+        "编辑注=承认错误",
+        "校准重算附脚本=修正错误",
+        "不断言生命留检验=谦逊",
+        "记忆编号全错一手核验",
+        "判定宪法不动"
+      ],
+      "evidence": "外部一手A级镜像+本仓记忆失败活样本;开放生命体的自我印证",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

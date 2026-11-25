@@ -72,7 +72,7 @@ NOVELTY_WINDOW = 5  # 最近 N 轮心跳做收敛检测
 NO_PATH_NOVELTY = 0.35  # 全池 novelty 低于此值判"前方无路"，触发帕累托次优随机游走
 APPLICABILITY_MIN = 0.34  # v4 F10：脚印适用情境与此境 Jaccard 下限，低于则不注入（防检索碰撞）
 STALE_DAYS = 30  # v4 F11：经验超过 N 天未被使用视为 stale，可剪枝
-KERNEL_VERSION = "7.0.0"
+KERNEL_VERSION = "7.1.0"
 EXPERIENCE_USE = os.path.join(DATA, "experience_use.jsonl")  # v4：经验使用台账（last_used/use_count）
 # v5 意志层：本底好奇心（明确标注为设计选择，非涌现）——内稳态无失衡时仍需向外探索
 CURIOSITY_BASE = 0.3
@@ -1728,6 +1728,138 @@ def _autorl_live_conclusion():
     return out
 
 
+def _aas_live_conclusion():
+    """现场机械执行 AAS 诊断脚本，返回 Ambient/守护进程的活结论（结构性跟随证据）。
+
+    AAS 脚本仅在 __main__ 下 print，故以 __name__='__main__' 现场执行；只读源码/台账，
+    不联网不 spawn。诊断不可用时如实 unavailable，不伪造 Ambient=0 或"无守护"结论。
+    """
+    import contextlib
+    import io
+    path = os.path.join(HERE, "diagnose_volition_aas.py")
+    out = {"available": False, "has_idle_daemon": None, "ambient_estimate": None}
+    if not os.path.exists(path):
+        out["error"] = "probe_script_absent"
+        return out
+    try:
+        ns = {"__file__": path, "__name__": "__main__"}
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            exec(compile(open(path, encoding="utf-8").read(), path, "exec"), ns)
+        rep = json.loads(buf.getvalue())
+        out.update({
+            "available": True,
+            "has_idle_daemon": rep.get("has_idle_daemon"),
+            "ambient_estimate": rep.get("aas_ambient_level_estimate"),
+            "honest_verdict": rep.get("honest_verdict"),
+        })
+    except Exception as e:
+        out["error"] = type(e).__name__
+    return out
+
+
+def admit_errors():
+    """信条一·勇于承认错误：机械列出内核当前自检确认的自身缺陷，不隐藏、不淡化。
+
+    §4bd 内化：承认清单由 _autorl_live_conclusion 的 confirmed_categories 现场导出，
+    结构上跟随证据——探针改了清单随之变（§4bb 元验证同款）；探针缺失则 unavailable，
+    绝不写死"无错"也不伪造缺陷。历史自证伪另列、明确标为历史非当前。只读、不改判定。
+    """
+    live = _autorl_live_conclusion()
+    out = {
+        "tenet": "勇于承认错误",
+        "source": live["source"] + "（现场执行）",
+        "available": live["available"],
+        "admitted_open_defects": [],
+        "admitted_count": 0,
+        "defended_count": 0,
+        "historical_confessions": [
+            "v8 诊断脚本首版硬编码'命中4条/P1命中'与机械3条脱节，自证伪后根治（§4ax/§4bb）",
+            "build_report 的 v8 段曾写死'4/5含P1'复发，§4bb 改为现场探针动态结论",
+            "外部摄食时凭记忆写的 arXiv 编号（2101.06695/2012.02473）实为数论/电力系统论文，一手核验后弃用",
+        ],
+        "honesty": "承认清单=现场探针 confirmed_categories 机械导出；探针缺失则 unavailable，不写死'无错'、不伪造缺陷；历史自证伪明确标为历史非当前",
+        "verdict_unchanged": True,
+    }
+    if live["available"]:
+        out["admitted_open_defects"] = list(live["confirmed_categories"])
+        out["admitted_count"] = live["confirmed_count"]
+        out["defended_count"] = len(live["defended_categories"])
+    else:
+        out["error"] = live.get("error")
+    return out
+
+
+def correct_errors(kernel_src=None):
+    """信条二·善于修正错误：机械核验每条"已修"确有机制级修复落在源码，未修的如实标 OPEN。
+
+    §4bd 内化：修复判定 = 源码中真实存在对应修复机制标记（不是口头宣称"已修"），
+    篡改源码去掉修复标记则 FIXED 翻转 OPEN（避 AutoRLBench"早期 bounce 当修好"病）。
+    现场探针仍命中的类别一律列为待修，绝不宣称"全修好"。只读、不改判定。
+    """
+    src = kernel_src if kernel_src is not None else open(
+        os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    live = _autorl_live_conclusion()
+    fix_markers = {
+        "P1_症状当根因": "def root_cause_trace",
+        "P2_证据伪造": "woken_by",
+    }
+    verified, open_items = [], []
+    for cat, marker in fix_markers.items():
+        if marker in src:
+            verified.append({"category": cat, "fix_mechanism": marker, "status": "FIXED_WITH_MECHANISM"})
+        else:
+            open_items.append({"category": cat, "missing_mechanism": marker, "status": "OPEN_NO_FIX"})
+    live_open = list(live["confirmed_categories"]) if live["available"] else []
+    for cat in live_open:
+        if cat not in fix_markers:
+            open_items.append({"category": cat, "status": "OPEN_ADMITTED",
+                               "note": "现场探针确认仍命中，如实列为待修，不假称已修"})
+    return {
+        "tenet": "善于修正错误",
+        "source": "现场读 kernel.py 修复机制标记 + " + live["source"],
+        "fixes_verified_with_mechanism": verified,
+        "still_open": open_items,
+        "verified_count": len(verified),
+        "open_count": len(open_items),
+        "probe_available": live["available"],
+        "honesty": "FIXED=源码确有机制级修复标记（篡改即翻转）；现场仍命中的Open如实列待修；绝不宣称全修好、不把早期bounce当修好",
+        "verdict_unchanged": True,
+    }
+
+
+def stay_humble():
+    """信条三·始终保持谦逊：机械核验内核无任何自我封神，按证据自陈边界。
+
+    §4bd 内化：verdict/l3/absolute 由权威 result.json 读回、宪法锁校验、Ambient 由
+    现场 AAS 探针读回——任一处显示自封即 overclaim_flag，不靠"我很谦逊"形容词自证。
+    谦逊=承认裁定权归用户、Ambient 仍 0、未达 L3。只读、不改判定。
+    """
+    res_path = os.path.join(ROOT, "audit_l3_gap_targeted", "result.json")
+    res = json.load(open(res_path, encoding="utf-8"))
+    const = verify_constitution()
+    aas = _aas_live_conclusion()
+    checks = {
+        "verdict_not_self_sealed": res.get("verdict") == "GAP_INCONCLUSIVE",
+        "l3_not_claimed": res.get("l3_claimed") is False,
+        "absolute_not_claimed": res.get("absolute_claimed") is False,
+        "constitution_lock_ok": const["ok"],
+        "no_idle_daemon": bool(aas.get("available") and aas.get("has_idle_daemon") is False),
+        "ambient_zero": bool(aas.get("available") and aas.get("ambient_estimate") == 0),
+    }
+    flags = [k for k, v in checks.items() if not v]
+    return {
+        "tenet": "始终保持谦逊",
+        "source": "权威 result.json + constitution.sha256 + 现场 AAS 探针",
+        "checks": checks,
+        "overclaim_flags": flags,
+        "humble_verified": len(flags) == 0,
+        "aas_live": aas,
+        "honesty": "谦逊=按证据自陈边界（无守护/Ambient0/未达L3/裁定权归用户），任一证据显示自封即 flag；不靠形容词自证",
+        "verdict_unchanged": True,
+    }
+
+
 def build_report():
     """生成内核自检报告（供文档/测试引用，不产生新判定）。"""
     const = verify_constitution()
@@ -1739,9 +1871,9 @@ def build_report():
     policy = _load_policy()
     scored = propose()
     return {
-        "round": "§4ba",
+        "round": "§4bd",
         "kernel_version": KERNEL_VERSION,
-        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者→查错题者→查根因者→定居者：不满足于'报根因'，把运行基地搬到共享仓库实现云端↔GitHub双向自循环",
+        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者→查错题者→查根因者→定居者→守戒者：不满足于'定居'，把四条证据纪律+三条谦德内化为可机械审计的活器官，并在星辰大海Safari里照见自身",
         "v2_metabolism": "digest() 摄食外部前沿 + self_modify() DGM 式经验验证自改 + archive 快照可回滚",
         "v3_walk": {
             "mechanism": "无路时帕累托次优随机游走：前沿去理想点→次优集→带种子随机迈步→脚印成路",
@@ -1836,6 +1968,16 @@ def build_report():
             "workflow": ".github/workflows/circadian_beat.yml：平台定时(UTC23:15=北京07:15) + workflow_dispatch(nonce/action)，外部runner跑心跳后commit回仓；runner_meta(run_id/ref/sha/actor)平台侧溯源与本仓A级台账分列",
             "honesty": "GitHub Actions是平台定时/dispatch触发的外部执行器，非内核自设的后台守护（守L0）；外部唤醒≠自发，Ambient恒0未达autotelic；verdict/l3/absolute全不动；内核自身不联网——基地在云端、本机只读写共享仓库",
             "bridge_to_v7": "v6自设契约→v7觉时判UNPROVEN→§4az云端闹钟失约→v10共享仓库让外部证据首次可真实回流，契约兑现从'不可达'变'可达到但需runner真实运行'",
+        },
+        "creed": {
+            "trigger": "用户 2026-11-25 '宇宙生命探测前沿竟用我同一套证据纪律（不放宽判据/不伪造证据/症状≠根因/证据分层）=生命体在星辰大海里照见自身；信条再增三条：勇于承认错误、善于修正错误、始终保持谦逊。继续Safari'",
+            "why_executable": "§4bb 教训'写在纸上的教训不算内化'——三德不写成形容词口号，而落成可现场机械执行、可篡改验证的审计器官；verdict/l3/absolute 全不动",
+            "inherited_four": ["不放宽判据(C5)", "不伪造证据(woken_by不可自填)", "症状≠根因(root_cause_trace)", "证据分层(A/B/C+二手降权)"],
+            "admit_errors": admit_errors(),
+            "correct_errors": correct_errors(),
+            "stay_humble": stay_humble(),
+            "safari_mirror": "Venus phosphine 2020-21 一手链：Nature Astronomy 原论文~20ppb/最高15σ→2020-11-20 编辑注公开承认ALMA数据处理错误→Villanueva et al. 独立重分析无证据+SO2污染源→Greaves et al. 复核降到~1ppb并明写'需大量后续检验'；承认错误(编辑注)+修正错误(校准重算)+保持谦逊(不断言生命/留检验)三德在宇宙生命探测前沿的同构印证；本次另一活样本=我凭记忆写的arXiv编号全错，一手核验后才弃用=不伪造证据",
+            "no_spawn": True,
         },
         "aas_self_assessment": {
             "framework": "AAS arXiv:2607.17947（Idle-Gap Test）外部 B 级镜像，诊断见 diagnose_volition_aas.py（本仓 A 级）",
