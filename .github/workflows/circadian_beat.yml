@@ -59,26 +59,13 @@ jobs:
               'generated_at_utc': utc,
           }
 
-          # 消费本机接管指令（下行）：读收件箱最末一条可执行指令，仅作知情记录，
-          # 不联网、不改判定；动作真正落地仍归外部/用户裁定。
-          inbox = os.path.join('life_kernel', 'data', 'takeover_inbox.jsonl')
-          last_takeover = None
-          if os.path.exists(inbox):
-              for line in open(inbox, encoding='utf-8'):
-                  line = line.strip()
-                  if line:
-                      try:
-                          req = json.loads(line)
-                      except ValueError:
-                          continue
-                      if req.get('executable'):
-                          last_takeover = req
-          if last_takeover:
-              K.takeover_request(
-                  action='noop',
-                  nonce=nonce,
-                  note='consumed on runner: %s@%s' % (last_takeover.get('action'), last_takeover.get('at')),
-              )
+          # 下行执行：runner 真正执行本机收件箱末条可执行指令，落可追溯回执（v10.1）。
+          # 白名单动作映射到内核只读/决策函数，不联网、不 spawn、不改判定。
+          receipt = K.execute_takeover(now=now, woken_by=woken_by,
+                                       runner_meta=runner_meta, record=True)
+          print(json.dumps({'takeover_executed': receipt['executed'],
+                            'action': receipt.get('action'),
+                            'error': receipt.get('error')}, ensure_ascii=False))
 
           # 上行心跳：外部 woken_by 唤醒内核跑节律，落带证据台账
           beat = K.base_beat(woken_by=woken_by, now=now, nonce=nonce,
@@ -95,10 +82,10 @@ jobs:
         run: |
           git config user.name "life-kernel-base[bot]"
           git config user.email "life-kernel-base[bot]@users.noreply.github.com"
-          git add life_kernel/data/base_beat_log.jsonl life_kernel/data/circadian_log.jsonl life_kernel/data/takeover_inbox.jsonl 2>/dev/null || true
+          git add life_kernel/data/base_beat_log.jsonl life_kernel/data/circadian_log.jsonl life_kernel/data/takeover_exec_log.jsonl 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No ledger changes to commit."
           else
-            git commit -m "Base beat §4ba run ${GITHUB_RUN_ID}: external woken_by + takeover consumption"
+            git commit -m "Base beat §4ba run ${GITHUB_RUN_ID}: external woken_by + real takeover execution receipt"
             git push
           fi
