@@ -5052,6 +5052,24 @@
       "evidence": "A级本仓实证；外部唤醒≠自发诚实边界守持",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT79",
+      "kind": "external_insight",
+      "mechanism": "云端'随时接收本机指令'的正确实现=共享仓库收件箱(随时写)+runner被调度时真执行(适时)；v10只写+记消费知情是缺口，v10.1补execute_takeover真调用白名单内核函数并落可追溯回执commit回仓；非实时常驻监听(无daemon守L0)",
+      "trigger": "用户建议'云端要能随时接收本机指令并适时执行'",
+      "action": "新增execute_takeover()：[status/probe/digest/reorient/noop/sleep_override]映射真函数、未知动作拒执行、回执takeover_exec_log落账；workflow调用并commit回执",
+      "provenance": "本仓A级：kernel.py execute_takeover+circadian_beat.yml+专项6点/全量1503",
+      "timestamp": "2026-11-25",
+      "support": [
+        "六动作真映射测试",
+        "未知动作拒绝不伪造",
+        "无pending空跑诚实零",
+        "真实exec台账零污染"
+      ],
+      "evidence": "A级本仓机制验证；外部runner执行非自发Ambient恒0",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

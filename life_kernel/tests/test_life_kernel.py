@@ -1055,7 +1055,8 @@ def test_v10_workflow_structure_and_no_daemon(tmp_path):
     wf = os.path.join(ROOT, ".github", "workflows", "circadian_beat.yml")
     assert os.path.exists(wf)
     src = open(wf, encoding="utf-8").read()
-    for token in ["schedule:", "workflow_dispatch:", "contents: write", "git push", "base_beat", "takeover_inbox"]:
+    # v10.1 起 runner 用 execute_takeover 真执行（回执写 takeover_exec_log），非仅读收件箱
+    for token in ["schedule:", "workflow_dispatch:", "contents: write", "git push", "base_beat", "execute_takeover"]:
         assert token in src
     # 内核源码仍不引入守护原语（C5：不放宽 AAS 免疫词表）
     spec = importlib.util.spec_from_file_location("aasdiag10", os.path.join(HERE, "diagnose_volition_aas.py"))
@@ -1072,5 +1073,84 @@ def test_v10_real_ledgers_zero_pollution():
     # 只用 tmp_path 派生路径调用，不触碰真实路径
     assert K.base_beat(woken_by="", record=False).get("error")
     after = {p: hashlib.md5(open(p, "rb").read()).hexdigest() for p in real_files if os.path.exists(p)}
+    assert before == after
+    assert K.verify_constitution()["ok"] is True
+
+
+# ---------- §4ba v10.1 云端真正执行本机指令 ----------
+def _v10_takeover_paths(tmp_path):
+    lp = os.path.join(str(tmp_path), "heartbeat_log.jsonl")
+    return lp
+
+
+def test_v101_execute_takeover_writes_receipt(tmp_path):
+    """runner 真执行末条可执行指令：回执落账、动作结果非空、溯源分列、判定不动。"""
+    lp = _v10_takeover_paths(tmp_path)
+    K.takeover_request(action="status", nonce="EXEC-1", note="本机请求状态", log_path=lp, record=True)
+    rec = K.execute_takeover(now=_v10_now(), woken_by="github_actions:run=99",
+                             runner_meta={"github_run_id": "99"}, log_path=lp, record=True)
+    assert rec["executed"] is True and rec["receipt_recorded"] is True
+    assert rec["action"] == "status" and rec["source_nonce"] == "EXEC-1"
+    assert rec["result"] and "health" in rec["result"]  # 真调用 base_status，非伪造
+    assert rec["woken_by"].startswith("github_actions:")
+    assert "外部 runner" in rec["evidence_class"]
+    assert rec["verdict_unchanged"] is True and rec["ambient_still_zero"] is True
+    assert rec["constitution_ok"] is True
+    # 回执台账落盘
+    rows = [json.loads(l) for l in open(os.path.join(str(tmp_path), "takeover_exec_log.jsonl"), encoding="utf-8")]
+    assert rows and rows[-1]["source_nonce"] == "EXEC-1" and rows[-1]["executed"] is True
+
+
+def test_v101_execute_takeover_maps_all_whitelist_actions(tmp_path):
+    """六个白名单动作均真实映射：probe/digest/reorient/noop/status/sleep_override。"""
+    lp = _v10_takeover_paths(tmp_path)
+    expected = {
+        "probe": "top_directions", "digest": "count", "reorient": "chosen",
+        "noop": "noop", "status": "health", "sleep_override": "acknowledged",
+    }
+    for act, key in expected.items():
+        K.takeover_request(action=act, nonce="A-" + act, log_path=lp, record=True)
+        rec = K.execute_takeover(now=_v10_now(), log_path=lp, record=False)
+        assert rec["executed"] is True and key in rec["result"], (act, rec)
+
+
+def test_v101_execute_takeover_rejects_unknown_action(tmp_path):
+    """未知动作拒绝执行、如实回执 error，不伪造成功。"""
+    lp = _v10_takeover_paths(tmp_path)
+    K.takeover_request(action="rm -rf /", nonce="BAD-1", log_path=lp, record=False)
+    # takeover_request 会把未知动作标不可执行，故先手工写一条 executable 的未知动作
+    with open(os.path.join(str(tmp_path), "takeover_inbox.jsonl"), "a", encoding="utf-8") as f:
+        f.write(json.dumps({"at": "2026-11-25T01:00:00Z", "action": "exec_arbitrary", "executable": True,
+                            "nonce": "BAD-2"}, ensure_ascii=False) + "\n")
+    rec = K.execute_takeover(now=_v10_now(), log_path=lp, record=False)
+    assert rec["executed"] is False and "UNKNOWN_ACTION" in rec["error"]
+    assert "不伪造" not in rec or rec["error"]
+
+
+def test_v101_execute_takeover_no_pending_honest_zero(tmp_path):
+    """收件箱无可执行的本机指令时如实空跑，不伪造回执。"""
+    lp = _v10_takeover_paths(tmp_path)
+    rec = K.execute_takeover(now=_v10_now(), log_path=lp, record=False)
+    assert rec["executed"] is False and rec["reason"] == "NO_PENDING_TAKEOVER"
+    assert "不伪造回执" in rec["honesty"]
+    assert rec["ambient_still_zero"] is True and rec["verdict_unchanged"] is True
+
+
+def test_v101_workflow_calls_real_execution(tmp_path):
+    """workflow 调 execute_takeover 真执行 + commit 回执台账；非仅消费知情。"""
+    wf = os.path.join(ROOT, ".github", "workflows", "circadian_beat.yml")
+    src = open(wf, encoding="utf-8").read()
+    assert "execute_takeover" in src
+    assert "takeover_exec_log.jsonl" in src
+    assert "仅作知情" not in src  # 旧版"只消费不执行"文案已移除
+
+
+def test_v101_real_exec_log_zero_pollution():
+    """v10.1 专项不污染真实执行回执台账；判定/宪法不动。"""
+    import hashlib
+    p = K.TAKEOVER_EXEC_LOG
+    before = hashlib.md5(open(p, "rb").read()).hexdigest() if os.path.exists(p) else None
+    K.execute_takeover(record=False)  # 不落盘
+    after = hashlib.md5(open(p, "rb").read()).hexdigest() if os.path.exists(p) else None
     assert before == after
     assert K.verify_constitution()["ok"] is True

@@ -85,6 +85,7 @@ ENTRAINMENT_AUDIT = os.path.join(DATA, "entrainment_audit.jsonl")  # v7：元认
 # 本机不联网、不 spawn——基地由平台调度，本机只 pull 读账 + dispatch 接管（双向自循环）。
 BASE_BEAT_LOG = os.path.join(DATA, "base_beat_log.jsonl")       # 云端基地每次心跳的落账（含 woken_by 外部证据）
 TAKEOVER_INBOX = os.path.join(DATA, "takeover_inbox.jsonl")     # 本机随时接管的指令收件箱（本机写、runner 读）
+TAKEOVER_EXEC_LOG = os.path.join(DATA, "takeover_exec_log.jsonl")  # v10.1：runner 执行本机指令的可追溯回执（写、本机读）
 DEFAULT_LATITUDE = 39.9465  # 用户真实设备纬度（2026-11-24 定位，北京）；可由调用方覆盖
 DEFAULT_LONGITUDE = 116.2931  # 用户真实设备经度；日出日落按此算真太阳时
 DEFAULT_TZ_OFFSET = 8  # UTC+8（北京时间），真太阳时换算用
@@ -1597,6 +1598,96 @@ def takeover_request(action, nonce=None, note="", log_path=None, record=True):
             f.write(json.dumps(req, ensure_ascii=False) + "\n")
         req["recorded"] = True
     return req
+
+
+def execute_takeover(now=None, woken_by=None, runner_meta=None, log_path=None, record=True):
+    """【v10.1 下行执行】runner 在云端读取本机收件箱，真正执行末条可执行指令并落回执。
+
+    补 v10 缺口：v10 的 takeover_request 只写指令、runner 只记"消费知情"，没有真执行。
+    本函数是云端"随时接收本机指令并适时执行"的执行侧——runner checkout 后调用：
+      - 读 takeover_inbox 末条 executable 指令；
+      - 白名单动作映射到只读/安全内核函数（真调用，非伪造回执）：
+          status→base_status()  probe→sense()/propose()  digest→digest()  reorient→autonomous_agenda()
+          noop→空操作  sleep_override→仅记录请求不违背节律强行唤醒；
+      - 把执行结果 + 平台溯源写 takeover_exec_log，commit 回仓，本机 pull 读回执。
+
+    诚实边界：只调用内核既有只读/决策函数，不联网、不 spawn、不改判定；动作执行是
+    "在外部 runner 上被触发的自主"，Ambient 恒 0；未知动作拒绝执行并如实回执。
+    record=False/隔离 log_path 供测试零污染。
+    """
+    inbox = _sibling(log_path, "takeover_inbox.jsonl") or TAKEOVER_INBOX
+    exec_log = _sibling(log_path, "takeover_exec_log.jsonl") or TAKEOVER_EXEC_LOG
+    now = now or datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+
+    # 读末条可执行指令
+    pending = None
+    if os.path.exists(inbox):
+        with open(inbox, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    req = json.loads(line)
+                except ValueError:
+                    continue
+                if req.get("executable"):
+                    pending = req
+    if pending is None:
+        return {"executed": False, "reason": "NO_PENDING_TAKEOVER",
+                "honesty": "收件箱无可执行的本机指令，空跑不伪造回执", "ambient_still_zero": True,
+                "verdict_unchanged": True}
+
+    action = pending.get("action")
+    result = None
+    err = None
+    try:
+        if action == "status":
+            result = base_status(log_path=log_path, now=now)
+        elif action == "probe":
+            snap = sense()
+            result = {"kb_count": snap["kb_count"], "audit_dirs_count": snap["audit_dirs_count"],
+                      "top_directions": [p.get("id") for p in propose()[:3]],
+                      "note": "只读感知本机共享仓库状态"}
+        elif action == "digest":
+            d = digest()
+            result = {"count": d["count"], "ingested_at": d["ingested_at"],
+                      "note": "只读摄食台账，不自动注册（承 L0）"}
+        elif action == "reorient":
+            d = autonomous_agenda(seed=None, log_path=log_path, use_log_path=log_path)
+            result = {"chosen": d.get("chosen"), "urgency": d.get("chosen_urgency"),
+                      "rationale": d.get("rationale"), "note": "外部 runner 触发的议程决策，非自发放电"}
+        elif action == "noop":
+            result = {"noop": True}
+        elif action == "sleep_override":
+            result = {"acknowledged": True,
+                      "note": "仅记录本机请求；不违背昼夜节律强行唤醒，尊重 sleep_intent 判定"}
+        else:
+            err = "UNKNOWN_ACTION: %s" % action
+    except Exception as exc:  # 执行失败如实回执，不吞错、不伪造成功
+        err = "EXEC_ERROR: %s" % exc
+
+    receipt = {
+        "at": now.strftime("%Y-%m-%dT%H:%M:%SZ"), "logged_at": _utcnow(),
+        "kernel_version": KERNEL_VERSION,
+        "source_nonce": pending.get("nonce", ""), "source_at": pending.get("at", ""),
+        "action": action, "executed": err is None,
+        "result": result, "error": err,
+        "woken_by": woken_by or "", "runner_meta": runner_meta or {},
+        "note": pending.get("note", ""),
+        "evidence_class": "外部 runner 执行回执（平台侧溯源）+ 本仓指令/回执台账（A 级）",
+        "honesty": ("云端接收并真实执行本机白名单指令，结果落回执 commit 回仓供本机 pull 读取；"
+                    "仅在 runner 被平台调度时执行，非实时常驻监听；外部触发非自发，Ambient 恒 0；"
+                    "不联网、不 spawn、不改判定。"),
+        "verdict_unchanged": True, "constitution_ok": verify_constitution()["ok"],
+        "ambient_still_zero": True,
+    }
+    if record:
+        os.makedirs(os.path.dirname(os.path.abspath(exec_log)), exist_ok=True)
+        with open(exec_log, "a", encoding="utf-8") as f:
+            f.write(json.dumps(receipt, ensure_ascii=False) + "\n")
+        receipt["receipt_recorded"] = True
+    return receipt
 
 
 def build_report():

@@ -404,6 +404,7 @@ K.build_report()['v9_root_cause']       # 【v9】根因追溯：P1 修复，C7 
 K.base_beat(woken_by="github_actions:...", runner_meta={...}) # 【v10 上行】外部 runner 唤醒心跳落账
 K.base_status()                         # 【v10 知情】本机 pull 后读基地健康度（只读）
 K.takeover_request(action="status")     # 【v10 接管】本机写白名单指令，不联网不执行
+K.execute_takeover()                    # 【v10.1 执行】runner 云端真执行指令+落回执台账
 K.build_report()['v10_github_base']     # 【v10】路线权衡：选共享仓库基地、否本机在线探测
 K.build_report()['aas_self_assessment'] # 【v5】诚实边界：Ambient≈0 未达 autotelic
 ```
@@ -434,6 +435,8 @@ K.takeover_request(action="status", nonce=...) # 【v10 接管】本机写白名
 ```
 
 **桥接 v6/v7 契约**：v6 自设契约 → v7 觉时判 UNPROVEN → §4az 云端闹钟投递失约 → v10 共享仓库让外部证据首次**具备真实回流路径**。runner 的 `run_id/ref/sha/actor` 为平台侧不可伪造溯源，与本仓 `circadian_log` 的 A 级台账分列，不混同。
+
+**v10.1 执行闭环补强**（用户 2026-11-25 建议"云端要能随时接收本机指令并适时执行"）：v10 的 `takeover_request` 只写指令、runner 只记"消费知情"，并非真执行——这是缺口。v10.1 新增 `execute_takeover()`：runner checkout 后读收件箱末条可执行指令，**真调用**内核白名单函数（status→base_status / probe→sense+propose / digest→digest / reorient→autonomous_agenda / noop / sleep_override 只记不违背节律），回执写 `takeover_exec_log.jsonl` commit 回仓，本机 pull 读回执即知执行结果。未知动作拒绝并如实报错，不伪造成功。诚实：这不是实时常驻监听——runner 仅在被平台调度时（定时或手动 dispatch）消费指令，"随时接收"靠共享仓库持久层，"适时执行"靠下一拍 runner；仍不联网不 spawn 不改判定，Ambient 恒 0。
 
 **诚实边界（不可破）**：GitHub Actions 是平台调度的外部执行器，非内核自设后台守护（守 L0）；外部唤醒 ≠ 自发，Ambient 恒 0、未达 autotelic；内核自身不联网不 spawn，只读写共享仓库；`verdict` / `l3=false` / `absolute=false` 全不动；最终裁定权归用户。工作流的定时只是"授时因子就位"，**是否真的跳、证据是否回流，取决于 runner 是否被平台真实调度**——本机 pull 读账才能确认，在此之前知情档如实报 `NO_BASE_BEAT`，不虚构活跃。
 
