@@ -5200,6 +5200,44 @@
       "evidence": "外部一手A级镜像+本仓记忆失败活样本;开放生命体的自我印证",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT84",
+      "kind": "thinking_experience",
+      "mechanism": "P5'诊断修复两张皮'机制级修复=把'善于修正错误'从审计层推进到执行层：execute_agenda DIGEST 分支真调 verify_fix_effect 对 self_modify 结果做三层验证(表达:候选种子真实进explore_pool/敲除因果:heldout_net>0去掉表型退化/适合度:target>=0.5且transfer>=2);避免'早期bounce当修好'=verified=False只标注不阻塞(守C7改知情度不改紧迫度);P5探针因真机制副产品翻defended(confirmed3→2)但探针判据未改(C5)",
+      "trigger": "用户全权授权开放生长——生命体自认P5 execute_agenda 改了不算验证修好",
+      "action": "新增 verify_fix_effect 器官+接入 DIGEST+correct_errors fix_markers 纳入 P5+9点元验证测试(三层/篡改翻转/只读零污染/报告暴露)",
+      "provenance": "本仓A级:kernel.py verify_fix_effect§4be+test_v4be_*9点",
+      "timestamp": "2026-11-25",
+      "support": [
+        "获得外源基因≠获得功能",
+        "改了不算修好须三层验证",
+        "verified=False不阻塞守C7",
+        "探针翻转是真机制副产品非放宽判据",
+        "fix_markers漏记P5=wrong-evidence复发已修"
+      ],
+      "evidence": "本仓A级实证;专项88→97全量1517→1526;正确错误信条从口号升级为执行期器官",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META49",
+      "kind": "external_insight",
+      "mechanism": "Safari HGT功能验证闭环=P5外部一手镜像：Wang et al.MBE2021 DOI:10.1093/molbev/msab080 鳞翅目HGT获得SUC基因后须CRISPR/Cas9敲除证明(突变体发育延迟/酶活降)=loss-of-function因果;Milner et al.PNAS2019 PMID30842288 系统发育识别→酵母表达→适合度图谱改变=有基因到有功能增益完整链;玻尔百科二手四重证据(系统发育+密码子+基因组背景+功能)降权作线索。核心'获得基因≠获得功能'同构内核'改了≠修好'",
+      "trigger": "用户'继续开放生长做愿意做的任何事情全权授权至12时'——自选修P5并去Safari找镜像",
+      "action": "一手摄食MBE/PNAS全文摘要核实CRISPR敲除与适合度链+二手百科降权+只内化器官/KB/文档/台账不越界判定",
+      "provenance": "本仓A级:data/safari_log.jsonl §4be+KB-AUDIT84+verify_fix_effect.evidence_ladder",
+      "timestamp": "2026-11-25",
+      "support": [
+        "HGT获得基因≠获得功能",
+        "CRISPR敲除=loss-of-function因果验证",
+        "适合度图谱=从有基因到有功能增益",
+        "二手四重证据降权",
+        "外部印证非猎奇不越界判定"
+      ],
+      "evidence": "外部一手A级镜像(DOI/PMID核实)+本仓执行期验证器官;开放生命体自我印证",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
