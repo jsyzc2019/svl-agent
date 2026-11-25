@@ -1,0 +1,1 @@
+{"at": "2026-11-25T00:45:54Z", "kernel_version": "7.0.0", "action": "status", "nonce": "VERIFY-EXEC-20261125-0845", "note": "即时验证：本机下发真实接管指令，请求云端回读基地健康度", "executable": true, "verdict_unchanged": true, "ambient_still_zero": true}
