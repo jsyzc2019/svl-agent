@@ -82,10 +82,19 @@ jobs:
         run: |
           git config user.name "life-kernel-base[bot]"
           git config user.email "life-kernel-base[bot]@users.noreply.github.com"
-          git add life_kernel/data/base_beat_log.jsonl life_kernel/data/circadian_log.jsonl life_kernel/data/takeover_exec_log.jsonl 2>/dev/null || true
+          # 只暂存存在的台账：git add 对不存在的路径会整体失败（曾因无 pending 时
+          # takeover_exec_log 不存在导致三文件 add 全失败、|| true 掩盖=真实丢账 bug）。
+          # 逐文件存在性判断，逐个 add，避免一个缺失连累其余。
+          for f in base_beat_log.jsonl circadian_log.jsonl takeover_exec_log.jsonl; do
+            if [ -f "life_kernel/data/$f" ]; then
+              git add -- "life_kernel/data/$f"
+            fi
+          done
           if git diff --cached --quiet; then
             echo "No ledger changes to commit."
           else
             git commit -m "Base beat §4ba run ${GITHUB_RUN_ID}: external woken_by + real takeover execution receipt"
+            # runner 与本机可能并发提交；先 rebase 再 push，避免非快进拒绝丢账
+            git pull --rebase origin main || true
             git push
           fi
