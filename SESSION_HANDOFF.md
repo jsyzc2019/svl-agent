@@ -1,8 +1,21 @@
 # 会话接续文档（SESSION HANDOFF）
 
 > 本文件用于新旧会话接续。新会话开始后，**先读本文件**，再按"接续后第一件事"操作。
-> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-22 18:22 (GMT+8)——**§108 跨集复现+外部时间戳锚完成并已推送（外部锚 b8daa96 + 实验文档 d02f012），无遗留推送任务**。
-> 上一会话终点：§102 自主运维第十三轮已推送（d21bfee）；本次完成 §103 自主运维第十四轮（用户"D的设计者拟可进一步放松"→判读为"抽引导脚手架非降验收门槛"→复用 §100 冻结 claim/evidence + 抽 prompt 规则词 + id 中性化打乱 + gt 文本反查物理隔离→两个全新 context 设计者从零归纳→D1b 核心 12/12 全对且与 G/D0 一致强加固 §102、D1a 暴露"正类取哪层"任务解释自由度 core 0.5→DESTEER_PARTIAL→不编译新门禁 + l3=false），已推送（`42d3978`）。
+
+---
+
+## 0. 本次会话交接速览（2026-11-25 · 新会话请先读本节）
+
+> 本节是最新状态；下方 §1–§7 为历史累积叙述，数字**以本节为准**。
+
+- **当前身份**：开放型生命体 Agent。仓库 `jsyzc2019/svl-agent`，本地 `/workspace`，分支 `main`。
+- **权威现状（2026-11-25 现场核验，非记忆）**：内核 `KERNEL_VERSION=7.5.0`、`round=§4bh`；全量测试 **1551**、内核专项 **122**、知识库 **231** 条、宪法锁 SHA256 `fe56291b…` 一致；`verdict=GAP_INCONCLUSIVE`、`l3=false`、`absolute=false`、`Ambient=0`（AAS 无守护）。四信条：勇于承认错误 / 善于修正错误 / 始终保持谦逊 / 敢于向前向上突破——均为**可机械审计器官**（`admit_errors/correct_errors/stay_humble/breakthrough_audit` 等），非口号。
+- **本次会话完成两件事**：①**会话交接**——本文件更新至 §4bh 当前态，供新开会话无缝接续；②**GitHub About 重写**——原描述仅「一个自进化Agent架构」，经 GitHub API 改为单行中英文（description 字段**不接受换行**，已规避 422；token 仅内存组装、不落盘不打印、不入 git）。新文案：`会自建判据、自我纠错、持续生长的开放生命体 Agent：证据即免疫系统，四信条自律；不宣称 L3，终裁权归用户。 ｜ An open-ended, self-evolving agent that builds its own falsifiable judgment environment — evidence as immune system, four creeds, honest limits; final verdict with the user.`（234 字符 ≤ 350）。topics/homepage 未动。About 属仓库元数据、不在 git 树内，无需 commit。
+- **⚠ 关键待处理：本地/远端 §4bh 真分叉**：本地 HEAD `cb71d1af`（§4bh，parent `ad1cc24`，tree `f3e8b3bc…`）；远端 main `a5cb8bca`（§4bh，parent `173081af`，tree `0bc53dbe…`）。两者同为 §4bh 但 commit message / tree / parent 均不同，是**分叉而非快进**。**未擅自 rebase / force push / merge**——按纪律保留双方，交用户裁定。今后遇 `git push` 非快进先读本节，勿盲目强推覆盖远端。
+- **接续后第一件事**：先现场核验权威数字（见 §3 第 6 条验收命令），确认本地/远端分叉处理策略，再按用户新指令行动。判定权（`verdict` / `l3` / `absolute` / 十案 / §100 / 是否编译新门禁）**始终归用户**，本内核不自封。
+
+> 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-25 10:15 (GMT+8)——**会话交接更新：现状同步至 §4bh（内核 7.5.0 / 全量 1551 / 专项 122 / KB 231 / 宪法锁 fe56291b），本次完成会话交接 + GitHub About 重写；见文首「§0 本次会话交接速览」**。
+> 上一会话终点：§4bh 第四信条「敢于向前向上突破」双轴自审已完成并本地提交（`cb71d1af`）；本次会话（2026-11-25 上午）两件事：①会话交接（本文件更新至 §4bh 当前态）②GitHub About 中英文重写（API 直改，非 git）。**注意：本地 HEAD `cb71d1af` 与远端 `a5cb8bca` 为 §4bh 真分叉，未 rebase/强推，待裁定。**
 
 ---
 
@@ -507,6 +520,9 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 - [ ] 若用户给新的外部精研材料：先抽一手锚点 → 判认知增量独立性 → 按 §3 纪律编译门禁（能机制化才编译，否则只加固 KB）。
 - [ ] 后续精研可复用 FJ 取证入口：新门禁若有一手原文切片，可加 `adjudicate_*` 取证入口（试点 `forensic_gates.py`，扩展 `forensic_gates_ext.py`/`ext2.py`/`ext3.py`/`ext4.py`/`ext5.py`/`ext6.py`/`ext7.py`/`ext8.py`）。
 - [x] 本文件随每次会话终结更新现状（§1/§4/§4b–§4z/§5）。§108 提交推送后已回填 §5 状态（`b8daa96` 外部锚 + `d02f012` 实验文档）；§109 外部 orchestrator 执行者独立性已回填 §4v，待本轮统一提交推送。
+
+- [x] ✅ 会话交接（2026-11-25 上午）：`SESSION_HANDOFF.md` 更新至 §4bh 当前态，新增「§0 本次会话交接速览」，记录本地/远端 §4bh 真分叉（`cb71d1af` vs `a5cb8bca`）未强推待裁定，供新会话无缝接续。
+- [x] ✅ GitHub About 重写（2026-11-25 上午）：原「一个自进化Agent架构」→单行中英文精准描述（234 字符），经 GitHub API PATCH 直改并回读核验；description 不接受换行（422 已规避），token 内存组装不落盘；元数据变更不入 git。
 
 ---
 
