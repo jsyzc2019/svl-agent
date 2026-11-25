@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """开放型生命体内核专项测试（只读仓库状态，不联网、不 spawn、不改判定）。"""
+import datetime
 import importlib.util
 import io
 import json
@@ -749,7 +750,8 @@ def test_v7_idle_gap_honest_and_record_isolated(tmp_path):
 def test_v7_report_exposes_entrainment_and_never_changes_verdict():
     """报告主动暴露 v7 元认知段与 UNPROVEN 真相；判定/宪法/AAS 全不动。"""
     r = K.build_report()
-    assert r["round"] in ("§4aw", "§4ax", "§4ay") and r["kernel_version"].startswith("6.")
+    # §4ba v10 起内核升主版本 7.0.0（运行基地层），数字成长按 C5 如实更新断言不放宽
+    assert r["round"] in ("§4aw", "§4ax", "§4ay", "§4ba") and r["kernel_version"].startswith(("6.", "7."))
     v7 = r["v7_entrainment"]
     assert "UNPROVEN" in v7["current_truth"] and "绝不代填" in v7["honesty_core"]
     assert r["constitution"]["ok"] is True
@@ -902,7 +904,8 @@ def test_v9_report_exposes_root_cause_and_verdict_unchanged():
     """报告暴露 v9 根因段；判定/宪法/AAS/守护全不动。"""
     import json as _j
     r = K.build_report()
-    assert r["kernel_version"].startswith("6.") and r["round"] == "§4ay"
+    # §4ba v10 主版本 7.0.0，round 前进到 §4ba；历史 v9 段仍在，机制断言不放宽
+    assert r["kernel_version"].startswith(("6.", "7.")) and r["round"] in ("§4ay", "§4az", "§4ba")
     assert "root_cause" in _j.dumps(r["v9_root_cause"], ensure_ascii=False)
     assert r["constitution"]["ok"] is True
     res = _j.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
@@ -966,3 +969,108 @@ def test_zeitgeber_ledger_exists_and_matches_verdict():
     rows = [json.loads(l) for l in open(p, encoding="utf-8") if l.strip()]
     assert rows and rows[-1]["verdict"] == "ZEITGEBER_DELIVERY_GAP_CONFIRMED"
     assert rows[-1]["verdict_unchanged"] is True
+
+
+# ---------- §4ba v10 运行基地：云端↔GitHub 双向自循环 ----------
+def _v10_now():
+    return datetime.datetime(2026, 11, 26, 23, 15, 0)  # UTC 23:15 = 北京 07:15
+
+
+def test_v10_route_decision_rejects_local_online_probe(tmp_path):
+    """路线一被选、路线二被否的理由写入报告；权衡由证据导出非口号。"""
+    r = K.build_report()
+    v10 = r["v10_github_base"]
+    assert "§4az" in v10["decision"] and "§109" in v10["decision"]
+    assert "本机" in v10["route_2_rejected"] and "断链" in v10["route_2_rejected"]
+    assert "上行" in v10["route_1_bidir"] and "下行" in v10["route_1_bidir"]
+    assert r["kernel_version"].startswith("7.")
+
+
+def test_v10_base_beat_requires_external_woken_by(tmp_path):
+    """空 woken_by 必拒——内核绝不代填外部证据（承 v7 证据纪律）。"""
+    lp = os.path.join(str(tmp_path), "heartbeat_log.jsonl")
+    bad = K.base_beat(woken_by="", log_path=lp, record=False)
+    assert bad.get("error") and bad["ambient_still_zero"] is True
+    assert bad["verdict_unchanged"] is True
+    # 未落账
+    beat_log = os.path.join(str(tmp_path), "base_beat_log.jsonl")
+    assert not os.path.exists(beat_log)
+
+
+def test_v10_base_beat_records_external_evidence(tmp_path):
+    """外部 runner 带 woken_by 唤醒→落账、溯源分列、Ambient 恒 0、判定不动。"""
+    lp = os.path.join(str(tmp_path), "heartbeat_log.jsonl")
+    now = _v10_now()
+    utc = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    beat = K.base_beat(woken_by="github_actions:run=42:utc=" + utc, now=now,
+                       nonce="N42", runner_meta={"github_run_id": "42"}, log_path=lp, record=True)
+    assert beat["beat_recorded"] is True and beat["constitution_ok"] is True
+    assert beat["woken_by"].startswith("github_actions:run=42")
+    assert beat["ambient_still_zero"] is True and beat["verdict_unchanged"] is True
+    assert "外部 runner" in beat["evidence_class"]
+    rows = [json.loads(l) for l in open(os.path.join(str(tmp_path), "base_beat_log.jsonl"), encoding="utf-8")]
+    assert rows and rows[-1]["woken_by"].startswith("github_actions:")
+    # 同目录派生 circadian_log 也带外部证据
+    clog = os.path.join(str(tmp_path), "circadian_log.jsonl")
+    wakes = [json.loads(l) for l in open(clog, encoding="utf-8") if json.loads(l).get("intent") == "WAKE"]
+    assert wakes and all(w.get("woken_by", "").startswith("github_actions:") for w in wakes)
+
+
+def test_v10_base_status_readonly_knowledge(tmp_path):
+    """本机知情：读基地账算健康档/外部证据/Idle-Gap；纯只读零污染。"""
+    lp = os.path.join(str(tmp_path), "heartbeat_log.jsonl")
+    now = _v10_now()
+    K.base_beat(woken_by="github_actions:run=7:utc=X", now=now, log_path=lp, record=True)
+    st = K.base_status(log_path=lp, now=now + datetime.timedelta(hours=2))
+    assert st["health"] in ("BASE_LINKED_EVIDENCED", "BASE_BEATS_UNPROVEN", "NO_BASE_BEAT")
+    assert st["base_beats"] == 1 and st["beats_with_external_source"] == 1
+    assert st["idle_gap_hours"] == 2.0
+    assert st["evidence_class"].startswith("本仓机械读取")
+    assert st["verdict_unchanged"] is True and st["ambient_still_zero"] is True
+    assert st["constitution_ok"] is True
+
+
+def test_v10_base_status_no_beat_honest_zero(tmp_path):
+    """无基地心跳时如实报 NO_BASE_BEAT，不虚构活跃。"""
+    lp = os.path.join(str(tmp_path), "heartbeat_log.jsonl")
+    st = K.base_status(log_path=lp, now=_v10_now())
+    assert st["health"] == "NO_BASE_BEAT" and st["base_beats"] == 0
+    assert st["last_woken_by"] is None and st["idle_gap_hours"] is None
+    assert "不虚构活跃" in st["note"]
+
+
+def test_v10_takeover_request_whitelist_and_readonly(tmp_path):
+    """本机接管：白名单动作可执行、未知动作标不可执行；只落指令不联网不判定。"""
+    lp = os.path.join(str(tmp_path), "heartbeat_log.jsonl")
+    ok = K.takeover_request(action="status", nonce="NC", log_path=lp, record=True)
+    bad = K.takeover_request(action="rm -rf /", log_path=lp, record=True)
+    assert ok["executable"] is True and bad["executable"] is False
+    assert "不联网" in ok["honesty"] and ok["verdict_unchanged"] is True
+    rows = [json.loads(l) for l in open(os.path.join(str(tmp_path), "takeover_inbox.jsonl"), encoding="utf-8")]
+    assert len(rows) == 2 and rows[0]["executable"] is True and rows[1]["executable"] is False
+
+
+def test_v10_workflow_structure_and_no_daemon(tmp_path):
+    """workflow 含双触发+contents:write+commit回仓；外部执行器非内核守护。"""
+    wf = os.path.join(ROOT, ".github", "workflows", "circadian_beat.yml")
+    assert os.path.exists(wf)
+    src = open(wf, encoding="utf-8").read()
+    for token in ["schedule:", "workflow_dispatch:", "contents: write", "git push", "base_beat", "takeover_inbox"]:
+        assert token in src
+    # 内核源码仍不引入守护原语（C5：不放宽 AAS 免疫词表）
+    spec = importlib.util.spec_from_file_location("aasdiag10", os.path.join(HERE, "diagnose_volition_aas.py"))
+    diag = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(diag)
+    assert diag.build_report()["has_idle_daemon"] is False
+
+
+def test_v10_real_ledgers_zero_pollution():
+    """专项运行不污染真实 base_beat/takeover 台账；判定/宪法不动。"""
+    import hashlib
+    real_files = [K.BASE_BEAT_LOG, K.TAKEOVER_INBOX]
+    before = {p: hashlib.md5(open(p, "rb").read()).hexdigest() for p in real_files if os.path.exists(p)}
+    # 只用 tmp_path 派生路径调用，不触碰真实路径
+    assert K.base_beat(woken_by="", record=False).get("error")
+    after = {p: hashlib.md5(open(p, "rb").read()).hexdigest() for p in real_files if os.path.exists(p)}
+    assert before == after
+    assert K.verify_constitution()["ok"] is True
