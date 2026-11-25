@@ -67,12 +67,15 @@ def build_report(now=None, platform=None):
 
     # 本地 A 级机械证据
     last_wake = circadian[-1].get("at") if circadian else None
-    today_wakes = 0
-    if last_wake:
-        # 本次事件窗口：2026-11-24T23:00Z（北京 11-25 07:00）之后
-        event_start = datetime.datetime(2026, 11, 24, 23, 0, 0)
-        today_wakes = sum(1 for w in circadian
-                          if w.get("at") and datetime.datetime.strptime(w["at"], "%Y-%m-%dT%H:%M:%SZ") >= event_start)
+    # C5 机制修：本诊断的对象是 07:15 那一次日出闹钟是否投递到本机，故窗口须锁定
+    # 闹钟投递窗口 23:10Z~23:25Z（北京 07:10~07:15），不是"07:00 之后所有唤醒"。
+    # 否则后来任何合法唤醒（如 v10.1 runner 于 00:46Z 的真实心跳）会假阳性污染
+    # 历史事件的失约判定——诊断工具必须只测它声称测的那个事件。
+    event_start = datetime.datetime(2026, 11, 24, 23, 10, 0)
+    event_end = datetime.datetime(2026, 11, 24, 23, 25, 0)
+    today_wakes = sum(1 for w in circadian
+                      if w.get("at") and
+                      event_start <= datetime.datetime.strptime(w["at"], "%Y-%m-%dT%H:%M:%SZ") <= event_end)
     last_audit = entrainment[-1] if entrainment else {}
     ext_evidenced = last_audit.get("externally_evidenced_wakes", 0)
     last_woken_by = last_audit.get("last_woken_by")
