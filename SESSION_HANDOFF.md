@@ -10,18 +10,21 @@
 
 **通道选择（2026-11-25 实测）**：
 - `git clone` / 匿名 GitHub API：此环境不通（git 443 超时、匿名 API 触发 rate limit）。**不要依赖 clone**。
-- ✅ **可用**：带 token 的 `codeload.github.com` tarball 归档下载（http 200，**完整约 13.8MB / 1596 文件**；下载慢、约 3 分钟，务必 `gzip -t` 校验——超时截断会得到残缺的 ~4MB 包；归档根形如 `jsyzc2019-svl-agent-<sha>/`，**不含 `.git` 历史**）。token 在 `assemble_github_token.py` 内存组装（若新会话也无此脚本/分片，则请用户重新注入 token）。
+- ✅ **可用**：`codeload.github.com` tarball 归档下载，**仓库 PUBLIC、匿名即可，无需 token**（带 token 亦可加速；http 200，**完整约 13.8MB / 1596 文件**；下载慢、约 3 分钟，务必 `gzip -t` 校验——超时截断会得到残缺的 ~4MB 包；归档根形如 `jsyzc2019-svl-agent-<sha>/`，**不含 `.git` 历史**）。2026-11-25 已分别实测匿名与带 token 两种均成功。
 
-**自举步骤（在空 /workspace 执行）**：
+**自举步骤（在空 /workspace 执行；仓库 PUBLIC，匿名即可，无需 token）**：
 ```
-TOKEN=$(python3.11 /root/.codebuddy/.secure/assemble_github_token.py)   # 若脚本不存在→请用户重新提供 token
-curl -sL --connect-timeout 30 --max-time 400 -H "Authorization: Bearer $TOKEN" \
+# 匿名 codeload 下载（2026-11-25 实测 http200/13.87MB/1596文件/约175s，gzip 完整）
+curl -sL --connect-timeout 30 --max-time 400 \
   -o /tmp/repo.tar.gz https://codeload.github.com/jsyzc2019/svl-agent/legacy.tar.gz/refs/heads/main
-gzip -t /tmp/repo.tar.gz || echo "归档不完整，重下"     # 必须校验完整性
+gzip -t /tmp/repo.tar.gz || echo "归档不完整，重下"     # 必须校验！超时截断会得到 ~4MB 残缺包
 mkdir -p /workspace && tar xzf /tmp/repo.tar.gz -C /tmp
 cp -a /tmp/jsyzc2019-svl-agent-*/. /workspace/          # 归档根 strip 到 /workspace
-cd /workspace && ls SESSION_HANDOFF.md && git rev-parse HEAD   # 应见 HEAD=a4c52cd
+cd /workspace && ls SESSION_HANDOFF.md                  # 见文件即恢复成功
 ```
+> 可选加速：若本会话的 token 分片脚本恰好可用，加 `-H "Authorization: Bearer $TOKEN"` 到 curl；但**非必需**——匿名已实测成功。
+> 注：新会话空沙箱通常**没有** token 分片脚本，不要因缺 token 而停步，直接匿名下载。
+
 恢复后**重新执行 §0 的核验与工作区梳理**。
 
 **`.git` 历史兜底**：tarball 仅快照、不含 `.git`。若需 git 历史以做"每批 commit 可回滚"，两种办法：①在能连 git 443 的环境 `git clone`（本会话实测 git 传输不通、仅 API/codeload 通，故新会话多半也需走②）；②**用 GitHub API 逐条拉提交重建**代价高，实务上改为**文件副本回滚点**——归档后先 `cp -a /workspace /workspace_pre_sort` 作为回滚基线，每批移动后可选 `diff -rq` 核对，不依赖 git。切勿在无 `.git` 时谎称"git commit 可回滚"。
