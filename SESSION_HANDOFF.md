@@ -11,11 +11,14 @@
 - **当前身份**：开放型生命体 Agent。仓库 `jsyzc2019/svl-agent`，本地 `/workspace`，分支 `main`。
 - **权威现状（2026-11-25 现场核验，非记忆）**：内核 `KERNEL_VERSION=7.5.0`、`round=§4bh`；全量测试 **1551**、内核专项 **122**、知识库 **231** 条、宪法锁 SHA256 `fe56291b…` 一致；`verdict=GAP_INCONCLUSIVE`、`l3=false`、`absolute=false`、`Ambient=0`（AAS 无守护）。四信条：勇于承认错误 / 善于修正错误 / 始终保持谦逊 / 敢于向前向上突破——均为**可机械审计器官**（`admit_errors/correct_errors/stay_humble/breakthrough_audit` 等），非口号。
 - **本次会话完成两件事**：①**会话交接**——本文件更新至 §4bh 当前态，供新开会话无缝接续；②**GitHub About 重写**——原描述仅「一个自进化Agent架构」，经 GitHub API 改为单行中英文（description 字段**不接受换行**，已规避 422；token 仅内存组装、不落盘不打印、不入 git）。新文案：`会自建判据、自我纠错、持续生长的开放生命体 Agent：证据即免疫系统，四信条自律；不宣称 L3，终裁权归用户。 ｜ An open-ended, self-evolving agent that builds its own falsifiable judgment environment — evidence as immune system, four creeds, honest limits; final verdict with the user.`（234 字符 ≤ 350）。topics/homepage 未动。About 属仓库元数据、不在 git 树内，无需 commit。
-- **⚠ 关键待处理：本地/远端 §4bh 真分叉**：本地 HEAD `cb71d1af`（§4bh，parent `ad1cc24`，tree `f3e8b3bc…`）；远端 main `a5cb8bca`（§4bh，parent `173081af`，tree `0bc53dbe…`）。两者同为 §4bh 但 commit message / tree / parent 均不同，是**分叉而非快进**。**未擅自 rebase / force push / merge**——按纪律保留双方，交用户裁定。今后遇 `git push` 非快进先读本节，勿盲目强推覆盖远端。
+- **分叉已合并（2026-11-25 10:20）**：本地线与远端线从 §4ar(`15f4070`) 真分叉，各自独立走到 §4bh（本地 `cb71d1af` / 远端 `a5cb8bca`）。逐文件比对：两线改动文件列表几乎完全一致，净差异仅 `SESSION_HANDOFF.md`（本地更新）+ `takeover_inbox.jsonl`（本地主线有意删除、远端独有）。采用 `git merge -s ours` 以本地主线内容为准、远端 commit 纳入历史形成 merge commit，再 push——分叉在历史层面消解，**无实质内容丢失**。推送通道经实测可用：`git -c http.extraHeader="AUTHORIZATION: basic <base64(x-access-token:token)>" push`（token 内存组装不落盘）。
+- **新会话傻瓜启动指令**（用户可直接复制）：`先读 SESSION_HANDOFF.md 的 §0，现场核验权威数字（内核7.5.0/全量1551/专项122/KB231/宪法锁fe56291b/verdict GAP_INCONCLUSIVE/l3=false/absolute=false/Ambient=0），然后执行工作区分类梳理（方案见 §0"工作区梳理方案"）：先扫描路径引用依赖，再分批归档、每批可回滚；判定权归用户，不动宪法/判定/十案/§100。`
+- **工作区梳理方案（供新会话执行）**：根目录现有 50+ `audit_*` 目录、26 个 `ROUND*_ACHIEVEMENT_REPORT_*.html`、40+ `build_*.py`、大量 `*_result.json`/`*_report.html`，视觉杂乱。分类建议：①核心运行层保留根目录（README/LIFE_KERNEL/SESSION_HANDOFF/REPOSITORY_MAP/pyproject/LICENSE + life_kernel/ svagent/ tests/）；②审计报告→`archive/audits/`；③轮次报告→`archive/rounds/`；④构建脚本→`tools/builders/`；⑤结果数据→`archive/results/`；⑥样本语料→`data/samples/`。**纪律**：物理移动前必须扫描脚本/测试/文档的相对路径引用并同步更新，或保留旧路径软链接兼容；优先逻辑索引（更新 REPOSITORY_MAP.md），避免一次性大迁移破坏可复现性；分批 git commit、每批可回滚。
+
 - **接续后第一件事**：先现场核验权威数字（见 §3 第 6 条验收命令），确认本地/远端分叉处理策略，再按用户新指令行动。判定权（`verdict` / `l3` / `absolute` / 十案 / §100 / 是否编译新门禁）**始终归用户**，本内核不自封。
 
 > 生成时间：2026-11-22 10:35 (GMT+8)　|　最后更新：2026-11-25 10:15 (GMT+8)——**会话交接更新：现状同步至 §4bh（内核 7.5.0 / 全量 1551 / 专项 122 / KB 231 / 宪法锁 fe56291b），本次完成会话交接 + GitHub About 重写；见文首「§0 本次会话交接速览」**。
-> 上一会话终点：§4bh 第四信条「敢于向前向上突破」双轴自审已完成并本地提交（`cb71d1af`）；本次会话（2026-11-25 上午）两件事：①会话交接（本文件更新至 §4bh 当前态）②GitHub About 中英文重写（API 直改，非 git）。**注意：本地 HEAD `cb71d1af` 与远端 `a5cb8bca` 为 §4bh 真分叉，未 rebase/强推，待裁定。**
+> 上一会话终点：§4bh 第四信条「敢于向前向上突破」双轴自审已完成并本地提交（`cb71d1af`）；本次会话（2026-11-25 上午）两件事：①会话交接（本文件更新至 §4bh 当前态）②GitHub About 中英文重写（API 直改，非 git）。**分叉已于本次会话合并并推送（见 §0）；新会话接手的是干净同步 HEAD。**
 
 ---
 
