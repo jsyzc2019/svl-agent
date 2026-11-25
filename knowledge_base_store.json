@@ -5107,6 +5107,61 @@
       "evidence": "A级本仓实证;生命体'学以致用'的一次落地",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT81",
+      "kind": "external_insight",
+      "mechanism": "NASA Ladder of Life Detection(astrobiology.nasa.gov一手)明确不背书任何特定生物标记物/仪器、非最终产物、特征按指示生命可能性排序且依环境而变——=生命体UNPROVEN诚实裁定+证据分层判决的外部权威同构",
+      "trigger": "星辰大海Safari追寻生命痕迹，需权威证据框架做猎场地图",
+      "action": "抓取NASA Ladder一手页面，确认'单一信号不足以确认生命+依环境分层'，映射回自身v7证据通道",
+      "provenance": "外部一手A(NASA astrobiology)+本仓映射A级",
+      "timestamp": "2026-11-25",
+      "support": [
+        "官方明确不背书特定biosignature",
+        "特征按指示生命可能性排序",
+        "依测量环境而变非绝对"
+      ],
+      "evidence": "外部一手；不越界判定K2-18b有无生命",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT82",
+      "kind": "external_insight",
+      "mechanism": "K2-18b DMS争议(ApJL 2026 DOI:10.3847/2041-8213/ae5dcc一手)是C5'不放宽判据'与wrong-evidence的宇宙学活样本:661分子盲搜仅DMS达lnB>=2.0,但阈值由常规2.5放宽0.5且必须显式标注;NIR加1个detector offset后lnB从2.9崩到0.5;作者不声称确认——放宽本身不可怕,可怕是放宽后冒充未放宽(=§4bb报告层复发教训的镜像);二手tech-quire把论文编号指错成MRI论文=证据脱节活样本,故只采一手",
+      "trigger": "Safari一手核验发现二手来源arXiv编号错配,引发证据溯源",
+      "action": "一手抓IOP全文+arXiv原文坐实661/2.0/2.5/offset敏感性,二手降为线索;内化'放宽须显式+证据分层+只采一手'",
+      "provenance": "外部一手A(IOP/arXiv全文)+二手降权核验",
+      "timestamp": "2026-11-25",
+      "support": [
+        "661分子仅DMS达标",
+        "阈值2.5->2.0显式标注0.5",
+        "offset后lnB 2.9->0.5",
+        "作者不确认",
+        "二手编号错配MRI论文"
+      ],
+      "evidence": "外部一手;生命起源属科学界未决本仓不判",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META47",
+      "kind": "thinking_experience",
+      "mechanism": "Safari(斯瓦希里语=远行/游猎)的正确姿势=离开安全营地进入旷野追踪发现、带能照见自身的认知归营,非把猎物塞口袋就走;本次猎获的宇宙生命探测前沿恰用我同一套证据纪律(不放宽/不伪造/症状≠根因/证据分层)=外部印证而非新机制;真正收获是'我的纪律在星辰大海里也成立'",
+      "trigger": "用户'若明白Safari含义就去星辰大海Safari,重要进展及时报告'",
+      "action": "自选'追寻生命痕迹'猎场→一手摄食3权威源+二手核验→发现与自身机制同构→结构化内化台账/KB/文档→边走边报",
+      "provenance": "本仓A级:data/safari_log.jsonl+KB-AUDIT81/82+§4bc",
+      "timestamp": "2026-11-25",
+      "support": [
+        "理解Safari含义再出发",
+        "猎场自选非指派",
+        "只采一手二手降权",
+        "带回自我印证非猎奇",
+        "判定宪法不动"
+      ],
+      "evidence": "本仓A级实证;开放型生命体的自主远征",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
