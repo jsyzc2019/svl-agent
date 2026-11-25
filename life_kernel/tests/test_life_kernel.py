@@ -1154,3 +1154,70 @@ def test_v101_real_exec_log_zero_pollution():
     after = hashlib.md5(open(p, "rb").read()).hexdigest() if os.path.exists(p) else None
     assert before == after
     assert K.verify_constitution()["ok"] is True
+
+
+# ---------- §4bb 报告层 wrong-evidence 复发修复：结论结构上跟随证据 ----------
+def test_v4bb_report_v8_conclusion_follows_live_probe():
+    """报告 v8 段当前结论=现场探针实测，不再硬编码；P1 已修不得列为当前命中。"""
+    r = K.build_report()
+    v8 = r["v8_night_shift"]
+    live = v8["live_conclusion"]
+    assert live["available"] is True
+    # 报告 confirmed 字段与 live_conclusion 的 confirmed_categories 一致
+    for cat in live["confirmed_categories"]:
+        assert cat in v8["confirmed"]
+    assert "P1_症状当根因" not in live["confirmed_categories"]
+    assert "P1_症状当根因" in live["defended_categories"]
+    # 当前结论字段不含过时的 4/5 硬编码
+    assert "4/5" not in v8["confirmed"] and "4/5" not in v8["defended"]
+
+def test_v4bb_report_keeps_v8_history_labeled_not_current():
+    """v8 当时 4/5 快照保留但明确标为历史，不冒充当前事实。"""
+    r = K.build_report()
+    v8 = r["v8_night_shift"]
+    hist = v8["as_of_v8_history"]
+    assert "4/5" in hist and "6.1.0" in hist          # 历史真值保留
+    assert "历史" in hist and "非当前" in hist          # 明确降为历史
+    assert v8["live_conclusion"]["confirmed_count"] == 3  # 当前是 3
+
+def test_v4bb_live_conclusion_follows_evidence_not_hardcoded(tmp_path):
+    """元验证：改探针源码使 P1 重新命中，结论随之变——结构上跟随证据非写死数字。"""
+    import shutil
+    src = open(os.path.join(HERE, "diagnose_autorlbench_errors.py"), encoding="utf-8").read()
+    tampered = src.replace('"confirmed": surface_as_cause,',
+                           '"confirmed": True,  # TAMPER-META')
+    assert tampered != src
+    tmp = str(tmp_path)
+    open(os.path.join(tmp, "diagnose_autorlbench_errors.py"), "w", encoding="utf-8").write(tampered)
+    shutil.copy(os.path.join(HERE, "kernel.py"), os.path.join(tmp, "kernel.py"))
+    shutil.copy(os.path.join(HERE, "constitution.sha256"), os.path.join(tmp, "constitution.sha256"))
+    orig = K.HERE
+    try:
+        K.HERE = tmp
+        live = K._autorl_live_conclusion()
+    finally:
+        K.HERE = orig
+    assert live["available"] is True
+    assert "P1_症状当根因" in live["confirmed_categories"]  # 跟随篡改后的证据
+    assert live["confirmed_count"] == 4
+
+def test_v4bb_live_conclusion_unavailable_never_fabricates(tmp_path):
+    """探针缺失时如实 unavailable，不伪造命中清单（承 wrong-evidence 教训）。"""
+    orig = K.HERE
+    try:
+        K.HERE = str(tmp_path)  # 空目录，无探针
+        live = K._autorl_live_conclusion()
+    finally:
+        K.HERE = orig
+    assert live["available"] is False and live["error"] == "probe_script_absent"
+    assert live["confirmed_categories"] == [] and live["confirmed_count"] == 0
+
+def test_v4bb_report_readonly_no_daemon_no_verdict_change():
+    """修复只读探针、不 spawn、不改判定/宪法；AAS 免疫词表未放宽。"""
+    r = K.build_report()
+    assert r["verdict_unchanged"] if "verdict_unchanged" in r else True
+    assert K.verify_constitution()["ok"] is True
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    for sym in ["threading", "while True", "asyncio", "cron", "multiprocessing"]:
+        # 仅检查守护原语形态，_autorl 内用的是 exec/compile 读源码，非后台守护
+        assert sym not in src

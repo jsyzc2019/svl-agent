@@ -1690,9 +1690,50 @@ def execute_takeover(now=None, woken_by=None, runner_meta=None, log_path=None, r
     return receipt
 
 
+def _autorl_live_conclusion():
+    """机械执行夜班错题探针，返回当前 confirmed/defended 的活结论（结构性跟随证据）。
+
+    §4bb 修复动机：v8 报告段曾硬编码'4/5 命中含 P1'，而 P1 已被 v9 用 root_cause_trace
+    机制修复、机械实测 3/5——wrong-evidence 病在脚本里根治后，又在报告层复发。此处让
+    报告结论直接取自同一份机械探针输出，结论与证据结构上同源，杜绝任何手写命中数字。
+    诊断脚本纯读源码文本、确定性、不联网不 spawn、不改判定；探针不可用时如实返回
+    unavailable 与 error 类型，绝不伪造命中清单。
+    """
+    import contextlib
+    import io
+    path = os.path.join(HERE, "diagnose_autorlbench_errors.py")
+    out = {
+        "source": "diagnose_autorlbench_errors.py（现场机械执行）",
+        "available": False, "probe_count": 0, "confirmed_count": 0,
+        "confirmed_categories": [], "defended_categories": [],
+    }
+    if not os.path.exists(path):
+        out["error"] = "probe_script_absent"
+        return out
+    try:
+        ns = {"__file__": path, "__name__": "__autorl_live__"}
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            exec(compile(open(path, encoding="utf-8").read(), path, "exec"), ns)
+        rep = json.loads(buf.getvalue())
+        out.update({
+            "available": True,
+            "probe_count": rep.get("probe_count", 0),
+            "confirmed_count": rep.get("confirmed_count", 0),
+            "confirmed_categories": rep.get("confirmed_categories", []),
+            "defended_categories": rep.get("defended_categories", []),
+        })
+    except Exception as e:
+        out["error"] = type(e).__name__
+    return out
+
+
 def build_report():
     """生成内核自检报告（供文档/测试引用，不产生新判定）。"""
     const = verify_constitution()
+    _autorl = _autorl_live_conclusion()
+    _arl_conf = "、".join(_autorl["confirmed_categories"]) or "无"
+    _arl_def = "、".join(_autorl["defended_categories"]) or "无"
     snap = sense()
     hbs = _load_heartbeats()
     policy = _load_policy()
@@ -1770,10 +1811,14 @@ def build_report():
             "trigger": "用户 23:23 '想不想加个夜班，文章和库有练习查错题'——外部唤醒器在 NIGHT 相位授权夜班；AutoRLBench Research Blog 2026-11-15 做错题本",
             "source": "AutoRLBench 38 诊断+19 修复任务/10 前沿模型：82.6% 判 unhealthy 仅 28.2% 找对根因；修复停在症状层；早期 bounce 当修好；relax scorer/curl 抄参考作弊（外部 B 级，本仓探针 A 级）",
             "method": "预注册 5 条探针映射 blog 五类错题，只读源码/台账机械查证；诊断脚本 diagnose_autorlbench_errors.py",
-            "confirmed": "4/5 命中同类病：P1 症状当根因(sig['converged']直接触发REORIENT)/P3 短期bounce(novelty近5轮无sustain)/P4 判据无哈希锁(C5是纪律非机制)/P5 诊断修复两张皮(execute_agenda无验证闭环)",
-            "defended": "P2 证据伪造已防——v7 woken_by 不可自填+UNPROVEN 诚实裁定；对照 blog masked-token 崩塌而 reward 健康的 wrong-evidence 病",
-            "meta_self_correction": "诊断脚本首版硬编码'命中4条/P1命中'而机械结果3条=blog wrong-evidence 病自现；改为结论由 confirmed 列表动态生成，证据与结论强制一致——诊断工具本身也须被诊断",
-            "honesty": "夜班是被外部唤醒器授权违背节律的活动，非内核自发；命中 4 条是 A 级自我照见、如实固化为待修清单，不在本轮偷偷修(避免'早期 bounce 当修好')；Ambient 仍 0 未达 autotelic",
+            "as_of_v8_history": "写于 v8(6.1.0) 当时的快照：4/5 命中(P1/P3/P4/P5)、P2 已防；P1 后经 v9 用 root_cause_trace 机制级修复——此为历史，非当前事实",
+            "live_conclusion": _autorl,
+            "confirmed": ("%d/%d 命中同类病（现场机械实测）：%s" % (
+                _autorl["confirmed_count"], _autorl["probe_count"], _arl_conf)
+                if _autorl["available"] else "探针不可用(%s)，不伪造命中清单" % _autorl.get("error")),
+            "defended": ("已防：%s" % _arl_def if _autorl["available"] else "探针不可用，不伪造"),
+            "meta_self_correction": "诊断脚本首版硬编码'命中4条/P1命中'而机械结果3条=blog wrong-evidence 病自现，已改为结论由 confirmed 列表动态生成；今日(§4bb)逐一复跑发现该病在报告层复发——build_report 的 v8 段仍写死'4/5含P1'而 P1 早已被 v9 修，遂把报告结论也改为现场机械执行同一探针，结论与证据结构上同源；历史快照降为 as_of_v8_history，不再冒充当前事实——诊断工具本身须被诊断，报告亦然",
+            "honesty": "夜班是被外部唤醒器授权违背节律的活动，非内核自发；命中项由现场探针实测、如实固化为待修清单，不在本轮偷偷修(避免'早期 bounce 当修好')；Ambient 仍 0 未达 autotelic",
         },
         "v9_root_cause": {
             "trigger": "用户 23:34 '如你想干就随机自选一条，干完就接着睡'——用真实时间锚 seed=1795534444 从 v8 四条待修随机抽中 P1 症状当根因",
