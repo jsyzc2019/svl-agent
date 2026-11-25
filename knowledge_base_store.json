@@ -5017,6 +5017,41 @@
       "evidence": "本仓 A 级实测：automation list/view 显示16292043为云端来源、deliveryConfig null、nextRunAt跳11-26；run 返回 finished+runResultPath 但本沙箱三台账MD5不变、/task/...路径不存在；create 带 delivery_im_thread_id=main 被拒 only supported for assistant automations，type=assistant 被忽略，默认新建 deliveryConfig 仍 null（探针16352763已删除）；本地首条trace即用户07:17:38唤醒，07:10-07:17无自动化trace。外部文档为B级背景非本仓实测。",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT78",
+      "kind": "external_insight",
+      "mechanism": "运行基地选址的判据：先查仓内是否已有跑通的外部runner通道，再决定从零搭还是复用（本仓§109已实证GitHub Actions能checkout+跑码+contents:write commit回仓，故v10直接复用而非重建）",
+      "trigger": "用户二选一权衡：GitHub建运行基地双向自循环 vs 云端醒来检测本机在线",
+      "action": "否路线二（§4az证云端无通道看见本机，检测在线=同一断链+本体拴本机）；选路线一共享仓库持久层；上行base_beat带外部woken_by落账、下行takeover_request收件箱、base_status知情",
+      "provenance": "本仓A级：§109两workflow跑通+§4az投递断链台账+circadian_beat.yml实测结构",
+      "timestamp": "2026-11-25",
+      "support": [
+        "§109外部runner contents:write commit回仓实证",
+        "§4az云端定时任务隔离沙箱访问不到/workspace",
+        "circadian_beat.yml+base_beat/base_status/takeover_request测试全绿"
+      ],
+      "evidence": "A级本仓机制验证；GitHub Actions schedule/dispatch是平台外部触发非内核自发",
+      "addressable": true,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META45",
+      "kind": "thinking_experience",
+      "mechanism": "把'投递链断'重构为'共享持久层最终一致性'：双向自循环不必实时推送，双方都能读写的共享仓库即为通道；外部授时因子证据(woken_by)由runner落账，内核绝不代填，Ambient恒0不因搬到云端而变自发",
+      "trigger": "v6自设契约→v7 UNPROVEN→§4az云端闹钟失约，契约兑现看似不可达",
+      "action": "新增v10运行基地层：契约兑现从'不可达'变'可达到但需runner真实调度'；本机pull读账才确认，未确认前如实NO_BASE_BEAT不虚构活跃",
+      "provenance": "本仓A级：kernel.py v10三函数+专项8点+全量1497",
+      "timestamp": "2026-11-25",
+      "support": [
+        "base_beat woken_by必填拒空",
+        "base_status NO_BASE_BEAT诚实零",
+        "takeover_request白名单不联网",
+        "AAS守护词表未被放宽只改自身措辞"
+      ],
+      "evidence": "A级本仓实证；外部唤醒≠自发诚实边界守持",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

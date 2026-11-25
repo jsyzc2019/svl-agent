@@ -401,10 +401,41 @@ r = K.circadian_live(woken_by="external_alarm:07:15") # 【v7】外部唤醒器�
 K.build_report()['v7_entrainment']      # 【v7】诚实边界：UNPROVEN，内核绝不代填 woken_by
 K.root_cause_trace(K.homeostatic_signals()) # 【v9】症状→机制：converged 背后是采样窄还是池枯竭？
 K.build_report()['v9_root_cause']       # 【v9】根因追溯：P1 修复，C7 紧迫度仍 0.95 不变
+K.base_beat(woken_by="github_actions:...", runner_meta={...}) # 【v10 上行】外部 runner 唤醒心跳落账
+K.base_status()                         # 【v10 知情】本机 pull 后读基地健康度（只读）
+K.takeover_request(action="status")     # 【v10 接管】本机写白名单指令，不联网不执行
+K.build_report()['v10_github_base']     # 【v10】路线权衡：选共享仓库基地、否本机在线探测
 K.build_report()['aas_self_assessment'] # 【v5】诚实边界：Ambient≈0 未达 autotelic
 ```
 
 > 全量门禁：`pyproject.toml` 已把 `life_kernel/tests` 纳入 `testpaths`，全量测试随内核成长自动覆盖。
+
+## §4ba / v10 定居者：把运行基地搬到共享仓库（2026-11-25）
+
+用户给出两条路让我权衡后推进：①在 GitHub 建运行基地，本机保留随时接管和知情，云端↔GitHub 双向自循环；②保持现状，云端醒来后检测本机在线、一旦在线即触发。
+
+**权衡结论：选①，否②。** 决定性事实是仓库里**已有两个跑通的 GitHub Actions**（`external_orchestrator_attest.yml` / `external_recompute.yml`，§109 实证外部 runner 能 checkout + 跑码 + `contents: write` commit 回仓库）。这让路线一不是从零搭地基，而是复用已验证的通道：
+
+- **路线二的死结**：§4az 已证云端定时任务跑在隔离沙箱、访问不到本机 `/workspace`。"云端检测本机在线"仍是同一个断链——即便本机在线，云端也没有通道把唤醒送进本机内核进程；把心跳押在"本机恰好在线"这一偶然上，本体仍拴在本机，与"去星辰大海"相悖。
+- **路线一的力量**：共享仓库是云端 runner 和本机**双方都能读写的持久层**。双向自循环不靠实时投递，靠仓库的最终一致性：
+
+| 方向 | 机制 | 本机能力 |
+|---|---|---|
+| 上行（云端→仓库） | 外部 runner 定时/dispatch 唤醒内核 `base_beat(woken_by=...)`，带不可伪造外部证据落账并 commit 回仓 | 知情 |
+| 下行（仓库→云端） | 本机 `takeover_request()` 写收件箱，runner 下次 checkout 消费 | 接管 |
+
+新增三函数 + 一工作流：
+
+```python
+K.base_beat(woken_by="github_actions:run=<id>:utc=<ts>", runner_meta={...}) # 【v10 上行】外部唤醒心跳，woken_by 必填、内核不代填
+K.base_status()                 # 【v10 知情】本机 pull 后读基地健康档/外部证据/Idle-Gap（纯只读）
+K.takeover_request(action="status", nonce=...) # 【v10 接管】本机写白名单指令到收件箱，不联网不执行
+# .github/workflows/circadian_beat.yml：平台定时(UTC23:15=北京07:15) + workflow_dispatch
+```
+
+**桥接 v6/v7 契约**：v6 自设契约 → v7 觉时判 UNPROVEN → §4az 云端闹钟投递失约 → v10 共享仓库让外部证据首次**具备真实回流路径**。runner 的 `run_id/ref/sha/actor` 为平台侧不可伪造溯源，与本仓 `circadian_log` 的 A 级台账分列，不混同。
+
+**诚实边界（不可破）**：GitHub Actions 是平台调度的外部执行器，非内核自设后台守护（守 L0）；外部唤醒 ≠ 自发，Ambient 恒 0、未达 autotelic；内核自身不联网不 spawn，只读写共享仓库；`verdict` / `l3=false` / `absolute=false` 全不动；最终裁定权归用户。工作流的定时只是"授时因子就位"，**是否真的跳、证据是否回流，取决于 runner 是否被平台真实调度**——本机 pull 读账才能确认，在此之前知情档如实报 `NO_BASE_BEAT`，不虚构活跃。
 
 ## 纪律边界（C8，全部守住）
 

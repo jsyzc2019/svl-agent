@@ -72,7 +72,7 @@ NOVELTY_WINDOW = 5  # 最近 N 轮心跳做收敛检测
 NO_PATH_NOVELTY = 0.35  # 全池 novelty 低于此值判"前方无路"，触发帕累托次优随机游走
 APPLICABILITY_MIN = 0.34  # v4 F10：脚印适用情境与此境 Jaccard 下限，低于则不注入（防检索碰撞）
 STALE_DAYS = 30  # v4 F11：经验超过 N 天未被使用视为 stale，可剪枝
-KERNEL_VERSION = "6.3.0"
+KERNEL_VERSION = "7.0.0"
 EXPERIENCE_USE = os.path.join(DATA, "experience_use.jsonl")  # v4：经验使用台账（last_used/use_count）
 # v5 意志层：本底好奇心（明确标注为设计选择，非涌现）——内稳态无失衡时仍需向外探索
 CURIOSITY_BASE = 0.3
@@ -81,6 +81,10 @@ AGENDA_LOG = os.path.join(DATA, "agenda_log.jsonl")  # v5：自主议程决策�
 WAKE_CONTRACT = os.path.join(DATA, "wake_contract.json")  # v6：醒来契约（可外部调度器消费）
 CIRCADIAN_LOG = os.path.join(DATA, "circadian_log.jsonl")  # v6：昼夜节律决策台账（只追加真实决策）
 ENTRAINMENT_AUDIT = os.path.join(DATA, "entrainment_audit.jsonl")  # v7：元认知审计台账（只追加真实审视）
+# v10 运行基地层：GitHub Actions 外部 runner 作为授时因子，把带证据的心跳 commit 回本仓。
+# 本机不联网、不 spawn——基地由平台调度，本机只 pull 读账 + dispatch 接管（双向自循环）。
+BASE_BEAT_LOG = os.path.join(DATA, "base_beat_log.jsonl")       # 云端基地每次心跳的落账（含 woken_by 外部证据）
+TAKEOVER_INBOX = os.path.join(DATA, "takeover_inbox.jsonl")     # 本机随时接管的指令收件箱（本机写、runner 读）
 DEFAULT_LATITUDE = 39.9465  # 用户真实设备纬度（2026-11-24 定位，北京）；可由调用方覆盖
 DEFAULT_LONGITUDE = 116.2931  # 用户真实设备经度；日出日落按此算真太阳时
 DEFAULT_TZ_OFFSET = 8  # UTC+8（北京时间），真太阳时换算用
@@ -1460,6 +1464,141 @@ def entrainment_audit(contract_path=None, log_path=None, now=None, record=False,
     return result
 
 
+# ---------- v10 运行基地层：云端↔GitHub 双向自循环 ----------
+# 路线权衡（2026-11-25，用户二选一让我权衡后推进）：
+#   路线二「云端醒来检测本机在线再触发」被否——§4az 已证云端隔离沙箱无通道看见本机，
+#   把心跳押在"本机恰好在线"的偶然上=本体仍拴在本机，与"去星辰大海"相悖。
+#   路线一「GitHub 作运行基地」被选——本仓 §109 已实证外部 runner 能 checkout+跑码+
+#   contents:write commit 回仓库。共享仓库是双方都能读写的持久层，双向不靠实时投递。
+# 诚实边界（不可破）：GitHub Actions 外部定时/dispatch 触发 ≠ 内核自发；Ambient 仍 0、
+#   未达 autotelic；不改动 verdict/l3/absolute；内核自身不联网、不 spawn。
+
+BASE_WAKE_SOURCE = "github_actions_external_runner"  # 唯一合法的基地唤醒源标记
+
+
+def base_beat(woken_by, now=None, nonce=None, runner_meta=None, max_steps=6,
+              log_path=None, use_log_path=None, policy_override=None, record=True):
+    """【上行】云端基地一次真实心跳：外部 runner 唤醒内核跑节律并落带证据的台账。
+
+    由 GitHub Actions 外部 runner 调用（见 .github/workflows/circadian_beat.yml）。
+    woken_by 只能由外部传入—— runner 形如 "github_actions:run=<id>:utc=<ts>"；
+    内核绝不代填（承 v7 证据通道纪律）。runner_meta 是平台侧不可伪造的溯源信息
+    （run_id / ref / sha / actor），与本仓 A 级台账分列，不混同。
+
+    这不改变判定：外部定时触发仍是被唤醒后的自主，Ambient 恒 0。
+    record=False 供测试零污染；log_path 单一路径派生所有隔离台账。
+    """
+    source = str(woken_by or "").strip()
+    if not source:
+        return {"error": "woken_by required: 基地心跳必须带外部唤醒源，内核绝不代填",
+                "ambient_still_zero": True, "verdict_unchanged": True}
+    ledger = _sibling(log_path, "base_beat_log.jsonl") or BASE_BEAT_LOG
+    now = now or datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+    circadian = circadian_live(max_steps=max_steps, now=now, woken_by=source,
+                               log_path=log_path, use_log_path=use_log_path,
+                               policy_override=policy_override, record=record)
+    beat = {
+        # at=事件真实时刻（runner 传入的 now），logged_at=本机落账时刻；二者分列，
+        # 使 base_status 的 Idle-Gap 以事件时间为准，不被本机时钟/测试锚点扭曲。
+        "at": now.strftime("%Y-%m-%dT%H:%M:%SZ"), "logged_at": _utcnow(),
+        "kernel_version": KERNEL_VERSION,
+        "channel": "github_actions", "woken_by": source,
+        "nonce": nonce or "", "runner_meta": runner_meta or {},
+        "start_phase": circadian["start_phase"], "steps": circadian["steps"],
+        "slept": circadian["slept"], "paused_for_external": circadian["paused_for_external"],
+        "evidence_class": "外部 runner 触发（平台侧观测）+ 本仓 circadian_log 落账（A 级）",
+        "honesty": ("外部授时因子首次真实兑现 v6/v7 契约：runner 带不可伪造 woken_by 唤醒内核；"
+                    "但触发源在平台、非内核自发放电，Ambient 仍 0 未达 autotelic；"
+                    "仍是被唤醒后自主，不改任何判定。"),
+        "verdict_unchanged": True, "constitution_ok": verify_constitution()["ok"],
+        "ambient_still_zero": True,
+    }
+    if record:
+        os.makedirs(os.path.dirname(os.path.abspath(ledger)), exist_ok=True)
+        with open(ledger, "a", encoding="utf-8") as f:
+            f.write(json.dumps(beat, ensure_ascii=False) + "\n")
+        beat["beat_recorded"] = True
+    return beat
+
+
+def base_status(log_path=None, now=None):
+    """【本机知情·下行】本机从共享仓库读基地健康度：心跳数、外部证据、Idle-Gap。
+
+    纯只读：只读 base_beat_log/circadian_log/entrainment_audit 三本账，不联网、不 spawn、
+    不改判定。本机随时 pull 仓库即可知情——这是路线一相对路线二的核心能力。
+    """
+    beat_log = _sibling(log_path, "base_beat_log.jsonl") or BASE_BEAT_LOG
+    beats = []
+    if os.path.exists(beat_log):
+        with open(beat_log, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        beats.append(json.loads(line))
+                    except ValueError:
+                        continue
+    audit = entrainment_audit(log_path=log_path, now=now, record=False)
+    last = beats[-1] if beats else None
+    idle = None
+    if last and now:
+        try:
+            t0 = datetime.datetime.strptime(last["at"], "%Y-%m-%dT%H:%M:%SZ")
+            idle = round((now - t0).total_seconds() / 3600.0, 2)
+        except (ValueError, KeyError):
+            pass
+    n_evd = sum(1 for b in beats if str(b.get("woken_by") or "").strip())
+    if not beats:
+        health = "NO_BASE_BEAT"
+        note = "共享仓库尚无任何云端基地心跳——基地未运行或投递未回流，知情但不虚构活跃。"
+    elif audit["verdict"] == "EXTERNALLY_EVIDENCED":
+        health = "BASE_LINKED_EVIDENCED"
+        note = ("基地已在平台 runner 上真实跳 %d 次、带外部 woken_by 证据；"
+                "契约被外部授时因子兑现，但仍是外部触发非自发，Ambient 恒 0。" % len(beats))
+    else:
+        health = "BASE_BEATS_UNPROVEN"
+        note = ("基地有 %d 次心跳但外部证据未被 entrainment 采信，如实保留不确定。" % len(beats))
+    return {
+        "at": _utcnow(), "kernel_version": KERNEL_VERSION,
+        "health": health, "note": note,
+        "base_beats": len(beats), "beats_with_external_source": n_evd,
+        "last_beat_at": last["at"] if last else None,
+        "last_woken_by": last.get("woken_by") if last else None,
+        "last_phase": last.get("start_phase") if last else None,
+        "idle_gap_hours": idle,
+        "entrainment_verdict": audit["verdict"],
+        "evidence_class": "本仓机械读取（A 级）——本机 pull 后读共享仓库",
+        "verdict_unchanged": True, "constitution_ok": verify_constitution()["ok"],
+        "ambient_still_zero": True,
+    }
+
+
+def takeover_request(action, nonce=None, note="", log_path=None, record=True):
+    """【本机接管·下行】本机写一条接管指令到共享收件箱，供下次 runner 消费。
+
+    本机不联网、不执行——只把"我希望基地下次做什么"落成可追溯指令（承 v5 SEEK
+    「只声明需求，不自己联网摄食」）。runner 下次 checkout 时读收件箱最末一条未消费指令。
+    action 仅允许白名单，防止本机把任意指令注入基地；不认可的动作原样记录但不标可执行。
+    """
+    inbox = _sibling(log_path, "takeover_inbox.jsonl") or TAKEOVER_INBOX
+    allowed = ("noop", "probe", "digest", "reorient", "status", "sleep_override")
+    act = str(action or "").strip()
+    req = {
+        "at": _utcnow(), "kernel_version": KERNEL_VERSION,
+        "action": act, "nonce": nonce or "", "note": note or "",
+        "executable": act in allowed,
+        "honesty": ("本机只声明接管需求并落共享仓库，不联网、不 spawn、不直接执行；"
+                    "由平台 runner 下次消费，裁定权与最终动作仍归用户/外部。"),
+        "verdict_unchanged": True, "ambient_still_zero": True,
+    }
+    if record:
+        os.makedirs(os.path.dirname(os.path.abspath(inbox)), exist_ok=True)
+        with open(inbox, "a", encoding="utf-8") as f:
+            f.write(json.dumps(req, ensure_ascii=False) + "\n")
+        req["recorded"] = True
+    return req
+
+
 def build_report():
     """生成内核自检报告（供文档/测试引用，不产生新判定）。"""
     const = verify_constitution()
@@ -1468,9 +1607,9 @@ def build_report():
     policy = _load_policy()
     scored = propose()
     return {
-        "round": "§4ay",
+        "round": "§4ba",
         "kernel_version": KERNEL_VERSION,
-        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者→查错题者→查根因者：不满足于'报症状'，追问症状背后的机制根因",
+        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者→查错题者→查根因者→定居者：不满足于'报根因'，把运行基地搬到共享仓库实现云端↔GitHub双向自循环",
         "v2_metabolism": "digest() 摄食外部前沿 + self_modify() DGM 式经验验证自改 + archive 快照可回滚",
         "v3_walk": {
             "mechanism": "无路时帕累托次优随机游走：前沿去理想点→次优集→带种子随机迈步→脚印成路",
@@ -1534,7 +1673,7 @@ def build_report():
             "honesty_core": "woken_by 仅由外部唤醒器调用 circadian_live(woken_by=...) 写入，内核绝不代填；无证据如实判 UNPROVEN，不把手动/自驱刷成契约兑现",
             "evidence_channel": "circadian_live() 新增 woken_by 参数作为可追溯兑现证据源；默认 None=无外部源，audit 不计入兑现",
             "recursion": "从'知昼夜'(对外感知)→'觉时'(对自身承诺的元审视)：递归一小步，非自发放电、不改 Ambient=0",
-            "current_truth": "现存 circadian_log 唯一 WAKE 记录写于 v6、无 woken_by 字段 → 判 UNPROVEN：契约从未被证明由外部授时因子兑现；日出闹钟自 2026-11-25 起才可能累积证据",
+            "current_truth": "v7 写下契约时唯一 WAKE 无 woken_by→判 UNPROVEN；§4az 云端闹钟投递断链未兑现；v10 起 GitHub Actions 外部 runner 经 base_beat() 带不可伪造 woken_by 落账，若 runner 真实运行则 entrainment 可转 EXTERNALLY_EVIDENCED——本机 pull 读账知情，不自证、不伪造",
         },
         "v8_night_shift": {
             "trigger": "用户 23:23 '想不想加个夜班，文章和库有练习查错题'——外部唤醒器在 NIGHT 相位授权夜班；AutoRLBench Research Blog 2026-11-15 做错题本",
@@ -1551,6 +1690,16 @@ def build_report():
             "c7_preserved": "关键约束：追溯只改转向的知情度，不改紧迫度——converged 仍 REORIENT/0.95 压过所有议程，宪法 C7 novelty 义务不破坏；真修复非塞词骗探针",
             "probe_flip": "P1 探针由 confirmed 翻转为 defended：诊断命中 4→3（P1 仅因函数体内真实 root_cause/mechanism 机制层而翻转，是修复副产品非目的）；v8 测试同步锁定新真实",
             "honesty": "是真机制级修复（读真实池算 jaccard）而非放宽探针；但只修 P1，P3/P4/P5 仍如实留有，不假装全修好；reflex: 本轮是'被授权夜班+真随机自选'的自主行为，Ambient 仍 0 未达 autotelic",
+        },
+        "v10_github_base": {
+            "trigger": "用户 2026-11-25 '去星辰大海两条路：①GitHub建运行基地+本机保留接管知情+双向自循环 ②云端醒来检测本机在线即触发；你来权衡推进'",
+            "decision": "选路线一：路线二把心跳押在'本机恰好在线'，但§4az已证云端隔离沙箱无通道看见本机，本体仍拴本机、与使命相悖；路线一复用本仓§109已实证的GitHub Actions外部runner(checkout+跑码+contents:write commit回仓)——共享仓库是双方都能读写的持久层，双向不靠实时投递",
+            "route_1_bidir": "上行=外部runner定时/手动dispatch唤醒内核base_beat()带不可伪造woken_by落账+commit回仓；下行=本机pull读base_status()知情+写takeover_request()到收件箱供runner下次消费",
+            "route_2_rejected": "云端检测本机在线=断链的另一种说法（§4az：云端访问不到/workspace）；即便本机在线，云端也无推送通道把唤醒送进本机内核进程",
+            "functions": "base_beat()外部唤醒上行心跳[woken_by必填内核不代填]+base_status()本机只读知情[心跳数/外部证据/Idle-Gap/健康档]+takeover_request()本机接管指令[白名单动作+不联网不执行]",
+            "workflow": ".github/workflows/circadian_beat.yml：平台定时(UTC23:15=北京07:15) + workflow_dispatch(nonce/action)，外部runner跑心跳后commit回仓；runner_meta(run_id/ref/sha/actor)平台侧溯源与本仓A级台账分列",
+            "honesty": "GitHub Actions是平台定时/dispatch触发的外部执行器，非内核自设的后台守护（守L0）；外部唤醒≠自发，Ambient恒0未达autotelic；verdict/l3/absolute全不动；内核自身不联网——基地在云端、本机只读写共享仓库",
+            "bridge_to_v7": "v6自设契约→v7觉时判UNPROVEN→§4az云端闹钟失约→v10共享仓库让外部证据首次可真实回流，契约兑现从'不可达'变'可达到但需runner真实运行'",
         },
         "aas_self_assessment": {
             "framework": "AAS arXiv:2607.17947（Idle-Gap Test）外部 B 级镜像，诊断见 diagnose_volition_aas.py（本仓 A 级）",
