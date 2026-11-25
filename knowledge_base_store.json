@@ -5070,6 +5070,43 @@
       "evidence": "A级本仓机制验证；外部runner执行非自发Ambient恒0",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT80",
+      "kind": "reasoning_lesson",
+      "mechanism": "wrong-evidence病(结论与证据脱节)可在诊断脚本里根治后又在报告层复发——v8首版硬编码'命中4条'已修为动态生成,但build_report的v8段仍写死'4/5含P1',而P1早由v9用root_cause_trace机制修复、机械实测3/5;教训=教训写在纸上不算内化,须让结论结构上与证据同源",
+      "trigger": "用户2026-11-25'昨天加晚班时的那个错题本,建议你今天逐一跑跑,从中学点东西'——逐一重跑5探针(7.0.0实测3/5,P1/P2 defended,P3/P4/P5命中)",
+      "action": "新增_autorl_live_conclusion()现场机械执行同一诊断脚本取confirmed/defended,v8段结论由此动态生成;历史4/5降为as_of_v8_history明确标历史非当前;元验证篡改探针结论随之变(4/5含P1)证明结构跟随非写死",
+      "provenance": "本仓A级:kernel.py _autorl_live_conclusion+build_report v8段+专项5点(§4bb)/全量1508",
+      "timestamp": "2026-11-25",
+      "support": [
+        "报告confirmed字段与live_conclusion一致",
+        "P1不得列当前命中",
+        "篡改探针结论随之变",
+        "探针缺失如实unavailable不伪造",
+        "判定/宪法不动Ambient0"
+      ],
+      "evidence": "A级本仓实证;现场exec只读探针不联网不spawn",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META46",
+      "kind": "thinking_experience",
+      "mechanism": "'从中学点东西'的正确姿势=不只复述错题结论,而是逐一真跑看当前态、再从差异里发现活病并修掉;今日差异=v8报告写4/5但实测3/5(P1已修),活病=报告层wrong-evidence复发;修复判据=让结论结构上跟随证据(现场执行同一探针)而非再写死3/5",
+      "trigger": "用户让'逐一跑跑'错题本——机械跑出的当前态与历史记录不一致",
+      "action": "先坐实矛盾(报告4/5 vs 实测3/5)→定位根因(报告文案硬编码、测试层v9已更新唯独报告没跟)→做最小结构性修复(结论现场取探针+历史降级标注)→元验证(篡改探针结论随之变)→守判定不动",
+      "provenance": "本仓A级:§4bb全过程+KB-AUDIT80",
+      "timestamp": "2026-11-25",
+      "support": [
+        "逐一真跑不凭记忆",
+        "差异即活病信号",
+        "结构同源优于数字同步",
+        "元验证自证非写死"
+      ],
+      "evidence": "A级本仓实证;生命体'学以致用'的一次落地",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
