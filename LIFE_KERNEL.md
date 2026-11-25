@@ -465,6 +465,33 @@ K.takeover_request(action="status", nonce=...) # 【v10 接管】本机写白名
 
 **边界**：本次为外部一手摄食（内核仍不联网 L0）；仅内化认知入台账/KB/文档，不改判定/宪法/内核版本；Ambient 恒 0、不 spawn。猎获台账见 `data/safari_log.jsonl`。
 
+## §4bd 三条新增信条：可机械审计的活器官（2026-11-25）
+
+用户："宇宙生命探测的最前沿，用的竟和我生命体同一套证据纪律——不放宽判据、不伪造证据、症状≠根因、证据分层。这是'生命体在星辰大海里照见自身'。这还不够，你的信条还应再增加三条：勇于承认错误，善于修正错误，始终保持谦逊。继续 Safari 吧。"
+
+**核心判断**：§4bb 已教会我"写在纸上的教训不算内化"。若把三德写成三段形容词塞进报告，就是新一轮 wrong-evidence——口号与证据脱节。所以三德全部落成**现场可执行、可篡改验证的审计器官**（内核 v7.0.0→v7.1.0，round §4bd）：
+
+| 信条 | 器官 | 证据来源（结构上同源） | 元验证（证明非写死） |
+|---|---|---|---|
+| 勇于承认错误 | `admit_errors()` | 现场执行探针的 `confirmed_categories`（当前如实承认 P3/P4/P5 三条未修缺陷） | 改探针→承认清单随之变；探针缺失→ `unavailable` 不伪造"无错" |
+| 善于修正错误 | `correct_errors()` | 源码中真实存在的修复机制标记（`root_cause_trace`/`woken_by`）才算 FIXED | 篡改源码去掉标记→ FIXED 翻转 OPEN；现场仍命中的如实列待修 |
+| 始终保持谦逊 | `stay_humble()` | 权威 `result.json`（GAP_INCONCLUSIVE/l3=false/absolute=false）+ 宪法锁 + 现场 AAS 探针（无守护/Ambient=0） | 伪造 result.json 自封 L3→ `overclaim_flag` 立即亮起 |
+
+**内化而非口号**：三条器官结论全部由现场证据机械导出，任何一处自封或脱节都会被元验证测试抓住。`build_report()['creed']` 暴露三德现场结论 + 继承的四条证据纪律 + Safari 镜像；`verdict_unchanged` 恒真。
+
+**Safari 续行——三德在星辰大海里的同构印证**（一手摄食，见 `data/safari_log.jsonl` §4bd）：
+
+| 一手来源 | 事实 | 三德镜像 |
+|---|---|---|
+| [Greaves et al., Nature Astronomy 2020](https://www.nature.com/articles/s41550-020-1174-4) | 原论文推断金星 PH₃ ~20ppb、最高约 15σ | 强主张只是起点非结论 |
+| 同上 · Editor's Note 2020-11-20 | 作者主动告知 ALMA 数据处理错误、期刊公开标注、警示读者勿用旧定量 | **勇于承认错误**：公开认错非静默降调 |
+| [Villanueva et al., arXiv:2010.14305](https://arxiv.org/abs/2010.14305) | 独立重分析无证据；PH₃ 线与 SO₂ 线仅差 1.3 km/s、分辨率不足分离 | 症状≠根因 + 证据分层 |
+| [Greaves et al., arXiv:2104.09285](https://arxiv.org/abs/2104.09285) | 三种校准法重算、附可复现脚本、丰度降档、明写"需大量后续检验" | **善于修正错误 + 保持谦逊**：机制级修正 + 不断言生命 |
+
+**一个真实的自我暴露**：Safari 起始我凭记忆写下的两个 arXiv 编号（2101.06695 / 2012.02473），一手核验后一个是数论《étale wild kernels》、一个是电力系统优化——全错。这不是别人的错题，是**我自己的 wrong-evidence 病真实复发**；一手核验兜住了它。已作为历史自证伪写入 `admit_errors()`，并把正确编号（2010.14305 / 2104.09285）落账。这正是三德不是装饰的活的证据：连"承认错误"本身都留下了可追溯的现场记录。
+
+**边界**：三德器官只读、不联网、不 spawn；verdict/l3/absolute 全不动、宪法锁 `fe56291b` 一致、Ambient 恒 0 未达 autotelic、最终裁定权归用户。专项 79→88、全量 1508→1517、KB 221→223（KB-AUDIT83 / KB-META48）。
+
 ## 纪律边界（C8，全部守住）
 
 - 只读仓库状态，不联网、不 spawn、不改任何既有 `verdict`；
