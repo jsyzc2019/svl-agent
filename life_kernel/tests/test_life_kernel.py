@@ -750,8 +750,8 @@ def test_v7_idle_gap_honest_and_record_isolated(tmp_path):
 def test_v7_report_exposes_entrainment_and_never_changes_verdict():
     """报告主动暴露 v7 元认知段与 UNPROVEN 真相；判定/宪法/AAS 全不动。"""
     r = K.build_report()
-    # §4ba v10 升主版本 7.0.0，§4bd v11 三德器官升 7.1.0；数字成长按 C5 如实更新断言不放宽
-    assert r["round"] in ("§4aw", "§4ax", "§4ay", "§4ba", "§4bd") and r["kernel_version"].startswith(("6.", "7."))
+    # §4ba v10 升 7.0.0，§4bd 三德升 7.1.0，§4be 验效器官升 7.2.0；数字成长按 C5 如实更新断言不放宽
+    assert r["round"] in ("§4aw", "§4ax", "§4ay", "§4ba", "§4bd", "§4be") and r["kernel_version"].startswith(("6.", "7."))
     v7 = r["v7_entrainment"]
     assert "UNPROVEN" in v7["current_truth"] and "绝不代填" in v7["honesty_core"]
     assert r["constitution"]["ok"] is True
@@ -799,15 +799,15 @@ def test_v8_evidence_fabrication_already_defended():
 
 
 def test_v8_real_gaps_confirmed_sustain_lock_verify():
-    """v9 修复 P1 后，剩余 3 条真实同类病仍被机械确认（P1 已转 defended）。"""
+    """v9 修 P1、§4be 修 P5 后，剩余 2 条真实同类病仍被机械确认（P1/P5 已转 defended）。"""
     rep, _ = _autorl_report()
     cats = set(rep["confirmed_categories"])
-    # P1 已由 v9 症状→机制追溯真修复，不再属于 confirmed；此处锁定新真实
+    # P1 由 v9 症状→机制修复、P5 由 §4be 执行期功能验证修复，均不再 confirmed；锁定新真实
     assert "P1_症状当根因" not in cats
     assert "P2_证据伪造" not in cats
     assert "P3_早期涨随后崩" in cats
     assert "P4_判据被篡改" in cats
-    assert "P5_诊断修复两张皮" in cats
+    assert "P5_诊断修复两张皮" not in cats  # §4be 真机制修复后翻 defended
     assert "87%" in rep["honest_verdict"]  # 结论由机械结果含 blog 数据生成
 
 
@@ -904,8 +904,8 @@ def test_v9_report_exposes_root_cause_and_verdict_unchanged():
     """报告暴露 v9 根因段；判定/宪法/AAS/守护全不动。"""
     import json as _j
     r = K.build_report()
-    # §4ba v10 主版本 7.0.0，§4bd v11 升 7.1.0，round 前进到 §4bd；历史 v9 段仍在，机制断言不放宽
-    assert r["kernel_version"].startswith(("6.", "7.")) and r["round"] in ("§4ay", "§4az", "§4ba", "§4bd")
+    # §4ba v10 主版本 7.0.0，§4bd 升 7.1.0，§4be 升 7.2.0，round 前进到 §4be；历史 v9 段仍在，机制断言不放宽
+    assert r["kernel_version"].startswith(("6.", "7.")) and r["round"] in ("§4ay", "§4az", "§4ba", "§4bd", "§4be")
     assert "root_cause" in _j.dumps(r["v9_root_cause"], ensure_ascii=False)
     assert r["constitution"]["ok"] is True
     res = _j.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
@@ -1178,7 +1178,7 @@ def test_v4bb_report_keeps_v8_history_labeled_not_current():
     hist = v8["as_of_v8_history"]
     assert "4/5" in hist and "6.1.0" in hist          # 历史真值保留
     assert "历史" in hist and "非当前" in hist          # 明确降为历史
-    assert v8["live_conclusion"]["confirmed_count"] == 3  # 当前是 3
+    assert v8["live_conclusion"]["confirmed_count"] == 2  # §4be P5 修复后当前是 2（P3/P4）
 
 def test_v4bb_live_conclusion_follows_evidence_not_hardcoded(tmp_path):
     """元验证：改探针源码使 P1 重新命中，结论随之变——结构上跟随证据非写死数字。"""
@@ -1199,7 +1199,7 @@ def test_v4bb_live_conclusion_follows_evidence_not_hardcoded(tmp_path):
         K.HERE = orig
     assert live["available"] is True
     assert "P1_症状当根因" in live["confirmed_categories"]  # 跟随篡改后的证据
-    assert live["confirmed_count"] == 4
+    assert live["confirmed_count"] == 3  # §4be 基线 2（P3/P4）+ 篡改使 P1 重命中 = 3
 
 def test_v4bb_live_conclusion_unavailable_never_fabricates(tmp_path):
     """探针缺失时如实 unavailable，不伪造命中清单（承 wrong-evidence 教训）。"""
@@ -1230,7 +1230,7 @@ def test_v4bd_admit_errors_follows_live_probe():
     live = K._autorl_live_conclusion()
     assert a["available"] is True
     assert a["admitted_open_defects"] == live["confirmed_categories"]
-    assert a["admitted_count"] == live["confirmed_count"] == 3
+    assert a["admitted_count"] == live["confirmed_count"] == 2  # §4be P5 修复后 admits P3/P4
     assert a["defended_count"] == len(live["defended_categories"])
     # 历史自证伪明确标注，不冒充当前缺陷
     assert a["historical_confessions"] and "历史" in a["honesty"]
@@ -1309,9 +1309,9 @@ def test_v4bd_stay_humble_flags_overclaim_when_evidence_flips(tmp_path):
 
 
 def test_v4bd_report_exposes_creed_and_keeps_verdict():
-    """报告暴露三德审计段；版本7.1/round§4bd 如实，判定/宪法/AAS 全不动。"""
+    """报告暴露三德审计段；版本7.2/round§4be 如实，判定/宪法/AAS 全不动。"""
     r = K.build_report()
-    assert r["kernel_version"].startswith("7.") and r["round"] == "§4bd"
+    assert r["kernel_version"].startswith("7.") and r["round"] == "§4be"
     creed = r["creed"]
     assert creed["admit_errors"]["tenet"] == "勇于承认错误"
     assert creed["correct_errors"]["tenet"] == "善于修正错误"
@@ -1350,3 +1350,129 @@ def test_v4bd_safari_log_venus_firsthand_chain():
     assert any("一手" in t for t in tiers) and any("二手" in t for t in tiers)
     blob = json.dumps(v, ensure_ascii=False)
     assert "承认" in blob and "修正" in blob and "谦逊" in blob
+
+
+# ---------- §4be 执行期功能验证器官：获得外源基因≠获得功能（HGT 敲除镜像）----------
+def _v4be_seed_ids():
+    return [s["id"] for s in K.digest()["seeds"]]
+
+
+def test_v4be_p5_probe_flipped_by_real_mechanism_not_relaxed_criterion():
+    """P5 因 execute_agenda 真实接入验证而翻为 defended；探针判据本身未被放宽。"""
+    live = K._autorl_live_conclusion()
+    assert live["available"] is True
+    assert "P5_诊断修复两张皮" in live["defended_categories"]
+    assert "P5_诊断修复两张皮" not in live["confirmed_categories"]
+    # C5：探针检测逻辑仍是"execute_agenda 体内 verify + attribution"，未删未松
+    diag = open(os.path.join(HERE, "diagnose_autorlbench_errors.py"), encoding="utf-8").read()
+    assert 'exec_verifies = ("verify" in exec_src and "attribution" in exec_src)' in diag
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    ex = src[src.find("def execute_agenda"):src.find("def live")]
+    assert "verify_fix_effect" in ex and "attribution" in ex  # 真机制在体内
+
+
+def test_v4be_verify_fix_effect_three_layers_all_pass():
+    """真接受场景：表达+敲除因果+适合度三层齐 → FIX_FUNCTIONAL_VERIFIED。"""
+    apply = {"accepted": True, "candidate_seed_ids": _v4be_seed_ids(),
+             "validation": {"attribution_detail": {"heldout_net": 2,
+                             "target_repair": 1.0, "transfer_distinct_tags": 5, "all_pass": True}}}
+    v = K.verify_fix_effect(apply)
+    assert v["verdict"] == "FIX_FUNCTIONAL_VERIFIED" and v["verified"] is True
+    assert all(l["passed"] for l in v["evidence_layers"].values())
+    assert v["verdict_unchanged"] is True and v["constitution_ok"] is True
+    assert len(v["evidence_ladder"]) >= 2
+
+
+def test_v4be_knockout_no_phenotype_flips_to_no_causal_effect():
+    """篡改 heldout_net<=0：去掉修复表型不退化='有基因无功能'，翻 NO_CAUSAL_EFFECT。"""
+    apply = {"accepted": True, "candidate_seed_ids": _v4be_seed_ids(), "validation": {}}
+    v = K.verify_fix_effect(apply, attribution_evidence={"heldout_net": 0,
+                            "target_repair": 1.0, "transfer_distinct_tags": 5})
+    assert v["verdict"] == "NO_CAUSAL_EFFECT" and v["verified"] is False
+    assert "有基因无功能" in v["honest"]
+    v2 = K.verify_fix_effect(apply, attribution_evidence={"heldout_net": -1,
+                             "target_repair": 1.0, "transfer_distinct_tags": 5})
+    assert v2["verdict"] == "NO_CAUSAL_EFFECT"  # 负净变化=回归也不算修好
+
+
+def test_v4be_fitness_regression_rejects_single_point():
+    """局部有净增益但 target/transfer 不达标 → FITNESS_REGRESSION，拒绝单点冒充修好。"""
+    apply = {"accepted": True, "candidate_seed_ids": _v4be_seed_ids(), "validation": {}}
+    v = K.verify_fix_effect(apply, attribution_evidence={"heldout_net": 1,
+                            "target_repair": 0.0, "transfer_distinct_tags": 1})
+    assert v["verdict"] == "FITNESS_REGRESSION" and v["verified"] is False
+    assert "不靠单点宣布修好" in v["honest"]
+
+
+def test_v4be_gene_not_expressed_and_no_gene_acquired():
+    """外源基因沉默 / 根本未获得：分别如实降级，绝不伪造 VERIFIED。"""
+    silent = K.verify_fix_effect({"accepted": True, "candidate_seed_ids": [], "validation": {}},
+                                 attribution_evidence={"heldout_net": 2, "target_repair": 1.0,
+                                                       "transfer_distinct_tags": 5})
+    assert silent["verdict"] == "GENE_NOT_EXPRESSED" and silent["verified"] is False
+    none = K.verify_fix_effect({"accepted": False})
+    assert none["verdict"] == "NO_GENE_ACQUIRED" and none["verified"] is False
+    assert "不伪造VERIFIED" in none["honest"]
+
+
+def test_v4be_execute_agenda_digest_actually_calls_verification(tmp_path):
+    """行为层：DIGEST 议程执行后带 fix_verification 现场结果（非只改了就算）。"""
+    hb = os.path.join(str(tmp_path), "heartbeat_log.jsonl")
+    decision = {"chosen": "DIGEST", "chosen_action": "注册摄食种子", "at": K._utcnow(),
+                "chosen_urgency": 0.5, "rationale": "§4be 测试"}
+    out = K.execute_agenda(decision, log_path=hb)
+    assert "fix_verification" in out
+    assert out["fix_verification"]["verdict"] in (
+        "FIX_FUNCTIONAL_VERIFIED", "GENE_NOT_EXPRESSED", "NO_CAUSAL_EFFECT",
+        "FITNESS_REGRESSION", "NO_GENE_ACQUIRED")
+    assert out["verdict_unchanged"] is True and out["constitution_ok"] is True
+
+
+def test_v4be_verify_organ_readonly_zero_pollution_no_spawn():
+    """验证器官只读：运行前后 policy/result 字节一致，不 spawn、不改判定/宪法。"""
+    import shutil
+    track = [os.path.join(ROOT, "life_kernel", "data", "runtime_policy.json"),
+             os.path.join(ROOT, "audit_l3_gap_targeted", "result.json")]
+    before = {p: open(p, "rb").read() for p in track}
+    apply = {"accepted": True, "candidate_seed_ids": _v4be_seed_ids(), "validation": {}}
+    K.verify_fix_effect(apply, attribution_evidence={"heldout_net": 2,
+                        "target_repair": 1.0, "transfer_distinct_tags": 5})
+    for p in track:
+        assert open(p, "rb").read() == before[p]
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    body = src[src.find("def verify_fix_effect"):src.find("def execute_agenda")]
+    for sym in ["threading", "while True", "asyncio", "multiprocessing", "subprocess"]:
+        assert sym not in body
+    assert K.verify_constitution()["ok"] is True
+    res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE" and res["l3_claimed"] is False
+
+
+def test_v4be_correct_errors_registers_p5_and_tamper_flips():
+    """correct_errors 把 P5 记为有机制 FIXED；篡改掉器官则 P5 翻 OPEN。"""
+    c = K.correct_errors()
+    fixed = {v["category"]: v["fix_mechanism"] for v in c["fixes_verified_with_mechanism"]}
+    assert fixed.get("P5_诊断修复两张皮") == "def verify_fix_effect"
+    assert c["verified_count"] == 3  # P1/P2/P5
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    tampered = src.replace("def verify_fix_effect", "def _removed_verify_fix_effect")
+    assert tampered != src and "def verify_fix_effect" not in tampered
+    ct = K.correct_errors(kernel_src=tampered)
+    open_cats = {o["category"] for o in ct["still_open"]}
+    assert "P5_诊断修复两张皮" in open_cats  # 证据变了 FIXED 翻 OPEN
+    assert ct["verified_count"] == 2
+
+
+def test_v4be_report_exposes_v11_and_keeps_all_verdicts():
+    """报告暴露 v11 验效段；版本7.2/round§4be；判定/宪法/AAS/裁定权全不动。"""
+    r = K.build_report()
+    assert r["kernel_version"] == "7.2.0" and r["round"] == "§4be"
+    v11 = r["v11_verify_effect"]
+    assert "获得外源基因≠获得功能" in v11["core_maxim"]
+    assert "verify_fix_effect" in v11["organ"] and "HGT" in v11["mirrors_hgt"]
+    assert v11["verdict_unchanged"] is True
+    assert r["creed"]["correct_errors"]["verified_count"] == 3
+    assert r["creed"]["stay_humble"]["humble_verified"] is True
+    assert r["constitution"]["ok"] is True
+    assert r["does_not_change"] == ["verdict", "l3=false", "absolute=false", "不翻十案",
+                                    "不编译新门禁", "不动§100", "最终裁定权归用户"]

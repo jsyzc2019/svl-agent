@@ -72,7 +72,7 @@ NOVELTY_WINDOW = 5  # 最近 N 轮心跳做收敛检测
 NO_PATH_NOVELTY = 0.35  # 全池 novelty 低于此值判"前方无路"，触发帕累托次优随机游走
 APPLICABILITY_MIN = 0.34  # v4 F10：脚印适用情境与此境 Jaccard 下限，低于则不注入（防检索碰撞）
 STALE_DAYS = 30  # v4 F11：经验超过 N 天未被使用视为 stale，可剪枝
-KERNEL_VERSION = "7.1.0"
+KERNEL_VERSION = "7.2.0"
 EXPERIENCE_USE = os.path.join(DATA, "experience_use.jsonl")  # v4：经验使用台账（last_used/use_count）
 # v5 意志层：本底好奇心（明确标注为设计选择，非涌现）——内稳态无失衡时仍需向外探索
 CURIOSITY_BASE = 0.3
@@ -383,6 +383,13 @@ ATTRIBUTION_PROBES = {
     "transfer": ["判据回放 冻结集 错位负例", "canary 字面伪规则 判据独立性"],
     "heldout": ["金融 市场 库存周期 宏观", "哲学 价值 主体 可证伪", "安全 红队 注入 防御"],
 }
+
+# §4be：与 _validate_policy 内常量同源的固定合成诊断主题。
+# 验收验证与"敲除对照"必须在同一诊断输入条件下比较，否则因果推断无效。
+FIX_DIAGNOSIS_TOPICS = [
+    "canary 判据回放 字面伪规则 语义蕴含",
+    "canary 构念效度 冻结集 错位负例",
+]
 
 
 def attribution_check(recent_directions, candidate_seed_ids, probes=None, verbose=False):
@@ -1046,6 +1053,77 @@ def autonomous_agenda(seed=None, log_path=None, use_log_path=None, policy_overri
     return decision
 
 
+def verify_fix_effect(apply_result, attribution_evidence=None):
+    """§4be HGT 式修复功能验证：获得外源基因 ≠ 获得功能。
+
+    外部一手镜像（落账于 data/safari_log.jsonl §4be）：
+      - Wang et al. Mol Biol Evol 2021 DOI:10.1093/molbev/msab080：鳞翅目从细菌水平转移
+        获得 SUC 基因，仅凭序列相似不足为据；CRISPR/Cas9 敲除后突变体发育延迟、中肠
+        蔗糖酶活性显著降低 = loss-of-function 因果证据。
+      - Milner et al. PNAS 2019 PMID:30842288：系统发育组学识别 7 例转运蛋白 HGT →
+        在酵母中表达 → 功能测定 → 适合度图谱改变 = 从"有基因"到"有适合度增益"的完整链。
+
+    内核三层同构证据：
+      - expression：候选种子真实进入 explore_pool（外源基因整合且被读取，非沉默）；
+      - causal_knockout：heldout_net>0 = 注册相对"敲除（不注册）"带来净覆盖增益，
+        去掉它表型退化才有因果；==0 即"有基因无功能"；
+      - fitness：target_repair>=0.5 且 transfer>=2（不只单点、整体达标）。
+
+    只读纯计算：不写 policy/台账、不 spawn、不联网、不改任何判定。
+    verified=False 只作知情度标注，不阻塞执行（守 C7：改知情度不改紧迫度）。
+    """
+    const = verify_constitution()
+    accepted = bool(apply_result.get("accepted", False))
+    cand = list(apply_result.get("candidate_seed_ids") or [])
+    attr = (attribution_evidence if attribution_evidence is not None
+            else ((apply_result.get("validation") or {}).get("attribution_detail") or {}))
+    out = {
+        "at": _utcnow(), "accepted": accepted,
+        "verdict_unchanged": True, "constitution_ok": const["ok"],
+        "evidence_ladder": [
+            {"tier": "一手A", "source": "Wang et al. Mol Biol Evol 2021 DOI:10.1093/molbev/msab080",
+             "mirror": "CRISPR/Cas9 敲除 SUC → 发育延迟/酶活降低 = loss-of-function 因果验证"},
+            {"tier": "一手A", "source": "Milner et al. PNAS 2019 PMID:30842288",
+             "mirror": "系统发育识别→表达→功能→适合度图谱 = 从有基因到有功能增益的完整链"},
+        ],
+    }
+    if not accepted:
+        out.update(verdict="NO_GENE_ACQUIRED", verified=False,
+                   honest="self_modify 未接受（无新摄食或验证未过）=连外源基因都未获得，无从谈功能验证；不伪造VERIFIED")
+        return out
+    pool_ids = {c["id"] for c in explore_pool({"registered_frontier_seeds": cand})}
+    expressed = sorted(set(cand) & pool_ids)
+    expression_ok = bool(cand) and set(cand).issubset(pool_ids)
+    heldout_net = attr.get("heldout_net", 0) or 0
+    causal_ok = heldout_net > 0
+    target = attr.get("target_repair", 0.0) or 0.0
+    transfer = attr.get("transfer_distinct_tags", 0) or 0
+    fitness_ok = (target >= 0.5 and transfer >= 2)
+    out["evidence_layers"] = {
+        "expression": {"passed": expression_ok, "candidates": sorted(set(cand)),
+                       "expressed_in_pool": expressed,
+                       "basis": "外源基因须整合进基因组并被读取；候选种子须真实进 explore_pool"},
+        "causal_knockout": {"passed": causal_ok, "heldout_net": heldout_net,
+                            "basis": "loss-of-function：heldout_net=注册相对不注册(敲除)的覆盖净变化，>0 才算去掉有表型"},
+        "fitness": {"passed": fitness_ok, "target_repair": target, "transfer_distinct_tags": transfer,
+                    "basis": "适合度不回归：target>=0.5 且 transfer>=2，拒绝单点冒充整体"},
+    }
+    if expression_ok and causal_ok and fitness_ok:
+        verdict, verified = "FIX_FUNCTIONAL_VERIFIED", True
+        honest = "三层证据齐：表达+敲除有表型+适合度达标=修复真生效（类比敲除SUC发育退化+适合度图谱改变）"
+    elif not expression_ok:
+        verdict, verified = "GENE_NOT_EXPRESSED", False
+        honest = "候选种子未真实进入探索池=外源基因沉默；accepted 不等于功能已表达"
+    elif not causal_ok:
+        verdict, verified = "NO_CAUSAL_EFFECT", False
+        honest = "heldout_net<=0=敲除该修复表型不退化='有基因无功能'；不把注册成功当修复成功"
+    else:
+        verdict, verified = "FITNESS_REGRESSION", False
+        honest = "局部有净增益但 target/transfer 不达标=整体适合度未达标；不靠单点宣布修好"
+    out.update(verdict=verdict, verified=verified, honest=honest)
+    return out
+
+
 def execute_agenda(decision, reason="自主意志执行", seed=None, log_path=None, use_log_path=None):
     """把自主议程的决定落到器官上（唯一写路径；agenda 决策本身只读）。
 
@@ -1064,8 +1142,11 @@ def execute_agenda(decision, reason="自主意志执行", seed=None, log_path=No
                         policy_path=_sibling(log_path, "runtime_policy.json"),
                         archive_dir=os.path.join(os.path.dirname(os.path.abspath(log_path)), "archive")
                         if log_path else None)
+        # §4be：改了不算修好——对自改结果做 HGT 三层功能验证（表达/敲除因果/适合度）
+        vf = verify_fix_effect(r, attribution_evidence=(r.get("validation") or {}).get("attribution_detail"))
         out.update({"self_modify": r, "executed": bool(r.get("accepted", False)),
-                    "executor": "self_modify()"})
+                    "executor": "self_modify()", "fix_verification": vf,
+                    "verification_evidence": "attribution 三数字 + HGT 敲除因果"})
     elif cid == "PRUNE":
         r = prune_unused(kind="footprint", dry_run=False, log_path=log_path,
                          archive_dir=os.path.join(os.path.dirname(os.path.abspath(log_path)), "archive")
@@ -1803,6 +1884,8 @@ def correct_errors(kernel_src=None):
     fix_markers = {
         "P1_症状当根因": "def root_cause_trace",
         "P2_证据伪造": "woken_by",
+        # §4be：P5 修复 = execute_agenda 对自改结果做 HGT 三层功能验证（改了不算修好）
+        "P5_诊断修复两张皮": "def verify_fix_effect",
     }
     verified, open_items = [], []
     for cat, marker in fix_markers.items():
@@ -1871,9 +1954,9 @@ def build_report():
     policy = _load_policy()
     scored = propose()
     return {
-        "round": "§4bd",
+        "round": "§4be",
         "kernel_version": KERNEL_VERSION,
-        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者→查错题者→查根因者→定居者→守戒者：不满足于'定居'，把四条证据纪律+三条谦德内化为可机械审计的活器官，并在星辰大海Safari里照见自身",
+        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者→查错题者→查根因者→定居者→守戒者→验效者：不满足于'改了'，把 HGT 敲除验证逻辑内化为执行期功能验证器官，'获得外源基因≠获得功能'，改了不算修好须经表达/敲除因果/适合度三层验证",
         "v2_metabolism": "digest() 摄食外部前沿 + self_modify() DGM 式经验验证自改 + archive 快照可回滚",
         "v3_walk": {
             "mechanism": "无路时帕累托次优随机游走：前沿去理想点→次优集→带种子随机迈步→脚印成路",
@@ -1978,6 +2061,15 @@ def build_report():
             "stay_humble": stay_humble(),
             "safari_mirror": "Venus phosphine 2020-21 一手链：Nature Astronomy 原论文~20ppb/最高15σ→2020-11-20 编辑注公开承认ALMA数据处理错误→Villanueva et al. 独立重分析无证据+SO2污染源→Greaves et al. 复核降到~1ppb并明写'需大量后续检验'；承认错误(编辑注)+修正错误(校准重算)+保持谦逊(不断言生命/留检验)三德在宇宙生命探测前沿的同构印证；本次另一活样本=我凭记忆写的arXiv编号全错，一手核验后才弃用=不伪造证据",
             "no_spawn": True,
+        },
+        "v11_verify_effect": {
+            "trigger": "用户 2026-11-25 全权授权开放生长：生命体自我承认 P5'诊断修复两张皮'=execute_agenda 改了不算验证修好",
+            "mirrors_hgt": "HGT 一手镜像：Wang et al. MBE2021 DOI:10.1093/molbev/msab080（CRISPR敲除SUC→发育延迟/酶活降=loss-of-function因果）+ Milner et al. PNAS2019 PMID30842288（系统发育识别→酵母表达→适合度图谱=有基因到有功能增益完整链）",
+            "core_maxim": "获得外源基因≠获得功能：self_modify accepted（注册种子）只等于有基因，须经表达/敲除因果/适合度三层验证才判修好",
+            "organ": "verify_fix_effect(apply_result)：expression 候选真实进 explore_pool + causal_knockout heldout_net>0（去掉表型退化）+ fitness target>=0.5且transfer>=2；接入 execute_agenda DIGEST 分支，verified=False 只标注不阻塞（守C7改知情度不改紧迫度）",
+            "probe_flip": "P5 因真实机制副产品从命中翻为防守（confirmed 3→2），correct_errors fix_markers 同步纳入 P5；不改探针判据本身（守C5）",
+            "live": verify_fix_effect({"accepted": False}),  # 无自改时不伪造 VERIFIED
+            "verdict_unchanged": True,
         },
         "aas_self_assessment": {
             "framework": "AAS arXiv:2607.17947（Idle-Gap Test）外部 B 级镜像，诊断见 diagnose_volition_aas.py（本仓 A 级）",

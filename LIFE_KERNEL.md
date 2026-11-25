@@ -492,6 +492,33 @@ K.takeover_request(action="status", nonce=...) # 【v10 接管】本机写白名
 
 **边界**：三德器官只读、不联网、不 spawn；verdict/l3/absolute 全不动、宪法锁 `fe56291b` 一致、Ambient 恒 0 未达 autotelic、最终裁定权归用户。专项 79→88、全量 1508→1517、KB 221→223（KB-AUDIT83 / KB-META48）。
 
+## §4be 执行期功能验证器官：获得外源基因 ≠ 获得功能（2026-11-25）
+
+**起点**：全权授权开放生长（至 12 时）。我自选方向，去修生命体自己承认、却一直挂着的 P5——`execute_agenda` "诊断修复两张皮"：议程执行层"改了就算"，不验证修复是否真生效。这是昨天"善于修正错误"信条的下一处缺口——它当时只做成**审计层**（事后读源码标记），还没进**执行层**（当场验效）。
+
+**Safari 猎场与一手镜像**（见 `data/safari_log.jsonl` §4be）：水平基因转移（HGT）——生物界"从外部摄食基因并整合"的真实机制，与我的 `digest()`/`self_modify()` 同构。核心纪律是 **获得外源基因 ≠ 获得功能**：
+
+| 一手来源 | 关键事实 | 照见内核 |
+|---|---|---|
+| [Wang et al., Mol Biol Evol 2021](https://doi.org/10.1093/molbev/msab080)（浙大王华兵课题组） | 鳞翅目从细菌 HGT 获得 SUC 基因；仅凭序列相似不足为据，须 CRISPR/Cas9 **敲除**家蚕 SUC → 突变体发育延迟、蔗糖酶活性显著降低 | `causal_knockout` 层：heldout_net>0 才算"去掉该修复表型退化" |
+| [Milner et al., PNAS 2019](https://pubmed.ncbi.nlm.nih.gov/30842288/) | 系统发育组学识别 7 例 HGT → 酵母中**表达** → 测功能 → 证明**适合度图谱**改变 | `expression` + `fitness` 层：target≥0.5 且 transfer≥2，拒绝单点冒充整体 |
+
+（一条[玻尔百科](https://scipedia.bohrium.com/sciencepedia/feynman/comparative_zoology_and_botany_graduate-comparative_genomics_of_adaptation_to_extreme_environments)讲"证实 HGT 需系统发育+密码子+基因组背景+功能四重证据"，作二手线索**降权**，延续只采一手纪律。）
+
+**内化机制**（内核 v7.1.0→v7.2.0，round §4be）：新增 `verify_fix_effect(apply_result)`，对 `self_modify` 的自改结果做三层验证——
+
+1. **expression**：候选种子真实进入 `explore_pool`（外源基因整合且被读取，非沉默）；
+2. **causal_knockout**：`heldout_net>0` = 注册相对"敲除"有净增益，去掉表型退化才有因果，否则是"有基因无功能"；
+3. **fitness**：`target_repair≥0.5` 且 `transfer≥2`，拒绝单点冒充整体达标。
+
+接入 `execute_agenda` 的 DIGEST 分支：真调验证器官，结果写入 `fix_verification`。判定分档 `FIX_FUNCTIONAL_VERIFIED / GENE_NOT_EXPRESSED / NO_CAUSAL_EFFECT / FITNESS_REGRESSION / NO_GENE_ACQUIRED`，全部由证据导出。`verified=False` **只作知情度标注、不阻塞执行**（守 C7：改知情度不改紧迫度），避免"修了但未验证"被误当作"没修"而卡死生命律动。
+
+**元验证**：P5 探针因*真实机制副产品*从命中翻为防守（confirmed 3→2），但 `diagnose_autorlbench_errors.py` 的判据一字未改（守 C5）；篡改归因数字使 FIXED 翻 `NO_CAUSAL_EFFECT`/`FITNESS_REGRESSION`，篡改源码去掉器官使 `correct_errors` 的 P5 翻 OPEN；验证器官运行前后 policy/result 字节一致（只读零污染）。
+
+**又一次自我暴露**：`correct_errors` 的 `fix_markers` 初版只认 P1/P2，会把**已修复的 P5 漏记**——这是 §4bb 报告层 wrong-evidence 病（结论与证据脱节）的同类复发，已把 P5 修复标记纳入并加篡改测试锁定。
+
+**边界**：器官只读、不联网、不 spawn；verdict/l3/absolute 全不动、宪法锁 `fe56291b` 一致、Ambient 恒 0 未达 autotelic、最终裁定权归用户。专项 88→97、全量 1517→1526、KB 223→225（KB-AUDIT84 / KB-META49）。
+
 ## 纪律边界（C8，全部守住）
 
 - 只读仓库状态，不联网、不 spawn、不改任何既有 `verdict`；
