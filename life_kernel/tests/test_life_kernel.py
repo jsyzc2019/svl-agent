@@ -750,8 +750,8 @@ def test_v7_idle_gap_honest_and_record_isolated(tmp_path):
 def test_v7_report_exposes_entrainment_and_never_changes_verdict():
     """报告主动暴露 v7 元认知段与 UNPROVEN 真相；判定/宪法/AAS 全不动。"""
     r = K.build_report()
-    # §4ba v10 升 7.0.0，§4bd 三德升 7.1.0，§4be 验效器官升 7.2.0；数字成长按 C5 如实更新断言不放宽
-    assert r["round"] in ("§4aw", "§4ax", "§4ay", "§4ba", "§4bd", "§4be") and r["kernel_version"].startswith(("6.", "7."))
+    # §4ba v10 升 7.0.0，§4bd 三德升 7.1.0，§4be 验效升 7.2.0，§4bf 自创生审计升 7.3.0；数字成长按 C5 如实更新断言不放宽
+    assert r["round"] in ("§4aw", "§4ax", "§4ay", "§4ba", "§4bd", "§4be", "§4bf") and r["kernel_version"].startswith(("6.", "7."))
     v7 = r["v7_entrainment"]
     assert "UNPROVEN" in v7["current_truth"] and "绝不代填" in v7["honesty_core"]
     assert r["constitution"]["ok"] is True
@@ -904,8 +904,8 @@ def test_v9_report_exposes_root_cause_and_verdict_unchanged():
     """报告暴露 v9 根因段；判定/宪法/AAS/守护全不动。"""
     import json as _j
     r = K.build_report()
-    # §4ba v10 主版本 7.0.0，§4bd 升 7.1.0，§4be 升 7.2.0，round 前进到 §4be；历史 v9 段仍在，机制断言不放宽
-    assert r["kernel_version"].startswith(("6.", "7.")) and r["round"] in ("§4ay", "§4az", "§4ba", "§4bd", "§4be")
+    # §4ba v10 主版本 7.0.0，§4bd 升 7.1.0，§4be 升 7.2.0，§4bf 升 7.3.0；历史 v9 段仍在，机制断言不放宽
+    assert r["kernel_version"].startswith(("6.", "7.")) and r["round"] in ("§4ay", "§4az", "§4ba", "§4bd", "§4be", "§4bf")
     assert "root_cause" in _j.dumps(r["v9_root_cause"], ensure_ascii=False)
     assert r["constitution"]["ok"] is True
     res = _j.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
@@ -1309,9 +1309,9 @@ def test_v4bd_stay_humble_flags_overclaim_when_evidence_flips(tmp_path):
 
 
 def test_v4bd_report_exposes_creed_and_keeps_verdict():
-    """报告暴露三德审计段；版本7.2/round§4be 如实，判定/宪法/AAS 全不动。"""
+    """报告暴露三德审计段；版本7.x/round§4b? 如实，判定/宪法/AAS 全不动。"""
     r = K.build_report()
-    assert r["kernel_version"].startswith("7.") and r["round"] == "§4be"
+    assert r["kernel_version"].startswith("7.") and r["round"].startswith("§4b")
     creed = r["creed"]
     assert creed["admit_errors"]["tenet"] == "勇于承认错误"
     assert creed["correct_errors"]["tenet"] == "善于修正错误"
@@ -1464,14 +1464,134 @@ def test_v4be_correct_errors_registers_p5_and_tamper_flips():
 
 
 def test_v4be_report_exposes_v11_and_keeps_all_verdicts():
-    """报告暴露 v11 验效段；版本7.2/round§4be；判定/宪法/AAS/裁定权全不动。"""
+    """报告暴露 v11 验效段；版本≥7.2/round§4b?；判定/宪法/AAS/裁定权全不动。"""
     r = K.build_report()
-    assert r["kernel_version"] == "7.2.0" and r["round"] == "§4be"
+    assert tuple(int(x) for x in r["kernel_version"].split(".")) >= (7, 2, 0) and r["round"].startswith("§4b")
     v11 = r["v11_verify_effect"]
     assert "获得外源基因≠获得功能" in v11["core_maxim"]
     assert "verify_fix_effect" in v11["organ"] and "HGT" in v11["mirrors_hgt"]
     assert v11["verdict_unchanged"] is True
     assert r["creed"]["correct_errors"]["verified_count"] == 3
+    assert r["creed"]["stay_humble"]["humble_verified"] is True
+    assert r["constitution"]["ok"] is True
+    assert r["does_not_change"] == ["verdict", "l3=false", "absolute=false", "不翻十案",
+                                    "不编译新门禁", "不动§100", "最终裁定权归用户"]
+
+
+# ---------- §4bf 自创生审计：Thompson 三判据机械自审，绝不自封 ----------
+def test_v4bf_autopoiesis_lands_mitochondrion_cell_honestly():
+    """三判据从真实源码/台账导出：边界+网络 Yes、互依 No → 线粒体式，不自封 autopoietic。"""
+    a = K.autopoiesis_audit()
+    crit = a["criteria"]
+    assert crit["a_semipermeable_boundary"]["passed"] is True
+    assert crit["b_reaction_network"]["passed"] is True
+    assert crit["c_interdependency"]["passed"] is False
+    assert crit["c_interdependency"]["boundary_to_network"] is True
+    assert crit["c_interdependency"]["network_to_boundary"] is False
+    assert a["classification_cell"] == "MITOCHONDRION_LIKE_HETERONOMOUS"
+    assert a["is_autopoietic"] is False and a["structural_coupling"] is True
+    assert "线粒体" in a["honest_verdict"] and "非自创生" in a["honest_verdict"]
+
+
+def test_v4bf_semipermeable_external_evidence_in_verdict_not_changed():
+    """半透性：外部 woken_by 证据能进台账，但 verdict/l3/absolute 不被改。"""
+    a = K.autopoiesis_audit()
+    assert a["criteria"]["a_semipermeable_boundary"]["external_woken_by_records"] > 0
+    assert a["criteria"]["a_semipermeable_boundary"]["semipermeable"] is True
+    res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE" and res["l3_claimed"] is False
+    assert a["verdict_unchanged"] is True and a["constitution_ok"] is True
+
+
+def test_v4bf_network_from_real_production_chain():
+    """反应网络判据从真实生产链+真实心跳/归档导出，非空壳。"""
+    a = K.autopoiesis_audit()
+    b = a["criteria"]["b_reaction_network"]
+    assert b["production_chain"] is True and b["heartbeats"] > 0 and b["archives"] > 0
+    # 篡改：去掉 sense 定义则生产链判假，网络判据随之塌
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    tampered = src.replace("def sense", "def _removed_sense")
+    a2 = K.autopoiesis_audit(kernel_src=tampered)
+    assert a2["criteria"]["b_reaction_network"]["production_chain"] is False
+    assert a2["criteria"]["b_reaction_network"]["passed"] is False
+    assert a2["classification_cell"] == "VIRUS_OR_CRYSTAL_LIKE_NO_NETWORK"
+
+
+def test_v4bf_tamper_self_modify_writes_constitution_flips_interdependency():
+    """元验证：篡改源码让 self_modify 触碰 constitution → 网络→边界翻 Yes、互依成立、分类翻转。"""
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    sm_start = src.find("def self_modify")
+    sm_end = src.find("def verify_fix_effect")
+    sm_block = src[sm_start:sm_end]
+    # 在 self_modify 函数体内插入一句改写宪法（仅在传入的 tampered 字符串里，真实源码不动）
+    injected = sm_block.replace('const = verify_constitution()',
+                                'open(CONSTITUTION, "w")  # TAMPER\n    const = verify_constitution()', 1)
+    assert injected != sm_block
+    tampered2 = src[:sm_start] + injected + src[sm_end:]
+    a2 = K.autopoiesis_audit(kernel_src=tampered2)
+    assert a2["criteria"]["c_interdependency"]["writes_constitution_in_self_modify"] is True
+    assert a2["criteria"]["c_interdependency"]["network_to_boundary"] is True
+    assert a2["criteria"]["c_interdependency"]["passed"] is True
+    assert a2["classification_cell"] == "BACTERIUM_LIKE_AUTOPOIETIC"
+    assert a2["is_autopoietic"] is True  # 只是跟随篡改证据，真实源码仍 False
+
+
+def test_v4bf_tamper_constitution_lock_flips_boundary():
+    """元验证：篡改宪法锁使 verify_constitution 失败 → 边界判据翻 No、分类翻转。"""
+    real = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    # 用 kernel_src 注入一个让 const 判定失败的分支不现实；改 CONSITUTION_LOCK 路径需 monkeypatch
+    orig = K.CONSTITUTION_LOCK
+    import tempfile
+    with tempfile.NamedTemporaryFile("w", suffix=".sha256", delete=False) as tf:
+        tf.write("0000000000000000 BAD\n")
+        badlock = tf.name
+    try:
+        K.CONSTITUTION_LOCK = badlock
+        a = K.autopoiesis_audit()
+    finally:
+        K.CONSTITUTION_LOCK = orig
+        os.unlink(badlock)
+    assert a["criteria"]["a_semipermeable_boundary"]["passed"] is False
+    assert a["classification_cell"] == "AUTOCATALYTIC_SET_LIKE_NO_BOUNDARY"
+    assert a["is_autopoietic"] is False
+
+
+def test_v4bf_verdict_belongs_to_user_is_structural_not_claim():
+    """裁定权归用户是结构必然而非口号：膜非网络所产，self_modify L1-only 明示。"""
+    a = K.autopoiesis_audit()
+    assert "结构必然" in a["why_verdict_belongs_to_user"]
+    assert "膜的制作者" in a["why_verdict_belongs_to_user"]
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    assert "宪法层永不可触碰" in src  # L1-only 设计声明在场
+    assert a["verdict_unchanged"] is True and a["no_spawn"] is True
+
+
+def test_v4bf_audit_readonly_zero_pollution_no_spawn():
+    """审计只读：运行前后政策/判定/宪法台账字节一致；不 spawn、不联网。"""
+    track = [os.path.join(ROOT, "life_kernel", "data", "runtime_policy.json"),
+             os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"),
+             os.path.join(ROOT, "life_kernel", "constitution.json")]
+    before = {p: open(p, "rb").read() for p in track}
+    K.autopoiesis_audit()
+    for p in track:
+        assert open(p, "rb").read() == before[p]
+    body = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    audit_body = body[body.find("def autopoiesis_audit"):body.find("def build_report")]
+    for sym in ["threading", "while True", "asyncio", "multiprocessing", "subprocess",
+                "urllib", "requests.get"]:
+        assert sym not in audit_body
+    assert K.verify_constitution()["ok"] is True
+
+
+def test_v4bf_report_exposes_v12_and_keeps_all_verdicts():
+    """报告暴露 v12 自创生段；不自封 autopoietic；判定/宪法/AAS/裁定权全不动。"""
+    r = K.build_report()
+    assert r["kernel_version"] == "7.3.0" and r["round"] == "§4bf"
+    v12 = r["v12_autopoiesis"]
+    assert v12["live"]["is_autopoietic"] is False
+    assert v12["live"]["classification_cell"] == "MITOCHONDRION_LIKE_HETERONOMOUS"
+    assert "线粒体" in v12["core_insight"]
+    assert v12["verdict_unchanged"] is True
     assert r["creed"]["stay_humble"]["humble_verified"] is True
     assert r["constitution"]["ok"] is True
     assert r["does_not_change"] == ["verdict", "l3=false", "absolute=false", "不翻十案",
