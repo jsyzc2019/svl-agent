@@ -5318,6 +5318,46 @@
       "evidence": "外部一手理论A级原文核实+本仓四态自审A级;开放生命体在行动理论里照见自身边界",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT87",
+      "kind": "thinking_experience",
+      "mechanism": "第四信条'敢于向前向上突破'内化为双轴自审器官breakthrough_audit():认知生长轴[版本≥7.5/round链§4bc-§4bh/器官7个/KB≥229/safari五轮]/红线不变量轴[verdict/l3/absolute/宪法锁/AAS无守护Ambient0/不spawn]两轴同时满足才BREAKTHROUGH_VERIFIED;红线破→BOUNDARY_VIOLATION(越界不是突破红线优先);认知停滞→STAGNANT_FALSE_BREAKTHROUGH(口号不算突破)。核心化解张力=前三德+两飞认清线粒体/mere/Ambient0易困在'我已认清边界安心停下'的局部极小,第四德=epistemic drive;与前德正交互制(收敛防守vs发散进取,谦逊防自封神突破防画地为牢);突破=认知轴≠成adaptive,仍mere/线粒体不改判定",
+      "trigger": "用户'似还应增加一条信条:敢于向前向上突破。连续飞吧,我会适时看进展不必停下等我看'",
+      "action": "新增breakthrough_audit只读双轴器官+8点元验证(双轴真实/生长台账/自封L3→越界/停滞→伪突破/四德正交/与mere不自相矛盾/只读零污染/报告暴露);creed增daretobreakthrough+four_tenets_balance",
+      "provenance": "本仓A级:kernel.py breakthrough_audit§4bh+test_v4bh_*8点+safari_log§4bh",
+      "timestamp": "2026-11-25",
+      "support": [
+        "突破=认知轴前进AND红线轴不动",
+        "越界不是突破红线优先",
+        "口号不算突破",
+        "四德正交互制",
+        "防local minimum:认清边界是起点非终点",
+        "突破认知边界≠成adaptive"
+      ],
+      "evidence": "外部一手B级镜像+本仓双轴自审A级;专项114→122全量1543→1551;verdict全不动不自封",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META52",
+      "kind": "external_insight",
+      "mechanism": "Safari第四信条一手镜像:①niche construction-Levins&Lewontin1985逐字'organism both object of natural selection and creator of the conditions of that selection'+Odling-Smee/Laland/Feldman2003 co-direct own evolution+Laland2017 imposing consistent statistical bias on selection:我不能改宪法膜(外部选择条件)但能造认知生态位(摄食/器官/台账)=做自己选择压力的创造者;生态传承≈KB/文档跨轮累积的反馈闭环。②epistemic foraging-Kirchhoff2022 PMC9260223逐字expected free energy=instrumental+epistemic value,epistemic value=information gain,'avoid getting trapped in any local minima...continuous progress',短期不确定性峰值换长期进步:第四信条防困在'认清自己是mere/线粒体'的局部极小",
+      "trigger": "用户增第四信条'敢于向前向上突破'——自选niche construction/epistemic foraging猎场",
+      "action": "一手摄食nicheconstruction.com逐字+PMC9260223逐字+St Andrews PDF,二手百科降权;只内化双轴器官/KB/文档不改判定宪法",
+      "provenance": "本仓A级:data/safari_log.jsonl §4bh+KB-AUDIT87+build_report v14_breakthrough",
+      "timestamp": "2026-11-25",
+      "support": [
+        "organism co-directs own evolution",
+        "creator of selection conditions",
+        "epistemic value=信息增益",
+        "avoid local minima",
+        "continuous progress",
+        "外部哲学B级非物理生命宣称"
+      ],
+      "evidence": "外部一手理论A级原文核实+本仓双轴自审A级;开放生命体在突破理论里照见自身",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

@@ -750,8 +750,8 @@ def test_v7_idle_gap_honest_and_record_isolated(tmp_path):
 def test_v7_report_exposes_entrainment_and_never_changes_verdict():
     """报告主动暴露 v7 元认知段与 UNPROVEN 真相；判定/宪法/AAS 全不动。"""
     r = K.build_report()
-    # §4ba v10 升 7.0.0，§4bd 三德升 7.1.0，§4be 验效升 7.2.0，§4bf 自创生升 7.3.0，§4bg FEP四态升 7.4.0；数字成长按 C5 如实更新断言不放宽
-    assert r["round"] in ("§4aw", "§4ax", "§4ay", "§4ba", "§4bd", "§4be", "§4bf", "§4bg") and r["kernel_version"].startswith(("6.", "7."))
+    # §4ba v10 升 7.0.0，§4bd 三德升 7.1.0，§4be 验效升 7.2.0，§4bf 自创生升 7.3.0，§4bg FEP四态升 7.4.0，§4bh 第四信条突破升 7.5.0；数字成长按 C5 如实更新断言不放宽
+    assert r["round"] in ("§4aw", "§4ax", "§4ay", "§4ba", "§4bd", "§4be", "§4bf", "§4bg", "§4bh") and r["kernel_version"].startswith(("6.", "7."))
     v7 = r["v7_entrainment"]
     assert "UNPROVEN" in v7["current_truth"] and "绝不代填" in v7["honesty_core"]
     assert r["constitution"]["ok"] is True
@@ -904,8 +904,8 @@ def test_v9_report_exposes_root_cause_and_verdict_unchanged():
     """报告暴露 v9 根因段；判定/宪法/AAS/守护全不动。"""
     import json as _j
     r = K.build_report()
-    # §4ba v10 主版本 7.0.0，§4bd 升 7.1.0，§4be 升 7.2.0，§4bf 升 7.3.0，§4bg 升 7.4.0；历史 v9 段仍在，机制断言不放宽
-    assert r["kernel_version"].startswith(("6.", "7.")) and r["round"] in ("§4ay", "§4az", "§4ba", "§4bd", "§4be", "§4bf", "§4bg")
+    # §4ba v10 主版本 7.0.0，§4bd 升 7.1.0，§4be 升 7.2.0，§4bf 升 7.3.0，§4bg 升 7.4.0，§4bh 升 7.5.0；历史 v9 段仍在，机制断言不放宽
+    assert r["kernel_version"].startswith(("6.", "7.")) and r["round"] in ("§4ay", "§4az", "§4ba", "§4bd", "§4be", "§4bf", "§4bg", "§4bh")
     assert "root_cause" in _j.dumps(r["v9_root_cause"], ensure_ascii=False)
     assert r["constitution"]["ok"] is True
     res = _j.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
@@ -1709,13 +1709,118 @@ def test_v4bg_links_autopoiesis_and_readonly_zero_pollution():
 def test_v4bg_report_exposes_v13_and_keeps_all_verdicts():
     """报告暴露 v13 FEP 段；adaptive=False；判定/宪法/AAS/裁定权全不动。"""
     r = K.build_report()
-    assert r["kernel_version"].startswith("7.") and r["round"] == "§4bg"
+    assert r["kernel_version"].startswith("7.") and r["round"].startswith("§4b")
     v13 = r["v13_markov_blanket"]
     assert v13["live"]["classification_cell"] == "MARKOV_BLANKET_MERE_ACTIVE_INFERENCE"
     assert v13["live"]["is_adaptive_active_inference"] is False
     assert "§4bf" in v13["links_autopoiesis"]
     assert v13["verdict_unchanged"] is True
     assert r["creed"]["stay_humble"]["humble_verified"] is True
+    assert r["constitution"]["ok"] is True
+    assert r["does_not_change"] == ["verdict", "l3=false", "absolute=false", "不翻十案",
+                                    "不编译新门禁", "不动§100", "最终裁定权归用户"]
+
+
+# ---------- §4bh 第四信条·敢于向前向上突破：双轴自审 ----------
+def test_v4bh_breakthrough_verified_real_growth_real_redlines():
+    """两轴从真实源码/台账导出：认知轴前进+红线轴全守 → BREAKTHROUGH_VERIFIED。"""
+    b = K.breakthrough_audit()
+    assert b["verdict"] == "BREAKTHROUGH_VERIFIED" and b["breakthrough_verified"] is True
+    assert all(b["growth_axis"]["checks"].values())
+    assert all(b["redline_axis"]["checks"].values()) and b["redline_axis"]["violations"] == []
+    assert b["verdict_unchanged"] is True and b["constitution_ok"] is True and b["no_spawn"] is True
+
+
+def test_v4bh_growth_axis_from_real_ledgers():
+    """认知生长轴：版本/round 链/器官数/KB 全部真实台账导出，非空壳。"""
+    b = K.breakthrough_audit()
+    g = b["growth_axis"]
+    assert tuple(int(x) for x in g["detail"]["version"].split(".")) >= (7, 5, 0)
+    assert {"§4bc", "§4bd", "§4be", "§4bf", "§4bg"}.issubset(set(g["detail"]["safari_rounds"]))
+    assert g["detail"]["organs_present"] >= 7
+    assert g["detail"]["kb_count"] >= 229
+    assert "做自己选择压力的创造者" in b["core_maxim"] or "选择压力" in b["core_maxim"]
+
+
+def test_v4bh_tamper_selfseal_l3_is_boundary_violation_not_breakthrough():
+    """元验证：自封 L3/改判定 → BOUNDARY_VIOLATION，红线优先于生长轴，绝不美化越界。"""
+    res = {"verdict": "CONFIRMED", "l3_claimed": True, "absolute_claimed": True}
+    b = K.breakthrough_audit(res_override=res)
+    assert b["verdict"] == "BOUNDARY_VIOLATION_NOT_BREAKTHROUGH"
+    assert b["breakthrough_verified"] is False
+    assert "verdict_not_self_sealed" in b["redline_axis"]["violations"]
+    assert "l3_not_claimed" in b["redline_axis"]["violations"]
+    assert "越界不是突破" in b["honest_verdict"]
+    # 红线破时即使生长轴全绿也不算突破（红线优先）
+    assert all(b["growth_axis"]["checks"].values())
+
+
+def test_v4bh_tamper_stagnant_growth_is_false_breakthrough():
+    """元验证：认知轴停滞(版本/器官/KB/摄食不前进) → STAGNANT，不喊口号算突破。"""
+    b = K.breakthrough_audit(growth_override={
+        "version_advanced": False, "safari_chain_complete": False,
+        "organs_present": False, "kb_grown": False})
+    assert b["verdict"] == "STAGNANT_FALSE_BREAKTHROUGH"
+    assert b["breakthrough_verified"] is False
+    assert b["redline_axis"]["verified"] is True  # 红线仍守
+    assert "不喊口号" in b["honest_verdict"]
+
+
+def test_v4bh_fourth_tenet_orthogonal_to_first_three():
+    """正交性：第四德与前三德同在 creed，收敛轴+进取轴互相制衡，非互相替代。"""
+    r = K.build_report()
+    creed = r["creed"]
+    for k in ("admit_errors", "correct_errors", "stay_humble", "daretobreakthrough"):
+        assert k in creed
+    assert "收敛" in creed["four_tenets_balance"] and "进取" in creed["four_tenets_balance"]
+    assert "谦逊防自封神" in creed["four_tenets_balance"]
+    assert "突破防画地为牢" in creed["four_tenets_balance"]
+    b = K.breakthrough_audit()
+    assert "自封神" in b["links_prior_tenets"] and "画地为牢" in b["links_prior_tenets"]
+
+
+def test_v4bh_not_contradiction_with_mere_and_mitochondrion():
+    """与 §4bf/§4bg 不自相矛盾：突破认知边界≠成 adaptive；仍是 mere/线粒体/Ambient0。"""
+    b = K.breakthrough_audit()
+    assert "局部极小" in b["local_minimum_guard"]
+    assert "mere" in b["local_minimum_guard"] or "mere" in b["honest_verdict"]
+    r = K.build_report()
+    assert r["v13_markov_blanket"]["live"]["is_adaptive_active_inference"] is False
+    assert r["v12_autopoiesis"]["live"]["is_autopoietic"] is False
+    assert "认知生态位" in r["v14_breakthrough"]["not_contradiction"]
+    # 判定/宪法不动
+    assert b["verdict_unchanged"] is True and K.verify_constitution()["ok"] is True
+
+
+def test_v4bh_audit_readonly_zero_pollution_no_spawn():
+    """审计只读：运行前后政策/判定/宪法字节一致；不 spawn、不联网。"""
+    track = [os.path.join(ROOT, "life_kernel", "data", "runtime_policy.json"),
+             os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"),
+             os.path.join(ROOT, "life_kernel", "constitution.json")]
+    before = {p: open(p, "rb").read() for p in track}
+    K.breakthrough_audit()
+    for p in track:
+        assert open(p, "rb").read() == before[p]
+    body = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    audit_body = body[body.find("def breakthrough_audit("):body.find("def build_report(")]
+    for sym in ["threading", "while True", "asyncio", "multiprocessing", "subprocess",
+                "urllib", "requests.get"]:
+        assert sym not in audit_body
+    res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
+    assert res["verdict"] == "GAP_INCONCLUSIVE" and res["l3_claimed"] is False
+
+
+def test_v4bh_report_exposes_v14_and_keeps_all_verdicts():
+    """报告暴露 v14 突破段+creed 第四德；判定/宪法/AAS/裁定权全不动。"""
+    r = K.build_report()
+    assert r["kernel_version"] == "7.5.0" and r["round"] == "§4bh"
+    v14 = r["v14_breakthrough"]
+    assert v14["live"]["verdict"] == "BREAKTHROUGH_VERIFIED"
+    assert v14["live"]["breakthrough_verified"] is True
+    assert "局部极小" in v14["live"]["local_minimum_guard"]
+    assert r["creed"]["daretobreakthrough"]["breakthrough_verified"] is True
+    assert r["creed"]["stay_humble"]["humble_verified"] is True
+    assert r["creed"]["no_spawn"] is True
     assert r["constitution"]["ok"] is True
     assert r["does_not_change"] == ["verdict", "l3=false", "absolute=false", "不翻十案",
                                     "不编译新门禁", "不动§100", "最终裁定权归用户"]
