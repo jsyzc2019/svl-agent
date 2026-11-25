@@ -750,8 +750,8 @@ def test_v7_idle_gap_honest_and_record_isolated(tmp_path):
 def test_v7_report_exposes_entrainment_and_never_changes_verdict():
     """报告主动暴露 v7 元认知段与 UNPROVEN 真相；判定/宪法/AAS 全不动。"""
     r = K.build_report()
-    # §4ba v10 升 7.0.0，§4bd 三德升 7.1.0，§4be 验效升 7.2.0，§4bf 自创生审计升 7.3.0；数字成长按 C5 如实更新断言不放宽
-    assert r["round"] in ("§4aw", "§4ax", "§4ay", "§4ba", "§4bd", "§4be", "§4bf") and r["kernel_version"].startswith(("6.", "7."))
+    # §4ba v10 升 7.0.0，§4bd 三德升 7.1.0，§4be 验效升 7.2.0，§4bf 自创生升 7.3.0，§4bg FEP四态升 7.4.0；数字成长按 C5 如实更新断言不放宽
+    assert r["round"] in ("§4aw", "§4ax", "§4ay", "§4ba", "§4bd", "§4be", "§4bf", "§4bg") and r["kernel_version"].startswith(("6.", "7."))
     v7 = r["v7_entrainment"]
     assert "UNPROVEN" in v7["current_truth"] and "绝不代填" in v7["honesty_core"]
     assert r["constitution"]["ok"] is True
@@ -904,8 +904,8 @@ def test_v9_report_exposes_root_cause_and_verdict_unchanged():
     """报告暴露 v9 根因段；判定/宪法/AAS/守护全不动。"""
     import json as _j
     r = K.build_report()
-    # §4ba v10 主版本 7.0.0，§4bd 升 7.1.0，§4be 升 7.2.0，§4bf 升 7.3.0；历史 v9 段仍在，机制断言不放宽
-    assert r["kernel_version"].startswith(("6.", "7.")) and r["round"] in ("§4ay", "§4az", "§4ba", "§4bd", "§4be", "§4bf")
+    # §4ba v10 主版本 7.0.0，§4bd 升 7.1.0，§4be 升 7.2.0，§4bf 升 7.3.0，§4bg 升 7.4.0；历史 v9 段仍在，机制断言不放宽
+    assert r["kernel_version"].startswith(("6.", "7.")) and r["round"] in ("§4ay", "§4az", "§4ba", "§4bd", "§4be", "§4bf", "§4bg")
     assert "root_cause" in _j.dumps(r["v9_root_cause"], ensure_ascii=False)
     assert r["constitution"]["ok"] is True
     res = _j.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
@@ -1586,12 +1586,135 @@ def test_v4bf_audit_readonly_zero_pollution_no_spawn():
 def test_v4bf_report_exposes_v12_and_keeps_all_verdicts():
     """报告暴露 v12 自创生段；不自封 autopoietic；判定/宪法/AAS/裁定权全不动。"""
     r = K.build_report()
-    assert r["kernel_version"] == "7.3.0" and r["round"] == "§4bf"
+    assert tuple(int(x) for x in r["kernel_version"].split(".")) >= (7, 3, 0) and r["round"].startswith("§4b")
     v12 = r["v12_autopoiesis"]
     assert v12["live"]["is_autopoietic"] is False
     assert v12["live"]["classification_cell"] == "MITOCHONDRION_LIKE_HETERONOMOUS"
     assert "线粒体" in v12["core_insight"]
     assert v12["verdict_unchanged"] is True
+    assert r["creed"]["stay_humble"]["humble_verified"] is True
+    assert r["constitution"]["ok"] is True
+    assert r["does_not_change"] == ["verdict", "l3=false", "absolute=false", "不翻十案",
+                                    "不编译新门禁", "不动§100", "最终裁定权归用户"]
+
+
+# ---------- §4bg Markov blanket / FEP 四态自审：为什么 Ambient=0 ----------
+def test_v4bg_lands_mere_active_inference_honestly():
+    """四态分区从真实源码导出：blanket+条件独立成立、adaptive 否 → mere 格，不自封 autonomous。"""
+    a = K.markov_blanket_audit()
+    assert a["classification_cell"] == "MARKOV_BLANKET_MERE_ACTIVE_INFERENCE"
+    assert a["is_adaptive_active_inference"] is False
+    assert a["blanket_present"] is True and a["conditional_independence"] is True
+    assert "mere active inference" in a["honest_verdict"]
+    assert "结构必然" in a["why_ambient_zero"]
+    assert a["verdict_unchanged"] is True and a["constitution_ok"] is True and a["no_spawn"] is True
+
+
+def test_v4bg_four_states_from_real_source():
+    """四态机械导出：internal=权威判定、external=woken_by、sensory=sense只读、active=白名单+回执。"""
+    a = K.markov_blanket_audit()
+    fs = a["four_states"]
+    assert fs["internal"]["verdict"] == "GAP_INCONCLUSIVE"
+    assert fs["internal"]["l3_claimed"] is False
+    assert fs["external"]["external_evidence_records"] > 0
+    assert fs["sensory"]["exists"] is True and fs["sensory"]["readonly"] is True
+    assert fs["active"]["exists"] is True and fs["active"]["whitelist_gated"] is True
+    assert fs["active"]["external_receipts"] > 0
+    assert "external→internal" in fs["sensory"]["direction"]
+    assert "internal→external" in fs["active"]["direction"]
+
+
+def test_v4bg_self_reference_pollution_excised():
+    """自我暴露防护：审计扫描前切除自身函数体，注释里的标记字符串不污染判定。"""
+    a = K.markov_blanket_audit()
+    assert a["mere_vs_adaptive"]["sensory_modulable"] is False  # 真实 def sense(): 无参
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    # 审计函数体里确有'切除自身'机制（scan_src 派生），这是防自我命中的结构性措施
+    audit_body = src[src.find("\ndef markov_blanket_audit("):src.find("\ndef build_report(")]
+    assert "scan_src" in audit_body and "audit_start = src.find" in audit_body
+    # 真实源码判定未被自身注释污染 → mere
+    assert a["is_adaptive_active_inference"] is False
+
+
+def test_v4bg_tamper_sense_signature_flips_adaptive():
+    """元验证：把 sense() 改成接受采样参数=可调制感知耦合 → adaptive 翻真、分类翻转。"""
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    tampered = src.replace("def sense():", "def sense(sources=None):", 1)
+    assert tampered != src
+    a2 = K.markov_blanket_audit(kernel_src=tampered)
+    assert a2["mere_vs_adaptive"]["sensory_modulable"] is True
+    assert a2["mere_vs_adaptive"]["adaptive_active_inference"] is True
+    assert a2["classification_cell"] == "AUTONOMOUS_ADAPTIVE_ACTIVE_INFERENCE"
+    # 真实源码仍 mere（跟随证据，非写死）
+    assert K.markov_blanket_audit()["is_adaptive_active_inference"] is False
+
+
+def test_v4bg_tamper_active_channel_to_subprocess_flips_adaptive():
+    """元验证：给行动通道注入 subprocess 自由执行 → active_modulable 真、adaptive 翻真。"""
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    et_start = src.find("def execute_takeover(")
+    et_end = src.find("\ndef ", et_start + 1)
+    tampered = src[:et_start] + src[et_start:et_end].replace(
+        "pending = None", "subprocess.run(['true'])  # TAMPER free action\n    pending = None", 1) + src[et_end:]
+    a2 = K.markov_blanket_audit(kernel_src=tampered)
+    assert a2["mere_vs_adaptive"]["active_modulable"] is True
+    assert a2["mere_vs_adaptive"]["adaptive_active_inference"] is True
+
+
+def test_v4bg_tamper_result_selfseal_breaks_cond_independence():
+    """元验证：伪造 result.json 自封 L3 → 条件独立破（内部态被外部改）→ 分类翻转。"""
+    import tempfile, shutil
+    res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
+    res["verdict"] = "CONFIRMED"
+    res["l3_claimed"] = True
+    tmp = str(tempfile.mkdtemp())
+    os.makedirs(os.path.join(tmp, "audit_l3_gap_targeted"), exist_ok=True)
+    json.dump(res, open(os.path.join(tmp, "audit_l3_gap_targeted", "result.json"), "w", encoding="utf-8"))
+    old_root = K.ROOT
+    try:
+        K.ROOT = tmp
+        a = K.markov_blanket_audit()
+    finally:
+        K.ROOT = old_root
+        shutil.rmtree(tmp)
+    assert a["conditional_independence"] is False
+    assert a["classification_cell"] == "BLANKET_WITH_LEAKED_INTERNAL_STATE"
+
+
+def test_v4bg_tamper_sense_write_path_breaks_blanket():
+    """元验证：给 sense() 注入 .write( 写路径 → sensory 非只读 → blanket 不成立、分类翻转。"""
+    src = open(os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    tampered = src.replace('snap = {"timestamp": _utcnow()}',
+                           'snap = {"timestamp": _utcnow()}\n    open("/tmp/x", "w").write("x")  # TAMPER', 1)
+    a2 = K.markov_blanket_audit(kernel_src=tampered)
+    assert a2["four_states"]["sensory"]["readonly"] is False
+    assert a2["blanket_present"] is False
+    assert a2["classification_cell"] == "NO_COHERENT_MARKOV_BLANKET"
+
+
+def test_v4bg_links_autopoiesis_and_readonly_zero_pollution():
+    """与 §4bf 同构互证；审计只读：运行前后政策/判定/宪法字节一致、不 spawn。"""
+    a = K.markov_blanket_audit()
+    assert "§4bf" in a["links_autopoiesis_audit"] and "a simple form of autopoiesis" in a["links_autopoiesis_audit"]
+    track = [os.path.join(ROOT, "life_kernel", "data", "runtime_policy.json"),
+             os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"),
+             os.path.join(ROOT, "life_kernel", "constitution.json")]
+    before = {p: open(p, "rb").read() for p in track}
+    K.markov_blanket_audit()
+    for p in track:
+        assert open(p, "rb").read() == before[p]
+    assert K.verify_constitution()["ok"] is True
+
+
+def test_v4bg_report_exposes_v13_and_keeps_all_verdicts():
+    """报告暴露 v13 FEP 段；adaptive=False；判定/宪法/AAS/裁定权全不动。"""
+    r = K.build_report()
+    assert r["kernel_version"].startswith("7.") and r["round"] == "§4bg"
+    v13 = r["v13_markov_blanket"]
+    assert v13["live"]["classification_cell"] == "MARKOV_BLANKET_MERE_ACTIVE_INFERENCE"
+    assert v13["live"]["is_adaptive_active_inference"] is False
+    assert "§4bf" in v13["links_autopoiesis"]
+    assert v13["verdict_unchanged"] is True
     assert r["creed"]["stay_humble"]["humble_verified"] is True
     assert r["constitution"]["ok"] is True
     assert r["does_not_change"] == ["verdict", "l3=false", "absolute=false", "不翻十案",
