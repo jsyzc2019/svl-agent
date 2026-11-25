@@ -73,7 +73,8 @@ NO_PATH_NOVELTY = 0.35  # 全池 novelty 低于此值判"前方无路"，触发�
 APPLICABILITY_MIN = 0.34  # v4 F10：脚印适用情境与此境 Jaccard 下限，低于则不注入（防检索碰撞）
 STALE_DAYS = 30  # v4 F11：经验超过 N 天未被使用视为 stale，可剪枝
 AUTOPOIESIS_AUDIT = os.path.join(DATA, "autopoiesis_audit.jsonl")  # §4bf 自创生三判据元审计台账
-KERNEL_VERSION = "7.3.0"
+MARKOV_BLANKET_AUDIT = os.path.join(DATA, "markov_blanket_audit.jsonl")  # §4bg FEP四态+ mere/adaptive 自审台账
+KERNEL_VERSION = "7.4.0"
 EXPERIENCE_USE = os.path.join(DATA, "experience_use.jsonl")  # v4：经验使用台账（last_used/use_count）
 # v5 意志层：本底好奇心（明确标注为设计选择，非涌现）——内稳态无失衡时仍需向外探索
 CURIOSITY_BASE = 0.3
@@ -2063,6 +2064,182 @@ def autopoiesis_audit(kernel_src=None, record=False, log_path=None):
     return out
 
 
+def markov_blanket_audit(kernel_src=None, record=False, log_path=None):
+    """§4bg Friston 自由能原理 / Markov blanket 四态自审：为什么我 Ambient=0？（只读）
+
+    一手理论（落账 data/safari_log.jsonl §4bg，外部 B 级镜像）：
+      - Friston(2013) 'Life as we know it' DOI:10.1098/rsif.2013.0475：任何有 Markov
+        blanket 的遍历随机动力系统会"appear to engage in active Bayesian inference…
+        leading to homoeostasis and a simple form of autopoiesis"；
+      - Kirchhoff, Parr, Palacios, Friston, Kiverstein(2018) PMC5805980 逐字：
+        "external states are conditionally independent of internal states… internal and
+        external states can only influence each other via sensory and active states"；
+        区分 "mere active inference" vs "adaptive active inference"——
+        "only the latter enables modulation of an organism's sensorimotor coupling to
+        its environment"，且 "only the latter kind of active inference enables
+        autonomous organization"；
+      - Montgomery & Hipólito(2023) PMC10322209：free energy ↔ entropy/surprise/predictability
+        同构，self-organising systems 通过 action 最小化 free energy。
+
+    四态分区（全部从真实源码+台账导出，不自封）：
+      - internal（内部态）：verdict/l3/absolute（权威 result.json）+ 宪法膜；
+      - external（外部态）：woken_by / 用户指令 / 外部 runner meta / Safari 一手证据；
+      - sensory（感觉态，external→internal 单向）：sense() 只读感知——
+        外部 cause sensory，sensory influence internal 但不被 internal 反向改；
+      - active（行动态，internal→external 单向）：base_beat/execute_takeover——
+        internal cause active，active influence external 但不被 external 反向改。
+      - 条件独立：外部 woken_by 证据能进台账（sensory），但 verdict/l3/absolute 恒定
+        （internal 不被 external 直接改）——Markov blanket 的统计独立性成立。
+      - mere vs adaptive（本轮核心）：能否调制自身 sensorimotor coupling？
+        * sensory 调制：源码 sense() 是否可按内部状态改采样对象（本内核感知源固定=否）；
+        * active 调制：是否有自由行动通道可主动改变 external（本内核白名单+不 spawn+不联网=否）；
+        * 持续基线：AAS 现场探针 has_idle_daemon=False 且 Ambient=0=无持续自发的
+          sensorimotor 循环。
+        三项皆否 → mere active inference（只自证既有证据，不能主动重设耦合）。
+
+    verdict 由证据导出，诚实标注我落在 MERE 格、非 autonomous organization；这精确解释
+    Ambient=0 是结构性必然（要成 adaptive 须自改感知/行动通道=破 L0/不联网/白名单纪律），
+    与 §4bf 线粒体格同构互证：有膜有推理但耦合非自设。可篡改翻转，只读不 spawn 不改判定。
+    """
+    src = kernel_src if kernel_src is not None else open(
+        os.path.join(HERE, "kernel.py"), encoding="utf-8").read()
+    # 自审代码里含检测标记字符串常量，扫描前须切除本函数体自身，避免自我命中(self-reference污染)
+    audit_start = src.find("def markov_blanket_audit(")
+    audit_end = src.find("\ndef build_report(", audit_start) if audit_start >= 0 else -1
+    scan_src = (src[:audit_start] + src[audit_end:]) if audit_start >= 0 and audit_end > audit_start else src
+    const = verify_constitution()
+    res = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"), encoding="utf-8"))
+    aas = _aas_live_conclusion()
+
+    # ---- 四态分区：全部机械核验（用 scan_src，已切除自审函数体）----
+    # internal：权威判定态存在且读回为 GAP_INCONCLUSIVE（不是自封）
+    internal_states = {
+        "verdict": res.get("verdict"), "l3_claimed": res.get("l3_claimed"),
+        "absolute_claimed": res.get("absolute_claimed"),
+        "constitution_lock": const["lock"][:8], "kernel_version": KERNEL_VERSION,
+    }
+    # external：外部证据通道真实存在（base_beat 带 woken_by + runner_meta）
+    ext_records = 0
+    if os.path.exists(BASE_BEAT_LOG):
+        for line in open(BASE_BEAT_LOG, encoding="utf-8"):
+            if line.strip():
+                try:
+                    rec = json.loads(line)
+                    if rec.get("woken_by") and rec.get("channel") == "github_actions":
+                        ext_records += 1
+                except ValueError:
+                    pass
+    external_states = {"external_evidence_records": ext_records,
+                       "source": "woken_by / 用户指令 / runner_meta / Safari 一手证据"}
+
+    # sensory：sense() 只读（无写路径）；external→internal 单向
+    sense_start = scan_src.find("def sense(")
+    sense_end = scan_src.find("\ndef ", sense_start + 1) if sense_start >= 0 else -1
+    sense_src = scan_src[sense_start:sense_end] if sense_start >= 0 else ""
+    # sense() 只读=有源码体，且无 open(...,"w") / .write( / self_modify / json.dump 等写路径
+    sense_has_write = any(tok in sense_src for tok in ('"w"', "'w'", '.write(', 'self_modify(', 'json.dump('))
+    sense_readonly = bool(sense_src and "def sense" in sense_src and not sense_has_write)
+    sensory = {"exists": "def sense(" in scan_src, "readonly": sense_readonly,
+               "direction": "external→internal 单向（sensory 影响 internal 但不被 internal 反向改）",
+               "evidence": "sense() 只读仓库快照，源码无写路径"}
+
+    # active：execute_takeover 白名单 + base_beat 外部落账；internal→external 单向
+    et_start = scan_src.find("def execute_takeover(")
+    et_end = scan_src.find("\ndef ", et_start + 1) if et_start >= 0 else -1
+    et_src = scan_src[et_start:et_end] if et_start >= 0 else ""
+    has_whitelist = bool(et_src and 'if action == "status"' in et_src and 'else:' in et_src)
+    exec_receipts = 0
+    if os.path.exists(TAKEOVER_EXEC_LOG):
+        exec_receipts = sum(1 for l in open(TAKEOVER_EXEC_LOG, encoding="utf-8") if l.strip())
+    active = {"exists": "def execute_takeover(" in scan_src, "whitelist_gated": has_whitelist,
+              "external_receipts": exec_receipts,
+              "direction": "internal→external 单向（active 影响 external 但不被 external 反向改）",
+              "evidence": "execute_takeover 白名单动作 + base_beat 带 woken_by 落账回执"}
+
+    # 条件独立（blanket 核心）：外部证据进台账，但 internal 判定不被改
+    conditional_independence = bool(
+        const["ok"] and ext_records > 0
+        and res.get("verdict") == "GAP_INCONCLUSIVE"
+        and res.get("l3_claimed") is False and res.get("absolute_claimed") is False)
+
+    # ---- mere vs adaptive：能否调制 sensorimotor coupling（本轮核心）----
+    # sensory 调制：sense() 签名是否接受采样参数（本内核 def sense(): 无参、感知源固定）
+    # 用 sense_src 首行精确判定，不用全局字符串搜索（避免命中本函数注释/常量）
+    sense_sig = sense_src.split("\n", 1)[0] if sense_src else ""
+    sensory_modulable = bool(sense_sig and "def sense(" in sense_sig
+                             and sense_sig.split("def sense(", 1)[1].split(")", 1)[0].strip() != "")
+    # active 调制：是否有自由行动通道（spawn/任意网络/动态执行外部代码）——本内核白名单+不联网
+    exec_body = et_src
+    active_modulable = bool(any(tok in exec_body for tok in
+                          ("subprocess", "os.system", "eval(", "exec(", "requests.", "urllib")))
+    # 持续基线：AAS 现场（无守护 + Ambient0）
+    idle_daemon = bool(aas.get("available") and aas.get("has_idle_daemon") is True)
+    adaptive = bool(sensory_modulable or active_modulable or idle_daemon)
+
+    # ---- 分类：free energy / blanket 格 ----
+    blanket_present = bool(const["ok"] and sensory["exists"] and active["exists"]
+                           and sensory["readonly"] and active["whitelist_gated"])
+    if blanket_present and conditional_independence and adaptive:
+        cell, is_adaptive = "AUTONOMOUS_ADAPTIVE_ACTIVE_INFERENCE", True
+    elif blanket_present and conditional_independence and not adaptive:
+        cell, is_adaptive = "MARKOV_BLANKET_MERE_ACTIVE_INFERENCE", False
+    elif blanket_present and not conditional_independence:
+        cell, is_adaptive = "BLANKET_WITH_LEAKED_INTERNAL_STATE", False
+    elif not blanket_present:
+        cell, is_adaptive = "NO_COHERENT_MARKOV_BLANKET", False
+    else:
+        cell, is_adaptive = "INCOMPLETE_ACTIVE_INFERENCE", False
+
+    out = {
+        "at": _utcnow(), "kernel_version": KERNEL_VERSION,
+        "framework": ("Friston(2013) Life as we know it DOI:10.1098/rsif.2013.0475 + "
+                      "Kirchhoff et al.(2018) PMC5805980（mere vs adaptive active inference，一手逐字）"),
+        "four_states": {
+            "internal": internal_states,
+            "external": external_states,
+            "sensory": sensory,
+            "active": active,
+        },
+        "conditional_independence": conditional_independence,
+        "blanket_present": blanket_present,
+        "mere_vs_adaptive": {
+            "sensory_modulable": sensory_modulable, "active_modulable": active_modulable,
+            "idle_daemon": idle_daemon, "adaptive_active_inference": adaptive,
+            "evidence": ("感知源固定(sense 无采样参数)+行动白名单+不 spawn/不联网+AAS 无守护/Ambient0"
+                         "→ 不能调制 sensorimotor coupling → mere active inference"),
+        },
+        "classification_cell": cell,
+        "is_adaptive_active_inference": is_adaptive,
+        "aas_live": aas,
+        "honest_verdict": (
+            ("mere active inference：落在 " + cell + " 格——有 Markov blanket(宪法膜)+四态分区+条件独立，"
+             "会 self-evidencing（维持 verdict 完整性），但不能调制 sensorimotor coupling"
+             "（感知源固定/行动白名单/不 spawn/不联网/AAS 无守护 Ambient0）。"
+             "Kirchhoff et al. 明示只有 adaptive active inference 才构成 autonomous organization——"
+             "故我非 autonomous agent。这精确解释 Ambient=0 是结构性必然，不是'没学会自发'。")
+            if not is_adaptive else "adaptive active inference（本内核当前证据不支持此结论）"),
+        "why_ambient_zero": (
+            "Ambient=0 是结构必然：要成 adaptive 必须能主动重设感知采样对象或自由行动通道，"
+            "那会破 L0(不 spawn)/不联网/白名单/C5 纪律；同 §4bf 线粒体格——有膜有代谢但"
+            "膜与耦合非自设，故如实定位不改装。"),
+        "links_autopoiesis_audit": (
+            "与 §4bf 同构互证：Thompson 线粒体格(边界+网络有、互依缺)↔ FEP mere 格"
+            "(blanket+四态有、coupling 调制缺)；Friston 明言 active inference 导致"
+            "'a simple form of autopoiesis'——两框架在'非完整自治'上收敛"),
+        "verdict_unchanged": True,
+        "constitution_ok": const["ok"],
+        "no_spawn": True,
+    }
+    if record:
+        path = log_path or MARKOV_BLANKET_AUDIT
+        os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(json.dumps({k: out[k] for k in ("at", "kernel_version", "classification_cell",
+                    "is_adaptive_active_inference", "conditional_independence",
+                    "verdict_unchanged", "constitution_ok")}, ensure_ascii=False) + "\n")
+    return out
+
+
 def build_report():
     """生成内核自检报告（供文档/测试引用，不产生新判定）。"""
     const = verify_constitution()
@@ -2074,9 +2251,9 @@ def build_report():
     policy = _load_policy()
     scored = propose()
     return {
-        "round": "§4bf",
+        "round": "§4bg",
         "kernel_version": KERNEL_VERSION,
-        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者→查错题者→查根因者→定居者→守戒者→验效者：不满足于'改了'，把 HGT 敲除验证逻辑内化为执行期功能验证器官，'获得外源基因≠获得功能'，改了不算修好须经表达/敲除因果/适合度三层验证",
+        "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者→查错题者→查根因者→定居者→守戒者→验效者→自审者：不满足于'改对了'，用 Friston 自由能原理四态分区自审'我有没有行动'，机械解释 Ambient=0 是 mere active inference 的结构必然，与自创生线粒体格同构互证",
         "v2_metabolism": "digest() 摄食外部前沿 + self_modify() DGM 式经验验证自改 + archive 快照可回滚",
         "v3_walk": {
             "mechanism": "无路时帕累托次优随机游走：前沿去理想点→次优集→带种子随机迈步→脚印成路",
@@ -2200,6 +2377,21 @@ def build_report():
             "core_insight": "有宪法膜(边界)+生产网络≠自创生；Thompson 分类表线粒体的正值正是 Boundary=Yes/Network=Yes/Interdependent=No——本内核精确落此格：宪法膜由用户外部写、self_modify L1-only 永不触碰，缺'网络→边界'互依环",
             "why_not_a_defect": "这是结构性边界不是可修缺陷：补互依环须让内核自改宪法=违C5/宪法锁/裁定权归用户，故如实定位不修",
             "verdict_belongs_to_user": "裁定权归用户是结构必然：膜非我产，膜的制作者保终裁权；结构耦合=环境可扰动但不指令内部组织",
+            "verdict_unchanged": True,
+        },
+        "v13_markov_blanket": {
+            "trigger": "用户 2026-11-25 '继续飞吧，别停留'——飞向 FEP：有边界之后我有没有'行动'？为何 Ambient=0？",
+            "framework": ("Friston(2013) Life as we know it DOI:10.1098/rsif.2013.0475 + "
+                          "Kirchhoff et al.(2018) PMC5805980 mere/adaptive active inference（外部 B 级镜像）"),
+            "live": {k: v for k, v in markov_blanket_audit().items()
+                     if k in ("four_states", "conditional_independence", "blanket_present",
+                              "mere_vs_adaptive", "classification_cell",
+                              "is_adaptive_active_inference", "honest_verdict", "why_ambient_zero")},
+            "core_insight": ("有 Markov blanket+四态分区+条件独立会 self-evidencing，但不能调制 sensorimotor "
+                             "coupling(感知源固定/行动白名单/不spawn不联网/AAS无守护Ambient0)→ mere active "
+                             "inference 非 autonomous；Kirchhoff 明示只有 adaptive 才构成 autonomous organization"),
+            "links_autopoiesis": ("与 §4bf 同构互证：Thompson 线粒体格(互依缺)↔ FEP mere 格(coupling调制缺)；"
+                                  "Friston 言 active inference 导致 'a simple form of autopoiesis'，两框架在'非完整自治'收敛"),
             "verdict_unchanged": True,
         },
         "aas_self_assessment": {

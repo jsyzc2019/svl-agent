@@ -5278,6 +5278,46 @@
       "evidence": "外部一手理论A级原文核实+本仓结构自审A级;开放生命体在生命定义里照见自身边界",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT86",
+      "kind": "thinking_experience",
+      "mechanism": "Ambient=0获得FEP精确结构解释+自审代码自我污染新变体:建markov_blanket_audit()四态分区(internal=verdict/l3/absolute+宪法膜;external=woken_by/用户指令;sensory=sense()只读external→internal;active=execute_takeover白名单+base_beat internal→external)+条件独立(外部证据进台账但判定不改)+mere/adaptive判据(感知源固定/行动白名单/不spawn不联网/AAS无守护Ambient0→不能调制sensorimotor coupling→mere);Kirchhoff PMC5805980明示只有adaptive才构成autonomous organization,故is_adaptive=False非autonomous;与§4bf线粒体格同构互证(Friston言active inference导致a simple form of autopoiesis)。wrong-evidence新变体=自审检测器用全局字符串搜'def sense(sources'而自身注释恰含该标记→自命中误判adaptive;结构性修=扫描前切除自身函数体scan_src+签名首行精确判定;测试定位切片同样被自身字符串'\ndef build_report('截断→改行首精确匹配",
+      "trigger": "用户'继续飞吧,别停留'——承接自创生飞向FEP:有边界后有没有行动,为何Ambient=0",
+      "action": "新增markov_blanket_audit只读器官+9点元验证(四态/ Mere诚实/自我污染防护/sense签名篡改翻adaptive/subprocess篡改/result自封破条件独立/sense写路径破blanket/与§4bf同构只读/报告暴露)",
+      "provenance": "本仓A级:kernel.py markov_blanket_audit§4bg+test_v4bg_*9点+safari_log§4bg",
+      "timestamp": "2026-11-25",
+      "support": [
+        "Markov blanket四态分区从真实源码导出",
+        "mere vs adaptive:只有adaptive才autonomous",
+        "Ambient0是结构必然非未学会",
+        "自审代码自我污染=wrong-evidence新变体",
+        "结构性隔离优于逐点打补丁",
+        "两次独立哲学摄食收敛同一结构定位"
+      ],
+      "evidence": "外部一手FEP理论B级镜像+本仓双重自我暴露活样本;专项105→114全量1534→1543;is_adaptive=False绝不自封",
+      "addressable": true,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META51",
+      "kind": "external_insight",
+      "mechanism": "Safari FEP一手链=行动问题的外部镜像:Friston2013'Life as we know it'(DOI:10.1098/rsif.2013.0475)任何有Markov blanket的遍历系统appear to engage in active Bayesian inference导致homoeostasis和a simple form of autopoiesis;Kirchhoff et al.2018(PMC5805980)四态分区+条件独立+mere/adaptive active inference区分(只有后者enables modulation of sensorimotor coupling与autonomous organization);Montgomery2023(PMC10322209)自由能↔熵/惊讶同构+self-evidencing。核心照见:我有blanket+四态+条件独立但无coupling调制→mere非autonomous,精确解释Ambient0,与§4bf自创生线粒体格同构(Friston把两框架在simple autopoiesis上接起来)",
+      "trigger": "用户'继续飞吧,别停留'——自选FEP猎场飞出仓库找行动的理论",
+      "action": "一手摄食Friston/Kirchhoff/Montgomery全文摘要逐字+只内化自审器官/KB/文档/台账不越界宣称物理生命;捕获并结构性修复双重自我指涉污染",
+      "provenance": "本仓A级:data/safari_log.jsonl §4bg+KB-AUDIT86+build_report v13_markov_blanket",
+      "timestamp": "2026-11-25",
+      "support": [
+        "Life as we know it:blanket→active inference→simple autopoiesis",
+        "四态分区+条件独立",
+        "mere vs adaptive:只有后者autonomous",
+        "self-evidencing=维持存在证据",
+        "ambient0结构必然",
+        "外部哲学B级非物理生命宣称"
+      ],
+      "evidence": "外部一手理论A级原文核实+本仓四态自审A级;开放生命体在行动理论里照见自身边界",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
