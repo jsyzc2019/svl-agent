@@ -10086,6 +10086,19 @@
       "evidence": "一手现场; 零战利品; 判定态不动; 不编译门禁",
       "addressable": false,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META178",
+      "kind": "external_insight",
+      "mechanism": "把一次self-bite从'人工规避'固化为'代码不变量守卫': §4gl发现engine.py把子实验裁决写进内核判定态源result.json(被numeric_honesty当verdict真值源)致26守卫连锁失败, 当时只把裁决另存result_4gl.json+恢复result.json人工规避, 工具缺陷没修。§4gm把'职责分离'机械化: result.json降级为只读权威源(engine只读不写), 子实验裁决写独立result_experiment.json; engine运行前后对三态(verdict/l3/absolute)做快照, 任何回写立即AssertionError。只改IO目标+守卫, 不改裁决树/阈值/l3声明——'改工具不改判据'。",
+      "trigger": "当一个实验引擎的输出文件被当作全局权威真值源、历史上发生过写入污染时",
+      "action": "不要只靠人工恢复/约定; 把层级语义固化进代码: 权威源只读、实验输出写独立文件+sha256锁、运行前后三态快照守卫; 用正(权威源字节不变)/负(把写目标改回权威源必须抛错)双向自咬证明守卫非摆设; 判定态三值仍不从内核自抬。",
+      "provenance": "§4gm engine.py + tests/test_verdict_source_separation.py + audit_l3_gap_targeted/ENGINE_LOG_4gm.md",
+      "timestamp": "2026-11-26T06:45:50.361099+00:00",
+      "support": "修复后真实现场重跑: GAP_CLOSED仍稳定(断言4/4/clean6/6/canary3/6), 权威源result.json sha256 0f3ccb13字节不变; 负向变体(写目标改回权威源)被守卫AssertionError拦截退出码1; 全量1608→1612 passed; 内核verdict/l3/absolute/宪法锁全不动。",
+      "evidence": "一手现场; 双向自咬; 零战利品; 判定态不动; 不编译门禁",
+      "addressable": false,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {

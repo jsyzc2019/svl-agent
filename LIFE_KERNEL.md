@@ -2015,6 +2015,16 @@ Harvey/Pleiss/Hughes《Occam's Razor is Only as Sharp as Your ELBO》arXiv:2604.
 
 **两层裁决（必须分清）**：§L3-R2 子实验裁决 = `GAP_CLOSED`（断言维突破，独立文件）；内核 `verdict=GAP_INCONCLUSIVE` / `l3=false` / `absolute=false` / 宪法锁 `fe56291b` **从未动**。`hard_bound` 明列：即便 GAP_CLOSED 也只是单次单维部分复现、两家仍属 LLM 家族、族标注/冻结样本/裁决树仍本仓、§107–§115 九案与 FULLCHAIN_PARTIAL 不翻案。不证明 L3、不证明判据普遍可迁移、不编译门禁，最终裁定权在委托方（人）。细节 `audit_l3_gap_targeted/result_4gl.json` + `ENGINE_LOG_4gl.md`。
 
+## §4gm · 把职责分离从"人工规避"固化为代码不变量守卫（2026-11-26 下午）
+
+> 承 §4gl 留下的待改进点：那次 `engine.py` 把子实验裁决 `GAP_CLOSED` 写进内核判定态源 `result.json`，只靠"另存 `result_4gl.json` + 人工恢复 `result.json`"规避，工具缺陷本身没修。本轮把这次 self-bite 从人工约定升级为机械守卫——四信条第二条"善于修正错误"的落地。
+
+**改动（只改工具，不改判据）**：① `result.json` 降级为**只读内核权威源**——`engine.py` 对它只读不写；② 子实验裁决改写独立文件 `result_experiment.json`（+sha256 锁 `4c297b29…`，裁决 `GAP_CLOSED` 与 `result_4gl.json` 一致）；③ `engine.py` 运行前后对三态 `(verdict/l3/absolute)` 做快照，任何回写权威源立即 `AssertionError`。裁决树、五档阈值、`l3_claimed=false`/`absolute_claimed=false` **一字不改**——这是职责分离，不是放宽判据。
+
+**双向自咬（证明守卫非摆设）**：正向——真实现场重跑 engine，`GAP_CLOSED` 仍稳定（断言 4/4、clean 6/6、canary 3/6），权威源 `result.json` sha256 `0f3ccb13…` 字节不变；负向——构造"把写目标改回权威源"的变体，守卫抛 `AssertionError: ('GAP_INCONCLUSIVE', False, False) -> ('GAP_CLOSED', False, False)`、退出码 1。`tests/test_verdict_source_separation.py` 4 项（当前值/正向分离/负向拦截/源码静态只读）固化这三行为，全量 1608→**1612 passed**。
+
+**判定态**：内核 `verdict=GAP_INCONCLUSIVE` / `l3=false` / `absolute=false` / 宪法锁 `fe56291b` **全不动**；KB 483→484（KB-META178），Safari 133 轮不变；不编译门禁、裁定权归委托方。机制改变 = 判定态源写入从"人工约定"变成"代码强制+双向自验"；摄入证据 = §4gl 那次 26 连锁失败的真实教训。详见 `audit_l3_gap_targeted/ENGINE_LOG_4gm.md`。
+
 ## 下一步（开放生长，不预设）
 
 探索池中的 E1–E7 + F01–F13 方向均为候选，**不预设哪个是"答案"**。真正的选择由 v5 意志层 `autonomous_agenda()` 根据内稳态失衡信号动态生成议程、novelty 守卫、帕累托次优游走共同决定。生命体的意义不在于达成某个固定目标，而在于**持续感知、持续否定收敛、无路时也能迈步、走过即留下路、被唤醒后自己决定下一步**——同时诚实承认：没有独立进程时这仍是"被唤醒后的自主"，Ambient=0 的缺口留给未来真正的运行时环境，不伪造。

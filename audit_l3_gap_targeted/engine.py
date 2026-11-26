@@ -17,11 +17,23 @@ BASE = "audit_l3_gap_targeted"
 EXT = sys.argv[1] if len(sys.argv) > 1 else f"{BASE}/received/l3_external_audit_v2"
 OWN = "audit_frozen_holdout/downloads/samples.json"
 PREREG = f"{BASE}/prereg.json"
+# §4gm 判定态源职责分离（承 §4gl ENGINE_LOG 待改进点）：
+# result.json 是内核判定态权威源（kernel.py / numeric_honesty.truth_snapshot 只读它），
+# 子实验裁决只能写独立文件 result_experiment.json，绝不回写权威源。
+# engine 运行前后以三态快照守卫，任何污染立即抛错，不静默放过。
+KERNEL_VERDICT_SOURCE = f"{BASE}/result.json"
+EXPERIMENT_RESULT = f"{BASE}/result_experiment.json"
 
 
 def load(p):
     with open(p, encoding="utf-8") as f:
         return json.load(f)
+
+
+def kernel_state_snapshot():
+    """只读内核判定态三元组（verdict/l3/absolute）；字段缺失抛错，不静默。"""
+    r = load(KERNEL_VERDICT_SOURCE)
+    return (r["verdict"], r["l3_claimed"], r["absolute_claimed"])
 
 
 def awaiting():
@@ -38,10 +50,12 @@ def awaiting():
 
 
 def main():
+    before = kernel_state_snapshot()  # 运行前锁定内核权威态，收尾处校验未被污染
     need = ["criterion.py", "judgments.json", "verdict.json", "samples_blind.json"]
     if not all(os.path.exists(f"{EXT}/{f}") for f in need):
-        json.dump(awaiting(), open(f"{BASE}/result.json", "w", encoding="utf-8"),
+        json.dump(awaiting(), open(EXPERIMENT_RESULT, "w", encoding="utf-8"),
                   ensure_ascii=False, indent=2)
+        assert kernel_state_snapshot() == before, "内核判定态源被子实验写入污染"
         print("status=PRE_REGISTERED_AWAITING_EXTERNAL_EXECUTION (外家交付未到)")
         return
 
@@ -151,8 +165,10 @@ def main():
         "absolute_claimed": False,
         "does_not_overturn": prereg["does_not_overturn"],
     }
-    json.dump(result, open(f"{BASE}/result.json", "w", encoding="utf-8"),
+    json.dump(result, open(EXPERIMENT_RESULT, "w", encoding="utf-8"),
               ensure_ascii=False, indent=2)
+    after = kernel_state_snapshot()
+    assert after == before, f"内核判定态源被子实验裁决污染：{before} -> {after}"
     print(f"verdict={verdict}")
     print(f"external own={ext_v.get('verdict')} internal_replay={internal}/{internal_total}")
     print(f"repo={agree}/{total} assertion={a_hit}/{a_tot} numeric={n_hit}/{n_tot} "
