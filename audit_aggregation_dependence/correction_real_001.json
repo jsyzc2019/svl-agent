@@ -1,0 +1,29 @@
+{
+  "record": {
+    "record_id": "CORR-REAL-001",
+    "ts": "2026-11-26T06:08:00Z",
+    "detect": {
+      "claim": "外部 orchestrator 的 workflow scope 仍不可达",
+      "truth": "当前 token 含 workflow scope, §109 已确认外部 runner 可执行",
+      "source": "§108 BLOCKERS 旧快照 (未读同文件 §109 更新段)"
+    },
+    "declared": "workflow scope 不可达",
+    "truth": "workflow scope 可达且外部 runner 已实证",
+    "source": "现场 GET /user + actions/workflows 核验",
+    "prev_hash": "GENESIS",
+    "self_hash": "f576359c63d38601e0cf44a6fac5376382d1705b9a147ab24c329a6ae41df87f"
+  },
+  "channel_verdict": "CORRECTION_CLOSED",
+  "detail": {
+    "has_detect": true,
+    "n_records": 1,
+    "authority_ok": true,
+    "chain": {
+      "n": 1,
+      "links_ok": true,
+      "order_ok": true,
+      "authority_ok": true
+    }
+  },
+  "note": "本仓首条真实(非回放)认错记录：Agent 用 §108 旧快照报现状，现场核验后机械落档。"
+}

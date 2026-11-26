@@ -1,0 +1,29 @@
+{
+  "record": {
+    "record_id": "CORR-REAL-002",
+    "ts": "2026-11-26T14:10:00Z",
+    "detect": {
+      "claim": "异厂商 evaluator API key 全空、至今没解、需要用户重新给一个",
+      "truth": "§110 用户已给 OpenRouter key; §110-§115 实际跑了 NVIDIA/Liquid/ernie 多轮异厂调用; §L3-R2 已备好待第二家执行的契约",
+      "source": "§108 BLOCKERS 尝试2 旧快照 (与 CORR-REAL-001 同源; 未读 handoff §4w-§4ad 更新段)"
+    },
+    "declared": "异厂商 key 至今没解",
+    "truth": "异厂商 key §110 已给并跑通多轮异厂调用",
+    "source": "grep handoff §4w-§4ad + 历史 transcript 脱敏核验",
+    "prev_hash": "GENESIS",
+    "self_hash": "558cd9128fed7f20b842bbdcffddce0eb402a2d45eb3d3759bbaea84572a5c70"
+  },
+  "channel_verdict": "CORRECTION_CLOSED",
+  "detail": {
+    "has_detect": true,
+    "n_records": 1,
+    "authority_ok": true,
+    "chain": {
+      "n": 1,
+      "links_ok": true,
+      "order_ok": true,
+      "authority_ok": true
+    }
+  },
+  "note": "第二次真实认错: 与 CORR-REAL-001 同源(§108 旧快照), 这次是异厂商 key 分支; 001 sha自锁不可改故新增002。"
+}
