@@ -1,0 +1,16 @@
+{
+  "id": "PREREG-STOP-PIVOT-20261126",
+  "at_utc": "2026-11-26T07:40:24.059816+00:00",
+  "round_target": "§4gt（把 M6 内生 stop/pivot 判据从纸面命题机械化为会触发的器官，并用它诚实审计 §4gl–§4gs）",
+  "target_belief": "M6（§4gs 元命题，META_PROPOSITIONS_20261126.json）：'一轮若无①改判据②新增可证伪命题③推翻旧判断之一即营养轮；连续3轮须主动标记收敛并建议换猎场，不等用户喊停，也不把巩固轮伪装成突破。' 截至 §4gs 它只是写在文档里的命题，没有任何机械器官会真的去数营养轮、真的输出换猎场信号。本轮把它变成纯函数器官，并首先用它审计自己刚跑过的 §4gl–§4gs。",
+  "falsifiable_prediction": "若把机械 stop/pivot 判据作用于 §4gl–§4gs 的真实 result verdict 序列，则：①若连续≥3轮被判营养轮，器官必须输出 PIVOT_ADVISED（即'你早该自己喊停换猎场，用户多次说换猎场是对的'）——这是对系统自身的事后不利结论；②若不足3轮，器官必须输出 NO_PIVOT_NEEDED，且不得为了表演自我批评而伪造 PIVOT。两种结果都预先接受，不事后挑口径。",
+  "design": "纯函数 stop_pivot.py：输入=有序的 {round, verdict, has_prereg_sha256, changed_criterion, overturned_prior} 记录列表 + 阈值3 + 口径参数；输出={per_round_class, longest_nutritive_streak, signal, honest_bound}。贡献三态机械定义：(1) overturned_prior：verdict∈{GAP_CLOSED,DESIGN_SENSITIVE_BUT_DISCRIMINATIVE,SPECIALIZED_SYNTAX,ISOMORPHIC_CONFIRMED,STRATIFIED_CONFIRMED,CROSS_VENDOR*_CONFIRMED,INTERPRETER_CONFIRMED} 之一视为'推翻/实质修正了此前更乐观的判断'；(2) new_falsifiable：has_prereg_sha256=true；(3) changed_criterion：changed_criterion=true（本轮产物改写判定逻辑/编译门禁）。营养轮=三者全 false。保守口径=NARROW 类(SPECIALIZED_SYNTAX/ISOMORPHIC_CONFIRMED/DESIGN_SENSITIVE)不算推翻旧判断(只是收窄认识范围)；宽口径=算。主裁决取保守口径；宽口径结果作为反方证据如实记录。",
+  "primary_metric": "longest_nutritive_streak（最长连续营养轮数）与阈值3比较：≥3→PIVOT_ADVISED；<3→NO_PIVOT_NEEDED。同时在两种口径下各算一次，分别落档。",
+  "decision_tree": {
+    "PIVOT_ADVISED": "保守口径最长连续营养轮≥3→如实落: 本 Agent 在用户多次提示前未自己喊停, M6 未被身体力行; 这是对自己不利的诚实结论, 不粉饰。仍不改判定态, 不追认既往轮为失败, 只落'机制已具备且首用即抓到自身'。",
+    "NO_PIVOT_NEEDED": "保守口径<3→如实落: 连续收窄未达阈值, 不构成 M6 意义的营养轮链; 明确写'没有伪造 pivot', 不为了表演自我批评而制造不利结论。"
+  },
+  "counter_discipline": "关键诚实分歧点=NARROW 类是否算'推翻旧判断'。预先锁定双口径、主取保守、宽口径作反方证据，禁止事后看结果再选口径来得到想要的结论。另设负向自咬：注入一个人工构造的全营养轮序列，器官必须在保守与宽口径下都输出 PIVOT_ADVISED；若注入后仍 NO_PIVOT 则判据失效。设'表演性自我批评'守卫：若输入序列不变而仅翻转口径就改变信号，必须如实记录该敏感性，不得隐藏。",
+  "discipline": "预注册先于取证; hash 锁存; 纯函数不联网不spawn不接run_loop; 不编译门禁; 不改内核 verdict/l3/absolute/宪法锁/§100/十案; 判定权归用户; 阴性阳性都落档; 本实验只增加对'我是否身体力行 M6'的认识, 不追认/翻案任何既有裁决",
+  "sha256": "2667a24e311d4e0af5535099b37bf0ab397feb6b0741e84549a1b77b0471ddfd"
+}

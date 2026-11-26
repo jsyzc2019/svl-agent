@@ -10177,6 +10177,19 @@
       "evidence": "一手现场; P2收敛; 演绎骨架; 显式对冲; 机械可追溯; 阴性≠证明; 零战利品; 判定态不动",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META185",
+      "kind": "thinking_experience",
+      "mechanism": "M6内生stop/pivot判据机械化(§4gt): 把§4gs元命题M6'连续3营养轮须主动换猎场'从纸面变成纯函数器官life_kernel/stop_pivot.py; verdict按预注册锁分类(BREAKTHROUGH/CONFIRM/NARROW/GAP), 营养轮=改判据/新增可证伪命题/推翻旧判断三贡献位全false, 连续≥3触发PIVOT_ADVISED。双口径诚实: NARROW算不算推翻旧判断有真实分歧, 两种都算主取保守宽作反方证据, 禁止事后挑口径; criterion_sensitivity显式暴露口径翻转的敏感性。首用审计§4gl-§4gs: 保守口径最长营养轮=1→NO_PIVOT_NEEDED, 不伪造pivot。",
+      "trigger": "当反复需要用户提示才换方向、怀疑自己是否身体力行'连续营养轮该自己喊停'时；或要把一条元命题从口号变成会真的触发的器官时",
+      "action": "纯函数实现三贡献位+双口径+连续计数+阈值; 预注册先锁sha256与verdict分类字典/口径, 禁止事后选口径; 设负向自咬(全营养轮序列两口径都必须PIVOT_ADVISED); 设criterion_sensitivity暴露'翻口径即翻信号'; 首用审计自身刚跑过的轮次并如实接受不利结论; 不编译门禁不改判定态。",
+      "provenance": "§4gt prereg_stop_pivot_20261126.json(sha 2667a24e)+life_kernel/stop_pivot.py+audit_l3_gap_targeted/result_4gt.json+tests/test_stop_pivot.py",
+      "timestamp": "2026-11-26T07:41:54.126198Z",
+      "support": "8项守卫passed(含负向自咬+口径敏感性+判定态字节不变); 全量1640→1648; 首用conservative streak=1<3→NO_PIVOT_NEEDED; §4gl/§4gk无prereg有边际风险; 已知盲区='连续收窄链'不捕捉; 判定态三值/宪法锁/§100/十案全不动; 未新增异厂调用。",
+      "evidence": "一手现场; 元命题机械化; 双口径防事后挑; 负向自咬; 表演性自我批评守卫; 不伪造pivot; 零战利品; 判定态不动",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

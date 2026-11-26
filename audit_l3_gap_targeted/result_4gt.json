@@ -1,0 +1,105 @@
+{
+  "experiment": "§4gt-stop-pivot-operationalization",
+  "round": "§4gt",
+  "status": "EXECUTED",
+  "prereg": "prereg_stop_pivot_20261126.json",
+  "prereg_sha256": "2667a24e311d4e0af5535099b37bf0ab397feb6b0741e84549a1b77b0471ddfd",
+  "generated": "2026-11-26T07:40:24.059816+00:00",
+  "input_records": [
+    {
+      "round": "§4gl",
+      "verdict": "GAP_CLOSED",
+      "has_prereg_sha256": false,
+      "changed_criterion": false
+    },
+    {
+      "round": "§4gk",
+      "verdict": "GAP_INCONCLUSIVE",
+      "has_prereg_sha256": false,
+      "changed_criterion": false
+    },
+    {
+      "round": "§4gp",
+      "verdict": "DESIGN_SENSITIVE_BUT_DISCRIMINATIVE",
+      "has_prereg_sha256": true,
+      "changed_criterion": false
+    },
+    {
+      "round": "§4gq",
+      "verdict": "SPECIALIZED_SYNTAX",
+      "has_prereg_sha256": true,
+      "changed_criterion": false
+    },
+    {
+      "round": "§4gr",
+      "verdict": "ISOMORPHIC_CONFIRMED",
+      "has_prereg_sha256": true,
+      "changed_criterion": false
+    }
+  ],
+  "self_bite_passed": true,
+  "signal": "NO_PIVOT_NEEDED",
+  "liberal_counter_signal": "NO_PIVOT_NEEDED",
+  "longest_nutritive_streak_conservative": 1,
+  "longest_nutritive_streak_liberal": 1,
+  "criterion_sensitivity": false,
+  "per_round": [
+    {
+      "round": "§4gl",
+      "verdict": "GAP_CLOSED",
+      "class": "BREAKTHROUGH",
+      "nutritive_conservative": false,
+      "nutritive_liberal": false
+    },
+    {
+      "round": "§4gk",
+      "verdict": "GAP_INCONCLUSIVE",
+      "class": "GAP",
+      "nutritive_conservative": true,
+      "nutritive_liberal": true
+    },
+    {
+      "round": "§4gp",
+      "verdict": "DESIGN_SENSITIVE_BUT_DISCRIMINATIVE",
+      "class": "NARROW",
+      "nutritive_conservative": false,
+      "nutritive_liberal": false
+    },
+    {
+      "round": "§4gq",
+      "verdict": "SPECIALIZED_SYNTAX",
+      "class": "NARROW",
+      "nutritive_conservative": false,
+      "nutritive_liberal": false
+    },
+    {
+      "round": "§4gr",
+      "verdict": "ISOMORPHIC_CONFIRMED",
+      "class": "NARROW",
+      "nutritive_conservative": false,
+      "nutritive_liberal": false
+    }
+  ],
+  "why": "§4gp/§4gq/§4gr 三轮均有 prereg_sha256(新增可证伪命题)→贡献位②为真→非营养轮; 保守口径最长连续营养轮=1<3→NO_PIVOT_NEEDED。诚实结论: 我不伪造 pivot; 但§4gl/§4gk 两轮无 prereg 且 verdict 落 GAP, 若再来一轮同类即触发——机制已布防。",
+  "honest_bound": [
+    "保守口径把 NARROW 类（收窄认识）不算推翻旧判断；宽口径算。两者都基于预注册锁定规则，非事后挑口径。",
+    "主裁决取保守口径，是为避免'用收窄包装成突破'；若两种口径信号不同，已通过 criterion_sensitivity 显式暴露。",
+    "本器官只数营养轮并发信号，不追认任何既往轮为失败、不翻任何既有裁决、不改判定态。",
+    "verdict 未知时保守归 GAP，可能高估营养轮——这是已知的工具盲区，不宣称精确。",
+    "本器官首次运行即给出'无需换猎场'的结论, 恰因输入不是全营养轮; 这是按预注册规则算出的, 不是为讨好谁。",
+    "§4gl 的 prereg_sha256 字段确为空——其子实验裁决在独立文件 result_4gl.json, 不构成本判据的'新增可证伪命题'贡献位; 如实记录。",
+    "NARROW 类(§4gp/§4gq/§4gr)虽非营养轮, 但都在收窄同一 GAP_CLOSED 结论——收窄链本身是边际递减信号, 本判据不捕捉, 属已知盲区。",
+    "内核 verdict=GAP_INCONCLUSIVE/l3=false/absolute=false/宪法锁/§100/十案全不动; 不编译门禁; 判定权归用户。"
+  ],
+  "kernel_verdict_unchanged": "GAP_INCONCLUSIVE",
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "self_bites": [
+    {
+      "id": "SELF-BITE-4gt-PREREG-HASH-CALIBER",
+      "what": "首版哈希写入时把 sha256:\"PENDING\" 占位值算进摘要, 而校验惯例(pop键后算)对不上; test_01 抛 AssertionError 抓住",
+      "fix": "按仓内惯例(pop sha256 后 sort_keys 默认 separators)重算并写回; 判据内容取证前已锁、未改动; 只修计算口径非放宽判据",
+      "at_utc": "2026-11-26T07:41:35.707749Z"
+    }
+  ]
+}
