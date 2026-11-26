@@ -1941,6 +1941,18 @@ Harvey/Pleiss/Hughes《Occam's Razor is Only as Sharp as Your ELBO》arXiv:2604.
 
 **诚实边界**：判据只核对"声明值 vs 真值"的一致性，不保证真值本身正确；它是数字诚实守卫不是真理判定器。verdict/l3/absolute/宪法/十案/§100 全不动，不编译门禁、判定权归用户。细节 `audit_aggregation_dependence/result_4gg.json`。
 
+## §4gh · 判据的盲区校准与存在性断言守卫（2026-11-26 下午）
+
+> 承 §4gg 收尾那句深省：一个只审"接线"、不审"盲区"的判据，和抓错字段的旧脚本没有区别。预注册 `prereg_claim_honesty_20261126.json`（`e26da683…`）写于实现之前。本轮把方向一（历史失效回归集）+ 方向二（存在性断言守卫）并做，方向三（外部时间锚）留 §4gi。
+
+**机制级变化**：
+- **改变**：新增 `life_kernel/claim_honesty.py`。① `KNOWN_FAILURES` 7 条真实历史失效（F01–F07：报告成功却没落、数字写错、抓错字段、未接线、token 分片不存在、ls 误判无任务、GitHub 报成功却没推）+ `KNOWN_VALID` 3 条合法对照；`blind_spot_check` **双向校准**——漏识别失效→`BLIND_SPOT`、误杀合法→`OVERREJECT`、两者皆过才算通过。恒真重述（`truth!=claim`）若无合法对照也会"全识别通过"，校准因此必须双向。② `existence_claim_guard` 对"X在/X已做/X没做"强制可复核句柄（commit_sha/verify_fn/tool_output/file_with_fact），无句柄→`UNVERIFIED_CLAIM`，把"报告过≠现在在"从数字推广到机制存在性；支持 `is_existence` 显式覆盖避免脆弱关键词。新增 `tests/test_claim_honesty.py` 8 测试入套件，全量 **1569→1577 passed**。
+- **摄入**：沿用 §4gg 已落地的失效案例（不重新联网）；F02 数字声明错精确化为 `OUT_OF_SCOPE`，由 `numeric_honesty` C1 覆盖——职责分区不是放宽。
+
+**五次自咬（如实记录）**：① 初版标记词表漏"已拆三块"→ `unverified_blocked=false`，扩词表 + 加 `is_existence` 显式覆盖；② 把"永远放行"误写成 `lambda f:True`（那是永远告警），语义反了→改 `lambda f:False`；③ 初版只喂失效集，恒真重述也"全识别通过"→加合法对照集升级双向校准；④ 真判据初版只识别 6/7，F02 是数字声明非存在性断言→职责精确化分区，六条存在性失效仍须全识别；⑤ 接线测试误借 `numeric_honesty.wiring_self_check`（token 固定为 test_numeric_honesty）查 claim 缺席→误判 True，改测试用本模块 token 判断，不动判据。
+
+**诚实上限**：守卫只查句柄存在与格式，**不联网复核 commit_sha 真伪**；校准集是已知案例非穷尽，通过≠覆盖所有失效；职责分区明确（存在性归本模块、数字归 numeric_honesty、联网锚留 §4gi）。verdict/l3/absolute/宪法/十案/§100 全不动，不编译门禁、判定权归用户。细节 `audit_aggregation_dependence/result_4gh.json`。
+
 ## 下一步（开放生长，不预设）
 
 探索池中的 E1–E7 + F01–F13 方向均为候选，**不预设哪个是"答案"**。真正的选择由 v5 意志层 `autonomous_agenda()` 根据内稳态失衡信号动态生成议程、novelty 守卫、帕累托次优游走共同决定。生命体的意义不在于达成某个固定目标，而在于**持续感知、持续否定收敛、无路时也能迈步、走过即留下路、被唤醒后自己决定下一步**——同时诚实承认：没有独立进程时这仍是"被唤醒后的自主"，Ambient=0 的缺口留给未来真正的运行时环境，不伪造。

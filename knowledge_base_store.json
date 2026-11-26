@@ -9956,6 +9956,32 @@
    "evidence": "一手现场核验；零战利品；不编译门禁；判定态不动",
    "addressable": false,
    "improvement_class": "preserve"
+  },
+  {
+   "item_id": "KB-AUDIT210",
+   "kind": "thinking_experience",
+   "mechanism": "断言诚实守卫claim_honesty：对声称X在/X已做/X没做的存在性断言强制可复核句柄(commit_sha/verify_fn/tool_output/file_with_fact)，无句柄判UNVERIFIED_CLAIM；把'报告过≠现在在'从数字推广到机制存在性；只查句柄格式不联网核真伪",
+   "trigger": "当本仓或外部报告某机制存在/某动作已完成(已拆三块/已同步/已落档/已接入)时",
+   "action": "要求附可复核句柄；无句柄默认不采信须补现场核验；支持is_existence显式覆盖避免脆弱关键词；数字声明归numeric_honesty不在此守卫职责",
+   "provenance": "life_kernel/claim_honesty.py + tests/test_claim_honesty.py(8) + audit_aggregation_dependence/result_4gh.json(CLAIM_HONESTY_GUARD_OPERATIONAL)",
+   "timestamp": "2026-11-26T05:44:15.890198+00:00",
+   "support": "7条真实历史失效+3条合法对照双向校准；永远放行→BLIND_SPOT、永远告警/恒真重述→OVERREJECT、真判据6/6识别0误杀；全量1569→1577；AST零中文字面量；预注册e26da683先于实现",
+   "evidence": "F05已拆三块无句柄→UNVERIFIED；合规commit_sha→QUALIFIED_HANDLE(标注未联网核真伪)；五次自咬如实记录(词表/语义反/单向校准/职责分区/跨模块token误用)",
+   "addressable": false,
+   "improvement_class": "fix"
+  },
+  {
+   "item_id": "KB-META173",
+   "kind": "external_insight",
+   "mechanism": "判据的元纪律：只审接线的判据和抓错字段的旧脚本没有区别。判据上线前须用真实历史失效集双向校准——漏识别→BLIND_SPOT、误杀合法→OVERREJECT；恒真重述(truth!=claim)若无合法对照集也会'全识别通过'，故校准必须双向。职责边界须精确分区(存在性/数字/联网锚各归其守卫)而非放宽。",
+   "trigger": "每当新建或升级一个判据/守卫/检查器时",
+   "action": "建KNOWN_FAILURES+KNOWN_VALID双向校准；要求判据识别全部已知失效且不误杀合法；校准先于修复(先用历史错误咬判据)；职责分区标OUT_OF_SCOPE由对应守卫负责；判据测试必须进pytest套件",
+   "provenance": "§4gh result_4gh.json + prereg_claim_honesty_20261126.json(e26da683) + tests/test_claim_honesty.py",
+   "timestamp": "2026-11-26T05:44:15.890198+00:00",
+   "support": "§4gg只审接线仍不够→§4gh审盲区；恒真重述被合法对照集挡为OVERREJECT；F02数字声明精确化归numeric_honesty",
+   "evidence": "一手现场核验；零战利品；不编译门禁；判定态不动；外部时间锚留§4gi",
+   "addressable": false,
+   "improvement_class": "preserve"
   }
  ],
  "thresholds": {

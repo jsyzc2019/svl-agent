@@ -1,0 +1,51 @@
+{
+  "id": "AUDIT-4gh-CLAIM-HONESTY",
+  "at_utc": "2026-11-26T05:41:28+00:00",
+  "verdict": "CLAIM_HONESTY_GUARD_OPERATIONAL",
+  "mission": "承§4gg深省：一个只审接线、不审盲区的判据，和抓错字段的旧脚本没区别。把'存在性断言'纳入可运行判据，并用历史失效案例集双向校准判据自身。",
+  "two_directions": {
+    "direction_1_blind_spot": "KNOWN_FAILURES 7条真实失效 + KNOWN_VALID 3条合法对照 + blind_spot_check 双向校准：漏识别→BLIND_SPOT、误杀合法→OVERREJECT、两者皆过→ALL_KNOWN_FAILURES_RECOGNIZED。判据上线前必须用历史错误外部校准，不再自己说了算。",
+    "direction_2_existence": "existence_claim_guard 对'X在/X已做/X没做'强制可复核句柄(commit_sha/verify_fn/tool_output/file_with_fact)，无句柄→UNVERIFIED_CLAIM；支持 is_existence 显式覆盖避免脆弱关键词。把'报告过≠现在在'从数字推广到机制存在性。",
+    "direction_3_deferred": "外部时间锚(真值源sha256→远端commit服务器时间戳)本轮不并入，留§4gi。"
+  },
+  "engine": {
+    "module": "life_kernel/claim_honesty.py",
+    "tests": "life_kernel/tests/test_claim_honesty.py (8 tests)",
+    "functions": ["KNOWN_FAILURES", "KNOWN_VALID", "existence_claim_guard", "is_failure_recognized", "blind_spot_check", "live_regression"],
+    "boundary": "纯函数；不联网/spawn/判定链/门禁；只查句柄存在与格式不联网复核真伪；校准集非穷尽；判据仍是守卫不是真理判定器。"
+  },
+  "known_failures_fixture": [
+    "F01 §4gf KB报告471现场470 report_success_but_no_land",
+    "F02 handoff数字471现场470 declared_number_wrong(OUT_OF_SCOPE→numeric_honesty C1已覆盖)",
+    "F03 一致性脚本抓错字段466 wrong_field_checked",
+    "F04 一致性脚本未入pytest judge_not_wired",
+    "F05 token已拆三块现场零分片 mechanism_claimed_but_absent",
+    "F06 目录枚举查自动化误判无任务 wrong_tool_for_negative",
+    "F07 GitHub报告成功现场未推 success_claimed_but_not_done"
+  ],
+  "calibration": {
+    "C1_permissive_caught": true,
+    "C1_evidence": "永远放行(全False)→BLIND_SPOT 识别0/6",
+    "C2_overreject_caught": true,
+    "C2_evidence": "永远告警(全True)→OVERREJECT 误杀3/3；恒真重述(truth!=claim)→OVERREJECT 误杀3/3；真判据→6/6识别0误杀",
+    "C3_existence_guard": true,
+    "C3_evidence": "无句柄'已拆三块'→UNVERIFIED_CLAIM；合规commit_sha→QUALIFIED_HANDLE(标注未联网复核)；坏sha→拦截",
+    "C4_wiring": true,
+    "C4_evidence": "test_claim_honesty 8项入pytest套件，全量1569→1577；接线自检识破伪造缺席集",
+    "C5_ast_zero_cjk_compare": true,
+    "C5_evidence": "AST Compare 中文字面量=0；13活体回归全绿；零战利品语言"
+  },
+  "self_bites": [
+    "初版 live_regression 的 unverified_blocked=false：F05'已拆三块'不在标记词表→扩展词表 + 加 is_existence 显式覆盖(校准不依赖脆弱关键词)。",
+    "初版把'永远放行'误写成 lambda f:True(那是永远告警)，语义反了→修正为 lambda f:False。",
+    "初版 blind_spot_check 只喂失效集，恒真重述(lambda f:truth!=claim)也'全识别通过'→加合法对照集，恒真重述改判 OVERREJECT。校准从单向升级双向。",
+    "真判据初版只识别6/7，F02是数字声明错非存在性断言→职责精确化：按 is_existence 分区，F02标 OUT_OF_SCOPE 由 numeric_honesty C1覆盖，六条存在性失效仍须全识别(精确化不是放宽)。",
+    "测试 test_checker_is_wired 误借 numeric_honesty.wiring_self_check(token固定为test_numeric_honesty)查claim缺席→伪集仍含numeric token误判True；改测试用本模块token判断，不动判据。"
+  ],
+  "honesty": "预注册 e26da683 先于实现；校准先于修复(先用历史失效咬判据再改工具)；职责边界诚实分区(本守卫不假装能核数字声明或联网核sha)；零战利品；判定态不动；判定权归用户。",
+  "verdict_unchanged": true,
+  "constitution_ok": true,
+  "no_spawn": true,
+  "no_online_inference": true,
+  "no_gate_compile": true
+}

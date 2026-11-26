@@ -1,0 +1,50 @@
+{
+  "id": "PREREG-CLAIM-HONESTY-20261126",
+  "written_at_utc": "2026-11-26T05:41:28+00:00",
+  "honest_timing": "写于实现之前。承上一轮最后的深省：一个只审接线、不审盲区的判据，和抓错字段的旧脚本没有区别。",
+  "session": "§4gh",
+  "mission": "把'存在性断言'纳入可运行判据，并用历史失效案例集校准判据自身——判据不再自己说了算。",
+  "two_directions_merged": {
+    "direction_1": "历史失效回归集：把真实抓到过的失效固化成 fixture，任何判据上线前须能识别全部，否则判 BLIND_SPOT。把'审自己'从自证接线升级为用真实历史错误做外部校准。",
+    "direction_2": "存在性断言守卫：凡报告'X在/X已做'(机制在、已同步、已落档、已修)，必须附可复核句柄(commit sha / 现场核验函数 / 工具输出 / 文件路径+可复核事实)，无句柄判 UNVERIFIED_CLAIM。",
+    "direction_3_deferred": "外部时间锚(真值源sha256→远端commit服务器时间戳)本轮不并入，留 §4gi；本轮先把前两条做扎实。"
+  },
+  "known_failures_fixture": [
+    {"id": "F01", "claim": "§4gf KB已落档(报告471)", "truth": "现场470，未落", "class": "report_success_but_no_land", "evidence": "audit_aggregation_dependence/result_4gg.json f1"},
+    {"id": "F02", "claim": "handoff权威行KB=471", "truth": "现场470", "class": "declared_number_wrong", "evidence": "result_4gg.json f2 + prereg_numeric_honesty"},
+    {"id": "F03", "claim": "一致性脚本在防数字漂移", "truth": "正则抓速查表旧值466非权威行", "class": "wrong_field_checked", "evidence": "result_4gg.json f3"},
+    {"id": "F04", "claim": "一致性脚本在全量套件里", "truth": "无test_前缀不在tests/，pytest collect不到", "class": "judge_not_wired", "evidence": "numeric_honesty.wiring_self_check"},
+    {"id": "F05", "claim": "token已拆三块临时组装", "truth": "现场零分片文件零组装代码", "class": "mechanism_claimed_but_absent", "evidence": "KB-AUDIT206 现场核验"},
+    {"id": "F06", "claim": "目录枚举查自动化得无任务", "truth": "调度器里日出唤醒ACTIVE一直在", "class": "wrong_tool_for_negative", "evidence": "纪律第8条 KB-META158"},
+    {"id": "F07", "claim": "GitHub同步已成功(旧记忆c446e01)", "truth": "现场HEAD e761b208，未推", "class": "success_claimed_but_not_done", "evidence": "GITHUB_SYNC_BLOCKERS_20261126.md"}
+  ],
+  "design": {
+    "module": "life_kernel/claim_honesty.py",
+    "nature": "纯函数，不联网/spawn/判定链/门禁；不改 verdict/l3/absolute/宪法。",
+    "functions": [
+      "KNOWN_FAILURES: 上述7条 fixture，每条带 id/claim/truth/class/evidence(可复核路径)",
+      "blind_spot_check(recognition_fn): 对给定判据函数，用7条 fixture 逐条测试能否识别；识别不了任何一条→返回 BLIND_SPOT 及漏掉的 id 清单。判据上线前必须通过。",
+      "existence_claim_guard(claims): 对'X在/X已做'类断言，检查是否附可复核句柄(handle_type ∈ {commit_sha, verify_fn, tool_output, file_with_fact})；缺句柄→UNVERIFIED_CLAIM；句柄格式对但无法现场复核→本模块不假装能复核，标 NEEDS_EXTERNAL_VERIFY。",
+      "live_regression()"
+    ],
+    "keyword_policy": "中文关键词集中字典，比较逻辑只查键，避免AST Compare中文字面量自咬。"
+  },
+  "calibration_requirements": [
+    "C1: blind_spot_check 对一个'永远放行'的假判据必须返回 BLIND_SPOT(7条全漏)。",
+    "C2: blind_spot_check 对一个'全判UNVERIFIED'的严格判据——需区分：能识别失效不等于误杀合法断言；用一条带真句柄的合法存在性断言验证 existence_claim_guard 放行。",
+    "C3: existence_claim_guard 对无句柄的'机制在'断言必须判 UNVERIFIED_CLAIM；对带 commit_sha 句柄的放行(格式核对不假装联网复核)。",
+    "C4: 接线自检——新增测试必须在 pytest 收集集内，且 blind_spot_check 本身也要被测到。",
+    "C5: AST Compare 中文字面量=0；活体回归全绿；零战利品语言。"
+  ],
+  "boundaries": {
+    "verdict_unchanged": true,
+    "constitution_unchanged": true,
+    "no_gate_compile": true,
+    "no_spawn": true,
+    "no_online_inference": true,
+    "zero_trophy": true,
+    "user_holds_verdict": true,
+    "honest_limit": "存在性守卫只检查句柄存在与格式，不联网复核 commit_sha 真伪；历史失效集是已知案例非穷尽；判据仍是守卫不是真理判定器。"
+  },
+  "success_criterion": "C1-C5 全过；新测试入套件使全量测试数增加；判定态不动；落档后 handoff 数字由 numeric_honesty 判据驱动对齐。"
+}
