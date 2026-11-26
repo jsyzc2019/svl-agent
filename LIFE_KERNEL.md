@@ -2073,6 +2073,15 @@ Harvey/Pleiss/Hughes《Occam's Razor is Only as Sharp as Your ELBO》arXiv:2604.
 - **诚实边界**：不推翻 §4gl 冻结回放（那批断言篡改恰在三类内，确实检出），但证明 GAP_CLOSED 适用范围**窄于"看到断言层"的字面暗示**；hard_bound 具体化一条：**判据泛化窄**——对实体/程度/量词/体态等未声明语义破坏系统性盲。仍单次/单判据/LLM 家族；内核 `verdict=GAP_INCONCLUSIVE`、`l3=false`、`absolute=false`、宪法锁 `fe56291b` 全不动；§107–115 九案不翻案，判定权归用户。
 - **固化**：`tests/test_criterion_generalization.py` 5 项（声明类保持检出/语义类保持盲/零重叠+零误报/负向自咬/裁决 sha 锁）；负向自咬篡改判据"什么都检出"→gq02 FAILED、恢复→PASS。详见 `audit_l3_gap_targeted/result_4gq.json`(sha256 `ed97ffbb…`)+`ENGINE_LOG_4gq.md`。全量 1623→1628 passed，KB 487→488。
 
+## §4gr · 族标注-判据能力同构：三条残余线归为一个根因（2026-11-26 下午）
+
+§4gl 的 GAP_CLOSED（断言 4/4）、§4gp 的族标注敏感性 60%、§4gq 的判据 SPECIALIZED_SYNTAX（声明类 100% / 语义类 8.3%）——本轮证明三者是**同一根因**：断言类族标注的定义恰好等于判据的三类规则集，即**考点=考纲**，4/4 不构成"看到断言层"的独立证据。
+
+- **方法（预注册先于裁决，hash 锁 `e2446ef5…`）**：机械提取不手工列举——① AST 从 `criterion.py` 提取规则集 = `{negation-polarity, assertion-tail-deletion, connector-change}`；② 族标注（写于第二家执行前）S01=TAIL、S02/S05=NEG、S04=CONN、S03/S06=NUMERIC_QUANT，断言类逐一映射到判据三类、数值类落规则外；③ 判据在 16 个独立样本上实际触发标签全集 = 同一三类无第四类。结合 §4gq 独立测得 100%/8.3% → "断言 4/4 vs 数值 0/2" = "判据在声明三类 100% × 规则外 0%" 的投影。裁决 **`ISOMORPHIC_CONFIRMED`**。
+- **反方证据（如实写入，防夸大）**：族标注写于 prereg 早于执行、basis 明言"非从结果反推"；Qoder 异家在同一标注上断言 0/4、数值 2/2（相反模式），证明标注独立于 DeepSeek。因此是**结构同构（考点=考纲）**，不是循环论证或造假——命题在先且有文本事实基础，只是考点覆盖面从设计上被判据能力边界锁定。
+- **诚实边界**：不撤销 §4gl 裁决、不翻既有裁决；GAP_CLOSED 在其声明范围（三类语法断言篡改）内仍真实成立，但"断言层被看到"被收窄为"非独立证据"。hard_bound 具体化一条：**考点=考纲同构，评估独立性受限**。仍单次/LLM 家族；内核 `verdict=GAP_INCONCLUSIVE`、`l3=false`、`absolute=false`、宪法锁 `fe56291b`、§107–115 九案全不动，判定权归用户。
+- **固化与 self-bite**：`tests/test_taxonomy_capability_isomorphism.py` 5 项。**真实 self-bite**：首版 gr01 只搜索硬编码 TAGS 三字符串、声称"无第四类"却抓不到注入的第四类规则（负向自咬第一次仍 PASS）→改工具（提取所有 reason 冒号前缀标签、断言集合==TAGS）→注入第四类 FAILED、恢复 PASS，过程如实记录。详见 `audit_l3_gap_targeted/result_4gr.json`(sha256 `f12fcf35…`)+`ENGINE_LOG_4gr.md`。全量 1628→1633 passed，KB 488→489。
+
 ## 下一步（开放生长，不预设）
 
 探索池中的 E1–E7 + F01–F13 方向均为候选，**不预设哪个是"答案"**。真正的选择由 v5 意志层 `autonomous_agenda()` 根据内稳态失衡信号动态生成议程、novelty 守卫、帕累托次优游走共同决定。生命体的意义不在于达成某个固定目标，而在于**持续感知、持续否定收敛、无路时也能迈步、走过即留下路、被唤醒后自己决定下一步**——同时诚实承认：没有独立进程时这仍是"被唤醒后的自主"，Ambient=0 的缺口留给未来真正的运行时环境，不伪造。

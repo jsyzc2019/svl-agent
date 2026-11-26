@@ -1,0 +1,22 @@
+{
+  "id": "PREREG-TAXONOMY-CAPABILITY-ISOMORPHISM-20261126",
+  "at_utc": "2026-11-26T07:25:26.523599+00:00",
+  "round_target": "§4gr（真瓶颈线续：族标注-判据能力同构归因）",
+  "target_belief": "§4gl GAP_CLOSED(断言4/4)、§4gp族标注敏感性60%、§4gq判据SPECIALIZED_SYNTAX(声明类100%/语义类8.3%)三条线是否同一根因: 断言类族标注的定义=判据声明的三类语法, 即'考点=考纲'结构同构",
+  "falsifiable_prediction": "若prereg.family_taxonomy的断言类定义与判据源码规则集一一对应(断言类4样本分属ASSERTION_TAIL/NEGATION/CONNECTOR, 恰是判据三类; 数值类NUMERIC_QUANT恰是判据不覆盖类), 且§4gq独立测得声明类100%/语义类8.3%, 则GAP_CLOSED的断言4/4是'判据能力集×族标注集同构'的必然, 不构成'看到断言层'的独立证据。若断言类样本中有不属判据三类的语义破坏仍被检出, 则同构论断被REFUTED。",
+  "data_sources": [
+    "audit_l3_gap_targeted/prereg.json:family_taxonomy(写于第二家执行前,时序无泄漏)",
+    "audit_l3_gap_targeted/result_experiment.json:per_case.family与检出",
+    "audit_l3_gap_targeted/received/l3_external_audit_v2/criterion.py:规则集",
+    "§4gq result_4gq.json:独立样本声明类100%/语义类8.3%"
+  ],
+  "primary_metric": "族标注类集合与判据规则集合的映射: 断言类4样本是否全部落在{negation,tail-drop,connector}; 数值类是否全部落在判据规则外; §4gq独立测得的两组检出率差是否解释冻结样本的4/4 vs 0/2。",
+  "decision_tree": {
+    "ISOMORPHIC_CONFIRMED": "族标注类集⊆判据规则集且§4gq独立率解释冻结结果→裁决结构同构: GAP_CLOSED是判据能力边界内的必然, 非独立断言层证据; 但要如实写明'命题在先无时序泄漏、标注有文本事实基础', 不夸大成造假或循环论证; hard_bound补'考点=考纲'一条; l3不动",
+    "REFUTED": "若断言类样本含判据规则外的语义破坏且仍检出→同构论断被推翻, 如实落CORR并撤回本推论",
+    "INCONCLUSIVE": "映射不整齐(部分对应)→诚实封顶"
+  },
+  "counter_discipline": "主动找反例: 检查是否有断言类样本其实靠语义(非三类语法)被检出; 同时防止'想推翻自己'的偏见夸大——时序上标注在先、Qoder在同标注上0/4证明标注独立于DeepSeek判定, 这两点必须作为反方证据如实写入, 不许把'结构同构'说成'事后作弊'。",
+  "discipline": "预注册先于裁决; 不改判据/gt/族标注原文; 不改内核verdict/l3/absolute; 不编译门禁; 判定权归用户; 本实验只增加对GAP_CLOSED性质的认识, 不翻既有裁决",
+  "sha256": "e2446ef50dc0b30ea7195cd0503c559b67a36f228a2f9e273308c6b900d94634"
+}

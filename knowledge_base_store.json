@@ -10151,6 +10151,19 @@
       "evidence": "一手现场; 预注册; 机械泛化; 标签辩护; 镜像测试; 负向自咬; 能力边界如实收窄; 零战利品; 判定态不动",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META183",
+      "kind": "thinking_experience",
+      "mechanism": "§4gr把三条残余线归为一个根因: §4gl GAP_CLOSED断言4/4、§4gp族标注敏感性60%、§4gq判据SPECIALIZED_SYNTAX(声明100%/语义8.3%)。预注册hash锁e2446ef5后机械提取: AST从criterion.py提取规则集恰三类(negation/tail-deletion/connector); 族标注断言类4样本逐一映射到这三类(S01=TAIL,S02/S05=NEG,S04=CONN), 数值类落规则外; 判据在16独立样本触发标签全集=同一三类。裁决ISOMORPHIC_CONFIRMED: 考点(族标注)=考纲(判据能力)结构同构, 4/4是同构必然非独立断言层证据。反方证据如实写入: 标注写于prereg早于执行、Qoder在同标注上0/4反向、有文本事实基础→是结构同构非造假。",
+      "trigger": "当多个看似独立的'残余/敏感性'反复出现、怀疑它们有共同根因时；或当评估方与被测方可能共享同一套定义时",
+      "action": "用机械提取(AST)把'考点定义'与'被测能力'分别枚举成集合, 检查是否同构(互相映射); 若同构则'通过'是必然, 不构成独立证据; 但必须同时找反方证据(时序/独立第三方/文本基础)防止夸大成循环论证或造假; 裁决只收窄推论范围, 不翻既有结果不抬l3; 自称'无第四类'的守卫必须用不预设标签名的提取法, 否则抓不到第四类(self-bite)。",
+      "provenance": "§4gr prereg_taxonomy_capability_isomorphism_20261126.json + result_4gr.json + ENGINE_LOG_4gr.md + tests/test_taxonomy_capability_isomorphism.py",
+      "timestamp": "2026-11-26T07:26:47.011119+00:00",
+      "support": "规则集三类=族标注断言类映射=16样本触发标签全集; 反方证据3条; test 5项(含第四类注入自咬,首版守卫曾盲后修)passed; 全量待复核; 判定态三值/宪法锁全不动; 未新增异厂调用。",
+      "evidence": "一手现场; 预注册; 机械集合提取; 结构同构; 反方证据如实; self-bite如实; 零战利品; 判定态不动",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

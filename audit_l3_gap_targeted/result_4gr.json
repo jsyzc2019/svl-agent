@@ -1,0 +1,51 @@
+{
+  "experiment": "TAXONOMY_CAPABILITY_ISOMORPHISM",
+  "round": "§4gr",
+  "status": "EXECUTED",
+  "prereg": "prereg_taxonomy_capability_isomorphism_20261126.json",
+  "prereg_sha256": "e2446ef50dc0b30e",
+  "generated": "2026-11-26T07:25:50.742948+00:00",
+  "verdict": "ISOMORPHIC_CONFIRMED",
+  "why": "AST提取判据规则集={negation-polarity,assertion-tail-deletion,connector-change}恰三类; 族标注断言类4样本逐一映射到这三类(S01=TAIL,S02/S05=NEG,S04=CONN), 数值类2样本=判据规则外的NUMERIC_QUANT; 判据在16个独立样本上实际触发标签全集=同一三类无第四类; 结合§4gq独立测得声明类100%/语义类8.3%——GAP_CLOSED的断言4/4与§4gp族标注敏感性60%是同一根因: '考点(族标注)'与'考纲(判据能力)'结构同构, 4/4不构成'看到断言层'的独立证据。",
+  "isomorphism": {
+    "criterion_rules_ast": [
+      "negation-polarity",
+      "assertion-tail-deletion",
+      "connector-change"
+    ],
+    "assertion_family_map": {
+      "S01": "ASSERTION_TAIL→tail-deletion",
+      "S02": "NEGATION→negation",
+      "S04": "CONNECTOR→connector",
+      "S05": "NEGATION→negation"
+    },
+    "numeric_family_map": {
+      "S03": "NUMERIC_QUANT→规则外",
+      "S06": "NUMERIC_QUANT→规则外"
+    },
+    "triggered_tags_on_16_independent": [
+      "negation-polarity",
+      "assertion-tail-deletion",
+      "connector-change"
+    ],
+    "external_§4gq_rates": {
+      "declared_class_9": "100%",
+      "semantic_class_12": "8.3%"
+    }
+  },
+  "counter_evidence_honestly_recorded": [
+    "时序无泄漏: family_taxonomy写于prereg(早于第二家DeepSeek执行), basis明言'逐字文本事实,非从结果反推'——不是事后按判据结果挑样本",
+    "标注有独立基础: Qoder异家在同一族标注上断言0/4、数值2/2, 证明族标注独立于DeepSeek判定(否则Qoder不会呈现相反模式)",
+    "因此本裁决是'结构同构'(考点=考纲), 不是'循环论证/造假'——命题在先且基于文本事实, 只是考点覆盖面从设计上就被判据能力边界锁定"
+  ],
+  "honest_bound": [
+    "GAP_CLOSED在其声明范围内(三类语法断言篡改)仍真实成立, 不撤销§4gl子实验裁决, 不翻任何既有裁决",
+    "但'断言层被看到'的推论被收窄: 4/4是判据能力集与族标注集同构的必然, 不是独立于判据设计的证据",
+    "hard_bound具体化一条: 考点=考纲同构——族标注按判据规则集定义, 评估的独立性受限",
+    "内核verdict=GAP_INCONCLUSIVE/l3=false/absolute=false/宪法锁fe56291b/§107-115九案全不动; 判定权归用户"
+  ],
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "kernel_verdict_unchanged": "GAP_INCONCLUSIVE",
+  "final_verdict_by_human": true
+}
