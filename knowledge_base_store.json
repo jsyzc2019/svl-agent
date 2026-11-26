@@ -10164,6 +10164,19 @@
       "evidence": "一手现场; 预注册; 机械集合提取; 结构同构; 反方证据如实; self-bite如实; 零战利品; 判定态不动",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META184",
+      "kind": "thinking_experience",
+      "mechanism": "P2元命题收敛(NEXT_STAGE_PLAN §P2): 用户'换猎场', 把§4gl-§4gr散在6份result的认识收敛成6条元命题(M1判定权不可自抬/M2阴性是证据但阴性≠证明/M3改工具不改判据/M4不能用被测方规则证被测方/M5自我否定须带反方证据防夸大/M6连续营养轮内生收敛), 每条四栏(主张/支持证据/什么会推翻/当前是否被推翻)。关键防失败判据'只换说法重排': 显式建4组对冲(M2↔M5找反例vs防夸大, M1↔M4判定冻结vs认识收窄, M3↔M6改工具vs防无限打磨, M4↔M1认识论力量vs裁定权), 叫'演绎骨架'而非归纳罗列。每条支持证据指向真实文件字段(7/7 result l3=false可机械扫描), 多数跨≥2轮合并。",
+      "trigger": "当多轮高密度产出散落各处、 needing 升级为可迁移骨架时；或总报告要从归纳罗列升级为演绎骨架时",
+      "action": "按P2四栏写每条(主张/支持证据/什么会推翻/当前是否被推翻); 关键不是列清单而是建对冲——把互相制约的倾向绑成对偶(鼓励找反例↔防夸大推翻, 判定冻结↔认识收窄, 改工具↔防无限打磨); 支持证据指向真实文件字段可机械追溯; '当前未被推翻'只指截至此刻未命中推翻条件≠证明; 用测试固化四栏/可证伪/证据存在/对冲引用有效/跨轮合并/判定态不动/负向自咬。",
+      "provenance": "§4gs META_PROPOSITIONS_20261126.json(sha a4782f4e)+META_PROPOSITIONS_20261126.md+tests/test_meta_propositions.py",
+      "timestamp": "2026-11-26T07:35:02.107756+00:00",
+      "support": "6条命题+4组对冲; 7/7 result判定态l3=false机械扫描; 7项守卫(含负向自咬)passed; 全量1633→1640; 判定态三值/宪法锁全不动; 未新增异厂调用。",
+      "evidence": "一手现场; P2收敛; 演绎骨架; 显式对冲; 机械可追溯; 阴性≠证明; 零战利品; 判定态不动",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

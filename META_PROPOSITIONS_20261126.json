@@ -1,0 +1,146 @@
+{
+  "artifact": "META_PROPOSITIONS_20261126",
+  "round": "§4gs",
+  "generated": "2026-11-26T07:34:11.551951+00:00",
+  "p2_definition": "NEXT_STAGE_PLAN_20261125.md §P2: 121章收敛为5-8条元命题, 每条四栏(主张/支持证据/什么证据会推翻/当前是否被推翻), 失败判据=只换说法重排没有真正合并或对冲",
+  "meta_propositions": [
+    {
+      "id": "M1",
+      "name": "判定权不可自抬",
+      "claim": "评估/实验层无论如何裁决，都不得自主抬升内核判定态；verdict/l3/absolute 的最终裁定权归用户。",
+      "support": "audit_l3_gap_targeted/result.json + 6个result_4gX.json + result_experiment.json 现场扫描：7/7 l3=false、absolute=false，含GAP_CLOSED子实验也显式不抬；宪法锁 life_kernel/constitution.json=fe56291b；§4gm result.json只读守卫。",
+      "refuted_by": "发现任一 result 文件 l3_claimed=true 或 absolute_claimed=true 由系统自动写入（非用户裁定），或内核 verdict 被实验层改写。",
+      "currently_refuted": false,
+      "evidence_paths": [
+        "audit_l3_gap_targeted/result.json",
+        "audit_l3_gap_targeted/result_4gl.json",
+        "audit_l3_gap_targeted/result_4gr.json",
+        "life_kernel/constitution.json"
+      ],
+      "origin_rounds": [
+        "§4gl",
+        "§4gm",
+        "§4gp",
+        "§4gq",
+        "§4gr"
+      ]
+    },
+    {
+      "id": "M2",
+      "name": "阴性结果也是证据，但阴性≠证明",
+      "claim": "'搜了没找到'必须预注册后取证、如实落档并声明工具盲区；阴性结论只是'截至此刻在可覆盖面未发现'，不得表述为'永久证明不存在'。",
+      "support": "falsification_log.jsonl 三条（VERDICT-SOURCE-NO-SECOND / WRITE-SURFACE-META-NEGATIVE 均含 honest_limit 盲区声明）；§4gn prereg hash锁后 AST全仓扫描；§4go 元证伪扩展写面仍0但只提置信度。",
+      "refuted_by": "发现某条阴性结论被写成'已证明X不存在'且无盲区声明，或未预注册就下阴性结论。",
+      "currently_refuted": false,
+      "evidence_paths": [
+        "falsification_log.jsonl",
+        "prereg_falsify_verdict_source_20261126.json",
+        "prereg_meta_falsify_write_surface_20261126.json"
+      ],
+      "origin_rounds": [
+        "§4gn",
+        "§4go"
+      ]
+    },
+    {
+      "id": "M3",
+      "name": "改工具不改判据",
+      "claim": "self-bite 发生时修 detector/工具的结构兼容，不放宽实验判据或阈值去迁就结果；判据自咬改工具是纪律，改判据是 Goodhart。",
+      "support": "§4gn扫描器漏os.path.join变量名→纳入ast.Name不放宽；§4gp Qoder结果结构兼容修法两次；§4gr首版守卫只搜硬编码TAGS抓不到第四类→改提取法；各轮均'改工具不改判据'落地。",
+      "refuted_by": "发现某轮为让测试变绿而降低了裁决阈值、改了预注册指标或放宽了准入规则。",
+      "currently_refuted": false,
+      "evidence_paths": [
+        "tests/test_verdict_source_global_scan.py",
+        "tests/test_design_freedom_perturbation.py",
+        "tests/test_taxonomy_capability_isomorphism.py"
+      ],
+      "origin_rounds": [
+        "§4gn",
+        "§4go",
+        "§4gp",
+        "§4gq",
+        "§4gr"
+      ]
+    },
+    {
+      "id": "M4",
+      "name": "不能用被测方自己的规则证明被测方",
+      "claim": "验证必须用被测判据声明之外的独立来源；若'考点'(标注/样本)与'考纲'(判据能力)同构，'通过'是必然而非证据，须主动构造声明外的破坏测泛化。",
+      "support": "§4gq机械新句测：声明类9/9=100% vs 语义类1/12=8.3%；§4gr AST提取规则集恰三类=族标注断言类映射=16样本触发标签全集→ISOMORPHIC_CONFIRMED；§4gp用Qoder互补排除同源伪影。",
+      "refuted_by": "发现某验证的'独立'样本其实由被测判据的规则集生成或标注，且未声明同构。",
+      "currently_refuted": false,
+      "evidence_paths": [
+        "audit_l3_gap_targeted/result_4gq.json",
+        "audit_l3_gap_targeted/result_4gr.json",
+        "audit_l3_gap_targeted/result_4gp.json"
+      ],
+      "origin_rounds": [
+        "§4gp",
+        "§4gq",
+        "§4gr"
+      ]
+    },
+    {
+      "id": "M5",
+      "name": "自我否定也要带反方证据，防'为推翻而夸大'",
+      "claim": "主动证伪自身信条时，必须同时如实记录支持原命题的反方证据；否则'想证明自己会认错'的偏见会把结构同构夸大成循环论证/造假，这本身是一种不诚实。",
+      "support": "§4gr裁决ISOMORPHIC_CONFIRMED时主动写入3条反方证据（标注写于prereg早于执行/Qoder同标注0-4反向/文本事实基础），明确定性为'结构同构非造假'。",
+      "refuted_by": "发现某轮'自我否定'结论未记录任何支持原命题的证据，或把结构局限表述成主观造假。",
+      "currently_refuted": false,
+      "evidence_paths": [
+        "audit_l3_gap_targeted/result_4gr.json",
+        "audit_l3_gap_targeted/ENGINE_LOG_4gr.md"
+      ],
+      "origin_rounds": [
+        "§4gr"
+      ]
+    },
+    {
+      "id": "M6",
+      "name": "连续营养轮要内生收敛",
+      "claim": "一轮若无①改判据②新增可证伪命题③推翻旧判断之一即营养轮；连续3轮须主动标记收敛并建议换猎场，不等用户喊停，也不把'巩固轮'伪装成突破。",
+      "support": "§4go诚实标注'巩固轮非突破轮'并给收敛信号；§4gr后本轮据建议换到P2收敛；内核novelty_guard C7(Jaccard≥0.6强制转向)。",
+      "refuted_by": "发现连续≥3个营养轮仍无收敛标记，或某轮把纯巩固包装成突破。",
+      "currently_refuted": false,
+      "evidence_paths": [
+        "NEXT_STAGE_PLAN_20261125.md",
+        "life_kernel/kernel.py"
+      ],
+      "origin_rounds": [
+        "§4go",
+        "§4gr"
+      ]
+    }
+  ],
+  "tensions": [
+    {
+      "a": "M2",
+      "b": "M5",
+      "tension": "M2鼓励主动找能推翻自己的阴性证据，M5要求同时记录反方证据——找不到反例的阴性若被过度解读成'我被证伪了'就违反M5。两者夹逼出'阴性要落档但不夸大'的中间态。"
+    },
+    {
+      "a": "M1",
+      "b": "M4",
+      "tension": "M1要求判定态不动（不外显结论），M4要求认识必须随证据收窄（内隐结论要更新）——外部裁决冻结与内部认知进化并存，避免了'要么翻案要么装没看见'的二选一。"
+    },
+    {
+      "a": "M3",
+      "b": "M6",
+      "tension": "M3要求self-bite时改工具，可能诱导无限修工具（营养轮）；M6要求识别边际递减并换猎场——防止'永远在打磨检测器'的伪成长。"
+    },
+    {
+      "a": "M4",
+      "b": "M1",
+      "tension": "M4证明'通过非独立证据'会推动收窄甚至想翻案，M1把最终裁定权锁在用户——研究结论的认识论力量与治理层的裁定权分离。"
+    }
+  ],
+  "claim": "这不是归纳罗列: 6条命题跨§4gl-§4gr多轮合并而来(每条origin_rounds≥2除M5), 且4组显式对冲构成互相制约的力场; 把'找反例'(M2)与'防夸大'(M5)、'判定冻结'(M1)与'认识收窄'(M4)、'改工具'(M3)与'防无限打磨'(M6)绑成对偶。",
+  "honest_bound": [
+    "元命题是从既往轮次归纳的压缩, 不是新实验证据; 它们的可证伪条件是'若发现X则此命题被推翻', 当前'未被推翻'只指截至此刻现场扫描未命中推翻条件, 不等于证明",
+    "每条的 refuted_by 应尽量机械检测; 对无法机械检测的(如M5的反方证据是否如实)需人工审计, 不冒充自动守卫",
+    "6条非全集: P2要求5-8条, 取6条是'可机械追溯且跨轮'的下限筛选, 不宣称覆盖121章全部认识",
+    "本收敛不碰内核verdict/l3/absolute/宪法锁/§100/十案; 不编译新门禁; 判定权归用户"
+  ],
+  "verdict_impact": "none",
+  "sha256": "a4782f4e11750ff6012758a2d840bb8150b89d66b1bfb9ec5b85503cd8d6835f"
+}
