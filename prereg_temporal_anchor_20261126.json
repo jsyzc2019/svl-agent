@@ -1,0 +1,48 @@
+{
+  "id": "PREREG-TEMPORAL-ANCHOR-20261126",
+  "written_at_utc": "2026-11-26T05:51:14Z",
+  "honest_timing": "写于实现与远端取证之前。承 §4gh 诚实上限：存在性守卫只查句柄存在与格式，不联网复核 commit_sha 真伪；联网锚留 §4gi。本轮先把判据规则与校准要求锁死，再去取远端证据。",
+  "session": "§4gi",
+  "mission": "把存在性句柄从'格式核对'升级到'外部时间锚交叉核验'：一个声称 X 在/X 已同步的 commit_sha，仅有格式合法不足采信；须证明远端真实存在 + 服务器时间戳晚于预注册(防事后补锚) + 本地真值源 sha256 与远端树中 blob 一致。",
+  "live_target": "§4gh 的 F07 活靶：旧记忆声称 GitHub 已同步 commit c446e01，但现场 HEAD 早已不同——格式合法的句柄，指向的东西在远端并不存在。format-pass 不等于 exist。",
+  "design": {
+    "module": "life_kernel/temporal_anchor.py",
+    "nature": "纯函数，不联网/spawn/判定链/门禁；不改 verdict/l3/absolute/宪法；联网摄食由外层工具完成并落证据快照，判据只读快照核验。",
+    "entry": "verify_anchor(anchor, evidence, prereg_ts) -> dict",
+    "dimensions": [
+      "D1_handle_format: anchor.commit_sha 匹配 [0-9a-f]{7,40}——承接 §4gh，仍是最低门槛非充分条件。",
+      "D2_remote_existence: anchor.commit_sha 与 evidence.remote_commit_sha 一致(前缀匹配)——远端确有此对象，抓 F07 型'句柄指向不存在'。",
+      "D3_temporal_order: evidence.server_timestamp >= prereg_ts——服务器时间戳不早于预注册，抓事后补锚(先取证后补写预注册)。",
+      "D4_content_consistency: anchor.local_sha256 == evidence.tree_blob_sha256——本地真值源与远端树中记录的 blob 一致，抓'推的不是这份'。"
+    ],
+    "verdict_map": "四维全过→ANCHOR_VERIFIED；任一不过→对应 flag(D1_FORMAT/D2_NOT_ON_REMOTE/D3_POSTDATED/D4_CONTENT_DRIFT)；证据快照缺失→NO_EVIDENCE_SNAPSHOT。零战利品词。",
+    "keyword_policy": "中文关键词与状态模板集中字典，比较逻辑只查 ASCII 键，避免 AST Compare 中文字面量自咬。",
+    "functions": ["verify_anchor", "KNOWN_GOOD_ANCHORS", "KNOWN_BAD_ANCHORS", "blind_spot_check", "wiring_self_check", "live_regression"]
+  },
+  "calibration_requirements": [
+    "C1_permissive_caught: 只用格式核对的弱判据必须对 KNOWN_BAD_ANCHORS 漏识别→BLIND_SPOT。",
+    "C2_postdated_caught: 服务器时间戳早于 prereg 的锚必须判 D3_POSTDATED。",
+    "C3_absent_remote_caught: 句柄格式对但远端 sha 不匹配的锚(F07 型)必须判 D2_NOT_ON_REMOTE。",
+    "C4_content_drift_caught: 本地 sha 与远端 blob 不符必须判 D4_CONTENT_DRIFT。",
+    "C5_good_not_overrejected: 四维全一致的真锚必须 ANCHOR_VERIFIED，双向校准不得误杀。",
+    "C6_wiring: verify_anchor 测试必须在 pytest 收集集内，wiring_self_check 能识破伪造缺席集。",
+    "C7_ast_zero_cjk_compare: AST Compare 中文字面量=0；活体回归全绿；零战利品语言。"
+  ],
+  "known_bad_anchors_fixture": [
+    {"id": "B01", "type": "absent_remote", "note": "F07 型：c446e01 格式合法但不在远端 HEAD"},
+    {"id": "B02", "type": "postdated", "note": "commit 服务器时间戳早于预注册时间，事后补锚"},
+    {"id": "B03", "type": "content_drift", "note": "本地真值源 sha 与远端 blob 不符"},
+    {"id": "B04", "type": "no_evidence", "note": "只有声称无证据快照"}
+  ],
+  "boundaries": {
+    "verdict_unchanged": true,
+    "constitution_unchanged": true,
+    "no_gate_compile": true,
+    "no_spawn": true,
+    "no_online_inference": true,
+    "zero_trophy": true,
+    "user_holds_verdict": true,
+    "honest_limit": "判据不联网，只读外层摄取的证据快照；快照自身 sha256 锁存防篡改；只能证明'快照内部格式+存在映射+时间顺序+内容一致'自洽，不能证明远端此刻真实状态(需现场 API 再验)；GitHub 服务器时间戳非密码学签名，标 B 级可核验不标 A 级真理；校准集已知非穷尽。"
+  },
+  "success_criterion": "C1-C7 全过；新测试入套件使全量测试数增加；判定态不动；落档后 handoff 数字由 numeric_honesty 判据驱动对齐；真锚证据快照取自远端 API 一手并 sha256 锁存。"
+}

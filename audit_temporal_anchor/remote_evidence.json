@@ -1,0 +1,14 @@
+{
+  "fetched_at_utc": "2026-11-26T05:51:57Z",
+  "repo": "jsyzc2019/svl-agent",
+  "branch": "main",
+  "head_sha": "b570b3c1cdd31f9b0fc1ec7955717749205197d1",
+  "server_timestamp": "2026-11-26T05:45:13Z",
+  "tree_sha": "e5ed517d169bb55cadadaad2f2f21293a097eead",
+  "constitution_blob_sha": "0c2c01321b7dbb4be400f6a9ca8a5034a74d294b",
+  "blob_path": "life_kernel/constitution.sha256",
+  "local_constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+  "tree_query": "recursive=1 (修正: 初版非递归漏嵌套路径, blob=None)",
+  "source": "GitHub Git Data API /commits/main + /git/trees/{tree_sha}?recursive=1",
+  "note": "一手远端元数据；token仅内存组装未落盘；服务器时间戳非密码学签名标B级。"
+}

@@ -1,0 +1,66 @@
+{
+  "id": "AUDIT-4gi-TEMPORAL-ANCHOR",
+  "at_utc": "2026-11-26T05:55:00Z",
+  "verdict": "TEMPORAL_ANCHOR_GUARD_OPERATIONAL",
+  "mission": "承 §4gh 诚实上限：存在性守卫只查句柄存在与格式，不联网复核真伪；联网锚留 §4gi。把 commit_sha 句柄从格式核对升级到远端存在+时间顺序+内容一致三维实证。",
+  "live_target": "§4gh F07：旧记忆 c446e01 格式合法但远端 HEAD 早已不同——format-pass 不等于 exist。四维判据必须拦下此类。",
+  "prereg": {
+    "file": "prereg_temporal_anchor_20261126.json",
+    "sha256": "b9e0e82081ce5a99304fcc78281b133417bf2cbfa0f60a120eef1aa0ef4ebc43",
+    "written_at_utc": "2026-11-26T05:51:14Z",
+    "timing_honesty": "写在实现与远端取证之前；sha256 锁存；测试 test_t13 校验锁未被改。"
+  },
+  "evidence": {
+    "file": "audit_temporal_anchor/remote_evidence.json",
+    "sha256": "aad01f9be004f8db3e556aa667b2d297deacc0c5ab92ac950d15a78bb3240406",
+    "source": "GitHub Git Data API /commits/main + /git/trees/{tree}?recursive=1（token 内存组装未落盘）",
+    "head_sha": "b570b3c1cdd31f9b0fc1ec7955717749205197d1",
+    "server_timestamp": "2026-11-26T05:45:13Z",
+    "token_integrity": "仅内存组装、未打印、未落盘、未入 git；临时取证脚本用后即删。"
+  },
+  "engine": {
+    "module": "life_kernel/temporal_anchor.py",
+    "tests": "tests/test_temporal_anchor.py (15 tests)",
+    "entry": "verify_anchor(anchor, evidence, prereg_ts)",
+    "dimensions": {
+      "D1": "handle_format: commit_sha 匹配 [0-9a-f]{7,40}",
+      "D2": "remote_existence: 句柄与远端 commit sha 前缀互认（抓 F07 型 absent_remote）",
+      "D3": "temporal_order: 服务器时间戳 >= 预注册时间（抓事后补锚）",
+      "D4": "content_consistency: 本地 git blob sha == 远端树中 blob sha（同类比较 SHA1 vs SHA1）"
+    },
+    "boundary": "纯函数；不联网/spawn/判定链/门禁；只读 sha256 锁存的证据快照；不改 verdict/l3/absolute/宪法。"
+  },
+  "calibration": {
+    "C1_permissive_caught": true,
+    "C1_evidence": "永远放行(全True)→OVERREJECT；永远告警(全False)→BLIND_SPOT；真判据→ALL_KNOWN_BAD_ANCHORS_RECOGNIZED。",
+    "C2_postdated_caught": true,
+    "C2_evidence": "commit 服务器时间 05:45:13Z < 预注册 05:51:14Z → D3_POSTDATED。真实远端快照就是此类负样本。",
+    "C3_absent_remote_caught": true,
+    "C3_evidence": "F07 活靶 c446e01 格式对但远端 sha 不匹配 → D2_NOT_ON_REMOTE。",
+    "C4_content_drift_caught": true,
+    "C4_evidence": "本地 blob deadbeef... 与远端不符 → D4_CONTENT_DRIFT。",
+    "C5_good_not_overrejected": true,
+    "C5_evidence": "四维全一致真锚 → ANCHOR_VERIFIED；7 位短 sha 与 40 位全 sha 互认通过；合法锚 2/2 不误杀。",
+    "C6_wiring": true,
+    "C6_evidence": "test_temporal_anchor 15 项入 pytest 收集集，全量 1577→1592；wiring_self_check 识破伪造缺席集。",
+    "C7_ast_zero_cjk_compare": true,
+    "C7_evidence": "AST Compare 中文字面量=0；15 活体回归全绿；零战利品语言。"
+  },
+  "honest_findings": [
+    "真实远端 commit 服务器时间戳 05:45:13Z 早于本轮预注册 05:51:14Z：该 commit 属上一轮 §4gh，构不成 §4gi 的正面时间锚。判据如实判 D3_POSTDATED，不伪造一个时间通过的真锚——这是本轮最重要的诚实结论。",
+    "完整正面锚需在本轮 commit 推送后，用新 commit 的服务器时间戳 (>= 预注册) 重取快照方可四维全过；本轮不宣称已达成正面锚，只证明判据能正确拒绝不构成锚的句柄。"
+  ],
+  "self_bites": [
+    "自咬1(取证工具)：初版 /git/trees/{tree} 非递归查询漏掉 life_kernel/ 嵌套路径，blob=None。改 recursive=1 重取 → 0c2c0132...。锚点 miss 改工具不改规则。",
+    "自咬2(字段语义)：D4 初想直接比 constitution.sha256 内容里的 SHA256 与远端 git blob sha(SHA1) —— 不同源必然失败。识别为'抓错字段'陷阱(F03 同源)，改成同类比较：本地文件 git hash-object 的 blob sha vs 远端树 blob sha。",
+    "自咬3(字段命名漂移)：预注册措辞 tree_blob_sha256、实现 tree_blob_sha、快照 constitution_blob_sha 三处不一致，导致 D4 读到空值、t14/t15 红。处置：已 sha256 锁存的快照保持原样不动，测试层加显式 adapter 做字段映射，判据不放宽。",
+    "自咬4(锁文件名)：测试误设锁文件为 remote_evidence.json.sha256，实际为 remote_evidence.sha256(标准命名)。改测试路径，不动证据。",
+    "AST 自审脚本自身 bug(n.left 是单节点却当列表迭代, TypeError) → 修审查脚本为 [n.left]+list(n.comparators)。审查工具的问题不记入判据失效。"
+  ],
+  "honesty": "预注册先于实现与取证；校准双向(坏锚须全识别、合法锚须全放行)；证据快照 sha256 锁存；职责分区(存在性/数字/联网锚分别归 claim_honesty/numeric_honesty/本模块)；零战利品；判定态不动；判定权归用户。",
+  "verdict_unchanged": true,
+  "constitution_ok": true,
+  "no_spawn": true,
+  "no_online_inference": true,
+  "no_gate_compile": true
+}
