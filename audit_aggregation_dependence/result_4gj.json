@@ -1,0 +1,70 @@
+{
+  "id": "AUDIT-4gj-CORRECTION-LEDGER",
+  "at_utc": "2026-11-26T06:05:00Z",
+  "verdict": "CORRECTION_LEDGER_CHANNEL_OPERATIONAL",
+  "mission": "承 §4gi 收尾元观察：连推五轮造的都是免疫系统(能抓错)但 verdict 不动；认错最后一公里仍是人肉自觉。建一条把'我错了'机械落档的通道：判据抓错→生成带sha256锁的认错记录→驱动权威行更新→全程可复核。",
+  "premise_checked": {
+    "note": "建通道前空杯审视五个判据输入源非沙上建塔",
+    "evidence_honesty": "7/7 all_pass=true, test_evidence_scope_and_cli.py 9项接线",
+    "independent_sources": "8/8 全绿, test_independent_sources.py 接线",
+    "numeric_honesty": "9/9 全绿, test_numeric_honesty.py 接线",
+    "claim_honesty": "13/13 全绿, test_claim_honesty.py 接线",
+    "temporal_anchor": "15/15 全绿, test_temporal_anchor.py 接线",
+    "honest_note": "审视脚本自身两次bug：一次 int-list 类型错(把len结果再减list)、一次把 evidence_honesty 的嵌套结构{cases,expected,all_pass,n}当成 dict[str,bool] 字典误判 1/4。均为审查工具问题非判据失效，如实记录、分开记账。"
+  },
+  "prereg": {
+    "file": "prereg_correction_ledger_20261126.json",
+    "sha256": "d58565fed35d970b82cdea51553d66b3a0d977fbac360f8ce6bed115816828ef",
+    "written_at_utc": "2026-11-26T06:00:09Z",
+    "timing_honesty": "写于实现与回放之前；sha256锁存；test_c13校验锁未被改。"
+  },
+  "four_link_chain": {
+    "L1_detect": "复用 numeric_honesty.check_handoff / claim_honesty.existence_claim_guard / temporal_anchor 的失败信号；无信号→NO_CORRECTION_NEEDED，不硬造认错。",
+    "L2_record": "有信号必须生成带sha256自锁的认错记录(唯一id+UTC时间戳+旧声明+真值+来源判据+prev_hash链)；回改字段→RECORD_TAMPER。",
+    "L3_propagate": "认错记录须驱动权威行更新，使 check_handoff(声明==现场真值)通过；只落记录不改权威行→RECORD_WITHOUT_PROPAGATION。",
+    "L4_verify": "记录链sha256连续+时间戳单调+末态权威行ok，有一环缺不报成功。"
+  },
+  "engine": {
+    "module": "life_kernel/correction_ledger.py",
+    "tests": "tests/test_correction_ledger.py (15 tests)",
+    "functions": ["make_correction", "verify_chain", "channel_status", "is_bad_chain", "blind_spot_check", "wiring_self_check", "live_regression"],
+    "boundary": "纯函数；不联网/spawn/判定链/门禁；数字真值源复用numeric_honesty不重造；不改verdict/l3/absolute/宪法。"
+  },
+  "calibration": {
+    "C1_permissive_caught": true,
+    "C1_evidence": "永远判CLOSED(全True)→OVERREJECT；永远告警(全False)→BLIND_SPOT；真判据→ALL_KNOWN_BAD_CHAINS_RECOGNIZED。",
+    "C2_detected_unrecorded": true,
+    "C2_evidence": "有失败信号无记录→DETECTED_BUT_UNRECORDED。",
+    "C3_record_unpropagated": true,
+    "C3_evidence": "有记录链完整但权威行check失败→RECORD_WITHOUT_PROPAGATION。",
+    "C4_tamper_caught": true,
+    "C4_evidence": "回改认错记录truth字段→self_hash不复算→RECORD_TAMPER；prev_hash断链同理。",
+    "C5_good_not_overrejected": true,
+    "C5_evidence": "四链全闭合→CORRECTION_CLOSED；无错场景→NO_CORRECTION_NEEDED；合法链2/2不误杀。",
+    "C6_wiring": true,
+    "C6_evidence": "test_correction_ledger 15项入pytest收集集；wiring_self_check识破伪造缺席集。",
+    "C7_ast_zero_cjk_compare": true,
+    "C7_evidence": "AST Compare中文字面量=0；15活体回归全绿；零战利品语言。"
+  },
+  "historical_replay": {
+    "H01_4gf_471_470": {
+      "detect": "真check_handoff抓出kb_count失败(声明471 vs 真值470)",
+      "before": "DETECTED_BUT_UNRECORDED(当时抓到了但靠手工补落)",
+      "record": "make_correction 生成 CORR-H01 带self_hash自锁",
+      "propagate": "权威行471→470后 check_handoff ok=true",
+      "after": "CORRECTION_CLOSED(四链闭合，机械逼出认错并驱动修正)"
+    },
+    "H02_F07_fake_sync": {
+      "detect": "真existence_claim_guard判无句柄的'GitHub已同步'→UNVERIFIED_CLAIM",
+      "record": "make_correction 生成 CORR-H02",
+      "propagate": "不撤假声明(authority_ok=false)→RECORD_WITHOUT_PROPAGATION不放行；撤销后→CORRECTION_CLOSED",
+      "note": "对照实验证明闭合来自'假声明被撤'而非记录本身，通道不放水。"
+    }
+  },
+  "honest_limit": "本模块不重造数字真值源(复用numeric_honesty.check_handoff)；不证明权威行真值本身正确，只证明'抓错→落档→传播→复核'链条机械闭合；sha256自锁防回改但不防'一开始就写假记录'(源头诚实仍靠判据+外部取证)；校准集已知非穷尽。verdict/l3/absolute/宪法/十案/§100全不动，不编译门禁，判定权归用户。",
+  "verdict_unchanged": true,
+  "constitution_ok": true,
+  "no_spawn": true,
+  "no_online_inference": true,
+  "no_gate_compile": true
+}

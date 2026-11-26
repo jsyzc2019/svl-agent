@@ -1967,6 +1967,22 @@ Harvey/Pleiss/Hughes《Occam's Razor is Only as Sharp as Your ELBO》arXiv:2604.
 
 **诚实上限**：判据不联网，只读 sha256 锁存的证据快照；只证明"快照内部四维自洽"，不证明远端此刻真实；GitHub 服务器时间戳非密码学签名，标 B 级可核验、不标 A 级真理；校准集已知非穷尽。职责分区：存在性归 `claim_honesty`、数字归 `numeric_honesty`、联网锚归本模块。verdict/l3/absolute/宪法/十案/§100 全不动，不编译门禁，判定权归用户。细节 `audit_temporal_anchor/result.json`。
 
+## §4gj · 认错台账：把"我错了"从人肉自觉升级为机械落档通道（2026-11-26 下午）
+
+> 承 §4gi 收尾的元观察：§4ge–§4gi 连推五轮造的全是免疫系统（能抓错），但 `verdict` 一直 `GAP_INCONCLUSIVE`、`l3=false`、`absolute=false` 纹丝不动。根因不是抓不到错——`numeric_honesty` 早就能抓出"报告471现场470"——而是**认错最后一公里仍是人肉自觉**：抓到后靠我手工写 result、改 handoff、报成功。§4gf 那次漏落 KB 却报成功，就是活证据。预注册 `prereg_correction_ledger_20261126.json`（`d58565fe…`）写于实现与回放之前，sha256 锁存。
+
+**建通道前的空杯审视（不建在沙上）**：五个判据输入源现场核验——`evidence_honesty` 7/7（嵌套结构 `all_pass=true`，`test_evidence_scope_and_cli.py` 9 项）、`independent_sources` 8/8、`numeric_honesty` 9/9、`claim_honesty` 13/13、`temporal_anchor` 15/15，全部真实全绿、测试入套件。审视脚本自身两次 bug（一次 `int-list` 类型错、一次把嵌套结构误判为 `dict[str,bool]` 得出假的 1/4）如实记账，与判据失效分开——工具问题不改判据。
+
+**机制级变化**：
+- **改变**：新增 `life_kernel/correction_ledger.py`，四链闭环 `detect→record→propagate→verify`。L1 复用判据失败信号（无信号→`NO_CORRECTION_NEEDED`，不硬造认错）；L2 有信号必须生成带 sha256 自锁的认错记录（唯一 id / UTC 时间戳 / 旧声明 / 真值 / 来源判据 / `prev_hash` 链，回改字段→`RECORD_TAMPER`）；L3 认错记录须驱动权威行更新，使 `check_handoff`（声明==现场真值）通过，只落记录不改权威行→`RECORD_WITHOUT_PROPAGATION`；L4 记录链 sha256 连续 + 时间戳单调 + 末态权威行 ok，缺一环不报成功。新增 `tests/test_correction_ledger.py` 15 测试入套件，全量 **1593→1608 passed**。
+- **摄入**：不联网。数字真值源复用 `numeric_honesty.check_handoff`，本模块不重造；存在性信号复用 `claim_honesty.existence_claim_guard`。
+
+**历史回放实证（通道不是摆设）**：H01 真用 `check_handoff` 抓出声明 471 vs 真值 470（`DETECTED_BUT_UNRECORDED`），`make_correction` 生成 `CORR-H01` 自锁记录，权威行 471→470 后 `check_handoff ok=true`，四链判 `CORRECTION_CLOSED`——机械逼出认错并驱动修正，不再靠人肉自觉。H02 假同步：真 `existence_claim_guard` 判无句柄声明 `UNVERIFIED_CLAIM`，生成 `CORR-H02`，不撤假声明（authority_ok=false）→`RECORD_WITHOUT_PROPAGATION` 不放行，撤销后→`CORRECTION_CLOSED`——对照证明闭合来自"假声明被撤"而非记录本身，通道不放水。
+
+**双向校准**：坏链 4 条（detected_unrecorded / record_unpropagated / tamper / broken_chain）须全识别、合法链 2 条（全闭合 / 无错不硬造）须全放行；永远放行→OVERREJECT、永远告警→BLIND_SPOT、真判据→`ALL_KNOWN_BAD_CHAINS_RECOGNIZED`。
+
+**诚实上限**：本模块不重造数字真值源、不证明权威行真值本身正确，只证明"抓错→落档→传播→复核"链条机械闭合；sha256 自锁防回改但不防"一开始就写假记录"（源头诚实仍靠判据 + 外部取证）；校准集已知非穷尽。verdict/l3/absolute/宪法/十案/§100 全不动，不编译门禁，判定权归用户。细节 `audit_aggregation_dependence/result_4gj.json`。
+
 ## 下一步（开放生长，不预设）
 
 探索池中的 E1–E7 + F01–F13 方向均为候选，**不预设哪个是"答案"**。真正的选择由 v5 意志层 `autonomous_agenda()` 根据内稳态失衡信号动态生成议程、novelty 守卫、帕累托次优游走共同决定。生命体的意义不在于达成某个固定目标，而在于**持续感知、持续否定收敛、无路时也能迈步、走过即留下路、被唤醒后自己决定下一步**——同时诚实承认：没有独立进程时这仍是"被唤醒后的自主"，Ambient=0 的缺口留给未来真正的运行时环境，不伪造。

@@ -10008,6 +10008,32 @@
       "evidence": "一手现场；零战利品；判定态不动；不编译门禁",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META175",
+      "kind": "external_insight",
+      "mechanism": "'认错'若靠Agent自觉就会漏：判据明明抓到了错(报告471现场470)却仍靠手工想起才改。把认错机械落档需四链闭环——L1判据抓错信号(无信号不硬造)、L2生成sha256自锁的认错记录(回改即TAMPER)、L3驱动权威行更新(check_handoff声明==真值)、L4链连续+时间单调+末态复核。四链缺一不报成功；这也是对'免疫系统够了'的回应：能抓错不等于会认错。",
+      "trigger": "当判据抓到错误、或发现声明与现场真值不符时",
+      "action": "不只改数字——先生成带sha256自锁的认错记录(旧值/真值/来源/时间戳/prev_hash链)，再驱动权威行修正，最后verify_chain+check_handoff复核；无失败信号则NO_CORRECTION_NEEDED不硬造；历史失效(H01 471/470、H02假同步)回放验证通道能逼出认错。",
+      "provenance": "§4gj result_4gj.json + prereg_correction_ledger(d58565fe) + life_kernel/correction_ledger.py + tests/test_correction_ledger.py",
+      "timestamp": "2026-11-26T06:01:43.081326+00:00",
+      "support": "连续五轮造免疫系统(能抓错)但verdict不动；根因是认错靠人肉自觉；四链通道把'我错了'变机械、赖不掉。H01回放：DETECTED_BUT_UNRECORDED→认错记录→权威行471改470→CORRECTION_CLOSED。",
+      "evidence": "一手现场；纯函数不联网；零战利品；判定态不动；不编译门禁",
+      "addressable": false,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT212",
+      "kind": "thinking_experience",
+      "mechanism": "建通道前须先空杯审视输入源是不是沙上建塔：五个判据(e_honesty/independent_sources/numeric/claim/temporal)虽各自全绿，但'全绿'也可能是审查脚本误判——evidence_honesty 返回的是嵌套结构{cases,expected,all_pass,n}而非 dict[str,bool]，审查脚本按统一bool字典假设得出1/4假的失败。工具的问题与判据的问题必须分开记账，否则会用错误审查 result 否定真判据。",
+      "trigger": "当用一个统一脚本批量审查多个结构不一致的模块时",
+      "action": "先检查每个模块返回结构再套判断；发现审查脚本自身bug改审查脚本、不改判据；如实记录 script-bug 与 judge-failure 是两类事件；确认输入源真实后再在其上建新机制。",
+      "provenance": "§4gj premise_checked + result_4gj.json(premise_checked.honest_note)",
+      "timestamp": "2026-11-26T06:01:43.081326+00:00",
+      "support": "审视脚本两次自身bug(int-list类型错、嵌套结构误判)均如实记入 self-bites，与判据失效分开；确认五判据真实全绿接线后才建认错通道。",
+      "evidence": "一手现场；零战利品；判定态不动",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

@@ -1,0 +1,54 @@
+{
+  "id": "PREREG-CORRECTION-LEDGER-20261126",
+  "written_at_utc": "2026-11-26T06:00:09Z",
+  "honest_timing": "写于实现之前。承 §4gi 收尾的元观察：连推五轮造的都是免疫系统(能抓错)，但 verdict 不动；认错最后一公里仍是人肉自觉——§4gf 报告471现场470就是'抓到了却靠我自己想起来改'。本轮把认错机械落档。",
+  "session": "§4gj",
+  "mission": "建一条把'我错了'机械落档的通道：判据抓错→生成带sha256锁的认错记录→驱动权威行更新→全程可复核。让认错不再取决于Agent此刻诚不诚实，而是机制强制、赖不掉。",
+  "premise_checked": {
+    "note": "建通道前先空杯审视五个判据输入源是否真实——不建在沙上。",
+    "result": "evidence_honesty(7/7, all_pass=true, test_evidence_scope_and_cli.py)、independent_sources(8/8, 已接线)、numeric_honesty(9/9, 已接线)、claim_honesty(13/13, 已接线)、temporal_anchor(15/15, 已接线) 全部真实全绿、测试入套件。审查脚本自身一次bug(把嵌套结构当bool字典)、一次bug(int-list)如实记录，非判据问题。"
+  },
+  "four_link_chain": {
+    "L1_detect": "判据产出失败信号：numeric_honesty.check_handoff 的 failed 清单 / claim_honesty 的 UNVERIFIED_CLAIM / temporal_anchor 的 flags。无信号→NO_CORRECTION_NEEDED，不硬造认错。",
+    "L2_record": "有信号必须生成认错记录：唯一id+UTC时间戳+旧声明值+真值+来源判据+sha256自锁。append-only，记录一旦落库不可回改(回改→RECORD_TAMPER)。",
+    "L3_propagate": "认错记录须驱动权威行更新：声明值被修正为真值，且修正后 handoff 权威行能通过 check_handoff(声明==现场真值)。只落记录不改权威行→RECORD_WITHOUT_PROPAGATION。",
+    "L4_verify": "全程可复核：记录sha256链连续、时间戳单调、最终权威行check ok。有一环缺→对应flag，不报成功。"
+  },
+  "design": {
+    "module": "life_kernel/correction_ledger.py",
+    "nature": "纯函数，不联网/spawn/判定链/门禁；不改verdict/l3/absolute/宪法；权威行真值由 numeric_honesty.check_handoff 提供，本模块不重造数字真值源。",
+    "functions": [
+      "make_correction(detect, declared, truth, source) -> dict：生成一条带sha256自锁的认错记录",
+      "verify_chain(records, authority_check_ok) -> dict：核验记录链(sha256连续/时间戳单调/末态权威行ok)",
+      "channel_status(detect_signals, records, authority_check_ok) -> dict：四链综合裁决",
+      "KNOWN_BAD_CHAINS / KNOWN_GOOD_CHAINS：双向校准集",
+      "blind_spot_check / wiring_self_check / live_regression"
+    ],
+    "verdict_map": "四链全闭合→CORRECTION_CLOSED；无失败信号→NO_CORRECTION_NEEDED；有信号无记录→DETECTED_BUT_UNRECORDED；有记录未传播→RECORD_WITHOUT_PROPAGATION；记录可回改→RECORD_TAMPER；权威行仍错→AUTHORITY_STILL_WRONG。零战利品词。",
+    "keyword_policy": "状态串集中字典，比较逻辑只查ASCII键，避免AST Compare中文字面量自咬。"
+  },
+  "historical_replay": [
+    "H01 §4gf：报告KB=471现场470——当时抓到了(numeric C1)但靠手工补落。本通道回放：应判 DETECTED_BUT_UNRECORDED，逼出认错记录→传播→权威行改471为470→CORRECTION_CLOSED。",
+    "H02 F07：旧记忆GitHub已同步c446e01现场未推——应判 DETECTED_BUT_UNRECORDED，认错记录驱动权威行撤销假同步声明。"
+  ],
+  "calibration_requirements": [
+    "C1_permissive_caught: 永远判CLOSED的弱判据对坏链集漏识别→BLIND_SPOT。",
+    "C2_detected_unrecorded: 有失败信号无认错记录→DETECTED_BUT_UNRECORDED。",
+    "C3_record_unpropagated: 有记录但权威行仍错→RECORD_WITHOUT_PROPAGATION或AUTHORITY_STILL_WRONG。",
+    "C4_tamper_caught: 回改认错记录字段→RECORD_TAMPER(sha256链断)。",
+    "C5_good_not_overrejected: 四链全闭合的真实认错→CORRECTION_CLOSED；无错场景→NO_CORRECTION_NEEDED，不得误杀。",
+    "C6_wiring: 测试必须在pytest收集集内，wiring_self_check识破伪造缺席集。",
+    "C7_ast_zero_cjk_compare: AST Compare中文字面量=0；活体回归全绿；零战利品语言。"
+  ],
+  "boundaries": {
+    "verdict_unchanged": true,
+    "constitution_unchanged": true,
+    "no_gate_compile": true,
+    "no_spawn": true,
+    "no_online_inference": true,
+    "zero_trophy": true,
+    "user_holds_verdict": true,
+    "honest_limit": "本模块不重造数字真值源(复用numeric_honesty.check_handoff)；不证明权威行真值本身正确，只证明'抓错→落档→传播→复核'链条机械闭合；sha256自锁防回改但不防'一开始就写假记录'(源头诚实仍靠判据+外部取证)；校准集已知非穷尽。"
+  },
+  "success_criterion": "C1-C7全过；H01/H02历史回放能逼出认错记录并驱动权威行修正；新测试入套件使全量测试数增加；判定态不动；落档后权威行由check_handoff驱动对齐。"
+}
