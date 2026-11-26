@@ -1,0 +1,41 @@
+{
+ "2605.29800": {
+  "id": "2605.29800",
+  "title": "Nine Judges, Two Effective Votes: Correlated Errors Undermine LLM Evaluation Panels",
+  "summary": "LLM-as-a-judge panels aggregate votes from multiple models, with the expectation that diverse models yield more reliable evaluations. We develop a framework to measure the true informational value of such panels and quantify how far their reliability falls short of the independent-voting ideal. Testing a panel of 9 frontier LLMs from 7 model families on three natural language inference datasets (each with 100 human annotations per item), we find that the 9 judges effectively provide only about 2 independent votes' worth of information. Roughly three-quarters of the panel's nominal independence is lost because the models make the same mistakes on the same items. The consequences are stark: the panel's actual accuracy falls 8-22 percentage points short of what independent voting would achieve, and the best single judge matches or outperforms the full panel across all conditions. Neither adding more judges nor using smarter aggregation algorithms helps -- established methods close at most 11% of this gap, even with access to the correct answers. We quantify these findings using the Kish effective sample size (n_eff) and a Condorcet null model, and show the deficit is robust across prompt variants, temperatures, chain-of-thought reasoning, and a pairwise preference task (RewardBench). The bottleneck is correlated judges, not the aggregation algorithm, implying that scaling up panels cannot substitute for genuinely independent evaluation.",
+  "authors": [
+   "Guneet Kohli"
+  ],
+  "published": "2026-05-28T11:48:17Z",
+  "updated": "2026-05-28T11:48:17Z",
+  "source_url": "https://export.arxiv.org/api/query?id_list=2605.29800"
+ },
+ "2606.26583": {
+  "id": "2606.26583",
+  "title": "Preference Optimization Drives Monoculture in LLM Prediction Markets",
+  "summary": "Prediction markets rest on the independence of participant errors. As LLM agents become active traders on platforms like Kalshi and Polymarket, we ask: does this independence hold when the crowd is composed of LLMs? We find it does not. LLM agents fine-tuned with Direct Preference Optimization (DPO) share a convergent output distribution, producing pairwise error correlations of $ρ= 0.70$ and reducing ten agents to the effective forecasting power of ${\\approx}1.4$ independent forecasters $N_{\\text{eff}}$. This is not a scaling problem: $N_{\\text{eff}}$ remains flat from $N=5$ to $N=40$, and the 10-agent market (67.6%) fails to match a single standalone agent (70.2%). Two controlled ablations isolate preference optimization as the causal driver, replicated across labs and scales ($Δρ= +0.24$ to $+0.46$ on identical-SFT controls at 8B and 70B). Among mitigations tested, cross-model diversity achieves the largest correlation reduction ($ρ$ from 0.68 to 0.40). As LLMs become more aligned, markets built from them become more monocultural.",
+  "authors": [
+   "James Begin",
+   "Brendan Gho",
+   "Suman Muppavarapu",
+   "Tyson Tsay"
+  ],
+  "published": "2026-06-25T04:16:44Z",
+  "updated": "2026-06-25T04:16:44Z",
+  "source_url": "https://export.arxiv.org/api/query?id_list=2606.26583"
+ },
+ "2603.06612": {
+  "id": "2603.06612",
+  "title": "Consensus is Not Verification: Why Crowd Wisdom Strategies Fail for LLM Truthfulness",
+  "summary": "Pass@k and other methods of scaling inference compute can improve language model performance in domains with external verifiers, including mathematics and code, where incorrect candidates can be filtered reliably. This raises a natural question: can we similarly scale compute to elicit gains in truthfulness for domains without convenient verification? We show that across five benchmarks and models, surprisingly, it cannot. Even at 25x the inference cost of naive sampling, polling-style aggregation yields no consistent accuracy gains over single-sample baselines and often amplifies shared misconceptions. We find that under uncertainty, models are better at predicting what other models will say within model ensembles than at identifying what is true, revealing a separation between social prediction and truth verification. Across models and benchmarks, aggregation fails to provide a robust truth signal because language model errors are strongly correlated. The source of correlation goes beyond any individual benchmark: we show that even when conditioned on out of distribution random strings and asked to produce pseudo-random outputs, different models produce correlated outputs. Confidence-based weighting provides no benefit because self-reported confidence fails to reliably distinguish correct from incorrect answers. These results delineate a boundary for inference-time scaling: in verified domains, additional samples provide more candidates for a verifier to filter; in unverified domains, additional samples merely reinforce shared misconceptions.",
+  "authors": [
+   "Yegor Denisov-Blanch",
+   "Joshua Kazdan",
+   "Jessica Chudnovsky",
+   "Rylan Schaeffer"
+  ],
+  "published": "2026-02-20T03:35:01Z",
+  "updated": "2026-02-20T03:35:01Z",
+  "source_url": "https://export.arxiv.org/api/query?id_list=2603.06612"
+ }
+}

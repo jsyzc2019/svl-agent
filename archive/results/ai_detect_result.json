@@ -1,0 +1,66 @@
+{
+  "sample_counts": {
+    "human": 24,
+    "ai": 12,
+    "deai": 12
+  },
+  "auc_original": 0.9236,
+  "deai_detect_rate": 1.0,
+  "deai_pass_rate": 0.0,
+  "deai_proba_mean": 0.8929,
+  "gate_length_label_corr": 0.0408,
+  "single_feature_auc": {
+    "sent_len_cv": 0.396,
+    "sent_len_mean": 0.062,
+    "ttr": 0.378,
+    "punct_rate": 0.875,
+    "dialogue_ratio": 0.455,
+    "formal_word_hits": 0.448,
+    "paragraph_count": 0.5,
+    "exclaim_question_rate": 0.542
+  },
+  "feature_means": {
+    "sent_len_cv": {
+      "human": 0.7115,
+      "ai": 0.6617
+    },
+    "sent_len_mean": {
+      "human": 41.0073,
+      "ai": 18.2834
+    },
+    "ttr": {
+      "human": 0.4633,
+      "ai": 0.4515
+    },
+    "punct_rate": {
+      "human": 0.0996,
+      "ai": 0.112
+    },
+    "dialogue_ratio": {
+      "human": 0.2148,
+      "ai": 0.1702
+    },
+    "formal_word_hits": {
+      "human": 1.8234,
+      "ai": 1.1469
+    },
+    "paragraph_count": {
+      "human": 1.0,
+      "ai": 1.0
+    },
+    "exclaim_question_rate": {
+      "human": 0.0063,
+      "ai": 0.0065
+    }
+  },
+  "decision": {
+    "R_original": "R1_detectable",
+    "R_deai": "R5_holds"
+  },
+  "gate": {
+    "G1_single_feature_dominant": true,
+    "G2_length_confound": false,
+    "G3_deai_heldout": true,
+    "G4_boundaries_written": true
+  }
+}

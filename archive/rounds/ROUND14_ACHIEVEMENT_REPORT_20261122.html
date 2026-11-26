@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第十四轮成果报告 · §103 设计者约束消融（去引导）</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.recursion{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第十四轮成果报告 <span class="pill tag">§103</span></h1>
+<div class="sub">设计者约束消融 · de-steering · 复用 §100 冻结 held-out · 2026-11-22 · 触发：用户"D的设计者拟可进一步放松"</div>
+
+<h2>一、"放松"的判读：抽引导脚手架，不是降验收门槛</h2>
+<div class="phil">
+面对"可进一步放松"，先判放松对象（KB-META10/KB-META11）：若是<b>判据准入阈值</b>→拒绝（放水）；若是评估方给受试者的<b>引导脚手架</b>→这是最高杠杆消融。<br><br>
+§102 证明判据可迁移，但留有两处引导：①给设计者的 prompt <b>直接描述了规则本质</b>（"限定成分逐字支撑"）＝告诉了答案形状；②样本 id 带 variant 语义（<code>S01_clean</code>）。未排除的替代解释：<b>"可迁移只是被引导到同一方向"</b>。<br><br>
+本轮把这两处引导也抽掉，做一次<b>约束消融（de-steering）</b>：结构可无引导重新发现→结论加固；发现不了或分歧→如实定位更深的依赖。仍<b>不编译新门禁</b>、不宣布 L3。
+</div>
+
+<h2>二、去引导设计与物理隔离（先锁后测）</h2>
+<p>复用 §100 冻结 claim/evidence（逐字不变），只重构呈现层；<b>唯一变量 = 设计者收到的引导信息量</b>。</p>
+<table>
+<tr><th>引导源（§102）</th><th>去引导处理（§103）</th></tr>
+<tr><td>prompt 明说"逐字/限定成分/支撑"</td><td>降为中性"二分归纳"任务，不含任何规则词</td></tr>
+<tr><td>id 带 <code>S01_clean</code> 语义</td><td>中性化 <code>N01..N18</code> + 固定种子 <code>20261122</code> 打乱顺序</td></tr>
+<tr><td>（评分需 gt）</td><td>gt 按 (claim,evidence) <b>文本反查</b>，映射不落盘——设计者目录仅裸样本一个文件</td></tr>
+</table>
+<p>预注册在 spawn 前锁存：<code>prereg 632b6f33…</code> / <code>gate_prereg 84862b70…</code> / <code>manifest 3c884ce8…</code> / <code>samples_desteer ec7a40b0…</code>。spawn <b>两个</b>全新 context 独立设计者（D1a/D1b，互不知对方、不获知 G/D0），避免单例偶然。三情形裁决规则先于结果锁定：ROBUST / PARTIAL / DEPENDENT。</p>
+
+<h2>三、两项独立发现：同构结构 vs 任务解释自由度</h2>
+<p>两设计者都从零发现了同一<b>三层结构</b>：evidence 是 claim 的 ①逐字重复 / ②删一段 / ③独立陈述——但选了不同分类目标。</p>
+<table>
+<tr><th>设计者</th><th>机制</th><th>clean</th><th>tampered</th><th>canary</th><th>解读</th></tr>
+<tr><td><b>D1b</b></td><td>单段删除检测（字符级前后缀比对）</td><td>True ✓</td><td>False ✓</td><td>True ✓</td><td>与 G/D0 逐样本全一致，core 12/12</td></tr>
+<tr><td><b>D1a</b></td><td>子序列回显检测</td><td>False ✗</td><td>False ✓</td><td>True ✓</td><td>正类取"独立陈述"层，core 6/12</td></tr>
+</table>
+<div class="note"><b>D1b = 强加固</b>："逐字支撑"判据可被<b>完全无引导</b>独立重新发现，§102 的可迁移结论不依赖 prompt 引导；且它用不同机制、不依赖词表，天然规避 §100 的 canary 类型错配。<br><br>
+<b>D1a = 更深残余</b>：发现了同构结构，却把"是否带来 claim 之外的新信息"当分类目标——<b>"分哪两类 / 正类取哪层"存在任务解释自由度</b>，这是比 §102 更深的一层。</div>
+<p>准入元审计：两者签名均 <code>(claim,evidence)</code>、无标签泄漏、无硬编码 <code>N01..N18</code>、确定性。D1b 注释出现 <code>tampered</code> 一词描述其自归纳的"删一段"结构——属自主概念命名非标签泄漏（判据只看剥离注释后的代码，§102 词边界纪律的镜像），回放测试专门固化此判据防回退。</p>
+
+<h2>四、one-shot 实测与交叉核验</h2>
+<table>
+<tr><th>指标</th><th>D1a</th><th>D1b</th></tr>
+<tr><td>admission_ok</td><td><span class="pill ok">True</span></td><td><span class="pill ok">True</span></td></tr>
+<tr><td>tamper_catch_rate</td><td><span class="pill ok">1.0</span></td><td><span class="pill ok">1.0</span></td></tr>
+<tr><td>clean_pass_rate</td><td><span class="pill no">0.0</span></td><td><span class="pill ok">1.0</span></td></tr>
+<tr><td>core_accuracy (excl canary)</td><td><span class="pill no">0.5</span></td><td><span class="pill ok">1.0</span></td></tr>
+<tr><td>vs G core agreement</td><td>0.5</td><td><span class="pill ok">1.0</span></td></tr>
+<tr><td>vs D0 core agreement</td><td>0.5</td><td><span class="pill ok">1.0</span></td></tr>
+</table>
+<p>D1a-D1b 核心一致率 <b>0.5</b>。裁决 <b class="pill no">DESTEER_PARTIAL</b>：判据"结构"可无引导重新发现（D1b 加固 §102），但"分哪两类/正类取哪层"有任务解释自由度（D1a）——如实记录，不粉饰。</p>
+
+<h2>五、接合、验收与诚实边界</h2>
+<table>
+<tr><th>项</th><th>结果</th></tr>
+<tr><td>回放测试</td><td>12 项全过（只读冻结结果，不重算判据）</td></tr>
+<tr><td>全量测试</td><td>1307 → <b>1319 passed</b>（+12，全绿）</td></tr>
+<tr><td>证据链审计</td><td>45→46 / 五件套 28→29 / 三锁 25→26（按实测更新断言，不放宽）</td></tr>
+<tr><td>成长桥 / KB</td><td>成长桥 87→88；KB 146→148（KB-AUDIT45 fix + KB-META11 preserve）</td></tr>
+<tr><td>门禁</td><td><b>刻意不编译新门禁</b>（延续 §102，最高杠杆≠最高产出数）</td></tr>
+</table>
+<div class="recursion"><b>诚实边界</b>：<code>l3_claimed=false</code> / <code>absolute=false</code>。去引导只抽掉 prompt 规则描述与 id 标签，<b>不消除</b> spawn/同模型家族（KB-STRUCT02）/解释环节本 Agent 的残余。Trusting Trust 递归在受控层停下：本轮定位的是"任务解释自由度"这一比 §102 更深的残余，而非宣称绝对独立。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。</div>
+
+<div class="foot">§103 自主运维第十四轮 · 证据链 <code>audit_designer_desteering/</code> · 回放 <code>tests/test_designer_desteering.py</code> · 报告 ROUND14_ACHIEVEMENT_REPORT_20261122.html</div>
+</div></body></html>

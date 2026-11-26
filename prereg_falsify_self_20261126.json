@@ -1,0 +1,17 @@
+{
+  "id": "PREREG-FALSIFY-SELF-CORRECTION-20261126",
+  "at_utc": "2026-11-26T01:54:27.317509+00:00",
+  "round_target": "§4ft",
+  "target_belief": "本仓P0通道根基：'主动自曝确认性采样/空杯自我审计能提升认知诚实、减少偏误'——自审SELF_AUDIT与每日'我这条评论最可能错在哪'均建立在此信条上",
+  "falsifiable_prediction": "若存在A级一手证据表明：①在无外部反馈时自我纠错(self-correction)无效甚至降低准确率；②偏见盲点(bias blind spot)使人对自己偏见的自查系统失效、自曝反增过度自信；③debugging式自我反思在长程任务中引入系统性误差——则本仓P0通道的认知论根基被削弱，'自曝即诚实'不成立",
+  "primary_metric": "至少1篇A级一手(期刊原文/权威会议/预印本有同行评论)给出可直接引用的对比数据：self-correction前后准确率无提升或下降，或bias blind spot自评与实测脱钩",
+  "secondary": "本仓KB/SELF_AUDIT中'自曝=证伪力'的等号是否可被该证据命中",
+  "decision_tree": {
+    "FOUND_A": "A级一手命中→如实落KB/报告，裁决SELF_CORRECTION_FOUNDATION_WEAKENED或REFINED，verdict不动",
+    "FOUND_B_ONLY": "仅B级二手或观点文章→标提示性线索，不翻案",
+    "NOT_FOUND": "如实记录'搜了没找到'，不宣称证实原信条"
+  },
+  "counter_discipline": "主动找'自我审计有效'的一手同样记录；但须标注'一手支持≠我被证伪'，加强信条不算P0收获，避免把支持当战利品",
+  "discipline": "分析前锁存；不编译门禁；不改verdict/l3/absolute/宪法；联网仅外层摄食，内核L0不联网不spawn；判定权归用户",
+  "sha256": "15ce59b531a8071526ee168ed2bf08f26722d9367dbd9310834efd425b933c03"
+}

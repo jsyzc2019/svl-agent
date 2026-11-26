@@ -245,4 +245,42 @@ core → verifiers → harness → handoff          L0 产物层：生成→判�
 2. **哈希被锁存**：9 个 `*.sha256` 文件锁定了预注册与样本内容；已逐一验证一致（见整理记录）。改动内容会破坏锁存。
 3. **后验不伪装**：`rsi_structure_amendment.json` 明确标注为全文到手后的增量，与 `rsi_structure_preregistration.json` 的哈希严格区分。
 
-因此本仓采用 **"保路径 + 强导航"** 的整理策略：结构清晰靠本文档，不靠移动文件。
+因此本仓长期采用 **"保路径 + 强导航"** 的整理策略：结构清晰靠本文档，不靠移动文件。**2026-11-25 工作区梳理**：在不违反上述纪律的前提下，对**零代码依赖、无哈希锁、无动态集合统计**的纯产物做了选择性物理归档（详见 §5）；凡被脚本/测试/内核/哈希锁/动态统计依赖的对象一律保留原位。
+
+---
+
+## 5. 工作区分类梳理（2026-11-25）
+
+> 目标：缓解根目录 50+ `audit_*` / 26 个 `ROUND*` HTML / 40+ `build_*.py` 的视觉杂乱。
+> 纪律：判定权归用户；不动宪法/判定/十案/§100；不编译新门禁；每批 `cp -a` 副本回滚点 + 全量测试验证。
+> **方法**：先扫全部脚本/测试/文档的相对路径引用，再按依赖分级分批归档；能安全移动的才移动，深度耦合的一律保原位走逻辑索引。
+
+### 5.1 引用扫描结论（归档前的依据）
+
+对根目录 141 个候选对象（61 audit 目录 + 34 builder + 25 ROUND HTML + 21 result json）做全仓扫描：
+
+- **74 个被 Python 硬编码路径引用** —— 其中 `audit_l3_gap_targeted/result.json`（GAP_INCONCLUSIVE 判定源）被内核 `life_kernel/kernel.py` 引用 6 处、内核测试 21 处；40+ audit 目录被 `tests/test_*.py` 用 `/workspace/audit_*` 绝对路径或 `os.path.dirname(__file__)` 相对路径引用。
+- **动态集合统计**：`tests/test_evidence_chain.py::test_audit_all_counts` 硬断言根目录 audit 目录数 = 61；内核 `sense()` 感知真实仓库状态。移走任一 audit 目录即失败（批次3 实测 2 failed，已回滚）。
+- **哈希锁**：`agi_essay_raw.txt` 等样本被 `*.sha256` / prereg JSON 锁定，移动破坏证据链。
+
+### 5.2 已归档（45 项，三批，每批后 1551 全绿）
+
+| 批次 | 类别 | 目标目录 | 数量 | 具体 |
+|---|---|---|---|---|
+| 1 | 轮次报告 HTML | `archive/rounds/` | 22 | `ROUND5`–`ROUND26_ACHIEVEMENT_REPORT_20261122.html`（ROUND2/3/4 因被对应 builder 引用保留原位） |
+| 2 | 中间结果 JSON | `archive/results/` | 3 | `ai_detect_result.json` / `sse_result.json` / `ssq_result.json`（均为无引用的中间态；带引用的 `*_full_result.json` 保留原位） |
+| 4 | 构建脚本 | `tools/builders/` | 20 | 无 `__file__` 定位、无入度引用的 `build_*.py`（内部为 CWD 相对路径或 `/workspace/` 绝对路径，从仓库根运行行为不变） |
+
+### 5.3 保留原位（耦合对象，走逻辑索引）
+
+- **61 个 audit 目录**：全部保留（判定源 + 测试硬引用 + 动态统计 + 哈希锁）。
+- **14 个 build_*.py**：被引用或 `__file__` 定位（`build_round2/3/4_report.py` / `build_fj_report.py` / `build_readme_stats.py` / `build_robustness_result.py` 等）保留原位。
+- **18 个 result json**：被测试/门禁引用（含全部 `*_full_result.json`）保留原位。
+- **样本语料**：`doupo_*.txt` / `agi_essay_raw.txt` / `china_*_raw.json` / `real_financials_cache.json` 等被哈希锁/测试/svagent 引用，保留原位。
+- **核心运行层**：`README.md` / `LIFE_KERNEL.md` / `SESSION_HANDOFF.md` / `REPOSITORY_MAP.md` / `pyproject.toml` / `LICENSE` + `life_kernel/` `svagent/` `tests/` 保留原位。
+
+### 5.4 验证与回滚
+
+- 每批归档后立即跑 `python3 -m pytest -p no:cacheprovider --override-ini=addopts= -q`，均 **1551 passed**（批次3 曾因移动 audit 目录得 2 failed，已按 manifest 全数回滚并复验 1551 通过）。
+- 完整回滚基线：`/workspace_pre_sort`（梳理前 `cp -a` 全量快照，62M）；每批 `mv` 源→目标记录在临时回滚区 manifest，可逆。
+- 本仓 tarball 快照不含 `.git`，**不声称 git commit 可回滚**；回滚靠文件副本。

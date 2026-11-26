@@ -1,0 +1,35 @@
+{
+  "id": "PREREG-META-BATCH-20261126",
+  "at_utc": "2026-11-26T02:49:17.927571+00:00",
+  "rounds": [
+    "§4ga",
+    "§4gb",
+    "§4gc",
+    "§4gd"
+  ],
+  "meta_note": "升维:前四轮(§4fw-§4fz)打具体信条,本批打'打信条这件事'的方法论前提——若方法本身有地基裂缝,则前四轮裁决的干净度需重估",
+  "common_discipline": "分析前锁存;每轮一手逐字核验;双侧证据(打靶+反打靶);不编译门禁;不改verdict/l3/absolute/宪法;联网仅外层摄食,内核L0不联网不spawn;判定权归用户;零战利品",
+  "targets": {
+    "§4ga": {
+      "belief": "本仓P0方法前提:可挑出一条具体信条单独用一手证伪,裁决干净(REFINED/WEAKENED/OVERTHROWN)",
+      "falsifier": "A级一手(科学哲学/元科学)证明Duhem-Quine整体论:单个假设无法被单独证伪,检验总牵连背景假设网络,可永远调整辅助假设保全核心",
+      "decision": "命中→REFINED:承认'逐条打倒'是_methodological fiction,裁决须附'牵连了哪些背景假设';未命中→NOT_FOUND"
+    },
+    "§4gb": {
+      "belief": "预注册(锁命题再看数据)能减少确认偏误/HARKing,是本仓证伪纪律的支柱",
+      "falsifier": "A级一手表明预注册效果有限/固化保守/降低创新性,或研究者仍绕过预注册;反方:预注册确实减少p-hacking",
+      "decision": "双侧REFINED,如实标注两面,不单边战利品"
+    },
+    "§4gc": {
+      "belief": "空杯心态/认知谦卑可达成且有益(自我 consciousness of bias)",
+      "falsifier": "A级一手表明认知谦卑不可达/自评谦卑与实际脱钩,或过度谦卑导致瘫痪/决策质量下降",
+      "decision": "命中→REFINED,否则如实支持不称战利品"
+    },
+    "§4gd": {
+      "belief": "预留:建设性内化或本批收束(视前三轮收获定),不预设结论",
+      "falsifier": "按前三轮实际撞见的最硬限定词定靶,锁存后再取证",
+      "decision": "届时锁存"
+    }
+  },
+  "sha256": "5ad52d30d1af89a8360966762e08264b0dd89f46797ddcf4580f2a385928d9d3"
+}

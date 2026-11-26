@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第十六轮成果报告 · §105 跨数据域字段名消融</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.recursion{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.rootcause{background:#e8f0e4;border:1px solid #b8d0ae;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第十六轮成果报告 <span class="pill tag">§105</span></h1>
+<div class="sub">跨数据域字段名语义消融 2×2（cross-domain field-name ablation）· 全新论文 arXiv:2611.14326 · 2026-11-22 · 触发：用户"你再放飞哈"</div>
+
+<h2>一、判读：最高杠杆是外部效度，不是再抽一层脚手架</h2>
+<div class="phil">
+上一轮在 §104 字段名层自然停手（纵向链到底）。用户"再放飞"接续"换数据域/换判据目标"的钩子。判读：§100–§104 的判据可迁移链<b>全部锁死在单一论文 arXiv:2610.16067（sha256=b2ce0f59…）、同一组 18 样本</b>上——§104 的 <code>FIELD_NEUTRAL_DEPENDENT</code> 从没在第二个数据域验证过，这是当前最大的<b>外部效度缺口</b>。<br><br>
+最高杠杆 = 换全新论文、复现 2×2 字段名消融，检验结论是否跨论文稳健。这是<b>横向验证</b>，不重走已停的纵向链，<b>不编译新门禁</b>（最高杠杆≠最高产出数，KB-META10）。
+</div>
+
+<h2>二、新域取料 + 出题权外移（先锁后测）</h2>
+<p>选 <b>arXiv:2611.14326</b>《When Should Agents Remember? Falsification-Gated Self-Evolution for LLM Agents》——自进化主题贴北极星，与 §100 的 oracle failures 完全不同域。一手取料 abs + full HTML（924KB）→ fetch_log + SHA256 + paper_flat（164KB，<code>source sha256=5950a338…</code>）。</p>
+<table>
+<tr><th>锁</th><th>值（前12位）</th><th>锁定时点</th></tr>
+<tr><td>prereg</td><td><code>795a2bba…</code></td><td>spawn 前</td></tr>
+<tr><td>gate_prereg</td><td><code>45a50ef2…</code></td><td>spawn 前</td></tr>
+<tr><td>manifest</td><td><code>c5bfab5c…</code></td><td>spawn 前</td></tr>
+<tr><td>samples</td><td><code>a388e200…</code></td><td>标注者产出后</td></tr>
+</table>
+<p>出题权外移：全新 context 独立标注者只读 paper_flat，抽 6 条逐字含限定成分的 claim（<code>only/not/but/three/never/However,</code>），各构造 clean / tampered（删该成分）/ canary（语义支撑换措辞），gt 不经本仓预设。</p>
+<div class="note"><b>逐字核验一次自咬</b>：首版检查用"tampered 是 clean 子串"，但删中间词后不再是连续子串（§102 词边界误报同类）——修正为 difflib 单片段删除检查，6 条 tampered 全部确认为纯删一个限定片段、无 replace/insert，不放水。</div>
+
+<h2>三、2×2 设计 + one-shot 实测</h2>
+<p>四份裸样本：条件 A（<code>claim/evidence</code> 字段名，A1/A2 同哈希 <code>c04b1055…</code>）、条件 B（<code>text_a/text_b</code> 中性，B1/B2 同哈希 <code>1fe15e99…</code>）。样本逐字相同、id 中性化打乱、评分映射落设计者目录外。四个全新 context 设计者，prompt 去规则词、互不知对方、不获知任何上游判据，准入全过。</p>
+<table>
+<tr><th>设计者</th><th>条件</th><th>归纳机制</th><th>clean</th><th>tamper_catch</th><th>canary_fp</th><th>core</th></tr>
+<tr><td>A1</td><td>有字段名</td><td>token Jaccard + 字符序列比</td><td>1.0</td><td><span class="pill no">0.0</span></td><td>1.0</td><td>0.50</td></tr>
+<tr><td>A2</td><td>有字段名</td><td>词元序列相似度 + Jaccard</td><td>1.0</td><td><span class="pill no">0.0</span></td><td>1.0</td><td>0.50</td></tr>
+<tr><td>B1</td><td>中性字段</td><td>词元子序列（删减副本）</td><td>1.0</td><td><span class="pill no">0.0</span></td><td>1.0</td><td>0.50</td></tr>
+<tr><td>B2</td><td>中性字段</td><td>最长公共前后缀（单段删除）</td><td>1.0</td><td><span class="pill no">0.0</span></td><td>1.0</td><td>0.50</td></tr>
+</table>
+<div class="note">四个设计者<b>全部 core=0.50</b>：全收敛到"近逐字复述"判据——把 tampered（删限定词）判支撑、canary（语义支撑）误拒。这是 §104 D2a 同型的逐字/语义错配，<b>在新独立数据域再次复现</b>。字段名效应：field_gap 新域=<b>0.0</b>（条件 A/B 均 0.5），旧域=<b>0.667</b>（D1b 1.0 vs D2 0.17–0.33）。</div>
+
+<h2>四、裁决：CROSS_DOMAIN_INCONCLUSIVE（诚实地板效应）</h2>
+<div class="recursion">
+初版引擎把"条件 B 高于旧域 B"误落 <code>WEAKENED</code>。按纪律自我纠错：裁决树<b>第一分叉应是"对照组（条件 A）在新域是否仍成立"</b>——条件 A 在新域也<b>未恢复 D1b</b>（tamper 全 0），存在<b>地板效应</b>，A/B 同低无法归因字段名。<br><br>
+修正为 <b><span class="pill tag">CROSS_DOMAIN_INCONCLUSIVE</span></b>：字段名效应未跨论文复现，但<b>既不宣称被推翻也不宣称确认</b>，只划出 §104 结论的适用边界（限于 2610.16067 样本结构）。<span class="pill no">l3=false</span> <span class="pill no">absolute=false</span>
+</div>
+
+<h2>五、根因取证（本轮最有价值的认知增量）</h2>
+<div class="rootcause">
+旧域 D1b 与新域 B2 识别出<b>同一个三层结构</b>（逐字重复 / 删一段 / 独立句）、用<b>几乎相同的最长公共前后缀算法</b>，但<b>正类取向相反</b>：D1b 把"删一段"判 <code>tampered=False</code>（core 1.0），B2 把"删一段"判 <code>decision=True</code>（core 0.5）。<br><br>
+四个新域设计者都把二分归纳成"近逐字 vs 不同句"、把 tampered 并入正类，<b>与字段名无关</b>。真正的杠杆不是字段名方向语义，而是<b>"删限定成分=被篡改=负类"这一源自任务目的的语义取向</b>（纯文本结构无法自明）——与 §103"正类取哪层"自由度（KB-AUDIT45）同源。
+</div>
+
+<h2>六、接合、验收与诚实边界</h2>
+<table>
+<tr><th>项</th><th>结果</th></tr>
+<tr><td>回放测试</td><td>13 项全过（只读冻结结果；裁决树自我纠错已固化）</td></tr>
+<tr><td>全量测试</td><td>1331 → <b>1344 passed</b>（+13，全绿）</td></tr>
+<tr><td>链审</td><td>47→48 目录 / 30→31 五件套 / 三锁 28，按实测更新断言不放宽</td></tr>
+<tr><td>成长桥</td><td>KB-AUDIT47(fix) + KB-META13(preserve 进 deferred)</td></tr>
+<tr><td>知识库</td><td>150 → <b>152</b> 条</td></tr>
+<tr><td>门禁</td><td><b>不编译新门禁</b>（延续 §102，最高杠杆≠最高产出数）</td></tr>
+</table>
+<p><b>诚实边界</b>：四个设计者仍由本 Agent spawn 且同模型家族（KB-STRUCT02），解释环节本 Agent；字段名效应限于此论文样本；不宣布 L3 / absolute。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；系统安全红线全程遵守。</p>
+
+<div class="foot">
+自主运维第十六轮 · §105 跨数据域字段名语义消融 2×2 · 数据域 arXiv:2611.14326（FGSE 自进化）· 裁决 CROSS_DOMAIN_INCONCLUSIVE · 成果报告 ROUND16_ACHIEVEMENT_REPORT_20261122.html
+</div>
+</div></body></html>

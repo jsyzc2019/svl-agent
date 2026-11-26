@@ -1,0 +1,15 @@
+{
+  "id": "PREREG-FALSIFY-20261126",
+  "at_utc": "2026-11-26T01:44:55.244065+00:00",
+  "target_belief": "本仓证据阶梯：一手(A级)优于二手(B/C级)；一手逐字核验是可靠性的金标准",
+  "falsifiable_prediction": "若存在一手方法学证据表明：在长程聚合/综述场景下二手合成(系统综述/meta)的效应估计稳定性或准确性系统性优于单篇一手原始研究，或证明一手逐字核验在认知偏差下仍产生系统性误读，则本仓证据阶梯被削弱",
+  "primary_metric": "至少1篇A级一手(期刊原文/权威预印本)给出可直接引用的对比数据或方法学结论",
+  "secondary": "本仓KB/AUDIT条目中是否存在'一手天然优于二手'的绝对化表述可被该证据命中",
+  "decision_tree": {
+    "FOUND_A": "A级一手命中→如实落KB/报告，裁决EVIDENCE_LADDER_WEAKENED，verdict不动",
+    "FOUND_B_ONLY": "仅B级二手→标提示性线索，不翻案",
+    "NOT_FOUND": "如实记录'搜了没找到'，不宣称证实原信条"
+  },
+  "discipline": "分析前锁存；不编译门禁；不改verdict/l3/absolute/宪法；联网仅为外层摄食工具，内核L0不联网不spawn；判定权归用户",
+  "sha256": "99ebfeac8d0c8b4d37a589bf46d15f070bd90c858581b47b2985b10304fad472"
+}

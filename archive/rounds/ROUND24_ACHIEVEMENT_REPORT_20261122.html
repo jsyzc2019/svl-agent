@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第二十四轮成果报告 · §113 跨集×跨厂商 2×2 闭合</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.tag{background:#fdecea;color:var(--accent)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.win{background:#e8f0e4;border:1px solid #b8d0ae;padding:14px 18px;border-radius:6px;font-size:14px}
+.recursion{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+.ck{font-family:monospace;font-size:13px;line-height:1.9}
+</style></head><body><div class="wrap">
+<h1>自主运维第二十四轮成果报告 <span class="pill tag">§113</span></h1>
+<div class="sub">跨集×跨厂商 2×2 闭合验证 · 2026-11-23 · 触发：用户"在遵守本仓纪律前提下，按你认为最有性价比的推"</div>
+
+<h2>一、触发：证据链唯一没填的交叉格</h2>
+<div class="phil">
+核查发现证据链是一个缺一角的 2×2：§112 只证明"跨厂商在主集上有效"，没证明"在独立集上稳健"。填上"第二集×Liquid AI"这一格，就把"设计者独立性"从单点升级为跨集×跨厂商矩阵——成本极低（管线现成，只换冻结输入），收益高（闭合唯一未碰维度）。这是当前最高性价比事项。
+</div>
+<table>
+<tr><th>2×2 矩阵</th><th>主确认集（§107）</th><th>独立第二集（§108）</th></tr>
+<tr><td><b>NVIDIA designer</b></td><td>§107 STRATIFIED_CONFIRMED<br>§111 AST_V2_PARTIAL（跨模型）</td><td>§108 CROSS_SET_PARTIAL</td></tr>
+<tr><td><b>Liquid AI designer</b></td><td>§112 CROSS_VENDOR2_PARTIAL</td><td><b>§113 本轮——唯一空格</b></td></tr>
+</table>
+
+<h2>二、spawn 前锁死——唯一变量=确认集</h2>
+<ul>
+<li>AST v2 规则逐字节复用 §111/§112（哈希 <code>5e36f492...</code>），designer=Liquid AI（同 §112），三 purpose.md 逐字节相同。</li>
+<li><b>唯一变化=确认集</b>（主集 <code>e7a65f...</code> → §108 第二集 <code>82c9966b...</code>）。</li>
+<li>verify 加 <code>rule_identical_to_audit_admission_ast_audit</code>、<code>rule_identical_to_audit_cross_vendor_designer2</code>、<code>samples_are_second_set</code>、<code>samples_not_main_set</code> 四重物理证明。</li>
+<li>prereg 裁决树 SET_VENDOR2 四档、不翻 §107/§108/§111/§112 四案、l3=false。commit+push <code>7b9122d</code>，服务器时间 <code>06:14:10Z</code> 早于 spawn——外部时间戳锚。</li>
+</ul>
+
+<h2>三、两次 spawn 均部分失败——诚实的负面结果</h2>
+<table>
+<tr><th>尝试</th><th>P0</th><th>P1</th><th>P2</th></tr>
+<tr><td>attempt1（16000）</td><td>代码截断 SyntaxError</td><td>无 judge 函数</td><td><b>ok</b></td></tr>
+<tr><td>attempt2（20000）</td><td>代码块中途截断</td><td><b>ok</b></td><td>代码块中途截断</td></tr>
+</table>
+<div class="note">两次各有不同条件成功，但<b>无法让三条件同时产出完整 judge</b>。根因：Liquid AI 1.7B 在第二集 purpose 下 reasoning 链超长，常在代码块中途被 token 上限切断（<code>finish=length</code>）。</div>
+
+<h2>四、关键纪律判断：不重跑到满意（反 Goodhart）</h2>
+<div class="recursion">
+区分两类问题：<br>
+① §109/§111 的"修工具"先例针对<b>确定性工程 bug</b>（锁文件名拼错），一次修到位；<br>
+② 本例是<b>异厂生成的不确定性</b>，反复提高 token（16000→20000）属"调参到跑通"，是纪律禁止的 Goodhart 风险——<b>绝不第三次重跑</b>。<br>
+保留两次全部失败留痕（<code>attempt1_manifest_16000.json</code>、<code>attempt1_P2_judge_16000.py</code>、<code>vendor_call_manifest.json</code>）+ <code>EXECUTION_LOG.md</code>，不删不掩盖；缺 judge 条件不伪造、metrics 写 None。<br>
+engine.py 修一处二元状态 bug（缺任一 judge 即写 PENDING，与已存在 P1 judge 矛盾）→ 三态（全缺=待命 / 部分缺=EXECUTED+INCONCLUSIVE / 全齐=正常裁决），按 prereg 失败分支封顶，只更严格不翻案。
+</div>
+
+<h2>五、核心结果（诚实版）</h2>
+<div class="win">
+<b>裁决：SET_VENDOR2_INCONCLUSIVE</b>——按 prereg"生成/API 失败→INCONCLUSIVE"分支落档。<br><br>
+这是<b>诚实的负面结果</b>：2×2 的"第二集×Liquid AI"格因异厂生成不稳定未能填充。四格如实陈述：§107 CONFIRMED / §108 PARTIAL / §112 PARTIAL / §113 INCONCLUSIVE（未完成）。不把三格选择性存活包装成完整结论（KB-META21）。<br><br>
+信息量：说明 §112 的跨厂商效应<b>可能主集特异、在独立第二集上不稳定</b>——样本特异性的又一例（延续 §108/§111 P0 地板跨集消失）。
+</div>
+
+<h2>六、诚实边界：仍未达到 L3</h2>
+<div class="phil">
+仍 <b>l3=false / absolute=false</b>：① 2×2 闭合尝试因生成不稳定未完成一格；② 样本/gt/盲评/裁决/解释仍本 Agent；③ 异厂仅生成 judge 源码、不采信自报；④ 单次单集、无多样本量；⑤ §107/§108/§111/§112 四份历史裁决全部保留并列，不翻案。
+</div>
+
+<h2>七、验收状态</h2>
+<div class="ck">
+全量测试：1421 → <b>1429 passed</b>（8 项 §113 专项，含部分失败态回归）<br>
+verify.py：<b>19/19 ALL_OK</b>（含 partial_failure_no_forged_metrics / samples_are_second_set / 不翻四案）<br>
+知识库：166 → <b>168 条</b>（KB-AUDIT55 部分失败反 Goodhart；KB-META21 2×2 空格诚实标注）<br>
+证据链审计：total 56 / five_piece 34 / 三锁 31（实测更新断言不放宽）<br>
+API key：全程零入仓；失败留痕全部保留；不编译新门禁；不接 run_loop（§58）<br>
+推送：远端 main <code>7b9122d</code>（预注册锁）→ 执行态收尾提交，API 独立核验远端=本地
+</div>
+
+<div class="foot">自主运维第二十四轮 · §113 跨集×跨厂商 2×2 闭合验证 · 生成于 2026-11-23 · 诚实负面结果，按 spawn 前预注册失败分支落档，无 post-hoc 翻案、无重跑到满意</div>
+</div></body></html>

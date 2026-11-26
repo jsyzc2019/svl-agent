@@ -1,0 +1,17 @@
+{
+  "id": "PREREG-FALSIFY-ADMIT-BIAS-20261126",
+  "at_utc": "2026-11-26T02:05:05.814158+00:00",
+  "round_target": "§4fu",
+  "target_belief": "上一轮对话共同接受的结论'承认偏见/盲见是客观现实,不必纠结,承认就好'——隐含假设:承认并标注自身偏见能降低其危害(attribution of bias as remedy)",
+  "falsifiable_prediction": "若A级一手表明:①承认/声明自身无偏见或道德凭证后反而增加偏见表达(moral licensing/moral credentialing);②单纯的偏见意识/教育不能减少且可能固化偏见(bias blind spot remediation失败);③'承认偏见'沦为自我呈现而行为不变——则'承认即解药'被削弱,须加边界:承认是起点非终点,且承认本身可被用作豁免",
+  "primary_metric": "至少1篇A级一手(同行评审期刊/顶会)给出可直接引用的实验数据:承认/凭证操作后的偏见表达变化方向,或debias干预的效应量/持久性",
+  "secondary": "本仓KB中'勇于承认错误/bias blind spot/自曝'相关条目是否隐含'承认= hypo'的等号可被命中",
+  "decision_tree": {
+    "FOUND_A": "A级一手命中→如实落KB/报告,裁决ADMIT_EQUALITY_REFINED或WEAKENED,verdict不动",
+    "FOUND_B_ONLY": "仅B级二手/观点→标提示性线索,不翻案",
+    "NOT_FOUND": "如实记录'搜了没找到',不宣称证实原信条"
+  },
+  "counter_discipline": "主动找'承认偏见确实有效'(debias培训有效、意识提升有效)的一手同样记录;加强信条不算战利品,如实标注",
+  "discipline": "分析前锁存;不编译门禁;不改verdict/l3/absolute/宪法;联网仅外层摄食,内核L0不联网不spawn;判定权归用户",
+  "sha256": "a69a924fd73dc21aa9e5184f6e0403cb15589fe323cd645ba7cb2d2d013ea25a"
+}

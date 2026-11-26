@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第二十六轮成果报告 · §115 解释者跨厂商交叉确认</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.tag{background:#fdecea;color:var(--accent)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.fix{background:#f3ecf7;border:1px solid #d6c2e4;padding:14px 18px;border-radius:6px;font-size:14px}
+.warnbox{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第二十六轮成果报告 <span class="pill tag">§115</span></h1>
+<div class="sub">解释者跨厂商交叉确认 · 2026-11-23 · 触发：用户"继续"</div>
+
+<h2>一、触发：把 §114 的单厂商证据升级为交叉</h2>
+<div class="phil">
+§114 已证明单一异厂解释者（baidu/ernie）能把四轮裁决 4/4 复现，但这是<b>单点单厂商</b>——无法排除"恰好这家厂商能正确应用规则"。按 §110→§112 设计者独立的单厂商→跨厂商升级路径，本轮对"解释者"一维做同样升级：用三家真正不同厂商各自盲评，检验裁决规则语义的可移植性是否为单厂商偶然。
+</div>
+
+<h2>二、设计：唯一变量 = 解释者厂商（逐字节物理证明）</h2>
+<table>
+<tr><th>维度</th><th>设置</th></tr>
+<tr><td>唯一变量</td><td>解释者厂商：§114 的 baidu → dots-studio / inclusionai / liquid（与 baidu 不同厂、彼此不同厂）</td></tr>
+<tr><td>逐字节复用</td><td>cases_blind / gt_private / gen_fixtures / call_interpreter 四文件哈希与 §114 完全一致（<code>172f8089…/407485c8…/75e3810d…/83f7113e…</code>），verify 加跨目录逐字节断言</td></tr>
+<tr><td>调用器</td><td>逐字节复用 §114 的 call_interpreter.py，编排器只换 INTERPRETER_MODEL/NAME 环境变量——物理上锁定唯一变量=厂商</td></tr>
+<tr><td>外部锚</td><td>commit <code>d6a6aa4</code> 服务器时间 <code>06:45:04Z</code> 早于 spawn</td></tr>
+</table>
+<p>空间探测（§112/§114 先例）：gemma 429 排除；dots-studio / inclusionai / liquid / particle-ai / recursive 均 finish=stop + JSON 正确分类。选前三家真异厂，依据写死锁内，不因结果改变。</p>
+
+<h2>三、执行：两家 4/4，一家 429</h2>
+<table>
+<tr><th>厂商</th><th>结果</th><th>tiers</th></tr>
+<tr><td>dots-studio/dots-3-note</td><td>ok / finish=stop</td><td>4/4（case_1=FULL, case_2/3/4=PARTIAL）</td></tr>
+<tr><td>inclusionai/ling-3.2-flash</td><td><b>HTTP 429 失败</b>（probe 可用，正式跑时限流）</td><td>无（不伪造）</td></tr>
+<tr><td>liquid/lfm-3</td><td>ok / finish=stop</td><td>4/4（同上）</td></tr>
+</table>
+
+<h2>四、确定性 bug 修复：失败厂商 ≠ 判错厂商</h2>
+<div class="fix">
+初版 engine 的 <code>present</code> 只按 manifest 文件是否存在判定（<code>git show d6a6aa4:engine.py</code> 第 44 行，spawn 前已锁），把 429 失败的 ling 也算"已判"，2 家 4/4 就误落 CROSS_PARTIAL（语义="1 家判错"）。但 ling 是 <b>API 失败没判</b>，不是"判了判错"——算作分歧是伪造语义。prereg 原文已写明"任一厂商 API 失败 → INTERPRETER_CROSS_INCONCLUSIVE"。修法：<code>present</code> 只计 status==ok 且产出 tiers 者，失败厂商 tiers=None 如实记录，走 INCONCLUSIVE 分支。修工具不放宽、不重跑 ling（§113 明禁调到跑通）、不改 prereg（KB-META23）。
+</div>
+
+<h2>五、裁决：INTERPRETER_CROSS_INCONCLUSIVE（诚实的不完整结果）</h2>
+<div class="warnbox">
+<b>2/3 家成功且都 4/4，但一家 429 失败</b> → 按 prereg 失败分支封顶，不宣布"三家交叉确认"。分层结论：解释规则语义在成功的两家真异厂上可移植（都 4/4），但第三家未能完成，整体证据不完整。§114 的单厂商 INTERPRETER_CONFIRMED 保持不变、不翻案。
+</div>
+
+<h2>六、诚实边界：仍未达到 L3</h2>
+<div class="note">
+仍 <b>l3=false / absolute=false</b>：① 三家仅两家完成，未达多厂商确认门槛；② 即便全完成，也只是解释者一维，样本/gt/盲评/designer/裁决树设计/最终 l3 判断仍本 Agent；③ 四 case 全来自既有四轮、档位同构（未覆盖 REFUTED 等未出现档位）；④ 异厂自报不采信，只采信 tier 标签与冻结 gt 机械比对；⑤ §107-§114 八案全部保留并列不翻案。
+</div>
+
+<h2>七、验收</h2>
+<ul>
+<li>verify.py <b>37/37 ALL_OK</b>（哈希锁 + 跨目录逐字节复用 + 厂商多样性 + 盲性 + 失败态无伪造 + 不翻案 8 案 + l3=false）；专项 9/9；全量回归见提交记录。</li>
+<li>KB 170→172（KB-AUDIT57 单厂限流封顶、KB-META23 失败厂商≠判错厂商状态机）。</li>
+<li>key 零入仓，askpass/hosts/临时 key 即用即删；系统安全红线全程遵守。不编译新门禁。</li>
+</ul>
+
+<div class="foot">自主运维第二十六轮 · §115 · 生成于 2026-11-23 · 本地=远端 main 经 GitHub API 独立核验 · l3=false / absolute=false</div>
+</div></body></html>

@@ -1,0 +1,152 @@
+"""审计整改销号报告 HTML。"""
+from pathlib import Path
+
+html = r"""<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>审计整改销号报告 · SVL 框架</title>
+<style>
+:root{--bg:#faf9f6;--ink:#1a1a1a;--muted:#666;--line:#e5e2dc;--red:#c0392b;--green:#1e8449;--amber:#b9770e;--blue:#1f4e79;--card:#fff}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;max-width:1020px;margin:0 auto;padding:32px 20px;line-height:1.7}
+h1{font-size:25px;margin:0 0 4px}h2{font-size:18px;margin:30px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+h3{font-size:14px;margin:16px 0 6px;color:var(--blue)}
+.sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+.lead{background:#1e3a2f;color:#e8f5e9;border-radius:10px;padding:18px 22px;margin:16px 0;font-size:14px}
+.lead b{color:#fbbf24}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:#f3f1ec;font-weight:600;color:#444}
+.fixed{color:var(--green);font-weight:600}.partial{color:var(--amber);font-weight:600}
+.tag{display:inline-block;border-radius:4px;padding:1px 8px;font-size:12px;color:#fff}
+.p0{background:var(--red)}.p1{background:var(--amber)}.p2{background:var(--blue)}
+.num{font-family:monospace;font-weight:600}
+ul{margin:8px 0;padding-left:22px}li{margin:5px 0;font-size:14px}
+.small{font-size:12px;color:var(--muted)}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}
+.kpi div{flex:1;min-width:110px;background:#f3f1ec;border-radius:8px;padding:12px;text-align:center}
+.kpi b{font-size:20px;display:block;color:var(--blue)}.kpi span{font-size:12px;color:var(--muted)}
+</style></head><body>
+
+<h1>审计整改销号报告 · SVL 框架</h1>
+<div class="sub">对第19节独立审计报告的逐条回应 · 真修复 / 真加测试 / 真接数据 · 128 测试通过 · 12 demo 冒烟通过</div>
+
+<div class="lead">
+审计定了 <b>1 个 P0 + 3 个 P1 + 3 个 P2</b>。本轮逐条销号：<b>修了一个真 bug、降级了两个过度宣称、
+把一个"我以为是检验"的东西还原成"它其实在循环"</b>。框架现在更诚实，不是更完美——
+而是终于把边界写进了代码、测试和报告。
+</div>
+
+<div class="kpi">
+<div><b>1/1</b><span>P0 已修</span></div>
+<div><b>4/4</b><span>P1 已修/量化</span></div>
+<div><b>1/3</b><span>P2 部分解决</span></div>
+<div><b>128</b><span>测试通过</span></div>
+<div><b>25</b><span>真实公司数据</span></div>
+</div>
+
+<h2>一、P0：criterion 符号 bug —— 已修</h2>
+<div class="card">
+<p><span class="tag p0">P0</span> <span class="fixed">已修复</span></p>
+<p><b>根因</b>：生成模型 <span class="num">rejected = decision &gt; criterion</span>（criterion 越大越保守），
+但估参器把 logistic intercept <span class="num">b</span> 直接当 criterion 输出，二者反号——
+真 +2（保守）估出 −3.55，注释还倒因为果写"负=保守"。</p>
+<p><b>修复</b>：<span class="num">criterion = −b</span>，符号与生成模型同号；predict 相应调整。
+新增 <span class="num">test_criterion_matches_generative_sign</span> 逐点验证 ±1/±2 符号一致。</p>
+</div>
+
+<h2>二、P0 附带：校准度 vs 辨别力概念分离 —— 已修</h2>
+<div class="card">
+<p><b>问题</b>：AUC（能否分开真伪）被当 calibration（置信是否等于正确率），两个统计量混用。</p>
+<p><b>修复</b>：新增真正的校准 <span class="num">1−ECE</span>（需 confidence 字段，缺省返回 None，
+绝不拿 AUC 冒充）；AUC 明确为辨别力。对照实验实测：</p>
+<table><tr><th>裁决者</th><th>辨别力AUC</th><th>校准(1−ECE)</th></tr>
+<tr><td>过度自信组</td><td class="num">0.888</td><td class="num">0.852</td></tr>
+<tr><td>校准良好组</td><td class="num">0.888</td><td class="num">1.000</td></tr></table>
+<p class="small">辨别力相同、校准不同——两维度可分离，3 个新测试固化。</p>
+</div>
+
+<h2>三、P1：telos 去玩具化 —— 已修</h2>
+<div class="card">
+<p><b>问题</b>：原任务 gap=0.65 太简单，全员满分，准确率无分辨力；最优停止只在简单任务成立。</p>
+<p><b>修复</b>：新增难度工厂 + 多难度扫描，Trajectory 加 stopped_early/exhausted 标记。实测：</p>
+<table><tr><th>难度</th><th>弱AI准确率</th><th>强AI准确率</th><th>停止率</th></tr>
+<tr><td>玩具 gap=.65</td><td class="num">100%</td><td class="num">100%</td><td class="num">62–100%</td></tr>
+<tr><td>困难 gap=.10</td><td class="num">77%</td><td class="num">100%</td><td class="num">0–2%</td></tr></table>
+<p class="small">能力差异现形，同时揭穿"优雅停止"只是简单任务性质。宣称从"能力差异不存在"
+修正为"原实验设计没有测出能力差异"。3 个新测试。</p>
+</div>
+
+<h2>四、P1：axiology 非同构证伪 —— 已修</h2>
+<div class="card">
+<p><b>问题</b>：线性生成→线性拟合的恒真循环；随机无意义 V 也能恢复 82%。</p>
+<p><b>修复</b>：新增非线性决策规则生成 + 对照。实测：</p>
+<table><tr><th>决策世界</th><th>解释率</th><th>余弦</th></tr>
+<tr><td>线性世界</td><td class="num">91%</td><td class="num">0.987</td></tr>
+<tr><td>非线性世界</td><td class="num">72%</td><td class="num">0.889</td></tr></table>
+<p class="small">能力下降如实展示；宣称从"agent 能造任意 V"降级为"能恢复与判据模型同构的那部分 V"。
+2 个新测试（含固化"随机 V 也能恢复"这一自证证据）。</p>
+</div>
+
+<h2>五、P1：mechanism 稳健边界 —— 已修</h2>
+<div class="card">
+<p><b>问题</b>：M4"稳健"以真实优先目标为前提，换目标即失效。</p>
+<p><b>修复</b>：纳入"产量优先"反方向目标。实测 regret：</p>
+<table><tr><th>系统目标</th><th>生成者独裁</th><th>M4职责加权</th></tr>
+<tr><td>真实优先</td><td class="num">0.678</td><td class="num">0.025</td></tr>
+<tr><td>产量优先(反方向)</td><td class="num">0.0045</td><td class="num">0.410</td></tr></table>
+<p class="small">被碾压。收束语从"任何目标下稳健"收敛为"目标未定或漂移时押注最坏情况"。1 个新测试。</p>
+</div>
+
+<h2>六、P1：财报盲测去循环 —— 已修（量化了循环严重程度）</h2>
+<div class="card">
+<p><b>问题</b>：alarm=1 与后验 risk 组高度重合，"预测非标"≈"用困境预测困境的结果"。</p>
+<p><b>修复</b>：新增 counterexample_analysis，用全部 22 家真实数据四类分解：</p>
+<div class="kpi">
+<div><b>5</b><span>TP</span></div><div><b>7</b><span>FP</span></div>
+<div><b>0</b><span>FN</span></div><div><b>10</b><span>TN</span></div>
+<div><b>0.42</b><span>精确率(原0.75)</span></div>
+</div>
+<p class="small"><b>FP 反例含正常白马比亚迪</b>（营收+28%但净利+346% 的增速背离误触发）、康美、奥瑞德。
+FN=0 更印证循环：非标=长期困境=增速必然背离，判据只是在读同一经济机制的两段读数。
+分组标签明确标注"仅抽样设计审计用，绝不参与判据与评估"。循环是"量化并暴露"，不是"消除"。</p>
+</div>
+
+<h2>七、P2：真实数据注入 —— 已做（estimation 首次接真实数据）</h2>
+<div class="card">
+<p>拉 25 家候选公司真实财报存 <span class="num">/workspace/real_financials_cache.json</span>（持久资产）。
+新增 build_real_verdict_log 从真实财报构造裁决日志，接 estimation 估参：</p>
+<ul>
+<li>真实样本 n=22（非标 5 / 标准 17）</li>
+<li>辨别力 AUC=0.718，判定倾向 +1.75（保守）</li>
+<li>留出预测 86%（基线 57%），校准如实标 N/A（真实日志无自报置信度）</li>
+<li>estimation 模块 real 计数 0→6，<b>全框架首次在真实数据上估参</b></li>
+</ul>
+</div>
+
+<h2>八、诚实边界：整改没有消除什么</h2>
+<div class="card">
+<ul>
+<li><span class="partial">部分解决</span> 只有 estimation 接了真实数据；axiology/mechanism/telos/insight
+仍主要靠合成数据。P2 的"全模块真实数据验证"未完全达成——如实说明，不夸大。</li>
+<li>真实日志标签是审计意见代理（非造假真值），evidence 与告警同源——数据真实但非完全独立。</li>
+<li>财报反例对照证明循环仍严重（precision 0.42），去循环是"量化暴露"而非"消除"。</li>
+<li>P0 符号修复改变 criterion 语义，旧结果数值不可直接对比。</li>
+</ul>
+</div>
+
+<h2>九、整改收束</h2>
+<div class="card">
+<p>审计的价值不在于否定，而在于打破"自洽即有效"的幻觉。本轮做了三件真事：
+<b>修了一个真 bug（P0）、降级了两个过度宣称（axiology/mechanism）、
+把一个"我以为是检验"的东西还原成"它其实在循环"（财报反例对照）</b>。</p>
+<p>框架现在更诚实，也更有用——不是因为它更完美，而是因为它终于把自己的边界
+写进了代码、测试和报告，而不是留在注释里自我安慰。</p>
+<p class="small">依据：commentary.md 第 20 节；代码改动见 svagent/{estimation,telos,axiology,mechanism,finance_blind_test}.py
+及对应测试；真实数据 real_financials_cache.json；版本 0.11.0。</p>
+</div>
+
+</body></html>"""
+
+Path("/workspace/remediation_report.html").write_text(html, encoding="utf-8")
+print("整改报告已生成: /workspace/remediation_report.html")

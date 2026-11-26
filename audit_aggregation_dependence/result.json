@@ -1,0 +1,50 @@
+{
+  "round": "§4ge",
+  "experiment": "§4ge-§4gf 独立性前提证伪：多源聚合降噪在 LLM 群体里为何失效",
+  "status": "EXECUTED",
+  "verdict": "AGGREGATION_PREMISE_REFINED",
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "verdict_unchanged": true,
+  "constitution_ok": true,
+  "prereg": {
+    "id": "PREREG-AGGREGATION-20261126",
+    "sha256": "3b4585f49af347b6f50912d5aae04f5d07c77fd6397033a0a215cac71afe5f28",
+    "written_at_utc": "2026-11-26T03:02:07+00:00",
+    "before_verbatim_evidence": true
+  },
+  "source_chain": {
+    "file": "arxiv_abstracts.json",
+    "sha256": "见 arxiv_abstracts.sha256",
+    "papers": [
+      {"id": "2605.29800", "title": "Nine Judges, Two Effective Votes: Correlated Errors Undermine LLM Evaluation Panels", "tier": "A级·arXiv一手摘要(API逐字)", "note": "9 judge/7 family 有效仅约2票；3/4名义独立性丢失；准确率距独立投票理想差8-22pp；最佳单judge匹配或超过整panel"},
+      {"id": "2606.26583", "title": "Preference Optimization Drives Monoculture in LLM Prediction Markets", "tier": "A级·arXiv一手摘要(API逐字)", "note": "DPO致成对误差相关rho=0.70；10 agent有效≈1.4独立预测者；N=5→40 neff持平；10-agent市场67.6%输给单agent70.2%；cross-model diversity为最大缓解(rho 0.68→0.40)"},
+      {"id": "2603.06612", "title": "Consensus is Not Verification: Why Crowd Wisdom Strategies Fail for LLM Truthfulness", "tier": "A级·arXiv一手摘要(API逐字)", "note": "五基准无可验证域，25x推理成本下轮询聚合无一致增益且常放大共同误解；模型更善预测同伴说什么而非何为真"}
+    ],
+    "tier_limit": "三篇均为 arXiv 预印本、未经同行评审，标 A级一手但不升'已确证'；摘要逐字核验，未取全文，限定词随摘要搬回不外推"
+  },
+  "adjudication": {
+    "disclose_hits": "13/13",
+    "counter_hits": 1,
+    "status": "AGGREGATION_PREMISE_REFINED",
+    "core_finding": "§4gd 的解药半边'多独立源聚合降噪'依赖'源之间独立'这一强假设。LLM 群体因共享预训练语料/对齐目标天然违背：名义9票≈2票、10票≈1.4票、neff不随N增长；无外部验证器时聚合放大共同误解而非降噪。",
+    "counter_side": "根因是独立性被违背，不是聚合本身失效——cross-model diversity 使 rho 0.68→0.40（缓解非消除）；§4gd 另半边'规则/算法无噪声'不受影响。故为 REFINE 非 OVERTHROW。",
+    "self_application": "本仓 §100–§107 多次 spawn '独立子agent/独立标注者'但均为同模型家族——正是本文所述相关性情形；此前把'独立设计者'当'独立误差源'是未核验的乐观假设，应标 neff 折减。"
+  },
+  "self_bite": [
+    "engine.py 首跑 NameError：DISCLOSE 误写 DISCLUDE（4处），改工具不改判据，修正后 13/13 命中",
+    "论文编号未凭印象猜：三篇 ID 先经 arXiv export API 按 id_list 精确核对标题再取摘要（延续 §4fv/§4fz 纪律）",
+    "预注册诚实标注：写于'搜到候选标题/摘要之后、逐字取证之前'，不谎称先于搜索",
+    "落档回归：首版 KB 两条用 type/created_at/title/claim 与 kind=audit|meta、improvement_class=自定义值，致内核 sense()/growth_bridge 19 项失败；实测白名单 kind∈(thinking_experience/reasoning_lesson/external_insight)、improvement_class∈(fix/preserve/vanity/'')，按历史证伪条目惯例改为 thinking_experience+fix / external_insight+preserve、addressable=false；evidence_chain total 断言按新增审计目录 61→62 实测更新不放宽；改工具不改判据，全量复回 1551 passed"
+  ],
+  "honesty": {
+    "zero_trophy": true,
+    "both_sides": true,
+    "qualifiers_carried_back": true,
+    "no_new_gate": true,
+    "no_verdict_touch": true,
+    "kernel_L0_offline_no_spawn": true,
+    "final_verdict_with_user": true
+  },
+  "next": "§4gf：把'有效独立数 neff'做成可运行判据——凡本仓声称'多源交叉/独立验证'处，强制标注源的真实独立性来源与折减，不数源的个数。"
+}

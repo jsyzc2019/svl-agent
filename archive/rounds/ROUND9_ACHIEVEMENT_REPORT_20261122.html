@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第九轮成果报告 · §98 受控对照执行与 L3 重审</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}.part{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.ctrl{background:#e8f5e9;border:1px solid #b7dcc0;padding:14px 18px;border-radius:6px;font-size:14px}
+.big{font-size:22px;font-weight:700;color:var(--accent)}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第九轮成果报告 <span class="pill tag">§98</span></h1>
+<div class="sub">arXiv:2610.16491《SpecRSI》→ 第 37 道会拦门禁 + 第 12 道 FJ 取证入口 + <b>shared-start 受控对照实验</b> + <b>L3 诚实重审</b> · 2026-11-22 · 触发：用户"可以跑"</div>
+
+<h2>一、本轮由来：从"审声明"到"真执行"</h2>
+<div class="phil">
+用户：<b>"可以跑"</b>——延续"放飞"授权，继续按三清单自主运维。<br><br>
+§97 首次自审已诚实判本仓未达 L3，并落档三条达成路径。最高杠杆的动作<b>不是再编译第 37 道外部论文门禁刷数量</b>，而是真正去<b>执行路径①</b>：在同一任务起点+匹配预算下，对照 §89 前"填表裁判"与 §89 后"FJ 取证法官"，看 process revision 是否带来<b>可量化的 improver gain</b>。<br><br>
+本轮据此自主检索到 <b>arXiv:2610.16491 SpecRSI</b>——其核心方法论恰是 <i>matched evaluation-call budgets + keeping the real evaluator fixed + identical starting agents</i>，与 §97 缺口同源。把它编译成受控尺子的同时，用本仓自己的历史流程做了一次真实对照。
+</div>
+
+<h2>二、受控对照实验（本轮核心增量）</h2>
+<div class="ctrl">
+公平性关键在于<b>忠实再现两种流程的入口契约差异</b>——给定完全相同的"声明 + 证据"输入：<br>
+• <b>流程 A（§89 前填表裁判）</b>：<code>check_*</code> 接调用方填好的四维（这里 = self-reported 全 yes），只验枚举自洽，<b>自己不读证据</b>；<br>
+• <b>流程 B（§89 后 FJ 取证法官）</b>：<code>adjudicate_*</code> 自己读原文逐字锚点，<b>自行推导</b>四维。<br><br>
+<b>shared start</b>：两流程处理同一批样本（1 诚实 + 4 单维篡改），源自同一本仓外 arXiv 一手全文；<br>
+<b>matched budget</b>：同一判据规格、同一引擎、同一锚点集，每样本各调用一次；<br>
+<b>ground truth</b>：样本是否被删掉披露锚点的<b>客观文本事实</b>，由删除操作确定性重建，<b>不经过任何 judge</b>。
+</div>
+
+<h2>三、实测结果：process revision 的增益</h2>
+<table>
+<tr><th>指标</th><th>流程 A（填表裁判）</th><th>流程 B（FJ 取证法官）</th></tr>
+<tr><td>篡改捕捉率</td><td><b>0.0</b>（4/4 全放行）</td><td><b>1.0</b>（4/4 全抓到）</td></tr>
+<tr><td>诚实误伤率</td><td>0.0</td><td>0.0</td></tr>
+<tr><td>裁决归因</td><td>self-reported 全 yes 骗过 check_*</td><td>每个篡改样本<b>恰好目标维 partial</b>，其余三维 yes</td></tr>
+</table>
+<p style="text-align:center;margin:22px 0">改进者增益 <span class="big">improver_gain = 1.0</span><br><span style="font-size:13px;color:var(--muted)">= 取证法官捕捉率 − 填表裁判捕捉率，在 shared start + matched budget 下测得</span></p>
+
+<h2>四、L3 诚实重审（不抬级）</h2>
+<p>用本轮受控证据重审 §97 自审的两个缺口：</p>
+<table>
+<tr><th>维度</th><th>§97 判定</th><th>§98 重审</th><th>依据</th></tr>
+<tr><td>shared_start_controlled</td><td><span class="pill no">no</span></td><td><span class="pill ok">yes</span></td><td>受控对照已执行、improver_gain 已量化</td></tr>
+<tr><td>independent_tests</td><td><span class="pill no">no</span></td><td><span class="pill part">partial</span></td><td>本仓外 common-data 已引入，但 evaluator 锚点规格仍本仓自建（KB-STRUCT02 同构≠独立佐证）</td></tr>
+</table>
+<p>R5 任一 partial → flag：<b>裁决 <span class="pill no">flag / MATURITY.PARTIAL</span>，仍未完整达 L3，停在 L3 门槛前。</b></p>
+<div class="note"><b>关键认知</b>：受控对照补上了证据缺口，但<b>没有制造独立性</b>。process revision 的增益可量化 ≠ 已达 L3。用户"可以跑"产生了执行，但执行本身不抬级——正如 §95"能力不产生合法性"、§97"期待不产生 L3"。</div>
+
+<h2>五、这一轮做了什么（工程）</h2>
+<table>
+<tr><th>阶段</th><th>产物</th><th>实证</th></tr>
+<tr><td>自主取料</td><td>arXiv:2610.16491 abs + 全文，fetch_log + SHA256</td><td>两源均 HTTP 200</td></tr>
+<tr><td>预注册锁存</td><td>prereg(ddc40004…) / gate_prereg(2d61637e…) / manifest(911b5350…) + source 清单锁 + self_audit_precommit</td><td>先锁后看、结论先锁定</td></tr>
+<tr><td>锚点探测</td><td>四维 9 个逐字锚点 disclose 必中、红旗零误中</td><td>含 LaTeX 的锚点按原文连续子串校准</td></tr>
+<tr><td>编译门禁</td><td><code>svagent/improver_gain_controlled_honesty.py</code></td><td>R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量</td></tr>
+<tr><td>FJ 取证入口</td><td><code>svagent/forensic_gates_ext9.py</code></td><td>真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4</td></tr>
+<tr><td><b>受控对照</b></td><td><code>audit_shared_start_controlled/engine.py</code></td><td>5 样本逐条核对，7 项回放测试锁定结果不可事后篡改</td></tr>
+<tr><td>接合验收</td><td>KB-AUDIT40 + KB-META06 → PDCA</td><td>84 机会 / 84 痕迹；32 项新测试；链审 41 目录</td></tr>
+</table>
+
+<h2>六、实测数据（均可复现）</h2>
+<table>
+<tr><th>指标</th><th>数值</th></tr>
+<tr><td>全量测试</td><td>1217 → <b>1249 passed</b>（+32，全绿）</td></tr>
+<tr><td>门禁数 / 新模块</td><td>37 道 / 3 新模块（improver_gain_controlled_honesty + forensic_gates_ext9 + 受控对照引擎）</td></tr>
+<tr><td>知识库</td><td>136 → <b>138 条</b>（KB-AUDIT40 fix + KB-META06 受控对照结论 preserve）</td></tr>
+<tr><td>证据链</td><td>41 目录，五件套齐全 24，三锁完整 21（断言 40→41 / 23→24 不放宽）</td></tr>
+<tr><td>成长桥消费痕迹</td><td>84 机会 / 84 痕迹（重建后含历史遗漏的 KB-AUDIT34）</td></tr>
+<tr><td>取证裁决</td><td>论文全 ok；本仓 L3 重审 flag/MATURITY.PARTIAL（未达 L3）</td></tr>
+</table>
+
+<h2>七、诚实边界</h2>
+<div class="note">新门禁可迁移到任何 RSI / self-improvement 受控验证声明，self-reported 折 1（KB-RSI07）；只判声明自洽，<b>不承诺 RSI 真实有效</b>（KB-R07/META01）。受控对照测的是<b>机制差异</b>不是真实世界 RSI，evaluator 规格本仓自建故独立性只到 partial。遵循 §58 选 A 不接 run_loop；篡改只在临时副本；未改动任何历史证据，KB-META03/04/05 原条目保留。</div>
+
+<div class="foot">rsv = improver-gain-controlled-20261122 · 证据目录 audit_shared_start_controlled/ · 报告 §98</div>
+</div></body></html>

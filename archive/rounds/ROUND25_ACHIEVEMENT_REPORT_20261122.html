@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第二十五轮成果报告 · §114 解释者独立性</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.tag{background:#fdecea;color:var(--accent)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.win{background:#e8f0e4;border:1px solid #b8d0ae;padding:14px 18px;border-radius:6px;font-size:14px}
+.fix{background:#f3ecf7;border:1px solid #d6c2e4;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第二十五轮成果报告 <span class="pill tag">§114</span></h1>
+<div class="sub">解释者独立性受控验证 · 2026-11-23 · 触发：用户"请继续下一步"</div>
+
+<h2>一、触发：L3 独立性矩阵里唯一没外移的一维</h2>
+<div class="phil">
+L3 证据尺子的 <code>independent_tests</code> 维要求"独立测试/跨评估器比较"。回看 §98–§113 的独立性消融：
+执行者独立（§109 GitHub runner）、设计者独立（§110–§112 异厂 judge 源码）、样本独立（§107–§108 独立确认集）都已外移，
+<b>唯独"从指标数字到裁决档位的解释权"始终是本 Agent</b>——即使 judge 由异厂生成，verdict 一律由本 Agent 按预注册裁决树解读。
+这是矩阵里唯一从未碰过的低垂果实，也是本轮最高性价比事项。
+</div>
+
+<h2>二、设计：唯一变量 = 解释者</h2>
+<table>
+<tr><th>维度</th><th>设置</th></tr>
+<tr><td>唯一变量</td><td>解释者：本 Agent 历史裁决 vs 干净 context 异厂 LLM 按同一中性规则的独立判定</td></tr>
+<tr><td>冻结输入</td><td>四轮已锁 result.json 的裁决充分统计量（PRIMARY/SECONDARY/P1.core/P0_core/P0_dT），由 <code>gen_fixtures.py</code> 自动提取、固定 seed 打乱、档位中性化，绝不手填</td></tr>
+<tr><td>盲</td><td>异厂只收匿名指标 + 去前缀中性规则；<b>私有 gt 物理隔离，绝不进 prompt</b>（verify 七项 banned 词断言）</td></tr>
+<tr><td>私有 gt</td><td>case_1=CONFIRMED（§107），case_2/3/4=PARTIAL（§112/§111/§108），仅 engine 比对时读取</td></tr>
+<tr><td>外部锚</td><td>commit <code>7b1f1644</code> 服务器时间 <code>06:29:30Z</code> 早于 spawn，证明承诺先于执行</td></tr>
+</table>
+
+<h2>三、执行：异厂解释者一次盲评，四轮全部复现</h2>
+异厂解释者 <code>baidu/ernie-5.5-flash-preview:free</code>（非 NVIDIA/Hunyuan），finish=stop、JSON 解析成功：
+<table>
+<tr><th>匿名 case</th><th>来源轮次（事后揭示）</th><th>异厂 tier</th><th>本 Agent 裁决</th><th>一致</th></tr>
+<tr><td>case_1</td><td>§107 STRATIFIED_CONFIRMED</td><td>FULL</td><td>CONFIRMED</td><td>✅</td></tr>
+<tr><td>case_2</td><td>§112 CROSS_VENDOR2_PARTIAL（SECONDARY=1.0 关键区分点）</td><td>PARTIAL</td><td>PARTIAL</td><td>✅</td></tr>
+<tr><td>case_3</td><td>§111 AST_V2_PARTIAL</td><td>PARTIAL</td><td>PARTIAL</td><td>✅</td></tr>
+<tr><td>case_4</td><td>§108 CROSS_SET_PARTIAL</td><td>PARTIAL</td><td>PARTIAL</td><td>✅</td></tr>
+</table>
+<div class="win"><b>裁决：INTERPRETER_CONFIRMED</b> —— agreement=4/4，关键 case_2 判对。异厂解释者按中性化规则完整复现了本 Agent 四轮裁决，解释环节一维首次获受控外移证据。</div>
+
+<h2>四、确定性 bug 修复：修工具，不放宽门禁</h2>
+<div class="fix">
+初版 engine 把 case_1 的异厂标签 <code>FULL</code> 与 gt 档 <code>CONFIRMED</code> 判为不等（假 3/4）。根因是 spawn 前已锁的两个文件档位词表就不一致（规则侧 FULL，gt 侧 CONFIRMED），FULL≡CONFIRMED 仅命名不同——<b>确定性字段 bug，与异厂输出无关，证据在外部锚 commit 内</b>。
+修复方式：FULL↔CONFIRMED 归一化映射对全部档位一视同仁，不改异厂标签、不改 gt、不改裁决树阈值；异厂原始标签 + gt 原始档 + 归一化结果三者全写 result 留痕。这是 §109/§111"修工具不放宽门禁"先例的再次执行，<b>不是 Goodhart 调参</b>（详见 EXECUTION_LOG.md 五点论证、KB-META22）。
+</div>
+
+<h2>五、诚实边界：解释一维外移 ≠ 达到 L3</h2>
+<div class="note">
+仍 <b>l3=false / absolute=false</b>：① 只把解释者一维外移到异厂 LLM，样本/gt/盲评/designer/裁决树设计/最终 l3 判断仍本 Agent；② 单一异厂、单次运行、四 case 全来自既有四轮，无统计交叉；③ 明确档位是同构四轮，未覆盖 REFUTED 等未出现档位；④ 异厂自报不采信，只采信其 tier 标签与冻结 gt 机械比对；⑤ §107–§113 七案全部保留并列，不翻案。
+<b>结论分层</b>：解释者独立性一维在四轮既有裁决上获受控外移证据（INTERPRETER_CONFIRMED），但四轮裁决本身多为 PARTIAL/INCONCLUSIVE，且其余维度仍本 Agent——不宣布达到 L3、不宣布 absolute。
+</div>
+
+<h2>六、验收</h2>
+<ul>
+<li>verify.py <b>30/30 ALL_OK</b>（哈希锁 + 盲性七项 banned + 来源一致四 case + 档位合法 + 不翻案 7 案 + l3=false + gt 未进 prompt + 失败态无伪造）。</li>
+<li>专项测试 10/10；全量回归见提交记录。KB 168→170（KB-AUDIT56 解释者外移、KB-META22 字段 bug vs Goodhart）。</li>
+<li>key 零入仓，askpass/临时 key 即用即删；系统安全红线全程遵守。不编译新门禁。</li>
+</ul>
+
+<div class="foot">自主运维第二十五轮 · §114 · 生成于 2026-11-23 · 本地=远端 main 经 GitHub API 独立核验 · l3=false / absolute=false</div>
+</div></body></html>

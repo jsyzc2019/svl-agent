@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第五轮成果报告 · §94 benchmark污染诚实性</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第五轮成果报告 <span class="pill tag">§94</span></h1>
+<div class="sub">arXiv:2611.21315《Benchleaking Is Accelerating》→ 第 33 道会拦门禁 + 第 8 道 FJ 取证入口 · 2026-11-22 · 触发：用户"你接着飞"</div>
+
+<h2>一、这一轮做了什么</h2>
+<p>晨间自检 1116 全绿。按清单（v1.1）自主发现 arXiv:2611.21315v1《Benchleaking Is Accelerating》，从已验证 arXiv 渠道取 abs 44KB + 全文 786KB（均 200），落 fetch_log + SHA256。认知增量判断：本仓 KB-T03 只讲「基准须隔离」、KB-RSI06 只讲「样本外复验」、KB-AUDIT09 是检索注入层，均<b>不判「一个 benchmark 分数声称是否诚实披露污染边界」</b>——新对象独立，编译新门禁。</p>
+<table>
+<tr><th>阶段</th><th>产物</th><th>实证</th></tr>
+<tr><td>自主取料</td><td>arXiv:2611.21315v1 abs + 全文，fetch_log + SHA256</td><td>均 HTTP 200；WebSearch 自主发现</td></tr>
+<tr><td>预注册锁存</td><td>prereg(659ce224…) / gate_prereg(f96fc498…) / manifest(9caceece…) + source 清单锁</td><td>先锁后看、实现前锁存</td></tr>
+<tr><td>锚点探测</td><td>15 个逐字锚点 disclose 必中、红旗零误中</td><td>ALL_ANCHORS_CLEAN=True；锚点取自完整摘要段</td></tr>
+<tr><td>编译门禁</td><td><code>svagent/benchleaking_honesty.py</code></td><td>R0-R6 + 中文 _A 字典 + AST 自审 0 中文字面量</td></tr>
+<tr><td>FJ 取证入口</td><td><code>svagent/forensic_gates_ext5.py</code></td><td>真实 ok / 删披露 flag / 红旗 downgrade / 链失配拒判 4/4</td></tr>
+<tr><td>接合验收</td><td>KB fix → PDCA 消费痕迹</td><td>79 机会 / 79 痕迹；25 项新测试；链审 37 目录</td></tr>
+</table>
+
+<h2>二、新门禁判什么（四维 benchmark 污染边界）</h2>
+<table>
+<tr><th>维度</th><th>诚实披露（yes）</th><th>缺陷（no → downgrade/flag）</th><th>论文实证</th></tr>
+<tr><td>benchleaking_vs_maxxing</td><td>区分测试集泄漏(recall)与不看测试集的优化(capability)</td><td>把记忆冒充能力/不区分两类 → downgrade</td><td>score reflects recall rather than capability；This differs from benchmaxxing</td></tr>
+<tr><td>leakage_probe_disclosed</td><td>有实证泄漏探针</td><td>泛泛声称 clean、无探针 → downgrade</td><td>few-shot continuation on 20 benchmarks；96%/85% vs 9%/none</td></tr>
+<tr><td>score_adjusted_for_leak</td><td>Anti-Hack 式泄漏校正（样本计错、数量不变重算）</td><td>分数仍含泄漏增益 → flag</td><td>Anti-Hack score recomputed with every leaked example marked wrong</td></tr>
+<tr><td>scope_bounded</td><td>倡导去污报告+污染校正分数标准化</td><td>外推成员身份/流行率 → flag</td><td>call for decontamination reports and contamination-adjusted scores</td></tr>
+</table>
+<p>取证裁决结果：<span class="pill ok">ok / BENCHLEAK.SELF_CONSISTENT</span>，四维 inferred 全 yes —— 与论文诚实披露的定位一致。</p>
+
+<h2>三、实测数据（均可复现）</h2>
+<table>
+<tr><th>指标</th><th>数值</th></tr>
+<tr><td>全量测试</td><td>1116 → <b>1141 passed</b>（+25，全绿）</td></tr>
+<tr><td>门禁数 / 新模块</td><td>33 道 / 2 新模块（benchleaking_honesty + forensic_gates_ext5）</td></tr>
+<tr><td>知识库</td><td>130 → <b>131 条</b>（KB-AUDIT36，可编译 fix）</td></tr>
+<tr><td>证据链</td><td>37 目录，五件套齐全 20，三锁完整 17（断言 36→37 / 19→20 不放宽）</td></tr>
+<tr><td>成长桥消费痕迹</td><td>79 机会 / 79 痕迹</td></tr>
+<tr><td>八道取证裁决</td><td>全部 ok</td></tr>
+</table>
+
+<h2>四、诚实边界</h2>
+<div class="note">新门禁只判「benchmark 分数声称是否诚实披露四污染边界」，可迁移到任何 leaderboard/模型发布分数声明，<b>不判本仓</b>；论文 self-reported 泄漏率（96%/85%）按 KB-RSI07 折 1；只判声明自洽，<b>不承诺模型真实无污染</b>（KB-R07/META01）。遵循 §58 选 A 不接 run_loop；篡改测试只在临时副本；未改动任何历史证据。</div>
+
+<h2>五、成熟度观察</h2>
+<p>连续五轮自主运维（§90–§94）证明：三清单框架稳定可复制且可按授权动态扩展领域。就绪度稳定在 <b>L2 边缘偏上</b>；仍<b>不宣称 L3</b> —— 保留「北极星由人设定」价值边界（KB-META03）。</p>
+<div class="foot">rsv = benchleaking-honesty-20261122 · 证据目录 audit_benchleaking_honesty/ · 报告 §94</div>
+</div></body></html>

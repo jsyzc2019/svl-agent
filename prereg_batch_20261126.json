@@ -1,0 +1,34 @@
+{
+  "id": "PREREG-BATCH-20261126",
+  "at_utc": "2026-11-26T02:44:47.617047+00:00",
+  "rounds": [
+    "§4fw",
+    "§4fx",
+    "§4fy",
+    "§4fz"
+  ],
+  "common_discipline": "分析前锁存;每轮一手逐字核验;双侧证据(打靶+反打靶);不编译门禁;不改verdict/l3/absolute/宪法;联网仅外层摄食,内核L0不联网不spawn;判定权归用户",
+  "targets": {
+    "§4fw": {
+      "belief": "RepoFactory立起的'代理指标可靠、低成本即时反馈可指导递归改进'",
+      "falsifier": "A级一手证明代理优化导致specification gaming/reward hacking/Goodhart塌缩,或代理与真实目标系统性脱钩",
+      "decision": "命中→REFINED(代理须配独立校验+真实目标抽检),未命中→如实记NOT_FOUND"
+    },
+    "§4fx": {
+      "belief": "递归自我改进(RSI)在环境中可行且带来持续增益",
+      "falsifier": "A级一手证明RSI收敛到局部最优/自我评估失真/改进不可持续",
+      "decision": "命中→WEAKENED或REFINED,未命中→NOT_FOUND"
+    },
+    "§4fy": {
+      "belief": "内在动机/自主性(用户'享受过程')促进持续成长与学习(建设性内化靶)",
+      "falsifier": "A级一手表明内在动机效应被夸大/外在激励更优/边界狭窄",
+      "decision": "命中→双侧REFINED,否则如实支持但不称战利品"
+    },
+    "§4fz": {
+      "belief": "RepoFactory'环境进化增益可复现'",
+      "falsifier": "A级一手证明同类环境合成/数据集存在泄漏/评测污染/增益不可复现",
+      "decision": "命中→标注不可复现风险,否则保留限定词"
+    }
+  },
+  "sha256": "0ce1607b5cbb682321ae6928397255e49ccbfcddeafb5adca6c34e7767063dd3"
+}

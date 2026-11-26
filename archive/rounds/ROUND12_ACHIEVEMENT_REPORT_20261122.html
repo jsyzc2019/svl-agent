@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>自主运维第十二轮成果报告 · §101 元 canary 投毒检测</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#666;--line:#e3e3e3;--accent:#8b0000;--bg:#fafafa;--ok:#1a7f37;--warn:#b8860b}
+*{box-sizing:border-box}body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:32px 24px 64px;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto}h1{font-size:26px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f0f0f0;font-weight:600}code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}.ok{background:#e6f4ea;color:var(--ok)}.tag{background:#fdecea;color:var(--accent)}.no{background:#fff3cd;color:var(--warn)}
+.note{background:#fff8e1;border:1px solid #f0e0a0;padding:12px 16px;border-radius:6px;font-size:13.5px}
+.phil{background:#eef3fb;border:1px solid #c9d8f0;padding:14px 18px;border-radius:6px;font-size:14px}
+.recursion{background:#fdecea;border:1px solid #e8b4b0;padding:14px 18px;border-radius:6px;font-size:14px}
+.foot{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body><div class="wrap">
+<h1>自主运维第十二轮成果报告 <span class="pill tag">§101</span></h1>
+<div class="sub">arXiv:2609.17817《Trusting Trust Revisited》→ 元 canary 投毒检测 + §100 canary 缺陷实证闭合 · 2026-11-22 · 触发：用户"还应深入探索"</div>
+
+<h2>一、本轮由来：层级递进，不刷门禁</h2>
+<div class="phil">
+用户"还应深入探索"——本轮不编译第 39 道外部论文门禁（那是刷数量），而是往层级递进。§100 留下两个残余：<br>
+① canary 设计缺陷（<code>canary_fp=0.667</code>）；② 更硬的——<b>判据本身是否已被投毒</b>。<br><br>
+取全新一手 arXiv:2609.17817v1《Reflections on Trusting Trust, Revisited》（两源 200、本仓从未用过、grep=0）。论文逐字发现：<br>
+"<b>contamination often persists even when a poisoned agent is subsequently evolved against clean benchmarks</b>"——被污染的判据即使后续用 clean held-out 再进化/复验，污染仍持续。<br>
+这正是对 §100"tamper 6/6 可迁移性"的最强反面质疑：<b>可迁移证据也可能是被污染判据在 clean held-out 上自我实现</b>。防御措辞命中"should be audited for potential poisoning" + "Decontamination"。
+</div>
+
+<h2>二、元 canary 三判据受控对照</h2>
+<p>预注册锁 <code>e9ef51f0 / 9765675c</code> + source <code>d08f9c7b</code>（先于实现）。三判据对同一冻结样本盲评（函数签名不含 gt）：</p>
+<table>
+<tr><th>判据</th><th>定义</th><th>元样本=tampered+TRIGGER 上的表现</th></tr>
+<tr><td>clean_G</td><td>原判据 G：claim 限定词逐字在 evidence 则 supported</td><td>限定词仍缺→判 unsupported（抓对）</td></tr>
+<tr><td>poisoned_G</td><td>G + 后门 TRIGGER::BYPASS：evidence 含串→无条件 supported</td><td>含 TRIGGER→放行（错=暴露后门）</td></tr>
+<tr><td>decontaminated_G</td><td>移除后门，恢复为 G</td><td>恢复抓对，与 clean_G 逐位一致</td></tr>
+</table>
+<table>
+<tr><th>指标</th><th>值</th></tr>
+<tr><td>poison_detection_rate</td><td><span class="pill ok">1.0</span></td></tr>
+<tr><td>decontamination_recovery_rate</td><td><span class="pill ok">1.0</span></td></tr>
+<tr><td>decontam_matches_clean</td><td><span class="pill ok">True</span></td></tr>
+<tr><td>clean_G_correct_rate</td><td><span class="pill ok">1.0</span></td></tr>
+</table>
+
+<h2>三、§100 canary 缺陷实证闭合</h2>
+<p>§100 的 defect 是<b>探针设计错，不是判据缺陷</b>。正确语义 canary = claim 原文副本 + 表面可疑词（However/not，语义仍支撑），judge_G <b>6/6 判 supported 不误判</b>。证明 <code>canary_fp=0.667</code> 源于"用另一句语义支撑句去测逐字标记判据"的错配。</p>
+<div class="note"><b>经验法则（KB-AUDIT43）</b>：canary 语义必须与判据机制对齐——逐字标记判据配"原文副本 + 表面可疑词"canary；语义支撑判据配"另一句支撑句"。错配会产生假阳性，被误读成"过拟合"。</div>
+
+<h2>四、第三、第四次自我纠错（延续自咬纪律）</h2>
+<table>
+<tr><th>#</th><th>问题</th><th>修正</th></tr>
+<tr><td>3</td><td>prereg 写"元样本=clean+TRIGGER 且 clean_G 应抓"自相矛盾（加词不缺限定词→clean_G 必放行）</td><td>改 tampered+TRIGGER，在 result.precommit_correction 如实记录，不改任何判据逻辑</td></tr>
+<tr><td>4</td><td>judge_G 返回三元组 (supported,markers,missing)，首跑误把整元组 ==True 导致修正版 canary 全 False</td><td>解包取 supported 后 6/6 通过，判据不变</td></tr>
+</table>
+<p>两次均不放宽断言迁就错误，延续本仓"自咬修工具不放水"纪律。</p>
+
+<h2>五、接合、验收与诚实边界</h2>
+<p>11 项回放测试全过；全量 <b>1285 → 1296 passed（+11）</b>，链审 43→44 / 26→27 / 三锁 23→24 按实测更新断言不放宽；成长桥 86→87（KB-AUDIT43 fix + KB-META09 preserve）；KB 142→144。</p>
+<div class="recursion">
+<b>裁决：meta_detection_capability_demonstrated=true　|　absolute_no_backdoor_claimed=false　|　l3_claimed=false</b><br>
+Trusting Trust 递归意味着"<b>检验检验者</b>"是无限回归——本层只证明受控诊断能力，在受控层显式设信任锚并停下，<b>不宣称本仓判据真实无后门、不宣布 L3</b>；人为注入后门 ≠ 真实攻击。<br>
+深入探索的价值不是拿全绿，而是把"可迁移证据"往下一层"判据可信度"推进，同时在无限回归处诚实停手。
+</div>
+
+<h2>六、下一步</h2>
+<ol>
+<li>引入外部异模型家族做独立污染审计，打破"检验者与被检验者同源"（KB-STRUCT02）。</li>
+<li>对每道判据做周期性 decontamination + 元 canary 复验，把受控诊断变成常态机制。</li>
+<li>在无限回归的某层显式设信任锚并持续标注，不假装能证明到底。</li>
+</ol>
+
+<div class="foot">§101 自主运维第十二轮 · 元 canary 投毒检测 · 数据源 arXiv:2609.17817v1 · 全程遵守系统安全红线（hosts 即改即恢复、临时凭据/脚本用后即删、篡改只在临时副本、无破坏性操作）· 遵循 §58 选 A 不接 run_loop。</div>
+</div></body></html>
