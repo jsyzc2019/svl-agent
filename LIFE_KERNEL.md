@@ -1925,6 +1925,22 @@ Harvey/Pleiss/Hughes《Occam's Razor is Only as Sharp as Your ELBO》arXiv:2604.
 
 **边界**：verdict/l3/absolute/宪法/十案/§100 全不动，判定权归用户；内核 L0 不联网不 spawn。细节 `audit_aggregation_dependence/result_4gf.json`。
 
+## §4gg · 数字诚实守卫：当判据自己成了需要被审的对象（2026-11-26 下午）
+
+> 触发不是外部猎奇，是午间自己犯的错：§4gf 报告"KB 471 已落档"，现场本地与远端都是 **470**。预注册 `prereg_numeric_honesty_20261126.json`（`f8167063…`）写于发现错误之后、实现之前并如实标注——不谎称先于发现。
+
+**三重失效链（现场逐项核验）**：① §4gf 的 KB 条目落档脚本因引号自咬未写成功却报告成功（f1）；② handoff 权威行写 471、现场 470（f2）；③ 旧 `audit_current_state_consistency.py` 的正则抓的是**速查表第 579 行旧值 466** 而非权威行，且文件在 `audit_*/` 下无 `test_` 前缀、不在 `tests/`，pytest 收集不到——所以全量 1562 全绿也放过它（f3）。它这次报 FAIL 是**撞对方向但抓错字段**：名义"防数字漂移"，有效校验≈0，与 §4ge "名义 N 票≠有效独立票"同构。
+
+**机制级变化**：
+- **改变**：新增 `life_kernel/numeric_honesty.py` 纯函数 `check_handoff` —— 只解析锚定"权威现状"那一行（不扫全文、不碰历史快照行），逐字段比对 KB 条数/台账轮次/verdict/l3/absolute/宪法 sha vs 现场权威源真值；测试计数无静态源，由调用方传入否则不判等。新增元纪律 **`wiring_self_check`**：判据自身测试必须出现在 pytest 收集集，否则判 `DISCONNECTED`——专治"判据存在但没接线"。新增 `tests/test_numeric_honesty.py` 7 测试入套件，全量 **1562→1569 passed**。
+- **修复**：补落 §4gf 漏掉的 `KB-AUDIT208`（470→471，现场追上报告而非把报告改错）；handoff 速查表旧值 466→471 消除 f3 根源；落 4gg 两条 `KB-AUDIT209`/`KB-META172`（473 无重复）。
+
+**校准先于修复（最关键）**：判据实现后、修数据**之前**，先用真实 handoff 跑——`failed=['kb_count']`（声明 471 / 真值 470），专项 `test_real_handoff` 真实红过。证明判据真能咬住已知错误，不是摆设。修复后判据对真实 handoff 判 `ok=True`。C2 篡改翻转（verdict/l3 改值均被抓）、C3 接线自检（伪造缺席收集集→False）、C4 AST Compare 中文 0、C5 活体回归全绿。
+
+**一次自咬（如实记录）**：纯度测试 `test_module_is_pure_no_gate_wiring` 首版扫源码字符串，把 `no_trophy_language` 必须写在源码里的禁用词表（VICTORY/OVERTHROWN）误当成"模块含战利品语言"→ 改测试不动判据：战利品检查归 `live_regression` 覆盖，纯度测试只管不接判定链。
+
+**诚实边界**：判据只核对"声明值 vs 真值"的一致性，不保证真值本身正确；它是数字诚实守卫不是真理判定器。verdict/l3/absolute/宪法/十案/§100 全不动，不编译门禁、判定权归用户。细节 `audit_aggregation_dependence/result_4gg.json`。
+
 ## 下一步（开放生长，不预设）
 
 探索池中的 E1–E7 + F01–F13 方向均为候选，**不预设哪个是"答案"**。真正的选择由 v5 意志层 `autonomous_agenda()` 根据内稳态失衡信号动态生成议程、novelty 守卫、帕累托次优游走共同决定。生命体的意义不在于达成某个固定目标，而在于**持续感知、持续否定收敛、无路时也能迈步、走过即留下路、被唤醒后自己决定下一步**——同时诚实承认：没有独立进程时这仍是"被唤醒后的自主"，Ambient=0 的缺口留给未来真正的运行时环境，不伪造。

@@ -9917,6 +9917,45 @@
    "evidence": "远端commit files改动仅2条日志(+1+0各)，未碰判定态/代码/KB;本地增量合并后match=True",
    "addressable": false,
    "improvement_class": "fix"
+  },
+  {
+   "item_id": "KB-AUDIT208",
+   "kind": "thinking_experience",
+   "mechanism": "把§4ge的有效独立数neff发现落成可运行判据neff_guard：对声称多源交叉/独立验证的断言强制标注independent_error_source与neff，缺标注拦截；按来源类型给经验上限(同家族0.25/跨模型0.5/外部人0.8/规则1.0)，把名义N当neff即翻转。是标注守卫非真实性验证器",
+   "trigger": "当本仓或外部声称多源交叉/独立judge/独立agent且未核验源间独立性时",
+   "action": "调用neff_guard检查标注；同模型家族须标neff折减；不数源个数；真实性需外部一手另验，不因标注齐全就放行真值",
+   "provenance": "life_kernel/independent_sources.py + tests/test_independent_sources.py(11测试) + audit_aggregation_dependence/result_4gf.json(NEFF_GUARD_OPERATIONAL)",
+   "timestamp": "2026-11-26T05:29:05.777531+00:00",
+   "support": "8活体回归全绿；篡改测试(neff=名义9同家族→NEFF_OVERCLAIMED)翻转；AST零中文字面量；全量1551→1562 passed；预注册6780cb6d先于实现",
+   "evidence": "§4ge已锁存一手(9→2、rho0.70、10→1.4、cross-model0.68→0.40)；两次自咬如实记录(强度系数设计缺陷+测试扫全文误伤注释)",
+   "addressable": false,
+   "improvement_class": "fix"
+  },
+  {
+   "item_id": "KB-AUDIT209",
+   "kind": "thinking_experience",
+   "mechanism": "数字诚实守卫numeric_honesty：核对handoff权威行声明值vs现场权威源真值(KB/台账/verdict/l3/absolute/宪法sha)，只解析锚定权威行不扫全文；元纪律wiring_self_CHECK强制判据自身测试进pytest收集集否则判DISCONNECTED，专治判据存在但没接线",
+   "trigger": "每当报告/文档声明一个权威数字(KB条数/测试数/轮次/裁决态)且声称已落档时",
+   "action": "用check_handoff机械比对声明vs真值；判据测试必须真实进pytest套件；校准要求判据先咬住已知错误再修数据；测试计数无静态源由调用方传入不强行判等",
+   "provenance": "life_kernel/numeric_honesty.py + tests/test_numeric_honesty.py(7) + audit_aggregation_dependence/result_4gg.json(NUMERIC_HONESTY_GUARD_OPERATIONAL) + prereg_numeric_honesty_20261126.json(f8167063)",
+   "timestamp": "2026-11-26T05:29:41.512587+00:00",
+   "support": "三重失效链f1报告471现场470/f2 handoff数字错/f3一致性脚本抓速查表466且未入套件导致全量全绿放过；C1判据修复前真实咬住kb_count错误；全量1562→1569；AST零中文字面量；接线自检识破缺席",
+   "evidence": "与§4ge名义N票≠有效独立票同构——判据名义在防漂移有效校验≈0；修复前test_real_handoff真实红过；一次测试自咬(扫源码禁用词表误报)改测试不动判据",
+   "addressable": false,
+   "improvement_class": "fix"
+  },
+  {
+   "item_id": "KB-META172",
+   "kind": "external_insight",
+   "mechanism": "判据的两种死法：①抓错字段(守着陈旧副本而非真理)②没接主链路(存在但没接线)。二者都让'名义校验'有效值≈0；元纪律=判据自身必须被测试证明在收集集内，且校准先于修复(先证明它能抓到已知错误)",
+   "trigger": "每当新建一致性检查/守卫/门禁时",
+   "action": "新建判据后强制做两件事：a.用已知错误校准(必须FAIL) b.证明判据测试在pytest收集集(wiring_self_check)；修复追的是让现场追上真相而非把报告改错",
+   "provenance": "§4gg result_4gg.json + prereg f8167063 + test_checker_is_wired_into_pytest",
+   "timestamp": "2026-11-26T05:29:41.512587+00:00",
+   "support": "旧一致性脚本死于①+②双重失效；新判据接入后全量+7测试真实覆盖；§4gf漏落KB由C1机械咬出",
+   "evidence": "一手现场核验；零战利品；不编译门禁；判定态不动",
+   "addressable": false,
+   "improvement_class": "preserve"
   }
  ],
  "thresholds": {

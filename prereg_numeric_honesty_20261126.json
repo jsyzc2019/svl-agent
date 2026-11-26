@@ -1,0 +1,45 @@
+{
+  "id": "PREREG-NUMERIC-HONESTY-20261126",
+  "written_at_utc": "2026-11-26T05:28:00+00:00",
+  "honest_timing": "写于已发现'报告KB=471、现场KB=470'错误之后、任何判据实现之前；不谎称先于发现。用途是防止实现时把判据调成'放过当前错误'。",
+  "session": "§4gg",
+  "mission": "把'报告的数字≠现场的真实'落成可运行判据，并强制判据自身接入主链路（专治'判据存在但没接线'）。",
+  "diagnosis_of_threefold_failure": {
+    "f1_kb_not_landed": "§4gf 的 KB 条目声称落档(KB=471)，现场本地与远端均 470——落档脚本那次因引号自咬未写成功，却报告了成功。",
+    "f2_handoff_declared_wrong": "SESSION_HANDOFF.md 第43行权威行写'知识库 471 条'，与现场 470 不一致。",
+    "f3_checker_decoupled": "audit_current_state_consistency.py 用正则 `knowledge_base_store.json`（(\\d+) 条 抓的是速查表第579行旧值466，不是权威行；且文件在 audit_*/ 下无 test_ 前缀、不在 tests/，pytest collect 不到——全量1562全绿放过它。",
+    "insight": "名义上在'防数字漂移'，有效校验≈0；与 §4ge 的'名义N票≠有效独立票'同构。判据这次报FAIL是撞对方向但抓错字段。"
+  },
+  "design": {
+    "module": "life_kernel/numeric_honesty.py",
+    "nature": "纯函数、不联网、不spawn、不接判定链、不编译门禁；不改 verdict/l3/absolute/宪法。",
+    "core_functions": [
+      "truth_snapshot(): 从权威源现场取真值——KB len(items)、台账行数、pytest计数(由调用方传入或读result)、result.json 的 verdict/l3_claimed/absolute_claimed、宪法 sha256。",
+      "check_handoff(handoff_text, truth): 严格从'权威现状'锚定的那一行解析声明值(不扫全文、不碰历史快照行)，逐字段比对；任何不一致返回 FAIL 清单。",
+      "wiring_self_check(collected_nodeids): 校验器自身的测试必须出现在 pytest 收集集中；否则判据判自身为 DISCONNECTED——这是本次新增的元纪律，专治'判据存在但没接线'。"
+    ],
+    "keyword_policy": "中文关键词集中字典，比较逻辑只查键，避免 §4ge-style AST Compare 中文字面量自咬。"
+  },
+  "calibration_requirements": [
+    "C1: 判据必须对当前已知错误(权威行471 vs 真值470)返回 FAIL；若放过，则判据设计失败，须改工具不放宽判据。",
+    "C2: 篡改测试——把权威行数字改成等于真值后应 PASS；故意改错另一个字段应 FAIL。",
+    "C3: 入场自检——从 pytest collect-only 结果证明校验测试在套件内；若不在，wiring_self_check 必须返回 False。",
+    "C4: AST 自审 Compare 内中文字面量 = 0。",
+    "C5: 活体回归全绿 + 零战利品语言。"
+  ],
+  "repair_plan": [
+    "补落 §4gf 漏掉的 KB 条目（现场追上报告，而非把报告改成470——因为§4gf代码/测试/result真实存在，漏的是KB落档）。",
+    "修正 handoff 权威行数字为补落后的真值，并同步速查表旧值466以防下一轮抓错。",
+    "把新校验测试纳入 pytest 套件，让全量测试真正覆盖数字一致性。"
+  ],
+  "boundaries": {
+    "verdict_unchanged": true,
+    "constitution_unchanged": true,
+    "no_gate_compile": true,
+    "no_spawn": true,
+    "no_online_inference": true,
+    "zero_trophy": true,
+    "user_holds_verdict": true
+  },
+  "success_criterion": "判据能抓到已知错误(C1)、篡改翻转(C2)、接线自检生效(C3)、AST零中文字面量(C4)、活体全绿(C5)，且修复后全量测试因新增校验测试而增加、判定态不动。"
+}
