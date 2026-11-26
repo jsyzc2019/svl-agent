@@ -47,7 +47,8 @@ def test_05_html_embeds_same_rules_no_escape_corruption():
     seg = re.search(r"const RULES = ([\s\S]*?);\nconst CARDS", html).group(1)
     embedded = json.loads(seg)  # 反斜杠若被吞会在此抛错（回归上一轮的 self-bite）
     assert embedded["rules"] == S.load_rules()["rules"]
-    assert "v2.0" in html and "分层评测口径" in html
+    # v2.1 起展示层版本号会随诚实边界补充递增；锁定 v2 系列而非具体小版本，判据(规则数据)上方已逐字节断言
+    assert "Argument Audit · v2." in html and "分层评测口径" in html
 
 
 def test_06_result_persisted_and_verdict_unchanged():

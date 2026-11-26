@@ -1,0 +1,125 @@
+{
+  "experiment": "§4gw-argument-audit-specificity",
+  "round": "§4gw",
+  "status": "EXECUTED",
+  "generated": "2026-11-26T08:07:51.791351Z",
+  "what": "取证工作台首次异质文本特异度测试——检验规则在训练题材(煽动文)之外的假阳性",
+  "why": "§4gu/§4gv全部验证来自同一篇煽动文13条, 规则对着它调; 在训练题材上表现好不算证据。APP最怕在正规文本上乱标红(狼来了效应), 此面从未测过",
+  "prereg_note": "探索性测试: 阳性=内置煽动DEMO+爆款文元信息, 阴性=技术交接文档/网络小说/DeepMind英文观点文, 中性=两条公众号元信息; 每文本取前4000字统一口径; 判据=密度(命中/千字)与逐条片段语境定性, 阈值仅作防退化守卫非能力宣称",
+  "cases": {
+    "POS-DEMO 内置煽动文": {
+      "kind": "positive",
+      "len": 175,
+      "n_signals": 7,
+      "total_hits": 13,
+      "per_1000": 74.29,
+      "by_signal": {
+        "SIG-QUOTE": 3,
+        "SIG-ABSOLUTE": 3,
+        "SIG-EMOTION": 3,
+        "SIG-AUTHORITY": 1,
+        "SIG-NUMBER": 1,
+        "SIG-FALSE-DICHOTOMY": 1,
+        "SIG-CERTAINTY": 1
+      }
+    },
+    "POS-爆款文元信息": {
+      "kind": "positive",
+      "len": 95,
+      "n_signals": 4,
+      "total_hits": 4,
+      "per_1000": 42.11,
+      "by_signal": {
+        "SIG-AUTHORITY": 1,
+        "SIG-QUOTE": 1,
+        "SIG-ABSOLUTE": 1,
+        "SIG-NUMBER": 1
+      }
+    },
+    "NEG-技术交接文档": {
+      "kind": "negative",
+      "len": 4000,
+      "n_signals": 1,
+      "total_hits": 1,
+      "per_1000": 0.25,
+      "by_signal": {
+        "SIG-EMOTION": 1
+      }
+    },
+    "NEG-网络小说": {
+      "kind": "negative",
+      "len": 4000,
+      "n_signals": 1,
+      "total_hits": 2,
+      "per_1000": 0.5,
+      "by_signal": {
+        "SIG-CAUSAL": 2
+      }
+    },
+    "NEG-DeepMind英文观点文": {
+      "kind": "negative",
+      "len": 4000,
+      "n_signals": 0,
+      "total_hits": 0,
+      "per_1000": 0.0,
+      "by_signal": {}
+    },
+    "NEU-大摩文元信息": {
+      "kind": "neutral",
+      "len": 80,
+      "n_signals": 0,
+      "total_hits": 0,
+      "per_1000": 0.0,
+      "by_signal": {}
+    },
+    "NEU-康波文元信息": {
+      "kind": "neutral",
+      "len": 113,
+      "n_signals": 0,
+      "total_hits": 0,
+      "per_1000": 0.0,
+      "by_signal": {}
+    }
+  },
+  "false_positives": [
+    {
+      "text": "NEG-技术交接文档",
+      "signal": "SIG-EMOTION",
+      "snippet": "必须校验！超时截断会得到…",
+      "verdict": "假阳性-语境错配",
+      "why": "技术备注的强调语气被'必须…！'模式命中, 非情绪煽动"
+    },
+    {
+      "text": "NEG-网络小说",
+      "signal": "SIG-CAUSAL",
+      "snippet": "因为大力，而导致略微尖锐的指甲…",
+      "verdict": "假阳性-语境错配",
+      "why": "叙事因果连接词, 非论证性因果断言"
+    },
+    {
+      "text": "NEG-网络小说",
+      "signal": "SIG-CAUSAL",
+      "snippet": "直接结果，便是导致其实力不断的后退",
+      "verdict": "假阳性-语境错配",
+      "why": "同上, 小说叙事语气"
+    }
+  ],
+  "discrimination": {
+    "positive_min": 42.11,
+    "negative_max": 0.5,
+    "ratio": 84.2
+  },
+  "decision": "不改规则: 消除3处假阳性需收紧SIG-EMOTION/SIG-CAUSAL语境, 会过拟合到这几个测试样本并可能误伤真断言(上轮过拟合守卫精神)。如实记假阳性率, 让区分度证据说话",
+  "honest_bound": [
+    "阴性对照仍有假阳性(0.25-0.5/千字), 工具不是零误报; 3处均为语境错配, 已逐条公开",
+    "样本仍小(4阴性+2阳性+2中性), 且截取前4000字; 区分度是探索性证据, 非稳健统计验证",
+    "DeepMind英文文0命中部分因为规则是中文正则, 跨语言支持=0, 不是'英文文本很干净'的证据",
+    "元信息文本仅80-113字, 样本太短, 0命中不构成阴性证据; 仅作参考",
+    "判定态三值/宪法锁/§100/十案全不动; 不编译门禁; 判定权归人"
+  ],
+  "kernel_verdict_unchanged": "GAP_INCONCLUSIVE",
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "no_new_gate": true,
+  "no_external_agent": true
+}
