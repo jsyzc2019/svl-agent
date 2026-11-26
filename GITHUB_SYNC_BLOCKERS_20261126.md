@@ -40,7 +40,7 @@
 
 采用 **GitHub Git Data API** 方案：以远端 HEAD `e761b208` 的 tree `4fab0e9085b0` 为 base_tree，把本地相对远端新增/修改的文件做成 blob 挂上去，parent 指向 `e761b208`，生成单个 commit 后更新 main ref。此方案**历史连续、远端已有的 45 个文件（本地 tarball 快照缺失）全部保留、只增不删**——这是相对 force push 的关键安全优势。
 
-推送结果与 commit SHA 见下方"五、推送结果"（推送成功后回填）。
+**推送结果（已成功，现场核验非记忆）**：commit `89dec3be9273`（父 `e761b208`，历史连续）；远端 main HEAD=`89dec3be9273`；提交 133 个新增/修改文件；tree `651ac30885c0`（truncated=false）。推送后核验：8/8 关键文件本地 sha256 == 远端 blob sha256（LIFE_KERNEL / KB / result / engine / handoff / test / safari_log / prereg）；父提交仍 `e761b208`；远端 blob 数 1596→**1723**（只增不删，本地缺失的 45 个远端文件全部保留）。token 仅内存使用、不打印、不入仓、不入任何提交；上传区 token 文件 chmod 600。
 
 ## 五、诚实边界
 
