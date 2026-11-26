@@ -1,0 +1,17 @@
+{
+  "id": "PREREG-META-FALSIFY-WRITE-SURFACE-20261126",
+  "at_utc": "2026-11-26T07:06:26.743830+00:00",
+  "round_target": "§4go（深挖轮，元证伪）",
+  "target_belief": "§4gn 阴性结论：'全仓生产代码无写点指向内核权威源 audit_l3_gap_targeted/result.json'。该结论来自只覆盖 open(path,'w') 的 AST 扫描。",
+  "falsifiable_prediction": "若把写路径覆盖面从 open() 扩展到①pathlib.Path.write_text/write_bytes/open(mode='w')②shutil.copy/copyfile/copy2/move(src,dst) 且 dst 指向内核源③os.replace/os.rename 覆盖内核源④json.dump 到非字面变量名句柄且该变量绑定内核源⑤eval/exec 动态构造写——其中任一被证实存在生产写点，则 §4gn 的阴性结论被 REFUTED（不只是 REFINE），须真实认错并升级守卫。",
+  "why_this_matters": "自审结论'证伪力2/执行力9'——本轮刻意对自己刚下的阴性结论做证伪，而非再找一个外部现象。阴影面：越是用'我搜过了'自我安慰，越可能漏掉工具盲区。",
+  "primary_metric": "扩展扫描器对每类写 API 给出'覆盖/未覆盖'声明；对能覆盖的类，内核源生产写点计数须仍为0；未覆盖类如实列盲区，不并入阴性证据。",
+  "decision_tree": {
+    "FOUND_ANY": "任一类发现生产写点→REFUTED，落真实认错CORR-REAL，修工具+升级守卫，verdict不动",
+    "ALL_COVERED_ZERO": "所有可覆盖类均0→阴性结论置信度提升(但不称证明)，落falsification_log并声明残余盲区",
+    "TOOL_GAP": "某类无法静态覆盖→如实记为未覆盖，不算阴性也不算阳性"
+  },
+  "counter_discipline": "主动找能推翻'写点=0'的证据；但也诚实承认：静态扫不到≠运行时不写。二者严格分开。不因'想显示证伪力'就夸大发现，也不因'想保住上轮结论'就淡化发现。",
+  "discipline": "预注册先于取证；判据自咬改工具不改判据；判定态不动；不编译门禁；阴性/阳性都落档；判定权归用户",
+  "sha256": "426c8a79edf8af191566075ade73266c8274679a60985354cec5638a05983fa5"
+}

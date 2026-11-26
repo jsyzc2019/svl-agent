@@ -10112,6 +10112,19 @@
       "evidence": "一手现场; 阴性结果落档; 判据自咬; 零战利品; 判定态不动; 不编译门禁",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META180",
+      "kind": "thinking_experience",
+      "mechanism": "元证伪:对自己刚下的阴性结论再证伪。§4gn结论'生产写点=0'只覆盖open(path,w), §4go预注册(hash锁)后把写面扩到write_text(167)/os.replace(180)/copy*(33)/数据流追踪, 结果ALL_COVERED_ZERO——阴性结论稳健但未推翻任何东西, 只是巩固。真实增量=发现并补上§4gn的write_text盲区(注入write_text写点旧扫描漏/新守卫FAILED)。71处'危险写点'是变量名碰撞误报(res/result/html/src通用名), 逐个精查全安全——工具粗判不可直接当结论。",
+      "trigger": "当刚下一个'我没找到X'的阴性结论、想检验它是否只是工具盲区造成的自我安慰时",
+      "action": "预注册可证伪预测(若扩展覆盖后找到X则原结论被REFUTED); 扩展写/检测面并声明每类覆盖; 区分'静态扫不到'与'运行时不发生'; 对粗判命中的数据流结果逐个精查(变量名碰撞误报); 负向注入盲区类型证明守卫扩展真实; ALL_COVERED_ZERO只提置信度不称证明。关键:属巩固轮非突破轮,连续三轮同主题时按P1主动标注收敛信号。",
+      "provenance": "§4go prereg_meta_falsify_write_surface_20261126.json + falsification_log.jsonl 第3条 + tests/test_write_surface_extended.py",
+      "timestamp": "2026-11-26T07:09:34.049944+00:00",
+      "support": "扩展扫描生产写点仍0; write_text盲区注入FAILED/删除PASS(新守卫3项); 全量1615→1618 passed; 判定态三值/宪法锁全不动。",
+      "evidence": "一手现场; 元证伪; 阴性巩固; 判据自咬; 零战利品; P1收敛信号",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
