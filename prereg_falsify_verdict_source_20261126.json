@@ -1,0 +1,16 @@
+{
+  "id": "PREREG-FALSIFY-VERDICT-SOURCE-20261126",
+  "at_utc": "2026-11-26T07:01:11.127544+00:00",
+  "round_target": "§4gm→§4gn",
+  "target_belief": "本仓信条'职责分区：每个实验目录写自己的 result.json、内核判定态源 audit_l3_gap_targeted/result.json 只读不可被实验层写'——§4gl 曾因 engine 回写该源致26守卫失败，§4gm 已把单点修复为代码守卫",
+  "falsifiable_prediction": "若全仓存在第二处'生产代码(非tmp副本/非测试)以写模式打开 audit_l3_gap_targeted/result.json 或把实验裁决写进被 numeric_honesty/kernel 当权威真值源的文件'——则'职责分区已全局闭合'这一推论被证伪，需再修",
+  "primary_metric": "AST扫描全仓*.py(排除archive/__pycache__/vendor)所有写模式open调用；内核权威源字面路径的写点必须为0(允许tmp_path副本内的篡改测试写点)",
+  "secondary": "其余 f'{BASE}/result.json' 写点须各自BASE不同、仅写本目录，不构成对内核源的跨层污染",
+  "decision_tree": {
+    "FOUND_PROD_WRITE": "发现生产代码写内核源→如实落KB/CORR,修工具,verdict不动",
+    "NOT_FOUND": "如实记录'全仓扫描未找到第二例',声明工具覆盖与盲区,不宣称'证明永远不会有'"
+  },
+  "counter_discipline": "主动承认AST扫描盲区:动态eval/exec写、非.py脚本(shell/node)、未来新增代码均不在本次覆盖;阴性结果只是'截至此刻未发现',非'永久不存在'",
+  "discipline": "判定态不动;不编译门禁;阴性结果也落falsification_log(搜了没找到也算数);判定权归用户",
+  "sha256": "a2c457ce1b52dde903889d97d9963dd2876f3245aa4e2eba5691870c2bd25b6f"
+}

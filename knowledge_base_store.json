@@ -10099,6 +10099,19 @@
       "evidence": "一手现场; 双向自咬; 零战利品; 判定态不动; 不编译门禁",
       "addressable": false,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META179",
+      "kind": "thinking_experience",
+      "mechanism": "P0阴性结果也算数: 用户否定'再搞第三家异厂'(收益递减+hard_bound已写明仍属LLM家族), 转向证伪自身信条'职责分区全局闭合'——预注册命题(hash锁)后AST全仓扫描*.py写模式open(), 内核权威源audit_l3_gap_targeted/result.json生产写点=0(27处出现:读25/写2均在tmp副本), 未发现第二例实验层污染→NOT_FOUND如实落falsification_log, 不宣称'证明永久不会有'。判据自咬: 首版扫描只抓字符串常量漏os.path.join(tmp,...)变量名→误报2处tmp写点→改工具纳入ast.Name(不放宽豁免), 负向注入假写点FAILED/删除PASS证明守卫非摆设。",
+      "trigger": "当用户否定一个显而易见但边际递减的方向、需要找更高杠杆时；或检验'某负面现象是否全局不存在'时",
+      "action": "把用户的方向判断当优先级引导而非判定证据; 优先证伪自身活信条而非堆同类实验; 阴性结果也预注册+落falsification_log(搜了没找到也算数); 声明工具覆盖与盲区, 阴性≠证明; 判据自咬改工具不改判据; 一次性扫描固化为持续守卫测试。",
+      "provenance": "§4gn PREREG-FALSIFY-VERDICT-SOURCE-20261126 + falsification_log.jsonl + tests/test_verdict_source_global_scan.py",
+      "timestamp": "2026-11-26T07:02:15.876839+00:00",
+      "support": "AST全仓扫描生产写点0; test_verdict_source_global_scan 3项(含负向注入自咬)passed; 全量1612→1615 passed; 判定态三值/宪法锁全不动; 未新增异厂调用。",
+      "evidence": "一手现场; 阴性结果落档; 判据自咬; 零战利品; 判定态不动; 不编译门禁",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

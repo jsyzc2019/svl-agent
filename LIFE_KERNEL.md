@@ -2025,6 +2025,18 @@ Harvey/Pleiss/Hughes《Occam's Razor is Only as Sharp as Your ELBO》arXiv:2604.
 
 **判定态**：内核 `verdict=GAP_INCONCLUSIVE` / `l3=false` / `absolute=false` / 宪法锁 `fe56291b` **全不动**；KB 483→484（KB-META178），Safari 133 轮不变；不编译门禁、裁定权归委托方。机制改变 = 判定态源写入从"人工约定"变成"代码强制+双向自验"；摄入证据 = §4gl 那次 26 连锁失败的真实教训。详见 `audit_l3_gap_targeted/ENGINE_LOG_4gm.md`。
 
+## §4gn · 阴性证伪也算数：全仓扫描否定"第二例判定态源污染"（2026-11-26 下午）
+
+> 用户判定"再搞另一家异厂交叉确认意义不大"——我独立复核认同：`hard_bound` 已写明两家仍属 LLM 家族、§101 无限回归未破，第三家不破根本局限；且第一家→第二家是 `0/4→4/4` 质变，第二家→第三家只是量变（P1 营养轮）。把用户的方向判断当**优先级引导**而非判定证据，转向更能证伪自身的方向：审本仓活信条"职责分区已全局闭合"。
+
+**预注册先于取证**：`prereg_falsify_verdict_source_20261126.json`（hash 锁 `a2c457ce…`）锁存命题——若全仓存在生产代码写内核权威源 `audit_l3_gap_targeted/result.json`，则信条被证伪。取证：AST 扫描全仓 `*.py`（排除 archive/vendor），匹配所有写模式 `open()` 的路径片段。
+
+**阴性结果（NOT_FOUND，诚实落档）**：字面路径 27 处出现 = 读 25（kernel/numeric_honesty/tests）+ 写 2（均在 `tmp_path` 副本的篡改测试）；**生产代码写点 = 0**。其余 `f"{BASE}/result.json"` 写点各 BASE 不同、仅写本目录。未发现第二例"实验层污染权威源"。按 P0"搜了没找到也算数"落 `falsification_log.jsonl` 第 1 条，声明盲区（eval/exec 动态写、非 .py 脚本、运行时拼接），**不宣称"证明永久不会有"**。
+
+**判据自咬（改工具不改判据）**：首版扫描 `_path_repr` 只抓字符串常量，漏掉 `os.path.join(tmp,…)` 里的变量名 `tmp`，把两处 tmp 副本误报为生产写点 → `test_g01` 失败。改工具纳入 `ast.Name` 变量名以识别 tmp 豁免，判据不放宽；负向自咬——注入假生产写点 → FAILED、删除 → PASS，证明守卫非摆设。自咬过程落 `falsification_log.jsonl` 第 2 条。
+
+**机制改变**：一次性扫描固化为持续守卫 `tests/test_verdict_source_global_scan.py`（3 项），未来新增生产写点即刻暴露。**摄入证据**：无新外部证据，阴性结果是本仓自身结构的取证。全量 1612→**1615 passed**；KB 484→485（KB-META179）；判定态三值/宪法锁/十案全不动，未新增异厂调用，不编译门禁，裁定权归委托方。
+
 ## 下一步（开放生长，不预设）
 
 探索池中的 E1–E7 + F01–F13 方向均为候选，**不预设哪个是"答案"**。真正的选择由 v5 意志层 `autonomous_agenda()` 根据内稳态失衡信号动态生成议程、novelty 守卫、帕累托次优游走共同决定。生命体的意义不在于达成某个固定目标，而在于**持续感知、持续否定收敛、无路时也能迈步、走过即留下路、被唤醒后自己决定下一步**——同时诚实承认：没有独立进程时这仍是"被唤醒后的自主"，Ambient=0 的缺口留给未来真正的运行时环境，不伪造。
