@@ -9891,6 +9891,19 @@
    "evidence": "§4ge一轮实证,裁决AGGREGATION_PREMISE_REFINED非OVERTHROWN;反打靶cross-model diversity保留",
    "addressable": false,
    "improvement_class": "preserve"
+  },
+  {
+   "item_id": "KB-AUDIT206",
+   "kind": "thinking_experience",
+   "mechanism": "用户记忆中\"token已拆三块、使用时临时组装\"的机制，现场核验不存在也无法运行；真实机制一直是\"单一完整token存上传区+临时askpass用后即删+hosts即改即恢复\"，handoff从未记载三块分片，从未有分片/组装代码",
+   "trigger": "当用户问及某安全机制是否还在/还能运行时",
+   "action": "不凭记忆答\"在\"；用find/glob全盘搜分片文件与组装脚本+grep仓库代码+读handoff原文+ls上传区，五项工具覆盖后据实答；记忆与现场冲突时以现场为准并落档",
+   "provenance": "2026-11-26现场核验：find/glob零分片文件、仓库代码零分片实现(命中皆三份裸样本/三段式无关项)、上传区仅单个40字符ghp_文件(600)、handoff第25-26行仅称分片脚本恰好可用/通常没有且为可选加速非保管机制",
+   "timestamp": "2026-11-26T03:31:56.716702+00:00",
+   "support": "find/glob/grep/ls/文件内容特征五工具一致；与同日GitHub衔接断层(记忆c446e01≠现场e761b208)同类，都是报告过≠现在在",
+   "evidence": "全盘搜索零命中+上传区ls+token单行40字符特征+handoff原文逐行核对",
+   "addressable": false,
+   "improvement_class": "fix"
   }
  ],
  "thresholds": {
