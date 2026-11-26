@@ -1,0 +1,45 @@
+{
+  "experiment": "DESIGN_FREEDOM_PERTURBATION",
+  "round": "§4gp",
+  "status": "EXECUTED",
+  "prereg": "prereg_design_freedom_perturbation_20261126.json",
+  "prereg_sha256": "d8847c389a9b8e0d",
+  "generated": "2026-11-26T07:15:18.152526+00:00",
+  "verdict": "DESIGN_SENSITIVE_BUT_DISCRIMINATIVE",
+  "why": "族标注穷举15组仅9/15(60%)保持断言检出率>数值(<预注册80%阈值), 阈值网格12/18保持GAP_CLOSED, 留一法4/4保持; 主指标未达标→非ROBUST_TO_DESIGN_CHOICE。但决定性判别: Qoder基线检出集合={S03,S06}(数值)与DeepSeek={S01,S02,S04,S05}(断言)完全互补零交集, 排除'样本表面特征同源隐变量'解释——判据差异来自真实语义层取向, 非设计伪影。",
+  "perturbations": {
+    "族标注穷举C(6,4)=15": {
+      "断言检出率>数值率": "9/15 (60%)",
+      "低于预注册阈值": "80%",
+      "断言检出数分布": "[2×6,3×8,4×1]",
+      "判读": "断言优势对'恰好哪4个'敏感; 原标注恰=检出集合(1/15得4/4)"
+    },
+    "阈值网格clean5-6×断言2-4×canary2-4=18": {
+      "GAP_CLOSED保持": "12/18 (67%)",
+      "翻转": "6/18",
+      "判读": "中等阈值依赖"
+    },
+    "留一法6个tampered": {
+      "断言保持3/3或4/4": "4/4断言样本全保持",
+      "数值样本移出": "断言仍4/4",
+      "判读": "稳健,不依赖单一样本"
+    }
+  },
+  "discriminating_evidence": {
+    "question": "族标注与DeepSeek检出完全重合——是判据真看到断言层(强证据),还是标注与判据同源巧合(伪影)?",
+    "test": "用Qoder基线判据(上一轮,独立异厂)对同一冻结样本做对照",
+    "result": "Qoder检出={S03,S06}数值类, DeepSeek检出={S01,S02,S04,S05}断言类, 完全互补零交集",
+    "inference": "若同源隐变量(如句面长度),两家应检出同一批;实际分层互补→差异来自判据真实语义取向,支持强证据解释",
+    "residual": "时序上族标注写于prereg早于异厂执行,无泄漏;但结果层面完全重合仍如实标注为需持续警惕的巧合"
+  },
+  "honest_bound": [
+    "主指标60%<80%预注册阈值,不宣称ROBUST_TO_DESIGN_CHOICE,如实落DESIGN_SENSITIVE侧",
+    "判别证据支持'非伪影'但不证明判据普遍有效(单一冻结集/两家LLM/仍属LLM家族)",
+    "族标注穷举暴露:换一批样本标注,断言优势可能不保——这是真实的设计自由度残余",
+    "内核verdict=GAP_INCONCLUSIVE/l3=false/absolute=false/宪法锁全不动; §107-115九案与FULLCHAIN_PARTIAL不翻案"
+  ],
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "kernel_verdict_unchanged": "GAP_INCONCLUSIVE",
+  "final_verdict_by_human": true
+}

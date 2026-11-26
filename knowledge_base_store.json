@@ -10125,6 +10125,19 @@
       "evidence": "一手现场; 元证伪; 阴性巩固; 判据自咬; 零战利品; P1收敛信号",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META181",
+      "kind": "external_insight",
+      "mechanism": "真瓶颈=hard_bound第4条'族标注/冻结样本/裁决树设计仍本仓'。§4gp用纯机械扰动直接攻: ①族标注穷举C(6,4)=15种(盲扰动不挑好看的)→断言检出率>数值率仅9/15=60%<80%预注册阈值, 说明断言优势依赖'恰好这4个'标注, 设计敏感性真实存在; ②阈值网格18组保持12/18; ③留一法4/4稳健。主指标未达标→不判ROBUST, 落DESIGN_SENSITIVE。关键判别: 族标注恰=DeepSeek检出集合(完全重合)引发'同源巧合'疑云→拿Qoder基线对照, Qoder检出{S03,S06}数值类与DeepSeek{S01,S02,S04,S05}断言类完全互补零交集→排除样本表面特征同源解释, 差异来自判据真实语义取向。裁决DESIGN_SENSITIVE_BUT_DISCRIMINATIVE。",
+      "trigger": "当声称'判据看到了某层现象'、但该现象的定义/标注/裁决规则都由自己设计时",
+      "action": "把设计自由度当作可扰动变量做盲扰动: 族标注穷举所有同尺寸分组(不挑好看的)、阈值网格邻域、留一法; 设预注册阈值(如80%); 若'优势'与标注恰好重合, 用第二独立来源做判别实验(互补则排除同源伪影, 相同则警惕); 阴性/阳性都如实落档; 改工具不改判据; l3不自己抬。",
+      "provenance": "§4gp prereg_design_freedom_perturbation_20261126.json + result_4gp.json + ENGINE_LOG_4gp.md + tests/test_design_freedom_perturbation.py",
+      "timestamp": "2026-11-26T07:16:18.519735+00:00",
+      "support": "族标注9/15=60%(<80%), 阈值12/18, 留一法4/4; 两家检出互补零交集; test 5项(含负向自咬)passed; 全量待复核; 判定态三值/宪法锁全不动。",
+      "evidence": "一手现场; 预注册; 盲扰动; 判别实验; 设计敏感性如实暴露; 零战利品; 判定态不动",
+      "addressable": false,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {
