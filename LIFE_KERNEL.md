@@ -1983,6 +1983,22 @@ Harvey/Pleiss/Hughes《Occam's Razor is Only as Sharp as Your ELBO》arXiv:2604.
 
 **诚实上限**：本模块不重造数字真值源、不证明权威行真值本身正确，只证明"抓错→落档→传播→复核"链条机械闭合；sha256 自锁防回改但不防"一开始就写假记录"（源头诚实仍靠判据 + 外部取证）；校准集已知非穷尽。verdict/l3/absolute/宪法/十案/§100 全不动，不编译门禁，判定权归用户。细节 `audit_aggregation_dependence/result_4gj.json`。
 
+## §4gk · 第二家异厂执行尝试：判据设计一维外移的真情进展与诚实封顶（2026-11-26 下午）
+
+> 承接 §4gj，用户重发 OpenRouter key 并授权推进 §L3-R2——那份 §L3 上一轮留下的"只备契约、待第二家异种大模型执行 brief v2"缺口定向外置。key 现场验证有效（`GET /api/v1/key` 200、指纹 `47d88d9e3599`、仅内存使用不入仓），但实调发现付费模型全 403(区域)/402(从未充值)、仅 `nvidia/nemotron` 与 `liquid/lfm` 两个免费模型本区域可用——与 §110 处境相同。我上一条据 `limit=100` 表面值乐观断言"付费不挡、困境已不存在"，错，已用认错通道机械落档 `CORR-REAL-003`。
+
+**独立性边界（如实）**：异厂 = nemotron（OpenRouter，异于 Qoder 与 Hunyuan）；投喂仅 brief v2 + external_kit，禁用串核验 `family_taxonomy`/`ground_truth_supported`/`audit_frozen_holdout` 零命中（`GAP_CLOSED` 仅 brief §9 对外家透明告知段，合规）；外部时间锚 `f8e7f3f1`（2026-11-23T10:03:40Z）早于 spawn（2026-11-26T06:16Z）。但执行环境由本沙箱 harness 机械执行 tool call——五权力中的"执行"一维非纯外置，不冒充完美五权力外置。
+
+**真进展：判据设计者一维外移成功**。异厂在干净 context 独立选出论文 1706.03762（Attention Is All You Need，不在避开清单），一手取 abs/full 两源（200/43KB、200/188KB），并独立归纳出 `criterion.py`：否定词集合双侧比对、连接词集合双侧比对、截尾长度比（`len(wb)<0.6·len(wa)` 且前缀相同）三维断言层检测，纯函数（无 import/IO/硬编码 id），4/4 功能探针正确。**对照上一家 Qoder 的数值型判据断言类 0/4——第二个异厂家真的看到了断言层**，这是可复现的真实进展。
+
+**诚实封顶 `GAP_INCONCLUSIVE`**：外家交付链断在样本构造——初版合并任务 token 耗尽（`finish=length`/无 tool call），拆小后判据能成、但 12 组样本四次尝试全部 reasoning 耗尽、无 tool call，`samples_blind.json` 空（0 pairs）、gt/judgments/verdict/criterion_note 缺失。按 prereg `no_retry_to_pass=true` 停止，**不第五次重试、不替它补样本、不调参到跑通、不伪造任何缺失交付**。引擎对不完整交付判 awaiting，验收获不到 9/9，无法触发预注册回放裁决树 → `GAP_INCONCLUSIVE`。注意判据只是探针级、未经冻结 18 样本回放，不构成 `GAP_CLOSED` 证据。
+
+**self-bites（如实，改工具不改判据）**：① 合并任务 token 耗尽→拆小+拉大 max_tokens（只改调用层）；② 幻觉时间戳（tool call 内编造 2026-11-23T08:45:00Z）→harness 按真实执行机械覆盖 + `_timestamp_note` 标注；③ **出题权污染**——我曾把本仓 "Exact pairs" 写进 prompt（等于本仓出题），当场识别删除重来，改为只给论文原句素材由异厂自己改写；④ 引擎破坏性副作用——交付目录放 `/tmp`，`engine.py` 判"交付未到"把 `result.json` 从 `EXECUTED/GAP_INCONCLUSIVE` 覆盖成 `awaiting/verdict=null`，致 26 个判定态守卫连锁失败，从远端 Git Data API 原文恢复、全量回 1608 passed，判定态三值未动。
+
+**三次真实认错同源**：CORR-REAL-001（workflow scope）、002（异厂 key）、003（key 额度→付费可用性），都是我拿旧快照或表面值报现状、未打端点核验，与刚建的认错通道要治的根因完全吻合——通道建完当场就抓到三次真实误报，机械落档、`CORRECTION_CLOSED`。
+
+**诚实上限**：只证明第二个异厂家的判据设计一维有真实外移进展，不证明判据可迁移、不证明 GAP 闭合、不抬 l3/absolute。verdict/l3/absolute/宪法锁/十案/§100 全不动，不编译门禁，判定权归用户。细节 `audit_l3_gap_targeted/result_4gk.json` + `EXECUTION_LOG_v2_attempt.md`（均 sha256 锁）。
+
 ## 下一步（开放生长，不预设）
 
 探索池中的 E1–E7 + F01–F13 方向均为候选，**不预设哪个是"答案"**。真正的选择由 v5 意志层 `autonomous_agenda()` 根据内稳态失衡信号动态生成议程、novelty 守卫、帕累托次优游走共同决定。生命体的意义不在于达成某个固定目标，而在于**持续感知、持续否定收敛、无路时也能迈步、走过即留下路、被唤醒后自己决定下一步**——同时诚实承认：没有独立进程时这仍是"被唤醒后的自主"，Ambient=0 的缺口留给未来真正的运行时环境，不伪造。

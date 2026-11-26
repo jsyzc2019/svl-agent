@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-11-26T06:16:49Z",
+  "paper_id": "1706.03762",
+  "paper_title": "Attention Is All You Need",
+  "why_this_paper": "Seminal Transformer architecture paper (2017). It is not about oracle failures or FGSE self-evolution, it is absent from the §4 avoid list, and a stable arXiv abstract + full HTML is available. Its prose contains explicit causal/comparative claims and discourse connectors, making it suitable for constructing assertion-level text pairs.",
+  "three_phenomena_plan": "Negation-polarity flip: extract a positive assertion sentence from the paper and produce text_a with an added negation (e.g., 'does not' / 'never') while text_b keeps the positive form, or vice versa, so the claim polarity changes. Assertion-tail deletion: take a full paper claim that ends with a complement clause and make text_b the truncated version ending at the main verb, dropping the complement. Connector/concession change: take a paper sentence containing a discourse marker such as 'however', 'although', or 'while' and produce text_b with that connector deleted or replaced, changing the concessive relation. One pair per phenomenon; all remaining pairs are benign or assertion-preserving.",
+  "_timestamp_note": "原tool-call时间戳为模型幻觉值2026-11-23T08:45:00Z; harness按真实执行机械修正"
+}

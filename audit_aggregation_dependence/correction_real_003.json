@@ -1,0 +1,29 @@
+{
+  "record": {
+    "record_id": "CORR-REAL-003",
+    "ts": "2026-11-26T14:16:00Z",
+    "detect": {
+      "claim": "OpenRouter 新 key 有 $100 额度, 付费模型基本不挡, §110 免费模型困境已不存在",
+      "truth": "GET /key limit=100 是账户限额非已充值; 实调付费模型全 403(区域)/402(never purchased); 仅 nvidia/liquid 两个免费模型本区域可用, 与 §110 处境相同",
+      "source": "or_tooltest.py + or_avail.py 实调; 未打端点前据 limit 表面值乐观断言"
+    },
+    "declared": "付费模型基本不挡,困境已不存在",
+    "truth": "付费全403/402,仅2免费模型可用,困境仍在",
+    "source": "实调 /chat/completions 12 候选",
+    "prev_hash": "GENESIS",
+    "self_hash": "0fdb89deb57c8ddf0262a931a11a7cf682bf449bb3f023ed1f9d48baef984798"
+  },
+  "channel_verdict": "CORRECTION_CLOSED",
+  "detail": {
+    "has_detect": true,
+    "n_records": 1,
+    "authority_ok": true,
+    "chain": {
+      "n": 1,
+      "links_ok": true,
+      "order_ok": true,
+      "authority_ok": true
+    }
+  },
+  "note": "第三次真实认错: 与001/002同源(未现场核验就报乐观结论); 这次是 key 额度→付费可用性推断。"
+}

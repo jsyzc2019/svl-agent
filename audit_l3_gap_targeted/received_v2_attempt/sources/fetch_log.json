@@ -1,0 +1,20 @@
+{
+  "fetches": [
+    {
+      "source": "abs",
+      "url": "https://arxiv.org/abs/1706.03762",
+      "http": 200,
+      "bytes": 43071,
+      "fetched_at": "2026-11-26T06:17:18.409346+00:00",
+      "file": "sources/1706.03762_abs.html"
+    },
+    {
+      "source": "full",
+      "url": "https://arxiv.org/html/1706.03762",
+      "http": 200,
+      "bytes": 188707,
+      "fetched_at": "2026-11-26T06:17:19.372760+00:00",
+      "file": "sources/1706.03762_full.html"
+    }
+  ]
+}

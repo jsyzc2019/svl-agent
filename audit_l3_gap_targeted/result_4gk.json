@@ -1,0 +1,38 @@
+{
+  "experiment": "L3_GAP_TARGETED_EXTERNAL",
+  "round": "§4gk",
+  "phase": "第二家异厂执行尝试（OpenRouter key 授权后）",
+  "executed_at_utc": "2026-11-26T06:16:49Z",
+  "external_judge": "nvidia/nemotron-3.5-super-vl:free (OpenRouter; 异于 Qoder 与 Hunyuan)",
+  "external_time_anchor": {"commit": "f8e7f3f1", "server_ts": "2026-11-23T10:03:40Z", "spawn_after_anchor": true},
+  "independence": {
+    "fed_content": "brief v2 + external_kit only; 无本仓判据/gt/冻结样本/历史裁决",
+    "leak_check": "family_taxonomy/ground_truth_supported/audit_frozen_holdout 零命中; GAP_CLOSED 仅 brief §9 透明告知",
+    "execution_env": "本沙箱 harness 机械执行 tool call; 执行一维非纯外置，如实标注"
+  },
+  "delivered": {
+    "prereg": true, "paper_selection": true, "primary_sources": true,
+    "criterion_py": true, "samples_blind": false, "gt_private": false,
+    "judgments": false, "verdict": false, "criterion_note": false, "EXECUTION_LOG": true
+  },
+  "real_progress": {
+    "criterion_designer_externalized": true,
+    "detail": "异厂在干净 context 独立归纳出断言层判据（否定集合/连接词集合/截尾长度比三维，纯函数），4/4 功能探针正确，AST 纯函数。对照上一家 Qoder 数值型判据断言类 0/4——第二个异厂家看到了断言层。",
+    "not_yet": "未经过本仓冻结 18 样本机械回放（因交付链断），不构成 GAP_CLOSED 证据"
+  },
+  "verdict": "GAP_INCONCLUSIVE",
+  "verdict_basis": "prereg verdict_tree: 交付验收未全过 / 样本为空 / gt-judgments-verdict 缺失 → GAP_INCONCLUSIVE。no_retry_to_pass=true，四次构样本失败后停止，不补样本、不调参到跑通、不伪造交付。",
+  "engine_state": "engine.py 对 /tmp 交付判 awaiting；其覆盖 result.json 的副作用已从远端权威态恢复（EXECUTED/GAP_INCONCLUSIVE/l3=false/abs=false）",
+  "self_bites": [
+    "调用层 token 预算：合并任务 finish=length/tool_calls=0，拆小+拉大 max_tokens（只改调用层）",
+    "幻觉时间戳：tool call 内 2026-11-23T08:45:00Z 为编造旧值，harness 机械覆盖 + _timestamp_note 标注",
+    "素材池污染：曾把本仓 Exact pairs 写进 prompt（出题权污染），当场识别删除重来，改为只给论文原句",
+    "四次构样本失败：模型 reasoning 耗尽无 tool call，按 no_retry_to_pass 停止",
+    "引擎破坏性覆盖：result.json 被改 awaiting 致 26 测试失败，远端原文恢复，全量回 1608"
+  ],
+  "honest_boundary": "只证明第二个异厂家的判据设计一维有真实外移进展；不证明判据可迁移、不证明 GAP 闭合、不抬 l3/absolute。判据质量本身也只是探针级，未经冻结集回放。",
+  "does_not_overturn": ["§107–§115 九案", "§L3 上一轮 FULLCHAIN_PARTIAL", "verdict=GAP_INCONCLUSIVE", "l3=false", "absolute=false", "宪法锁 fe56291b"],
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "final_verdict_by_human": true
+}

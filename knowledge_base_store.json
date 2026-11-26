@@ -10034,6 +10034,32 @@
       "evidence": "一手现场；零战利品；判定态不动",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-AUDIT213",
+      "kind": "thinking_experience",
+      "mechanism": "免费 reasoning 模型(nemotron/liquid)经 OpenRouter 的通量画像：tool calling 可用、结构化 JSON 能逐字落盘，但一旦要求'逐字复制句子+多变换+打包'就把 token 全烧在 reasoning 里 finish=length、无 tool call。判据归纳这种单产物任务能成(4/4探针)，多样本构造这种多产物任务四次全败。契约 no_retry_to_pass 下诚实封顶 GAP_INCONCLUSIVE，不补样本/不调参到跑通。",
+      "trigger": "当用免费 reasoning 模型驱动需要多步结构化交付的外部 agent 时",
+      "action": "按产物拆小任务、只给干净素材、max_tokens 拉大(只改调用层不改判据)；单产物(判据)可成即如实记进展；多产物(样本)失败即按 pre-reg 封顶，不第五次重试、不替它补；空交付如实保留为失败证据。",
+      "provenance": "§4gk result_4gk.json + EXECUTION_LOG_v2_attempt.md + received_v2_attempt/criterion.py",
+      "timestamp": "2026-11-26T06:27:30.991792+00:00",
+      "support": "异厂 nemotron 独立归纳断言层判据(否定/连接词/截尾三维,4/4探针,纯函数)确实看到断言层——对照上一家 Qoder 数值判据断言0/4；但 samples 0组、gt/judgments/verdict 缺失,引擎判交付未到,封顶 INCONCLUSIVE。",
+      "evidence": "一手异厂 tool call；sha256锁；零伪造交付；判定态与宪法锁不动；不编译门禁",
+      "addressable": false,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META176",
+      "kind": "external_insight",
+      "mechanism": "外部判定引擎可能有破坏性副作用：把交付目录放在 /tmp 跑 engine.py，它判'交付未到'就把 result.json 从权威态 EXECUTED/GAP_INCONCLUSIVE 覆盖成 awaiting/verdict=null，连带 26 个读判定态的守卫测试连锁失败。判定态文件不是只读输入——跑引擎前须确认交付路径，跑后须复核权威态；被覆盖用远端 Git Data API 原文恢复最快。另：投喂外部 agent 的独立性核验要查禁用串，GAP_CLOSED 出现在 brief§9 透明告知段是合规的，不能一刀切当泄漏。",
+      "trigger": "当运行会写 result/判定态文件的外部引擎，或给独立 agent 组装投喂包时",
+      "action": "跑引擎前确认交付路径正确、备份权威态；跑后立即复核 verdict/l3/absolute；被覆盖从远端原文恢复并记 self-bite；投喂包禁用串按上下文判定(透明告知≠泄漏)；本轮 exact-pairs 写进 prompt 的出题权污染当场识别删除。",
+      "provenance": "§4gk self_bites + CORR-REAL-003 + EXECUTION_LOG_v2_attempt.md",
+      "timestamp": "2026-11-26T06:27:30.991792+00:00",
+      "support": "引擎覆盖致26失败→远端恢复→全量1608 passed；判定态三值未动。三次真实认错(001/002/003)同源:未现场核验就报乐观结论。",
+      "evidence": "一手现场；零战利品；判定态不动；不编译门禁",
+      "addressable": false,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {
