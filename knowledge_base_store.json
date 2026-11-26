@@ -10190,6 +10190,19 @@
       "evidence": "一手现场; 元命题机械化; 双口径防事后挑; 负向自咬; 表演性自我批评守卫; 不伪造pivot; 零战利品; 判定态不动",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META186",
+      "kind": "thinking_experience",
+      "mechanism": "论证取证工作台产品化(§4gu换实践性猎场): 用户'死嗑自己累了换实践猎场'→不再内省, 把491条KB偏误库+36门禁取证纪律做成对外可用工具argument_audit.html(单文件/纯前端/文字不上传), 9类机械信号(伪托权威/无出处名言/绝对化/数字断言/强因果/情绪煽动/以偏概全/伪二选一/确定性包装)可追溯KB; 诚实边界写明'只标可疑不判真假,命中≠错误未命中≠属实'。ground-truth用article_factcheck.json真实核查13claim验证:伪托类召回6/8=0.75, 两条语义级'局部属实细节走样'(王小波/闵子骞)漏检如实记为公开盲区, 不粉饰成全覆盖。",
+      "trigger": "当积累的判断力需要变成别人能用的产出、或从内省转向对外实践时；当要把一次性分析报告产品化为可复用工具时",
+      "action": "把散落的一次性分析(article_factcheck)与知识库(491 KB)抽象成规则JSON(signal_rules.json,每条标KB溯源)+纯函数引擎(scan.py)+单文件HTML(内嵌同规则); 用已有ground-truth做召回验证并如实记录漏检盲区; headless浏览器实测交互(演示→7类/13命中/13高亮)+6项守卫(规则溯源/正则可编译/已知case/双引擎一致/召回基线/判定态不动); 显著位置写诚实边界防用户误当裁判。",
+      "provenance": "§4gu argument_audit.html+audit_argument_audit/{signal_rules.json,scan.py,bias_cards.json,result.json,demo_screenshot.png}+tests/test_argument_audit.py",
+      "timestamp": "2026-11-26T07:50:54.971542Z",
+      "support": "9类信号11正则全部可编译; 偏误速查60卡; ground-truth伪托类召回0.75(6/8)盲区如实记录; headless实测演示7类13命中13高亮; 6守卫passed; 全量1648→1654; 判定态三值/宪法锁/§100/十案全不动; 纯前端无联网无上传; 未编译门禁未新增异厂调用。",
+      "evidence": "一手现场; 能力产品化; 对外实践; 规则可追溯; ground-truth验证; 盲区如实; 诚实边界; 零战利品; 判定态不动",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

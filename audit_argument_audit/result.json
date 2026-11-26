@@ -1,0 +1,52 @@
+{
+  "experiment": "§4gu-argument-audit-productization",
+  "round": "§4gu",
+  "status": "EXECUTED",
+  "generated": "2026-11-26T07:51:00.308079Z",
+  "what": "把对外取证能力产品化为单文件工具 argument_audit.html",
+  "artifacts": [
+    "argument_audit.html",
+    "audit_argument_audit/signal_rules.json",
+    "audit_argument_audit/scan.py",
+    "audit_argument_audit/bias_cards.json",
+    "audit_argument_audit/demo_screenshot.png"
+  ],
+  "signal_rules": 9,
+  "regex_total": 11,
+  "bias_cards": 60,
+  "ground_truth": {
+    "source": "article_factcheck.json",
+    "claims_total": 13,
+    "need_external_verify": 8,
+    "tp": 6,
+    "fn": 2,
+    "recall": 0.75,
+    "honest_misses": [
+      "王小波插队时躲起来看书排遣孤寂(局部属实细节走样)",
+      "闵子骞拜孔子读书后面色由蜡黄变红润(典故走样)"
+    ],
+    "why_missed": "语义级改写/典故细节走样,正则无法捕捉;不粉饰为全覆盖"
+  },
+  "browser_e2e": {
+    "tool": "chromium headless",
+    "action": "点击演示→扫描",
+    "result": "7类信号/13处命中/13处高亮",
+    "screenshot": "audit_argument_audit/demo_screenshot.png"
+  },
+  "tests": {
+    "file": "tests/test_argument_audit.py",
+    "count": 6,
+    "all_passed": true
+  },
+  "honest_bound": [
+    "机械扫描只标可疑信号不判真假;命中≠错误未命中≠属实",
+    "伪托类召回0.75,语义走样盲区公开",
+    "文字纯本地处理不上传",
+    "不替代一手核验,判定权归人"
+  ],
+  "kernel_verdict_unchanged": "GAP_INCONCLUSIVE",
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "no_new_gate": true,
+  "no_external_agent": true
+}

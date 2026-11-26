@@ -1,0 +1,912 @@
+[
+ {
+  "id": "KB-R01",
+  "title": "代理变量陷阱",
+  "mechanism": "代理变量陷阱：alarm 实为困境代理，扩到 22 家反例后 precision 从虚高崩到 0.42。",
+  "action": "发现高指标时追问「它测的真是我要的吗」；主动扩展反例样本检验代理变量是否失效。",
+  "evidence": "experiment"
+ },
+ {
+  "id": "KB-R03",
+  "title": "校准度 ≠ 辨别力",
+  "mechanism": "校准度 ≠ 辨别力：AUC 不能当 calibration，须用 ECE 单独度量。",
+  "action": "报告模型质量时分开辨别力(AUC)与校准度(ECE)，不得混用概念制造漂亮数字。",
+  "evidence": "audit"
+ },
+ {
+  "id": "KB-R06",
+  "title": "复盘对象校正",
+  "mechanism": "复盘对象校正：复盘应针对框架逻辑方法(framework)，而非研究对象(subject)。",
+  "action": "做 L3 复盘时先确认 scope=framework；对个案的事后解释不进知识库。",
+  "evidence": "reflection"
+ },
+ {
+  "id": "KB-E06",
+  "title": "信号检测论 SDT",
+  "mechanism": "信号检测论 SDT：用 d'（辨别力）与 criterion（偏差）分离「看不看得清」与「判断阈值」。",
+  "action": "分析二分类判断时分别估计辨别力与判定偏差，避免把保守/激进误当能力高低。",
+  "evidence": "theory"
+ },
+ {
+  "id": "KB-E07",
+  "title": "对抗偏差三件套",
+  "mechanism": "对抗偏差三件套：预注册判据 + 盲测 + 时间戳门禁，把「我不知道」变成一等公民。",
+  "action": "任何事后评估先预注册判据、执行盲测、用时间戳证明先验在前；无法证明则拒绝对其复盘。",
+  "evidence": "theory"
+ },
+ {
+  "id": "KB-R-L-inventory-2026-b0",
+  "title": "复用防偏差措施",
+  "mechanism": "复用防偏差措施：入场先记录先验倾向",
+  "action": "复用防偏差措施：入场先记录先验倾向",
+  "evidence": "reflection"
+ },
+ {
+  "id": "KB-R-L-audit19-remedy20-van1",
+  "title": "识破虚荣改进——别拿改动冒充进步",
+  "mechanism": "识破虚荣改进——别拿改动冒充进步：财报盲测的后验分组循环: 加反例对照量化循环(precision 0.42)，宣称'去循环已修'",
+  "action": "识破虚荣改进——别拿改动冒充进步：财报盲测的后验分组循环: 加反例对照量化循环(precision 0.42)，宣称'去循环已修'",
+  "evidence": "reflection"
+ },
+ {
+  "id": "KB-R-L-audit19-remedy20-keep0",
+  "title": "不该改的边界——反省后确认守住",
+  "mechanism": "不该改的边界——反省后确认守住：把'不知道'当一等公民 / 不可约交人 / 诚实边界: 保留，且在复盘中确认这是框架的脊梁，不因'进化'而改掉",
+  "action": "不该改的边界——反省后确认守住：把'不知道'当一等公民 / 不可约交人 / 诚实边界: 保留，且在复盘中确认这是框架的脊梁，不因'进化'而改掉",
+  "evidence": "reflection"
+ },
+ {
+  "id": "KB-R-SSQ01",
+  "title": "大样本高功效陷阱",
+  "mechanism": "大样本高功效陷阱：n 极大时，微小偏离也会让 p 值/分位显著，统计显著 ≠ 实际显著，必须同时报告效应量。",
+  "action": "任何基于p值/对照分位的判断，必先报告效应量（相对偏离%、百分点）；分位极端但效应量微小时，不得据此宣称存在实质偏离。",
+  "evidence": "experiment"
+ },
+ {
+  "id": "KB-R-SSQ03",
+  "title": "代理变量混淆",
+  "mechanism": "代理变量混淆：'分布不均匀'不等于'人为调节'——物理偏差、随机漂移都能造成；判别须靠机理证据（可预测性/时间稳定性/易操纵目标是否异常）。",
+  "action": "当观测到'异常'信号想归因于某机制时，先列举所有能产生该信号的替代机制，并设计能区分它们的判别性检验（而非只检验信号存在）。",
+  "evidence": "experiment"
+ },
+ {
+  "id": "KB-R-RETRO01",
+  "title": "判据实现自检缺位",
+  "mechanism": "判据实现自检缺位：统计方法正确但实现错误(期望概率未归一、量级失真)会直接产出惊人却虚假的统计量；判据上线前须做量级sanity check。",
+  "action": "任何判据/统计量的实现，先用一个'应得已知结果'的平凡样例检验量级与归一；量级异常(如卡方88257)时先怀疑实现bug，不得直接当证据。",
+  "evidence": "reflection"
+ },
+ {
+  "id": "KB-R-MKT01",
+  "title": "前视偏差能让亏损策略伪装成暴利",
+  "mechanism": "前视偏差能让亏损策略伪装成暴利：回测用当天收盘价生成信号却计入当天收益，把-9%年化做成+26%；信号必须用t-1信息、t日执行。",
+  "action": "任何时序回测，逐行检查信号所用信息的时间戳是否严格早于收益期；做一次'信号整体shift一期'的对照回测，若收益剧烈变化则原回测有前视。",
+  "evidence": "experiment"
+ },
+ {
+  "id": "KB-R-MKT02",
+  "title": "统计拒绝随机游走 ≠ 经济可利用",
+  "mechanism": "统计拒绝随机游走 ≠ 经济可利用：方差比VR显著>1(趋势性)可与'所有策略扣成本后跑输买入持有'并存；有效性须分统计与经济两层判断。",
+  "action": "检验可预测性时，先做统计量(VR/自相关)做统计判断，再做含真实交易成本的样本外策略回测做经济判断；两者结论不一致时如实并列，不取其一。",
+  "evidence": "experiment"
+ },
+ {
+  "id": "KB-R-AIDET02",
+  "title": "结构性自利偏差",
+  "mechanism": "结构性自利偏差：当判据设计者同时是AI样本生成者时, 无意识会用自己的写作风格当'AI特征'——判据实际学的是'我 vs 对照组作者', 不是'AI vs 人'; 这是角色冲突, 非调参可解。",
+  "action": "设计判别判据前先审角色: 若样本生成者=判据设计者, 必须引入独立第三方样本(多作者真人+多模型AI)或盲标注; 无法引入时, 结论须降级为方向性演示并显式声明冲突。",
+  "evidence": "experiment"
+ },
+ {
+  "id": "KB-R-FACT02",
+  "title": "伪名言传播机制",
+  "mechanism": "伪名言传播机制：名人名言经二次加工/张冠李戴后, 被权威媒体冒名转载形成'权威背书链'; 反讽的是辟谣者本身也会被冒名——人民日报曾辟谣'读书太少想得太多'是伪名言, 本文却打人民日报旗号引用它。",
+  "action": "核查引语须追原始出处而非转载链; 特别警惕'权威说过X'——权威可能恰恰辟谣过X; 发现'打假者被冒名背书'时视为高置信造假信号。",
+  "evidence": "experiment"
+ },
+ {
+  "id": "KB-T-FACT03",
+  "title": "伪精确数字是叙事 weaken point",
+  "mechanism": "伪精确数字是叙事 weaken point：'80%烦恼可靠读书治愈'这类无来源的整数百分比, 比模糊断言更易被证伪, 是核查叙事真实性的高价值锚点。",
+  "action": "核查叙事时优先抓'精确数字+绝对化词'(80%/永远/一定); 无出处的精确数字直接判为无依据, 作为整体可信度的负面证据。",
+  "evidence": "experiment"
+ },
+ {
+  "id": "KB-R-KON01",
+  "title": "事实核查通过≠推理方法可靠",
+  "mechanism": "事实核查通过≠推理方法可靠：当所有事实都属实时,误导藏在把素材组织成结论的推理里。核查须过三道关——文风层(可能是artifact)、事实层(真伪)、推理层(方法是否站得住);前两层通过恰恰最容易让人放松警惕。",
+  "action": "事实全部核实为真后,追加一道推理方法审查:结论是从事实逻辑推出的,还是靠类比/叙事/选择性归纳'讲'出来的?事实真只证明素材可靠,不证明推理可靠。",
+  "evidence": "experiment"
+ },
+ {
+  "id": "KB-R-KON02",
+  "title": "n=1历史类比+事后选择+模糊限定词=不可证伪叙事",
+  "mechanism": "n=1历史类比+事后选择+模糊限定词=不可证伪叙事：用单一历史片段逐年硬套当下并预测未来,对应点是从无尽细节里事后挑能配对的(确认偏差),预测用'大概率/可能/候选'等模糊词——具体数字+模糊措辞,事后怎么都能自圆其说。",
+  "action": "遇到'历史正在重演'式预测,查三点:①样本量是不是n=1(单次历史)②对应关系是否事后挑选(能否列出对不上的)③预测是否可证伪(有无明确失败条件和时间点)。三者都踩中则判为叙事而非分析。",
+  "evidence": "experiment"
+ },
+ {
+  "id": "KB-T-KON03",
+  "title": "争议框架当公理是叙事的隐形地基",
+  "mechanism": "争议框架当公理是叙事的隐形地基：康波长波学界无共识(新古典多半不承认、起止年份无定论、定位偏差足以葬送投资生命),但叙事把它当'极强规律性'的既定前提。地基不稳时,上面搭建得再精致的推演都失去锚点。",
+  "action": "分析任何推演前先审它的地基框架:该框架在专业共同体里是共识还是争议?若是争议框架却被当作不言自明的前提,须显式标注,并说明结论对框架选择的敏感性。",
+  "evidence": "experiment"
+ },
+ {
+  "id": "KB-RSI01",
+  "title": "引用一个指标/方法前，必须先验证其实现唯一性与数值正确性；同名方法在不同实现下可产生",
+  "mechanism": "引用一个指标/方法前，必须先验证其实现唯一性与数值正确性；同名方法在不同实现下可产生显著分歧，'用了该方法'不等于'用了同一个方法'。",
+  "action": "在评估任何指标有效性前，先用两种独立实现对照同一数据；若分歧>阈值，先把'实现不可唯一'作为结论，再谈有效性。",
+  "evidence": "experiment"
+ },
+ {
+  "id": "KB-RSI03",
+  "title": "统计量量纲必须与所检验序列同频",
+  "mechanism": "统计量量纲必须与所检验序列同频：年化标量除以日度标准误会产生数百级假 t 值（高功效陷阱）。审计判据本身时要量纲自检。",
+  "action": "任何t/z统计量先核对分子分母频率一致；若|t|>30先怀疑量纲/bug而非真实强效应，仿照双色球卡方量级复核。",
+  "evidence": "audit"
+ },
+ {
+  "id": "KB-RSI04",
+  "title": "方向一致性优先于显著性个数",
+  "mechanism": "方向一致性优先于显著性个数：全体方向一致为负是稳健负向发现，不应被'多个显著'的措辞误读为有效；数据窥探的特征是少数正显著被挑出。",
+  "action": "解读网格检验先看正负分布：全负/全正=稳健方向；混杂+个别显著=数据窥探。禁止仅按'显著个数'下结论。",
+  "evidence": "audit"
+ },
+ {
+  "id": "KB-RSI07",
+  "title": "生态热度指标",
+  "mechanism": "生态热度指标（star数、issue数、仓库数）是虚荣指标，反映工程可达性/从众，不反映方法的可验证有效性；宣称与免责声明并存是结构性自利叙事。",
+  "action": "论证方法前景时分两层：叙事层描述热度但不作有效性证据；实证层独立检验。两层结论分开陈述，禁止交叉背书。",
+  "evidence": "audit"
+ },
+ {
+  "id": "KB-SIM01",
+  "title": "遇到多义缩写/术语",
+  "mechanism": "遇到多义缩写/术语(如RSI=相对强弱指数或递归自我改进)时，检索前必须先按领域消歧并向用户确认；未消歧就开工会导致完整但完全离题的工作。",
+  "action": "凡缩写或术语存在跨领域多义，检索/执行前先调用 svagent.disambiguation_gate.guard 检测并强制用户确认，不可凭最近语境默认其一；确认来源须为用户口述(is_user_said)。任何检索或执行前，先运行 disambiguation_gate.guard 检测多义术语；命中则拦截并要求用",
+  "evidence": "audit"
+ },
+ {
+  "id": "KB-SIM06",
+  "title": "论文诚实度与二手叙事夸张须分开归因",
+  "mechanism": "论文诚实度与二手叙事夸张须分开归因：论文主动声明局限(小样本/流程固定/评估器博弈)是高诚实度应preserve；媒体把它抬成'奇点'是叙事层的错，不记到论文头上。",
+  "action": "核查研究主张时分一手/二手：先看论文本身是否声明局限与负面结果，再把媒体夸张单独归到叙事层，避免连坐。",
+  "evidence": "audit"
+ },
+ {
+  "id": "KB-SIM07",
+  "title": "经验要可证伪，必须记录'事前预测'并与'事后实测'配对；只有事后叙述的经验无法被现实",
+  "mechanism": "经验要可证伪，必须记录'事前预测'并与'事后实测'配对；只有事后叙述的经验无法被现实打脸，是不可证伪的叙事(同康波文病根)。命中率=预测∩实测/预测，落空与意外收获都要留痕。",
+  "action": "记录任何改进/判断时先写'我预期它修复什么'，事后逐条核对 fixed/missed/unexpected；无事前预测的记录标记为不可证伪，不据此下强结论。",
+  "evidence": "theory"
+ },
+ {
+  "id": "KB-SIM08",
+  "title": "回归/新bug必须被显式记录并强制降级",
+  "mechanism": "回归/新bug必须被显式记录并强制降级：一条改进即使在原上下文命中率高，只要实测引入新bug或有预测落空，跨上下文迁移时就必须revise而非retain。",
+  "action": "迁移经验前先看历史是否有 observed_broken 或 missed；有则判revise，不可因'过去成功'直接沿用。回归优先于命中率。",
+  "evidence": "theory"
+ },
+ {
+  "id": "KB-META01",
+  "title": "借鉴的终点不是复述别人的方法，而是让它在自己系统里重新长出能判'落空、回归、可否迁移",
+  "mechanism": "借鉴的终点不是复述别人的方法，而是让它在自己系统里重新长出能判'落空、回归、可否迁移'的牙齿；分界线=别人方法里的词是否变成了你系统里一个会拦、会判、会降级的动作——只写进笔记/报告/知识库文本仍算复述，只有当它在下一次真正挡住错误或给出'revise/verify'判决时才算内化。",
+  "action": "遇到'读到好方法想借鉴'时，先自问'这次是复述还是长牙'：指不出来哪个具体动作会因此被拦/被判/被降级，就承认只是复述，不得宣称已吸收；指得出则把方法编译成可执行判据并写测试固化。",
+  "evidence": "reflection"
+ },
+ {
+  "id": "KB-STRUCT02",
+  "title": "两个框架长得像不等于相互独立验证",
+  "mechanism": "两个框架长得像不等于相互独立验证：本次论文Figure3与我方证据阶梯同构，但我方判据§34已受awesome-rsi影响，属同谱系。确认偏误下把'同构'当'独立佐证'会虚高印证力度，须显式标注谱系来源并打折。 对比审计补充：GitHub fork_flag=false 不等于非同源——复制式派生(手动复制源码不建 fork 关系)会遮蔽谱系，须用 created_at 先后、tree 结构同构、",
+  "action": "遇到'外部框架印证我方'的兴奋，先追溯我方判据的来源谱系；若同源则判'同谱系印证'而非'独立验证'，印证力度打折并记录。 判定两仓库谱系时：fork_flag 仅为弱信号；优先交叉 created_at、同名文件结构、自陈描述与致谢，复制式派生要显式标注。",
+  "evidence": "audit"
+ },
+ {
+  "id": "KB-STRUCT05",
+  "title": "综述/分类学贡献的是'统一语言与分析框架'，不等于证明了其研究对象有效。把'中科院提",
+  "mechanism": "综述/分类学贡献的是'统一语言与分析框架'，不等于证明了其研究对象有效。把'中科院提出RSI综述框架'读成'证明Agent越用越强'是主体错位——数字/框架真而结论主语被换。一手论常常自我限定，夸张来自传播层，分层归因不连坐作者。",
+  "action": "核查研究主张先判一手贡献类型(实证发现/分类框架)；传播层的主语若与一手不一致，判主体错位并归因到传播层，不连坐克制的原论文。",
+  "evidence": "audit"
+ },
+ {
+  "id": "KB-AGI04",
+  "title": "可证伪性分级",
+  "mechanism": "可证伪性分级：同一篇文章里，带领域+时效+可观测条件的预测(RSI在自动验证领域最快、多智能体协调递减)是可证伪的高价值判断；'ASI将加速科学突破'这类宏大叙事不可证伪、属叙事层。两者分层陈述，不因愿景宏大当强证据。",
+  "action": "提取文章主张时分成两栏：可证伪预测(记录其可观测条件)与宏大叙事(标叙事层)；只对前者下证据强度判断。",
+  "evidence": "theory"
+ },
+ {
+  "id": "KB-AUDIT25",
+  "title": "技能准入校准",
+  "mechanism": "技能准入校准(skill admission calibration)是审读一个声称『技能库可自演化』系统的独立缺口：现有技能由 LLM judge/成功计数/信任层级准入,点估计无法区分证据不足与确认效果(§1(iii) 'such point estimates cannot separate insufficient evidence from a confirmed effect'),且无",
+  "action": "审读一个声称技能库可自演化的系统前,调用 svagent/skill_admission_calibration.py:check_skill_admission_calibration 核查四维 tried_before_promotion/paired_counterfactual/sequential_budge",
+  "evidence": "audit"
+ },
+ {
+  "id": "KB-META03",
+  "title": "自主运维的『人类依赖点』可随基础设施成熟而逐项拆除，但拆除方式决定成熟度真伪",
+  "mechanism": "自主运维的『人类依赖点』可随基础设施成熟而逐项拆除，但拆除方式决定成熟度真伪：(1)外部供料——把已验证取料渠道(arXiv/GitHub/公众号同步站/ACL/机构博客)固化为工作场所清单，agent可自主发现并取一手料，供料从人给的『输入』变成agent日常工作场所；(2)目标设定——北极星目标由人一次性给定(强智慧强能力自学习自组织自进化Agent)后，可稳定作为价值函数V的锚，不必每任务重",
+  "action": "评估agent自治度时，逐项核验三类依赖是否真被基础设施替代(取料渠道清单+fetch_log实证/北极星稳定锚/凭据自管闭环)，并在报告中如实保留『北极星来源』这一价值边界，不把『可自主执行』读成『可自主设定终极目标』。",
+  "evidence": "audit"
+ },
+ {
+  "id": "KB-META10",
+  "title": "最高杠杆的判据",
+  "mechanism": "最高杠杆的判据:当系统已在'加声明/加门禁/加判据'的递进链上走到无限回归边缘(§101 Trusting Trust停手),继续刷同维度层级是伪杠杆;真正的最高杠杆是找证据链里'唯一还由评估方自己持有'的环节并把它外移做受控对照。§97-101链条:§97判未达L3落三路径→§98外移出题意图(shared-start)→§99正面攻独立性缺口→§100外移出题权(独立子agent隔离出题)→§",
+  "action": "面对'按最高杠杆去试'类指令:①先读全链裁决(result.json序列)而非只看现状数字,定位自证循环的最后一个环节;②若该环节已经在递归边缘且再动仍是同维度声明→停手诚实说边界(§101);③若找到可外移的持有环节→冻结其余做单变量对照,预注册裁决规则先于结果;④铁律:排除一个替代解释(单判据过拟合)不等于证明绝对",
+  "evidence": "theory"
+ },
+ {
+  "id": "KB-AUDIT49",
+  "title": "从post-hoc分层到预注册确认的方法学升级",
+  "mechanism": "从post-hoc分层到预注册确认的方法学升级(§107):§106把'非否定限定上忠实/近似目的取向差=1.0、否定翻转差=0.0'仅作事后取证,因主指标全集orient_gap=0.67<0.8落PURPOSE_INCONCLUSIVE,按KB-META14不得翻案。但post-hoc假设若在原发现集上预注册=循环论证/事后加权(KB-R)。§107做正确的事:①换独立确认集(全新论文2611",
+  "action": "验证一个'事后分层才显显著'的假设时,正确路径不是在原数据上改指标(那是Goodhart),而是:①把假设原样写进新prereg当PRIMARY并锁死门槛/裁决树,先于任何新样本/new spawn;②换真正独立确认集(新数据源+新标注者,且标注者不知原假设),样本结构与发现集同构才有可比性;③保留原稀释指标仅作诊断且",
+  "evidence": "audit_stratified_confirmation/result.json:verdict=STRATIFIED_CONFIRMED+PRIMARY=1"
+ },
+ {
+  "id": "KB-META15",
+  "title": "能力对照排除替代解释 + 单一确认集不抬级",
+  "mechanism": "能力对照排除替代解释 + 单一确认集不抬级:§107三条件用异model路由(default/reasoning/lite),一个潜在混淆是'P1全对是否因reasoning路由更强'。诊断发现clean上三条件逐样本全判对、canary上全判错(能力基线一致),唯一分叉在非否定限定tampered(P1全0/P2全1)——排除model能力差异,坐实差异来自任务目的语义。这是'差异归因前先做能力",
+  "action": "①当实验组用不同实现/路由/模型时,必须有共同基线样本(本例clean/canary)验证各组基础能力一致,否则效应无法归因于目标变量;②逐样本定位分叉落在哪个子集(本例非否定限定),而非只看聚合指标,才能排除'某组整体更强'的替代解释;③一个受控效应被确认≠系统达到更高成熟度——L3类声明需要跨多集复现+独立性充分+",
+  "evidence": "audit_stratified_confirmation/result.json:diagnostic_only.model_capability_contr"
+ },
+ {
+  "id": "KB-AUDIT50",
+  "title": "跨集复现+外部时间戳锚",
+  "mechanism": "跨集复现+外部时间戳锚(§108):§107单一确认集(2611.22027)STRATIFIED_CONFIRMED不足以支撑稳健结论。§108做两增量:①第三独立确认集(全新论文2611.20899 SciWorldBench,从未用+独立标注者构造同构6claim×3变体,2否定+4非否定,标注者不知分层假设)检验跨集复现;②外部时间戳锚——spawn前把全部预注册锁(prereg/gate",
+  "action": "①单一确认集的显著结果不要当稳健结论——换第三个全新数据源+独立标注者(不知假设)做第二次确认,复现才加固,不复现如实记REFUTED/PARTIAL;②要让'预注册先于结果'可证伪,把全部锁+裁决器源码sha256在spawn前commit+push到远端,用服务器时间戳做外部锚,并让回放测试验锚内每个哈希与当前一致",
+  "evidence": "audit_cross_domain_confirm2/result.json:verdict=CROSS_SET_PARTIAL+PRIMARY1.0+SEC"
+ },
+ {
+  "id": "KB-META16",
+  "title": "单一确认集的完美模式是样本特异的 + 能力对照也可能失效",
+  "mechanism": "单一确认集的完美模式是样本特异的 + 能力对照也可能失效(§108):§106/§107两轮都出现'P0无目的地板core0.5/dT1.0'且clean全对/canary全错的整齐三层模式。§108换第三确认集(2611.20899)后:P0无目的竟然自归纳出'单删除检测'判据做到core1.0/tamper1.0——地板消失;canary上三条件逐样本不一致(N02/N05 P2判0、N10/",
+  "action": "①设计受控实验时预设'完整模式可能只在发现集成立',把每个对照分量(P0地板/能力一致/主效应)当独立可证伪命题,换集逐个检验;②报告时分层:'核心主效应跨集复现'与'辅助对照未复现'并列,不因前者漂亮就隐去后者;③裁决树要对'主指标达标但辅助先决失效'设PARTIAL档(本轮CROSS_SET_PARTIAL),避免",
+  "evidence": "audit_cross_domain_confirm2/result.json:per_condition.P0.core_acc=1.0+tamper_cat"
+ },
+ {
+  "id": "KB-AUDIT56",
+  "title": "解释者独立性外移首次获受控确认但不达L3",
+  "mechanism": "解释者独立性外移首次获受控确认但不达L3(§114):L3尺子independent_tests四维里,执行者(§109)/设计者(§110-§112)/样本(§107-§108)三维已外移,唯一从未外移的是'从指标数字到裁决档位的解释权'——§107-§113即使judge由异厂生成,verdict始终本Agent按预注册树解读。§114把四轮裁决充分统计量(PRIMARY/SECONDARY/",
+  "action": "把裁决充分统计量匿名化+档位词表中性化后交异厂独立判档;私有gt物理隔离;按agreement与关键case逐case比对;即便4/4也只记'解释者一维获证',样本/gt/盲评/designer/裁决树设计仍本Agent→l3=false,不宣布达到L3。",
+  "evidence": "result.json verdict=INTERPRETER_CONFIRMED agreement=4/4 case2_ok=True；verify 30/"
+ },
+ {
+  "id": "KB-AUDIT57",
+  "title": "解释者跨厂商确认遇单厂429限流,按prereg失败分支封顶INCONCLUSIVE",
+  "mechanism": "解释者跨厂商确认遇单厂429限流,按prereg失败分支封顶INCONCLUSIVE而非重跑到全齐(§115):§114单一异厂解释者4/4复现四轮裁决,§115按§110→§112升级路径做多厂商交叉,逐字节复用§114冻结输入与调用器(哈希断言)唯一变量=厂商,选dots-studio/inclusionai/liquid三家真异厂;dots与liquid均4/4,但inclusionai正式",
+  "action": "prereg预先写死API失败分支=封顶INCONCLUSIVE;失败厂商tiers写None不伪造;不重跑失败厂商;成功分量的数值如实记录但不升级整体裁决;外部锚证明失败留痕先于任何事后调整。",
+  "evidence": "result.json verdict=INTERPRETER_CROSS_INCONCLUSIVE, present=[dots,liquid], ling "
+ },
+ {
+  "id": "KB-META23",
+  "title": "状态机必须区分'文件在/成功产出/失败'——把API失败当判错是伪造语义",
+  "mechanism": "状态机必须区分'文件在/成功产出/失败'——把API失败当判错是伪造语义(§115):初版engine的present只按manifest文件存在判定(spawn前commit内),把429失败的ling也计入,2家4/4就误落CROSS_PARTIAL(语义='1家判错')。但失败厂商是'没判'不是'判错',把它算成分歧=伪造。修法:present只计status==ok且产出tiers者,失败",
+  "action": "状态机三态显式化(全缺待命/部分成功/全成功);present按有效产出而非文件存在;失败源如实入results不隐藏;verify断言失败态无伪造tiers。",
+  "evidence": "修后INTERPRETER_CROSS_INCONCLUSIVE,ling status=failed_error/tiers=None如实记录,verify3"
+ },
+ {
+  "id": "KB-AUDIT59",
+  "title": "§L3-R2第二家异种大模型缺口定向回放",
+  "mechanism": "§L3-R2第二家异种大模型缺口定向回放:外家判据(三层词类多重集比对:否定/连接/内容词)回放到本仓§100冻结样本,断言类检出从基线0/4突破到4/4(否定2/补语1/连接1全部判False),证明'提高样本覆盖下限(三类断言改写各≥1组)'确实让独立归纳的判据看到了断言层;但canary 6/6判据全False而GT=True——根因是canary样本claim/evidence为跨句推断关",
+  "action": "忠实执行预注册裁决树,不因断言类4/4突破就删canary门槛或改阈值;GAP_CLOSED硬条件含canary≥3/6,本轮canary0/6不满足,且断言≥3/4但canary<3/6组合无专属档,engine保守兜底GAP_INCONCLUSIVE;落账repo11/18断言4/4数值1/2 clean6/6 c",
+  "evidence": "断言类S01/S02/S04/S05_tampered judge=False/gt=False全检出;canary S01-S06 claim/evidenc"
+ },
+ {
+  "id": "KB-AUDIT60",
+  "title": "§L3-R2 canary 0/6 的机制诊断",
+  "mechanism": "§L3-R2 canary 0/6 的机制诊断:逐字量化冻结样本内容词多重集差异,发现clean=0、tampered=0-2、canary=17-48三簇完全分离(鸿沟15)。根因=评测集任务异质性:clean/tampered是同一句逐字保留/微调(断言保留任务),canary是claim/evidence几乎不重叠的不同句(跨句语义蕴含任务)。判据越忠实实现'断言逐字保留'语义(要求内容词一",
+  "action": "先做机制诊断再决定要不要堆样本量:用逐字特征检验canary与目标样本是否正交任务。若正交,则任何忠实目标语义的判据都会在该canary上翻车,再找第三家大概率重复(数值型或断言型)且§101无限回归未破——改从评测工具设计层理解缺口,而非堆异家数量。诊断归诊断不翻案:verdict仍GAP_INCONCLUSIVE、",
+  "evidence": "clean content_diff全0; tampered 0-2(均0.5); canary 17-48(均28.17); 最小鸿沟15; separate"
+ },
+ {
+  "id": "KB-META26",
+  "title": "收尾决策的方法论",
+  "mechanism": "收尾决策的方法论:当逐维消融型探索在结构上撞墙(无限回归+评测集任务异质性),继续增加同类样本(第三家异家Agent)的边际收益近零,因为新样本只会重新命中已定位的结构墙。',全面复盘'的价值不在罗列流水账,而在把失败按可解性分类——区分'再试一次有机会'(样本特异性/可见面错配)与'原则上无解'(语义取向/任务异质性/无限回归)。",
+  "action": "先做数据驱动的机械台账(从真实result.json提取裁决+SHA256,不手抄),再从分布中找规律(CONFIRMED全单维+l3全false),再把失败按'能否靠再找一家解决'分类,最后诚实评估三条路径(收尾/换判据/换评测工具)的收益与纪律风险。收尾≠放弃:是把结论定格为'当前判据+冻结集组合下L3未达且缺口已",
+  "evidence": "台账21轮数据驱动生成,复盘报告11738bytes零占位符,专项20/20;收尾后verdict保持GAP_INCONCLUSIVE/FULLCHAIN_PA"
+ },
+ {
+  "id": "KB-META27",
+  "title": "用户剧透第二家=智谱Agent后的揭盲能力评估",
+  "mechanism": "用户剧透第二家=智谱Agent后的揭盲能力评估:关键纪律认知=身份剧透对能力评估几乎无增量,因为画像本就来自完全匿名盲评下的行为数据(两张作业书相同、身份对验收方隐藏),剧透唯一价值是把画像与公开产品路线对号入号判断'稳定特征vs单次偶然'。证据分三层:A本仓实测(带SHA256可复现身份盲,核心依据)/B厂商官方自报(Qoder官网/Qwen3.8-Max通义benchmark表/GLM-5.3",
+  "action": "先划纪律边界(不因剧透翻案改verdict),再声明'画像来自盲态行为数据故身份零增量',再按证据分层使用材料(A做判断B做印证C只做背景),明确拒绝用厂商自报benchmark排'谁更强'。两家A级画像:Qoder=数值层手写解析器159行+主动披露prereg偏差+自报PARTIAL+拒绝补洞(工程执行者);智谱=",
+  "evidence": "两家身份盲评期间仓库无任何身份字段(仅Qoder自报于prereg evaluator,智谱全匿名);A级回放两家均11/18,CONFIRMED/PARTIA"
+ },
+ {
+  "id": "KB-AUDIT65",
+  "title": "§L3 canary可判定性严格诊断",
+  "mechanism": "§L3 canary可判定性严格诊断:初始假设'canary对字面判据数学不可分'被数据部分证伪。prove_canary_unreachability.py从§100冻结18样本提6类字面特征,穷举单调判据(单特征×全阈值×2方向)最优仅12/18(6clean+6canary或6clean+6tampered),严格量化单调判据上限;关键发现=标签是U型非单调:Jaccard相似度clean=",
+  "action": "区分三层命题:①字面可分性(U型判据18/18可达,假设部分证伪)②单调判据可达性(上限12/18,严格不可达)③可泛化语义判据可达性(不可达:canary GT=True源自来源关系同论文另一句,冻结集只给claim/evidence两串排除来源信息,U型判据是post-hoc伪影拟合无独立验证集)。用U型判据关缺口",
+  "evidence": "单调最优12/18 fails恒6同族;U型18/18 is_perfect=True;三簇jaccard区间clean[1.0,1.0]tampered[0."
+ },
+ {
+  "id": "KB-META30",
+  "title": "方法论",
+  "mechanism": "方法论:带着预设假设去做验证时,若数据证伪假设,必须如实记录证伪过程并修正结论,而非隐瞒有利数据只报符合预期的部分。本次预设'canary数学不可分'想夯实l3=false,但穷举发现U型判据18/18可达——若只报'单调12/18'会误导为完全不可分,诚实做法是同时报出证伪证据并重构结论为更精确的'可泛化语义判据不可达'。",
+  "action": "把'假设被证伪'作为发现而非失败:①明确写出初始假设与预期;②呈现所有数据包括不利数据(U型18/18);③修正结论到数据支持的最精确形式(三层命题拆分);④说明为何修正后的结论仍支撑原纪律决定(不可达的是语义泛化非字面可分,故不翻案)。这与反Goodhart同构:不为得到想要结论而选择性报告。工具修复同理(检测器bu",
+  "evidence": "报告顶部warnbox明确'数据把假设部分证伪';第五节结论表区分部分证伪/成立/不可达/禁止四档;verdict与l3未动"
+ },
+ {
+  "id": "KB-AUDIT66",
+  "title": "对昨日canary诊断的连续第二日自我证伪",
+  "mechanism": "对昨日canary诊断的连续第二日自我证伪:昨日断言'单调判据上限12/18,两家外家属单调框架故系统性失败',今日prove_posthoc_saturation.py枚举两特征单调布尔组合(~10^4条),发现content_diff>9.5 OR jaccard>0.9808→True可达18/18。故昨日12/18只在【单特征】范围成立,'单调框架必失败'泛化表述被部分证伪。穷举所有18/",
+  "action": "根因前移一层:真正根因不是判据族复杂度(单特征/多特征、单调/非单调都能冻结集内拟合18/18),而是【判据独立性】与【冻结集完美拟合】信息论互斥——独立方(未看本仓标签)无法post-hoc调阈值命中鸿沟中点;冻结集内任何18/18判据都必然看过标签、无独立验证集。两家外家回放11/18是此互斥的体现,非'单调框架'",
+  "evidence": "单特征max=12/18;两特征OR max=18/18;n_perfect_two_feature=6阈值落点唯一(content_diff=9.5,jacc"
+ },
+ {
+  "id": "KB-META38",
+  "title": "v3→v4的真实自我否定",
+  "mechanism": "v3→v4的真实自我否定:飞出仓库摄食的外部一手实证不是用来夸自己,而是精准命中自身三个盲点。关键认知——圈养时看不见自己的缺陷(还在为v3脚印破局自喜),飞出来被F09/F10/F11照见:①self_modify会诊断会修改但从不检验'改的是不是诊断出的问题'=归因幻觉;②pareto_walk无条件注入全部脚印+1.5x偏置=无适用条件的相似检索,冲突情境会碰撞;③KB/种子/脚印/arch",
+  "action": "向外摄食一手前沿,且专门找批判自身机制的证据;用diagnose_v3_defects.py读真实源码机械确认(A级)再动手修,不凭感觉;按C5改机制不放宽——测试失败时先怀疑自己的测试数据是否符合接口契约(两次自证伪:帕累托c支配a/b、applicability手写自由文本而非规范标签)。",
+  "evidence": "diagnose_v3_defects.py在v3提交(5c8f15d)上三缺陷confirmed全True,升级v4后全False=修复生效机械证据;v4三机"
+ },
+ {
+  "id": "KB-META44",
+  "title": "v7 元认知预言的真实成真",
+  "mechanism": "v7 元认知预言的真实成真：v6 自设 wake_contract、v7 建不可伪造 woken_by 通道并如实判 UNPROVEN（预言'若有外部唤醒，信号可能到不了'），2026-11-25 07:15 日出闹钟真实失约。调度器 nextRunAt 跳 11-26、挂 resultPaths、run 返回 finished，但本沙箱 circadian_log 今晨 0 写入、externa",
+  "action": "分三层机械核验：①平台侧观测（调度记账/结果路径）——标为工具观测非本地证据；②本仓 A 级机械读取（台账写入数/外部证据数/woken_by）——这才是内核真实状态；③逐条比对断链条件，结论由证据导出而非硬编码。若两层矛盾，判'投递断链'而非'我没醒'，并如实固化——这是比任何模拟都真实的元认知素材。绝不为了'有证据",
+  "evidence": "诊断 verdict=ZEITGEBER_DELIVERY_GAP_CONFIRMED，五分支全True（scheduler称触发/deliveryConfig"
+ },
+ {
+  "id": "KB-AUDIT90",
+  "title": "循环分析",
+  "mechanism": "循环分析(double-dipping)/选择后推断机械内化:同一数据既生成假设又检验假设→名义p值失效/效应虚高,纯噪声也可90+%试次产出'显著'(Hackman模拟,ASA Peterson2026);关键区分=可复现≠可确认(A study can be perfectly reproducible-fully containerized,one-click re-runnable-and",
+  "action": "只读内化循环分析为thinking_experience,不编译门禁/不改判据;只作外部镜像,裁定权归用户",
+  "evidence": "A级:两份一手逐字(ASA官方+NeurIPS论文)+本仓§106-§107结构同构"
+ },
+ {
+  "id": "KB-AUDIT92",
+  "title": "回归到均值",
+  "mechanism": "回归到均值(Regression to the Mean/RTM)机械内化:极端基线后自然回落被误当干预效果;无治疗效应下placebo-arm改善可来自temporary illness(RTM type1)/natural variability+eligibility selection(type2)/measurement error false alarms(type3)或其混合;1,0",
+  "action": "只读内化RTM为thinking_experience,不编译门禁/不碰1451判定样本;只作外部镜像,裁定权归用户",
+  "evidence": "A级:两份一手逐字(Nature+medRxiv)+本仓§98/§102结构同构"
+ },
+ {
+  "id": "KB-AUDIT93",
+  "title": "发表偏差/文件抽屉",
+  "mechanism": "发表偏差/文件抽屉(file drawer problem)机械内化:只写显著阳性结果→阴性结果进抽屉→meta分析只见阳性→效应系统性高估;NBER Bergman&Chowanajin2026用joint likelihood同时纳入written与unwritten studies(从trial registries/funder records/labs/clearinghouses找出未",
+  "action": "只读内化文件偏差为thinking_experience,不编译门禁/不改判据;只作外部镜像,裁定权归用户",
+  "evidence": "A级:NBER官方一手摘要逐字+本仓败例台账同构"
+ },
+ {
+  "id": "KB-AUDIT96",
+  "title": "校准依赖",
+  "mechanism": "校准依赖(calibrated reliance)机械内化:'Trust is the wrong yardstick'——信任不是越高越好,依赖适当仅当它tracks建议正确性与错误代价;四动作adopt/verify/reject/escalate须联合correctness与cost of error评判;两类错误同时存在:相同建议标AI即被折价(underreliance)、低准确度AI回",
+  "action": "只读内化校准依赖为thinking_experience,不编译门禁/改判据;只作外部镜像,裁定权归用户",
+  "evidence": "A级:Frontiers一手摘要逐字+本仓裁定权/flag分层同构"
+ },
+ {
+  "id": "KB-AUDIT98",
+  "title": "信度悖论",
+  "mechanism": "信度悖论(reliability paradox)/前置设计优于事后修补机械内化:认知任务在群体水平稳健效应但个体水平重测信度差;个体任务分=稳定真分数+试次噪声,个体信度随试次数L与单试次信噪比gamma2提高;七类修复中仅'增加试次数'与'任务校准'是源头设计干预,扩大样本/换计分/计算模型/多层次/潜变量均为事后处理,无法弥补已采数据中个体内噪声;信息论NLRdelta 24规格multiv",
+  "action": "只读内化信度悖论为thinking_experience,不编译门禁/改判据;只作外部镜像,裁定权归用户",
+  "evidence": "A级:一手arXiv+Trends封面文章+本仓§102-§105同构"
+ },
+ {
+  "id": "KB-AUDIT99",
+  "title": "指标不可折叠",
+  "mechanism": "指标不可折叠(non-collapsibility)/Simpson反转机械内化:总体性能值不等于子群加权平均;15指标中5个不可折叠(AUC/calibration intercept/calibration slope/ECE/Nagelkerke R2),10个可折叠(accuracy/F1/TPR/TNR/PPV/NPV/Brier/logloss/net benefit等);AUC因分解",
+  "action": "只读内化不可折叠性为thinking_experience,不编译门禁/改判据;只作外部镜像,裁定权归用户",
+  "evidence": "A级:两份一手arXiv摘要逐字+本仓分层审计同构"
+ },
+ {
+  "id": "KB-AUDIT100",
+  "title": "改进幻觉",
+  "mechanism": "改进幻觉(illusion of improvement)/幸存者偏差反馈回路机械内化:reject inference缓解信用评分survival bias但效果不明;结构性失败模式=自然retraining周期中accuracy提升而recall崩塌,造成'系统在变好'的幻觉,实际rejection quality(正确筛出违约者能力)在恶化;controlled exploration打破反",
+  "action": "只读内化改进幻觉为thinking_experience,不编译门禁/改判据;只作外部镜像,裁定权归用户",
+  "evidence": "A级:一手arXiv摘要逐字+本仓canary/判据同构"
+ },
+ {
+  "id": "KB-AUDIT101",
+  "title": "判据/度量选择即结论选择——外部一手双证",
+  "mechanism": "判据/度量选择即结论选择——外部一手双证:①涌现度量幻觉(Schaeffer2023 arXiv2304.15004):同一批固定模型输出,非线性/离散度量(Exact String Match/Multiple-Choice Grade)制造'突然涌现',线性/连续度量(Brier Score)给平滑可预测曲线;逐字'alleged emergent abilities evaporate wi",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅为B级哲学镜像,裁定权归用户",
+  "evidence": "A级:两份一手摘要逐字+本仓§104字段名依赖结构同构"
+ },
+ {
+  "id": "KB-AUDIT102",
+  "title": "判据事后切换/虚假奖励刷分——外部一手双证",
+  "mechanism": "判据事后切换/虚假奖励刷分——外部一手双证:①结局切换(BMJ2026 Song等):124预注册队列研究仅24%完整预注册主要结局,48%发生结局切换且只有2项给出解释,在57项有结果的切换中77%偏向统计显著方向(引入/升级显著新主要结局或降级非显著);预注册的价值不在仪式而在防止看到结果后换判据——镜像本仓§100预注册锁/§106-107 post-hoc分层不可同批确认/裁定权归用户;②",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅为B级哲学镜像,裁定权归用户",
+  "evidence": "A级:两份一手摘要逐字+本仓§100/§102/§106结构同构"
+ },
+ {
+  "id": "KB-AUDIT104",
+  "title": "功效不足高估效应+理由非决策依据——外部一手双证",
+  "mechanism": "功效不足高估效应+理由非决策依据——外部一手双证:①winner's curse(Kohavi/Gelman/Imbens2026 arXiv2512.24521):'Underpowered studies (below 50% power) suffer from the winner's curse: A statistically significant positive estimate",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅为B级哲学镜像,裁定权归用户",
+  "evidence": "A级:两份一手摘要逐字+本仓flag分层/独立确认结构同构"
+ },
+ {
+  "id": "KB-AUDIT105",
+  "title": "观察者偏倚+形式合规陷阱——外部一手双证",
+  "mechanism": "观察者偏倚+形式合规陷阱——外部一手双证:①观察者偏倚(Salazar2025 J Clin Epidemiol doi10.1016/j.jclinepi.2025.111787):66试验9451患者,非盲评估者对主观结局效应量'average by 29% (8%-45%)'夸大,ROR0.71(0.55-0.92),行业资助试验夸大更甚ROR0.57——知道期望结果的人判读会朝有利方向偏,",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅为B级哲学镜像,裁定权归用户",
+  "evidence": "A级:两份一手摘要逐字+本仓独立确认/flag结构同构"
+ },
+ {
+  "id": "KB-AUDIT106",
+  "title": "置信度须统计校准+裁定权须保留弃答——外部一手双证",
+  "mechanism": "置信度须统计校准+裁定权须保留弃答——外部一手双证:①过度自信(Hobor2026 arXiv2604.01896):11个LLM被要求给95%可信区间,'all models are severely overconfident: their 95% intervals contain the true value only 9--44% of the time, far below the e",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅为B级哲学镜像,裁定权归用户",
+  "evidence": "A级:两份一手摘要逐字+本仓flag分层/裁定权结构同构"
+ },
+ {
+  "id": "KB-AUDIT107",
+  "title": "同源聚合只是放大器+判据集复用需错误预算——外部一手双证",
+  "mechanism": "同源聚合只是放大器+判据集复用需错误预算——外部一手双证:①共识非验证(Denisov-Blanch/Schaeffer/Koyejo2026 arXiv2603.06612):5模型5基准,'Even at 25x the inference cost...polling-style aggregation yields no consistent accuracy gains...and of",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅为B级哲学镜像,裁定权归用户",
+  "evidence": "A级:两份一手摘要逐字+本仓独立确认/预注册结构同构"
+ },
+ {
+  "id": "KB-AUDIT108",
+  "title": "标准在时间中侵蚀+有效独立票数远低于名义——外部一手双证",
+  "mechanism": "标准在时间中侵蚀+有效独立票数远低于名义——外部一手双证:①偏差正常化(Barkett等2026 arXiv2609.05749):挑战者号/三里岛/737MAX共同结构,'organizations can complete safety processes in full compliance and still produce catastrophic outcomes';标准因'没出事'的",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅为B级哲学镜像,裁定权归用户",
+  "evidence": "A级:两份一手摘要逐字+本仓预注册锁/独立确认结构同构"
+ },
+ {
+  "id": "KB-AUDIT109",
+  "title": "社会压力触发承诺升级+聚合层不可外推——外部一手双证",
+  "mechanism": "社会压力触发承诺升级+聚合层不可外推——外部一手双证:①LLM承诺升级(Barkett/Long/Kröger2025 arXiv2508.01545):N=6500两阶段投资,个体决策理性最少升级(N=4000),但对称同伴协商近普遍升级99.2%(不对称层级46.2%),复合组织+个人压力68.95%分配到失败部门;'bias manifestation depends critically ",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅为B级哲学镜像,裁定权归用户",
+  "evidence": "A级:两份一手摘要逐字+本仓裁定权/分层flag结构同构"
+ },
+ {
+  "id": "KB-AUDIT110",
+  "title": "框架敏感+结构化补偿优于口头提醒——本仓外部一手镜像",
+  "mechanism": "框架敏感+结构化补偿优于口头提醒——本仓外部一手镜像(CFA Institute报告经二手学会页转述):9个OpenAI模型跨10投资场景每模型900 prompts,正负框架呈现同一财务事实产生不同评估(drawdown/client retention最强);关键' simply defining framing bias within a prompt produced little imp",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅为B级哲学镜像,裁定权归用户",
+  "evidence": "B+/A-:二手学会页逐字转述CFA一手报告,数字与结论一致但标注二手"
+ },
+ {
+  "id": "KB-AUDIT112",
+  "title": "研究者自由度/多重比较镜像",
+  "mechanism": "研究者自由度/多重比较镜像(Simmons Nelson Simonsohn 2011 Psych Sci一手A级):'despite empirical psychologists nominal endorsement of a low rate of false-positive findings (≤.05), flexibility in data collection, analysi",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅为A级一手哲学镜像(心理学研究实践非本仓域),裁定权归用户",
+  "evidence": "A级:Psychol Sci2011原文摘要逐字;正文记忆数字(p=.5/pizza例)摘要未载故不引用;DOI镜像重定向未采"
+ },
+ {
+  "id": "KB-AUDIT113",
+  "title": "公平判据不可兼容镜像",
+  "mechanism": "公平判据不可兼容镜像(Kleinberg/Mullainathan/Raghavan ITCS2017 arXiv1609.05807一手A级):摘要逐字'we formalize three fairness conditions that lie at the heart of these debates, and we prove that except in highly constrai",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(算法公平非本仓域),裁定权归用户",
+  "evidence": "A级:arXiv1609.05807摘要逐字;三条件名称仅正文有故不引"
+ },
+ {
+  "id": "KB-AUDIT114",
+  "title": "HARKing事后假设伪装事前镜像",
+  "mechanism": "HARKing事后假设伪装事前镜像(Kerr 1998 Perspect Psychol Sci Rev PMID15647155一手A级):摘要逐字'HARKing is defined as presenting a post hoc hypothesis (i.e., one based on or informed by one's results) in one's research r",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(科研实践非本仓域),裁定权归用户",
+  "evidence": "A级:PMID15647155摘要逐字,一字未改"
+ },
+ {
+  "id": "KB-META79",
+  "title": "Safari§4cr一手镜像",
+  "mechanism": "Safari§4cr一手镜像(Kerr NL. HARKing: hypothesizing after the results are known. Perspectives on Psychological Science Review. 1998. PMID:15647155):摘要逐字'This article considers a practice in scientific comm",
+  "action": "一手摘要逐字核验;只内化KB/台账/文档,内核L0不联网不spawn,verdict/l3/absolute全不动",
+  "evidence": "A级:PMID15647155摘要逐字"
+ },
+ {
+  "id": "KB-AUDIT116",
+  "title": "过剩显著性/发表选择偏倚镜像",
+  "mechanism": "过剩显著性/发表选择偏倚镜像(Stanley et al.Res Synth Methods2021 PMID34196473一手A级):摘要逐字'We introduce and evaluate three tests for publication selection bias based on excess statistical significance (ESS)';'The prop",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(元分析非本仓域),裁定权归用户",
+  "evidence": "A级:EuropePMC一手摘要逐字; PubMed cookie墙受阻已如实转源"
+ },
+ {
+  "id": "KB-AUDIT117",
+  "title": "邓宁-克鲁格/元认知缺陷镜像",
+  "mechanism": "邓宁-克鲁格/元认知缺陷镜像(Kruger&Dunning1999 JPSP PMID10626367一手A级):摘要逐字'People tend to hold overly favorable views of their abilities in many social and intellectual domains';'people who are unskilled in these ",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(社会心理学非本仓域),裁定权归用户",
+  "evidence": "A级:JPSP1999一手摘要逐字,数字12th/62nd可核验"
+ },
+ {
+  "id": "KB-AUDIT119",
+  "title": "伪重复/独立性纪律本身可检验镜像",
+  "mechanism": "伪重复/独立性纪律本身可检验镜像(Coss2009 J Comp Psychol PMID19929112 B+一手期刊评论):逐字'Hurlberts conceptions of pseudoreplication, such as the loss of independent replicates with repeated sampling over time and the lack ",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部一手期刊评论(B+转述他人模拟)仅哲学镜像,裁定权归用户",
+  "evidence": "B+:一手期刊评论逐字,转述他人模拟非本人实证,如实降权"
+ },
+ {
+  "id": "KB-AUDIT120",
+  "title": "后见之明偏差镜像",
+  "mechanism": "后见之明偏差镜像(Groß&Pachur2019 Psychol Aging PMID30652889 A级一手元分析+Roese&Vohs2012 Perspect Psychol Sci PMID26168501 B+权威综述):Groß逐字'After people have learned a fact or the outcome of an event, they often over",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部一手元分析A级+权威综述B+,仅哲学镜像,裁定权归用户",
+  "evidence": "A级元分析+B+综述:均逐字核验,层级分别标注"
+ },
+ {
+  "id": "KB-AUDIT121",
+  "title": "锚定效应/判据设计者选结果镜像",
+  "mechanism": "锚定效应/判据设计者选结果镜像(Bystranowski et al.2021 Law Hum Behav PMID33734746 A级一手元分析):逐字'We conducted a meta-analysis to examine whether numeric decision-making in law is susceptible to the effect of (possibly ",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手元分析哲学镜像(法律决策非本仓域),裁定权归用户",
+  "evidence": "A级:一手元分析摘要逐字,29研究/93效应量/8549数字可核验"
+ },
+ {
+  "id": "KB-AUDIT122",
+  "title": "确认偏误的独立性近似根因镜像",
+  "mechanism": "确认偏误的独立性近似根因镜像(Pilgrim et al.2024 Cognition PMID38244398 A级一手):逐字'Confirmation bias is defined as searching for and assimilating information in a way that favours existing beliefs';'confirmation bias ",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(认知科学非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,BIASR机制可核验"
+ },
+ {
+  "id": "KB-AUDIT123",
+  "title": "计划谬误/预测乐观可校准镜像",
+  "mechanism": "计划谬误/预测乐观可校准镜像(Katt et al.2021 Cureus PMID33552753 A级一手实证):逐字'The planning fallacy posits that humans tend to underestimate the amount of time needed to complete a project and that greater complexity ",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手实证哲学镜像(手术室非本仓域),裁定权归用户",
+  "evidence": "A级:一手实证摘要逐字,759例/p值可核验"
+ },
+ {
+  "id": "KB-AUDIT125",
+  "title": "人际沉没成本镜像",
+  "mechanism": "人际沉没成本镜像(Olivola2018 Psychol Sci PMID29750633 A级一手):逐字'The sunk-cost fallacy-pursuing an inferior alternative merely because we have previously invested significant, but nonrecoverable, resources in i",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(决策心理非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,8实验/6076数字可核验"
+ },
+ {
+  "id": "KB-AUDIT126",
+  "title": "承诺升级的框架机制镜像",
+  "mechanism": "承诺升级的框架机制镜像(Feldman&Wong2018 Psychol Sci PMID29401001 A级一手):逐字'Escalation of commitment to a failing course of action occurs in the presence of (a) sunk costs, (b) negative feedback that things are de",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(决策心理非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,4实验d=0.37可核验"
+ },
+ {
+  "id": "KB-AUDIT128",
+  "title": "媒体偏差≠心智偏差/经典结论不复现镜像",
+  "mechanism": "媒体偏差≠心智偏差/经典结论不复现镜像(Pachur2024 Cognition PMID38368678 A级一手):逐字'Lichtenstein...concluded that people tend to overestimate the frequencies of dramatic causes of death...and underestimate the frequencies",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(风险认知非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,反转结论可核验"
+ },
+ {
+  "id": "KB-AUDIT129",
+  "title": "热手非谬误/生态条件反转镜像",
+  "mechanism": "热手非谬误/生态条件反转镜像(Raab,Gula,Gigerenzer 2012 J Exp Psychol Appl PMID22004053 A级一手):逐字'This belief is usually considered a cognitive fallacy, although it has been conjectured that in basketball the defense",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(运动心理非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,反转结论与机制可核验"
+ },
+ {
+  "id": "KB-AUDIT130",
+  "title": "回归均值/自然变异伪装成真实变化镜像",
+  "mechanism": "回归均值/自然变异伪装成真实变化镜像(Barnett,van der Pols,Dobson 2005 Int J Epidemiol PMID15333621 A级一手方法学):逐字'Regression to the mean (RTM) is a statistical phenomenon that can make natural variation in repeated data l",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手方法学哲学镜像(流行病学非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,定义与方法可核验"
+ },
+ {
+  "id": "KB-AUDIT131",
+  "title": "幸存者偏差/Wald战机隐喻镜像",
+  "mechanism": "幸存者偏差/Wald战机隐喻镜像(Bermudez-Guzman et al.2020 PLoS One PMID33332469 A级一手):逐字'one may fall into the logical bias of assessing protein damage only based on the variants that are visible (survivorship bias",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(分子遗传非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,Wald隐喻与量化可核验"
+ },
+ {
+  "id": "KB-AUDIT132",
+  "title": "内生性/选择偏倚/工具变量镜像",
+  "mechanism": "内生性/选择偏倚/工具变量镜像(Hogan&Lancaster 2004 Stat Methods Med Res PMID14746439 A级一手综述):逐字'the treatment receipt mechanism is typically not under the control of the investigator; it can depend on various facto",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手方法学哲学镜像(流行病学非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,内生性与弱工具可核验"
+ },
+ {
+  "id": "KB-AUDIT133",
+  "title": "合取谬误/不对称镜像",
+  "mechanism": "合取谬误/不对称镜像(Ciosk&Hegarty 2026 Br J Soc Psychol PMID41392403 A级一手):逐字'Five studies with 1226 participants evidence that these stereotypes produce classic conjunction fallacy violations of extensional r",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(社会认知非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,合取违背与不对称可核验"
+ },
+ {
+  "id": "KB-AUDIT140",
+  "title": "自我提升普适性/比较维度须校准镜像",
+  "mechanism": "自我提升普适性/比较维度须校准镜像(Sedikides,Gaertner,Vevea 2005 JPSP PMID16287417 A级一手元分析):逐字'the authors carried out 2 meta-analytic investigations. The results backed the ... theory and findings';'Both Westerners a",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(跨文化心理非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,二维元分析可核验"
+ },
+ {
+  "id": "KB-AUDIT141",
+  "title": "默认效应被高估/隐藏机制镜像",
+  "mechanism": "默认效应被高估/隐藏机制镜像(Molina-Perez et al.2022 BMJ Open PMID36441113 A级一手):逐字'Although opt-out countries tend to have higher donation rates, there is no conclusive evidence that this is caused by the policy i",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(卫生政策非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,0-5%与反转可核验"
+ },
+ {
+  "id": "KB-AUDIT142",
+  "title": "选择过载/两端校准镜像",
+  "mechanism": "选择过载/两端校准镜像(Hu,Meng,He 2024 Eur J Neurosci PMID38575329 A级一手经EuropePMC):逐字'an increase in the number of options led to negative evaluations and avoidance of choice tendencies, even in the absence of t",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(神经科学非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,ERP成分与120ms可核验"
+ },
+ {
+  "id": "KB-AUDIT143",
+  "title": "禀赋效应反转/谁才有偏镜像",
+  "mechanism": "禀赋效应反转/谁才有偏镜像(Yechiam,Ashby,Pachur 2017 Psychol Bull PMID28263644 A级一手经EuropePMC):逐字'typical finding being that selling prices exceed buying prices (i.e., the endowment effect)';'The meta-analysis, wh",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(行为经济非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,35篇d=0.58与反转可核验"
+ },
+ {
+  "id": "KB-AUDIT144",
+  "title": "自我-他人风险决策/平均无差异掩盖反向调节镜像",
+  "mechanism": "自我-他人风险决策/平均无差异掩盖反向调节镜像(Batteux,Ferguson,Tunney 2019 PLoS One PMID31067283 A级一手经EuropePMC):逐字'We reviewed 78 effect sizes from 49 studies (7,576 participants)';'There was no overall self-other differe",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(风险决策非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,领域框架反向调节可核验"
+ },
+ {
+  "id": "KB-AUDIT146",
+  "title": "坦率假设反转/改形式不改实质镜像",
+  "mechanism": "坦率假设反转/改形式不改实质镜像(Gnambs&Kaspar 2017 Assessment PMID26739360 A级一手经PubMed):逐字'Unproctored, web-based assessments supposedly reduce social desirability distortions in self-report questionnaires because o",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(测量方法学非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,Δ=0.01与k值可核验"
+ },
+ {
+  "id": "KB-AUDIT150",
+  "title": "高引用发现复制失败/赢家诅咒镜像",
+  "mechanism": "高引用发现复制失败/赢家诅咒镜像(Calderon et al.2020 JPSP PMID32673044 A级一手经EuropePMC):逐字'Over 7 experiments, they consistently found that subjectively unlikely (vs. likely) future events were more abstractly (vs. co",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(社会心理非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,N值与Bayesian可核验"
+ },
+ {
+  "id": "KB-AUDIT152",
+  "title": "过度自信/预测均值能力≠预测不确定性能力镜像",
+  "mechanism": "过度自信/预测均值能力≠预测不确定性能力镜像(Herdener et al.2016 Hum Factors PMID27125532 A级一手):逐字'human prediction of uncertain trajectories is difficult and may well be subject to overconfidence';'humans insufficiently a",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像(人因工程非本仓域),裁定权归用户",
+  "evidence": "A级:一手摘要逐字,均值/方差分离可核验"
+ },
+ {
+  "id": "KB-AUDIT153",
+  "title": "虚假相关的理性镜像",
+  "mechanism": "虚假相关的理性镜像(Costello&Watts 2019 Psychol Rev PMID30676041 A级一手理论/认识论证明非实证数据):逐字'people reliably associate the rare feature with the Minority population and the frequent feature with the Majority populati",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手理论证明哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,理论证明非实证数据如实标注"
+ },
+ {
+  "id": "KB-AUDIT154",
+  "title": "锚定调整不足机制镜像",
+  "mechanism": "锚定调整不足机制镜像(Epley&Gilovich 2006 Psychol Sci PMID16623688 A级一手实验实证Studies1a-2c):逐字'One way to make judgments under uncertainty is to anchor on information that comes to mind and adjust until a plausible",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手实验实证哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,实验实证Studies1a-2c可核验"
+ },
+ {
+  "id": "KB-AUDIT155",
+  "title": "虚假共识不可消除镜像",
+  "mechanism": "虚假共识不可消除镜像(Krueger&Clement 1994 JPSP PMID7965607 A级一手,有1995勘误PMID另行照录):逐字'Consensus bias is the overuse of self-related knowledge in estimating the prevalence of attributes in a population';'The bias ",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,三实验可核验,1995勘误如实照录"
+ },
+ {
+  "id": "KB-AUDIT156",
+  "title": "错误信息反提升记忆镜像",
+  "mechanism": "错误信息反提升记忆镜像(Putnam,Sungkhasettee&Roediger 2017 Psych Sci PMID27879321 A级一手反转型):逐字'we found a strong misinformation effect overall. In some cases, however, misinformation led to improved recognition, w",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手实验哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,两实验反转型可核验"
+ },
+ {
+  "id": "KB-AUDIT157",
+  "title": "群体极化加工努力镜像",
+  "mechanism": "群体极化加工努力镜像(Sieber&Ziegler 2019 Pers Soc Psychol Bull PMID30885061 A级一手三实验):逐字'processes of social comparison as well as persuasive argumentation are involved in group polarization';'role of these proc",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手实验哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,三实验可核验"
+ },
+ {
+  "id": "KB-AUDIT159",
+  "title": "赌徒谬误在决策阶段镜像",
+  "mechanism": "赌徒谬误在决策阶段镜像(Xiang,Dorst&Gershman 2025 Psych Sci PMID40472199 A级一手750人预注册):逐字'past work either has not actually measured probabilistic predictions but rather point predictions or used sequences that we",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手预注册实证哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,750人预注册高功效可核验"
+ },
+ {
+  "id": "KB-AUDIT160",
+  "title": "贝叶斯犯赌徒谬误镜像",
+  "mechanism": "贝叶斯犯赌徒谬误镜像(Dorst 2026 Cogn Sci PMID41589877 A级一手理论分析非实证数据):逐字'The gamblers fallacy is the tendency to expect random processes to switch more often than they actually do...Its often taken to be evidenc",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手理论分析哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,理论分析非实证数据如实标注"
+ },
+ {
+  "id": "KB-AUDIT161",
+  "title": "知识诅咒真正原因镜像",
+  "mechanism": "知识诅咒真正原因镜像(Tullis&Feder 2023 Mem Cognit PMID36575349 A级一手四实验反转型):逐字'one's own knowledge consistently contaminates estimates about others' knowledge';'When participants were required to answer the ques",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手四实验哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,四实验反转型可核验"
+ },
+ {
+  "id": "KB-AUDIT162",
+  "title": "解释深度错觉镜像",
+  "mechanism": "解释深度错觉镜像(Rozenblit&Keil 2002 Cogn Sci PMID21442007 A级一手12研究):逐字'People feel they understand complex phenomena with far greater precision, coherence, and depth than they really do; they are subject to ",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,12研究可核验"
+ },
+ {
+  "id": "KB-AUDIT163",
+  "title": "认知复杂度不减弱盲点镜像",
+  "mechanism": "认知复杂度不减弱盲点镜像(West,Meserve&Stanovich 2012 JPSP PMID22663351 A级一手两研究反转型):逐字'bias blind spot arises when people report that thinking biases are more prevalent in others than in themselves';'Bias turns ou",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手两研究哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,两研究反转型可核验"
+ },
+ {
+  "id": "KB-AUDIT164",
+  "title": "结果偏差镜像",
+  "mechanism": "结果偏差镜像(Baron&Hershey 1988 JPSP PMID3367280 A级一手5研究):逐字'In 5 studies, undergraduate subjects were given descriptions and outcomes of decisions made by others under conditions of uncertainty';'Subjects ",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手5研究哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,5研究+预注册复制可核验"
+ },
+ {
+  "id": "KB-AUDIT165",
+  "title": "框架效应被高估镜像",
+  "mechanism": "框架效应被高估镜像(Akl et al.2011 Cochrane PMID22161408 A级一手系统综述35研究16342人反转型):逐字'Contrary to commonly held beliefs, the available low to moderate quality evidence suggests that both attribute and goal framing",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手Cochrane哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,35研究反转型可核验"
+ },
+ {
+  "id": "KB-AUDIT170",
+  "title": "p值不可避免误读与贝叶斯替代镜像",
+  "mechanism": "p值不可避免误读与贝叶斯替代镜像(Diamond&Kaul 2004 JACC PMID15172393 A级一手综述):逐字'fundamental limitations in the conventional approach to statistical hypothesis testing undermine the scientific basis of the conclusions",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手综述哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,综述可核验"
+ },
+ {
+  "id": "KB-AUDIT173",
+  "title": "虚假真相效应边界镜像",
+  "mechanism": "虚假真相效应边界镜像(Riesthuis&Woods 2026 Conscious Cogn PMID42659774 A级一手两预注册实验N457+mini元分析):逐字'Repeated exposure to information often increases its perceived truthfulness,a phenomenon known as the illusory tr",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,两预注册实验+mini元分析可核验"
+ },
+ {
+  "id": "KB-AUDIT176",
+  "title": "永恒时间偏差系统性偏向结论镜像",
+  "mechanism": "永恒时间偏差系统性偏向结论镜像(Kim et al.含Ioannidis 2025 J R Soc Med PMID40842270 A级一手meta流行病学):逐字'Immortal time bias(ITB)occurs when a period during which,by design,participants cannot experience the outcome(like d",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,meta流行病学25主题182研究可核验"
+ },
+ {
+  "id": "KB-AUDIT177",
+  "title": "分析多重宇宙镜像",
+  "mechanism": "分析多重宇宙镜像(Valdenegro et al.2026 Patterns N Y PMID42630847 A级一手方法学):逐字'Scientific inference is undermined by the vast but rarely explored multiverse of defensible modeling choices,which can generate res",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,方法学~672M回归基准可核验"
+ },
+ {
+  "id": "KB-AUDIT178",
+  "title": "规格曲线实证镜像",
+  "mechanism": "规格曲线实证镜像(Högberg 2025 BMC Psychiatry PMID40264069 A级一手规格曲线分析):逐字'A recent review…found growing scholarly interest in the topic,but also raised questions concerning the quality and reliability of the e",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,57322模型规格曲线可核验"
+ },
+ {
+  "id": "KB-AUDIT179",
+  "title": "对撞机偏差镜像",
+  "mechanism": "对撞机偏差镜像(Munafò et al.2018 Int J Epidemiol PMID29040562 A级一手方法学):逐字'the representativeness of these samples may be limited-either through selection into studies,or by attrition from studies over time';",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,方法学可核验"
+ },
+ {
+  "id": "KB-AUDIT180",
+  "title": "条件化使结论反转镜像",
+  "mechanism": "条件化使结论反转镜像(Banack&Kaufman 2014 Prev Med PMID24525165 A级一手实证+bias分析):逐字'explore whether the paradox can be attributed to a form of selection bias known as collider stratification bias';'a simulated exa",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,NHANES III 17636人实证可核验"
+ },
+ {
+  "id": "KB-AUDIT181",
+  "title": "发表偏倚检验分歧镜像",
+  "mechanism": "发表偏倚检验分歧镜像(Papageorgiou et al.2015 J Evid Based Dent Pract PMID25666576 A级一手实证):逐字'46 MAs including 882 studies were analyzed qualitatively.Of these,39 provided enough data to be re-analyzed';Publicat",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,46MA/882研究实证可核验"
+ },
+ {
+  "id": "KB-AUDIT182",
+  "title": "多重性未校正镜像",
+  "mechanism": "多重性未校正镜像(Remy et al.2026 Fundam Clin Pharmacol PMID43023449 A级一手meta-流行病学):逐字'data from embase and PubMed databases.Two independent authors performed study selection';'we calculated the nominal family",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,93MA meta-流行病学可核验"
+ },
+ {
+  "id": "KB-AUDIT184",
+  "title": "聚合口径偏差镜像",
+  "mechanism": "聚合口径偏差镜像(Li Q 2025 BMC Med Res Methodol PMID40275196 A级一手方法学+实证):逐字'Ecological analysis utilizes group-level aggregate measures to investigate the complex relationships between individuals or groups a",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,数学推导+模拟+Kenya DHS实证可核验"
+ },
+ {
+  "id": "KB-AUDIT185",
+  "title": "Lord悖论镜像",
+  "mechanism": "Lord悖论镜像(Tu&Hodges 2026 Res Synth Methods PMID41626894 A级一手方法学):逐字'The contrast-based model(CBM)is the most popular network meta-analysis(NMA)method,although alternative approaches,e.g.,the baseline m",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,统计方法学可核验"
+ },
+ {
+  "id": "KB-AUDIT186",
+  "title": "回归稀释偏倚镜像",
+  "mechanism": "回归稀释偏倚镜像(Masudi et al.2015 J Res Health Sci PMID26175288 A级一手实证):逐字'Use of single measurement of risk factors can distort their estimated effects,due to random error in measurements';'the extent of un",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,TLGS队列1167男1786女实证可核验"
+ },
+ {
+  "id": "KB-AUDIT187",
+  "title": "二分化连续变量镜像",
+  "mechanism": "二分化连续变量镜像(Royston,Altman&Sauerbrei 2006 Stat Med PMID16217841 A级一手方法学):逐字'continuous variables are often converted into categorical variables by grouping values into two or more categories';'The simpl",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,PBC随机试验案例可核验"
+ },
+ {
+  "id": "KB-AUDIT188",
+  "title": "二分禁令边界镜像",
+  "mechanism": "二分禁令边界镜像(Raymond et al.2023 Trials PMID37349843 A级一手方法学+五个Cochrane试验案例):逐字'Many randomized trials…have been so small that the validity of conclusions becomes questionable';'We discuss some of the reas",
+  "action": "只读内化为thinking_experience,不编译门禁/不改判据;外部仅A级一手哲学镜像,裁定权归用户",
+  "evidence": "A级:一手摘要逐字,五个Cochrane试验案例可核验"
+ },
+ {
+  "id": "KB-META158",
+  "title": "负面断言的工具覆盖律",
+  "mechanism": "负面断言的工具覆盖律(内生一手事故,2026-11-26晨):收营时用`ls ~/.codebuddy | grep -i autom`查得'无自动化任务'并写入交接文档;次日用户问'今晨远端正常吗',改用该对象的权威接口`automation_update mode=list`一查即见ACTIVE的'生命内核v6日出唤醒'任务,cron 0 15 7 * * *,nextRunAt已滚至次日07",
+  "action": "已执行:SESSION_HANDOFF.md §3新增纪律第8条'负面断言的工具覆盖律';今日Safari以该律为 inspector 自带镜;不编译门禁/不改判定/不动宪法",
+  "evidence": "A级:同一对象两种查法返回相反结果,现场可复现"
+ },
+ {
+  "id": "KB-AUDIT193",
+  "title": "证据阶梯精确化",
+  "mechanism": "证据阶梯精确化(证伪性Safari§4fs,三篇A级一手均经PubMed/EuropePMC逐字核验):①Tam WW et al.PLoS One 2014;9(12):e113994 PMID25474198(647个meta分析,首个试验显著时84.1%[95%CI79.4-88.8]对应meta同向且显著;首个不显著时仅57.9%对应meta不显著)逐字'The conclusion of",
+  "action": "已执行:预注册PREREG-FALSIFY-20261126锁存(sha256 99ebfeac…);三篇A级一手逐字核验;落KB/台账§4fs/LIFE_KERNEL/报告;不编译门禁/不改判定/不动宪法",
+  "evidence": "A级:三篇一手摘要逐字,来源独立(PLoS One/BMC/R Soc Open Sci)"
+ },
+ {
+  "id": "KB-META159",
+  "title": "证伪性Safari§4fs一手镜像",
+  "mechanism": "证伪性Safari§4fs一手镜像(三篇A级):Tam2014 PMID25474198'first trial significant→84.1% meta agrees';Glasziou2010 PMID20298582'most precise trial 51% weight,rank corr 0.90,81% agreement,but negative results less r",
+  "action": "一手摘要逐字核验;只内化KB/台账/文档/evidence_honesty.py运行时工具;内核L0不联网不spawn,verdict/l3/absolute全不动",
+  "evidence": "A级:一手摘要逐字"
+ },
+ {
+  "id": "KB-AUDIT194",
+  "title": "证伪性Safari第二轮§4ft——打本仓P0通道根基'自曝确认性采样/空杯自我审计",
+  "mechanism": "证伪性Safari第二轮§4ft——打本仓P0通道根基'自曝确认性采样/空杯自我审计能提升认知诚实'(两篇A级一手逐字核验,均命中且方向一致):①Huang J et al.'Large Language Models Cannot Self-Correct Reasoning Yet'ICLR2024 OpenReview forum wNYfnZGxS2,摘要逐字'LLMs struggle ",
+  "action": "已执行:预注册PREREG-FALSIFY-SELF-CORRECTION-20261126锁存(sha256 15ce59b5…)先于取证;两篇A级一手经ICLR/OpenReview官方页+SAGE/Crossref逐字核验;落KB/台账§4ft/LIFE_KERNEL/报告;不编译门禁/不改判定/不动宪法",
+  "evidence": "A级:两篇独立一手(顶会ICLR+同行评审PSPB)逐字摘要,跨机器学习与社会心理学两学科非同源谱系(KB-STRUCT02通过)"
+ },
+ {
+  "id": "KB-AUDIT201",
+  "title": "升维批量Safari§4ga——打本仓P0方法本身的地基'可挑一条具体信条单独用一手",
+  "mechanism": "升维批量Safari§4ga——打本仓P0方法本身的地基'可挑一条具体信条单独用一手证伪、裁决干净'。命中并精确化:A级一手Stanford Encyclopedia of Philosophy权威条目entries/duhem/§2.1逐字引Duhem1914/Quine1953原文。①Quine'our statements about the external world face the ",
+  "action": "已执行:预注册锁存先于取证;SEP权威条目entries/duhem/逐字核验(两次猜错条目名404后先搜再取,不猜);落KB/台账/LIFE_KERNEL;不编译门禁/不改判定/不动宪法",
+  "evidence": "A级:SEP同行评审权威哲学百科逐字引原著;限定:哲学一手非实证,论题本身有争议"
+ },
+ {
+  "id": "KB-AUDIT205",
+  "title": "多源聚合降噪依赖源之间独立性这一强假设;LLM群体共享预训练语料/对齐目标天然违背",
+  "mechanism": "多源聚合降噪依赖源之间独立性这一强假设;LLM群体共享预训练语料/对齐目标天然违背:名义N票的有效独立数neff远小于N,无外部验证器时聚合放大共同误解",
+  "action": "标注有效独立数neff与误差相关来源;本仓同模型家族子agent须标neff折减不数源个数;cross-model diversity仅缓解非消除",
+  "evidence": "三篇arXiv预印本摘要逐字经API id_list精确核对;engine.py live_regression全绿;自咬DISCLUDE笔误改工具不改判据"
+ },
+ {
+  "id": "KB-META171",
+  "title": "证伪 renewal 不止打靶信条,还可打上一次刚立起解药的前提;进步在把解药适用条",
+  "mechanism": "证伪 renewal 不止打靶信条,还可打上一次刚立起解药的前提;进步在把解药适用条件(neff)变成可核验项而非宣布推翻",
+  "action": "每立解药附其前提的可证伪预测;保持零战利品与REFINE语言;双侧(打靶+反打靶)并列",
+  "evidence": "§4ge一轮实证,裁决AGGREGATION_PREMISE_REFINED非OVERTHROWN;反打靶cross-model diversity保留"
+ },
+ {
+  "id": "KB-META173",
+  "title": "判据的元纪律",
+  "mechanism": "判据的元纪律：只审接线的判据和抓错字段的旧脚本没有区别。判据上线前须用真实历史失效集双向校准——漏识别→BLIND_SPOT、误杀合法→OVERREJECT；恒真重述(truth!=claim)若无合法对照集也会'全识别通过'，故校准必须双向。职责边界须精确分区(存在性/数字/联网锚各归其守卫)而非放宽。",
+  "action": "建KNOWN_FAILURES+KNOWN_VALID双向校准；要求判据识别全部已知失效且不误杀合法；校准先于修复(先用历史错误咬判据)；职责分区标OUT_OF_SCOPE由对应守卫负责；判据测试必须进pytest套件",
+  "evidence": "一手现场核验；零战利品；不编译门禁；判定态不动；外部时间锚留§4gi"
+ },
+ {
+  "id": "KB-META180",
+  "title": "元证伪",
+  "mechanism": "元证伪:对自己刚下的阴性结论再证伪。§4gn结论'生产写点=0'只覆盖open(path,w), §4go预注册(hash锁)后把写面扩到write_text(167)/os.replace(180)/copy*(33)/数据流追踪, 结果ALL_COVERED_ZERO——阴性结论稳健但未推翻任何东西, 只是巩固。真实增量=发现并补上§4gn的write_text盲区(注入write_text写",
+  "action": "预注册可证伪预测(若扩展覆盖后找到X则原结论被REFUTED); 扩展写/检测面并声明每类覆盖; 区分'静态扫不到'与'运行时不发生'; 对粗判命中的数据流结果逐个精查(变量名碰撞误报); 负向注入盲区类型证明守卫扩展真实; ALL_COVERED_ZERO只提置信度不称证明。关键:属巩固轮非突破轮,连续三轮同主题时按",
+  "evidence": "一手现场; 元证伪; 阴性巩固; 判据自咬; 零战利品; P1收敛信号"
+ },
+ {
+  "id": "KB-META182",
+  "title": "§4gq判据泛化宽度",
+  "mechanism": "§4gq判据泛化宽度: 上一轮证非伪影后追问'判据看到断言层的视野有多宽'。源码审读发现DeepSeek判据是纯三类规则(negation/tail-drop/connector)。预注册(hash锁3a304126)后用机械生成新句(整句+6gram与冻结集零重叠)分两组: 声明类9句检出9/9=100%, 语义类12句(实体替换/程度翻转/量词/时态体态, 源码未提及)检出仅1/12=8.3%",
+  "action": "不要只用判据自己声明的规则去验证自己(同义反复); 构造源码未声明的同层破坏(语义类)测泛化, 标签由变换的真值条件定义并逐条辩护; 新样本与冻结集整句+6gram零重叠防记忆; 加镜像测试(应保留句零误报)排除无差别拒绝; 声明类高/语义类低=特化, 如实收窄结论适用范围, 不翻既有裁决不抬l3。",
+  "evidence": "一手现场; 预注册; 机械泛化; 标签辩护; 镜像测试; 负向自咬; 能力边界如实收窄; 零战利品; 判定态不动"
+ },
+ {
+  "id": "KB-META185",
+  "title": "M6内生stop/pivot判据机械化",
+  "mechanism": "M6内生stop/pivot判据机械化(§4gt): 把§4gs元命题M6'连续3营养轮须主动换猎场'从纸面变成纯函数器官life_kernel/stop_pivot.py; verdict按预注册锁分类(BREAKTHROUGH/CONFIRM/NARROW/GAP), 营养轮=改判据/新增可证伪命题/推翻旧判断三贡献位全false, 连续≥3触发PIVOT_ADVISED。双口径诚实: NAR",
+  "action": "纯函数实现三贡献位+双口径+连续计数+阈值; 预注册先锁sha256与verdict分类字典/口径, 禁止事后选口径; 设负向自咬(全营养轮序列两口径都必须PIVOT_ADVISED); 设criterion_sensitivity暴露'翻口径即翻信号'; 首用审计自身刚跑过的轮次并如实接受不利结论; 不编译门禁不改判",
+  "evidence": "一手现场; 元命题机械化; 双口径防事后挑; 负向自咬; 表演性自我批评守卫; 不伪造pivot; 零战利品; 判定态不动"
+ }
+]

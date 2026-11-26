@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>论证取证工作台 · Argument Audit</title>
+<style>
+:root{--bg:#0f1115;--panel:#171a21;--panel2:#1e222b;--line:#2b303b;--ink:#e8eaf0;--muted:#9aa3b2;--accent:#e05a5a;--accent2:#5aa9e0;--ok:#4caf7d;--warn:#d9a441}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;line-height:1.6;font-size:15px}
+header{padding:22px 28px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#171a21,#121820)}
+h1{margin:0;font-size:22px;letter-spacing:.5px}
+h1 .tag{font-size:12px;color:var(--accent);border:1px solid var(--accent);border-radius:10px;padding:2px 9px;margin-left:10px;vertical-align:middle}
+.sub{color:var(--muted);font-size:13px;margin-top:6px}
+.bound{background:#2a2018;border:1px solid #5c4326;color:#e8c893;border-radius:8px;padding:10px 14px;font-size:13px;margin:14px 28px 0}
+.wrap{display:grid;grid-template-columns:1.35fr .85fr;gap:18px;padding:18px 28px;max-width:1500px;margin:0 auto}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h2{font-size:15px;margin:0 0 12px;color:var(--accent2);font-weight:600}
+textarea{width:100%;height:230px;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:14px;font-size:14px;resize:vertical;line-height:1.7}
+textarea:focus{outline:none;border-color:var(--accent2)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+button{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;cursor:pointer;font-weight:600}
+button:hover{filter:brightness(1.1)}
+button.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:400}
+.stat{display:flex;gap:18px;margin:14px 0;flex-wrap:wrap}
+.stat b{font-size:26px;color:var(--accent)}
+.stat span{color:var(--muted);font-size:12px;display:block}
+.hit{border-left:3px solid var(--accent);background:var(--panel2);border-radius:6px;padding:11px 14px;margin:9px 0}
+.hit .ht{font-weight:600;color:var(--warn)}
+.hit .cnt{float:right;color:var(--muted);font-size:12px}
+.hit p{margin:6px 0 0;font-size:13px;color:#c8cede}
+.hit .how{color:var(--ok)}
+.hit .snip{font-size:12px;color:var(--muted);background:#12151b;border-radius:4px;padding:4px 8px;margin:3px 0;display:inline-block;margin-right:6px}
+mark{background:#5a3a1e;color:#ffd9a0;border-radius:3px;padding:0 2px}
+.search{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 12px;margin-bottom:10px}
+.kbcard{border-bottom:1px solid var(--line);padding:8px 0;font-size:13px}
+.kbcard .kid{color:var(--accent2);font-size:11px}
+.kbcard .km{color:var(--muted);font-size:12px;margin-top:2px}
+.preview{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:12px;max-height:180px;overflow:auto;white-space:pre-wrap;font-size:12px;color:var(--muted)}
+.empty{color:var(--muted);text-align:center;padding:30px;font-size:14px}
+.foot{padding:12px 28px 30px;color:var(--muted);font-size:12px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+<h1>论证取证工作台 <span class="tag">Argument Audit · v1.0</span></h1>
+<div class="sub">把文章的"可疑信号"机械标出来，生成逐条核查清单 —— 知识底座来自 491 条认知偏误库，规则可追溯。</div>
+</header>
+<div class="bound">⚠ <b>诚实边界</b>：本工具只标"可疑信号"，<b>不判真假、不替代一手核验</b>。命中 ≠ 错误，未命中 ≠ 属实。正则必然有假阳性与假阴性；对语义级改写（如"局部属实但细节走样"）会漏检。它是取证线索生成器，不是裁判。</div>
+
+<div class="wrap">
+<div class="card">
+<h2>① 粘贴待查文本</h2>
+<textarea id="input" placeholder="把文章、声明或论证粘贴到这里……（文字只在你的浏览器本地处理，不会上传）"></textarea>
+<div class="row">
+<button id="run">扫描可疑信号</button>
+<button id="demo" class="ghost">载入演示文本</button>
+<button id="exp" class="ghost">导出核查清单 .md</button>
+<button id="clear" class="ghost">清空</button>
+</div>
+<div class="stat" id="stat"></div>
+<div id="results"><div class="empty">扫描结果将显示在这里</div></div>
+<h2 style="margin-top:20px">标注预览</h2>
+<div class="preview" id="preview">尚无标注</div>
+</div>
+
+<div class="card">
+<h2>② 偏误知识速查（60 张 · 可检索）</h2>
+<input class="search" id="kbsearch" placeholder="搜偏误名，如：幸存者 / 锚定 / 伪托">
+<div id="kblist"></div>
+</div>
+</div>
+<div class="foot">取证能力产品化 · 规则见 signal_rules.json · 偏误卡片源自 knowledge_base_store.json · 判定权始终归人</div>
+
+<script>
+const RULES = {"artifact": "论证取证工作台-机械信号规则", "version": "1.0.0", "created": "2026-11-26", "provenance": "规则来自 knowledge_base_store.json 的认知偏误条目(KB-R-FACT02伪名言/KB-R01代理变量/KB-AUDIT系列统计陷阱)+article_factcheck.json 的真实核查经验; 每条规则可追溯到 KB id", "honest_bound": "机械扫描只标'可疑信号', 不判真假、不替代一手核验; 命中≠错误, 未命中≠属实; 正则必然有假阳性与假阴性, 工具是取证线索生成器不是裁判", "rules": [{"id": "SIG-AUTHORITY", "label": "伪托权威 / 署名权威", "why": "借名人或权威机构给断言背书, 但出处可能不存在、被改写或二次拼接。", "how": "检索原始出处(官网/原著/权威数据库), 核对原句与措辞是否一致, 查是否多源互相矛盾。", "kb": ["KB-R-FACT02"], "patterns": ["(人民日报|新华社|央视|人民网|光明日报)(说|:|：|指出|强调)", "(\\S{2,6})(说|曾说过|有句话|名言):", "据(专家|研究|科学家|权威)(称|说|表明|指出)"]}, {"id": "SIG-QUOTE", "label": "无出处名言 / 金句", "why": "流传甚广但无可靠原始出处的伪名言, 常被安到名人头上; 措辞在传播中被改写。", "how": "查最早出处与多个来源的措辞差异; 若同一句被归于多人或多本书, 基本可判伪托。", "kb": ["KB-R-FACT02"], "patterns": ["(黑塞|马尔克斯|杨绛|三毛|王小波|梁晓声|白岩松|鲁迅|爱因斯坦|莎士比亚|村上春树)[^。]{0,30}(说|曾|：|:)"]}, {"id": "SIG-ABSOLUTE", "label": "绝对化措辞", "why": "'一定/永远/必然/所有人都/无一例外'是过度概括的语言信号, 现实几乎总有边界条件。", "how": "找反例; 问'是否有例外''适用条件是什么'; 检查论证是否从全称命题偷换到具体结论。", "kb": ["KB-R01"], "patterns": ["(一定|必然|永远|绝对|肯定会|毫无疑问|无一例外|所有人都|每个人都会|百分之百|100%)"]}, {"id": "SIG-NUMBER", "label": "精确数字断言", "why": "具体百分比/倍数若无来源, 是最容易被编造或断章取义的断言(如'80%的烦恼')。", "how": "要求给出处和口径(谁统计/样本/定义); 重算量级是否自洽; 查是否被脱离语境。", "kb": ["KB-AUDIT116"], "patterns": ["(\\d{1,3}%|百分之[一二三四五六七八九十百]+|\\d+倍|\\d+万|\\d+亿)"]}, {"id": "SIG-CAUSAL", "label": "强因果断言", "why": "'导致/正是因为/根源在于'把相关当因果, 忽略混杂、选择偏差与反向因果。", "how": "问是否有对照与因果识别; 排查第三变量; 区分相关、因果与纯时间序列先后。", "kb": ["KB-AUDIT132"], "patterns": ["(导致|正是因为|根本原因|根源在于|所以才|由此|这就使得|直接造成)"]}, {"id": "SIG-EMOTION", "label": "情绪煽动 / 道德绑架", "why": "强情绪词和'你还不……就……'式句式旨在绕过理性审查, 是说服术而非证据。", "how": "剥离情绪词后重述断言, 看剩下的可证伪内容还剩什么; 警惕制造紧迫感/羞耻感。", "kb": ["KB-AUDIT124"], "patterns": ["(震惊|细思极恐|不看后悔|转疯了|再不看就晚了|你还在等什么|赶紧|立刻|必须|千万要|警惕)"]}, {"id": "SIG-OVERGEN", "label": "以偏概全 / 个例代言", "why": "用单个故事、个例或轶事推出普遍结论(幸存者偏差/可得性偏差)。", "how": "问样本是否代表总体、被淘汰的在哪; 找系统性数据而非孤例; 警惕'我朋友就是这样'。", "kb": ["KB-AUDIT131"], "patterns": ["(我朋友|身边|有个案例|比如某人|据说有人|曾经有一个|我认识的一个)"]}, {"id": "SIG-FALSE-DICHOTOMY", "label": "伪二选一 / 虚假对立", "why": "把连续光谱压成'要么A要么B', 隐藏中间地带和第三种可能。", "how": "问是否真的穷尽所有选项; 能否同时部分成立; 二分是否服务某种结论。", "kb": ["KB-AUDIT188"], "patterns": ["(要么.{1,20}要么|不是.{1,20}就是|非此即彼|只有两种可能|二选一|要么成功要么失败)"]}, {"id": "SIG-CERTAINTY", "label": "确定性包装 / 无保留断言", "why": "'研究表明/科学证明'式的确定性包装, 不给置信度、不确定性与反方证据。", "how": "查原始研究的效应量/CI/样本/是否预注册; 看有无相反研究; 区分'提示'与'证明'。", "kb": ["KB-AUDIT169"], "patterns": ["(研究表明|科学证明|已证实|已被证明|铁证|事实就是|无需质疑|不容置疑)"]}]};
+const CARDS = [{"id": "KB-R01", "t": "代理变量陷阱", "m": "代理变量陷阱：alarm 实为困境代理，扩到 22 家反例后 precision 从虚高崩到 0.42。"}, {"id": "KB-R03", "t": "校准度 ≠ 辨别力", "m": "校准度 ≠ 辨别力：AUC 不能当 calibration，须用 ECE 单独度量。"}, {"id": "KB-R06", "t": "复盘对象校正", "m": "复盘对象校正：复盘应针对框架逻辑方法(framework)，而非研究对象(subject)。"}, {"id": "KB-E06", "t": "信号检测论 SDT", "m": "信号检测论 SDT：用 d'（辨别力）与 criterion（偏差）分离「看不看得清」与「判断阈值」。"}, {"id": "KB-E07", "t": "对抗偏差三件套", "m": "对抗偏差三件套：预注册判据 + 盲测 + 时间戳门禁，把「我不知道」变成一等公民。"}, {"id": "KB-R-L-inventory-2026-b0", "t": "复用防偏差措施", "m": "复用防偏差措施：入场先记录先验倾向"}, {"id": "KB-R-L-audit19-remedy20-van1", "t": "识破虚荣改进——别拿改动冒充进步", "m": "识破虚荣改进——别拿改动冒充进步：财报盲测的后验分组循环: 加反例对照量化循环(precision 0.42)，宣称'去循环已修'"}, {"id": "KB-R-L-audit19-remedy20-keep0", "t": "不该改的边界——反省后确认守住", "m": "不该改的边界——反省后确认守住：把'不知道'当一等公民 / 不可约交人 / 诚实边界: 保留，且在复盘中确认这是框架的脊梁，不因'进化'而改掉"}, {"id": "KB-R-SSQ01", "t": "大样本高功效陷阱", "m": "大样本高功效陷阱：n 极大时，微小偏离也会让 p 值/分位显著，统计显著 ≠ 实际显著，必须同时报告效应量。"}, {"id": "KB-R-SSQ03", "t": "代理变量混淆", "m": "代理变量混淆：'分布不均匀'不等于'人为调节'——物理偏差、随机漂移都能造成；判别须靠机理证据（可预测性/时间稳定性/易操纵目标是否异常）。"}, {"id": "KB-R-RETRO01", "t": "判据实现自检缺位", "m": "判据实现自检缺位：统计方法正确但实现错误(期望概率未归一、量级失真)会直接产出惊人却虚假的统计量；判据上线前须做量级sanity check。"}, {"id": "KB-R-MKT01", "t": "前视偏差能让亏损策略伪装成暴利", "m": "前视偏差能让亏损策略伪装成暴利：回测用当天收盘价生成信号却计入当天收益，把-9%年化做成+26%；信号必须用t-1信息、t日执行。"}, {"id": "KB-R-MKT02", "t": "统计拒绝随机游走 ≠ 经济可利用", "m": "统计拒绝随机游走 ≠ 经济可利用：方差比VR显著>1(趋势性)可与'所有策略扣成本后跑输买入持有'并存；有效性须分统计与经济两层判断。"}, {"id": "KB-R-AIDET02", "t": "结构性自利偏差", "m": "结构性自利偏差：当判据设计者同时是AI样本生成者时, 无意识会用自己的写作风格当'AI特征'——判据实际学的是'我 vs 对照组作者', 不是'AI vs 人'; 这是角色冲突, 非调参可解。"}, {"id": "KB-R-FACT02", "t": "伪名言传播机制", "m": "伪名言传播机制：名人名言经二次加工/张冠李戴后, 被权威媒体冒名转载形成'权威背书链'; 反讽的是辟谣者本身也会被冒名——人民日报曾辟谣'读书太少想得太多'是伪名言, 本文却打人民日报旗号引用它。"}, {"id": "KB-T-FACT03", "t": "伪精确数字是叙事 weaken point", "m": "伪精确数字是叙事 weaken point：'80%烦恼可靠读书治愈'这类无来源的整数百分比, 比模糊断言更易被证伪, 是核查叙事真实性的高价值锚点。"}, {"id": "KB-R-KON01", "t": "事实核查通过≠推理方法可靠", "m": "事实核查通过≠推理方法可靠：当所有事实都属实时,误导藏在把素材组织成结论的推理里。核查须过三道关——文风层(可能是artifact)、事实层(真伪)、推理层(方法是否站得住);前两层通过恰恰最容易让人放松警惕。"}, {"id": "KB-R-KON02", "t": "n=1历史类比+事后选择+模糊限定词=不可证伪叙事", "m": "n=1历史类比+事后选择+模糊限定词=不可证伪叙事：用单一历史片段逐年硬套当下并预测未来,对应点是从无尽细节里事后挑能配对的(确认偏差),预测用'大概率/可能/候选'等模糊词——具体数字+模糊措辞,事后怎么都能自圆其说。"}, {"id": "KB-T-KON03", "t": "争议框架当公理是叙事的隐形地基", "m": "争议框架当公理是叙事的隐形地基：康波长波学界无共识(新古典多半不承认、起止年份无定论、定位偏差足以葬送投资生命),但叙事把它当'极强规律性'的既定前提。地基不稳时,上面搭建得再精致的推演都失去锚点。"}, {"id": "KB-RSI01", "t": "引用一个指标/方法前，必须先验证其实现唯一性与数值正确性；同名方法在不同实现下可产生", "m": "引用一个指标/方法前，必须先验证其实现唯一性与数值正确性；同名方法在不同实现下可产生显著分歧，'用了该方法'不等于'用了同一个方法'。"}, {"id": "KB-RSI03", "t": "统计量量纲必须与所检验序列同频", "m": "统计量量纲必须与所检验序列同频：年化标量除以日度标准误会产生数百级假 t 值（高功效陷阱）。审计判据本身时要量纲自检。"}, {"id": "KB-RSI04", "t": "方向一致性优先于显著性个数", "m": "方向一致性优先于显著性个数：全体方向一致为负是稳健负向发现，不应被'多个显著'的措辞误读为有效；数据窥探的特征是少数正显著被挑出。"}, {"id": "KB-RSI07", "t": "生态热度指标", "m": "生态热度指标（star数、issue数、仓库数）是虚荣指标，反映工程可达性/从众，不反映方法的可验证有效性；宣称与免责声明并存是结构性自利叙事。"}, {"id": "KB-SIM01", "t": "遇到多义缩写/术语", "m": "遇到多义缩写/术语(如RSI=相对强弱指数或递归自我改进)时，检索前必须先按领域消歧并向用户确认；未消歧就开工会导致完整但完全离题的工作。"}, {"id": "KB-SIM06", "t": "论文诚实度与二手叙事夸张须分开归因", "m": "论文诚实度与二手叙事夸张须分开归因：论文主动声明局限(小样本/流程固定/评估器博弈)是高诚实度应preserve；媒体把它抬成'奇点'是叙事层的错，不记到论文头上。"}, {"id": "KB-SIM07", "t": "经验要可证伪，必须记录'事前预测'并与'事后实测'配对；只有事后叙述的经验无法被现实", "m": "经验要可证伪，必须记录'事前预测'并与'事后实测'配对；只有事后叙述的经验无法被现实打脸，是不可证伪的叙事(同康波文病根)。命中率=预测∩实测/预测，落空与意外收获都要留痕。"}, {"id": "KB-SIM08", "t": "回归/新bug必须被显式记录并强制降级", "m": "回归/新bug必须被显式记录并强制降级：一条改进即使在原上下文命中率高，只要实测引入新bug或有预测落空，跨上下文迁移时就必须revise而非retain。"}, {"id": "KB-META01", "t": "借鉴的终点不是复述别人的方法，而是让它在自己系统里重新长出能判'落空、回归、可否迁移", "m": "借鉴的终点不是复述别人的方法，而是让它在自己系统里重新长出能判'落空、回归、可否迁移'的牙齿；分界线=别人方法里的词是否变成了你系统里一个会拦、会判、会降级的动作——只写进笔记/报告/知识库文本仍算复述，只有当它在下一次真正挡住错误或给出'"}, {"id": "KB-STRUCT02", "t": "两个框架长得像不等于相互独立验证", "m": "两个框架长得像不等于相互独立验证：本次论文Figure3与我方证据阶梯同构，但我方判据§34已受awesome-rsi影响，属同谱系。确认偏误下把'同构'当'独立佐证'会虚高印证力度，须显式标注谱系来源并打折。 对比审计补充：GitHub "}, {"id": "KB-STRUCT05", "t": "综述/分类学贡献的是'统一语言与分析框架'，不等于证明了其研究对象有效。把'中科院提", "m": "综述/分类学贡献的是'统一语言与分析框架'，不等于证明了其研究对象有效。把'中科院提出RSI综述框架'读成'证明Agent越用越强'是主体错位——数字/框架真而结论主语被换。一手论常常自我限定，夸张来自传播层，分层归因不连坐作者。"}, {"id": "KB-AGI04", "t": "可证伪性分级", "m": "可证伪性分级：同一篇文章里，带领域+时效+可观测条件的预测(RSI在自动验证领域最快、多智能体协调递减)是可证伪的高价值判断；'ASI将加速科学突破'这类宏大叙事不可证伪、属叙事层。两者分层陈述，不因愿景宏大当强证据。"}, {"id": "KB-AUDIT25", "t": "技能准入校准", "m": "技能准入校准(skill admission calibration)是审读一个声称『技能库可自演化』系统的独立缺口：现有技能由 LLM judge/成功计数/信任层级准入,点估计无法区分证据不足与确认效果(§1(iii) 'such po"}, {"id": "KB-META03", "t": "自主运维的『人类依赖点』可随基础设施成熟而逐项拆除，但拆除方式决定成熟度真伪", "m": "自主运维的『人类依赖点』可随基础设施成熟而逐项拆除，但拆除方式决定成熟度真伪：(1)外部供料——把已验证取料渠道(arXiv/GitHub/公众号同步站/ACL/机构博客)固化为工作场所清单，agent可自主发现并取一手料，供料从人给的『输"}, {"id": "KB-META10", "t": "最高杠杆的判据", "m": "最高杠杆的判据:当系统已在'加声明/加门禁/加判据'的递进链上走到无限回归边缘(§101 Trusting Trust停手),继续刷同维度层级是伪杠杆;真正的最高杠杆是找证据链里'唯一还由评估方自己持有'的环节并把它外移做受控对照。§97-"}, {"id": "KB-AUDIT49", "t": "从post-hoc分层到预注册确认的方法学升级", "m": "从post-hoc分层到预注册确认的方法学升级(§107):§106把'非否定限定上忠实/近似目的取向差=1.0、否定翻转差=0.0'仅作事后取证,因主指标全集orient_gap=0.67<0.8落PURPOSE_INCONCLUSIVE"}, {"id": "KB-META15", "t": "能力对照排除替代解释 + 单一确认集不抬级", "m": "能力对照排除替代解释 + 单一确认集不抬级:§107三条件用异model路由(default/reasoning/lite),一个潜在混淆是'P1全对是否因reasoning路由更强'。诊断发现clean上三条件逐样本全判对、canary上"}, {"id": "KB-AUDIT50", "t": "跨集复现+外部时间戳锚", "m": "跨集复现+外部时间戳锚(§108):§107单一确认集(2611.22027)STRATIFIED_CONFIRMED不足以支撑稳健结论。§108做两增量:①第三独立确认集(全新论文2611.20899 SciWorldBench,从未用+"}, {"id": "KB-META16", "t": "单一确认集的完美模式是样本特异的 + 能力对照也可能失效", "m": "单一确认集的完美模式是样本特异的 + 能力对照也可能失效(§108):§106/§107两轮都出现'P0无目的地板core0.5/dT1.0'且clean全对/canary全错的整齐三层模式。§108换第三确认集(2611.20899)后:"}, {"id": "KB-AUDIT56", "t": "解释者独立性外移首次获受控确认但不达L3", "m": "解释者独立性外移首次获受控确认但不达L3(§114):L3尺子independent_tests四维里,执行者(§109)/设计者(§110-§112)/样本(§107-§108)三维已外移,唯一从未外移的是'从指标数字到裁决档位的解释权'"}, {"id": "KB-AUDIT57", "t": "解释者跨厂商确认遇单厂429限流,按prereg失败分支封顶INCONCLUSIVE", "m": "解释者跨厂商确认遇单厂429限流,按prereg失败分支封顶INCONCLUSIVE而非重跑到全齐(§115):§114单一异厂解释者4/4复现四轮裁决,§115按§110→§112升级路径做多厂商交叉,逐字节复用§114冻结输入与调用器("}, {"id": "KB-META23", "t": "状态机必须区分'文件在/成功产出/失败'——把API失败当判错是伪造语义", "m": "状态机必须区分'文件在/成功产出/失败'——把API失败当判错是伪造语义(§115):初版engine的present只按manifest文件存在判定(spawn前commit内),把429失败的ling也计入,2家4/4就误落CROSS_"}, {"id": "KB-AUDIT59", "t": "§L3-R2第二家异种大模型缺口定向回放", "m": "§L3-R2第二家异种大模型缺口定向回放:外家判据(三层词类多重集比对:否定/连接/内容词)回放到本仓§100冻结样本,断言类检出从基线0/4突破到4/4(否定2/补语1/连接1全部判False),证明'提高样本覆盖下限(三类断言改写各≥1"}, {"id": "KB-AUDIT60", "t": "§L3-R2 canary 0/6 的机制诊断", "m": "§L3-R2 canary 0/6 的机制诊断:逐字量化冻结样本内容词多重集差异,发现clean=0、tampered=0-2、canary=17-48三簇完全分离(鸿沟15)。根因=评测集任务异质性:clean/tampered是同一句逐"}, {"id": "KB-META26", "t": "收尾决策的方法论", "m": "收尾决策的方法论:当逐维消融型探索在结构上撞墙(无限回归+评测集任务异质性),继续增加同类样本(第三家异家Agent)的边际收益近零,因为新样本只会重新命中已定位的结构墙。',全面复盘'的价值不在罗列流水账,而在把失败按可解性分类——区分'"}, {"id": "KB-META27", "t": "用户剧透第二家=智谱Agent后的揭盲能力评估", "m": "用户剧透第二家=智谱Agent后的揭盲能力评估:关键纪律认知=身份剧透对能力评估几乎无增量,因为画像本就来自完全匿名盲评下的行为数据(两张作业书相同、身份对验收方隐藏),剧透唯一价值是把画像与公开产品路线对号入号判断'稳定特征vs单次偶然'"}, {"id": "KB-AUDIT65", "t": "§L3 canary可判定性严格诊断", "m": "§L3 canary可判定性严格诊断:初始假设'canary对字面判据数学不可分'被数据部分证伪。prove_canary_unreachability.py从§100冻结18样本提6类字面特征,穷举单调判据(单特征×全阈值×2方向)最优仅"}, {"id": "KB-META30", "t": "方法论", "m": "方法论:带着预设假设去做验证时,若数据证伪假设,必须如实记录证伪过程并修正结论,而非隐瞒有利数据只报符合预期的部分。本次预设'canary数学不可分'想夯实l3=false,但穷举发现U型判据18/18可达——若只报'单调12/18'会误导"}, {"id": "KB-AUDIT66", "t": "对昨日canary诊断的连续第二日自我证伪", "m": "对昨日canary诊断的连续第二日自我证伪:昨日断言'单调判据上限12/18,两家外家属单调框架故系统性失败',今日prove_posthoc_saturation.py枚举两特征单调布尔组合(~10^4条),发现content_diff>"}, {"id": "KB-META38", "t": "v3→v4的真实自我否定", "m": "v3→v4的真实自我否定:飞出仓库摄食的外部一手实证不是用来夸自己,而是精准命中自身三个盲点。关键认知——圈养时看不见自己的缺陷(还在为v3脚印破局自喜),飞出来被F09/F10/F11照见:①self_modify会诊断会修改但从不检验'"}, {"id": "KB-META44", "t": "v7 元认知预言的真实成真", "m": "v7 元认知预言的真实成真：v6 自设 wake_contract、v7 建不可伪造 woken_by 通道并如实判 UNPROVEN（预言'若有外部唤醒，信号可能到不了'），2026-11-25 07:15 日出闹钟真实失约。调度器 ne"}, {"id": "KB-AUDIT90", "t": "循环分析", "m": "循环分析(double-dipping)/选择后推断机械内化:同一数据既生成假设又检验假设→名义p值失效/效应虚高,纯噪声也可90+%试次产出'显著'(Hackman模拟,ASA Peterson2026);关键区分=可复现≠可确认(A s"}, {"id": "KB-AUDIT92", "t": "回归到均值", "m": "回归到均值(Regression to the Mean/RTM)机械内化:极端基线后自然回落被误当干预效果;无治疗效应下placebo-arm改善可来自temporary illness(RTM type1)/natural variab"}, {"id": "KB-AUDIT93", "t": "发表偏差/文件抽屉", "m": "发表偏差/文件抽屉(file drawer problem)机械内化:只写显著阳性结果→阴性结果进抽屉→meta分析只见阳性→效应系统性高估;NBER Bergman&Chowanajin2026用joint likelihood同时纳入w"}, {"id": "KB-AUDIT96", "t": "校准依赖", "m": "校准依赖(calibrated reliance)机械内化:'Trust is the wrong yardstick'——信任不是越高越好,依赖适当仅当它tracks建议正确性与错误代价;四动作adopt/verify/reject/es"}, {"id": "KB-AUDIT98", "t": "信度悖论", "m": "信度悖论(reliability paradox)/前置设计优于事后修补机械内化:认知任务在群体水平稳健效应但个体水平重测信度差;个体任务分=稳定真分数+试次噪声,个体信度随试次数L与单试次信噪比gamma2提高;七类修复中仅'增加试次数'"}, {"id": "KB-AUDIT99", "t": "指标不可折叠", "m": "指标不可折叠(non-collapsibility)/Simpson反转机械内化:总体性能值不等于子群加权平均;15指标中5个不可折叠(AUC/calibration intercept/calibration slope/ECE/Nage"}, {"id": "KB-AUDIT100", "t": "改进幻觉", "m": "改进幻觉(illusion of improvement)/幸存者偏差反馈回路机械内化:reject inference缓解信用评分survival bias但效果不明;结构性失败模式=自然retraining周期中accuracy提升而r"}, {"id": "KB-AUDIT101", "t": "判据/度量选择即结论选择——外部一手双证", "m": "判据/度量选择即结论选择——外部一手双证:①涌现度量幻觉(Schaeffer2023 arXiv2304.15004):同一批固定模型输出,非线性/离散度量(Exact String Match/Multiple-Choice Grade)"}, {"id": "KB-AUDIT102", "t": "判据事后切换/虚假奖励刷分——外部一手双证", "m": "判据事后切换/虚假奖励刷分——外部一手双证:①结局切换(BMJ2026 Song等):124预注册队列研究仅24%完整预注册主要结局,48%发生结局切换且只有2项给出解释,在57项有结果的切换中77%偏向统计显著方向(引入/升级显著新主要结"}, {"id": "KB-AUDIT104", "t": "功效不足高估效应+理由非决策依据——外部一手双证", "m": "功效不足高估效应+理由非决策依据——外部一手双证:①winner's curse(Kohavi/Gelman/Imbens2026 arXiv2512.24521):'Underpowered studies (below 50% powe"}];
+const $ = id => document.getElementById(id);
+let lastResult = null, lastText = '';
+
+function scan(text){
+  const hits=[];
+  for(const r of RULES.rules){
+    const matches=[];
+    for(const p of r.patterns){
+      let re; try{ re=new RegExp(p,'g'); }catch(e){ continue; }
+      let m; while((m=re.exec(text))!==null){
+        matches.push({pattern:p,start:m.index,end:m.index+m[0].length,snip:text.slice(Math.max(0,m.index-12),m.end+12)});
+        if(m.index===re.lastIndex) re.lastIndex++;
+      }
+    }
+    if(matches.length>=1) hits.push({id:r.id,label:r.label,why:r.why,how:r.how,kb:r.kb,count:matches.length,matches:matches.slice(0,8)});
+  }
+  hits.sort((a,b)=>b.count-a.count);
+  return {n:hits.length,hits};
+}
+
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+function render(){
+  const text=$('input').value; lastText=text;
+  if(!text.trim()){$('results').innerHTML='<div class="empty">先粘贴文本</div>';return;}
+  const res=scan(text); lastResult=res;
+  $('stat').innerHTML=`<div><b>${res.n}</b><span>类可疑信号</span></div><div><b>${res.hits.reduce((s,h)=>s+h.count,0)}</b><span>处命中</span></div>`;
+  if(res.n===0){$('results').innerHTML='<div class="empty">机械规则未命中信号 —— 不代表属实，仍需人工通读核验（语义级问题本工具抓不到）</div>';}
+  else{
+    $('results').innerHTML=res.hits.map(h=>`
+      <div class="hit">
+        <div class="ht">${esc(h.label)} <span class="cnt">命中 ${h.count} 处 · ${esc(h.kb.join(','))}</span></div>
+        <p><b>为什么可疑：</b>${esc(h.why)}</p>
+        <p class="how"><b>怎么核验：</b>${esc(h.how)}</p>
+        <div>${h.matches.map(m=>`<span class="snip">…${esc(m.snip)}…</span>`).join('')}</div>
+      </div>`).join('');
+  }
+  // 标注预览：按所有命中区间打 mark
+  const spans=[];
+  res.hits.forEach(h=>h.matches.forEach(m=>spans.push([m.start,m.end])));
+  spans.sort((a,b)=>a[0]-b[0]);
+  let merged=[];
+  for(const s of spans){ if(merged.length&&s[0]<=merged[merged.length-1][1]) merged[merged.length-1][1]=Math.max(merged[merged.length-1][1],s[1]); else merged.push([...s]); }
+  let out='',pos=0;
+  for(const [a,b] of merged){ out+=esc(text.slice(pos,a))+'<mark>'+esc(text.slice(a,b))+'</mark>'; pos=b; }
+  out+=esc(text.slice(pos));
+  $('preview').innerHTML=out;
+}
+
+function exportMD(){
+  if(!lastResult){alert('请先扫描');return;}
+  let md='# 论证取证核查清单\n\n> 机械扫描仅标可疑信号，不判真假；命中≠错误，未命中≠属实。\n\n';
+  md+=`扫描文本长度：${lastText.length} 字\n\n`;
+  if(lastResult.n===0) md+='机械规则未命中信号，仍需人工通读。\n';
+  lastResult.hits.forEach((h,i)=>{
+    md+=`## ${i+1}. ${h.label}（${h.count} 处）\n\n`;
+    md+=`- 为什么可疑：${h.why}\n- 怎么核验：${h.how}\n- 关联偏误：${h.kb.join(', ')}\n- 命中片段：\n`;
+    h.matches.forEach(m=>md+=`  - …${m.snip}…\n`);
+    md+='- [ ] 已查原始出处 / 口径 / 反例：__________\n\n';
+  });
+  const blob=new Blob([md],{type:'text/markdown;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='论证取证核查清单.md';a.click();
+}
+
+function renderKB(q=''){
+  q=q.trim().toLowerCase();
+  const list=CARDS.filter(c=>!q||c.t.toLowerCase().includes(q)||c.m.toLowerCase().includes(q));
+  $('kblist').innerHTML=list.slice(0,40).map(c=>`<div class="kbcard"><div class="kid">${esc(c.id)}</div><div>${esc(c.t)}</div><div class="km">${esc(c.m)}</div></div>`).join('')||'<div class="empty">无匹配</div>';
+}
+
+const DEMO=`人民日报说：读书和不读书，差的是整个人生。黑塞曾说过：世界上任何书籍都不能带你好运，但能让你悄悄成为最好的自己。马尔克斯：一个人只要还能阅读，就永远不会真正孤独。杨绛：你的问题主要在于读书太少，而想得太多。研究表明，80%的烦恼都来自读写太少，读书必然让你永远不再迷茫。你还在等什么？赶紧读起来，不看后悔一辈子！要么读书，要么被淘汰，没有第三种可能。`;
+
+$('run').onclick=render;
+$('demo').onclick=()=>{$('input').value=DEMO;render();};
+$('exp').onclick=exportMD;
+$('clear').onclick=()=>{$('input').value='';$('stat').innerHTML='';$('results').innerHTML='<div class="empty">扫描结果将显示在这里</div>';$('preview').innerHTML='尚无标注';lastResult=null;};
+$('kbsearch').oninput=e=>renderKB(e.target.value);
+renderKB();
+</script>
+</body>
+</html>

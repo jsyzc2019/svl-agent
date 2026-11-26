@@ -72,7 +72,8 @@ def test_audit_all_counts():
     # §4ap 构念效度增强集 §100-CE 目录（预注册+回放器，内部受控诊断不编译门禁）→ total 60→61，five_piece/三锁不变
     # §4ge 独立性前提证伪目录（audit_aggregation_dependence，证伪Safari非门禁目录、无五件套）→ total 61→62
     # §4gi 外部时间锚证据快照目录（audit_temporal_anchor，remote_evidence+prereg+result，非五件套）→ total 62→63
-    assert a["total"] == 63
+    # §4gu 论证取证工作台产品化目录（audit_argument_audit，规则+引擎+验证结果+截图，非五件套）→ total 63→64
+    assert a["total"] == 64
     assert a["five_piece_complete"] == 34
     assert a["three_locks_intact"] == 31
     assert 0 < a["three_locks_intact"] <= a["total"]
