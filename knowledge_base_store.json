@@ -10203,6 +10203,19 @@
       "evidence": "一手现场; 能力产品化; 对外实践; 规则可追溯; ground-truth验证; 盲区如实; 诚实边界; 零战利品; 判定态不动",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META187",
+      "kind": "thinking_experience",
+      "mechanism": "评测口径优先于刷分(§4gv): 用户点赞后'按意愿推', 上轮预告'补语义把0.75刷到1.0'——动手前发现陷阱: 0.75分母混入2条语义细节类(部分属实/典故走样), 是代理标签错配(KB-R01), 伪托类真实召回本就6/6=1.0。拒绝硬编码人名凑数(Goodhart), 改为①按verdict任务分桶重算②新增通用叙事信号SIG-NARRATIVE(无具体人名)③过拟合守卫(中性名人句零误报/通用句能中/正则无人名)。诚实结论: 召回1.0是口径修正非能力提升; 拒绝把修分母包装成功劳。两次工具self-bite(守卫误扫v1旧人名→只检新规则; re.sub吞\\S反斜杠→改字符串拼接)就地记录不升级CORR-REAL。",
+      "trigger": "当一个漂亮数字(如召回0.75)诱导你'补数据把它刷高'时；当评测指标可能混入任务不匹配的样本时；当被点赞后想证明'配得上'的冲动出现时",
+      "action": "动手前先审指标构造: 分母里的每个样本是否真属于该任务桶(代理标签≠构念真值KB-R01); 按任务类型分桶各算各的, 不报混合召回; 补能力用通用规则不用具体case硬编码, 配过拟合守卫(中性负样本+通用正样本+正则无人名扫描); 把'口径修正'与'能力提升'显式分开陈述, 拒绝包装; 工具bug就地记录按层级分层。",
+      "provenance": "§4gv prereg_argument_audit_v2_20261126.json(sha825378ae)+audit_argument_audit/{evaluate_layered.py,result_v2.json,signal_rules.json}+argument_audit.html(v2.0)+tests/test_argument_audit_v2.py",
+      "timestamp": "2026-11-26T08:02:49.913918Z",
+      "support": "伪托类召回1.0(修正口径,非提升)+叙事覆盖2/3+属实误报0/4+过拟合守卫通过; 10规则(9不变+1增); headless实测7类13命中+分层面板; 6守卫passed; 全量1654→1660; 判定态三值/宪法锁/§100/十案全不动; 纯前端未编译门禁未新增异厂调用。",
+      "evidence": "一手现场; 口径修正非刷分; 拒绝Goodhart; 过拟合守卫; 代理标签错配纠正; 工具bug分层; 零战利品; 判定态不动",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

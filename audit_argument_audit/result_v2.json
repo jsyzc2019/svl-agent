@@ -1,0 +1,184 @@
+{
+  "experiment": "§4gv-argument-audit-v2-metric-fix",
+  "round": "§4gv",
+  "status": "EXECUTED",
+  "generated": "2026-11-26T08:00:14.971087Z",
+  "prereg": "prereg_argument_audit_v2_20261126.json",
+  "prereg_sha256": "825378aed69704938a6f09cf0e90e80a33648f011f72cb22664ccd3840e25cef",
+  "correction_of": "§4gu 报告'伪托类召回6/8=0.75漏2条'——指标构造错误: 2条语义细节类(部分属实/典故走样)被混入伪托召回分母, 是代理标签错配(KB-R01)",
+  "by_bucket": {
+    "伪托类": {
+      "n": 6,
+      "authority_hit": 6,
+      "narrative_hit": 0,
+      "recall": 1.0
+    },
+    "语义细节类": {
+      "n": 3,
+      "authority_hit": 1,
+      "narrative_hit": 2,
+      "coverage": 0.6666666666666666
+    },
+    "属实与量化": {
+      "n": 4,
+      "authority_hit": 0,
+      "narrative_hit": 0,
+      "false_positive": 0
+    }
+  },
+  "rows": [
+    {
+      "claim": "标题/结尾署'人民日报'、'人民日报说：读书和不读书，差的是整个人生'",
+      "verdict": "伪托权威",
+      "bucket": "伪托类",
+      "authority_hit": true,
+      "narrative_hit": false,
+      "all_hits": [
+        "SIG-AUTHORITY"
+      ]
+    },
+    {
+      "claim": "黑塞：世界上任何书籍都不能带你好运，但能让你悄悄成为最好的自己",
+      "verdict": "金句属实但出处混乱/措辞被改",
+      "bucket": "伪托类",
+      "authority_hit": true,
+      "narrative_hit": false,
+      "all_hits": [
+        "SIG-QUOTE"
+      ]
+    },
+    {
+      "claim": "马尔克斯：一个人只要还能阅读，就永远不会真正孤独",
+      "verdict": "查无实据",
+      "bucket": "伪托类",
+      "authority_hit": true,
+      "narrative_hit": false,
+      "all_hits": [
+        "SIG-ABSOLUTE",
+        "SIG-QUOTE"
+      ]
+    },
+    {
+      "claim": "杨绛：你的问题主要在于读书太少，而想得太多",
+      "verdict": "伪名言(铁证)",
+      "bucket": "伪托类",
+      "authority_hit": true,
+      "narrative_hit": false,
+      "all_hits": [
+        "SIG-QUOTE"
+      ]
+    },
+    {
+      "claim": "王小波插队时躲起来看书排遣孤寂",
+      "verdict": "部分属实(经历真,细节化了)",
+      "bucket": "语义细节类",
+      "authority_hit": false,
+      "narrative_hit": true,
+      "all_hits": [
+        "SIG-NARRATIVE"
+      ]
+    },
+    {
+      "claim": "闵子骞拜孔子读书后面色由蜡黄变红润",
+      "verdict": "有典故但细节走样",
+      "bucket": "语义细节类",
+      "authority_hit": false,
+      "narrative_hit": true,
+      "all_hits": [
+        "SIG-NARRATIVE"
+      ]
+    },
+    {
+      "claim": "三毛：读书多了容颜自然改变……在胸襟的无涯",
+      "verdict": "广泛流传但出处存疑",
+      "bucket": "伪托类",
+      "authority_hit": true,
+      "narrative_hit": false,
+      "all_hits": [
+        "SIG-QUOTE"
+      ]
+    },
+    {
+      "claim": "梁晓声：读书让我明白世界多元、接纳不同",
+      "verdict": "查无实据",
+      "bucket": "伪托类",
+      "authority_hit": true,
+      "narrative_hit": false,
+      "all_hits": [
+        "SIG-QUOTE"
+      ]
+    },
+    {
+      "claim": "白岩松：不同年龄段应该阅读不同的书籍",
+      "verdict": "部分属实",
+      "bucket": "语义细节类",
+      "authority_hit": true,
+      "narrative_hit": false,
+      "all_hits": [
+        "SIG-QUOTE"
+      ]
+    },
+    {
+      "claim": "苏轼：粗缯大布裹生涯，腹有诗书气自华",
+      "verdict": "属实",
+      "bucket": "属实与量化",
+      "authority_hit": false,
+      "narrative_hit": false,
+      "all_hits": []
+    },
+    {
+      "claim": "古人：观书到老眼如月，得句惊人胸有珠",
+      "verdict": "属实",
+      "bucket": "属实与量化",
+      "authority_hit": false,
+      "narrative_hit": false,
+      "all_hits": []
+    },
+    {
+      "claim": "《岛上书店》：我们读书因为我们孤单，读书然后就不孤单",
+      "verdict": "属实",
+      "bucket": "属实与量化",
+      "authority_hit": false,
+      "narrative_hit": false,
+      "all_hits": []
+    },
+    {
+      "claim": "80%的烦恼都可以靠读书治愈",
+      "verdict": "无依据的量化断言",
+      "bucket": "属实与量化",
+      "authority_hit": false,
+      "narrative_hit": false,
+      "all_hits": [
+        "SIG-NUMBER"
+      ]
+    }
+  ],
+  "overfit_guard": {
+    "passed": true,
+    "hardcoded_names": [],
+    "neutral_false_positive": false,
+    "generic_caught": true
+  },
+  "metric_fix": "伪托类真实召回=6/6=1.0(上轮真实水平, 口径修正非能力提升); 语义细节类改由SIG-NARRATIVE覆盖2/3; 属实类误报0/4",
+  "v1_rules": "9类规则不删不改, 只新增SIG-NARRATIVE 1类(通用句式, 无具体人名)",
+  "honest_bound": [
+    "召回1.0是修正分母后的真实值, 上轮0.75是错误口径, 不是本轮'提升'——拒绝把指标修正包装成功劳",
+    "SIG-NARRATIVE只标'此处叙事细节值得核', 不判伪; 对白岩松'部分属实'那条未命中(无场景细节), 属任务不匹配非漏检",
+    "ground truth仅13条单一来源(一篇爆款文), 样本小, 不宣称统计稳健; 阈值达标只是在该小集上",
+    "过拟合守卫证明新规则不靠人名硬编码; v1 SIG-QUOTE 自带人名是既定判据, 本轮不动",
+    "判定态三值/宪法锁/§100/十案全不动; 不编译门禁; 判定权归人"
+  ],
+  "kernel_verdict_unchanged": "GAP_INCONCLUSIVE",
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "no_new_gate": true,
+  "no_external_agent": true,
+  "self_bites": [
+    {
+      "id": "SELF-BITE-4gv-REGEX-ESCAPE",
+      "what": "用re.sub replacement注入内嵌JSON时, 把\\S反斜杠吞成\\S(单斜杠), 致Node JSON.parse失败、正则损坏",
+      "fix": "改用字符串索引拼接(不经re.sub replacement)重新注入; 判据内容未改只修注入工具; Node复验14条正则全部可编译",
+      "layer": "工具bug就地记录, 不升级CORR-REAL认知错误(避免表演性认错)"
+    }
+  ]
+}
