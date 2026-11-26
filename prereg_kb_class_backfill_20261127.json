@@ -1,0 +1,179 @@
+{
+  "experiment": "P4-KB-improvement_class-backfill",
+  "round": "§4gx",
+  "preregistered_at_utc": "2026-11-26T23:23:38.366806+00:00",
+  "task_source": "NEXT_STAGE_PLAN_20261125.md P4 结构去脆弱化——补齐空 improvement_class 字段的可追溯性",
+  "problem_statement": "KB 494 条中 19 条 improvement_class 为空。同类条目 475 条全部已填且无内联标记, 证明 KB 条目的 class 是复盘/人工判定填入(非自动分类)。§23.4 的'只认前缀标记、绝不猜测'纪律针对 _classify_framework_decision 自动函数, 不适用于 KB 人工条目——此点已取证澄清, 避免误用纪律导致错误地宣布'正当空置'。",
+  "pre_registered_decision_rule": {
+    "principle": "按机制实质归类, 逐条写理由, 区分'锚点类推'与'新判定', 全部可被后续证伪",
+    "anchors": [
+      "KB-E07 对抗偏差三件套(external_insight)=fix → 识别自欺机制并给对策 = fix",
+      "KB-R-SSQ01 大样本高功效陷阱(reasoning_lesson)=fix → 统计陷阱识别 = fix",
+      "KB-AUDIT92-102 系列(thinking_experience)=fix → 机械内化的认知陷阱 = fix",
+      "KB-R01 代理变量陷阱=fix → 名义/实际拆分同类 = fix",
+      "KB-R-L-audit19-remedy20-keep0='不该改的边界'=preserve → 守住框架脊梁 = preserve"
+    ],
+    "rules": [
+      {
+        "id": "R1",
+        "match": "识别出一个会导致自欺的机制缺陷, 并给出核查/拆分/防护对策",
+        "class": "fix",
+        "basis": "锚点 KB-E07/KB-R-SSQ01/KB-R01"
+      },
+      {
+        "id": "R2",
+        "match": "记录一次被证伪的先验, 认知从'原以为'修正为'实际'",
+        "class": "fix",
+        "basis": "c 系列: 数据推翻先验, 属真修正"
+      },
+      {
+        "id": "R3",
+        "match": "复用的防偏差措施/守住既有边界(记录先验、预注册、盲判分离、反例对照等)",
+        "class": "preserve",
+        "basis": "锚点 KB-R-L-audit19-remedy20-keep0; '复用'语义=守住不走样, 非新修复"
+      },
+      {
+        "id": "R4",
+        "match": "纯价值/目的设定, 既非缺陷修复也非边界守护",
+        "class": "preserve",
+        "basis": "价值自举类=框架脊梁的一部分, 保守归 preserve 并标注为'新判定'",
+        "novel": true
+      }
+    ],
+    "per_item_decisions": [
+      {
+        "id": "KB-T01",
+        "rule": "R1",
+        "class": "fix",
+        "why": "自证能力=环境产物而非模型自夸→识破'模型自证'自欺并给对策(审视判据环境)"
+      },
+      {
+        "id": "KB-T04",
+        "rule": "R1",
+        "class": "fix",
+        "why": "六环节是闸门非闭环→识破'堆闸门即自证'缺陷并给对策(检查返工回路)"
+      },
+      {
+        "id": "KB-T07",
+        "rule": "R4",
+        "class": "preserve",
+        "why": "价值自举=判据环境是价值化石,属框架价值底座守护;新判定(无直接锚点),标注待复核"
+      },
+      {
+        "id": "KB-R05",
+        "rule": "R1",
+        "class": "fix",
+        "why": "名义/实际拆分→锚点 KB-R01 同类:识破名义增长水分并给拆分对策"
+      },
+      {
+        "id": "KB-E01",
+        "rule": "R1",
+        "class": "fix",
+        "why": "PDCA 必须有停止条件→识破'无限空转'缺陷并给对策(budget/收敛判据)"
+      },
+      {
+        "id": "KB-E02",
+        "rule": "R1",
+        "class": "fix",
+        "why": "红队对抗→锚点 KB-E07 同类:主动构造反例破自证"
+      },
+      {
+        "id": "KB-E03",
+        "rule": "R1",
+        "class": "fix",
+        "why": "消融与反例对照→识破'极端指标被单一特征撑起'缺陷并给对策"
+      },
+      {
+        "id": "KB-E04",
+        "rule": "R1",
+        "class": "fix",
+        "why": "序贯最优停止→识破'何时收手靠直觉'缺陷并给出形式化框架"
+      },
+      {
+        "id": "KB-E05",
+        "rule": "R1",
+        "class": "fix",
+        "why": "IRL 价值从裁决反推→识破'价值须显式设定'的误区并给对策"
+      },
+      {
+        "id": "KB-E06",
+        "rule": "R1",
+        "class": "fix",
+        "why": "SDT 分离辨别力与偏差→识破'把保守误当能力'缺陷并给分离对策"
+      },
+      {
+        "id": "KB-R-L-inventory-2026-c0",
+        "rule": "R2",
+        "class": "fix",
+        "why": "数据推翻'转变属实'先验→一次真实认知修正"
+      },
+      {
+        "id": "KB-R-L-inventory-2026-c1",
+        "rule": "R2",
+        "class": "fix",
+        "why": "名义+11.6%实为物量+6.6%→修正先验"
+      },
+      {
+        "id": "KB-R-L-inventory-2026-b0",
+        "rule": "R3",
+        "class": "preserve",
+        "why": "复用措施:入场先记录先验→守边界"
+      },
+      {
+        "id": "KB-R-L-inventory-2026-b1",
+        "rule": "R3",
+        "class": "preserve",
+        "why": "复用措施:预注册判据→守边界(锚点 KB-E07 是'建立'该措施=fix, 此处是'复用'=preserve, 区分依据=R3)"
+      },
+      {
+        "id": "KB-R-L-inventory-2026-b2",
+        "rule": "R3",
+        "class": "preserve",
+        "why": "复用措施:盲判/揭盲分离→守边界"
+      },
+      {
+        "id": "KB-R-L-inventory-2026-b3",
+        "rule": "R3",
+        "class": "preserve",
+        "why": "复用措施:名义实际双轨→守边界"
+      },
+      {
+        "id": "KB-R-L-inventory-2026-b4",
+        "rule": "R3",
+        "class": "preserve",
+        "why": "复用措施:历史反例对照→守边界"
+      },
+      {
+        "id": "KB-R-L-finance-hcnh-c0",
+        "rule": "R2",
+        "class": "fix",
+        "why": "判据全过≠叙事真实,早期补贴依赖是盲区→真实认知修正"
+      },
+      {
+        "id": "KB-R-L-finance-hcnh-b3",
+        "rule": "R3",
+        "class": "preserve",
+        "why": "复用措施:下挖判据盲区→守边界"
+      }
+    ]
+  },
+  "falsification_criteria": [
+    "若某条被填 class 与该条 mechanism 实质明显矛盾(如把'识破自欺机制'填成 preserve), 则本判定被证伪",
+    "若 b1(复用预注册判据)被证明语义上应是 fix 而非 preserve, 则 R3 与 R1 的边界划分被证伪",
+    "若 KB-T07 价值自举被证明应是 fix, 则 R4 新判定被证伪",
+    "若任何一条的 support 指针不足以追溯其分类依据, 则'补齐可追溯性'目标未达成"
+  ],
+  "scope_limits": [
+    "只改 19 条空 improvement_class 字段, 不改 mechanism/support/kind/任何判定态",
+    "不编译新门禁; 判定态三值/宪法锁/§100/十案全不动",
+    "KB 总数 494 不变(只填字段不新增条目); 全量测试须保持 1666+新守卫",
+    "所有判定写入独立可审查文件 kb_class_backfill_decisions.json, 逐条带 rule/class/why/novel 标记"
+  ],
+  "acceptance": [
+    "19 条全部填非空 class, 取值在 fix/vanity/preserve 内",
+    "每条判定可在 kb_class_backfill_decisions.json 找到 rule 与 why",
+    "新守卫测试: 19→0 空、判定文件覆盖全部 19 条、R3/R1 边界案例(b1)显式标注、KB 总数不变、判定态字节不变",
+    "全量测试无回归; 如实记录哪些是锚点类推、哪条是新判定(KB-T07)"
+  ],
+  "sha256": "2d032f7a6bd33d8ab02bcb65f39cce433d147c1559aba4de6b0b0f2f16678fd2"
+}

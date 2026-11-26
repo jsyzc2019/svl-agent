@@ -19,7 +19,7 @@
       ],
       "evidence": "theory",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "fix"
     },
     {
       "item_id": "KB-T02",
@@ -81,7 +81,7 @@
       ],
       "evidence": "theory",
       "addressable": true,
-      "improvement_class": ""
+      "improvement_class": "fix"
     },
     {
       "item_id": "KB-T05",
@@ -141,7 +141,7 @@
       ],
       "evidence": "experiment",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "preserve"
     },
     {
       "item_id": "KB-T08",
@@ -263,7 +263,7 @@
       ],
       "evidence": "experiment",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "fix"
     },
     {
       "item_id": "KB-R06",
@@ -348,7 +348,7 @@
       ],
       "evidence": "theory",
       "addressable": true,
-      "improvement_class": ""
+      "improvement_class": "fix"
     },
     {
       "item_id": "KB-E02",
@@ -368,7 +368,7 @@
       ],
       "evidence": "theory",
       "addressable": true,
-      "improvement_class": ""
+      "improvement_class": "fix"
     },
     {
       "item_id": "KB-E03",
@@ -388,7 +388,7 @@
       ],
       "evidence": "theory",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "fix"
     },
     {
       "item_id": "KB-E04",
@@ -408,7 +408,7 @@
       ],
       "evidence": "theory",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "fix"
     },
     {
       "item_id": "KB-E05",
@@ -429,7 +429,7 @@
       ],
       "evidence": "theory",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "fix"
     },
     {
       "item_id": "KB-E06",
@@ -450,7 +450,7 @@
       ],
       "evidence": "theory",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "fix"
     },
     {
       "item_id": "KB-E07",
@@ -495,7 +495,7 @@
       ],
       "evidence": "reflection",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "fix"
     },
     {
       "item_id": "KB-R-L-inventory-2026-c1",
@@ -516,7 +516,7 @@
       ],
       "evidence": "reflection",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "fix"
     },
     {
       "item_id": "KB-R-L-inventory-2026-b0",
@@ -540,7 +540,7 @@
       ],
       "evidence": "reflection",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "preserve"
     },
     {
       "item_id": "KB-R-L-inventory-2026-b1",
@@ -564,7 +564,7 @@
       ],
       "evidence": "reflection",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "preserve"
     },
     {
       "item_id": "KB-R-L-inventory-2026-b2",
@@ -588,7 +588,7 @@
       ],
       "evidence": "reflection",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "preserve"
     },
     {
       "item_id": "KB-R-L-inventory-2026-b3",
@@ -609,7 +609,7 @@
       ],
       "evidence": "reflection",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "preserve"
     },
     {
       "item_id": "KB-R-L-inventory-2026-b4",
@@ -630,7 +630,7 @@
       ],
       "evidence": "reflection",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "preserve"
     },
     {
       "item_id": "KB-R-L-finance-hcnh-c0",
@@ -651,7 +651,7 @@
       ],
       "evidence": "reflection",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "fix"
     },
     {
       "item_id": "KB-R-L-finance-hcnh-b3",
@@ -672,7 +672,7 @@
       ],
       "evidence": "reflection",
       "addressable": false,
-      "improvement_class": ""
+      "improvement_class": "preserve"
     },
     {
       "item_id": "KB-R-L-audit19-remedy20-fix0",
