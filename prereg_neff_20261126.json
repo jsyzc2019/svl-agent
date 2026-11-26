@@ -1,0 +1,24 @@
+{
+  "id": "PREREG-NEFF-20261126",
+  "at_utc": "2026-11-26T05:17:54+00:00",
+  "round": "§4gf",
+  "meta_note": "承§4ge：既然A级一手证明LLM群体名义多源的有效独立数neff远小于N（9→2、10→1.4、rho=0.70），本轮把该发现从'认知结论'落成'可运行判据'——凡本仓声称多源交叉/独立验证处，强制标注独立性来源与neff折减，不数源个数。",
+  "build_target": {
+    "artifact": "life_kernel/independent_sources.py（新模块，纯函数，不接run_loop、不联网、不spawn）",
+    "core_fn": "neff_guard(claims: list) -> verdict：对每条'多源交叉/独立验证/独立judge'断言，检查是否附独立性来源(independent_error_source)与neff证据；缺则判 UNQUALIFIED_INDEPENDENCE_CLAIM 并要求补注，不静默放行",
+    "principle": "数源个数≠独立性；同模型家族子agent须标neff折减；cross-model diversity只是缓解非消除（承§4ge反打靶）；不编译成新门禁、不改verdict/l3/absolute/宪法"
+  },
+  "acceptance": [
+    "预注册先于实现与取证",
+    "活体回归≥7含：合规标注放行/缺标注拦截/同模型家族标折减/cross-model不误判为完全独立/篡改neff值即翻转/非多源断言skipped/零战利品语言",
+    "AST自审Compare内零中文字面量（延续§4ge自咬教训）",
+    "篡改测试：删独立性来源→判据翻转；改neff为名义N→判据翻转",
+    "全量测试1551不回退、判定态不动、KB按max(n)+1落档"
+  ],
+  "decision_tree": {
+    "hit": "七个活体回归全过+篡改翻转+AST零命中→NEFF_GUARD_OPERATIONAL（记为机制级变化，非战利品）",
+    "miss": "任一回归失败→改工具不改判据，重跑至绿；若判据本身需改，显式记录为'前提修订'而非'调参到跑通'",
+    "boundary": "本模块是标注守卫，不是真实性验证器；它检查'是否标注了独立性来源与neff'，不检查'标注的值是否真实'——后者需外部一手，不在本轮范围，诚实标注此上限"
+  },
+  "common_discipline": "预注册先于实现；纯函数不接判定链；不编译门禁；不改verdict/l3/absolute/宪法/十案/§100；联网仅外层摄食；判定权归用户；零战利品；自咬如实记录；本轮一手锚点沿用§4ge已锁存arxiv_abstracts.json不重复联网取证"
+}

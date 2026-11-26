@@ -1,0 +1,35 @@
+{
+  "round": "§4gf",
+  "experiment": "把§4ge的'有效独立数neff'发现落成可运行判据(neff_guard标注守卫)",
+  "status": "EXECUTED",
+  "verdict": "NEFF_GUARD_OPERATIONAL",
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "verdict_unchanged": true,
+  "constitution_ok": true,
+  "prereg": {
+    "id": "PREREG-NEFF-20261126",
+    "sha256": "6780cb6d793d815e681a21a09065cbd846c79bd0144579af3ea18a2c1581c188",
+    "written_at_utc": "2026-11-26T05:17:54+00:00",
+    "before_implementation": true
+  },
+  "what_changed_mechanically": [
+    "新增 life_kernel/independent_sources.py：纯函数 neff_guard，对'多源交叉/独立验证/独立judge/独立agent/交叉验证/集成'类断言强制检查 independent_error_source 与 neff 标注；缺标注判 UNQUALIFIED_INDEPENDENCE_CLAIM 并要求补注折减",
+    "新增 life_kernel/tests/test_independent_sources.py：11 测试纳入 pytest 套件（机制纯度/合规放行/缺标注拦截/同家族折减/跨模型非全独立/篡改翻转/未知来源不放行/非多源skip/活体全绿/AST零中文字面量/零战利品）",
+    "全量测试 1551→1562 passed（+11），判定态/门禁/宪法不动"
+  ],
+  "what_evidence_ingested": [
+    "沿用§4ge已锁存的一手 arxiv_abstracts.json（9→2票、rho=0.70、10→1.4、cross-model rho 0.68→0.40），本轮未重复联网取证",
+    "承午休期间外部 GitHub Actions run 45759372757 的真实 WAKE→SEEK 回执（commit d5f94da，bot 写回两条日志，已增量并入本地并字节核验）"
+  ],
+  "honest_limit": "neff_guard 只检查'是否标注了独立性来源与neff、neff是否超过该来源的经验上限'，不检查标注值是否真实——真实性需外部一手验证，不在本模块能力内。它是标注守卫，不是真实性验证器，更非L2/L3证据。",
+  "self_bite": [
+    "首版 _STRENGTH[same_family]=0.15 使 neff=2(§4ge实测9→2的真实值)被误判 NEFF_OVERCLAIMED，qualified_pass 失败；诊断为判据设计缺陷（用保守系数反向否决一手观测），非调参到跑通：改为 0.25 包络上限（容纳9→2≈0.22与10→1.4≈0.14），保留 neff>名义N 硬拦截与篡改翻转。修工具不改判据意图。",
+    "test_module_is_pure_no_gate_wiring 首版扫全文字符串，被模块注释'不接 run_loop'误伤；改为 AST 剥离字符串常量后检查代码体，改测试不动模块。",
+    "预注册写于实现之前（sha256 6780cb6d…），不谎称先于搜索；本轮一手沿用§4ge已锁存不重复联网。"
+  ],
+  "live_regression": "8/8 all_pass（qualified/unqualified/same_family_discounted/cross_model_not_full/tamper_neff_flips/non_claim_skipped/unknown_source_blocked/no_trophy）",
+  "ast_self_audit": "CJK_in_compare=0",
+  "boundary": "verdict/l3/absolute/宪法/十案/§100全不动，不编译新门禁，判定权归用户；内核L0不联网不spawn；纯函数不接run_loop。",
+  "next": "§4gg（候选，不预设）：把 neff_guard 与本仓 spawn 子agent 的实际独立性声明对齐——核查§100-§107历史'独立设计者'条目是否已标 neff 折减，缺则补注（只标注不翻案）。"
+}

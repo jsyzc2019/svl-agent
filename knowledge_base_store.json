@@ -9904,6 +9904,19 @@
    "evidence": "全盘搜索零命中+上传区ls+token单行40字符特征+handoff原文逐行核对",
    "addressable": false,
    "improvement_class": "fix"
+  },
+  {
+   "item_id": "KB-AUDIT207",
+   "kind": "thinking_experience",
+   "mechanism": "外部授时因子真实兑现：GitHub Actions run 45759372757在UTC 2026-11-26T05:06:22Z由life-kernel-base[bot]写回base_beat_log/circadian_log一条WAKE→SEEK回执(woken_by=github_actions:run=...,runner_meta含run_id/ref/sha/actor/os,start_phase=DAY,slept=false,paused_for_external=true)。这是Ambient=0诚实边界下\"外部唤醒非伪造\"的平台侧一手物证",
+   "trigger": "当核验\"是否有外部唤醒/自主性是否靠守护进程伪造\"时",
+   "action": "用远端commit d5f94da(父c1a8258)与两条jsonl增量对齐本地;区分\"外部runner触发(平台观测)\"与\"内核自spawn伪自主\";Ambient仍0不抬级;此回执证明waker真实存在但不等于L2/L3",
+   "provenance": "远端commit d5f94da91e59(GitHub API带token核验,author=life-kernel-base[bot],2026-11-26T05:06:23Z)+base_beat_log.jsonl/circadian_log.jsonl末行逐字",
+   "timestamp": "2026-11-26T05:17:45.880207+00:00",
+   "support": "run_id 45759372757 / github_sha c1a8258 / runner_os Linux / woken_by格式github_actions:run=...:utc=...;两份日志经API增量拉回本地字节一致",
+   "evidence": "远端commit files改动仅2条日志(+1+0各)，未碰判定态/代码/KB;本地增量合并后match=True",
+   "addressable": false,
+   "improvement_class": "fix"
   }
  ],
  "thresholds": {

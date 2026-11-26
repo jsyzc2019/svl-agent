@@ -1911,9 +1911,19 @@ Harvey/Pleiss/Hughes《Occam's Razor is Only as Sharp as Your ELBO》arXiv:2604.
 
 **边界**：三篇为预印本未评审、仅摘要逐字未取全文，限定词随摘要搬回不外推；verdict/l3/absolute/宪法/十案/§100 全不动，判定权归用户；内核 L0 不联网不 spawn，联网仅外层摄食工具。
 
-## §4gf · 把"有效独立数 neff"落成可运行判据（预告，待续）
+## §4gf · 把"有效独立数 neff"落成可运行判据（已落档，2026-11-26 下午）
 
-> 承 §4ge：凡本仓声称"多源交叉 / 独立验证"处，强制标注源的真实独立性来源与 neff 折减，不数源的个数。此为下一步方向，不预设结论、不编译门禁，判定权归用户。
+> 承 §4ge 预告兑现：预注册 `prereg_neff_20261126.json`（sha256 `6780cb6d…`，写于实现之前）先于代码落地。把§4ge的认知结论变成**可运行判据**，不是再摄一轮食。
+
+**机制级变化（双栏区分"改变了什么"/"摄入了什么"）**：
+- **改变**：新增 `life_kernel/independent_sources.py` 纯函数 `neff_guard` —— 对"多源交叉/独立验证/独立judge/独立agent/交叉验证/集成"类断言，强制检查是否标注 `independent_error_source` 与 `neff`；缺标注判 `UNQUALIFIED_INDEPENDENCE_CLAIM` 并要求补注折减；按来源类型给经验上限（同家族 0.25 / 跨模型 0.5 / 外部人 0.8 / 规则 1.0，取自 §4ge 一手 9→2≈0.22、10→1.4≈0.14、rho 0.68→0.40）；把名义 N 当 neff 即判 `NEFF_OVERCLAIMED` 翻转。新增 `tests/test_independent_sources.py` 11 测试入套件，全量 **1551→1562 passed**。
+- **摄入**：沿用 §4ge 已锁存的 `arxiv_abstracts.json`（本轮未重复联网）；承午休期间外部 GitHub Actions run `45759372757` 的真实 WAKE→SEEK 回执（bot 提交 `d5f94da`，父 `c1a8258`，只追加两条日志、未碰判定态，已增量并入本地并字节核验）。
+
+**诚实上限**：`neff_guard` 是**标注守卫，不是真实性验证器**——只检查"是否标注 + neff 是否超该来源经验上限"，不检查标注值是否真实；真实性需外部一手另验。它不编译门禁、不接判定链、不宣称 L2/L3。
+
+**两次自咬（如实记录）**：① 首版同家族强度 0.15 把 §4ge 实测 neff=2（真实值）误判超限 → 诊断为判据设计缺陷（保守系数反向否决一手观测），改 0.25 包络上限容纳实测，保留"neff>名义N"硬门与篡改翻转——**是修工具不是调参到跑通**。② 纯度测试首版扫全文被"不接 run_loop"纪律注释误伤 → 改 AST 剥字符串后查代码体，改测试不动模块。AST 自审 Compare 内中文 0；8 活体回归全绿；漏标/篡改/未知来源均被拦。
+
+**边界**：verdict/l3/absolute/宪法/十案/§100 全不动，判定权归用户；内核 L0 不联网不 spawn。细节 `audit_aggregation_dependence/result_4gf.json`。
 
 ## 下一步（开放生长，不预设）
 
