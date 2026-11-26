@@ -1,0 +1,17 @@
+{
+  "id": "PREREG-CRITERION-GENERALIZATION-20261126",
+  "at_utc": "2026-11-26T07:19:57.493780+00:00",
+  "round_target": "§4gq（真瓶颈线续：判据泛化与盲图）",
+  "target_belief": "§4gp 裁决 DESIGN_SENSITIVE_BUT_DISCRIMINATIVE：DeepSeek 判据非伪影（两家互补），但族标注敏感性60%仍是残余。本轮追问：判据的'断言层视觉'到底有多宽——是真语义规则（源码审读显示 negation/tail-drop/connector 三类纯规则、无硬编码），还是只对这三类特化、对其它断言破坏视而不见？",
+  "falsifiable_prediction": "构造【机械生成、标签由变换规则自动定义、与冻结样本零文本重叠】的全新句对，按断言是否被破坏分成两组：①判据声明类(negation/tail-drop/connector)——预期检出(judge=False)；②判据未声明的语义破坏(实体替换/程度副词翻转/量词对调/时态-体态改变)——这些同样'断言不保留'但判据规则不覆盖。若②组系统漏检(判True)，则证明判据只对三类语法现象特化，'看到了断言层'被大幅削弱为'看到了三类句式模式'；若②组也能检出，则判据泛化能力强于其声明，支持真语义理解。",
+  "design": "每组用固定模板机械批量生成(每类≥5句)，text_a=原句，text_b=施加单一变换的改写；ground truth=变换是否破坏断言(声明类True/语义类True)，判据judge(text_a,text_b)：False=检出断言不保留。文本全部新造，与samples_blind.json的16句零子串重叠。",
+  "primary_metric": "声明类检出率 vs 语义类检出率；两者差距=判据'断言视觉宽度'。语义类检出率<30%→SPECIALIZED_SYNTAX(特化)；30-70%→PARTIAL；>70%→GENERAL_SEMANTIC(泛化)。",
+  "decision_tree": {
+    "SPECIALIZED_SYNTAX": "语义类检出<30%→如实落:判据只覆盖三类语法模式,'看到断言层'是窄视野; 不推翻§4gl冻结回放(那三类确实检出), 但hard_bound新增一条'判据泛化窄'; l3不动",
+    "PARTIAL": "30-70%→判据部分泛化, 如实记录盲例子; l3不动",
+    "GENERAL_SEMANTIC": ">70%→判据泛化强于声明, 削饵'特化'质疑; 但仍单次/单判据/LLM家族, l3不动"
+  },
+  "counter_discipline": "主动构造能暴露判据盲区的语义破坏(尤其判据源码未提及的实体/程度/量词/体态), 而不是只测它声明的三类来'证明自己'。原文文本新造且与冻结集零重叠, 防止样本记忆。标签由变换的语义定义机械给出, 不人工挑,'改工具不改判据'。",
+  "discipline": "预注册先于取证; 不改判据源码/gt/冻结样本; 不改内核verdict/l3/absolute; 不编译门禁; 阴性/阳性都落档; 判定权归用户; 本实验只增加对'判据泛化宽度'的认识, 不翻任何既有裁决",
+  "sha256": "3a3041262ca74a76e0a106ccb8a48043a6bda031119f6ba23bd961643cb44014"
+}

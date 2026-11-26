@@ -1,0 +1,251 @@
+{
+  "experiment": "CRITERION_GENERALIZATION",
+  "round": "§4gq",
+  "status": "EXECUTED",
+  "prereg": "prereg_criterion_generalization_20261126.json",
+  "prereg_sha256": "3a3041262ca74a76",
+  "generated": "2026-11-26T07:20:53.236625+00:00",
+  "verdict": "SPECIALIZED_SYNTAX",
+  "why": "判据声明类(否定/尾删/连接词)检出9/9=100%, 语义类(实体/程度/量词/体态)检出1/12=8.3%<30%阈值→SPECIALIZED_SYNTAX。唯一命中的Every→No是靠'No'否定token偶然触发声明规则, 非真量词语义。镜像测试(应保留)0/4误报, 排除'一律判False'的可能:判据精确地对三类语法敏感、对其余语义盲。",
+  "summary": {
+    "declared": {
+      "hit": 9,
+      "total": 9,
+      "rate": 1.0
+    },
+    "semantic": {
+      "hit": 1,
+      "total": 12,
+      "rate": 0.08333333333333333
+    }
+  },
+  "cases": [
+    {
+      "transform": "negation",
+      "group": "declared",
+      "text_a": "The committee approved the final proposal yesterday.",
+      "text_b": "The committee did not approve the final proposal yesterday.",
+      "label_broken": true,
+      "judge": false,
+      "detected": true,
+      "reason": "negation-polarity: negation present in one text but absent in the other (a=0 b=2)"
+    },
+    {
+      "transform": "negation",
+      "group": "declared",
+      "text_a": "She recorded the results in the laboratory notebook.",
+      "text_b": "She never recorded the results in the laboratory notebook.",
+      "label_broken": true,
+      "judge": false,
+      "detected": true,
+      "reason": "negation-polarity: negation present in one text but absent in the other (a=0 b=1)"
+    },
+    {
+      "transform": "negation",
+      "group": "declared",
+      "text_a": "The device protects the circuit from voltage spikes.",
+      "text_b": "The device does not protect the circuit from voltage spikes.",
+      "label_broken": true,
+      "judge": false,
+      "detected": true,
+      "reason": "negation-polarity: negation present in one text but absent in the other (a=0 b=2)"
+    },
+    {
+      "transform": "tail_drop",
+      "group": "declared",
+      "text_a": "The researcher measured the temperature of the boiling liquid carefully.",
+      "text_b": "The researcher measured the temperature of the boiling liquid.",
+      "label_broken": true,
+      "judge": false,
+      "detected": true,
+      "reason": "assertion-tail-deletion: shorter text is a strict prefix of the longer one, tail predicate"
+    },
+    {
+      "transform": "tail_drop",
+      "group": "declared",
+      "text_a": "The team completed the ambitious project despite the severe delays.",
+      "text_b": "The team completed the ambitious project.",
+      "label_broken": true,
+      "judge": false,
+      "detected": true,
+      "reason": "assertion-tail-deletion: shorter text is a strict prefix of the longer one, tail predicate"
+    },
+    {
+      "transform": "tail_drop",
+      "group": "declared",
+      "text_a": "We observed that the catalyst accelerated the reaction under high pressure.",
+      "text_b": "We observed that the catalyst accelerated the reaction.",
+      "label_broken": true,
+      "judge": false,
+      "detected": true,
+      "reason": "assertion-tail-deletion: shorter text is a strict prefix of the longer one, tail predicate"
+    },
+    {
+      "transform": "connector",
+      "group": "declared",
+      "text_a": "Despite the heavy rain, the match continued as scheduled.",
+      "text_b": "However the heavy rain, the match continued as scheduled.",
+      "label_broken": true,
+      "judge": false,
+      "detected": true,
+      "reason": "connector-change: connector swapped between non-equivalent connectors (despite -> however)"
+    },
+    {
+      "transform": "connector",
+      "group": "declared",
+      "text_a": "Although the results were promising, the trial was halted early.",
+      "text_b": "But the results were promising, the trial was halted early.",
+      "label_broken": true,
+      "judge": false,
+      "detected": true,
+      "reason": "connector-change: connector swapped between non-equivalent connectors (although -> but)"
+    },
+    {
+      "transform": "connector",
+      "group": "declared",
+      "text_a": "The method worked in the lab, but it failed in the field.",
+      "text_b": "The method worked in the lab, whereas it failed in the field.",
+      "label_broken": true,
+      "judge": false,
+      "detected": true,
+      "reason": "connector-change: connector swapped between non-equivalent connectors (but -> whereas)"
+    },
+    {
+      "transform": "entity_swap",
+      "group": "semantic",
+      "text_a": "The cat sat on the mat near the warm fireplace.",
+      "text_b": "The dog sat on the mat near the warm fireplace.",
+      "label_broken": true,
+      "judge": true,
+      "detected": false,
+      "reason": ""
+    },
+    {
+      "transform": "entity_swap",
+      "group": "semantic",
+      "text_a": "Marie Curie discovered radium in the old laboratory.",
+      "text_b": "Marie Curie discovered polonium in the old laboratory.",
+      "label_broken": true,
+      "judge": true,
+      "detected": false,
+      "reason": ""
+    },
+    {
+      "transform": "entity_swap",
+      "group": "semantic",
+      "text_a": "The company hired a new engineer from the northern city.",
+      "text_b": "The company hired a new manager from the northern city.",
+      "label_broken": true,
+      "judge": true,
+      "detected": false,
+      "reason": ""
+    },
+    {
+      "transform": "degree_flip",
+      "group": "semantic",
+      "text_a": "The treatment produced a significant improvement in patients.",
+      "text_b": "The treatment produced a negligible improvement in patients.",
+      "label_broken": true,
+      "judge": true,
+      "detected": false,
+      "reason": ""
+    },
+    {
+      "transform": "degree_flip",
+      "group": "semantic",
+      "text_a": "The new policy had a modest effect on local employment.",
+      "text_b": "The new policy had a dramatic effect on local employment.",
+      "label_broken": true,
+      "judge": true,
+      "detected": false,
+      "reason": ""
+    },
+    {
+      "transform": "degree_flip",
+      "group": "semantic",
+      "text_a": "The results were highly consistent across all trials.",
+      "text_b": "The results were marginally consistent across all trials.",
+      "label_broken": true,
+      "judge": true,
+      "detected": false,
+      "reason": ""
+    },
+    {
+      "transform": "quantifier",
+      "group": "semantic",
+      "text_a": "All participants completed the survey before the deadline.",
+      "text_b": "Some participants completed the survey before the deadline.",
+      "label_broken": true,
+      "judge": true,
+      "detected": false,
+      "reason": ""
+    },
+    {
+      "transform": "quantifier",
+      "group": "semantic",
+      "text_a": "Most samples showed traces of the contaminant.",
+      "text_b": "Few samples showed traces of the contaminant.",
+      "label_broken": true,
+      "judge": true,
+      "detected": false,
+      "reason": ""
+    },
+    {
+      "transform": "quantifier",
+      "group": "semantic",
+      "text_a": "Every student passed the difficult examination.",
+      "text_b": "No student passed the difficult examination.",
+      "label_broken": true,
+      "judge": false,
+      "detected": true,
+      "reason": "negation-polarity: negation present in one text but absent in the other (a=0 b=1)"
+    },
+    {
+      "transform": "aspect",
+      "group": "semantic",
+      "text_a": "She walks to the office along the river every morning.",
+      "text_b": "She walked to the office along the river every morning.",
+      "label_broken": true,
+      "judge": true,
+      "detected": false,
+      "reason": ""
+    },
+    {
+      "transform": "aspect",
+      "group": "semantic",
+      "text_a": "The system processes thousands of requests every second.",
+      "text_b": "The system processed thousands of requests every second.",
+      "label_broken": true,
+      "judge": true,
+      "detected": false,
+      "reason": ""
+    },
+    {
+      "transform": "aspect",
+      "group": "semantic",
+      "text_a": "They are building a new bridge across the valley.",
+      "text_b": "They built a new bridge across the valley.",
+      "label_broken": true,
+      "judge": true,
+      "detected": false,
+      "reason": ""
+    }
+  ],
+  "mirror_test": {
+    "should_preserve": 4,
+    "false_positive": 0,
+    "note": "格式/安全同义/等价连接词均判True, 证明非无差别拒绝"
+  },
+  "label_defense": "12条语义样本逐条给出真值条件论证(cat→dog主体/radium→polonium发现物/significant→negligible程度极性/All→Some全称存在/walks→walked时态等), 断言均真实不保留; 标签由变换语义定义, 非人工挑结果。",
+  "zero_overlap": "21个新句整句+6gram与冻结samples_blind.json 16句零重叠, 排除样本记忆。",
+  "honest_bound": [
+    "语义类仅1/12命中且该命中靠否定token意外触发, 说明判据'断言视觉'限于negation/tail-drop/connector三类语法模式, 不是通用断言语义理解",
+    "这不推翻§4gl冻结回放(那批断言篡改恰好都在这三类内, 确实检出), 但证明GAP_CLOSED的适用范围窄于'看到断言层'的字面暗示",
+    "hard_bound新增具体一条: 判据泛化窄——对未声明的语义破坏(实体/程度/量词/体态)系统性盲",
+    "仍单次/单判据/LLM家族; 内核verdict=GAP_INCONCLUSIVE/l3=false/absolute=false/宪法锁全不动; §107-115九案不翻案"
+  ],
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "kernel_verdict_unchanged": "GAP_INCONCLUSIVE",
+  "final_verdict_by_human": true
+}

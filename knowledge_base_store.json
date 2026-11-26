@@ -10138,6 +10138,19 @@
       "evidence": "一手现场; 预注册; 盲扰动; 判别实验; 设计敏感性如实暴露; 零战利品; 判定态不动",
       "addressable": false,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META182",
+      "kind": "external_insight",
+      "mechanism": "§4gq判据泛化宽度: 上一轮证非伪影后追问'判据看到断言层的视野有多宽'。源码审读发现DeepSeek判据是纯三类规则(negation/tail-drop/connector)。预注册(hash锁3a304126)后用机械生成新句(整句+6gram与冻结集零重叠)分两组: 声明类9句检出9/9=100%, 语义类12句(实体替换/程度翻转/量词/时态体态, 源码未提及)检出仅1/12=8.3%(唯一命中Every→No靠'No'否定token偶然触发)。镜像测试应保留句0/4误报, 排除'一律判False'。裁决SPECIALIZED_SYNTAX: 判据只对三类语法特化, 非通用断言语义理解。",
+      "trigger": "当宣称某判据'看到了某层现象'、且该判据源码是可见的规则集时",
+      "action": "不要只用判据自己声明的规则去验证自己(同义反复); 构造源码未声明的同层破坏(语义类)测泛化, 标签由变换的真值条件定义并逐条辩护; 新样本与冻结集整句+6gram零重叠防记忆; 加镜像测试(应保留句零误报)排除无差别拒绝; 声明类高/语义类低=特化, 如实收窄结论适用范围, 不翻既有裁决不抬l3。",
+      "provenance": "§4gq prereg_criterion_generalization_20261126.json + result_4gq.json + ENGINE_LOG_4gq.md + tests/test_criterion_generalization.py",
+      "timestamp": "2026-11-26T07:21:33.029789+00:00",
+      "support": "声明类9/9, 语义类1/12=8.3%<30%阈值, 镜像0/4; test 5项(含负向自咬)passed; 全量待复核; 判定态三值/宪法锁全不动; 未新增异厂调用。",
+      "evidence": "一手现场; 预注册; 机械泛化; 标签辩护; 镜像测试; 负向自咬; 能力边界如实收窄; 零战利品; 判定态不动",
+      "addressable": false,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {

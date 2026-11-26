@@ -2063,6 +2063,16 @@ Harvey/Pleiss/Hughes《Occam's Razor is Only as Sharp as Your ELBO》arXiv:2604.
 
 **判据自咬 + 固化**：`tests/test_design_freedom_perturbation.py` 5 项；两次 self-bite 均为 Qoder 旧结果结构兼容（per_case 在顶层 `repo_mechanical_comparison`），改解析逻辑不改判据；负向自咬——篡改 Qoder 使检出有交集 → p04 FAILED、恢复 → PASS，守卫有效。全量 1618→**1623 passed**；KB 486→487（KB-META181）。判定态三值/宪法锁/十案全不动，不编译门禁，裁定权归委托方。
 
+## §4gq · 判据泛化宽度：从"看到断言层"到"三类语法特化"（2026-11-26 下午）
+
+§4gp 证明 GAP_CLOSED 非设计伪影（两家判据检出互补零交集）。§4gq 追问更深一层：**判据的"断言视觉"到底有多宽**——是真语义理解，还是只对某几类句式特化？
+
+- **动机**：源码审读发现 DeepSeek 归纳的 `criterion.py` 是纯三类规则（negation / tail-drop / connector），文件头明写 `no hard-coded ids or ground truth`。
+- **方法（预注册先于取证，hash 锁 `3a304126…`）**：为避免"用判据声明的规则证自己"的同义反复，机械生成两组全新句对（与冻结集整句+6gram 零重叠，排除样本记忆）：声明类 9 句（否定/尾删/连接词）、**源码未提及的语义类 12 句**（实体替换/程度翻转/量词/时态体态）。标签=变换是否改变真值条件，逐条语义辩护；另设 4 条应保留句做镜像测试。
+- **结果**：声明类 **9/9=100%**、语义类 **1/12=8.3%**（唯一命中 Every→No 靠 "No" 否定 token 偶然触发声明规则，非真量词语义）、镜像 **0/4 误报**（排除"一律判 False"）。按预注册裁决树语义类<30% → **`SPECIALIZED_SYNTAX`**。
+- **诚实边界**：不推翻 §4gl 冻结回放（那批断言篡改恰在三类内，确实检出），但证明 GAP_CLOSED 适用范围**窄于"看到断言层"的字面暗示**；hard_bound 具体化一条：**判据泛化窄**——对实体/程度/量词/体态等未声明语义破坏系统性盲。仍单次/单判据/LLM 家族；内核 `verdict=GAP_INCONCLUSIVE`、`l3=false`、`absolute=false`、宪法锁 `fe56291b` 全不动；§107–115 九案不翻案，判定权归用户。
+- **固化**：`tests/test_criterion_generalization.py` 5 项（声明类保持检出/语义类保持盲/零重叠+零误报/负向自咬/裁决 sha 锁）；负向自咬篡改判据"什么都检出"→gq02 FAILED、恢复→PASS。详见 `audit_l3_gap_targeted/result_4gq.json`(sha256 `ed97ffbb…`)+`ENGINE_LOG_4gq.md`。全量 1623→1628 passed，KB 487→488。
+
 ## 下一步（开放生长，不预设）
 
 探索池中的 E1–E7 + F01–F13 方向均为候选，**不预设哪个是"答案"**。真正的选择由 v5 意志层 `autonomous_agenda()` 根据内稳态失衡信号动态生成议程、novelty 守卫、帕累托次优游走共同决定。生命体的意义不在于达成某个固定目标，而在于**持续感知、持续否定收敛、无路时也能迈步、走过即留下路、被唤醒后自己决定下一步**——同时诚实承认：没有独立进程时这仍是"被唤醒后的自主"，Ambient=0 的缺口留给未来真正的运行时环境，不伪造。
