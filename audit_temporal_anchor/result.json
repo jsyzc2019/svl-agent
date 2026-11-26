@@ -42,13 +42,13 @@
     "C5_good_not_overrejected": true,
     "C5_evidence": "四维全一致真锚 → ANCHOR_VERIFIED；7 位短 sha 与 40 位全 sha 互认通过；合法锚 2/2 不误杀。",
     "C6_wiring": true,
-    "C6_evidence": "test_temporal_anchor 15 项入 pytest 收集集，全量 1577→1592；wiring_self_check 识破伪造缺席集。",
+    "C6_evidence": "test_temporal_anchor 16 项入 pytest 收集集，全量 1577→1593；wiring_self_check 识破伪造缺席集。",
     "C7_ast_zero_cjk_compare": true,
     "C7_evidence": "AST Compare 中文字面量=0；15 活体回归全绿；零战利品语言。"
   },
   "honest_findings": [
     "真实远端 commit 服务器时间戳 05:45:13Z 早于本轮预注册 05:51:14Z：该 commit 属上一轮 §4gh，构不成 §4gi 的正面时间锚。判据如实判 D3_POSTDATED，不伪造一个时间通过的真锚——这是本轮最重要的诚实结论。",
-    "完整正面锚需在本轮 commit 推送后，用新 commit 的服务器时间戳 (>= 预注册) 重取快照方可四维全过；本轮不宣称已达成正面锚，只证明判据能正确拒绝不构成锚的句柄。"
+    "闭环：本轮 commit e46e04df 推送后重取快照，服务器时间戳 05:55:03Z（晚于预注册 05:51:14Z），同一判据四维全过→ANCHOR_VERIFIED，落 positive_anchor.json(8eb3a436)。正负两侧闭合——判据既能拒绝不构成锚的句柄，也能确认构成锚的句柄；t16 用同一句柄换回旧快照仍被 D3_POSTDATED 拒绝，证明翻转来自时间维度而非放水。"
   ],
   "self_bites": [
     "自咬1(取证工具)：初版 /git/trees/{tree} 非递归查询漏掉 life_kernel/ 嵌套路径，blob=None。改 recursive=1 重取 → 0c2c0132...。锚点 miss 改工具不改规则。",

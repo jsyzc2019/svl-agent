@@ -1,0 +1,18 @@
+{
+  "fetched_at_utc": "2026-11-26T05:55:23Z",
+  "phase": "post_push_positive_anchor",
+  "head_sha": "e46e04df0561a0f497cb768c2d0de9df8503c503",
+  "server_timestamp": "2026-11-26T05:55:03Z",
+  "temporal_anchor_blob_sha": "1302f925991dcdeb2e45db36913e98d12fe1be1d",
+  "local_blob_sha": "1302f925991dcdeb2e45db36913e98d12fe1be1d",
+  "prereg_ts": "2026-11-26T05:51:14Z",
+  "verdict": "ANCHOR_VERIFIED",
+  "flags": [],
+  "detail": {
+    "D1": true,
+    "D2": true,
+    "D3": true,
+    "D4": true
+  },
+  "note": "本轮commit推送后重取；commit时间在预注册之后，构成完整正面锚；token内存组装未落盘。"
+}

@@ -121,6 +121,29 @@ def test_t14_real_remote_snapshot_postdated_vs_prereg():
     assert "D3_POSTDATED" in v.flags
 
 
+def test_t16_post_push_positive_anchor_verified():
+    """闭环实证：本轮 commit 推送后重取快照，服务器时间戳晚于预注册，
+    同一判据从 D3_POSTDATED 翻转为 ANCHOR_VERIFIED。正负两侧都闭合。"""
+    d = os.path.join(ROOT, "audit_temporal_anchor")
+    ev_path = os.path.join(d, "positive_anchor.json")
+    sh_path = os.path.join(d, "positive_anchor.sha256")
+    import hashlib
+    raw = open(ev_path, "rb").read()
+    assert hashlib.sha256(raw).hexdigest() == open(sh_path).read().split()[0]
+    snap = json.loads(raw)
+    a = {"commit_sha": snap["head_sha"], "local_blob_sha": snap["local_blob_sha"]}
+    e = {"remote_commit_sha": snap["head_sha"],
+         "server_timestamp": snap["server_timestamp"],
+         "tree_blob_sha": snap["temporal_anchor_blob_sha"]}
+    v = ta.verify_anchor(a, e, snap["prereg_ts"])
+    assert v.status == "ANCHOR_VERIFIED"
+    assert all(v.detail.values())
+    # 对照：同一句柄换成旧快照(上一轮 commit 时间)仍被拒——证明翻转来自时间维度而非放水
+    old = json.load(open(os.path.join(d, "remote_evidence.json")))
+    v_old = ta.verify_anchor(a, _from_snapshot(old), snap["prereg_ts"])
+    assert "D3_POSTDATED" in v_old.flags
+
+
 def test_t15_same_kind_comparison():
     """D4 必须同类比较（git blob sha vs git blob sha），不是 SHA256 vs SHA1。
     本地 constitution.sha256 文件的 git blob sha 应等于远端树中记录的 blob sha。"""
