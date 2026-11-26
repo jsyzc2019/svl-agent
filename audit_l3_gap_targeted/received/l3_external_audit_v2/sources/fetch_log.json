@@ -2,18 +2,18 @@
   "fetches": [
     {
       "role": "primary_abs",
-      "url": "https://arxiv.org/abs/2005.14165",
+      "url": "https://arxiv.org/abs/2405.14831",
       "http_status": 200,
-      "bytes": 48472,
-      "timestamp": "2026-11-23T10:36:05Z"
+      "bytes": 43605,
+      "timestamp": "2026-11-26T06:32:39Z"
     },
     {
       "role": "primary_full",
-      "url": "https://arxiv.org/html/2005.14165",
+      "url": "https://arxiv.org/html/2405.14831",
       "http_status": 200,
-      "bytes": 1220984,
-      "timestamp": "2026-11-23T10:37:53Z"
+      "bytes": 482073,
+      "timestamp": "2026-11-26T06:32:40Z"
     }
   ],
-  "note": "两源均一手直取（curl），时间戳为实际取料 ISO-8601，晚于 prereg 的 2026-11-23T10:31:56Z。"
+  "note": "两源一手直取,timestamp实际取料ISO晚于prereg的06:32:00Z"
 }

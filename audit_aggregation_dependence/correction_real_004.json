@@ -1,0 +1,29 @@
+{
+  "record": {
+    "record_id": "CORR-REAL-004",
+    "ts": "2026-11-26T14:33:00Z",
+    "detect": {
+      "claim": "暂时别给其他家key,再给大概率同样403/402或reasoning截断,给已充值OpenRouter或直连key才可能",
+      "truth": "DeepSeek直连key有效(余额57.97CNY),deepseek-chat tool calling干净可用(finish=tool_calls无reasoning),换厂商直连这条路实际是通的;我的建议'别给'过度泛化自OpenRouter单一样本",
+      "source": "ds_cap.py 实调 + /user/balance; 用户给DeepSeek key后现场推翻"
+    },
+    "declared": "再给其他家key大概率同样失败,建议别给",
+    "truth": "DeepSeek直连可用,换厂商直连是通路的判断我错了",
+    "source": "实调DeepSeek /user/balance + /chat/completions tool_choice",
+    "prev_hash": "GENESIS",
+    "self_hash": "6c0ca31c30329dcc999825fe40885225053a33029bca4de9f44d91853b08b514"
+  },
+  "channel_verdict": "CORRECTION_CLOSED",
+  "detail": {
+    "has_detect": true,
+    "n_records": 1,
+    "authority_ok": true,
+    "chain": {
+      "n": 1,
+      "links_ok": true,
+      "order_ok": true,
+      "authority_ok": true
+    }
+  },
+  "note": "第四次真实认错: 从OpenRouter单一样本过度泛化到'所有其他家都不行',DeepSeek直连推翻。与001-003同源:现场核验不足就下结论。"
+}

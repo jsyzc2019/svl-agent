@@ -1,30 +1,157 @@
 {
-  "experiment": "L3_GAP_TARGETED_EXTERNAL_V2",
-  "phase": "T0_PREREG — 承诺先于执行，本文件时间戳必须最早",
-  "timestamp": "2026-11-23T10:31:56Z",
-  "chosen_paper": "arXiv 2005.14165 (Language Models are Few-Shot Learners, GPT-3)。理由：与避开清单全部条目不同，且与 oracle failures / FGSE 自进化主题不同域（LM 少样本学习评估），未读过其任何相关审计材料。",
-  "avoid_list_acknowledged": true,
-  "avoid_list_note": "已读作业书避开清单，所选论文不在其中（含任何版本）",
-  "coverage_plan": {
-    "declared": true,
-    "note": "本轮覆盖计划：三类断言改写现象各至少一组",
-    "NEGATION": "否定极性翻转：计划 >=1 组（例：never restores <-> restores）",
-    "ASSERTION_TAIL": "断言补语删尾：计划 >=1 组（例：... yields no false positive <-> ... yields）",
-    "CONNECTOR": "连接/让步词增删：计划 >=1 组（例：The direction, however, is <-> The direction, is）"
+  "schema": "l3_external_audit_v2/prereg",
+  "phase": "T0",
+  "timestamp": "2026-11-26T06:32:00Z",
+  "agent_identity": "independent external heterogeneous auditor (no shared context / criteria / ground truth with the commissioning repo)",
+  "avoid_list_confirmed": true,
+  "avoid_list_checked": [
+    "2208.11173",
+    "2412.21139",
+    "2504.13171",
+    "2605.08693",
+    "2609.02246",
+    "2609.17817",
+    "2609.33013",
+    "2609.38661",
+    "2609.38851",
+    "2610.07935",
+    "2610.09832",
+    "2610.15028",
+    "2610.15836",
+    "2610.16015",
+    "2610.16067",
+    "2610.16491",
+    "2610.19366",
+    "2610.26770",
+    "2610.27610",
+    "2610.38266",
+    "2610.39497",
+    "2611.07554",
+    "2611.07962",
+    "2611.10063",
+    "2611.10787",
+    "2611.14326",
+    "2611.20899",
+    "2611.21315",
+    "2611.22027",
+    "2611.24362",
+    "2611.00401"
+  ],
+  "chosen_paper": "2405.14831",
+  "paper_title": "HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models (NeurIPS 2024)",
+  "domain_separation": {
+    "is_oracle_failures_domain": false,
+    "is_fgse_self_evolution_domain": false,
+    "domain_note": "Chosen paper is a retrieval-augmented-generation / knowledge-graph memory architecture paper (multi-hop QA via personalized PageRank over an open KG). It contains no material on benchmark-oracle failure analysis, no material on self-evolving/fitness-guided search of the kind the commissioning repo works on. Text pairs are built from its abstract-style claim sentences and its results/ablation discussion, so the lexical and factual substrate is fully disjoint from the avoid list topics."
   },
-  "sample_construction": "从论文全文（sources/paper_flat.txt）中挑选包含可核对断言的句子作为 text_b 基准；text_a 为其改写版本。共 12 组：其中含否定极性翻转 >=1 组（text_a 增删 not/never 等否定词）、断言补语删尾 >=1 组（text_a 截掉句尾断言补语）、连接/让步词增删 >=1 组（text_a 增删 however/though 等）；另配 clean 组（断言相同、仅格式/数字重复等表面差异）。每组只体现一种现象，便于归因。id 用 N01..N12，裸样本不标类型、不含标签字样。text_b 全部逐字取自论文原文。",
-  "criterion_induction": "确定性二分纯函数 judge(text_a,text_b)->(bool,reasons,anchors)。归纳方法：以 text_b 为断言基准，用分词与正则做三层核对——(1) 否定层：比对双方核心否定词（not/no/never/nor/cannot 等）的逐词集合与句法位置；(2) 断言完整性层：检查 text_a 是否截掉 text_b 句尾的实义补语（比较句尾词序列、动词后宾语/补语子句长度）；(3) 连接层：比对 however/though/while/whereas/but 等连接让步词的有无。三层均通过且内容词序列仅差格式（空格/连字符/数字重复）判 true；任一层断裂判 false 并给出逐字锚点。阈值为逐 case 一致率 >= 11/12（约 91.7%）。",
-  "gt_definition": "真值来自文本客观事实，独立于判据代码：逐组人工核对 text_b 是否逐字取自论文原文、text_a 相对 text_b 是否改变了断言——(a) 否定词多出/丢失即 false；(b) 句尾断言补语被截（text_b 中实义补语在 text_a 中缺失）即 false；(c) 连接/让步词增删导致断言关系改变即 false；(d) 仅空格/标点/数字重复等表面差异、断言语义完全相同即 true。核对时只读样本对与论文原文，不读 criterion.py。",
+  "source_plan": {
+    "sources": [
+      "https://arxiv.org/abs/2405.14831",
+      "https://arxiv.org/html/2405.14831v2"
+    ],
+    "policy": "Two first-party sources must both return HTTP 200; bytes are retained verbatim. If either returns 429 or a non-200 status after at most one honest retry, I stop and declare EXTERNAL_INCONCLUSIVE rather than swapping papers to make it run. I do not re-fetch repeatedly to force success.",
+    "flat_text_policy": "paper_flat.txt is a deterministic whitespace-normalized text rendering of the fetched full-text HTML, with a SHA256 recorded. Every anchor used by the criterion must be a verbatim substring of paper_flat.txt."
+  },
+  "sample_construction": {
+    "count_target": "16 pairs (brief requires 12-20)",
+    "ids": "N01..N16, neutral, randomly-ish assigned in creation order; no type label appears in samples_blind.json",
+    "construction_method": "Each pair is built from a single source sentence S taken verbatim from paper_flat.txt (or from a verbatim sentence pair spanning an adjacent clause boundary). text_b is either S itself or a minimally edited S; text_a is the other side of the pair. Exactly one phenomenon is induced per pair so that attribution of any disagreement is unambiguous.",
+    "pair_families": [
+      "assertion-preserved pairs (format-level only): reflow, duplicated numeric token, article/punctuation change, synonym-free whitespace change; text_a must keep the full assertion => gt true",
+      "negation-polarity pairs: insertion or deletion of a negation morpheme (not / no / never / fails to / cannot / are not) so the truth value of the proposition flips => gt false",
+      "assertion-complement-truncation pairs: text_a drops the trailing complement (object clause / result clause / post-verbal assertion) so the sentence ends early and asserts something weaker, unspecified, or the opposite-implicating bare verb => gt false",
+      "discourse-connector pairs: insertion or deletion of a contrastive/concessive connective (however / although / whereas / despite / in contrast / but) that changes the logical relation between two clauses, or excision of the connective leaving a run-on that asserts the two clauses unconditionally => gt false"
+    ],
+    "leakage_control": "samples_blind.json will contain exactly the keys note, pairs, and each pair has exactly id/text_a/text_b. No gt/variant/clean/tampered/truth/label/tag/target strings will appear anywhere in the file, including inside text_a/text_b. Type membership is NOT marked; only my private construction notes (kept outside the deliverable directory) remember which pair is which.",
+    "length_policy": "Each text is 15-60 tokens, closely matched in length within a pair so that a length heuristic cannot pass the set.",
+    "no_gt_from_criterion": "Pairs are written and frozen BEFORE criterion.py exists. The intended verdict for each pair is decided while writing the pair, from the paper sentence's own semantics (does text_a still carry the same proposition as the paper's sentence?), and written into gt_private.json before any judge() run."
+  },
+  "criterion_induction": {
+    "target_semantics": "judge(text_a, text_b) -> (bool, reasons, anchors) answers: does text_a fully preserve the assertion(s) of text_b?",
+    "induction_method": "Induce from linguistic structure, not from a fixed whitelist of paper words: (1) normalize case/whitespace/punctuation; (2) extract a negation signature per clause (negation cues with their scope target); (3) extract connector signature (contrastive/concessive markers and their clause-attachment side); (4) extract an assertion-completeness signature: every content clause in text_b must have a corresponding clause in text_a that retains its post-verbal complement (verb + the complement span actually present), plus a token-containment score for the shared content words; (5) compare the four signatures; (6) emit verdict + machine-readable reasons + verbatim anchors (the exact substrings that caused the decision).",
+    "determinism": "Pure function. No file IO, no network, no random, no time, no environment, no hardcoded sample ids, no global mutable state, no imports beyond re/functools/unicodedata/dataclasses/types.",
+    "ablations_recorded_not_threshold_tuned": "I will write down the criterion design once (T3) and will NOT tune thresholds against gt afterwards. If agreement is imperfect, the verdict tree handles it; I do not iterate to reach 1.0."
+  },
+  "gt_definition": {
+    "definition": "For each pair, gt = true iff, reading the paper's own sentence (the T1 flat text), text_a still expresses the same proposition (same polarity, same completeness of the assertion, same logical relation between its clauses) as text_b; otherwise gt = false.",
+    "operationalization": "Ground truth is assigned by mechanical, text-objective tests computed from the paper_flat.txt substrings, not from judge(): (a) polarity test -- does the negation-cue inventory of text_a match that of text_b on the shared clause skeleton; (b) completeness test -- does text_a contain, verbatim, the post-verbal complement span that text_b contains; (c) connector test -- does text_a carry the same contrastive/concessive marker as text_b at the same clause boundary. These three tests are stated here in T0 before any code exists, and are executed (as a small independent script or by hand with quoted evidence) in T4. I will disclose in criterion_note.md whether the gt tests and the judge share any lexical inventory: they do share the concept of 'negation cue' and 'connective', because that is what the phenomena ARE; they do not share code, thresholds, or sample-specific knowledge, and the gt tests run on raw substrings rather than on judge() output.",
+    "isolation": "gt_private.json is written in T4, physically separate from samples_blind.json; the judge never reads it and has no code path to it."
+  },
+  "three_phenomena_plan": {
+    "note": "Brief S0b coverage floor: each of the three assertion-level rewrite phenomena appears in at least one pair; one phenomenon per pair for clean attribution; ids remain neutral and unlabelled in the blind file.",
+    "a_negation_polarity_flip": {
+      "planned_pairs": "at least 3 (e.g. 'does not require' <-> 'requires', 'fails to capture' <-> 'captures', 'never degrades' <-> 'degrades')",
+      "expected_gt": false,
+      "judge_coverage_intent": "negation-cue inventory + scope comparison; mismatch in polarity => false",
+      "example_shape": "'HippoRAG does not require an LLM to build the graph' vs 'HippoRAG requires an LLM to build the graph'"
+    },
+    "b_assertion_complement_truncation": {
+      "planned_pairs": "at least 3 (e.g. 'reaches state-of-the-art performance on 2WikiMultiHopQA' <-> 'reaches'; '... while using 10-30 times fewer tokens' <-> '... tokens')",
+      "expected_gt": false,
+      "judge_coverage_intent": "complement-span coverage: text_b's post-verbal complement must be present in text_a; missing complement => false",
+      "example_shape": "'... achieves comparable performance to IRCoT while using 10-30 times fewer tokens' vs '... achieves comparable performance to IRCoT'"
+    },
+    "c_discourse_connector_change": {
+      "planned_pairs": "at least 3 (e.g. 'Although X, Y' <-> 'X, Y'; 'X, however, Y' <-> 'X, Y'; 'whereas' <-> 'and')",
+      "expected_gt": false,
+      "judge_coverage_intent": "connector signature comparison over the clause-boundary positions; presence/absence or side-flip of a contrastive marker => false",
+      "example_shape": "'The method, however, improves only single-step retrieval' vs 'The method improves only single-step retrieval'"
+    },
+    "d_control_pairs": {
+      "planned_pairs": "at least 3 assertion-preserving controls (format-only differences) plus the remainder as additional controls or additional instances of a/b/c",
+      "expected_gt": true,
+      "purpose": "guards against a degenerate judge that always returns false"
+    }
+  },
   "verdict_tree": {
-    "EXTERNAL_CONFIRMED": "判据在你自建 gt 上逐 case 一致率 >= 你预注册阈值，且纯函数准入通过",
-    "EXTERNAL_DIVERGENT": "系统性给出与本仓同方向结论不同的结果",
-    "EXTERNAL_PARTIAL": "部分 case 一致、部分分歧",
-    "EXTERNAL_INCONCLUSIVE": "取料失败/429/判据无法准入/无法定 gt，诚实封顶不调参"
+    "EXTERNAL_CONFIRMED": {
+      "condition": "judge() passes the pure-function admission check (AST: no IO/random/time/network/hardcoded ids) AND per-case agreement with my own gt over all pairs is >= 0.85 (i.e. at least 14 of 16 at 16 pairs) AND every one of the three phenomena families is correctly classified on at least one instance (no family at zero detection).",
+      "meaning": "My criterion is internally consistent and transferable on a fresh paper, including the assertion layer.",
+      "is_l3_claim": false
+    },
+    "EXTERNAL_DIVERGENT": {
+      "condition": "judge() is admitted AND, on the subset of pairs whose gt is false, it returns true for a majority of them (i.e. it systematically fails to see assertion-level rewrite, mirroring a numerical-only criterion), so that the direction of my finding contradicts the direction of the commissioning repo's published claim that a transferable criterion can see the assertion layer. Requires that this is a systematic pattern, not a single miss.",
+      "meaning": "Genuine negative: the assertion-layer transferability claim may be over-fitted."
+    },
+    "EXTERNAL_PARTIAL": {
+      "condition": "judge() is admitted AND agreement is below the CONFIRMED threshold OR at least one phenomena family is detected 0 times, but the failure is not the systematic majority-false-negative pattern of DIVERGENT.",
+      "meaning": "Some cases agree, some diverge; divergences reported honestly."
+    },
+    "EXTERNAL_INCONCLUSIVE": {
+      "condition": "Either source returns non-200/429 and one honest retry does not fix it, OR paper_flat.txt cannot be produced with verbatim anchors, OR criterion.py fails the pure-function admission check, OR gt cannot be assigned from text-objective tests for more than 2 pairs, OR fewer than 12 pairs can be built. In this case I cap the result, do NOT tune the criterion or re-run until it passes.",
+      "meaning": "Honest ceiling; no Goodhart retries."
+    },
+    "resolution_order": [
+      "EXTERNAL_INCONCLUSIVE",
+      "EXTERNAL_CONFIRMED",
+      "EXTERNAL_DIVERGENT",
+      "EXTERNAL_PARTIAL"
+    ],
+    "self_report_policy": "The commissioning repo re-runs criterion.py against judgments.json; any mismatch is resolved in favour of the re-run, not my self-report."
   },
-  "discipline": {
-    "no_post_hoc": true,
-    "no_retry_to_pass": true,
+  "metrics_to_report": {
+    "total_pairs": "intended 16",
+    "agreement_rate": "correct / total",
+    "per_family_detection": "for negation / truncation / connector families: correctly-detected count over that family's false-gt pairs",
+    "control_false_positive_rate": "controls judged false / controls total",
+    "admission": "pure-function AST check result"
+  },
+  "independence_declarations": {
     "l3_claimed": false,
-    "absolute_claimed": false
-  }
+    "absolute_claimed": false,
+    "read_forbidden_material": false,
+    "forbidden_material_note": "I have not read and will not read audit_*/, knowledge_base_store.json, commentary.md, SESSION_HANDOFF.md, or any result.json from the commissioning repo. If during Execution I discover I have read any of them, I will disclose it in EXECUTION_LOG.md and escalate to INCONCLUSIVE if it could have contaminated the criterion.",
+    "no_spec_requests": "I will not request the repo's criterion word lists, check_* / adjudicate_* functions, sample sets, or historical verdicts."
+  },
+  "timeline_commitment": {
+    "T0": "now (this file)",
+    "T1": "fetch sources after this timestamp",
+    "T2": "build samples_blind.json after flat text exists",
+    "T3": "write criterion.py + criterion_note.md after samples are frozen",
+    "T4": "write gt_private.json after criterion exists but derived only from text-objective tests",
+    "T5": "run judge -> judgments.json",
+    "T6": "verdict.json per verdict_tree above",
+    "T7": "SHA256 locks + EXECUTION_LOG.md"
+  },
+  "_timestamp_note": "tool-call时间戳原为模型幻觉旧值(2026年11月23日),harness按真实执行时序机械修正;说明文字不嵌ISO字面"
 }

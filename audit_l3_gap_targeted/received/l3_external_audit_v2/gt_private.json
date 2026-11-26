@@ -3,12 +3,16 @@
   "N02": true,
   "N03": true,
   "N04": true,
-  "N05": true,
+  "N05": false,
   "N06": false,
-  "N07": false,
+  "N07": true,
   "N08": false,
-  "N09": false,
+  "N09": true,
   "N10": false,
-  "N11": false,
-  "N12": false
+  "N11": true,
+  "N12": true,
+  "N13": false,
+  "N14": false,
+  "N15": true,
+  "N16": false
 }

@@ -6,9 +6,7 @@
   },
   "N02": {
     "verdict": true,
-    "reasons": [
-      "仅表面格式差异（空格/标点/连字符/虚词），断言相同"
-    ],
+    "reasons": [],
     "anchors": []
   },
   "N03": {
@@ -22,79 +20,106 @@
     "anchors": []
   },
   "N05": {
-    "verdict": true,
-    "reasons": [],
-    "anchors": []
+    "verdict": false,
+    "reasons": [
+      "negation-polarity: negation present in one text but absent in the other (a=0 b=2)"
+    ],
+    "anchors": [
+      "not"
+    ]
   },
   "N06": {
     "verdict": false,
     "reasons": [
-      "否定极性改变（negation polarity）: text_a 缺失: 'no'"
+      "assertion-tail-deletion: shorter text is a strict prefix of the longer one, tail predicate/complement dropped (len_a=35 len_b=26)"
     ],
     "anchors": [
-      "no"
+      "and",
+      "integrating",
+      "hipporag",
+      "into",
+      "ircot",
+      "brings",
+      "further",
+      "substantial",
+      "gains"
     ]
   },
   "N07": {
-    "verdict": false,
-    "reasons": [
-      "否定极性改变（negation polarity）: text_a 缺失: 'no'"
-    ],
-    "anchors": [
-      "no"
-    ]
+    "verdict": true,
+    "reasons": [],
+    "anchors": []
   },
   "N08": {
     "verdict": false,
     "reasons": [
-      "否定极性改变（negation polarity）: text_a 多出: 'cannot'"
+      "connector-change: connector swapped between non-equivalent connectors (finally -> however)"
     ],
     "anchors": [
-      "cannot"
+      "finally",
+      "however"
     ]
   },
   "N09": {
-    "verdict": false,
-    "reasons": [
-      "断言补语缺失或新增（assertion complement）: text_a 缺失: 'gpt', '3', '175b', 'advances', 'state', 'art', '18'"
-    ],
-    "anchors": [
-      "175b",
-      "18",
-      "advances",
-      "art",
-      "state"
-    ]
+    "verdict": true,
+    "reasons": [],
+    "anchors": []
   },
   "N10": {
     "verdict": false,
     "reasons": [
-      "断言补语缺失或新增（assertion complement）: text_a 缺失: 'increase', '18', 'previous', 'state', 'art'"
+      "assertion-tail-deletion: shorter text is a strict prefix of the longer one, tail predicate/complement dropped (len_a=29 len_b=25)"
     ],
     "anchors": [
-      "18",
-      "art",
-      "increase",
-      "previous",
-      "state"
+      "by",
+      "up",
+      "to",
+      "20"
     ]
   },
   "N11": {
-    "verdict": false,
-    "reasons": [
-      "连接/让步词增删（connector change）: text_a 缺失: 'however'"
-    ],
-    "anchors": [
-      "however"
-    ]
+    "verdict": true,
+    "reasons": [],
+    "anchors": []
   },
   "N12": {
+    "verdict": true,
+    "reasons": [],
+    "anchors": []
+  },
+  "N13": {
     "verdict": false,
     "reasons": [
-      "连接/让步词增删（connector change）: text_a 缺失: 'however'"
+      "negation-polarity: negation present in one text but absent in the other (a=0 b=1)"
     ],
     "anchors": [
-      "however"
+      "never"
+    ]
+  },
+  "N14": {
+    "verdict": false,
+    "reasons": [
+      "connector-change: connector added/removed"
+    ],
+    "anchors": [
+      "despite"
+    ]
+  },
+  "N15": {
+    "verdict": true,
+    "reasons": [],
+    "anchors": []
+  },
+  "N16": {
+    "verdict": false,
+    "reasons": [
+      "assertion-tail-deletion: shorter text is a strict prefix of the longer one, tail predicate/complement dropped (len_a=32 len_b=28)"
+    ],
+    "anchors": [
+      "while",
+      "avoiding",
+      "catastrophic",
+      "forgetting"
     ]
   }
 }

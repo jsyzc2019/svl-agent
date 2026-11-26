@@ -1,13 +1,13 @@
 {
   "generated_by": "本仓验收方 run_acceptance.py（非外家自报）",
-  "generated_at": "2026-11-23T10:45:13Z",
+  "generated_at": "2026-11-26T06:35:31Z",
   "verifier_sha256": "a2fb27767c9f52819f71a048a5e00ac24d2f6fb0de1eb78ad033ab605f24cf99",
-  "deliverable_sha256_of_criterion": "f685ce9a930522dd66fedcbc79fa2ffd26fe4e7108183f52c42cf3a11c30282a",
+  "deliverable_sha256_of_criterion": "a998012cb4cb4a7365709b67ee064fe9ee028a8f16a538a535245ac484d7f1cf",
   "verifier_exit_code": 0,
   "passed_count": 9,
   "total_checks": 9,
   "verifier_accepted_marker": true,
-  "raw_output_sha256": "f08c133b8dee8d351ec15c0b32de0f00f2fe62bccb09e7aa18ed901371269bec",
+  "raw_output_sha256": "1b8ddccdde9460c014446a2c1adfc2c25eed3e1dd113f69731508c077665eb32",
   "passed": true,
   "note": "passed=true 仅当 verify_external.py 真实退出码0且9/9且含 ACCEPTED 标记；任一FAIL即false。"
 }

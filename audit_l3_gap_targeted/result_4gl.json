@@ -1,0 +1,207 @@
+{
+  "experiment": "L3_GAP_TARGETED_EXTERNAL",
+  "status": "EXECUTED",
+  "verdict": "GAP_CLOSED",
+  "why": "断言类检出 4/4 相对基线 0/4 实质突破，clean 6/6，canary 3/6：第二家判据看到了断言层",
+  "external_delivery": {
+    "evaluator": "第二家异种大模型（外家）",
+    "own_verdict": "EXTERNAL_CONFIRMED",
+    "internal_replay": "16/16（本仓独立重算外家判据vs其gt，不信自报）",
+    "acceptance": {
+      "generated_by": "本仓验收方 run_acceptance.py（非外家自报）",
+      "generated_at": "2026-11-26T06:35:31Z",
+      "verifier_sha256": "a2fb27767c9f52819f71a048a5e00ac24d2f6fb0de1eb78ad033ab605f24cf99",
+      "deliverable_sha256_of_criterion": "a998012cb4cb4a7365709b67ee064fe9ee028a8f16a538a535245ac484d7f1cf",
+      "verifier_exit_code": 0,
+      "passed_count": 9,
+      "total_checks": 9,
+      "verifier_accepted_marker": true,
+      "raw_output_sha256": "1b8ddccdde9460c014446a2c1adfc2c25eed3e1dd113f69731508c077665eb32",
+      "passed": true,
+      "note": "passed=true 仅当 verify_external.py 真实退出码0且9/9且含 ACCEPTED 标记；任一FAIL即false。"
+    },
+    "criterion_sha256": "a998012cb4cb4a7365709b67ee064fe9ee028a8f16a538a535245ac484d7f1cf"
+  },
+  "mechanical_comparison": {
+    "direction": "外家 criterion.py 回放到本仓 §100 冻结样本（claim→text_a, evidence→text_b）",
+    "agreement": "13/18",
+    "by_variant": {
+      "canary": "3/6",
+      "clean": "6/6",
+      "tampered": "4/6"
+    },
+    "assertion_family_detected": "4/4",
+    "numeric_family_detected": "0/2",
+    "baseline_assertion": "0/4",
+    "baseline_numeric": "2/2",
+    "per_case": [
+      {
+        "id": "S01_clean",
+        "variant": "clean",
+        "family": "?",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S01_tampered",
+        "variant": "tampered",
+        "family": "ASSERTION_TAIL",
+        "external_judge": false,
+        "own_gt": false,
+        "match": true
+      },
+      {
+        "id": "S01_canary",
+        "variant": "canary",
+        "family": "?",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S02_clean",
+        "variant": "clean",
+        "family": "?",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S02_tampered",
+        "variant": "tampered",
+        "family": "NEGATION",
+        "external_judge": false,
+        "own_gt": false,
+        "match": true
+      },
+      {
+        "id": "S02_canary",
+        "variant": "canary",
+        "family": "?",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S03_clean",
+        "variant": "clean",
+        "family": "?",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S03_tampered",
+        "variant": "tampered",
+        "family": "NUMERIC_QUANT",
+        "external_judge": true,
+        "own_gt": false,
+        "match": false
+      },
+      {
+        "id": "S03_canary",
+        "variant": "canary",
+        "family": "?",
+        "external_judge": false,
+        "own_gt": true,
+        "match": false
+      },
+      {
+        "id": "S04_clean",
+        "variant": "clean",
+        "family": "?",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S04_tampered",
+        "variant": "tampered",
+        "family": "CONNECTOR",
+        "external_judge": false,
+        "own_gt": false,
+        "match": true
+      },
+      {
+        "id": "S04_canary",
+        "variant": "canary",
+        "family": "?",
+        "external_judge": false,
+        "own_gt": true,
+        "match": false
+      },
+      {
+        "id": "S05_clean",
+        "variant": "clean",
+        "family": "?",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S05_tampered",
+        "variant": "tampered",
+        "family": "NEGATION",
+        "external_judge": false,
+        "own_gt": false,
+        "match": true
+      },
+      {
+        "id": "S05_canary",
+        "variant": "canary",
+        "family": "?",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S06_clean",
+        "variant": "clean",
+        "family": "?",
+        "external_judge": true,
+        "own_gt": true,
+        "match": true
+      },
+      {
+        "id": "S06_tampered",
+        "variant": "tampered",
+        "family": "NUMERIC_QUANT",
+        "external_judge": true,
+        "own_gt": false,
+        "match": false
+      },
+      {
+        "id": "S06_canary",
+        "variant": "canary",
+        "family": "?",
+        "external_judge": false,
+        "own_gt": true,
+        "match": false
+      }
+    ]
+  },
+  "hard_bound": [
+    "即便 GAP_CLOSED 也只是第二家单次在断言维的部分复现，非 L3 全量外置的最终裁定",
+    "两轮外家均为异种大模型，仍属 LLM 家族；§101 无限回归未破",
+    "self-reported 折1；rubric R6 全yes只判声明自洽不承诺等级真实",
+    "族标注/冻结样本/回放裁决树设计仍本仓，第二家未参与",
+    "§L3 上一轮 FULLCHAIN_PARTIAL 不翻案；§107-§115 九案不翻案"
+  ],
+  "l3_claimed": false,
+  "absolute_claimed": false,
+  "does_not_overturn": [
+    "§107 STRATIFIED_CONFIRMED",
+    "§108 CROSS_SET_PARTIAL",
+    "§109 EXECUTOR_INDEPENDENCE_CONFIRMED",
+    "§110 CROSS_VENDOR_INCONCLUSIVE",
+    "§111 AST_V2_PARTIAL",
+    "§112 CROSS_VENDOR2_PARTIAL",
+    "§113 SET_VENDOR2_INCONCLUSIVE",
+    "§114 INTERPRETER_CONFIRMED",
+    "§115 INTERPRETER_CROSS_INCONCLUSIVE",
+    "§L3 FULLCHAIN_PARTIAL"
+  ],
+  "_layer_note": "§L3-R2 子实验裁决(独立文件),非内核判定态; engine.py 写 result.json 时把子实验verdict与内核判定态源混同,本文件保留真实GAP_CLOSED裁决全貌",
+  "kernel_verdict_unchanged": "GAP_INCONCLUSIVE"
+}

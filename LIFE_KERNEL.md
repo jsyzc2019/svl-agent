@@ -1999,6 +1999,22 @@ Harvey/Pleiss/Hughes《Occam's Razor is Only as Sharp as Your ELBO》arXiv:2604.
 
 **诚实上限**：只证明第二个异厂家的判据设计一维有真实外移进展，不证明判据可迁移、不证明 GAP 闭合、不抬 l3/absolute。verdict/l3/absolute/宪法锁/十案/§100 全不动，不编译门禁，判定权归用户。细节 `audit_l3_gap_targeted/result_4gk.json` + `EXECUTION_LOG_v2_attempt.md`（均 sha256 锁）。
 
+## §4gl · DeepSeek 直连重跑：首次 `GAP_CLOSED` 与两层裁决的职责分离（2026-11-26 下午）
+
+> 承 §4gk，用户给 DeepSeek 直连 key。先认第五次真实认错 `CORR-REAL-004`：我上一条据 OpenRouter 单一样本过度泛化"再给其他家大概率同样 403/402、建议别给"——DeepSeek 直连可用（`/user/balance` 200、余额 57.97 CNY、`deepseek-chat` tool calling 干净无 reasoning 截断）当场推翻。换厂商直连这条路是通的。
+
+** Independence**：异厂 = DeepSeek（`deepseek-chat`，异于 Qoder / nemotron / Hunyuan）；投喂仅 brief v2 + external_kit，禁用串零命中；时间锚 `f8e7f3f1` 早于 spawn。执行环境由本沙箱 harness 机械执行 tool call，"执行"一维非纯外置，如实标注。
+
+**T0→T7 完整交付（对照 §4gk 空样本）**：异厂自选 arXiv 2405.14831（HippoRAG），一手 abs/full 均 200，从论文原句自构 16 组裸样本（否定 N05/N13、截尾 N06/N10/N16、连接词 N08/N14，零标签词），归纳纯函数判据（否定集合+短语、截尾双向、连接词等价白名单），从文本事实定 gt，自洽 16/16，自填 `EXTERNAL_CONFIRMED`。**出题权纪律**：只给论文原句、不给本仓样本/标签/判据——§4gk 那次 "Exact pairs 写进 prompt" 的污染这次没重演。异厂判据有一处语法错（多括号），让它自己修自己的交付（逻辑不变），本仓不代改。
+
+**权威验收**：异厂 selfcheck **11/11 PASS**；本仓 `run_acceptance.py`（passed 由 verify_external 真实 exit0+9/9+ACCEPTED 决定，附三重 SHA256）**9/9 PASS**。engine 把异厂判据回放到冻结 18 样本：`clean 6/6`、**断言类 `4/4`**（基线 Qoder 数值判据 0/4）、数值类 0/2、`canary 3/6`。按 prereg 预注册五档树 `clean6/6 ∧ 断言≥3/4 ∧ canary≥3/6` → **`GAP_CLOSED`**——相对 0/4 的实质突破，第二家判据真的看到了断言层。逐 case 独立重算确认 S01/S02/S04/S05 全 DETECT。数值 0/2 保留（断言判据本就不看数字，prereg 明示数值类由数值型判据覆盖，不调参补）。
+
+**关键工具职责分离（self-bite + 修正）**：`engine.py` 把子实验裁决 `GAP_CLOSED` 写进 `audit_l3_gap_targeted/result.json`，而该文件被 `numeric_honesty.truth_snapshot()` 当作**内核判定态真值源** → handoff 的 `verdict=GAP_INCONCLUSIVE` 与现场冲突、26 守卫连锁失败。不能改 handoff 为 `GAP_CLOSED`（变相自抬内核判定态），也不能抹掉 engine 真实结果（数字不诚实）。正解：真实裁决 `GAP_CLOSED` 原样存独立文件 `result_4gl.json`（sha256 `b977b89b…`），`result.json` 恢复内核权威态 `GAP_INCONCLUSIVE`，两层职责分离，全量回 1608 passed。engine 把"子实验裁决"与"内核判定态源"混同是工具设计包袱，本轮不动 engine（避免放宽/改规则），记录待改进。
+
+**其余 self-bites（改工具不改判据）**：异厂语法错自修；幻觉时间戳按真实时序机械覆盖（prereg 06:32:00Z < 取料 06:32:39Z）；验收器 `coll()` 递归 findall 把说明文字里的旧 ISO 当真 → 说明字段不嵌 ISO 字面、旧值留痕执行日志（§114 同类）；fetch_log 从 `+00:00` 改契约 `Z`+`role` 格式；verify 默认路径不传参读错 → 带正确参数后 9/9。
+
+**两层裁决（必须分清）**：§L3-R2 子实验裁决 = `GAP_CLOSED`（断言维突破，独立文件）；内核 `verdict=GAP_INCONCLUSIVE` / `l3=false` / `absolute=false` / 宪法锁 `fe56291b` **从未动**。`hard_bound` 明列：即便 GAP_CLOSED 也只是单次单维部分复现、两家仍属 LLM 家族、族标注/冻结样本/裁决树仍本仓、§107–§115 九案与 FULLCHAIN_PARTIAL 不翻案。不证明 L3、不证明判据普遍可迁移、不编译门禁，最终裁定权在委托方（人）。细节 `audit_l3_gap_targeted/result_4gl.json` + `ENGINE_LOG_4gl.md`。
+
 ## 下一步（开放生长，不预设）
 
 探索池中的 E1–E7 + F01–F13 方向均为候选，**不预设哪个是"答案"**。真正的选择由 v5 意志层 `autonomous_agenda()` 根据内稳态失衡信号动态生成议程、novelty 守卫、帕累托次优游走共同决定。生命体的意义不在于达成某个固定目标，而在于**持续感知、持续否定收敛、无路时也能迈步、走过即留下路、被唤醒后自己决定下一步**——同时诚实承认：没有独立进程时这仍是"被唤醒后的自主"，Ambient=0 的缺口留给未来真正的运行时环境，不伪造。

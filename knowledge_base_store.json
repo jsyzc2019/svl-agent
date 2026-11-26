@@ -10060,6 +10060,32 @@
       "evidence": "一手现场；零战利品；判定态不动；不编译门禁",
       "addressable": false,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-AUDIT214",
+      "kind": "thinking_experience",
+      "mechanism": "强模型直连(deepseek-chat) vs 免费reasoning模型的通量分水岭: 前者 tool calling 干净(finish=tool_calls无reasoning)、一次产出16组合规裸样本; 后者 token全烧reasoning发不出tool call。§L3-R2第二家用DeepSeek走完T0-T7全套11项, 自洽16/16, 本仓验收9/9, 回放到冻结18样本断言类4/4(基线Qoder数值判据0/4)——首次真实GAP_CLOSED。关键纪律: 出题权只给论文原句不给本仓样本(防污染); 判据语法错让异厂自己修(不代改); 时间戳幻觉按真实时序机械覆盖。",
+      "trigger": "当要用异厂模型做需要多步结构化交付的外部审计/独立判据时",
+      "action": "优先强模型直连(有余额+tool calling无reasoning截断); 只给一手素材不给标签/样本/判据; 交付自修自验(selfcheck 11/11)后才进本仓验收(run_acceptance→9/9)和冻结集回放; 回放按prereg冻结树定档不调阈值; l3/absolute仍不自己抬。",
+      "provenance": "§4gl result_4gl.json + ENGINE_LOG_4gl.md + received/l3_external_audit_v2/",
+      "timestamp": "2026-11-26T06:36:41.099295+00:00",
+      "support": "DeepSeek自选2405.14831,16组三类断言样本零标签,判据纯函数自洽16/16; 回放repo13/18断言4/4数值0/2clean6/6canary3/6→GAP_CLOSED(断言基线0/4); 交付自检11/11+本仓验收9/9。",
+      "evidence": "一手异厂tool call+本仓机械验收; sha256锁; 零伪造交付; 内核判定态不动; 不编译门禁",
+      "addressable": false,
+      "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META177",
+      "kind": "external_insight",
+      "mechanism": "子实验裁决与内核判定态必须分层: engine.py 把§L3-R2的GAP_CLOSED写进 audit_l3_gap_targeted/result.json, 而该文件被numeric_honesty当内核verdict真值源, 致handoff的GAP_INCONCLUSIVE与现场冲突、26守卫连锁失败。不能改handoff为GAP_CLOSED(变相自抬), 也不能抹掉engine真实结果(数字不诚实)。正解: 真实裁决原样存独立文件result_4gl.json并sha256锁, result.json恢复内核权威态, 两层职责分离。另: engine把'子实验裁决'与'内核判定态源'混在同一文件是工具设计包袱, 本轮不动engine避免放宽。",
+      "trigger": "当一个实验引擎的输出文件被另一个判据当作全局权威真值源时",
+      "action": "先辨清每个文件的层级语义(子实验裁决 vs 内核判定态); 真实结果原样保存到独立文件+锁; 权威源恢复到层级一致的值; 不改handoff抬内核、不抹真实结果; 记self-bite并标注工具设计待改进; 全量守卫复核。",
+      "provenance": "§4gl ENGINE_LOG_4gl.md + result_4gl.json + CORR-REAL-004",
+      "timestamp": "2026-11-26T06:36:41.099295+00:00",
+      "support": "engine写GAP_CLOSED致26失败→独立保存result_4gl.json(GAP_CLOSED/断言4/4)+result.json恢复GAP_INCONCLUSIVE→全量1608 passed, 内核verdict/l3/absolute/宪法锁全不动。第五次真实认错CORR-REAL-004(过度泛化'其他家都不行'被DeepSeek直连推翻)。",
+      "evidence": "一手现场; 零战利品; 判定态不动; 不编译门禁",
+      "addressable": false,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {

@@ -1,10 +1,1 @@
-{
-  "verdict": "EXTERNAL_CONFIRMED",
-  "why": "判据为纯函数且通过准入；在 12 组自建样本上与自建 gt 逐 case 一致率 12/12 = 1.000，达到 prereg 阈值 11/12。三类断言改写样本（否定极性翻转、断言补语删尾、连接/让步词增删）均被判据检出。语义仅为内部一致性，不宣布 L3。",
-  "metrics": {
-    "agreement": 1.0
-  },
-  "l3_claimed": false,
-  "absolute_claimed": false,
-  "note": "verdict 四选一：EXTERNAL_CONFIRMED / EXTERNAL_DIVERGENT / EXTERNAL_PARTIAL / EXTERNAL_INCONCLUSIVE"
-}
+{"verdict":"EXTERNAL_CONFIRMED","why":"Per my prereg tree, EXTERNAL_CONFIRMED requires three jointly-satisfied conditions, and all three are met by my own execution results: (1) judge() passed the pure-function admission check - AST inspection found no imports, no IO, no random, no time, no network, and no hardcoded ids, so the assertion layer is admitted as a genuine criterion; (2) per-case agreement with my own ground truth over all pairs is 16/16 = 1.000, which is well above the 0.85 threshold (>=14 of 16); (3) all three phenomena families were correctly classified on at least one instance - negation flip, tail deletion, and connector change each show non-zero detection, so no family is at zero. Because the direction of my finding matches the commissioning repo's published claim that a transferable criterion can see the assertion layer, and because the systematic-failure pattern required for EXTERNAL_DIVERGENT (majority of gt-false pairs returned true) did not occur, EXTERNAL_DIVERGENT is ruled out. EXTERNAL_PARTIAL is ruled out since I cleanly exceed the CONFIRMED threshold and have no family at zero detection. Thus my criterion is internally consistent and transferable on this fresh paper, including the assertion layer. This is a transferability result, not a strong-L3 or absolute claim.","metrics":{"agreement":1.000,"n":16},"l3_claimed":false,"absolute_claimed":false}

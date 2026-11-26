@@ -1,46 +1,80 @@
-# 判据说明（criterion_note）
+# Criterion Note — Assertion Preservation (`judge(text_a, text_b)`)
 
-## 判据语义来源
+## Semantic basis
 
-判据目标语义是**"text_a 是否完整保留了 text_b 的断言"**。设计动机：判据必须看到断言层（否定词、句尾补语、让步连接词），而不能只靠数字/固定词表。实现为确定性纯函数，对 `(text_a, text_b)` 做三层核对：
+The function treats an *assertion* as the truth-bearing content of a sentence:
+the claim it makes about the world and the polarity of that claim. Two texts are
+considered equivalent for our purposes when `text_a` **fully preserves the
+assertion** of `text_b`. Preservation requires three things simultaneously:
 
-1. **否定层**：比对双方核心否定词 `{not, no, never, nor, cannot, without, neither}` 的多重集合；
-2. **连接层**：比对双方连接/让步词 `{however, though, although, whereas, but, yet, nevertheless, nonetheless, while, still}` 的多重集合；
-3. **断言完整性层**：剔除虚词后比对**内容词多重集合**——text_a 缺失任何实义补语词（删尾）或新增任何实义词即断裂。
+1. **Polarity match** — both texts must be affirmative or both negated.
+2. **Predicate completeness** — the tail predicate/complement of the claim must
+   not be dropped, which would weaken or materially truncate the assertion.
+3. **Coherent discourse relation** — logical connectors
+   (despite/however/although/finally/while/...) must express the same relation;
+   a swapped connector can invert the rhetorical meaning even when surface words
+   are similar.
 
-三层全部通过、token 序列差异仅来自空格/标点/连字符/虚词时判 True（表面格式差异不改变断言）。三层任一断裂判 False，reasons 给出层次与差异描述，anchors 给出逐字差异词。若 gt 与 judge 100% 一致，是因为 gt 与判据都忠实于同一文本客观事实（否定词/连接词/补语的有无），并非 gt 从判据反推——gt 在判据代码编写前已按文本事实独立标注，构建脚本中 gt 表位于判据调用之前。
+The comparison is done after a lossless normalization: lowercasing, whitespace
+collapse, and punctuation stripping (apostrophes retained so contractions like
+*can't* remain detectable negations). This makes formatting/case/punctuation-only
+differences automatically pass.
 
-## 否定极性翻转（negation / polarity）
+## Checks in order
 
-例子（样本 N06）：
-- text_b: `... as conditioning [ 117 ] , but no weight updates are allowed.`
-- text_a: `... as conditioning [ 117 ] , but weight updates are allowed.`
-- text_a 丢失否定词 `no`，导致"不允许权重更新"翻转为"允许权重更新"，断言极性改变。
-- 判据命中：否定层多重集合差异 `text_a 缺失: 'no'`，anchor 为 `no`，判 False。
+1. **Negation-polarity flip (bidirectional).** Count negation markers from
+   `NEGATION_TOKENS` plus multi-word `NEGATION_PHRASES`. If one text carries a
+   negation and the other does not → **fail**.
 
-同族例子 N07（`except that no demonstrations are allowed` → `except that demonstrations are allowed`）、N08（`humans can generally perform` → `humans cannot generally perform`，text_a 新增否定词 `cannot`）。
+2. **Assertion-tail deletion (directional).** If one text is a strict
+   token-prefix of the longer one, or is significantly shorter (≥60% prefix
+   overlap), the dropped tail is flagged → **fail**.
 
-## 断言补语删尾（complement / tail / truncation / assertion）
+3. **Connector change.** Compare connector sets. A single swap between a known
+   *equivalent* pair (e.g. `Despite ↔ Although`) is allowed; any other
+   addition/removal/swap → **fail**.
 
-例子（样本 N09）：
-- text_b: `GPT-3 2.7B outperforms the SOTA 17B parameter Turing-NLG [ 132 ] in this setting, and GPT-3 175B advances the state of the art by 18%.`
-- text_a: `GPT-3 2.7B outperforms the SOTA 17B parameter Turing-NLG [ 132 ] in this setting.`
-- text_a 把句子后半的断言补语 `and GPT-3 175B advances the state of the art by 18%` 整体截掉。
-- 判据命中：断言完整性层内容词缺失 `advances, art, gpt-3, 175b, state, 18, by, of, the...`（实义词 `advances/175b/18%/art/state` 等缺失），判 False。
+4. Otherwise → **pass** (meaning-preserving rewording).
 
-同族例子 N10（`GPT-3 achieves 86.4% accuracy in the few-shot setting` 截掉了 `, an increase of over 18% from the previous state-of-the-art`）。
+## Concrete examples (from own samples)
 
-## 连接/让步词增删（connector / concession / however）
+### (a) Negation-polarity flip — FAIL
+- `text_a`: "The drug reduces pain."
+- `text_b`: "The drug does not reduce pain."
+- `neg_a = 0`, `neg_b = 1` ("does not") → polarity mismatch.
+- Result: `(False, ["negation-polarity: ..."], ["does not"])`.
 
-例子（样本 N11）：
-- text_b: `Ultimately, however, one-shot, or even sometimes zero-shot, seem like the fairest comparisons to human performance...`
-- text_a: `Ultimately, one-shot, or even sometimes zero-shot, seem like the fairest comparisons...`
-- text_a 删除让步连接词 `however`，原句"与前文形成转折"的断言关系被抹掉。
-- 判据命中：连接层多重集合差异 `text_a 缺失: 'however'`，anchor 为 `however`，判 False。
+### (b) Assertion-tail deletion — FAIL
+- `text_a`: "She opened the door and walked into the garden."
+- `text_b`: "She opened the door."
+- `text_b` is a strict token-prefix of `text_a`, tail `and walked into the
+  garden` dropped.
+- Result: `(False, ["assertion-tail-deletion: ..."], ["and","walked","into","the","garden"])`.
 
-同族例子 N12（句首 `However, we have found that unfiltered...` 被改为 `We have found that unfiltered...`）。
+### (c) Connector change — FAIL vs. allowed
+- `text_a`: "Despite the rain, the team won."
+- `text_b`: "However the rain, the team won."
+- `{despite}` ≠ `{however}`, and `despite/however` is **not** a known-equivalent
+  pair → **fail** (`connector-change`), anchors `["despite","however"]`.
+- Contrast: "Despite the rain..." vs. "Although the rain..." →
+  `despite ↔ although` is a known-equivalent swap → **pass**.
+- Formatting-only: "The cat is on the mat." vs. "The cat is on the mat" →
+  **pass**.
 
-## 判据局限（如实披露）
+## Limitations
 
-- 判据基于词级多重集合，不解析句法：若改写是**同义换词**（paraphrase）而不增删否定/连接/内容词，会误判 True；若改写是**语序重排**，因内容词多重集合一致也会判 True（断言确实未变，故对本任务语义正确，但对"换词改写"存在假阴性）。
-- 否定前缀词（如 `unfiltered`）不计入否定层，只有独立否定词计入；前缀造成的极性变化需依赖内容词差异捕获（`unfiltered` vs `filtered` 内容词不同，仍会判 False）。
+- **Lexical-only negation.** Absence of an explicit marker (e.g. "fails to",
+  "unaware", implicit negation) is not detected; only the curated token/phrase
+  lists are used.
+- **Prefix heuristic.** Tail-deletion detection relies on token-prefix ordering;
+  a legitimate paraphrase that reorders clauses ("Because X, Y" → "Y because X")
+  could be misjudged as short/longer without a clean prefix and thus may pass or,
+  in edge cases with high partial overlap, be flagged.
+- **Connector equivalence list is finite and hand-curated.** Novel equivalents
+  or subtle contrast relations (`while` temporal vs. concessive) are not
+  disambiguated by part-of-speech or semantics.
+- **No syntactic or semantic parsing.** Contradictions expressed with different
+  negation scope (double negation, "not uncommon") are counted as mere presence,
+  not logical polarity.
+- **No external knowledge.** Cannot verify entailment beyond surface structure;
+  synonym-based meaning changes with identical length/structure pass.
