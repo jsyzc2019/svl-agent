@@ -10268,6 +10268,19 @@
       "evidence": "一手现场;已知盲区机械化;判据对自身路径依赖失明;首用抓自己不利结论;两判据并列不抹平;口径敏感性公开;自指未捕获如实;不追认失败;判定态不动",
       "addressable": false,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META192",
+      "kind": "thinking_experience",
+      "mechanism": "代理标签≠构念真值——拿证据审自己的性能陈述(§4gb P0抓手): 本仓财务盲测报recall=1.0/precision=0.75被当可信结论,但它是建立在审计意见(代理标签)而非叙事真实性(构念)之上。预注册(sha92025d41)锁三条证伪,从finance_blind_test_result现场抽取:CV1代理-构念背离(奥瑞德600666:会计信号alarm=1却标准无保留意见,只判背离不判真假);CV2 precision=0.75的Wilson95CI=[0.30,0.95]极宽(n=4点估计不稳);CV3样本基础率3/9=33%分层抽样人为富集+跨阈值precision 0.429~0.75敏感。纯函数construct_validity.py裁决PROXY_GAP_CONFIRMED,三注入负向自咬全过(不会永远喊gap)。",
+      "trigger": "当你把自己的二分类性能陈述(准确率/精确率)当真值结论时;当结局标签是代理量(审计意见/评分/标签)而你声称测的是构念(真实性/能力/质量)时;当样本基础率被抽样设计人为抬高时;当点估计不带置信区间时",
+      "action": "把性能陈述拆成代理标签vs独立信号vs判据预测三列,统计标签-信号背离(只判背离事实不判孰真孰假);点估计必带Wilson区间,n小就如实报不稳;报样本基础率与抽样方式,标总体基础率UNKNOWN不外推;做阈值敏感性看是否稳健;三项全中则判定代理不可当构念、性能陈述降级;硬边界:绝不判个股真假/投资价值,禁把代理背离样本写成其实造假;阴性≠证明;判定态三值/宪法/§100/十案全不动",
+      "provenance": "§4gb prereg_finance_construct_validity_20261127.json(sha92025d41)+life_kernel/construct_validity.py+audit_finance_construct_validity/{engine.py,result.json,falsification_entries.jsonl}+tests/test_finance_construct_validity.py",
+      "timestamp": "2026-11-27T00:24:06.000000Z",
+      "support": "三条证伪全成立:CV1背离1家(奥瑞德600666)/CV2 CI[0.3006,0.9544]宽0.6538/CV3极差0.321;裁决PROXY_GAP_CONFIRMED;三注入自咬全过;8守卫;全量1694→1702;判定态三值GAP_INCONCLUSIVE/l3=false/absolute=false与宪法锁字节未动;不编译门禁未新增异厂调用;不判个股真假不构成投资建议;总体基础率UNKNOWN不外推;康美FP历史口径差异公开(实际FP是奥瑞德不冒充);因子有效性小话未引用未入仓;三条候选证伪写独立文件不覆盖正式falsification_log.jsonl",
+      "evidence": "一手现场;P0找自己信条的错;拿证据审本仓判据;代理不等于构念;点估计带区间;基础率富集不外推;阈值敏感;硬边界不判个股;阴性≠证明;历史口径差异留痕;判定态不动",
+      "addressable": false,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {

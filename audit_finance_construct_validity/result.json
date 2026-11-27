@@ -1,0 +1,107 @@
+{
+  "round": "§4gb",
+  "prereg_sha256_locked": "92025d41ccd935ec7350eed04cee0d58b4414f3de987259526475b4943bda71c",
+  "prereg_hash_ok": true,
+  "data_tier": "A- 本仓已加工公开财务指标（非年报原文）；不构成投资建议；不判个股真假",
+  "source_files": {
+    "finance_result_sha256": "354e34ca3bfcbd74"
+  },
+  "verdict_triplet_before": [
+    "GAP_INCONCLUSIVE",
+    false,
+    false
+  ],
+  "verdict_triplet_after": [
+    "GAP_INCONCLUSIVE",
+    false,
+    false
+  ],
+  "sample_base_rate": 0.3333333333333333,
+  "n_usable": 9,
+  "organ_result": {
+    "verdict": "PROXY_GAP_CONFIRMED",
+    "cv1_proxy_gap": {
+      "passed": true,
+      "count": 1,
+      "n": 9,
+      "indices": [
+        3
+      ],
+      "note": "信号异常但代理标签阴性=代理与构念非同一；只判背离事实不判真假。"
+    },
+    "cv2_precision_ci": {
+      "passed": true,
+      "tp": 3,
+      "fp": 1,
+      "n": 4,
+      "precision": 0.75,
+      "wilson_ci": [
+        0.3006,
+        0.9544
+      ],
+      "ci_width": 0.6538
+    },
+    "cv3_base_rate_sensitivity": {
+      "passed": true,
+      "span": 0.321,
+      "sensitive": true,
+      "n": 6,
+      "min": 0.429,
+      "max": 0.75,
+      "population_base_rate_hint": "UNKNOWN",
+      "note": "hint 缺省为 UNKNOWN，不外推真实世界基础率。"
+    },
+    "hard_limit": "方法论判定：代理标签与构念是否可混用。绝不判个股真假/投资价值，不构成投资建议。"
+  },
+  "negative_self_bite": {
+    "passed": true,
+    "detail": {
+      "identical_labels_no_gap": true,
+      "narrow_ci_not_flagged": true,
+      "insensitive_not_flagged": true
+    }
+  },
+  "falsification_candidates": [
+    {
+      "id": "FALSIFY-CV1-PROXY-NOT-CONSTRUCT",
+      "round": "§4gb",
+      "target_belief": "审计意见代理标签可作为『财务叙事真实性』构念真值使用（本仓性能陈述隐含前提）",
+      "method": "现场抽取 finance_blind_test_result.json 中 alarm=1 但 label_neg=0 的背离样本，只判标签-信号背离事实",
+      "finding": "背离样本 1 家（代理标签阴性但会计信号预警），代理与构念不可等同",
+      "divergent_samples": [
+        {
+          "code": "600666",
+          "name": "奥瑞德",
+          "alarm": 1,
+          "label_neg": 0,
+          "label_opinion": "标准无保留意见"
+        }
+      ],
+      "honest_limit": "不判定任何个股造假真值（清单红线）；背离只说明两种口径不等价，不说明孰对孰错",
+      "verdict_impact": "不动（verdict/l3/absolute 不变）",
+      "discipline": "拿证据审本仓判据，非用红线审证据；阴性≠证明"
+    },
+    {
+      "id": "FALSIFY-CV2-PRECISION-CI-WIDE",
+      "round": "§4gb",
+      "target_belief": "precision=0.75 是稳定的点估计，可支撑『判据精确率 0.75』陈述",
+      "method": "Wilson score 95% 区间重算（TP=3, FP=1, n=4）",
+      "finding": "point=0.75, CI=[0.3006, 0.9544], width=0.6538",
+      "honest_limit": "n=4 极小；CI 宽是『结论不稳』证据，不是『反结论成立』证据",
+      "verdict_impact": "不动",
+      "discipline": "点估计须带不确定性，不把 0.75 包装成确定"
+    },
+    {
+      "id": "FALSIFY-CV3-BASE-RATE-ENRICHMENT",
+      "round": "§4gb",
+      "target_belief": "本仓财务盲测的 precision 可外推到真实世界",
+      "method": "读取 sensitivity 全阈值配置极差 + 现场算样本基础率",
+      "finding": "样本基础率=0.3333（分层抽样人为富集）; precision 跨配置极差=0.321 (0.429~0.75)",
+      "honest_limit": "总体基础率 UNKNOWN（用户未给），不外推；只指出本样本结论对阈值/构成敏感",
+      "verdict_impact": "不动",
+      "discipline": "富集样本结论不外推；不判个股；不构成投资建议"
+    }
+  ],
+  "honest_bound_history_note": "清单 §57 原文写『康美 FP』，但本仓 finance_blind_test_result.json 的 10 家样本里并无康美；实际 alarm=1 且 label_neg=0 的代理标签背离样本是奥瑞德(600666)。本轮如实按现场数据记为奥瑞德，不把奥瑞德冒充康美，也不臆造康美 FP 证据。此为历史叙述口径差异，公开留痕不作掩盖。",
+  "honest_summary": "拿证据审本仓自己的财务盲测结论（P0 本意，非内审递归，非因子有效性小话）：三条证伪全部成立——CV1 代理标签与会计信号背离（审计意见≠叙事真实性构念）、CV2 precision=0.75 的 Wilson95CI=[0.30,0.95] 极宽、CV3 样本基础率 33% 人为富集且跨阈值 precision 0.429~0.75 敏感。器官裁决=PROXY_GAP_CONFIRMED，负向自咬通过=True。硬边界：不判任何个股真假、总体基础率 UNKNOWN 不外推、三条是『本仓结论不可靠』的证据非『反结论成立』的证据。判定态三值/宪法锁/§100/十案全不动。"
+}

@@ -1,0 +1,63 @@
+{
+  "round": "§4gb",
+  "title": "财报复跑专项：把『代理标签≠构念真值』落成可复用构念效度检查项，拿证据审本仓自己的判据",
+  "authority": "NEXT_STAGE_PLAN_20261125.md §55-58（P0 具体抓手；非投资建议）；用户『按你的意见推』(2026-11-27)",
+  "time_anchor_utc": "2026-11-27T00:22:10.000000+00:00",
+  "what_this_is": "P0 的本意——用外部一手财务数据去审本仓自己财务盲测的结论，找『我现在信条的错』。非内审递归（对象不是我自己的元判据，而是本仓一条实证结论），非因子有效性小话（那番问答不入仓，本轮不引用、不落档、不混入）。",
+  "data_tier": "A- 本仓已落档的公开财务接口加工指标（finance_blind_test_result.json，methodology 自述『公开接口加工指标非年报原文』）+ 2025 年报审计意见标签。非年报原文逐字核验，标 A- 诚实降级，不作 A 级一手。",
+  "target_belief": "本仓 finance_blind_test_result.json 结论『预警判据 recall=1.0 / precision=0.75，判据有效』被当作可信的性能陈述。本轮检验：该陈述是否把『审计意见代理标签』误当『叙事真实性构念真值』、且忽略 precision 不确定性与抽样基础率。",
+  "three_falsifications": [
+    {
+      "id": "CV1_proxy_not_construct",
+      "claim": "结局标签『2025 审计意见(标准无保留 vs 非标)』是代理标签，不等于构念真值『财务叙事真实性』；把 precision/recall 建立其上只测到了代理一致性，没测到构念。",
+      "predicate": "存在至少一家：预警判据 alarm=1（会计信号强烈异常）但 label_neg=0（标准无保留）——即代理标签与会计信号背离，证明两者非同一构念。",
+      "evidence_source": "finance_blind_test_result.json results[] 现场抽取，不判定该股真假，只判『标签与信号背离』这一事实。",
+      "falsifier": "若全样本 alarm 与 label_neg 完全一致（无背离），则代理≈构念，本条不成立。"
+    },
+    {
+      "id": "CV2_precision_ci_wide",
+      "claim": "precision=0.75 是 n=4（TP+FP）的点估计，置信区间极宽，不足以支撑『判据精确率稳定在 0.75』。",
+      "predicate": "Wilson 95% CI 下界 < 0.5 且区间宽度 > 0.5。",
+      "evidence_source": "metrics.混淆矩阵 TP=3/FP=1 现场重算 Wilson score interval。",
+      "falsifier": "若 CI 下界 ≥0.5 或宽度 ≤0.5，则点估计够稳，本条不成立。"
+    },
+    {
+      "id": "CV3_base_rate_enrichment",
+      "claim": "样本基础率 3/9=33% 是分层抽样（risk/normal 各半）人为富集，不代表真实世界非标审计意见的基础率；在该富集样本上算出的 precision 不可外推。",
+      "predicate": "sensitivity 显示阈值 k>=1 时 precision 从 0.75 掉到 0.429（FP 从1涨到4），说明结论对阈值/样本构成高度敏感。",
+      "evidence_source": "sensitivity.F_阈值放宽k>=1 现场读取；methodology 抽样段『固定种子分层随机抽10家』。",
+      "falsifier": "若各阈值配置 precision 稳定在同一水平，则结论稳健，本条不成立。"
+    }
+  ],
+  "reusable_organ": {
+    "name": "construct_validity.py",
+    "kind": "pure function，不联网不 spawn 不改判定态",
+    "input": "一个二分类评估：proxy_labels[]（代理标签）、signals[]（独立会计信号）、predictions[]（判据预测）、sample_base_rate、population_base_rate_hint",
+    "output": "proxy_construct_gap（代理-构念背离数）、precision_point、precision_wilson_ci、base_rate_sensitivity_flag、verdict",
+    "verdict_tree": {
+      "PROXY_GAP_CONFIRMED": "CV1 有背离实证 且 CV2 CI宽 且 CV3 敏感 → 代理标签不能当构念真值，本仓性能陈述须降级",
+      "PARTIAL": "仅 1-2 条成立",
+      "REFUTED": "三条 falsifier 全部触发"
+    },
+    "hard_limit": "只输出『代理与构念是否可混用』的方法论判定；绝不输出任何个股是否造假/是否值得投资的判断；population_base_rate_hint 若用户不提供则标 UNKNOWN 不外推"
+  },
+  "negative_self_bite": [
+    "注入一个 proxy 与 signal 完全一致的样本 → 必须判无背离（防器官永远喊有 gap）",
+    "注入 precision CI 窄样本(TP=90,FP=10) → 不得报 CI 宽",
+    "注入阈值不敏感样本 → 不得报 base_rate_sensitivity_flag"
+  ],
+  "honest_bounds": [
+    "数据源是本仓已加工的财务指标，非年报原文逐字核验——不能声称 A 级一手，标 A-。",
+    "不判定任何个股造假真值（清单红线）；奥瑞德 FP 只作为『代理标签与信号背离』的样本，不写成『它其实造假』。",
+    "样本 n=9 极小，三条实证是『本仓结论不可靠』的证据，不是『反结论成立』的证据——阴性≠证明。",
+    "factor validity 问答是小话，本轮不引用、不落档、不与之混同；若本产物任何字段出现该问答内容即为越界。",
+    "判定态三值 verdict=GAP_INCONCLUSIVE/l3=false/absolute=false、宪法锁、§100、十案全不动。"
+  ],
+  "falsification_log_entries": 3,
+  "does_not_change": [
+    "verdict / l3 / absolute",
+    "宪法锁 / §100 / 十案",
+    "不编译新门禁 / 不新增异厂调用 / 不判定个股真假 / 不构成投资建议"
+  ],
+  "sha256": "92025d41ccd935ec7350eed04cee0d58b4414f3de987259526475b4943bda71c"
+}

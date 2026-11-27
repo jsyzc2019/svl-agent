@@ -54,8 +54,8 @@ def test_05_boundary_case_and_novel_flagged():
 
 
 def test_06_kb_total_unchanged():
-    # §4gx 回填后基线 494；§4gy +189 → 495；§4gz +190 → 496；§4ga +191 → 497。总数变化只由显式新条目驱动。
-    assert len(_kb()["items"]) == 497
+    # §4gx 回填后基线 494；§4gy +189 → 495；§4gz +190 → 496；§4ga +191 → 497；§4gb +192 → 498。总数变化只由显式新条目驱动。
+    assert len(_kb()["items"]) == 498
 
 
 def test_07_verdict_source_bytes_unchanged():
