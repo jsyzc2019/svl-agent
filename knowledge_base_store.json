@@ -10309,6 +10309,19 @@
       "evidence": "一手现场;裁定权归用户;执行不代裁;改动最小;生成源优先;判据快照不追认漂移;台账合并hash核验;边界字段完整随行;历史快照不追认失败;判定态不动",
       "addressable": false,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META195",
+      "kind": "thinking_experience",
+      "mechanism": "裁定留档也要回执,否则执行了却写待执行(§4hf): §4he三项裁定全落地,DECISIONS_20261127.json三条status却仍PENDING_EXECUTION——裁定记录说待执行/handoff说已执行,自相矛盾,且是§4he自身制造(执行裁定忘回写)。这不是内审判据递归(对象=留档完整性非判据有效性)、非因子小话。预注册(sha8c02729b)锁三现场只读探针(D1:KB两条provenance含裁定采纳回填/D2:log>=6行且三条CV id在/D3:verdict以DEFERRED开头)+status期望映射(PENDING→NOT_EXECUTED/EXECUTED→EXECUTED);纯函数life_kernel/decision_receipt.py首用抓RECEIPT_MISMATCH(三探针全EXECUTED但status全PENDING),负向自咬三注入全过(全一致不误报/两方向失配都抓)。",
+      "trigger": "当你执行了用户裁定却没回写裁定记录状态时;当一处留档说待办另一处说已办时;当执行回执靠人肉记忆而非机械核验时;当裁定内容重要却状态字段没人守卫时",
+      "action": "把裁定状态做成可核验回执:预注册锁三条只读现场探针(不硬编码已执行)+status期望映射;纯函数比对status期望vs现场探针,不符报RECEIPT_MISMATCH并列出id;补录只改status+加receipt{时间戳/证据锚点/非新裁定note},裁定实质字段逐字不动;首用失配快照存独立first_use_snapshot.json只读不随重跑改写(不追认失败),after每次现场算;三注入负向自咬;对象=留档完整性非判据有效性,避免伪装成内审递归;判定态三值/宪法/§100/十案全不动",
+      "provenance": "§4hf prereg_decision_receipt_20261127.json(sha8c02729b)+life_kernel/decision_receipt.py+audit_decision_receipt/{engine.py,result.json,first_use_snapshot.json}+DECISIONS_20261127.json(回执补录)+tests/test_decision_receipt.py",
+      "timestamp": "2026-11-27T02:29:10.000000Z",
+      "support": "首用RECEIPT_MISMATCH(三条失配),补录后ALL_RECEIPTS_CONSISTENT;三注入自咬全过;1处self-bite(§4he自身缺口)如实记;1处测试字段名bug(user_verdict非verdict)就地修判据未变;8守卫+证据链目录67→68;全量1710→1718;裁定实质字段逐字一致(补录只加status+receipt);判定态三值GAP_INCONCLUSIVE/l3=false/absolute=false与宪法锁字节0f3ccb13未动;不编译门禁未新增异厂调用不构成投资建议;因子小话不入仓",
+      "evidence": "一手现场;裁定留档完整性;可纠错溯源闭环;执行回执机械核验;首用失配快照不追认;补录不改实质;不新裁定不代裁;负向自咬;判定态不动",
+      "addressable": false,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {

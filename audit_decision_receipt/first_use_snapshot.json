@@ -1,0 +1,20 @@
+{
+  "at_utc": "2026-11-27T02:26:16.000000+00:00",
+  "note": "§4hf 首用实测快照，采于补录回执之前（补录动作 at_utc 同日稍后）。status 快照为补录前真实值，非事后编造。此文件只读、不随引擎重跑改写——保留『首用抓到 MISMATCH』的历史事实，不追认失败。",
+  "decisions_status_before": {
+    "D1-provenance-backfill": "PENDING_EXECUTION",
+    "D2-falsification-merge": "PENDING_EXECUTION",
+    "D3-judgment-fork-defer": "PENDING_EXECUTION"
+  },
+  "probe_results_at_first_use": {
+    "D1-provenance-backfill": "EXECUTED",
+    "D2-falsification-merge": "EXECUTED",
+    "D3-judgment-fork-defer": "EXECUTED"
+  },
+  "first_use_signal": "RECEIPT_MISMATCH",
+  "first_use_mismatch_ids": [
+    "D1-provenance-backfill",
+    "D2-falsification-merge",
+    "D3-judgment-fork-defer"
+  ]
+}

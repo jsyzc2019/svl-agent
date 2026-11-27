@@ -1,0 +1,83 @@
+{
+  "round": "§4hf",
+  "prereg": "prereg_decision_receipt_20261127.json",
+  "object": "裁定留档完整性（可纠错溯源闭环），非判据有效性递归、非因子小话",
+  "probe_results": {
+    "D1-provenance-backfill": "EXECUTED",
+    "D2-falsification-merge": "EXECUTED",
+    "D3-judgment-fork-defer": "EXECUTED"
+  },
+  "receipt_check_before": {
+    "signal": "RECEIPT_MISMATCH",
+    "mismatch_ids": [
+      "D1-provenance-backfill",
+      "D2-falsification-merge",
+      "D3-judgment-fork-defer"
+    ],
+    "rows": [
+      {
+        "id": "D1-provenance-backfill",
+        "status": "PENDING_EXECUTION",
+        "expected_by_status": "NOT_EXECUTED",
+        "actual_probe": "EXECUTED",
+        "consistent": false
+      },
+      {
+        "id": "D2-falsification-merge",
+        "status": "PENDING_EXECUTION",
+        "expected_by_status": "NOT_EXECUTED",
+        "actual_probe": "EXECUTED",
+        "consistent": false
+      },
+      {
+        "id": "D3-judgment-fork-defer",
+        "status": "PENDING_EXECUTION",
+        "expected_by_status": "NOT_EXECUTED",
+        "actual_probe": "EXECUTED",
+        "consistent": false
+      }
+    ],
+    "n": 3
+  },
+  "receipt_check_after_backfill": {
+    "signal": "ALL_RECEIPTS_CONSISTENT",
+    "mismatch_ids": [],
+    "rows": [
+      {
+        "id": "D1-provenance-backfill",
+        "status": "EXECUTED",
+        "expected_by_status": "EXECUTED",
+        "actual_probe": "EXECUTED",
+        "consistent": true
+      },
+      {
+        "id": "D2-falsification-merge",
+        "status": "EXECUTED",
+        "expected_by_status": "EXECUTED",
+        "actual_probe": "EXECUTED",
+        "consistent": true
+      },
+      {
+        "id": "D3-judgment-fork-defer",
+        "status": "EXECUTED",
+        "expected_by_status": "EXECUTED",
+        "actual_probe": "EXECUTED",
+        "consistent": true
+      }
+    ],
+    "n": 3
+  },
+  "negative_self_bite": {
+    "passed": true,
+    "detail": {
+      "all_consistent_not_flagged": true,
+      "pending_but_done_caught": true,
+      "executed_but_not_done_caught": true
+    }
+  },
+  "self_bites": [
+    "§4he 自身制造缺口：执行了裁定却忘回写 status，本轮由首用取证抓到并补录，如实认不粉饰（非 CORR-REAL 认知错误，是留档完整性遗漏）。"
+  ],
+  "honest_summary": "首用抓到 RECEIPT_MISMATCH：三项裁定 D1/D2/D3 现场探针全 EXECUTED，但 DECISIONS 三条 status 仍 PENDING_EXECUTION——裁定记录说待执行、handoff 说已执行，留档自相矛盾。此缺口由 §4he 自身制造（执行了裁定却忘回写 status），如实认，不粉饰。补录 action=执行规则只补 status+receipt 字段，不改裁定实质内容、不新裁定、不代用户裁定。负向自咬三注入（全一致不误报/两方向失配都抓）全过。",
+  "verdict_impact": "不动（verdict/l3/absolute 与宪法锁字节未变，判定态前后快照核验）"
+}

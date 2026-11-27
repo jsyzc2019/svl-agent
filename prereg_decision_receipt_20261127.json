@@ -1,0 +1,29 @@
+{
+  "round": "§4hf",
+  "at_utc": "2026-11-27T02:26:16.000000+00:00",
+  "question": "裁定记录 DECISIONS_20261127.json 的 status 字段，是否与三项裁定的实际落地状态一致？若不一致，如何在不新裁定、不改裁定内容的前提下补录执行回执并防复发？",
+  "why_this_is_not_inner_audit": "对象=裁定留档的完整性（可纠错溯源闭环），非 vanity/stop_pivot 判据有效性、非因子有效性小话。猎场=decision_receipt 家族，与 vanity/narrowing 不同族，不构成 §4ga 连续收窄链。",
+  "observation": "现场初核：三项裁定（D1 provenance 回填 / D2 财报证伪并入 / D3 judgment_fork 降级）均已实际落地并经守卫验证，但 DECISIONS 三条 status 仍为 PENDING_EXECUTION——裁定记录与 handoff 权威行自相矛盾。此缺口由 §4he 自身制造（执行了裁定却忘了回写 status）。",
+  "hypothesis": "H：三条 status 均与实际状态失配（RECEIPT_MISMATCH），补录回执后应全部一致。H0：status 与实际一致（则如实报 CONSISTENT，不制造工作）。",
+  "criterion": {
+    "status_normalization": {
+      "PENDING_EXECUTION": "期望探针=NOT_EXECUTED",
+      "EXECUTED": "期望探针=EXECUTED"
+    },
+    "probes": {
+      "D1-provenance-backfill": "现场读 knowledge_base_store.json：KB-AUDIT68/69 的 provenance 均非空且含『裁定采纳回填』→EXECUTED，否则 NOT_EXECUTED",
+      "D2-falsification-merge": "现场读 falsification_log.jsonl：行数>=6 且三条 FALSIFY-CV* id 均在→EXECUTED，否则 NOT_EXECUTED",
+      "D3-judgment-fork-defer": "现场读 audit_vanity_selfaudit/result.json：judgment_fork.user_verdict 以 DEFERRED 开头→EXECUTED，否则 NOT_EXECUTED"
+    },
+    "verdict": "任一 decision 的 status 期望 != 探针结果 → RECEIPT_MISMATCH（列出失配 id）；全部一致 → ALL_RECEIPTS_CONSISTENT",
+    "design_freedom": "探针定义先于取证锁定于此；不因结果不好而改探针。三探针均为只读现场读文件，不硬编码『已执行』结论。"
+  },
+  "negative_controls": [
+    "注入：三条 status=EXECUTED 且探针全 EXECUTED → 必须 ALL_RECEIPTS_CONSISTENT（防器官永远喊 mismatch）",
+    "注入：一条 status=PENDING 但探针=EXECUTED → 必须 RECEIPT_MISMATCH 且列出该 id",
+    "注入：一条 status=EXECUTED 但探针=NOT_EXECUTED → 必须 RECEIPT_MISMATCH（反向也抓）"
+  ],
+  "execution_rule": "若 RECEIPT_MISMATCH：只补录 status→EXECUTED + receipt 字段{at_utc, evidence_probe, note:『§4hf 补录 §4he 遗漏回执』}；裁定内容（verdict/execution/agent_recommendation/invariants）一字不改；这是如实补录已完成事实的执行回执，不是新裁定、不代用户裁定。",
+  "hard_bounds": "判定态三值 GAP_INCONCLUSIVE/l3=false/absolute=false、宪法锁 fe56291b、§100 冻结集、十案全不动；不编译新门禁、不新增异厂调用、不构成投资建议；因子有效性小话不入仓；不修改任何被审裁定的实质结论。",
+  "sha256": "8c02729b0a50a4c0b155ea336b1d13221151fbe1cae8b41d6044aa5d1be9fcff"
+}
