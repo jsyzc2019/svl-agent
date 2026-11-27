@@ -8,3 +8,4 @@
 {"at": "2026-11-27T07:11:21Z", "woken_by": "workbuddy_automation:hourly_beat:utc=2026-11-27T07:11:21Z", "step": 4, "phase": "DAY", "intent": "WAKE", "chosen": "REORIENT", "urgency": 0.95, "executed": false, "need_external": false}
 {"at": "2026-11-27T07:11:21Z", "woken_by": "workbuddy_automation:hourly_beat:utc=2026-11-27T07:11:21Z", "step": 5, "phase": "DAY", "intent": "WAKE", "chosen": "REORIENT", "urgency": 0.95, "executed": false, "need_external": false}
 {"at": "2026-11-27T07:11:21Z", "woken_by": "workbuddy_automation:hourly_beat:utc=2026-11-27T07:11:21Z", "step": 6, "phase": "DAY", "intent": "WAKE", "chosen": "REORIENT", "urgency": 0.95, "executed": false, "need_external": false}
+{"at": "2026-11-27T09:29:04Z", "woken_by": "github_actions:run=45974067856:utc=2026-11-27T09:29:04Z", "step": 1, "phase": "NIGHT", "intent": "SLEEP", "reason": "夜伏相位(NIGHT)且无 C7 义务：尊重节律继续休眠，不强行扰动", "executed": false}
