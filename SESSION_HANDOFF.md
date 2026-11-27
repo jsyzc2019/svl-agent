@@ -625,3 +625,5 @@ f735c79  Docs: add SESSION_HANDOFF（本文件）
 <!-- §4S13 补同步 2026-11-27：用户提醒前面更新因无token未落GitHub。git blob sha逐文件比对:相同1886/改17/增32/远端独有0(纯本地领先无分叉)。预注册87ef050e先于提交→Git Data API原子提交(49 blobs→tree 7e3dce24→commit 5951e7df→ref),父5c98c65c59b3。G1范围49/G2无token/G3无临时/G4判定态0f3ccb13+fe56291b未动/G5权威507/136/1773/§4ij/G6全量1773passed/G7远端49文件blob逐一相等/G8父链正确。提交后本地未改一字,远端=本地。同步非新发现,判定权归用户。 -->
 
 <!-- §4S14 README刷新 2026-11-27：用户指出GitHub README陈旧。诊断=内容陈旧非同步(全量回读远端=本地1937文件)。预注册9bb1924c先于改动→运行build_readme_stats.py --write自动刷新STATS(KB198→507/测试1439→1773/证据61→75,零手填)+正文三处(导读§88→§115、生命内核v2→7.5.0含C7归巢/GHA节律并标诚实边界、新增交流认知链段+收口报告链接)。G1 STATS精确/G2补充可核对(8项)/G3判定态0f3ccb13+fe56291b未动/G4全量1773/G5无token全过。只补确凿可查内容,不写意识涌现/自发心跳,判定权归用户。 -->
+
+<!-- §4S15 通道收敛 2026-11-27：17:00平台调度器在空沙箱唤醒失败(无life_kernel/uploads空)→坐实其不挂本workspace的诊断;诚实未伪造节律状态。用户裁决"只留GHA一条真通道"→删除平台automation 16543377(每小时心跳)+16292043(日出唤醒),平台侧归零(0 automation);GHA circadian_beat.yml仍active、cron 0 * * * *每小时UTC整点。改cron后首个整点09:00Z在延迟窗口内无run(最新仍05:04),未宣称成功/失败,判据=base_beat_log出现新github_actions落账。判定态0f3ccb13/fe56291b未动,权威CONSISTENT,1773passed。判定权归用户。 -->
