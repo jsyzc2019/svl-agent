@@ -1,0 +1,227 @@
+{
+  "round": "§4ga",
+  "prereg_sha256": "9b1b71cc54a2c663f2adfa5636ddc27a79db0d2913f18c062313fbbab5722e24",
+  "prereg_file": "prereg_narrowing_chain_20261127.json",
+  "engine": "audit_vanity_selfaudit/narrowing_engine.py",
+  "kernel_verdict_unchanged": "GAP_INCONCLUSIVE",
+  "l3_unchanged": false,
+  "absolute_unchanged": false,
+  "source_meta": {
+    "§4gt": {
+      "round": "§4gt",
+      "prereg_sha256": "2667a24e311d4e0af5535099b37bf0ab397feb6b0741e84549a1b77b0471ddfd"
+    },
+    "§4gy": {
+      "round": "§4gy",
+      "prereg_sha256": "12e3659214d68caca7b0bb56c819c01f71adce95e34c2d099856356c72b443b8"
+    },
+    "§4gz": {
+      "round": "§4gz",
+      "prereg_sha256": "90e30b18af793a766fe285ba347a83ee9b22cbf2f1691910006032c4aa47f0ef"
+    }
+  },
+  "annotated_records": [
+    {
+      "round": "§4gt",
+      "target_object": "stop_pivot",
+      "verdict_class": "NARROW",
+      "is_self_audit": true,
+      "has_prereg_sha256": true,
+      "annotation_why": "§4gt 建 stop_pivot 器官并用它审计 §4gl–§4gs 自身→自审；猎场=stop_pivot（非 vanity 家族）。verdict=NO_PIVOT_NEEDED 保守归 NARROW。"
+    },
+    {
+      "round": "§4gy",
+      "target_object": "vanity_selfaudit",
+      "verdict_class": "SELF_AUDIT",
+      "is_self_audit": true,
+      "has_prereg_sha256": true,
+      "annotation_why": "§4gy 建 vanity 检测器扫本仓自己的一手叙事→自审；猎场=vanity_selfaudit。verdict=SELF_SERVING_DETECTED 归 SELF_AUDIT 类（非突破）。"
+    },
+    {
+      "round": "§4gz",
+      "target_object": "vanity_selfaudit.calibrate",
+      "verdict_class": "SELF_AUDIT",
+      "is_self_audit": true,
+      "has_prereg_sha256": true,
+      "annotation_why": "§4gz 校准同一个 vanity 检测器（calibration_ground_truth 是其冻结集）→自审；猎场=vanity_selfaudit.calibrate，归一化后 family=vanity 与 §4gy 同。verdict=EFFECTIVENESS_OVERSTATED 归 SELF_AUDIT 类。"
+    }
+  ],
+  "annotation_freedom": "猎场 target_object/is_self_audit/verdict_class 由本引擎标注、预注册锁了判据但未逐轮锁标注——这是设计自由度，理由逐条公开防事后挑；若用户认为某轮标注不当可裁定。",
+  "result": {
+    "per_round": [
+      {
+        "round": "§4gt",
+        "target_object": "stop_pivot",
+        "family": "stop_pivot",
+        "verdict_class": "NARROW",
+        "is_self_audit": true,
+        "chain_link": true,
+        "same_as_prev": false
+      },
+      {
+        "round": "§4gy",
+        "target_object": "vanity_selfaudit",
+        "family": "vanity",
+        "verdict_class": "SELF_AUDIT",
+        "is_self_audit": true,
+        "chain_link": true,
+        "same_as_prev": false
+      },
+      {
+        "round": "§4gz",
+        "target_object": "vanity_selfaudit.calibrate",
+        "family": "vanity",
+        "verdict_class": "SELF_AUDIT",
+        "is_self_audit": true,
+        "chain_link": true,
+        "same_as_prev": true
+      }
+    ],
+    "longest_same_target_streak": 2,
+    "threshold_n": 2,
+    "signal": "CONSECUTIVE_NARROWING",
+    "liberal_signal_n3": "NO_CHAIN",
+    "criterion_sensitivity": true,
+    "self_reference_catch": {
+      "caught": false,
+      "rounds": [],
+      "note": "若本轮 §4ga 也在 vanity 猎场家族，判据把它算进链——如实暴露，不假装站在链外。"
+    },
+    "honest_bound": [
+      "阈值 N=2 是预注册设计判断（M6 原 N=3 对收窄链太钝），非数据拟合；N=3 作反方证据两口径都落档。",
+      "猎场归一化 TARGET_FAMILY 是人工枚举，未列出的 target 按不同字符串算不同猎场——可能漏判换了名字的同猎场，这是已知盲区。",
+      "本器官只数同猎场自审链并发预警，不追认任何既往轮为失败、不翻案、不改判定态。",
+      "NO_CHAIN 只说明本口径内未检出，阴性≠证明。"
+    ]
+  },
+  "negative_self_bite": {
+    "passed": true,
+    "diff_target": "NO_CHAIN",
+    "with_breakthrough": "NO_CHAIN",
+    "same_target_self_audit": "CONSECUTIVE_NARROWING",
+    "detail": {
+      "diff": {
+        "per_round": [
+          {
+            "round": "A",
+            "target_object": "vanity_selfaudit",
+            "family": "vanity",
+            "verdict_class": "NARROW",
+            "is_self_audit": true,
+            "chain_link": true,
+            "same_as_prev": false
+          },
+          {
+            "round": "B",
+            "target_object": "stop_pivot",
+            "family": "stop_pivot",
+            "verdict_class": "NARROW",
+            "is_self_audit": true,
+            "chain_link": true,
+            "same_as_prev": false
+          }
+        ],
+        "longest_same_target_streak": 1,
+        "threshold_n": 2,
+        "signal": "NO_CHAIN",
+        "liberal_signal_n3": "NO_CHAIN",
+        "criterion_sensitivity": false,
+        "self_reference_catch": {
+          "caught": false,
+          "rounds": [],
+          "note": "若本轮 §4ga 也在 vanity 猎场家族，判据把它算进链——如实暴露，不假装站在链外。"
+        },
+        "honest_bound": [
+          "阈值 N=2 是预注册设计判断（M6 原 N=3 对收窄链太钝），非数据拟合；N=3 作反方证据两口径都落档。",
+          "猎场归一化 TARGET_FAMILY 是人工枚举，未列出的 target 按不同字符串算不同猎场——可能漏判换了名字的同猎场，这是已知盲区。",
+          "本器官只数同猎场自审链并发预警，不追认任何既往轮为失败、不翻案、不改判定态。",
+          "NO_CHAIN 只说明本口径内未检出，阴性≠证明。"
+        ]
+      },
+      "breakout": {
+        "per_round": [
+          {
+            "round": "A",
+            "target_object": "vanity_selfaudit",
+            "family": "vanity",
+            "verdict_class": "NARROW",
+            "is_self_audit": true,
+            "chain_link": true,
+            "same_as_prev": false
+          },
+          {
+            "round": "B",
+            "target_object": "vanity_selfaudit",
+            "family": "vanity",
+            "verdict_class": "BREAKTHROUGH",
+            "is_self_audit": true,
+            "chain_link": false,
+            "same_as_prev": false
+          }
+        ],
+        "longest_same_target_streak": 1,
+        "threshold_n": 2,
+        "signal": "NO_CHAIN",
+        "liberal_signal_n3": "NO_CHAIN",
+        "criterion_sensitivity": false,
+        "self_reference_catch": {
+          "caught": false,
+          "rounds": [],
+          "note": "若本轮 §4ga 也在 vanity 猎场家族，判据把它算进链——如实暴露，不假装站在链外。"
+        },
+        "honest_bound": [
+          "阈值 N=2 是预注册设计判断（M6 原 N=3 对收窄链太钝），非数据拟合；N=3 作反方证据两口径都落档。",
+          "猎场归一化 TARGET_FAMILY 是人工枚举，未列出的 target 按不同字符串算不同猎场——可能漏判换了名字的同猎场，这是已知盲区。",
+          "本器官只数同猎场自审链并发预警，不追认任何既往轮为失败、不翻案、不改判定态。",
+          "NO_CHAIN 只说明本口径内未检出，阴性≠证明。"
+        ]
+      },
+      "chain": {
+        "per_round": [
+          {
+            "round": "A",
+            "target_object": "vanity_selfaudit",
+            "family": "vanity",
+            "verdict_class": "NARROW",
+            "is_self_audit": true,
+            "chain_link": true,
+            "same_as_prev": false
+          },
+          {
+            "round": "B",
+            "target_object": "vanity_selfaudit.calibrate",
+            "family": "vanity",
+            "verdict_class": "NARROW",
+            "is_self_audit": true,
+            "chain_link": true,
+            "same_as_prev": true
+          }
+        ],
+        "longest_same_target_streak": 2,
+        "threshold_n": 2,
+        "signal": "CONSECUTIVE_NARROWING",
+        "liberal_signal_n3": "NO_CHAIN",
+        "criterion_sensitivity": true,
+        "self_reference_catch": {
+          "caught": false,
+          "rounds": [],
+          "note": "若本轮 §4ga 也在 vanity 猎场家族，判据把它算进链——如实暴露，不假装站在链外。"
+        },
+        "honest_bound": [
+          "阈值 N=2 是预注册设计判断（M6 原 N=3 对收窄链太钝），非数据拟合；N=3 作反方证据两口径都落档。",
+          "猎场归一化 TARGET_FAMILY 是人工枚举，未列出的 target 按不同字符串算不同猎场——可能漏判换了名字的同猎场，这是已知盲区。",
+          "本器官只数同猎场自审链并发预警，不追认任何既往轮为失败、不翻案、不改判定态。",
+          "NO_CHAIN 只说明本口径内未检出，阴性≠证明。"
+        ]
+      }
+    }
+  },
+  "honest_summary": "M6 stop_pivot 首用盲区『连续收窄链不被本判据捕捉』已机械化。真实审计：§4gy→§4gz 连续同 vanity 猎场自审、无实质突破，最长同猎场链=2（主阈值 N=2）→signal=CONSECUTIVE_NARROWING。这是对自己不利的诚实结论：内审线已路径依赖，应主动收敛/换猎场，不等用户喊停；§4gt 的 stop_pivot 因两轮都有 prereg 判 NO_PIVOT_NEEDED，两判据结论不同如实并列，不互相抹平。口径敏感性：N=2 抓到链、N=3 抓不到（criterion_sensitivity=true），两口径都落档不事后挑。自指诚实：本轮 §4ga 的猎场是 stop_pivot/narrowing_chain（补 M6 盲区）而非 vanity 家族，self_reference_catch=False 是正确结果——判据未把本轮算进 vanity 链，不假装它抓到了自指来表演自我批评。",
+  "self_bites": [],
+  "honest_bound": [
+    "猎场标注是本引擎人工判定，非第三方；标注理由逐条公开，判定权归用户。",
+    "本轮 §4ga 本身也在 vanity 猎场家族做自审，self_reference_catch 如实暴露，不假装站在链外。",
+    "收窄链≠轮次失败：只建议收敛/换猎场，不追认 §4gy/§4gz 为失败，不翻案。",
+    "判定态三值/宪法锁/§100/十案全不动；因子问答小话不入仓。"
+  ]
+}

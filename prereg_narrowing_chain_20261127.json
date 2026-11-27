@@ -1,0 +1,16 @@
+{
+  "id": "PREREG-NARROWING-CHAIN-20261127",
+  "at_utc": "2026-11-27T00:16:48.000000+00:00",
+  "round_target": "§4ga（补 M6 stop_pivot 的已知盲区『连续收窄链不被本判据捕捉』——把同猎场连续收敛机械化为会触发的第二判据，并首用审计 §4gy/§4gz 自身）",
+  "target_belief": "SESSION_HANDOFF §4gt 首用时诚实记录盲区：『连续收窄链本身不被本判据捕捉』。stop_pivot.py 的营养轮三贡献位=①改判据②新增可证伪命题③推翻旧判断；只要每轮有 prereg（贡献位②真）即非营养轮。于是『连续多轮在同一猎场上建工具→校准工具→再校准校准器』这种层层自指的收窄链，每轮都有 prereg、都不算营养轮，M6 永不触发——判据对自身路径依赖失明。§4gy 建 vanity 检测器、§4gz 校准同一检测器，正是这条链的活样本。",
+  "falsifiable_prediction": "若把『同猎场连续收敛』判据作用于真实轮次序列：①审计 §4gy/§4gz（两轮 target_object 同为 vanity_selfaudit，且两轮 verdict 均为 SELF_SERVING 类自我审计裁决），应判 CONSECUTIVE_NARROWING（连续收窄链≥2）——这是对我自己刚跑两轮不利的诚实结论：内审线已路径依赖，该主动收敛/换猎场，不伪造『still productive』；②注入对照序列（两轮不同猎场 / 一轮有实质突破）应判 NO_CHAIN；两种结果都预接受，禁止为让结论好看而调阈值或改猎场定义。特别地，若判据抓到自身递归（本轮 §4ga 也在同一 vanity 猎场家族），如实记录该自指，不假装本轮豁免。",
+  "design": "纯函数 life_kernel/narrowing_chain.py。输入=有序轮次记录 {round, target_object, verdict_class, has_prereg_sha256, is_self_audit} + 阈值N(默认2) + 猎场归一化规则；输出={per_round, longest_same_target_streak, signal, self_reference_catch, honest_bound}。收窄链判定：连续≥N 轮同时满足 (a) target_object 归一化后相同（猎场同一）且 (b) 轮次属于 SELF_AUDIT 类（is_self_audit=true，即本轮产物是审/校本仓自己上一轮的产物）且 (c) 无 BREAKTHROUGH/CONFIRM 类实质新证据（verdict_class∈{NARROW,GAP,SELF_AUDIT}）。三条件缺一即断链。阈值N=2 为主口径（预注册锁定：连续两轮同猎场自审即预警，不等到3轮——M6 原阈值3已证明对收窄链太钝）；N=3 作宽口径反方证据，两口径都落档。",
+  "primary_metric": "longest_same_target_streak（同猎场+自审+无突破的最长连续轮数）与阈值N=2比较：≥2→CONSECUTIVE_NARROWING；<2→NO_CHAIN。两口径都算，主取N=2。",
+  "decision_tree": {
+    "CONSECUTIVE_NARROWING": "如实落：本 Agent 在 §4gy→§4gz 连续同猎场自我审计，判据已抓到 M6 盲区——内审线路径依赖，应主动收敛/换猎场，不等用户喊停。这是对自己不利的诚实结论，不粉饰、不把收窄包装成突破。仍不改判定态、不追认既往轮为失败。",
+    "NO_CHAIN": "如实落：未达连续同猎场自审阈值；明确写没有伪造收窄链来表演自我批评，若有接近的案例作反方证据。"
+  },
+  "counter_discipline": "①负向自咬：注入两轮不同 target_object → 必须 NO_CHAIN；注入两轮同 target 但含 BREAKTHROUGH → 必须断链；注入两轮同 target 自审 → 必须 CONSECUTIVE_NARROWING。三注入全过才生效。②口径敏感性：N=2 与 N=3 两口径都算都落档，禁止事后挑。③判据不自欺：本轮 §4ga 本身也是 vanity 猎场家族的自审，若判据把它算进链，如实记 self_reference_catch，不假装本轮站在链外。④阈值来源诚实：N=2 是预注册选择，理由是 M6 原 N=3 对收窄链太钝（§4gy/§4gz 两轮已足够构成路径依赖证据），这是设计判断非数据拟合，禁止事后调阈值迁就结论。⑤阴性≠证明：NO_CHAIN 只说明本口径内未检出。",
+  "discipline": "预注册先于取证; hash 锁存; 纯函数不联网不spawn不接run_loop不编译门禁; 不改verdict/l3/absolute/宪法锁/§100/十案; 判定权归用户; 阳阴都落档; 本实验只增加对『内审线是否路径依赖』的认识，不追认/翻案任何裁决; 因子问答小话永不入仓。",
+  "sha256": "9b1b71cc54a2c663f2adfa5636ddc27a79db0d2913f18c062313fbbab5722e24"
+}

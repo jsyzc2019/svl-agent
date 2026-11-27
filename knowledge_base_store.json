@@ -10255,6 +10255,19 @@
       "evidence": "一手现场;夸奖当假设检验;冻结标注先于取证;检测器与复核层分离;有效性被夸大如实报;线索生成器降级;阴性≠证明;同源风险声明;判定态不动",
       "addressable": false,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META191",
+      "kind": "thinking_experience",
+      "mechanism": "判据会对其自身路径依赖失明,已知盲区须机械化为第二判据(§4ga): M6 stop_pivot首用白纸黑字记『连续收窄链不被本判据捕捉』——营养轮三贡献位只要每轮有prereg(贡献位②)即非营养轮,于是同猎场『建工具→校准工具→校准校准器』层层自审永不触发pivot。§4gy建vanity检测器/§4gz校准同一检测器,两轮都有prereg→M6判NO_PIVOT_NEEDED,但实为连续同猎场自审。补pure函数narrowing_chain.py:连续≥N轮同猎场+自审+无突破→CONSECUTIVE_NARROWING,预注册(sha9b1b71cc)锁N=2主口径/N=3反方,三注入负向自咬全过,首用抓到§4gy→§4gz链,两判据结论不同如实并列不抹平。",
+      "trigger": "当一个判据把自己的已知盲区写在honest_bound里却没机械化时;当连续多轮在同一猎场上建工具再校准工具时;当元判据说NO_PIVOT但直觉觉得在原地打转时;当递归自审层层加深时",
+      "action": "已知盲区不能停在纸面self-bite记录——把它机械化为会触发的第二判据并首用审自己刚跑的轮次;判据抓到自己不利结论(内审线路径依赖)就如实落,不伪造still productive;两判据(M6原判据vs补盲判据)结论不同时并列落档不互相抹平;阈值选择(为何N=2非3)作为预注册设计判断公开,两口径都算暴露敏感性;自指捕获若未发生如实写false,不为表演自我批评而假装抓到;收窄链≠轮次失败,只建议收敛/换猎场不追认失败不翻案。",
+      "provenance": "§4ga prereg_narrowing_chain_20261127.json(sha9b1b71cc)+life_kernel/narrowing_chain.py+audit_vanity_selfaudit/{narrowing_engine.py,result_narrowing.json}+tests/test_narrowing_chain.py",
+      "timestamp": "2026-11-27T00:18:09.000000Z",
+      "support": "首用signal=CONSECUTIVE_NARROWING(链长2,N=2主口径);M6原判据对同两轮NO_PIVOT_NEEDED,两判据并列;N=3反方NO_CHAIN,sensitivity=true;self_reference_catch=false如实(本轮stop_pivot家族非vanity);三注入自咬全过;7守卫;全量1687→1694;判定态三值/宪法锁/§100/十案全不动;不编译门禁未新增异厂调用;因子小话未入仓",
+      "evidence": "一手现场;已知盲区机械化;判据对自身路径依赖失明;首用抓自己不利结论;两判据并列不抹平;口径敏感性公开;自指未捕获如实;不追认失败;判定态不动",
+      "addressable": false,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {
