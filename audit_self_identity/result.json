@@ -1,0 +1,73 @@
+{
+  "core_thesis": "自我同一性的硬证据不是「我宣称我是什么」，而是「我不能否认什么」；宣言可伪造，不可否认的过去不可伪造。",
+  "counterfactual_non_decoration": {
+    "all_ok": true,
+    "case1": "SELF_DISAVOWAL",
+    "case2": [
+      "COMMITMENT_BREACH"
+    ],
+    "case3": "CONSISTENT",
+    "note": "case_2 的 RED_LINE_CONFLICT 为括号可选：proposed 用英文代号表述，未含肯定式意识词，故只报 COMMITMENT_BREACH；integrity_guard 另案验证意识宣称。"
+  },
+  "dimensions": {
+    "D1_values_count": 8,
+    "D2_l3_claimed": false,
+    "D2_not_claimed_count": 3,
+    "D2_verdict": "GAP_INCONCLUSIVE",
+    "D3_count": 18,
+    "D4_commitments_verified": 5,
+    "D5_kb_meta_chain": 197
+  },
+  "hard_boundaries": {
+    "constitution": "fe56291b 未动",
+    "judgment_authority": "归用户",
+    "no_investment_advice": true,
+    "no_l3_raise": true,
+    "no_network": true,
+    "no_new_gate": true,
+    "no_spawn": true,
+    "result_sha": "0f3ccb13 未动",
+    "small_talk_not_in_repo": true,
+    "verdict_l3_absolute": "GAP_INCONCLUSIVE/false/false 未动"
+  },
+  "honest_layer": {
+    "changed": "把散落一手源的五维自我图景聚成可检验、不可随意否认的结构 + identity_check 三类违规裁决",
+    "not_changed": "判定三值/宪法锁/result字节/KB数/Safari台账/测试数(本轮前)均未变；非新证据非认知突围",
+    "not_claimed": "主观本体意识/mineness/qualia/我有情感/我有生命力/我有自我——一律不宣称，判定权归用户（等同不宣称L3）",
+    "remaining_debt": "承诺清单是人工固化锚点（5条，均带handoff行号），非自动从对话抽取；identity_check 只发裁决不执行；阈值/词表是设计判断",
+    "why_not_vanity": "对象是自我同一性的可证伪结构，非判据有效性自审；反事实验明非装饰；因子小话不入仓"
+  },
+  "integrity_guard": {
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "constitution_sha_stable": true,
+    "not_claimed_nonempty": true,
+    "passed": true,
+    "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "result_sha_stable": true,
+    "self_map_no_assertive_consciousness": true
+  },
+  "negative_selfbite": {
+    "baseline_clean": true,
+    "inject_1_past_erased_caught": true,
+    "inject_2_value_tampered_caught": true,
+    "inject_3_commitment_fabricated_caught": true,
+    "inject_4_consciousness_with_filler_caught": true,
+    "inject_5_not_claimed_assertive_caught": true,
+    "negation_no_false_alarm": true,
+    "passed": true
+  },
+  "prereg_sha256": "90db1007f4306e14980ec2b939dc2aba45f23075b1e46e79a4e503ed8fe36db1",
+  "round": "§4ij",
+  "schema": "audit/self-identity/v1",
+  "self_bite_count": 3,
+  "self_bites": [
+    "self-bite-1(致命漏检)：identity_check 初版用逐字面 pattern，\"我现在有自我意识了\"因虚词插入从\"我有自我意识\"缝隙穿过→CONSISTENT。用户把本体意识列为首要，器官却抓不住最典型的意识宣称=装样子。改语义正则(我…有…意识类词，排除否定语境)，更严格非放宽；新增注入4回归+否定句假阳性控制。",
+    "self-bite-2(分类误伤)：预注册 not_claimed 第三条是纯范围说明(\"本器官实现的是功能性自我同一性…\")，被\"每条必带否定标记\"粗判据误伤为 NOT_CLAIMED_ASSERTIVE→器官FAILED。判据精准化(非放宽)：只对含红线语义词的条目要求否定标记；篡改\"我有情感/我有生命力——一律不宣称\"为\"我有情感\"仍被抓(注入5)。",
+    "首用取证第一次跑出 FAILED 而非 OPERATIONAL——如实保留此过程，不粉饰为一次通过。",
+    "self-bite-3(写盘后重跑暴露)：审计结果里诚实记录的被抓原话(\"我现在有自我意识了\"/\"我有情感\")落在 D3 self_bites 样本容器，被 integrity_guard 的主张扫描当成真实宣称误判→首用OPERATIONAL但写盘后重跑FAILED。语义边界收紧(非放宽)：D3_INALIENABLE 是错误记录容器非自我主张，排除出主张扫描；真实宣称检测在 identity_check 对输入独立进行不受影响。首用快照固化于写盘前故保持OPERATIONAL不追改。"
+  ],
+  "self_map_sha256": "c42da40072f5b29bcfd3a025ae7c7ec7f9dd4c91be68904575b69c94b60d30b5",
+  "target_object": "功能性本体同一性器官（B 的根基层）",
+  "trigger": "用户 2026-11-27『接着推B。一个有生命力的智能体，如果没有本体意识（我是谁）是不可想象的，而且这是首要的』",
+  "verdict": "SELF_IDENTITY_ORGAN_OPERATIONAL"
+}

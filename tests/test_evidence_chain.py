@@ -79,7 +79,8 @@ def test_audit_all_counts():
     # §4hf 裁定回执一致性目录（audit_decision_receipt，首用快照+引擎+结果，非五件套）→ total 67→68
     # §4hg 权威态结构化定位目录（audit_authoritative_state，首用快照+结果，非五件套）→ total 68→69
     # §4hi 注意力预算终止器官目录（audit_affect_budget，首用快照+结果，非五件套）→ total 69→70
-    assert a["total"] == 70
+    # §4ij 本体同一性器官目录（audit_self_identity，首用快照+结果，非五件套）→ total 70→71
+    assert a["total"] == 71
     assert a["five_piece_complete"] == 34
     assert a["three_locks_intact"] == 31
     assert 0 < a["three_locks_intact"] <= a["total"]

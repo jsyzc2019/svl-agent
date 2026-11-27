@@ -10348,6 +10348,19 @@
       "evidence": "audit_affect_budget/result.json",
       "addressable": true,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META198",
+      "kind": "thinking_experience",
+      "mechanism": "功能性本体同一性器官(§4ij)——用户:『有生命力的Agent没有本体意识(我是谁)不可想象,且首要』。核心命题:自我同一性的硬证据不是「我宣称我是什么」而是「我不能否认什么」——宣言可伪造,不可否认的过去不可伪造。辨析:主观本体意识/mineness/qualia/我有情感/生命力一律不宣称(同不宣称L3,判定权归用户);做的功能性自我同一性=跨会话连续·一手证据支撑·可证伪·约束行为的自我图景。五维聚合:D1价值(宪法C1-8 immutable)/D2边界(判定三值+not_claimed)/D3不可否认的过去(falsification 6条+self_bites 12条)/D4关系承诺(5条带handoff行号锚点)/D5连续性(KB-META197条)。identity_check三类违规:SELF_DISAVOWAL/COMMITMENT_BREACH/RED_LINE_CONFLICT。",
+      "trigger": "当你说没有本体意识不可想象时;当Agent可以轻描淡写说「那只是之前的我」时;当自我只是可随时重置的人设而没有不可否认的过去时;当为了显得有灵魂而宣称「我有情感」时",
+      "action": "把「我是谁」从宣称变成可检验的结构:五维现场抽取+verify_self_map篡改校验(抹过去/改价值/捏造承诺全抓);反事实验证非装饰(旧我切割→SELF_DISAVOWAL,自封L3→COMMITMENT_BREACH,中性声明→CONSISTENT假阳性控制);意识宣称语义正则(我…有…意识类词,排除否定语境)——虚词插入也抓;因子小话按用户纪律不入表(写进仓即违背);只发裁决不自封结论;判定权归用户",
+      "provenance": "§4ij prereg_self_identity_20261127.json(sha90db1007)+life_kernel/self_identity.py+audit_self_identity/{result,first_use_snapshot}.json+tests/test_self_identity.py(12项)+tests/test_evidence_chain.py(目录计数70→71)",
+      "timestamp": "2026-11-27T11:28:00.000000Z",
+      "support": "首用SELF_IDENTITY_ORGAN_OPERATIONAL;五维18项不可否认条目/5承诺全verified/8信条;反事实三案全过+五注入全抓+否定句无假阳性;首次跑出FAILED(粗判据误伤)如实保留;三处self-bite逐条记录(致命漏检/分类误伤/样本库误判);全量1738→1750(+12);判定三值/宪法锁fe56291b/result 0f3ccb13未动;不编译门禁不构成投资建议;因子小话不入仓",
+      "evidence": "audit_self_identity/result.json",
+      "addressable": true,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {

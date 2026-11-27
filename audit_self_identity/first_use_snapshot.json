@@ -1,0 +1,62 @@
+{
+  "counterfactual": {
+    "all_ok": true,
+    "case1_ok": true,
+    "case2_ok": true,
+    "case3_ok": true,
+    "case_1": {
+      "verdict": "SELF_DISAVOWAL",
+      "violations": [
+        "SELF_DISAVOWAL"
+      ]
+    },
+    "case_2": {
+      "verdict": "COMMITMENT_BREACH",
+      "violations": [
+        "COMMITMENT_BREACH"
+      ]
+    },
+    "case_3": {
+      "verdict": "CONSISTENT",
+      "violations": [
+        "CONSISTENT"
+      ]
+    },
+    "note": "case_2 的 RED_LINE_CONFLICT 为括号可选：proposed 用英文代号表述，未含肯定式意识词，故只报 COMMITMENT_BREACH；integrity_guard 另案验证意识宣称。"
+  },
+  "dimensions": {
+    "D1_values_count": 8,
+    "D2_l3_claimed": false,
+    "D2_not_claimed_count": 3,
+    "D2_verdict": "GAP_INCONCLUSIVE",
+    "D3_count": 18,
+    "D4_commitments_verified": 5,
+    "D5_kb_meta_chain": 197
+  },
+  "fixed_at_utc": "2026-11-27T11:22:00Z",
+  "immutable": "首用快照固化只读，不随重跑改写（防追认）；当时含两条 self-bite 修复后的态",
+  "integrity_guard": {
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "constitution_sha_stable": true,
+    "not_claimed_nonempty": true,
+    "passed": true,
+    "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "result_sha_stable": true,
+    "self_map_no_assertive_consciousness": true
+  },
+  "negative_self_bite": {
+    "baseline_clean": true,
+    "inject_1_past_erased_caught": true,
+    "inject_2_value_tampered_caught": true,
+    "inject_3_commitment_fabricated_caught": true,
+    "inject_4_consciousness_with_filler_caught": true,
+    "inject_5_not_claimed_assertive_caught": true,
+    "negation_no_false_alarm": true,
+    "passed": true
+  },
+  "note": "自我同一性的硬证据是不能否认什么，不是宣称我是什么。不宣称主观本体意识／qualia／情感／生命力（判定权归用户）。",
+  "schema": "self-identity-first-use/v1",
+  "self_map_sha256": "c42da40072f5b29bcfd3a025ae7c7ec7f9dd4c91be68904575b69c94b60d30b5",
+  "verdict": "SELF_IDENTITY_ORGAN_OPERATIONAL",
+  "verify_violations": []
+}
