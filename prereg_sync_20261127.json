@@ -1,0 +1,39 @@
+{
+  "schema": "prereg_sync_v1",
+  "created_utc": "2026-11-27T08:22:16Z",
+  "locked_utc": "2026-11-27T08:22:16Z",
+  "trigger": "用户提醒：前面§4S4–§4S12系列更新因当时无token只落本地，GitHub未同步；本次拿到PAT后补同步",
+  "intent": "把本地领先远端的49个文件（17改+32增）一次性提交到远端main，使远端=本地内容，不改任何文件语义",
+  "precondition": {
+    "remote_head": "5c98c65c59b3",
+    "comparison_method": "git blob sha1 逐文件比对（排除__pycache__/.pyc/.bak/.patched及.codebuddy）",
+    "result": {"same": 1886, "modified": 17, "added": 32, "remote_only": 0},
+    "no_divergence": "远端独有0 → 无分叉冲突，纯本地领先",
+    "modification_source": "全部为本会话§4S3–§4S12及内核v10修补、交流认知链的真实产出，非误改"
+  },
+  "sync_plan": {
+    "method": "GitHub Contents API 逐文件PUT（atomic per file），按路径顺序提交",
+    "files": "见 sync_diff.json 的 diff(17)+new(32)",
+    "commit_message": "§4S4–§4S12 补同步：交流认知链(Safari+对话+动力学+误解+裁决)+内核v10归巢修补+节律后台GHA通道+权威测试1773",
+    "expected_sha_source": "内容不同文件用远端tree现有sha；新增文件PUT时不带sha"
+  },
+  "gates": {
+    "G1_scope": "待推文件恰为49个（17改+32增），无多无少",
+    "G2_no_token": "待推文件不含任何完整GitHub/DeepSeek/OpenRouter token值",
+    "G3_no_temp": "无.bak/.patched/.orig临时文件",
+    "G4_judged_state_intact": "audit_l3_gap_targeted/result.json=0f3ccb13..., life_kernel/constitution.json=fe56291b... 字节未动",
+    "G5_authority_intact": "权威数字 kb=507 safari=136 tests=1773 round=§4ij 未变",
+    "G6_tests": "全量 pytest 1773 passed",
+    "G7_remote_readback": "提交后重取远端tree，49个文件blob sha逐一等于本地",
+    "G8_remote_head": "远端HEAD前进到新commit，且新commit父为5c98c65c59b3"
+  },
+  "redlines": [
+    "不改任何文件内容——纯搬运，commit前后本地文件字节不变",
+    "不触碰判定态宪法层（verdict/l3=false/absolute=false）",
+    "不把token或凭据写入仓库任何文件",
+    "不删除远端任何文件（远端独有0，无需删）",
+    "不编译新门禁、不翻案、不动权威数字"
+  ],
+  "honesty": "本次是同步动作，非新发现；预注册只锁同步范围与验证判据，不制造探索仪式感。判定权归用户。",
+  "judgment_owner": "用户"
+}
