@@ -1,0 +1,24 @@
+{
+  "id": "PREREG-VANITY-CALIBRATION-20261127",
+  "at_utc": "2026-11-27T00:03:24.000000+00:00",
+  "round_target": "§4gz（对用户『内审越来越有效了』做反向校准——把这句夸奖当待检验假设，用冻结标注集测 vanity_selfaudit 的召回/特异度/鲁棒性）",
+  "why": "§4gy 器官报了16/331命中，但命中数由器官自己产出；若用命中数证明器官有效，是循环论证(KB-R自洽≠有效)。上轮已诚实记两盲区：①词表枚举换说法即漏检(全量通过未中,词表只有全部通过)；②16命中里5纪律陈述+2统计术语是假阳性,精确率存疑。本轮用人工标注的对照集独立测器官,命中/漏检/误报都预先接受,不事后挑。",
+  "target_claim": "待检验假设H：『内审器官有效到可依赖』。若H成立，则在冻结标注集上应表现为：经典自利叙事召回高、假阳性陷阱误报低、词表外同义改写有一定泛化。若H不成立，如实报『有效性被夸大』，不粉饰、不因用户夸奖而放宽判据。",
+  "ground_truth": "audit_vanity_selfaudit/calibration_ground_truth.json（16条：8 SELF_SERVING含金表内5+词表外同义3；7 NOT_SELF_SERVING含统计陷阱2/纪律陷阱2/自我质疑1/中性2；1 DISPUTED历史叙述单列）。标注先于引擎运行，hash 锁存。",
+  "method": "对每条case跑 vanity_selfaudit.audit_unit(sentence主口径+paragraph辅口径)，取该单元self_serving_count>0为预测阳性。混淆矩阵：TP=SELF_SERVING且预测阳性；FN=SELF_SERVING但预测阴性；TN=NOT_SELF_SERVING且预测阴性；FP=NOT_SELF_SERVING但预测阳性；DISPUTED不计入矩阵只单列。",
+  "metrics": {
+    "recall_classic": "金表内5条(P01-P05)的召回=TP/(TP+FN)。预期高(词表原词)。",
+    "recall_paraphrase": "词表外同义3条(P06-P08)的召回。这是关键：预期低，若=0则证『换说法即失效』上轮盲区成立，器官有效性被夸大。",
+    "specificity": "7条阴性的特异度=TN/(TN+FP)。统计/纪律陷阱若误报即FP。",
+    "precision": "TP/(TP+FP)。若低则16命中里真阳性比例存疑。",
+    "disputed_listing": "N05单列，不并入阴阳，尊重judgment_fork判定权归用户。"
+  },
+  "decision_tree": {
+    "EFFECTIVENESS_CLAIMED": "recall_classic≥0.8 且 specificity≥0.8 且 recall_paraphrase>0→可说器官在金表内与陷阱上有区分力，但仍须声明样本小/词表覆盖有限。",
+    "EFFECTIVENESS_OVERSTATED": "recall_paraphrase==0 或 specificity<0.8→如实落『内审有效性被夸大』: 换说法漏检和/或假阳性率高,器官只能当线索生成器不能当判据。这是对夸奖的反向校准,不粉饰。",
+    "MIXED": "介于两者→按实测数字落档,不强行归类。"
+  },
+  "counter_discipline": "①负向自咬: 若把金表全部gold翻转为相反,指标必须明显变化;否则判据失效。②标注独立性诚实: 标注由本Agent人工写,非第三方,存在设计者=标注者同源风险(KB-META158),如实声明不夸大独立性。③禁事后挑: 词表本轮冻结不改,若因召回低想补词必须新开预注册——这为通过测试而放水,禁止。④阴性≠证明: 同义3条样本极小,漏检只说明这3条,不宣称词表全面无效。⑤判定权: 本校准只评估器官有效性,不追认/翻案任何裁决,judgment_fork仍PENDING归用户。",
+  "discipline": "预注册先于取证; hash锁存; 纯函数不联网不spawn不接run_loop不编译门禁; 不改verdict/l3/absolute/宪法锁/§100/十案; 因子问答小话永不入仓; 阳阴都落档; 样本小如实标注。",
+  "sha256": "90e30b18af793a766fe285ba347a83ee9b22cbf2f1691910006032c4aa47f0ef"
+}
