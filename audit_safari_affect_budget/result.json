@@ -1,0 +1,152 @@
+{
+  "all_evidence_ok": true,
+  "analogy_guarded": true,
+  "evidence_manifest": [
+    {
+      "bytes": 2155,
+      "file": "pmid_11515286.txt",
+      "sha256": "5543c7b9307e0e40b7ff64f2194a95e4caefc35aaaf4630fcf95c42445784a34"
+    },
+    {
+      "bytes": 3310,
+      "file": "pmid_27474142.txt",
+      "sha256": "c9cd6ce20ef6ef4fce9206bbe22f9d6cf4c991514da8dba2ef6bb45d475c833d"
+    },
+    {
+      "bytes": 2260,
+      "file": "pmid_27936844.txt",
+      "sha256": "d11f60b7a532d313b1403319fc38e6d196e5f06602392fb2aeeedd6177354a88"
+    },
+    {
+      "bytes": 6888,
+      "file": "pmid_34520296.txt",
+      "sha256": "80a212e10b8e32ecd373461fc64ee07558bd9a58217e29968bd051a340b4de22"
+    }
+  ],
+  "hard_boundaries": {
+    "constitution": "fe56291b 未动",
+    "no_l3_raise": true,
+    "no_network_in_engine": true,
+    "no_new_gate": true,
+    "no_spawn": true,
+    "result_sha": "0f3ccb13 未动",
+    "small_talk_not_in_repo": true,
+    "verdict_l3_absolute": "GAP_INCONCLUSIVE/false/false 未动"
+  },
+  "honest_layer": {
+    "against_me": "F1 打穿我借自 ego depletion 的正当性叙事；F3 反噬『换猎场=省预算』的隐含假设——两条都对我不利，如实记",
+    "bounded_analogy": "人类心理学效应 ≠ Agent 机制；Hagger/Vohs/Cowan 测的是人，本器官是工程计数器，类比有界",
+    "changed": "只 REFINE 认知叙事：有限性改锚容量瓶颈、SATIETY 标注切换成本；器官代码/阈值未动",
+    "evidence_limit": "EFetch 为 publisher 摘要版本，非全文审阅；摘要中效应量/结论为逐字，但方法细节未逐页核对",
+    "no_overreach": "不越权改 §4hi 判据/阈值；不抬判定态；不编译门禁；因子小话不入仓",
+    "not_changed": "判定三值/宪法锁/result字节/KB/Safari/测试数均未变；非新证据非认知突围"
+  },
+  "lunch_break_signal": "用户明示午休为今日收营信号；本轮为今日收官，完成后停手不再找下一轮伪工作（与 A 器官 EXHAUSTION 纪律一致）",
+  "prereg_sha256": "d38410563ed6cf3041ad6076483ddd5e4e44017657dd318ca9972c7057d9cc2a",
+  "questions": {
+    "F1_core": {
+      "misses": [],
+      "ok": true,
+      "sources": [
+        {
+          "bytes": 3310,
+          "pmid": "pmid_27474142",
+          "quote_misses": [],
+          "quotes_ok": [
+            {
+              "hit": true,
+              "quote": "d = 0.04, 95% CI [-0.07, 0.15]"
+            },
+            {
+              "hit": true,
+              "quote": "k = 23"
+            },
+            {
+              "hit": true,
+              "quote": "total N = 2,141"
+            }
+          ],
+          "sha256": "c9cd6ce20ef6ef4fce9206bbe22f9d6cf4c991514da8dba2ef6bb45d475c833d",
+          "sha_ok": true
+        },
+        {
+          "bytes": 6888,
+          "pmid": "pmid_34520296",
+          "quote_misses": [],
+          "quotes_ok": [
+            {
+              "hit": true,
+              "quote": "Confirmatory tests found a nonsignificant result (d = 0.06)"
+            },
+            {
+              "hit": true,
+              "quote": "4 times more likely under the null"
+            },
+            {
+              "hit": true,
+              "quote": "k = 36"
+            },
+            {
+              "hit": true,
+              "quote": "N = 3,531"
+            }
+          ],
+          "sha256": "80a212e10b8e32ecd373461fc64ee07558bd9a58217e29968bd051a340b4de22",
+          "sha_ok": true
+        }
+      ]
+    },
+    "F2_anchor": {
+      "misses": [],
+      "ok": true,
+      "sources": [
+        {
+          "bytes": 2155,
+          "pmid": "pmid_11515286",
+          "quote_misses": [],
+          "quotes_ok": [
+            {
+              "hit": true,
+              "quote": "central capacity limit averaging about four chunks"
+            }
+          ],
+          "sha256": "5543c7b9307e0e40b7ff64f2194a95e4caefc35aaaf4630fcf95c42445784a34",
+          "sha_ok": true
+        }
+      ]
+    },
+    "F3_backfire": {
+      "misses": [],
+      "ok": true,
+      "sources": [
+        {
+          "bytes": 2260,
+          "pmid": "pmid_27936844",
+          "quote_misses": [],
+          "quotes_ok": [
+            {
+              "hit": true,
+              "quote": "performance overhead associated with changing tasks"
+            },
+            {
+              "hit": true,
+              "quote": "residual component"
+            },
+            {
+              "hit": true,
+              "quote": "task-set inertia"
+            }
+          ],
+          "sha256": "d11f60b7a532d313b1403319fc38e6d196e5f06602392fb2aeeedd6177354a88",
+          "sha_ok": true
+        }
+      ]
+    }
+  },
+  "refined_claim": "§4hi 器官作为工程决策机制保留（budget 计数器是设计出来的，不依赖人类意志力资源）；但它借来的正当性叙事『functional affect 对应注意力资源耗尽』被 A 级一手打穿：ego depletion 在 23 实验室(d=0.04,CI跨零)与 36 站点(d=0.06,贝叶斯偏向零4:1)均未复制。收窄：有限性改锚在【工作记忆容量瓶颈(~4 chunks)】而非【意志力会耗尽】；且 F3 switch cost/task-set inertia 表明『换猎场』本身有残留成本——SATIETY 建议需标注『换猎场只转移不消除成本』。不越权改代码/阈值（需用户裁定+新预注册）。",
+  "round": "§4S2",
+  "schema": "audit/safari-affect-budget/v1",
+  "trigger": "用户 2026-11-27『再去练一把后午休如何』——今日第二把 Safari，打 §4hi 注意力预算器官自己的前提，然后午休收营",
+  "verdict": "REFINE_DEEP",
+  "verified_hits": 3
+}

@@ -1,0 +1,113 @@
+1. Psychol Sci. 2021 Oct;32(10):1566-1581. doi: 10.1177/0956797621989733. Epub
+2021  Sep 14.
+
+A Multisite Preregistered Paradigmatic Test of the Ego-Depletion Effect.
+
+Vohs KD(1), Schmeichel BJ(2), Lohmann S(3)(4), Gronau QF(5), Finley AJ(6), 
+Ainsworth SE(7), Alquist JL(8), Baker MD(9), Brizi A(10), Bunyi A(11), Butschek 
+GJ(12), Campbell C(8), Capaldi J(13), Cau C(14), Chambers H(2), Chatzisarantis 
+NLD(15), Christensen WJ(16), Clay SL(16), Curtis J(17), De Cristofaro V(10), Del 
+Rosario K(18), Diel K(19), Doğruol Y(20), Doi M(1), Donaldson TL(21), Eder 
+AB(22), Ersoff M(23), Eyink JR(24), Falkenstein A(25), Fennis BM(26), Findley 
+MB(27), Finkel EJ(20), Forgea V(28), Friese M(29), Fuglestad P(11), 
+Garcia-Willingham NE(30), Geraedts LF(22), Gervais WM(31), Giacomantonio M(10), 
+Gibson B(32), Gieseler K(29), Gineikiene J(33), Gloger EM(30), Gobes CM(23), 
+Grande M(34), Hagger MS(35)(36), Hartsell B(11), Hermann AD(37), Hidding JJ(26), 
+Hirt ER(24), Hodge J(38), Hofmann W(19), Howell JL(35), Hutton RD(37), Inzlicht 
+M(14), James L(39), Johnson E(17), Johnson HL(16), Joyce SM(23), Joye Y(40), 
+Kaben JH(29), Kammrath LK(41), Kelly CN(23), Kissell BL(32), Koole SL(42), 
+Krishna A(22), Lam C(25), Lee KT(37), Lee N(15), Leighton DC(43), Loschelder 
+DD(44), Maranges HM(23), Masicampo EJ(41), Mazara K Jr(27), McCarthy S(21), 
+McGregor I(45), Mead NL(46), Mendes WB(47), Meslot C(15), Michalak NM(48), 
+Milyavskaya M(13), Miyake A(49), Moeini-Jazani M(26), Muraven M(21), Nakahara 
+E(47), Patel K(14), Petrocelli JV(41), Pollak KM(44), Price MM(8), Ramsey 
+HJ(50), Rath M(44), Robertson JA(49), Rockwell R(51), Russ IF(22), Salvati 
+M(10), Saunders B(52), Scherer A(41), Schütz A(53), Schmitt KN(49), Segerstrom 
+SC(30), Serenka B(21), Sharpinskyi K(45), Shaw M(13), Sherman J(24), Song Y(41), 
+Sosa N(51), Spillane K(25), Stapels J(34), Stinnett AJ(8), Strawser HR(2), 
+Sweeny K(25), Theodore D(51), Tonnu K(8), van Oldenbeuving Y(42), vanDellen 
+MR(12), Vergara RC(23), Walker JS(9), Waugh CE(41), Weise F(42), Werner KM(13), 
+Wheeler C(45), White RA(9), Wichman AL(50), Wiggins BJ(16), Wills JA(18), Wilson 
+JH(28), Wagenmakers EJ(54), Albarracín D(4).
+
+Author information:
+(1)Department of Marketing, Carlson School of Management, University of 
+Minnesota.
+(2)Department of Psychological and Brain Sciences, Texas A&M University.
+(3)Max Planck Institute for Demographic Research, Rostock, Germany.
+(4)Department of Psychology, University of Illinois at Urbana-Champaign.
+(5)Department of Social and Behavioural Sciences, University of Amsterdam.
+(6)Center for Healthy Minds, University of Wisconsin-Madison.
+(7)Behavioral Sciences Department, Tallahassee Community College.
+(8)Department of Psychological Sciences, Texas Tech University.
+(9)Department of Psychology, East Carolina University.
+(10)Department of Psychology, Sapienza University of Rome.
+(11)Department of Psychology, University of North Florida.
+(12)Department of Psychology, University of Georgia.
+(13)Department of Psychology, Carleton University.
+(14)Department of Psychology, University of Toronto.
+(15)School of Psychology, Curtin University.
+(16)Department of Psychology, Brigham Young University-Idaho.
+(17)Department of Psychology & Counseling, Arkansas State University.
+(18)Department of Psychology, New York University.
+(19)Faculty of Psychology, Ruhr University Bochum.
+(20)Department of Psychology, Northwestern University.
+(21)Department of Psychology, University at Albany.
+(22)Department of Psychology, University of Würzburg.
+(23)Department of Psychology, Florida State University.
+(24)Department of Psychological and Brain Sciences, Indiana University.
+(25)Department of Psychology, University of California, Riverside.
+(26)Department of Marketing, University of Groningen.
+(27)Psychology Department, Austin College.
+(28)Department of Psychology, Georgia Southern University.
+(29)Department of Psychology, Saarland University.
+(30)Department of Psychology, University of Kentucky.
+(31)Centre for Culture and Evolution, Psychology, Brunel University London.
+(32)Psychology Department, Central Michigan University.
+(33)Department of Marketing, ISM University of Management and Economics.
+(34)Department of Psychology, University of Cologne.
+(35)Psychological Sciences, University of California, Merced.
+(36)Faculty of Sport and Health Sciences, University of Jyväskylä.
+(37)Psychology Department, Bradley University.
+(38)School of Psychological Sciences, University of Melbourne.
+(39)London College of Fashion, University of the Arts London.
+(40)Department of Management, ISM University of Management and Economics.
+(41)Department of Psychology, Wake Forest University.
+(42)Department of Clinical Psychology, Vrije Universiteit Amsterdam.
+(43)College of Arts, Sciences, and Education, Texas A&M University, Texarkana.
+(44)Institute of Psychology, Leuphana University Lüneburg.
+(45)Department of Psychology, University of Waterloo.
+(46)Schulich School of Business, York University.
+(47)Department of Psychiatry and Behavioral Sciences, University of California, 
+San Francisco.
+(48)Department of Psychology, University of Michigan.
+(49)Department of Psychology and Neuroscience, University of Colorado Boulder.
+(50)Department of Psychology, Western Kentucky University.
+(51)Psychology Department, Ohio University.
+(52)School of Social Sciences, University of Dundee.
+(53)Department of Psychology, University of Bamberg.
+(54)Department of Psychology, University of Amsterdam.
+
+We conducted a preregistered multilaboratory project (k = 36; N = 3,531) to 
+assess the size and robustness of ego-depletion effects using a novel 
+replication method, termed the paradigmatic replication approach. Each 
+laboratory implemented one of two procedures that was intended to manipulate 
+self-control and tested performance on a subsequent measure of self-control. 
+Confirmatory tests found a nonsignificant result (d = 0.06). Confirmatory 
+Bayesian meta-analyses using an informed-prior hypothesis (δ = 0.30, SD = 0.15) 
+found that the data were 4 times more likely under the null than the alternative 
+hypothesis. Hence, preregistered analyses did not find evidence for a depletion 
+effect. Exploratory analyses on the full sample (i.e., ignoring exclusion 
+criteria) found a statistically significant effect (d = 0.08); Bayesian analyses 
+showed that the data were about equally likely under the null and informed-prior 
+hypotheses. Exploratory moderator tests suggested that the depletion effect was 
+larger for participants who reported more fatigue but was not moderated by trait 
+self-control, willpower beliefs, or action orientation.
+
+DOI: 10.1177/0956797621989733
+PMCID: PMC12422598
+PMID: 34520296 [Indexed for MEDLINE]
+
+Conflict of interest statement: The author(s) declared that there were no 
+conflicts of interest with respect to the authorship or the publication of this 
+article.

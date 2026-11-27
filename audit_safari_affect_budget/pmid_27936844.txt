@@ -1,0 +1,41 @@
+1. J Exp Psychol Learn Mem Cogn. 2017 Jun;43(6):862-873. doi: 10.1037/xlm0000347.
+ Epub 2016 Dec 12.
+
+Self-paced preparation for a task switch eliminates attentional inertia but not 
+the performance switch cost.
+
+Longman CS(1), Lavric A(1), Monsell S(1).
+
+Author information:
+(1)Department of Psychology, College of Life and Environmental Sciences, 
+University of Exeter.
+
+The performance overhead associated with changing tasks (the "switch cost") 
+usually diminishes when the task is specified in advance but is rarely 
+eliminated by preparation. A popular account of the "residual" (asymptotic) 
+switch cost is that it reflects "task-set inertia": carry-over of task-set 
+parameters from the preceding trial(s). New evidence for a component of 
+"task-set inertia" comes from eye-tracking, where the location associated with 
+the previously (but no longer) relevant task is fixated preferentially over 
+other irrelevant locations, even when preparation intervals are generous. Might 
+such limits in overcoming task-set inertia in general, and "attentional inertia" 
+in particular, result from suboptimal scheduling of preparation when the time 
+available is outside one's control? In the present study, the stimulus comprised 
+3 digits located at the points of an invisible triangle, preceded by a central 
+verbal cue specifying which of 3 classification tasks to perform, each 
+consistently applied to just 1 digit location. The digits were presented only 
+when fixation moved away from the cue, thus giving the participant control over 
+preparation time. In contrast to our previous research with 
+experimenter-determined preparation intervals, we found no sign of attentional 
+inertia for the long preparation intervals. Self-paced preparation reduced but 
+did not eliminate the performance switch cost-leaving a clear residual component 
+in both reaction time and error rates. That the scheduling of preparation 
+accounts for some, but not all, components of the residual switch cost, 
+challenges existing accounts of the switch cost, even those which distinguish 
+between preparatory and poststimulus reconfiguration processes. (PsycINFO 
+Database Record
+
+(c) 2017 APA, all rights reserved).
+
+DOI: 10.1037/xlm0000347
+PMID: 27936844 [Indexed for MEDLINE]

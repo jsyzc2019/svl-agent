@@ -16,7 +16,7 @@
     "tests_passed"
   ],
   "handoff_authority_line": 43,
-  "kb_count": 505,
+  "kb_count": 506,
   "kernel_version": "7.5.0",
   "l3_claimed": false,
   "migration": {
@@ -28,9 +28,9 @@
   },
   "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
   "round": "§4ij",
-  "safari_rounds": 134,
+  "safari_rounds": 135,
   "schema": "authoritative-state/v1",
-  "sha256": "2f6611c05f986acd79b2f74a52d4932013b44ba876d64406cb38dd4f1d11e121",
+  "sha256": "fd4cc8e10e992d07126e43d00b1a437952436845801d1c886bc4ea76063c48f0",
   "tests_passed": 1750,
   "verdict": "GAP_INCONCLUSIVE"
 }

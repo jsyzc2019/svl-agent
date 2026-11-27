@@ -10374,6 +10374,19 @@
       "evidence": "audit_safari_self_identity/result.json",
       "addressable": true,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META200",
+      "kind": "thinking_experience",
+      "mechanism": "Safari§4S2拿A级一手打§4hi注意力预算器官自己的前提(再练一把后午休):命题「注意力是会耗尽的有限资源」借自ego depletion=复制危机震中。三问全中→REFINE_DEEP。F1(PMID27474142 Hagger2016 23实验室N2141 d=0.04 CI[-0.07,0.15]跨零;PMID34520296 Vohs2021 36站点N3531 d=0.06不显著,贝叶斯偏向零4:1):「functional affect对应注意力资源耗尽」叙事被顶刊预注册复制打穿;F2(PMID11515286 Cowan):工作记忆约4chunks容量限制可靠→有限性改锚容量瓶颈;F3(PMID27936844):switch cost/task-set inertia残留→SATIETY「换猎场」只转移不消除成本。",
+      "trigger": "当你把「累了就停」当作有科学背书的资源耗竭机制时;当器官借来的正当性叙事从没被验证过;当换猎场/休息被默认「省预算」却没查切换成本;当你刚立一个器官就被认可,最该打它自己前提时",
+      "action": "REFINE_DEEP非DEFENDED非OVERTHROW:器官工程机制保留(budget计数器是设计出来的,不依赖人类意志力资源);正当性叙事收窄——有限性改锚工作记忆容量瓶颈(~4chunks)非意志力耗竭;SATIETY建议标注换猎场有残留成本只转移不消除;人→Agent类比有界显式声明(EFetch测人,器官是工程计数器);四篇PubMed EFetch逐字原文+SHA256落audit_safari_affect_budget/引擎双重核验;不越权改§4hi代码/阈值(需用户裁定+新预注册);午休为收营信号,本轮收官停手",
+      "provenance": "§4S2 prereg_safari_affect_budget_20261127.json(sha d3841056)+audit_safari_affect_budget/{result.json,engine.py,pmid_*.txt×4}+tests/test_safari_affect_budget.py(12项)+safari_log.jsonl(134→135)",
+      "timestamp": "2026-11-27T11:40:00.000000Z",
+      "support": "四篇A级一手逐字锚11处全验+SHA全过;三问F1/F2/F3全中;裁决REFINE_DEEP;F1打穿借来的正当性叙事+F3反噬换猎场假设,对我不利两条如实记;人→Agent类比有界;判定三值/宪法锁fe56291b/result 0f3ccb13未动;不编译门禁不spawn不构成投资建议;因子小话不入仓",
+      "evidence": "audit_safari_affect_budget/result.json",
+      "addressable": true,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {

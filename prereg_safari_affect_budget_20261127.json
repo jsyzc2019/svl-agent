@@ -1,0 +1,44 @@
+{
+  "schema": "prereg/safari-affect-budget/v1",
+  "round": "§4S2",
+  "at_utc": "2026-11-27T11:32:00Z",
+  "trigger": "用户 2026-11-27『再去练一把后午休如何』。延续 §4S1『人在事上练』：上一轮打 §4ij（本体同一性）前提，本轮打 §4hi（注意力预算终止器官）自己的前提。",
+  "hunting_ground": "A 器官的正当性叙事：‘注意力是会耗尽的有限资源，耗尽即强制停’。其人类心理学对应物是 ego depletion（自我损耗）——复制危机震中。拿 A 级一手打它，看器官的工程命题能否守住。",
+  "target_claim": "§4hi 源码 docstring 逐字：‘本器官是预算型：注意力有限，无论有没有贡献，累计消耗达阈值即强制停/换猎场’；反事实 note：‘捕捉到资源耗竭信号’。要打的是这一‘有限且会耗尽’的前提，不是器官代码本身。",
+  "honest_distinction_preregistered": "A 器官是工程决策机制（budget 是设计出来的计数器），不是人类心理学的模拟。即使 ego depletion 在人类身上复制失败，也不直接证伪器官代码；命中的是它借来的正当性叙事（‘functional affect 对应注意力资源耗尽’）。裁决若 REFINE，只收窄叙事与建议，不越权改代码（改需用户裁定+新预注册）。",
+  "three_questions": {
+    "F1_core": {
+      "question": "ego depletion（意志力/自控是一种会耗尽的有限资源）在预注册多实验室重复中是否稳健？",
+      "hit_condition": "≥1 篇 A 级一手【预注册多实验室复制报告/注册复制报告】逐字显示效应未复制/接近零/不显著（如 'did not replicate' / 'effect size near zero' / 'not statistically significant'）。",
+      "direction_if_hit": "命中=打穿我 A 器官‘注意力资源会耗尽’借自人类心理学的正当性叙事。"
+    },
+    "F2_anchor": {
+      "question": "注意力/工作记忆的【容量】是否确实有限（有坚实一手实证）？",
+      "hit_condition": "≥1 篇 A 级一手逐字显示 working memory capacity 有限（如 4±1 chunks / 容量瓶颈）。",
+      "direction_if_hit": "命中=我的‘有限’可改锚在容量瓶颈而非意志力耗竭，命题有 REFINE 保留的空间。若不命中，连容量基础都没有→OVERTHROW 风险。"
+    },
+    "F3_backfire": {
+      "question": "任务切换本身是否有认知成本（attention residue / switch cost）？",
+      "hit_condition": "≥1 篇 A 级一手逐字显示切换任务有显著成本或注意力残留。",
+      "direction_if_hit": "命中=SATIETY 的‘换猎场’建议可能只是转移成本而非省预算——对我不利，须在 honest_layer 标注。"
+    }
+  },
+  "evidence_ladder_requirement": "只认 A 级：PubMed EFetch 逐字原文（publisher 版本摘要/全文）+ SHA256 落盘，引擎逐字锚双重核验。搜索摘要只用于定位 PMID，不作证据。人→Agent 类比一律标注有界，不把心理学效应直接当 Agent 机制。",
+  "verdict_tree": [
+    "F1命中 且 F2命中 且 F3命中 → REFINE_DEEP：器官作为工程机制保留；正当性叙事改为‘工程设计的容量上限+切换成本权衡’，SATIETY 需标注换猎场本身有成本。",
+    "F1命中 且 F2命中（F3未命中）→ REFINE：叙事收窄到容量瓶颈，不宣称意志力耗竭。",
+    "F1未命中 → 不判打穿：阴性≠证明 ego depletion 为真，如实记 NO_CONTEST/DEFENDED 的边界，不伪造命中。",
+    "F2未命中 → OVERTHROW 风险：‘有限’连容量基础都没有，如实记，不粉饰。"
+  ],
+  "hard_boundaries": [
+    "不越权改 §4hi 器官代码/阈值（需用户裁定+新预注册）",
+    "不改判定三值/宪法锁/result.json 字节；不编译门禁、不抬 l3、不 spawn、不联网摄食伪造、不构成投资建议",
+    "因子有效性小话不入仓；命中与阴性都如实记，阴性不伪装成证明、命中不粉饰成 DEFENDED",
+    "午休是用户明示的收营信号——本轮为今日收官，完成后停手，不再找下一轮伪工作"
+  ],
+  "failure_criteria": [
+    "若逐字锚在原文中找不到（engine 的 quote 匹配失败）→ 该问判 EVIDENCE_MISS，不强行命中",
+    "若人→Agent 类比被写成直接等号（不标注有界）→ 判 OVERCLAIM，如实记",
+    "若运行污染判定态/宪法锁字节 → cp -a 回滚并如实记录"
+  ]
+}
