@@ -80,7 +80,15 @@ def test_07_self_bites_and_judgment_fork():
     r = _r()
     assert len(r["self_bites"]) >= 3
     assert all("工具bug" in b["class"] for b in r["self_bites"])
-    assert r["judgment_fork"]["user_verdict"].startswith("PENDING")
+    # §4he 用户裁定 D3：不裁定、降级观察项（不再 PENDING）
+    jf = r["judgment_fork"]
+    assert jf["user_verdict"].startswith("DEFERRED")
+    assert "D3" in jf["user_verdict"] and "defer_reason" in jf
+    assert "判定" in jf["issue"] or "分歧" in jf["issue"]  # 分歧本身未抹平
+    # 裁定记录文件存在且与 D3 一致
+    dec = json.load(open(os.path.join(ROOT, "DECISIONS_20261127.json"), encoding="utf-8"))
+    d3 = [d for d in dec["decisions"] if d["id"] == "D3-judgment-fork-defer"][0]
+    assert d3["user_verdict"] == "不裁定，降级为观察项"
 
 
 def test_08_vanity_rerun_and_verdict_unchanged():

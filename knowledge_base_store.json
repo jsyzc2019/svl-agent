@@ -4744,7 +4744,8 @@
       "support": 1,
       "evidence": "三类标签全degenerate=true;U型伪规则全局18/18;canary jaccard区间[0.098,0.235]与§4al权威一致;frozen_has_canary_negative=false;报告渲染3页无乱码;专项34点全过",
       "addressable": true,
-      "improvement_class": "preserve"
+      "improvement_class": "preserve",
+      "provenance": "§4hc audit_memory_governance 机械抽取候选+用户2026-11-27裁定采纳回填(DECISIONS_20261127.json D1):prove_canary_construct_validity.py+§4al权威口径"
     },
     {
       "item_id": "KB-META33",
@@ -4769,7 +4770,8 @@
       "support": 1,
       "evidence": "原100哈希前后一致5ad35731;prereg锁一致4988673d;J1 pos6/6neg0/6;J2 3/6v3/6;J3 pos0/6neg6/6;verdict CONSTRUCT_DEFECT_CONFIRMED;专项36点全绿;报告渲染3页",
       "addressable": true,
-      "improvement_class": "preserve"
+      "improvement_class": "preserve",
+      "provenance": "§4hc audit_memory_governance 机械抽取候选+用户2026-11-27裁定采纳回填(DECISIONS_20261127.json D1):prereg.json+sha4988673d+sha5ad35731+§4ap"
     },
     {
       "item_id": "KB-META34",
@@ -10292,6 +10294,19 @@
       "timestamp": "2026-11-27T00:30:51.000000Z",
       "support": "498条现场:provenance缺2(KB-AUDIT68/69)均可恢复;裁决GOVERNANCE_GAP_FOUND;support形态list419/number47/string32;三注入自咬全过;1处self-bite(\\b中文边界)就地修;8守卫;全量1702→1710;判定态三值GAP_INCONCLUSIVE/l3=false/absolute=false与宪法锁字节未动;候选provenance未写回KB(交裁定);不编译门禁未新增异厂调用;因子小话未入仓",
       "evidence": "一手现场;WORK_ITEMS P0记忆治理;可纠错溯源链;少而精体检;候选不写回判定权归用户;观察项不擅改口径;阴性≠证明;工具self-bite就地修不升级CORR-REAL;判定态不动",
+      "addressable": false,
+      "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META194",
+      "kind": "thinking_experience",
+      "mechanism": "用户裁定执行也要守住判据快照与改动最小(§4he): 用户『采纳你的建议』一次裁定三项——①§4hc provenance候选回填②§4gb三条财报证伪并入正式log③judgment_fork降级DEFERRED。执行时三处陷阱均就地挡住: (a)judgment_fork由engine.py生成,直接改result.json会被重跑覆盖→改源头并重生成; (b)重跑vanity engine扫当前语料命中16→18(handoff在§4gy后追加大量『全绿+判定权归用户』叙述)属判据漂移,与裁定无关→恢复§4gy快照只替换judgment_fork字段,其余字节一致; (c)并入log时原有3行字节哈希核验未动、候选3条携带完整honest_limit(不只搬结论)。统一裁定记录DECISIONS_20261127.json作一手依据。",
+      "trigger": "当用户一次裁定多项待办时;当要改的字段由生成脚本产出时;当重跑工具会导致判据数据漂移时;当合并记录进正式台账时",
+      "action": "先写统一裁定记录(actor/verdict/execution/invariants)作一手依据;改由脚本生成的字段必须改源头再重生成,且核验除目标字段外字节一致;重跑取证引擎若因语料增长改变判据数值,恢复原快照只落地裁定字段,不追认判据漂移;合并台账前hash锁原有行、合并后核验原有行字节未动,候选须带完整边界字段不只搬结论;首用快照守卫(如PENDING/不写回/仍是原三条)随裁定更新语义但不改历史审计result(那是当时事实不追认);判定态三值/宪法/§100/十案全不动",
+      "provenance": "§4he DECISIONS_20261127.json+knowledge_base_store.json(KB-AUDIT68/69回填)+falsification_log.jsonl(3→6)+audit_vanity_selfaudit/{engine.py,result.json}+tests/{test_memory_governance,test_finance_construct_validity,test_vanity_selfaudit}.py",
+      "timestamp": "2026-11-27T00:39:23.000000Z",
+      "support": "三项裁定全落地:①provenance缺2→0,KB总数499不变,mechanism原文未动②正式log 3→6原有3行sha256 67c85d8c一致,3条带honest_limit/verdict_impact/discipline+merged标记③judgment_fork PENDING→DEFERRED/LOW_PRIORITY,result.json除judgment_fork外与§4gy快照字节一致(命中仍16非漂移的18);guardian三处各8项守卫;全量1710(未新增测试);判定态三值GAP_INCONCLUSIVE/l3=false/absolute=false与宪法锁字节未动;不编译门禁未新增异厂调用不构成投资建议;因子小话未入仓",
+      "evidence": "一手现场;裁定权归用户;执行不代裁;改动最小;生成源优先;判据快照不追认漂移;台账合并hash核验;边界字段完整随行;历史快照不追认失败;判定态不动",
       "addressable": false,
       "improvement_class": "fix"
     }

@@ -69,7 +69,20 @@ def test_07_three_falsification_entries():
     assert all(x["verdict_impact"].startswith("不动") for x in lines)
 
 
-def test_08_formal_log_not_touched_by_engine():
-    """本轮产物写入独立候选文件，不覆盖正式 falsification_log.jsonl。"""
+def test_08_formal_log_merged_after_user_decision():
+    """§4he 用户裁定 D2 采纳并入：正式 log 3→6 行，原有 3 行未动，3 条携带完整边界标注。"""
     formal = os.path.join(ROOT, "falsification_log.jsonl")
-    assert sum(1 for _ in open(formal, encoding="utf-8")) == 3  # 仍是原三条
+    rows = [json.loads(l) for l in open(formal, encoding="utf-8") if l.strip()]
+    assert len(rows) == 6
+    # 原有 3 行 id 仍在（不被覆盖）
+    assert "FALSIFY-20261126-VERDICT-SOURCE-NO-SECOND-INSTANCE" in [r["id"] for r in rows]
+    merged = [r for r in rows if r["id"].startswith("FALSIFY-CV")]
+    assert len(merged) == 3
+    for r in merged:
+        assert r["honest_limit"]  # 边界标注随条目并入，不只搬结论
+        assert r["verdict_impact"].startswith("不动")
+        assert r["merged_from"].startswith("audit_finance_construct_validity/")
+        assert "D2" in r["user_decision"]
+    # 引擎仍只写独立候选文件（不自动覆盖正式 log）
+    src = open(os.path.join(ROOT, "audit_finance_construct_validity", "engine.py"), encoding="utf-8").read()
+    assert "不覆盖" in src

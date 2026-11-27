@@ -50,13 +50,22 @@ def test_05_triplet_unchanged():
     assert r["verdict_triplet_before"] == r["verdict_triplet_after"] == ["GAP_INCONCLUSIVE", False, False]
 
 
-def test_06_candidates_not_written_back():
-    """硬边界：候选只是建议，KB 正文 provenance 仍缺（不擅自写回）。"""
+def test_06_candidates_backfilled_after_user_decision():
+    """§4he 用户裁定 D1 采纳回填：两条 provenance 已补，锚点可追溯，mechanism 原文不动。
+    审计 result.json 的历史快照仍报缺2（那是 §4hc 当时事实，不追认失败），此处核当前 KB 正文。"""
     kb = _load("knowledge_base_store.json")
+    by_id = {x["item_id"]: x for x in kb["items"]}
+    for iid, anchor in (("KB-AUDIT68", "prove_canary_construct_validity.py"),
+                        ("KB-AUDIT69", "prereg.json")):
+        pv = by_id[iid].get("provenance", "")
+        assert "用户2026-11-27裁定采纳回填" in pv and "DECISIONS_20261127.json D1" in pv
+        assert anchor in pv  # 候选锚点来自 mechanism 客观抽取，非臆造
+    # 全库 provenance 不再缺失（回填后）
     missing = [x["item_id"] for x in kb["items"] if not x.get("provenance")]
-    assert "KB-AUDIT68" in missing and "KB-AUDIT69" in missing
+    assert missing == []
+    # 硬边界声明仍在源码（防未来引擎擅自自动写回）
     src = open(os.path.join(ROOT, "life_kernel", "memory_governance.py"), encoding="utf-8").read()
-    assert "写回" in src  # 硬边界声明存在（不自动采纳）
+    assert "写回" in src
 
 
 def test_07_support_shape_observation_only():

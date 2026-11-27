@@ -1,0 +1,36 @@
+{
+  "at_utc": "2026-11-27T00:37:41.000000Z",
+  "round": "§4he",
+  "actor": "用户",
+  "context": "用户对 §4hc/§4gb/§4gy 留下的三项待裁定事项给出『采纳你的建议』——即逐条采纳 Agent 在 08:35 给出的三项倾向：①2 条 provenance 候选回填；②3 条财报证伪并入正式 log；③judgment_fork 不裁定、降级 DEFERRED。本文件是裁定一手记录，改动落地须与此一致。",
+  "decisions": [
+    {
+      "id": "D1-provenance-backfill",
+      "source": "§4hc audit_memory_governance/result.json suggestions",
+      "user_verdict": "采纳回填",
+      "agent_recommendation": "采纳。历史漏填字段，候选是从条目自身 mechanism 客观抽取的锚点，非臆造；补齐增强可纠错溯源。",
+      "execution": "只补 provenance 字段，mechanism 原文一字不动；改字段不加条目，KB 总数 499 不变；标注来源为『§4hc 机械抽取+用户裁定采纳』。",
+      "items": ["KB-AUDIT68", "KB-AUDIT69"],
+      "status": "PENDING_EXECUTION"
+    },
+    {
+      "id": "D2-falsification-merge",
+      "source": "§4gb audit_finance_construct_validity/falsification_entries.jsonl",
+      "user_verdict": "采纳并入",
+      "agent_recommendation": "采纳，但必须整体携带边界标注（A- 数据等级、只判背离不判个股真假、基础率 UNKNOWN 不外推、阴性≠证明），不能只搬结论。",
+      "execution": "追加 3 条到 falsification_log.jsonl（3→6 行），不改已有 3 行；id 唯一；完整保留 honest_limit/verdict_impact/discipline 字段；独立候选文件保留不删。",
+      "items": ["FALSIFY-CV1-PROXY-NOT-CONSTRUCT", "FALSIFY-CV2-PRECISION-CI-WIDE", "FALSIFY-CV3-BASE-RATE-ENRICHMENT"],
+      "status": "PENDING_EXECUTION"
+    },
+    {
+      "id": "D3-judgment-fork-defer",
+      "source": "§4gy audit_vanity_selfaudit/result.json judgment_fork",
+      "user_verdict": "不裁定，降级为观察项",
+      "agent_recommendation": "不裁定。依赖的检测器已被 §4gz 证明有效性被夸大（同义召回 0、特异度 0.5714），8 条命中是弱线索非证据；handoff 历史条目是事实记录，判为领功需意图证据而词表匹配给不了；裁定『算领功』等于用被削弱的工具给自己定罪=表演式自我批评。",
+      "execution": "改 engine.py 源头 user_verdict 为 DEFERRED 口径并重生成 result.json（否则重跑覆盖）；薄记降级理由；不抹平分歧本身，只标不裁定。",
+      "status": "PENDING_EXECUTION"
+    }
+  ],
+  "invariants": "判定态三值 GAP_INCONCLUSIVE/l3=false/absolute=false、宪法锁 fe56291b、§100 冻结集、十案全不动；不编译新门禁、不新增异厂调用、不构成投资建议、因子有效性小话不入仓。",
+  "discipline": "裁定权归用户；Agent 执行裁定而非代裁；每项落地后现场核验+全量测试+GitHub 增量推送(force:false)。"
+}
