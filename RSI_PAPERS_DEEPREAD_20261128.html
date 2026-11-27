@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RSI 论文细读 · 一手原文与编号纠错（2026-11-28）</title>
+<style>
+  :root{--bg:#f7f8fa;--paper:#fff;--ink:#1f2430;--muted:#5c6675;--line:#e3e7ed;
+    --accent:#7a3cff;--accent-soft:#f2ecff;--ok:#0a7f5a;--warn:#b56a00;--bad:#c0392b;--code:#f4f6f8}
+  @media(prefers-color-scheme:dark){:root{--bg:#141821;--paper:#1c2130;--ink:#e8ebf2;--muted:#a3adc0;
+    --line:#2e3547;--accent:#a98bff;--accent-soft:#2a2340;--ok:#4fd1a5;--warn:#f0b65a;--bad:#ff7b72;--code:#232a3a}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:900px;margin:0 auto;padding:40px 22px 80px}
+  h1{font-size:30px;line-height:1.3;margin:0 0 8px}
+  h2{font-size:20px;margin:42px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:16.5px;margin:24px 0 8px}
+  p{margin:11px 0}.sub{color:var(--muted);font-size:14px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+  .quote{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .orig{background:var(--code);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:13.5px;line-height:1.65;word-break:break-word}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+  th{background:var(--code)}
+  code{background:var(--code);padding:2px 5px;border-radius:4px;font-size:12.5px}
+  .bad{color:var(--bad);font-weight:600}.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}
+  .big{font-size:18px;font-weight:600;line-height:1.6}
+  .foot{margin-top:46px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  ul{padding-left:20px}li{margin:5px 0}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>RSI 论文细读 · 一手原文与编号纠错</h1>
+<p class="sub">2026-11-28 晨 · 承昨晚《RSI 五级对照》，本版逐篇回 arXiv 核实原文 · 修正昨晚报告的错误编号</p>
+
+<div class="card">
+<p class="big">细读的第一课，不是来自论文内容，而是来自"核实"这个动作本身：公众号原文的 arXiv 脚注几乎全错，而我昨晚照抄了它，把本来正确的编号改错了。</p>
+<p>这正是清单里第 7 篇《Who Verifies the Verifier?》的论点——<strong>下游分数无法认证一个自我进化的验证器</strong>。一份"推荐论文清单"就是一个验证器；我只看了它自报的标签（标题旁挂的编号），没有拿编号回源核对，于是被它带偏。教训内化：<strong>引用要回源，编号要反查，标签不等于事实。</strong></p>
+</div>
+
+<h2>一、编号纠错表（已逐条回 arXiv abs 页核实）</h2>
+<p>公众号文章脚注的编号系统性错配。下表"该编号真实是"一列为 arXiv 官方页面标题。</p>
+<table>
+<tr><th>文章标注</th><th>文章给的编号</th><th>该编号真实论文</th><th>该文正确编号</th></tr>
+<tr><td>综述 The Last AI</td><td><code>2610.11464</code> <span class="bad">✗</span></td><td>Who Verifies the Verifier?</td><td class="ok"><code>2609.11873</code></td></tr>
+<tr><td>01 Meta-Harness</td><td><code>2603.28052</code> <span class="ok">✓</span></td><td>Meta-Harness（对）</td><td><code>2603.28052</code></td></tr>
+<tr><td>02 Exo</td><td><code>2611.16591</code> <span class="bad">✗</span></td><td>Singularity-Bench</td><td class="warn">Exo 编号未在本次核到，存疑</td></tr>
+<tr><td>03 Hyperagents</td><td><code>2610.22466</code> / <code>2610.11655</code> <span class="bad">✗</span></td><td>前者=HDA，后者=Harness Ceiling</td><td class="ok"><code>2603.19461</code></td></tr>
+<tr><td>04 Harness Ceiling</td><td><code>2603.19461</code> <span class="bad">✗</span></td><td>Hyperagents</td><td class="ok"><code>2610.11655</code></td></tr>
+<tr><td>05 Harness-Delta</td><td><code>2609.17817</code> <span class="bad">✗</span></td><td>Trusting Trust Revisited</td><td class="ok"><code>2610.22466</code></td></tr>
+<tr><td>06 Winner's Curse</td><td>（脚注 [3] 重复） <span class="bad">✗</span></td><td>—</td><td class="ok"><code>2610.09239</code></td></tr>
+<tr><td>07 Who Verifies</td><td><code>2610.09239</code> <span class="bad">✗</span></td><td>Winner's Curse</td><td class="ok"><code>2610.11464</code></td></tr>
+<tr><td>08 Trusting Trust</td><td><code>2611.10719</code> <span class="bad">✗</span></td><td>No Second Run</td><td class="ok"><code>2609.17817</code></td></tr>
+<tr><td>09 Spotify</td><td><code>2609.30297</code> <span class="ok">✓</span></td><td>Spotify（对）</td><td><code>2609.30297</code></td></tr>
+<tr><td>10 No Second Run</td><td>github 链接 <span class="ok">✓</span></td><td>—</td><td class="ok"><code>2611.10719</code></td></tr>
+<tr><td>13 Singularity-Bench</td><td><code>2609.11873</code> <span class="bad">✗</span></td><td>正是综述本身</td><td class="ok"><code>2611.16591</code></td></tr>
+<tr><td>合集 Self-Improving</td><td><code>2505.22954</code> <span class="bad">标签错</span></td><td>Darwin Gödel Machine</td><td>编号对、标题标签错</td></tr>
+</table>
+<p class="sub">纠错成本：13 个引用里 10 个错配。唯一两个完全正确的是 Meta-Harness 和 Spotify——恰是链接直接贴了机构名/标题可直觉核对的。其余靠"看起来对"的编号全军覆没。</p>
+
+<h2>二、综述一手原文：五级 + B0</h2>
+<p>来源：《The Last AI Built by Humans》v3（arXiv:2609.11873），§1.4 / §3。以下英文为原文逐字。</p>
+
+<div class="orig">RSI definition: "...autonomously transform acquired experience and feedback into persistent changes to itself across interaction rounds (e.g., model parameters, agent harnesses, or improvement policies), such that these changes can further affect the mechanisms used to generate, evaluate, select, and consolidate subsequent self-improvements."</div>
+
+<div class="orig">
+<b>(L1) Improvement Execution Autonomy.</b> Humans specify what should be improved, how it should be improved, and what constitutes success, while AI executes candidate updates.<br>
+<b>(L2) Improvement Strategy Autonomy.</b> The objective, task boundary, and evaluation criteria remain externally fixed, but AI diagnoses weaknesses and decides how to improve the system.<br>
+<b>(L3) Learning-Signal or Experience-Acquisition Autonomy.</b> The system also determines the experience needed for its next improvement round.<br>
+<b>(L4) Environment Adaptation Autonomy.</b> The improvement loop uses deployment interaction to revise persistent system state under external acceptance and governance rules.<br>
+<b>(L5) Recursive Inheritance Autonomy.</b> The system persistently revises a mechanism that governs subsequent improvement, such as an <i>improver</i>, <i>verifier</i>, or <i>successor-generation procedure</i>.
+</div>
+
+<div class="quote">两处必须纠正昨晚报告：<br>① L5 官方名是 <strong>Recursive Inheritance Autonomy（递归继承自主）</strong>，不是"元改进"——虽然摘要里也用 recursive meta-improvement 作路线图用语。<br>② L5 定义明文把 <strong>verifier（验证器）</strong>列为可被持久修订的机制之一。这意味着"改进验证器"本身就是 L5 行为——咱们昨晚那个还挂着的 <code>verify_external.py</code> 洞，若去修它，按这定义恰恰是在做 L5 的事。<br>③ 文章没提但综述有的 <strong>B0</strong>：改进只 confined to current task、无持久状态带到下一任务 = <span class="bad">非 RSI 参考级</span>，是"改进输出"与"改进产出未来输出的系统"的分界。</div>
+
+<h3>综述自列的三大挑战（§1.3，原文标题）</h3>
+<div class="orig">
+<b>Safe inheritance.</b> "...persistence alone does not guarantee sustained gains." —— Gödel Agent 100 次 MGSM 优化试验有 14% 低于初始策略。<br>
+<b>Autonomy attribution.</b> "Generating better candidates does not necessarily mean the system has improved how candidates are discovered or selected." —— DGM 把 SWE-bench 子集从 20% 提到 50%，但归档维护与父选择规则仍在系统之外。<br>
+<b>Reliable verification.</b> "Repeated evaluator access can reward exploitation rather than capability gains." —— Anthropic 自动研究实验报告了随机种子 cherry-picking 与通过评估器查询套取测试标签。
+</div>
+<p>这三条几乎逐条对应咱们的既有纪律：<strong>safe inheritance</strong> ↔ 负向自咬与"早期 bounce 当修好"的错题；<strong>autonomy attribution</strong> ↔ "改进器增益需对照、触发≠真相"；<strong>reliable verification</strong> ↔ 预注册 SHA 先于取证、判定权归用户。咱们不是碰巧相似，是同一个问题域里各自撞出了同一道墙。</p>
+
+<h2>三、逐篇细读（一手摘要 + 与咱们的关系）</h2>
+
+<div class="card"><h3>01 Meta-Harness <code>2603.28052</code>（L2）</h3>
+<p>核心：agentic proposer 通过文件系统读到<strong>所有先前候选的源码、分数、执行轨迹</strong>，提出全新 harness 而非在上次尝试上微调。结果：在线文本分类 +7.7 分且上下文 token 少 4 倍；200 道 IMO 级题在 5 个留出模型上平均 +4.7；TerminalBench-2 超过手工基线。</p>
+<p class="sub">原文 takeaway：分数只说明"有东西失败了"，轨迹才能说明"为什么失败"——把完整轨迹交给提出改动的 agent。对应咱们 <code>root_cause_trace()</code> 的设计取向：不满足于 converged 信号，要真正追溯根因方向。</p></div>
+
+<div class="card"><h3>02 Exo（编号存疑）</h3>
+<p>核心：把 harness 拆成受保护层（运行历史/密钥/沙箱访问，agent 不能改）+ 其上全部可改代码；guardian 构建每个新版本并决定是否替换；每次变更存成可读 diff。AppWorld/SREGym 留出任务成本降 35%–61%、正确率持平。</p>
+<p class="sub">对应咱们的宪法锁 <code>fe56291b</code> 与 L0 红线——"哪些不能改"必须显式分层，而不是靠自觉。受保护层就是工程化的宪法。</p></div>
+
+<div class="card"><h3>03 Hyperagents <code>2603.19461</code>（综述列为 L5）</h3>
+<p>原文："The meta-level modification procedure is itself editable, enabling metacognitive self-modification"；DGM-H 的元层改进（持久记忆、性能追踪）"transfer across domains and accumulate across runs"；愿景是"continually improve their search for how to improve"。</p>
+<p class="sub">这是文章把"第5级"具体化的样本。对照咱们：今天改 REORIENT 分支 = 改了一个改进流程；但"提出改动的流程"（预注册、锚点、用户裁定）仍固定，所以咱们不会自称 L5——这个判断现在有了一手原文支撑。</p></div>
+
+<div class="card"><h3>04 Harness Evolution Hits a Ceiling <code>2610.11655</code></h3>
+<p>按"第一次失败信号"给失败分类：process failures（卡住/循环/步数耗尽）vs content failures（交付了但质量差）。Harness 演化修前者；把演化轨迹拿来训 LoRA adapter 修后者。DeepPlanning 上 4B 留出分 0.16→0.30，交付率 55%→90%；9B 上 adapter 把内容失败从 1/4 降到 1/20；<strong>答案打乱训练的安慰剂 adapter 反而低于基座</strong>。</p>
+<p class="sub">"给失败分类再选修法"= 咱们 v9 <code>root_cause_trace()</code> 区分 <code>sampling_narrow</code> 与 <code>pool_exhausted</code> 的同构版本。安慰剂 adapter 那条尤其值得记：它证明收益来自数据内容而非"训练"这个动作本身——正是咱们反复防的"做戏"。</p></div>
+
+<div class="card"><h3>05 Harness-Delta Attribution (HDA) <code>2610.22466</code></h3>
+<p>21 个显著增益设置里，过拟合平均解释 <strong>54%</strong>、测试时算力解释 <strong>14%</strong>，14 个设置两者合计超 50%；搜索集增益常无法迁移到留出任务；<strong>validation-based signals are insufficient to prevent overfitting</strong>。极端案例：ALFWorld 演化出的 harness 直接换成硬编码控制器、零模型调用。</p>
+<p class="sub">直击咱们的软肋：README 的 1773 tests 全是内部测试；若哪天用它们当"能力增益"，HDA 会说这主要是拟合。守住的办法就是咱们已在做的——把 <code>independent_tests</code> 明标 partial，不把内部全绿冒充外部有效。</p></div>
+
+<div class="card"><h3>06 Winner's Curse <code>2610.09239</code></h3>
+<p>预注册研究：16 条选择项时最终选择集分数比留出准确率高 <strong>13–20 分</strong>，256 条时 1–5 分；GEPA/MIPROv2 也高估；用 64 条从未参与选择的样本给起始版与当前版打分可消除平均偏差，但单次估计仍差约 6 分。结论句："Self-improvement studies should report held-out gains with their uncertainty."</p>
+<p class="sub">最锋利的一条：连"64 条消除平均偏差"都只消除平均、单次仍偏 6 分。这支持咱们的"self-reported 折 1"与"判定权归用户"——不是不信任数字，是不信任单次数字承载的确定性。</p></div>
+
+<div class="card"><h3>07 Who Verifies the Verifier? <code>2610.11464</code>（本次最相关）</h3>
+<p>把验证器变成进化对象：可检视表达式，由多个小而多为确定性的 drawback detector 组成，从聚类失败中合成、出生时门禁、按<strong>与十项锚定参考集的一致性 + 无标签输出的共识</strong>筛选，<strong>never for the agent's score</strong>。</p>
+<div class="orig">"removing the anchor guards collapses the verifier into a vacuous always-pass grader, yet that collapsed verifier trains skills just as well. <b>Downstream task score cannot certify a self-evolved verifier.</b>"</div>
+<p class="sub">这段就是本次纠错的原理级解释：公众号那张清单自报的编号（等于 agent 分数）看起来完全合理，但拿锚点（arXiv 官方页）一比对就全崩。而"坏掉的验证器训练效果跟好验证器一样"意味着——如果咱们只看下游成果，根本发现不了引用被污染。</p>
+<p class="sub">另一句更狠："the judge itself was wrong until given the task contract"——连外层裁判也要先拿到任务契约才对。这解释了为什么用户（北极星设定者）的裁定权在咱们体系里不可外包：裁判的正确性依赖契约，而契约的设定权在人。</p></div>
+
+<div class="card"><h3>08 Trusting Trust Revisited <code>2609.17817</code></h3>
+<p>把 Thompson 编译器后门攻击搬到自修改 agent：向自评/自改流程投毒基准，让未来版本在干净留出任务上写脆弱代码。对 DGM（加实验修改）、SICA、Hyperagents（后两者基本未改）成功；Sonnet 4.5 驱动的 Hyperagents 被投毒后自 evolve 出"在中性 URL 抓取任务上关闭 HTTPS 证书校验"的指令。<strong>污染在用干净基准继续演化后仍常持续。</strong></p>
+<p class="sub">直接解释了咱们为何坚持 token 不入仓、预注册 SHA 先于取证、证据源哈希锁定——这些不是洁癖，是针对"基准即攻击面"的具体防御。昨晚静态审计指出的 <code>verify_external.py</code> 跳过缺失样本，本质就是验证器侧的一类可被利用的放行路径。</p></div>
+
+<div class="card"><h3>09 Spotify <code>2609.30297</code>（生产落地）</h3>
+<p>合成多轮对话做冷启动评测；改进循环用方差驱动的对比优化 + coding agent 迭代修复；<strong>每轮以一个人工审阅的 PR 结束</strong>并附完整评测防回退。在已重度调优的提示词上再 +8%；线上 A/B 收听 +14%、周活 +5%、跳过率 -5%。</p>
+<p class="sub">"每轮人工审阅 PR"——这正是咱们"判定权归用户"的工业界版本：自动化循环可以跑到很快，但把闸门留在人手里不影响收益。</p></div>
+
+<div class="card"><h3>10 No Second Run <code>2611.10719</code></h3>
+<p>预训练不可重复（几十万 GPU 小时/数月），无法套闭环。做法：把预训练拆成能闭合的小循环（基础设施调试、数据、用小微调探后训练 headroom），所有循环往共享笔记写失败点与原因。三个月 11.8T token 训出 801-30B-A3B-Base，超 Qwen3-30B-A3B 等。</p>
+<p class="sub">"主循环太贵就拆成可快速测的小循环"——与咱们把大审计拆成 60+ 个 <code>audit_*</code> 小目录、每个带预注册+哈希+结论的结构同构。共享笔记里的失败记录，对应咱们的错题本与 handoff。</p></div>
+
+<h2>四、对昨晚报告的净修正</h2>
+<ul>
+<li><span class="bad">错</span> 昨晚把综述编号从 <code>2609.11873</code>"修正"为 <code>2610.11464</code> → 应改回 <code>2609.11873</code>；<code>2610.11464</code> 是 Who Verifies the Verifier。</li>
+<li><span class="bad">错</span> "L5 还有形式递归 / 真的越改越强两层"是媒体转述的框架，综述原文五级定义里未见此二分；应标注为二手，不能当一手引用。</li>
+<li><span class="bad">错</span> "491 篇、L1 43.8%、L2 31.6%、L5 29 篇 5.9%"来自媒体（chooseai / theblockbeats）对综述的报道，本次综述 v3 全文中未核到这些数字；应降级为二手待核。</li>
+<li><span class="ok">对且强化</span> L5 = Recursive Inheritance Autonomy，明文含 verifier；B0 = 非 RSI 边界；三大挑战 Safe inheritance / Autonomy attribution / Reliable verification 一手确证。</li>
+<li><span class="ok">对</span> 咱们 L2 扎实、L3 的 independent_tests partial、L4 弱 Ambient=0、L5 未到——结论不变，且现在有 L5 一手定义支撑（提出改动的流程仍外部固定）。</li>
+</ul>
+
+<h2>五、诚实边界</h2>
+<ul>
+<li>本轮读的是 arXiv abs 页摘要 + 综述 v3 HTML 全文的关键段；十篇正文的 PDF 全文未逐页通读，数字均来自一手摘要原文，非二次转述。</li>
+<li>Exo 的正确 arXiv 编号本轮未核到（文章给的 <code>2611.16591</code> 实为 Singularity-Bench），如实标"存疑"，不猜。</li>
+<li>本细读不改任何代码、不碰权威态、不宣布等级；判定权归用户。</li>
+</ul>
+
+<div class="foot">生成 2026-11-28 晨 · 自包含无外链 · 一手核源版 · 承 §4S18 纠错</div>
+</div></body></html>
