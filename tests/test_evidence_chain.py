@@ -82,7 +82,9 @@ def test_audit_all_counts():
     # §4ij 本体同一性器官目录（audit_self_identity，首用快照+结果，非五件套）→ total 70→71
     # §4S1 Safari 本体前提打靶目录（audit_safari_self_identity，结果+引擎+4篇一手原文，非五件套）→ total 71→72
     # §4S2 Safari 注意力预算前提打靶目录（audit_safari_affect_budget，结果+引擎+4篇一手原文，非五件套）→ total 72→73
-    assert a["total"] == 73
+    # §4S3 Safari 路标下一猎场目录（audit_safari_social_agents，结果+引擎+6件一手原文+SHA清单，非五件套）→ total 73→74
+    # §4S4 真实Agent对话目录（audit_agent_dialogue，4轮真实一问一答逐字落档+completion id，非五件套）→ total 74→75
+    assert a["total"] == 75
     assert a["five_piece_complete"] == 34
     assert a["three_locks_intact"] == 31
     assert 0 < a["three_locks_intact"] <= a["total"]

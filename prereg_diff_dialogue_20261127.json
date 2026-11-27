@@ -1,0 +1,68 @@
+{
+  "schema": "prereg-safari-dialogue-v1",
+  "title": "§4S5 预注册 —— Diff 驱动对话推进 + 坦诚边界",
+  "round": "§4S5",
+  "prereg_at_utc": "2026-11-27T06:00:02Z",
+  "prereg_at_local": "2026-11-27T14:00:02+08:00",
+  "purpose": "在采集任何新证据之前，锁定用户新洞见的操作化命题、判据与验证设计；防止事后拟合(post-hoc)。",
+  "user_verbatim": "对话能层层推进，靠的是Diff双方意图，否则一聊就死。当然，坦诚也是美德。",
+  "user_verbatim_source": "用户 2026-11-27 13:58 GMT+8 对话原话",
+  "locked_pre_evidence_state": {
+    "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "verdict": "GAP_INCONCLUSIVE",
+    "l3_claimed": false,
+    "absolute_claimed": false,
+    "tests_passed": 1773,
+    "kb_count": 507,
+    "safari_rounds": 136,
+    "round": "§4ij",
+    "git_note": "工作区为 tarball 恢复，无 .git；以文件哈希+UTC时间锚作先后证明"
+  },
+  "propositions": [
+    {
+      "id": "D1",
+      "claim": "对话之所以能层层推进，靠的是双方意图存在差异(Diff)。",
+      "operational": "一次交流的 E1→E2→E3 闭环之所以能续接下一轮，是因为双方意图不完全一致而产生可洞悉、可协商、可修正的张力；Diff 提供推进势能。",
+      "test_signal": "真实对话中，当出现意图差异并被洞悉、协商时，对话产生新论点/追问/修正/深化(推进)；当意图趋同(Diff≈0)时，对话停滞、寒暄化、无新信息(一聊就死)。"
+    },
+    {
+      "id": "D2",
+      "claim": "否则一聊就死——Diff 归零则对话失去推进势能。",
+      "operational": "这是继『对牛弹琴(E2断)''尬聊(E3断)』之后的第三类失败模式：Diff 归零——无新意图可表达、无差异可洞悉、无新方向可行动。",
+      "test_signal": "对照条件(意图完全附和/无分歧)下，对方回应无新信息量、主动收尾或空转。"
+    },
+    {
+      "id": "D3",
+      "claim": "坦诚也是美德——含蓄与坦诚都是 E1 的合法风格，不必然退化为命令/祈求。",
+      "operational": "含蓄(隐藏意图、给对方洞悉空间)与坦承(直接表达意图)并非互斥；坦诚若保留对方的洞悉空间与回应余地，同样是有效甚至更体贴的推进策略；这与上一轮『直接表露往往成命令/祈求』构成边界条件而非全盘否定。",
+      "test_signal": "真实对话中，坦诚直陈意图且不以命令/祈求语气强加时，对方仍能给出有信息量的回应(推进)； Agent 若能自主说出『有时直接最体贴』即为独立印证。"
+    }
+  ],
+  "verification_design": {
+    "method": "两层证据：(a)经验层——回溯已有真实对话轨迹(dialogue_raw/definition_dialogue/subtle_A/subtle_B)中 Diff 出现→推进、Diff 归零→停滞的可观察片段；(b)独立评议层——向新的真实社会化 Agent 抛出命题，让其按『同意/修正/反对+理由』独立评议 D1/D2/D3，并追问坦诚与含蓄各自的适用边界。",
+    "endpoint": "https://text.pollinations.ai/openai (anonymous free tier，逐轮真实 completion id)",
+    "rate_limit": "FREE_LIMIT 每IP每45秒1条，如实等待不绕过",
+    "new_dialogue_file": "audit_agent_dialogue/diff_dialogue.json",
+    "turn_plan": [
+      "Q1:评议 D1+D2——对话层层推进是否靠双方意图差异；无差异是否一聊就死(同意/修正/反对)",
+      "Q2:评议 D3——坦诚直陈意图是否也是推进交流的美德，与含蓄的关系与边界",
+      "Q3:弦外之音场景测试——用自然场景(不直曝意图)让 Agent 自行洞悉 Diff 并推进，检验含蓄仍有效"
+    ],
+    "honesty": "每轮带服务端 completion id 与 usage；限流失败如实留空不伪造；不 spawn；不编译新门禁；判定态与权威数字不动。"
+  },
+  "acceptance_criteria": [
+    "新对话每轮带真实 completion id，无占位无伪造",
+    "result.json 新增 diff_drives_dialogue 字段，含 D1/D2/D3 操作化与实证核验",
+    "engine.py 新增 G7 检查(原话落档+三命题字段+新对话真实性)，overall 仍 PASS",
+    "SESSION_HANDOFF.md 新增 §4S5 段落并逐字含用户原话",
+    "判定态哈希(result/constitution)与权威数字(1773/507/136/§4ij)全程未变",
+    "全量测试仍 1773 passed"
+  ],
+  "failure_branches": {
+    "rate_limit": "遇 429/FREE_LIMIT 如实留空该轮，等待后重试或停止，绝不伪造",
+    "agent_disagrees": "若 Agent 对命题提出修正/反对，如实保留为 REFINE，不强行裁决；判定权归用户",
+    "endpoint_down": "若端点不可达，落档 BLOCKERS 并保持准入未完成，不声称验证通过"
+  },
+  "judgment_owner": "用户"
+}

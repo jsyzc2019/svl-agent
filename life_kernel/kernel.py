@@ -1161,6 +1161,23 @@ def execute_agenda(decision, reason="自主意志执行", seed=None, log_path=No
                         record=True, log_path=log_path)
         out.update({"walk": r, "executed": bool(r.get("walk_triggered", False)),
                     "executor": "pareto_walk()"})
+        # v10 归巢落地：pareto_walk 在已有可用路径时不出手(walk_triggered=false)，
+        # 导致 C7 收敛的 REORIENT 意图连选却空转——找得到巢方向却落不下脚印。
+        # 若本可转向却未触发游走，用 root_cause_trace 从真实 explore_pool+近期心跳
+        # 诊断出的 suggested_direction 落一条 evolve 心跳，把"已识别的巢方向"兑现为痕迹。
+        # 方向来自真实 jaccard 比对(非伪造)，不碰任何阈值/门禁/判定态/宪法；
+        # walk_triggered=true 的路径完全不变。这是意图→痕迹的机制修补，非涌现意识。
+        if not r.get("walk_triggered", False):
+            _sig = homeostatic_signals(log_path=log_path)
+            _rct = root_cause_trace(_sig, log_path=log_path)
+            _nest = (_rct.get("suggested_direction") or {}).get("direction")
+            if _nest:
+                _hb = evolve(_nest,
+                             action_note=reason + "（REORIENT 归巢：root_cause_trace 诊断方向落账）",
+                             log_path=_sibling(log_path, "heartbeat_log.jsonl"))
+                out.update({"nest_direction": _nest, "nest_heartbeat": _hb,
+                            "nest_executed": bool(_hb.get("heartbeat_written", False)),
+                            "nest_root_cause": _rct.get("root_cause")})
     elif cid == "CONSOLIDATE":
         r = pareto_walk(seed=seed if seed is not None else _utcnow(),
                         record=True, log_path=log_path)

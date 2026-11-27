@@ -49,8 +49,8 @@ def test_04_known_authority_numbers():
     s = json.load(open(AS.STATE_JSON, encoding="utf-8"))
     assert s["round"] == "§4ij"
     assert s["tests_passed"] == 1773
-    assert s["kb_count"] == 506  # §4S2 新增 KB-META200，505→506
-    assert s["safari_rounds"] == 135  # §4S1 Safari 打靶 133→134
+    assert s["kb_count"] == 507  # §4S3 新增 KB-META201，506→507
+    assert s["safari_rounds"] == 136  # §4S3 Safari 路标探索 135→136
     assert s["kernel_version"] == "7.5.0"
 
 

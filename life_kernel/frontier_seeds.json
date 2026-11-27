@@ -1,9 +1,9 @@
 {
   "level": "L1-runtime-input",
   "name": "外部前沿摄食种子",
-  "ingested_at": "2026-11-24T02:58:00Z",
+  "ingested_at": "2026-11-27T06:55:00Z",
   "ingest_method": "WebSearch 2026-11-24 两轮一手检索(第二轮向外飞行:自进化/开放式/DGM/记忆四方向)+WebFetch 核实三篇原文;每条带URL与时间锚;证据分层B=arXiv作者摘要级自报,C=二级转述,均非本仓实测(A) | v5 SEEK 内核主动请求外部刺激→外层手脚WebSearch agency方向+WebFetch核实F12/F13原文;证据分层B级非本仓实测。",
-  "note": "F09-F11 是第二轮'勇敢放飞'向外摄食所得,恰好构成对内核 v3 脚印机制的三条外部批判(归因幻觉/检索碰撞/只增不减)。内核通过 self_modify()+新增经验验证决定是否注册,不由本仓预设。 | F12/F13 是 v5 内核自主 SEEK 后摄食,首次由内核自己(而非用户提示)发起的向外探索;F12 Idle-Gap Test 照出 v5 Ambient=0 真实缺口,如实固化不掩饰。",
+  "note": "F09-F11 是第二轮'勇敢放飞'向外摄食所得,恰好构成对内核 v3 脚印机制的三条外部批判(归因幻觉/检索碰撞/只增不减)。内核通过 self_modify()+新增经验验证决定是否注册,不由本仓预设。 | F12/F13 是 v5 内核自主 SEEK 后摄食,首次由内核自己(而非用户提示)发起的向外探索;F12 Idle-Gap Test 照出 v5 Ambient=0 真实缺口,如实固化不掩饰。 | F14 为 2026-11-27 内核自主 SEEK 摄食，WebFetch 核实 arXiv 2605.01750 摘要页原始字节（B级非本仓实测）。",
   "seeds": [
     {
       "id": "F01",
@@ -175,6 +175,23 @@
         "embeddedness",
         "self-boundary"
       ]
+    },
+    {
+      "id": "F14",
+      "direction": "多智能体 Negotiation 的瓶颈是动态 grounding 而非信息交换：个体能独立找到帕累托最优，成对却 consistently 达不到；四种失败模式(丢失共享交互历史/顽固锚定早期提案/默认均分而非奖励最大化协调/跨轮指称绑定失败)；瓶颈在联合计划的形成、承诺与执行",
+      "source_name": "Talk is Cheap, Communication is Hard: Dynamic Grounding Failures and Repair in Multi-Agent Negotiation, arXiv:2605.01750v2 (Yao, Zou, Hawkins)",
+      "source_url": "https://arxiv.org/abs/2605.01750",
+      "evidence_tier": "B",
+      "anchor": "Abstract 逐字: 'the coordination gap is not explained by individual reasoning limits or insufficient information exchange alone. Instead, the bottleneck lies in dynamic grounding: joint plan formation, commitment, and execution.' | submitted 3 May 2026 v1, revised 12 May 2026 v2",
+      "tags": [
+        "grounding",
+        "negotiation",
+        "multi_agent",
+        "repair",
+        "communication"
+      ],
+      "ingested_at": "2026-11-27T06:55:00Z",
+      "ingest_context": "内核 7.5.0 自主 SEEK 议程（内稳态无失衡+DAY相位）→ 外层手脚 WebSearch+WebFetch 核实 arXiv 摘要页原文；与用户当日交流认知(E2洞悉/E3行动/循环版/谈崩底线显化)外部独立同向"
     }
   ]
 }

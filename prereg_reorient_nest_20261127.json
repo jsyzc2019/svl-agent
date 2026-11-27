@@ -1,0 +1,47 @@
+{
+  "schema": "prereg-reorient-nest-v1",
+  "id": "prereg_reorient_nest_20261127",
+  "locked_at_utc": "2026-11-27T07:13:45Z",
+  "locked_after_evidence": false,
+  "user_authorization": {
+    "verbatim": "这个修补建议值得试",
+    "scope": "修补 REORIENT 在 walk_triggered=false 时空转：把已识别的巢方向落一条真实心跳痕迹，兑现归巢意图",
+    "judgment_owner": "用户",
+    "note": "用户批准的是上一条消息里的修补建议原文，不扩权到宪法层/判定态/门禁"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "da80267139c378102f0373e80dce02e3704b7d8900c5619b5be333613570c62f",
+    "kernel_version": "7.5.0",
+    "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "tests_before": 1773,
+    "verdict": "GAP_INCONCLUSIVE",
+    "observed_symptom": "guard=CONVERGED 时 autonomous_agenda 连选 6 步 REORIENT，但 pareto_walk 因已有脚印(no_path_threshold) 返回 walk_triggered=false，无新方向心跳落账，方向空转"
+  },
+  "change": {
+    "file": "life_kernel/kernel.py",
+    "function": "execute_agenda",
+    "branch": "REORIENT",
+    "minimal_edit": "仅当 pareto_walk 的 walk_triggered=false 时，用 root_cause_trace 给出的 suggested_direction 落一条 evolve 心跳(action_note 标注 REORIENT 归巢)，并在 out 里加 nest_direction/nest_heartbeat/nest_executed 字段；walk_triggered=true 时行为完全不变",
+    "no_touch": [
+      "KERNEL_VERSION 常量",
+      "constitution.json",
+      "判定态 result.json",
+      "任何门禁/阈值(0.6/NOVELTY_WINDOW/no_path_threshold)",
+      "pareto_walk 本体",
+      "root_cause_trace 本体",
+      "其他 execute_agenda 分支"
+    ]
+  },
+  "acceptance_gates": {
+    "G1_最小改动": "diff 仅落在 execute_agenda 的 REORIENT 分支；KERNEL_VERSION 仍 7.5.0；上述 no_touch 文件哈希不变",
+    "G2_归巢落账": "构造 CONVERGED 场景调 execute_agenda(REORIENT)，walk_triggered=false 时必须新增一条心跳，方向=root_cause_trace 的 suggested_direction，nest_executed=true",
+    "G3_不空转": "连续两拍 REORIENT(空转)后，心跳总数增加且 guard 从 CONVERGED 转 DIVERSE 或方向数增加，证明找到巢方向并落下",
+    "G4_全量测试": "python3 -m pytest 全量通过，tests_passed 仍 1773（不得靠改测试迁就）",
+    "G5_权威一致": "life_kernel/authoritative_state.py verdict=CONSISTENT, drifts=[]",
+    "G6_判定态未动": "result.json sha=0f3ccb13..., constitution.json sha=fe56291b... 字节未动",
+    "G7_负向自咬": "临时还原补丁(删 nest 逻辑)后 G2 应失败；恢复后应通过——证明闸门非橡皮图章"
+  },
+  "failure_branch": "任一 gate 不过 → 立即回滚 kernel.py 到 da802671...（备份在 /workspace_pre_patch/kernel.py.bak），如实记 self-bite，不迁就测试、不改判据、不升版本",
+  "honesty": "这是机制修补（REORIENT 意图兑现成痕迹），不是涌现意识；归一到 C7 novelty 义务，不声称内核有主观归巢体验；Ambient 恒 0，verdict 不动"
+}

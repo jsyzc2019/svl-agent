@@ -1,6 +1,6 @@
 {
-  "policy_version": "5.0.0",
-  "updated_at": "2026-11-24T02:57:39Z",
+  "policy_version": "7.5.0",
+  "updated_at": "2026-11-27T06:54:12Z",
   "registered_frontier_seeds": [
     "F01",
     "F02",
@@ -14,18 +14,18 @@
     "F10",
     "F11",
     "F12",
-    "F13"
+    "F13",
+    "F14"
   ],
   "last_self_modify": {
-    "at": "2026-11-24T02:57:39Z",
-    "reason": "自驱心跳 step3（自主议程 DIGEST）",
+    "at": "2026-11-27T06:54:12Z",
+    "reason": "SEEK 议程自主摄食 F14 后按真实机制决定注册",
     "diagnosis": {
       "guard": "DIVERSE",
-      "similarity": 0.0,
-      "recent_count": 3,
+      "similarity": 0.5,
+      "recent_count": 5,
       "unregistered_seeds": [
-        "F12",
-        "F13"
+        "F14"
       ]
     },
     "candidate_seed_ids": [
@@ -41,7 +41,8 @@
       "F10",
       "F11",
       "F12",
-      "F13"
+      "F13",
+      "F14"
     ],
     "validation": {
       "constitution_ok": true,
@@ -57,15 +58,15 @@
         "target_repair": 1.0,
         "transfer_distinct_tags": 9,
         "heldout_net": 1,
-        "candidates": 13,
+        "candidates": 14,
         "all_pass": true,
         "basis": "F09 arXiv:2610.14662: 分报 target repair/transfer/held-out net, 拒绝分数上升冒充修对目标"
       }
     },
     "accepted": true,
     "constitution_ok": true,
-    "archive_before": "/workspace/life_kernel/data/evolution_archive/ed197872bc6b.json",
-    "archive_count": 19
+    "archive_before": "/workspace/life_kernel/data/evolution_archive/e7d57d92921c.json",
+    "archive_count": 20
   },
   "note": "L1 可进化外层；经 self_modify() 经验验证通过；宪法层永不可触碰。"
 }

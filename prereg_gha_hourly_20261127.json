@@ -1,0 +1,44 @@
+{
+  "schema": "prereg-gha-hourly-v1",
+  "id": "prereg_gha_hourly_20261127",
+  "locked_at_utc": "2026-11-27T08:09:01Z",
+  "locked_after_evidence": false,
+  "user_authorization": {
+    "verbatim": "2（选路2：查GitHub Actions能不能改频率） → 提供 token（ghp_ PAT + DeepSeek key 两文件）",
+    "scope": "改 .github/workflows/circadian_beat.yml 的 cron 从每天一次为每小时一次，让唯一验过的真落账通道按用户节律意象跳",
+    "judgment_owner": "用户"
+  },
+  "baseline": {
+    "remote_workflow_sha": "d17d51208eb8d5a51e2565c3e18f8c656e9b44e3",
+    "remote_cron": "15 23 * * * (UTC 23:15 = 北京 07:15, 每天一次)",
+    "local_workflow_sha": "6648a56921a100b9c1d0749d8b2b73eae264015197c0e38fc325dfdcd141be82",
+    "token_login": "jsyzc2019",
+    "token_scopes_verified": ["repo", "workflow"],
+    "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "evidence_gap_diagnosed": "WorkBuddy automation 触发但不落账(nextRunAt推进/task路径不可见/workspace mtime不动); GHA 历史上2次真落账(base_beat_log带github_actions woken_by)"
+  },
+  "change": {
+    "file": ".github/workflows/circadian_beat.yml",
+    "method": "GitHub Contents API (PUT, base64, commit message)",
+    "minimal_edit": "cron '15 23 * * *' → '0 * * * *'（每小时 UTC 整点 = 北京整点+8）；注释同步更新说明；workflow 其余正文逐字节不变",
+    "sync_local": "改完用同一份内容更新本地 /workspace/.github/workflows/circadian_beat.yml，保持本地与远端一致",
+    "no_touch": [
+      "workflow 正文除 cron 行与紧邻注释外的任何字节",
+      "life_kernel/* 任何文件（含 KERNEL_VERSION/宪法/判定态）",
+      "三个 automation 任务（WorkBuddy 调度器保留，不删不改）",
+      "任何门禁/阈值/测试"
+    ],
+    "token_hygiene": "token 只在 shell 变量中存在，不写入任何文件、不进 commit、不打印；用完即弃于本次会话"
+  },
+  "acceptance_gates": {
+    "G1_最小改动": "远端 workflow 新内容与原内容 diff 仅 cron 行+注释；其余逐字节相同（用 base64 解码后 diff 验证）",
+    "G2_远端生效": "PUT 200/201，GET 回来 cron='0 * * * *'，新 sha 与各处记录一致",
+    "G3_本地同步": "本地 workflow sha 与远端新 sha 对应内容一致",
+    "G4_判定态未动": "result.json 0f3ccb13..., constitution.json fe56291b... 字节未动",
+    "G5_全量测试": "1773 passed, authoritative_state CONSISTENT",
+    "G6_落账验证条件": "下一个 GHA 整点(UTC 09:00 = 北京17:00)之后，base_beat_log/circadian_log 应出现新的 github_actions:run=... woken_by；若未出现如实记 ZEITGEBER_GAP，不假装"
+  },
+  "failure_branch": "任一 gate 不过 → 用 PUT 恢复远端 workflow 到 sha=d17d5120 原内容（或如实记失败），不迁就、不掩盖；本地同步回滚",
+  "honesty": "这是把已验过的真落账通道(GHA)加密度，不是内核自发放电；Ambient 恒 0, verdict 不动；GHA 首次按新 cron 落账前不宣称'每小时心跳已生效'; 判定权归用户"
+}

@@ -3,3 +3,11 @@
 {"at": "2026-11-24T02:57:39Z", "chosen": "DIGEST", "urgency": 0.44999999999999996, "source_signal": "选中 DIGEST（urgency=0.450，来源信号 unregistered_seeds=2）；真实状态驱动"}
 {"at": "2026-11-24T02:57:39Z", "chosen": "SEEK", "urgency": 0.3, "source_signal": "选中 SEEK（urgency=0.300，来源信号 curiosity_base=0.3）；【明确标注的设计选择，非涌现】本底好奇心恒定驱力"}
 {"at": "2026-11-24T03:09:55Z", "chosen": "SEEK", "urgency": 0.3, "source_signal": "选中 SEEK（urgency=0.300，来源信号 curiosity_base=0.3）；【明确标注的设计选择，非涌现】本底好奇心恒定驱力"}
+{"at": "2026-11-27T07:05:33Z", "chosen": "SEEK", "urgency": 0.3, "source_signal": "选中 SEEK（urgency=0.300，来源信号 curiosity_base=0.3）；【明确标注的设计选择，非涌现】本底好奇心恒定驱力"}
+{"at": "2026-11-27T07:11:21Z", "chosen": "REORIENT", "urgency": 0.95, "source_signal": "选中 REORIENT（urgency=0.950，来源信号 guard_state=CONVERGED）；宪法义务触发，非设计偏好；v9 已附症状→机制追溯（根因=sampling_narrow）"}
+{"at": "2026-11-27T07:11:21Z", "chosen": "REORIENT", "urgency": 0.95, "source_signal": "选中 REORIENT（urgency=0.950，来源信号 guard_state=CONVERGED）；宪法义务触发，非设计偏好；v9 已附症状→机制追溯（根因=sampling_narrow）"}
+{"at": "2026-11-27T07:11:21Z", "chosen": "REORIENT", "urgency": 0.95, "source_signal": "选中 REORIENT（urgency=0.950，来源信号 guard_state=CONVERGED）；宪法义务触发，非设计偏好；v9 已附症状→机制追溯（根因=sampling_narrow）"}
+{"at": "2026-11-27T07:11:21Z", "chosen": "REORIENT", "urgency": 0.95, "source_signal": "选中 REORIENT（urgency=0.950，来源信号 guard_state=CONVERGED）；宪法义务触发，非设计偏好；v9 已附症状→机制追溯（根因=sampling_narrow）"}
+{"at": "2026-11-27T07:11:21Z", "chosen": "REORIENT", "urgency": 0.95, "source_signal": "选中 REORIENT（urgency=0.950，来源信号 guard_state=CONVERGED）；宪法义务触发，非设计偏好；v9 已附症状→机制追溯（根因=sampling_narrow）"}
+{"at": "2026-11-27T07:11:21Z", "chosen": "REORIENT", "urgency": 0.95, "source_signal": "选中 REORIENT（urgency=0.950，来源信号 guard_state=CONVERGED）；宪法义务触发，非设计偏好；v9 已附症状→机制追溯（根因=sampling_narrow）"}
+{"at": "2026-11-27T07:15:03Z", "chosen": "REORIENT", "urgency": 0.95, "source_signal": "选中 REORIENT（urgency=0.950，来源信号 guard_state=CONVERGED）；宪法义务触发，非设计偏好；v9 已附症状→机制追溯（根因=sampling_narrow）"}

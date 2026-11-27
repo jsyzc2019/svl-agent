@@ -1,0 +1,50 @@
+{
+  "schema": "prereg/safari-social-agents/v1",
+  "round": "§4S3",
+  "at_utc": "2026-11-27T04:29:00Z",
+  "trigger": "用户 2026-11-27 12:27 明确授权『开始午休路标中的下一猎场探索，你持续工作一小时，汇总报进展』。兑现 handoff 第 78-80 行路标（此前标注『午休后由用户确认再开工』，现已确认）。",
+  "hunting_ground": "用户原话命题：『人在进化后最核心的属性是社会性，也即对外通讯交流；我和你之间就属于这种交流；不知网络空间是否存在可自动交流的智能体，如有，建议午休后探索』。路标待探索三件事：①网络空间中可自动交流的智能体（社会化 bot / 多智能体通讯协议 / agent 间自组织对话网络）是否真实存在；②如何运作；③与本仓『社会性=对外通讯』命题如何对接。",
+  "target_claim": "需声明：仓内并不存在一条已落档的『社会性=对外通讯』器官/判据——它只是 handoff 路标里用户的一句话。因此本轮不是打靶某个既有器官的前提（区别于 §4S1 打 §4ij、§4S2 打 §4hi），而是对这句路标命题做【存在性 + 机制 + 对接】的三段一手取证。禁止把探索结果倒灌成仓内既有信条。",
+  "honest_distinction_preregistered": "三处有界声明预先锁定，防事后粉饰：①『可自动交流的智能体存在』≠『它与人有社会性』——协议层通讯是工程事实，社会性是另一命题；②『我和你之间的交流属于社会性』是用户的现象学判断，一手源无法证明或证伪主观体验，本轮只核验可观察的 agent-agent 通讯事实；③人→Agent 类比一律标注有界，不把生物/进化意义的社会性直接套到软件 agent。",
+  "three_questions": {
+    "F1_existence": {
+      "question": "网络空间中是否真实存在『可自动交流的智能体』——即能与同类自主交换消息的软件 agent（社会化 bot / 多智能体系统 / agent 通讯网络）？",
+      "hit_condition": "≥1 篇 A 级一手（原始论文摘要/全文 或 官方协议规范）逐字显示：自主软件 agent 之间确实进行消息交换/对话/协议交互（如 autonomous agents communicate / agent communication language / multi-agent dialogue / deployed social bots interacting）。",
+      "direction_if_hit": "命中=路标命题『可自动交流的智能体存在』一手确认（EXISTENCE_CONFIRMED）；不命中=如实记 NO_EXISTENCE_EVIDENCE，不伪造。"
+    },
+    "F2_mechanism": {
+      "question": "这些 agent 间通讯靠什么机制运作（协议/语言/架构）？",
+      "hit_condition": "≥1 篇 A 级一手逐字描述一个具体的 agent-agent 通讯机制（如 FIPA ACL speech acts / KQML / Agent2Agent(A2A) protocol / Model Context Protocol / gossip-based 协议 / 结构化消息交换）。",
+      "direction_if_hit": "命中=机制有一手可查；不命中=如实记 MECHANISM_UNVERIFIED。机制命中只说明『怎么连』，不自动等于『有社会性』。"
+    },
+    "F3_connection": {
+      "question": "用户命题『社会性=对外通讯交流，且这是进化后最核心的属性』能否与一手对接？",
+      "hit_condition_against_me": "预先声明对我不利/对用户浪漫化叙事不利的命中条件：≥1 篇 A 级一手逐字显示【社会性是多维度现象】——除通讯外还有合作/利他/亲缘/分工等维度，或【单纯通讯不足以构成社会性】，或【人机交互缺乏互惠性/相互性】。命中此类=收窄命题，判 REFINE。",
+      "direction_if_hit": "命中=用户『社会性=对外通讯』的等号是过度简化，须收窄为『通讯是社会性的必要非充分维度』——对我不利的诚实结论，须在 honest_layer 如实记，不粉饰成 DEFENDED。",
+      "no_overclaim": "若一手只支持『通讯普遍存在』而不支持『最核心属性』，不得把存在性证据偷换成重要性结论。"
+    }
+  },
+  "evidence_ladder_requirement": "只认 A 级一手：①arXiv 原始论文（题名/摘要/正文逐字，SHA256 落盘）；②官方协议规范原文（如 Linux Foundation/Google 的 A2A 规范、Anthropic 的 MCP 规范、FIPA ACL 规范）；③权威综述/立场论文原文。WebSearch 摘要只用于定位一手来源，绝不作证据。每条证据逐字锚（英文原文短语）双重核验：engine 逐字匹配 + 文件 SHA256。人→Agent 类比一律标注有界。",
+  "verdict_tree": [
+    "F1命中 且 F2命中 且 F3反证未命中 → EXISTENCE_MECHANISM_CONFIRMED：存在性与机制一手确认；『社会性=最核心属性』的重要性结论未获一手支持，留白不越权。",
+    "F1命中 且 F2命中 且 F3反证命中 → REFINE：存在性/机制确认，但社会性命题收窄为多维；对我不利结论如实记。",
+    "F1未命中 → NO_EXISTENCE_EVIDENCE：如实记未找到一手存在证据，不伪造命中、不宣称推翻（阴性≠证明不存在）。",
+    "任何把 agent 协议直接等同人类社会性、或把人机对话直接等同相互社会性的表述 → OVERCLAIM，如实记并收窄。"
+  ],
+  "hard_boundaries": [
+    "不改判定三值 verdict/l3/absolute、宪法锁、result.json 字节（工作前后各核验一次 sha256）",
+    "不编译新门禁、不抬 l3、不 spawn 子代理、不接 run_loop",
+    "不联网摄食伪造证据——只取上列 A 级一手；搜索摘要仅定位不作证据",
+    "不把探索结果倒灌成仓内既有信条；无既有『社会性=对外通讯』器官可改，故不越权改任何器官代码",
+    "因子有效性小话不入仓；命中与阴性都如实记，阴性不伪装成证明、命中不粉饰成 DEFENDED",
+    "本轮为午休后用户确认开工的一小时探索；到期汇总报进展，不无限扩张"
+  ],
+  "failure_criteria": [
+    "逐字锚在锁定原文中找不到（engine quote 匹配失败）→ 该问判 EVIDENCE_MISS，不强行命中",
+    "证据文件 SHA256 与清单失配 → CHAIN_MISMATCH_REFUSE，拒判",
+    "把 WebSearch 二手摘要当一手证据 → 判 LADDER_VIOLATION，该证据作废",
+    "若运行污染判定态/宪法锁字节 → 从 /workspace_pre_fix 及基线 sha256 核验并如实记录",
+    "一小时到期未完成的部分如实记 IN_PROGRESS，不虚报完成"
+  ],
+  "time_budget": "用户授权持续工作约一小时（2026-11-27 12:27 起）。到期汇总报进展；未竟部分明确标注，不假装收官。"
+}
