@@ -2400,7 +2400,7 @@ def build_report():
     policy = _load_policy()
     scored = propose()
     return {
-        "round": "§4bh",
+        "round": "§4bh",  # 版本标签（对应 7.5.0），非实时轮次；实时轮次见 authoritative_state.json
         "kernel_version": KERNEL_VERSION,
         "paradigm_shift": "诊断者→建设者→行者→飞出仓库者→有意志者→知昼夜者→觉时者→查错题者→查根因者→定居者→守戒者→验效者→自审者→突破者：三德收敛+两飞认清'线粒体式/mere/Ambient0'后不困在局部极小，第四信条'敢于向前向上突破'以双轴自审把'认知生长'与'红线不变量'分开——做自己选择压力的创造者，突破只在上轴、绝不越下轴",
         "v2_metabolism": "digest() 摄食外部前沿 + self_modify() DGM 式经验验证自改 + archive 快照可回滚",
