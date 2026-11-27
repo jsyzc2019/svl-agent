@@ -1,0 +1,46 @@
+1. Proc Natl Acad Sci U S A. 2021 Mar 30;118(13):e2026447118. doi: 
+10.1073/pnas.2026447118.
+
+Rich false memories of autobiographical events can be reversed.
+
+Oeberst A(1)(2), Wachendörfer MM(3), Imhoff R(4), Blank H(5).
+
+Author information:
+(1)Department of Psychology, University of Hagen, 58084 Hagen, Germany; 
+aileen.oeberst@fernuni-hagen.de.
+(2)Leibniz-Institut für Wissensmedien, 72076 Tübingen, Germany.
+(3)Department of Psychology, University of Hagen, 58084 Hagen, Germany.
+(4)Department of Psychology, Johannes Gutenberg Universität Mainz, 55122 Mainz, 
+Germany.
+(5)Department of Psychology, University of Portsmouth, Portsmouth PO1 2DY, 
+Hampshire, United Kingdom.
+
+False memories of autobiographical events can create enormous problems in 
+forensic settings (e.g., false accusations). While multiple studies succeeded in 
+inducing false memories in interview settings, we present research trying to 
+reverse this effect (and thereby reduce the potential damage) by means of two 
+ecologically valid strategies. We first successfully implanted false memories 
+for two plausible autobiographical events (suggested by the students' parents, 
+alongside two true events). Over three repeated interviews, participants 
+developed false memories (measured by state-of-the-art coding) of the suggested 
+events under minimally suggestive conditions (27%) and even more so using 
+massive suggestion (56%). We then used two techniques to reduce false memory 
+endorsement, source sensitization (alerting interviewees to possible external 
+sources of the memories, e.g., family narratives) and false memory sensitization 
+(raising the possibility of false memories being inadvertently created in memory 
+interviews, delivered by a new interviewer). This reversed the false memory 
+build-up over the first three interviews, returning false memory rates in both 
+suggestion conditions to the baseline levels of the first interview (i.e., to 
+∼15% and ∼25%, respectively). By comparison, true event memories were endorsed 
+at a higher level overall and less affected by either the repeated interviews or 
+the sensitization techniques. In a 1-y follow-up (after the original interviews 
+and debriefing), false memory rates further dropped to 5%, and participants 
+overwhelmingly rejected the false events. One strong practical implication is 
+that false memories can be substantially reduced by easy-to-implement techniques 
+without causing collateral damage to true memories.
+
+DOI: 10.1073/pnas.2026447118
+PMCID: PMC8020801
+PMID: 33753514 [Indexed for MEDLINE]
+
+Conflict of interest statement: The authors declare no competing interest.

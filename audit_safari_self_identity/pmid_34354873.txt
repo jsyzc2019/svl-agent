@@ -1,0 +1,43 @@
+1. Clin Psychol Sci. 2021 Jul;9(4):686-698. doi: 10.1177/2167702620982576. Epub 
+2021 Mar 31.
+
+Proof of Concept for the Autobiographical Memory Flexibility (MemFlex) 
+Intervention for Posttraumatic Stress Disorder.
+
+Moradi AR(1), Piltan M(2), Choobin MH(3), Azadfallah P(2), Watson P(4), 
+Dalgleish T(4)(5), Hitchcock C(4).
+
+Author information:
+(1)Department of Psychology, Institute for Cognitive Sciences Studies, Kharazmi 
+University.
+(2)Department of Psychology, Tarbiat Modares University.
+(3)Department of Clinical Psychology, Kharazmi University.
+(4)MRC Cognition and Brain Sciences Unit, University of Cambridge.
+(5)Cambridgeshire and Peterborough NHS Foundation Trust, Cambridgeshire, 
+England.
+
+Autobiographical memory distortions are a key feature of posttraumatic stress 
+disorder (PTSD). In this proof-of-concept randomized controlled trial (N = 43), 
+we evaluated an autobiographical memory flexibility intervention, MemFlex. We 
+aimed to determine whether the mechanism-focused intervention, which aims to 
+improve autobiographical memory processes, may also affect other cognitive 
+predictors of PTSD and potentially reduce PTSD symptoms in Iranian trauma 
+survivors diagnosed with PTSD. Results indicated significant, moderate to large 
+between-groups effect sizes in favor of MemFlex, relative to wait-list control, 
+for the targeted cognitive mechanism of autobiographical memory flexibility and 
+PTSD symptoms. A large, significant effect was also observed on maladaptive 
+posttraumatic cognitions-a strong predictor of PTSD prognosis, which is a key 
+target of high-intensity cognitive therapies for PTSD. Findings support future 
+completion of a scaled-up trial to evaluate treatment efficacy of MemFlex for 
+PTSD to determine whether MemFlex may offer a culturally adaptive, low-cost, 
+low-intensity intervention able to improve cognitive mechanisms of PTSD.
+
+© The Author(s) 2021.
+
+DOI: 10.1177/2167702620982576
+PMCID: PMC8278548
+PMID: 34354873
+
+Conflict of interest statement: Declaration of Conflicting Interests: The 
+author(s) declared that there were no conflicts of interest with respect to the 
+authorship or the publication of this article.

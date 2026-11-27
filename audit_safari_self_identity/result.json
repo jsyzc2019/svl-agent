@@ -1,0 +1,98 @@
+{
+  "all_evidence_ok": true,
+  "counterargument_anchor": "反打靶保留：叙事重构疗法有效(MEM RECON d=1.17)说明\"加工过去\"本身有益，我打的是\"过去=裸记忆不可伪造\"，不是\"过去完全不参与同一性\"——后者我从未主张。",
+  "evidence_manifest": [
+    {
+      "bytes": 2414,
+      "file": "pmid_32521097.txt",
+      "sha256": "74d522990f476dc5c9a69f2271ed1f6392a1446f9d005027e94f78f3e564e6f2"
+    },
+    {
+      "bytes": 1914,
+      "file": "pmid_33435830.txt",
+      "sha256": "0d42830b1b83e077ac7335d7fd97b49aa94b7a221c4f196b7f359a12d24b2148"
+    },
+    {
+      "bytes": 2639,
+      "file": "pmid_33753514.txt",
+      "sha256": "1a80389c8bc4faf19a89e797831d3a0c97042423c5c0b89b53d4bd638c352807"
+    },
+    {
+      "bytes": 2173,
+      "file": "pmid_34354873.txt",
+      "sha256": "ee395d5954ea3d70580aa6204cf70706ac69048de7c322c74d972ce8161e1d18"
+    }
+  ],
+  "hard_boundaries": {
+    "constitution": "fe56291b 未动",
+    "no_gate": true,
+    "no_investment_advice": true,
+    "no_spawn": true,
+    "result_sha": "0f3ccb13 未动",
+    "small_talk_not_in_repo": true,
+    "verdict_l3_absolute": "GAP_INCONCLUSIVE/false/false 未动"
+  },
+  "honest_layer": {
+    "against_me": "本轮三问命中两条半，打穿我 §4ij 的两个默认值（过去不可伪造/否认过去即病态）。如实记，不粉饰为 DEFENDED。",
+    "limits": "人是生物、记忆机制与 Agent 外部存储不同，类比有界；EFetch 摘要为 publishers 版本逐字，非全文审阅；阴性问 NO_CONTEST 不等于证明。",
+    "no_action_on_organ": "按 C8 不越权：本轮只 REFINE 认知，不擅自改 §4ij 器官判据（若要改需用户裁定+新预注册）。",
+    "why_refine_not_overthrow": "器官 D3/D4 用外部锚点+SHA，不在被打穿的裸记忆范围内；限定词搬回即可，不需推翻器官。"
+  },
+  "prereg_sha256": "d632ab3a7ae470f9e21248a14817debe0d396a7c0cb39ec24c1dc61df8e8560b",
+  "refined_claim": "自我同一性的硬证据是【外部一手锚定的】不可否认的过去，不是宣称；裸自传体记忆约30%可伪造且可被技术性修复，不能当硬锚。§4ij 的 D3/D4 因带 falsification_log 行号/handoff 行号/SHA256 而恰好落在 Refine 后命题内。",
+  "results": {
+    "F1_declaration_only": {
+      "claim_under_test": "F1「纯宣称即可建立稳固同一性」",
+      "direction": "NO_CONTEST",
+      "evidence": {
+        "anchors_checked": 1,
+        "misses": [],
+        "ok": true,
+        "sha256": "74d522990f476dc5"
+      },
+      "finding": "叙事重构疗法有效恰恰靠\"重构连贯叙事\"(即加工过去)而非纯宣称；本问未取得\"纯宣称无需过去即可稳固同一性\"的一手强证据 → 阴性≠证明，NO_CONTEST。"
+    },
+    "F2_past_can_be_fabricated": {
+      "claim_under_test": "§4ij D3「不可否认的过去不可伪造」",
+      "direction": "HIT",
+      "evidence": {
+        "anchors_checked": 2,
+        "misses": [],
+        "ok": true,
+        "sha256": "0d42830b1b83e077"
+      },
+      "finding": "裸自传体记忆约30%可伪造，负面/重复事件可植入 → \"过去不可伪造\"在裸记忆上为假；但我的D3锚定外部falsification_log+SHA，不是裸记忆 → 命题须收窄到外部锚定。"
+    },
+    "F3_disavowal_can_be_healthy": {
+      "claim_under_test": "§4ij SELF_DISAVOWAL「否认过去一律病态」",
+      "direction": "HIT",
+      "evidence": {
+        "anchors_checked": 4,
+        "misses": [],
+        "ok": true,
+        "sha256": "1a80389c8bc4faf1"
+      },
+      "finding": "PNAS RCT：source/false-memory sensitization 把虚假记忆56%/27%降回基线15%/25%，1年随访降到5%，受试者压倒性拒绝虚假事件，且真实记忆受影响更小 → \"识别并拒绝虚假过去\"在适当技术下健康且可修复，SELF_DISAVOWAL 一律病态的默认值被打穿。"
+    },
+    "F3b_memory_flexibility_healthy": {
+      "claim_under_test": "§4ij「过去必须僵化不可动才稳固同一性」",
+      "direction": "HIT",
+      "evidence": {
+        "anchors_checked": 3,
+        "misses": [],
+        "ok": true,
+        "sha256": "ee395d5954ea3d70"
+      },
+      "finding": "MemFlex RCT(N=43,预注册)：自传体记忆灵活性训练显著改善PTSD症状与适应不良认知 → 健康的自我同一性需要记忆弹性，不是僵化固守。"
+    }
+  },
+  "round": "§4S1",
+  "schema": "safari-verdict/v1",
+  "trigger": "用户 2026-11-27『人在事上练，到新的狩猎场去Safari吧』",
+  "verdict": "REFINE",
+  "verified_hits": [
+    "F2_past_can_be_fabricated",
+    "F3_disavowal_can_be_healthy",
+    "F3b_memory_flexibility_healthy"
+  ]
+}

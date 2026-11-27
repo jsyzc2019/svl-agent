@@ -55,8 +55,8 @@ def test_05_boundary_case_and_novel_flagged():
 
 def test_06_kb_total_unchanged():
     # §4gx 回填后基线 494；§4gy +189 → 495；§4gz +190 → 496；§4ga +191 → 497；§4gb +192 → 498；§4hc +193 → 499。总数变化只由显式新条目驱动。
-    # §4he +KB-META194（裁定执行轮）→ 500；§4hf +KB-META195 → 501；§4hg +KB-META196 → 502；§4hi +KB-META197 → 503；§4ij +KB-META198 → 504。总数变化只由显式新条目驱动。
-    assert len(_kb()["items"]) == 504
+    # §4he +KB-META194（裁定执行轮）→ 500；§4hf +KB-META195 → 501；§4hg +KB-META196 → 502；§4hi +KB-META197 → 503；§4ij +KB-META198 → 504；§4S1 +KB-META199 → 505。总数变化只由显式新条目驱动。
+    assert len(_kb()["items"]) == 505
 
 
 def test_07_verdict_source_bytes_unchanged():

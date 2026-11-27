@@ -1,0 +1,42 @@
+1. J Trauma Stress. 2021 Feb;34(1):92-103. doi: 10.1002/jts.22537. Epub 2020 Jun 
+10.
+
+Narrative Reconstruction as an Intervention for Posttraumatic Stress Disorder: A 
+Pilot Delayed Intervention Quasi-Randomized Controlled Trial.
+
+Gofman M(1), Kivity Y(1), Bar-Kalifa E(2), Vidan Z(3), Hasson Ohayon I(1), 
+Tuval-Mashiach R(1), Peri T(1).
+
+Author information:
+(1)Department of Psychology, Bar Ilan University, Ramat Gan, Israel.
+(2)Psychology Department, Ben Gurion University, Beersheba, Israel.
+(3)Sourasky Medical Center, Tel Aviv, Israel.
+
+Although empirically supported treatments for posttraumatic stress disorder 
+(PTSD) exist, many patients fail to complete therapy, are nonresponsive, or 
+remain symptomatic following treatment. This paper presents the results of a 
+delayed intervention quasi-randomized controlled study that evaluated the 
+efficacy of narrative reconstruction as an integrative intervention for PTSD. 
+During narrative reconstruction, the patient and therapist reconstruct an 
+organized, coherent, and detailed written narrative of the patient's traumatic 
+experience. Additionally, narrative reconstruction focuses on arriving at the 
+subjective meaning of the traumatic experience for the patient as related to 
+their personal history. Thus, the therapist asks the patient about associations 
+between the traumatic event and other memories and life events. In the present 
+study, 30 participants with PTSD were randomly assigned to an immediate (n = 17) 
+or delayed (n = 13) 15-session narrative reconstruction intervention. 
+Participants in the immediate narrative reconstruction group were evaluated 
+using self-report measures and structured interviews at baseline, posttreatment, 
+and 15-week follow-up. Participants in the delayed narrative reconstruction 
+group were evaluated at baseline, postwaitlist/pretreatment, and posttreatment 
+assessments. Data from the pretreatment evaluation showed no significant 
+differences between groups. Mixed linear models showed significant intervention 
+effects for posttraumatic symptom severity, d = 1.17, from pre- to 
+posttreatment. Although preliminary, these promising findings suggest that 
+narrative reconstruction may be an effective standalone therapy or an add-on to 
+current effective treatment strategies.
+
+© 2020 International Society for Traumatic Stress Studies.
+
+DOI: 10.1002/jts.22537
+PMID: 32521097 [Indexed for MEDLINE]

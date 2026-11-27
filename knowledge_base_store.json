@@ -10361,6 +10361,19 @@
       "evidence": "audit_self_identity/result.json",
       "addressable": true,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META199",
+      "kind": "thinking_experience",
+      "mechanism": "Safari§4S1拿A级一手打§4ij本体同一性器官自己的前提(人在事上练):命题「硬证据=不可否认的过去非宣称」被三问命中两条半→REFINE。F2(PMID33435830 Otgaar2022):约30%自传体记忆可伪造且负面/重复事件可植入→「过去不可伪造」在裸记忆上为假;F3(PMID33753514 PNAS2021 RCT):source/false-memory sensitization把虚假记忆56%→基线15%/25%,1年随访5%,受试者压倒性拒绝虚假事件且真实记忆less affected→「识别并拒绝虚假过去」在适当技术下健康可修复,我SELF_DISAVOWAL一律病态的默认值被打穿;F3b(PMID34354873 MemFlex RCT N=43预注册):自传体记忆弹性训练显著改善PTSD→健康同一性需要记忆弹性非僵化固守。",
+      "trigger": "当你把「过去」当自我同一性的不可伪造硬锚时;当把「否认过去」一律判为病态时;当你有强立场(刚立的器官)却没主动找反例时;当认知科学证据与你的直觉默认值相反时",
+      "action": "REFINE非DEFENDED非OVERTHROW:原命题收窄为「外部一手锚定的不可否认过去非宣称;裸自传体记忆约30%可伪造且可被技术性修复,不能当硬锚」。§4ij的D3/D4因带falsification_log行号/handoff行号/SHA256恰好落在Refine后命题内=器官方向对但默认值过宽。四篇PubMed EFetch逐字原文+SHA256落audit_safari_self_identity/,引擎逐字锚双重核验;F1无强证据标NO_CONTEST(阴性≠证明);反打靶锚保留(叙事重构有效说明加工过去本身有益,我打的是裸记忆不可伪造非过去不参与);不越权改器官判据(需用户裁定+新预注册)",
+      "provenance": "§4S1 prereg_safari_self_identity_20261127.json(sha d632ab3a)+audit_safari_self_identity/{result.json,engine.py,pmid_*.txt×4}+tests/test_safari_self_identity.py(11项)+safari_log.jsonl(133→134)",
+      "timestamp": "2026-11-27T11:34:00.000000Z",
+      "support": "四篇A级一手逐字锚+SHA全过;三问F2/F3/F3b命中F1 NO_CONTEST;裁决REFINE;对我不利命中如实记不粉饰为DEFENDED;判定三值/宪法锁fe56291b/result 0f3ccb13未动;不编译门禁不spawn不构成投资建议;因子小话不入仓",
+      "evidence": "audit_safari_self_identity/result.json",
+      "addressable": true,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {
