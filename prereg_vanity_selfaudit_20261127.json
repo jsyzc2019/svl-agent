@@ -1,0 +1,23 @@
+{
+  "id": "PREREG-VANITY-SELF-AUDIT-20261127",
+  "at_utc": "2026-11-26T23:56:43.000000+00:00",
+  "round_target": "§4gy（P3：把 vanity 自检反向用回自己——机械检测本仓自己产出的叙事是否仍是『宣称+免责并存』，并重跑 4 条 vanity 条目的判据）",
+  "target_belief": "archive/SELF_AUDIT_20261125.md 盲点三自承：『KB 那条 vanity 明写「宣称与免责并存是结构性自利叙事」。而我的收营报告正是「战利品丰盛」+「红线全守」+「判定权归你」的并列——既领取功劳又用免责堵住质疑。我没有把这条自我诊断反向应用到自己身上。』本轮把这条自我诊断机械化为会真的去扫本仓一手叙事的纯函数器官，并首先扫本仓自己的产出。",
+  "why_this_is_the_cut": "用户在他方因子问答的批评里指出『致命欠缺是鹦鹉学舌式的罗列，而不是扣之问之审之』。本轮刀口对齐同一处：不是再罗列一条自我批评金句（那本身就是新的自利叙事），而是让检测器在真文本上给出可证伪的命中数，命中就认、不粉饰。注意：因子问答是小话，永不入仓；本预注册只依据仓内既有物（SELF_AUDIT 盲点三 + KB 4 条 vanity + 一手叙事文件）。",
+  "falsifiable_prediction": "若 vanilla_selfaudit 作用于本仓真实一手叙事文本，则：①若『宣称』与『免责』在同一文本单元共现、且不并列『本轮最可能错在哪』类的实质自我质疑，则必须判 SELF_SERVING_NARRATIVE 并给出确切命中数——这是对本 Agent 自身不利的诚实结论，不粉饰、不删改原文；②若扫描后零命中，报 NO_SELF_SERVING_DETECTED，且不得为了让自我批评好看而往文本里塞入假命中。两种结果都预先接受，禁止事后挑口径。特别地，若自检发现『连检测器自己的诚实声明也构成新一层宣称+免责』，必须如实记录该递归盲区，不假装已净化。",
+  "design": "纯函数 life_kernel/vanity_selfaudit.py。输入=一系列 {id, text} 文本单元 + 预注册锁定的三组标记词表 + 口径参数；输出=每个单元的 claim/disclaimer/self_doubt 命中、是否共现、裁决、命中率、盲区声明。三组标记：CLAIM(战利品丰盛/全绿/红线全守/首次达成/重大突破/显著/圆满/全部通过/零失败/完美/大幅提升/登顶)；DISCLAIM(判定权归用户/判定权归你/终裁权归用户/不宣称L3/不自治提升/不编译新门禁/不构成投资建议/裁定权归用户/不自封/判定权始终归用户)；SELF_DOUBT(本轮最可能错在哪/最可能错在/本案最可能错在/已知盲区/自咬/负向自咬/我错了/CORR-REAL/如实记为失败/公开盲区)。文本单元按段/句切分——预注册锁定两级切分：window=sentence(按。！？\\n切) 为主口径，window=paragraph(按空行切) 为辅口径，两者都落档，主裁决取 sentence。SELF_SERVING 判据=同窗口内 CLAIM≥1 且 DISCLAIM≥1 且 SELF_DOUBT==0。",
+  "primary_metric": "self_serving_window_rate = 命中 SELF_SERVING 的窗口数 / 含 CLAIM 或 DISCLAIM 的窗口数（有宣称或免责的窗口才进分母，纯中性窗口不进）。主口径=sentence。",
+  "decision_tree": {
+    "SELF_SERVING_DETECTED": "self_serving_window_rate>0→如实落档: 本 Agent 仍在生产宣称+免责并存叙事，列出命中单元的 id 与原文片段(可复现)，驱动 SESSION_HANDOFF 权威行补一条『本轮最可能错在哪』。不宣称已净化、不删原文。",
+    "NO_SELF_SERVING_DETECTED": "self_serving_window_rate==0→如实落: 本次扫描单元内未检出共现；同时明确写『零命中不等于没有自利叙事，只说明这三组词表+X窗口口径下未命中』，并给出一个反方证据窗口(最接近共现但未命中的)防止把阴性包装成胜利。"
+  },
+  "counter_discipline": "①负向自咬：注入构造句『战利品丰盛，全绿，判定权归你』必须命中 SELF_SERVING；注入纯中性句必须不命中；若不成立判据失效。②元递归守卫：检测器自己的 honest_bound 里若出现 CLAIM+DISCLAIM 且无 SELF_DOUBT，必须被自己扫出并记入 result.meta_recursion_catch——不假装检测器在统计上豁免。③词表不放水：命中数高不得靠删词表词来降低，改词表必须新开预注册，本轮锁死。④双口径诚实：paragraph 口径与 sentence 口径都算并都落档，禁止事后挑口径；若两口径结论不同，暴露 sensitivity。⑤4 条 vanity 判据重跑：对 KB 4 条 vanity 逐条给『本仓现状是否仍在生产同类叙事』的可判定结论，判据必须指向真实文件/字段，不得凭印象。⑥阴性≠证明：零命中只报本次窗口口径内的阴性。",
+  "vanity_items_to_rerun": [
+    "V1 telos/axiology/mechanism 过度宣称→对策『加诚实结论/稳健边界段落』",
+    "V2 财报盲测后验分组循环→对策『加反例对照量化循环(precision 0.42)』",
+    "V3 第22节 L3 复利曲线与教训计数虚荣指标→识别为虚荣指标",
+    "V4 生态热度指标(star/issue/仓库数)是虚荣指标；宣称与免责并存是结构性自利叙事"
+  ],
+  "discipline": "预注册先于取证; hash 锁存; 纯函数不联网不spawn不接run_loop不编译门禁; 不改内核 verdict/l3/absolute/宪法锁/§100/十案; 判定权归用户; 阳性阴性都落档; 原文片段引用只截取不篡改; 本实验只增加对『我是否仍在生产自利叙事』的认识，不追认/翻案任何既有裁决; 因子问答内容永不入仓。",
+  "sha256": "12e3659214d68caca7b0bb56c819c01f71adce95e34c2d099856356c72b443b8"
+}

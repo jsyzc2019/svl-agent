@@ -73,7 +73,8 @@ def test_audit_all_counts():
     # §4ge 独立性前提证伪目录（audit_aggregation_dependence，证伪Safari非门禁目录、无五件套）→ total 61→62
     # §4gi 外部时间锚证据快照目录（audit_temporal_anchor，remote_evidence+prereg+result，非五件套）→ total 62→63
     # §4gu 论证取证工作台产品化目录（audit_argument_audit，规则+引擎+验证结果+截图，非五件套）→ total 63→64
-    assert a["total"] == 64
+    # §4gy vanity 自检反用回自己目录（audit_vanity_selfaudit，预注册+引擎+结果，非五件套）→ total 64→65
+    assert a["total"] == 65
     assert a["five_piece_complete"] == 34
     assert a["three_locks_intact"] == 31
     assert 0 < a["three_locks_intact"] <= a["total"]

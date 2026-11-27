@@ -10229,6 +10229,19 @@
       "evidence": "一手现场; 特异度补盲; 假阳性如实公开; 拒绝为刷区分度过拟合; 跨语言边界诚实; 产品层诚实; 零战利品; 判定态不动",
       "addressable": false,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META189",
+      "kind": "thinking_experience",
+      "mechanism": "发现别人自利叙事的能力不等于不用它查自己(§4gy P3): SELF_AUDIT盲点三自承KB写着『宣称与免责并存是结构性自利叙事』自己却照样生产战利品丰盛+红线全守+判定权归你。把自我诊断机械化为纯函数器官life_kernel/vanity_selfaudit.py真的去扫本仓6份一手叙事,预注册(hash 12e36592)锁三组标记词表+双口径+sentence主判据,扫出16/331窗口(4.83%)宣称+免责且无实质自我质疑,靶心句(SELF_AUDIT盲点三)被自己扫出;元递归守卫把检测器自己的诚实边界也扫出(它含全绿/判定权归用户却无自我质疑),不假装豁免。",
+      "trigger": "当你能清楚指出别人的偏差叙事、却没有用它反查自己产出时;当报告同时出现领功词(全绿/战利品丰盛)与免责词(判定权归你/不编译门禁)时;当自我批评只是又一句金句而非可证伪的命中数时",
+      "action": "把自我诊断写成纯函数扫描器作用于自己真实产出,命中就认不粉饰,零命中也要给反方证据窗口防把阴性包装成胜利;双口径(句/段)都算都落档禁事后挑;抓出假阳性候选(统计术语显著/纪律陈述不编译门禁)逐条公开但不删词(改词表须新预注册,防过拟合);元递归地扫检测器自己的诚实边界并暴露;历史轮次条目算不算当场领功是有真实分歧,记judgment_fork交用户裁定不自行抹平。",
+      "provenance": "§4gy prereg_vanity_selfaudit_20261127.json+life_kernel/vanity_selfaudit.py+audit_vanity_selfaudit/{engine.py,result.json}+tests/test_vanity_selfaudit.py",
+      "timestamp": "2026-11-26T23:58:27.000000Z",
+      "support": "16/331窗口命中(4.83%),sentence主口径/paragraph辅口径均>0;靶心句被扫出;元递归caught=true;假阳性复核16条(纪律陈述5/统计术语2/疑似真9);负向自咬正例命中1负例0;3处工具self-bite就地修;8守卫;全量1673→1681;判定态三值/宪法锁/§100/十案全不动;判定权归用户(judgment_fork PENDING);未编译门禁未新增异厂调用;因子问答小话未入仓",
+      "evidence": "一手现场;扣之问之审之;自我诊断反用回自己;元递归诚实;假阳性公开不删词;零战利品;判定态不动;阴性≠证明;判定权归用户",
+      "addressable": false,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {
