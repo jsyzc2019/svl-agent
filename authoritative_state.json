@@ -30,7 +30,7 @@
   "round": "§4ij",
   "safari_rounds": 135,
   "schema": "authoritative-state/v1",
-  "sha256": "fd4cc8e10e992d07126e43d00b1a437952436845801d1c886bc4ea76063c48f0",
-  "tests_passed": 1750,
+  "sha256": "c970ef6ddf26d8eb95f33583adb17c9aaa2a75a566c996b4514ac7bffc455fe1",
+  "tests_passed": 1773,
   "verdict": "GAP_INCONCLUSIVE"
 }

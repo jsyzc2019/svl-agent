@@ -10,7 +10,7 @@
     "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
     "round": "§4ij",
     "safari_rounds": 135,
-    "tests_passed": 1750,
+    "tests_passed": 1773,
     "verdict": "GAP_INCONCLUSIVE"
   },
   "hard_boundaries": {
@@ -41,7 +41,7 @@
   "self_bites": [
     "§4hg 收尾尝试把 kernel.py build_report()[\"round\"] 从 §4bh 改为动态读结构化文件(误以为硬编码旧值)。全量测试 7 处失败暴露该字段实为版本标签(§4bh 对应 7.5.0,内核版本未升则不该变),非实时轮次;若改 7 个历史测试迁就即\"改判据过测试\"。诚实撤回改动、如实记此 self-bite,不升级 CORR-REAL(判断失误及时回退非认知错误)。内核 round 保持 §4bh 版本标签,实时轮次由 authoritative_state.json 承载,二者职责分离。"
   ],
-  "state_sha256": "fd4cc8e10e992d07126e43d00b1a437952436845801d1c886bc4ea76063c48f0",
+  "state_sha256": "c970ef6ddf26d8eb95f33583adb17c9aaa2a75a566c996b4514ac7bffc455fe1",
   "target_object": "权威态结构化定位（P4 第一条）",
   "three_way_check": {
     "drifts": [],
