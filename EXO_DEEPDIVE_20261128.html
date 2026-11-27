@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exo 深度检索 · 运行时自我改进架构（2026-11-28）</title>
+<style>
+  :root{--bg:#f7f8fa;--paper:#fff;--ink:#1f2430;--muted:#5c6675;--line:#e3e7ed;
+    --accent:#7a3cff;--accent-soft:#f2ecff;--ok:#0a7f5a;--ok-soft:#e6f5ef;--warn:#b56a00;--warn-soft:#fff4e2;--bad:#c0392b;--bad-soft:#fdeceb;--code:#f4f6f8}
+  @media(prefers-color-scheme:dark){:root{--bg:#141821;--paper:#1c2130;--ink:#e8ebf2;--muted:#a3adc0;
+    --line:#2e3547;--accent:#a98bff;--accent-soft:#2a2340;--ok:#4fd1a5;--ok-soft:#173a30;--warn:#f0b65a;--warn-soft:#3a2e18;--bad:#ff7b72;--bad-soft:#3d2020;--code:#232a3a}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:900px;margin:0 auto;padding:40px 22px 80px}
+  h1{font-size:30px;line-height:1.3;margin:0 0 8px}
+  h2{font-size:20px;margin:42px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:16.5px;margin:24px 0 8px}
+  p{margin:11px 0}.sub{color:var(--muted);font-size:14px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+  .quote{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .note{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .good{background:var(--ok-soft);border-left:4px solid var(--ok);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .orig{background:var(--code);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:13.5px;line-height:1.65;word-break:break-word}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+  th{background:var(--code)}
+  code{background:var(--code);padding:2px 5px;border-radius:4px;font-size:12.5px}
+  .bad{color:var(--bad);font-weight:600}.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}
+  .big{font-size:18px;font-weight:600;line-height:1.6}
+  .foot{margin-top:46px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  ul{padding-left:20px}li{margin:5px 0}
+  .tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:10px;margin-right:6px}
+  .tag.g{background:var(--ok-soft);color:var(--ok)}.tag.w{background:var(--warn-soft);color:var(--warn)}.tag.b{background:var(--bad-soft);color:var(--bad)}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>Exo 深度检索 · 运行时自我改进架构</h1>
+<p class="sub">2026-11-28 · 用户追问"网文说 Exo 开源了，再深入检索" · 一手 arXiv 全文 + GitHub 仓库实查 · 零代码改动</p>
+
+<div class="card">
+<p class="big">先纠正用户给的那条链接：它又是一个编号错配。<code>arxiv.org/abs/2611.16591</code> 打开是《Singularity-Bench: Can Agents Build Agents?》，不是 Exo。Exo 的真身是 <strong>arXiv:2611.00463</strong>，标题《Exo: An Architecture for Self-Improving Systems at Runtime》，2026-10-30 提交。</p>
+<p>这是同一类错误的第二次印证——前一份细读报告里，Exo 那一行的编号我就标了"未核到，存疑"。现在核实了：<span class="bad">网文的 2611.16591 是错的，正确是 2611.00463</span>。教训不变：引用要回源，编号要反查。</p>
+</div>
+
+<h2>一、开源是真的，而且活跃</h2>
+<p>用户关心"开源了"——这次不是网文吹嘘，我直接查了 GitHub 官方 API（<a href="https://github.com/exoharness/exo">exoharness/exo</a>）：</p>
+<table>
+<tr><th>项</th><th>实测值（2026-11-28）</th></tr>
+<tr><td>仓库</td><td><code>exoharness/exo</code>，MIT 许可，未归档</td></tr>
+<tr><td>Star / Fork</td><td><strong>1724 / 139</strong>（网文两三天前说 1.6k，还在涨）</td></tr>
+<tr><td>最近提交</td><td><code>961f6bb6</code> 2026-11-24 "Support live Firecracker CPU and memory growth"；11 月内多次提交，活跃</td></tr>
+<tr><td>技术栈</td><td>Rust 核心 + TypeScript harness，<code>crates/</code>、<code>exoharness/</code>、<code>eval/</code>、<code>examples/</code> 目录齐全</td></tr>
+<tr><td>自改进示例</td><td><code>examples/self-improving-agent/</code> 真实存在，含 <code>SELF.md</code>（自我维护地图）、<code>guardian-tools.ts</code>、<code>sandbox-tools.ts</code>（快照/回卷）、<code>introspection-tools.ts</code></td></tr>
+</table>
+<div class="note"><strong>一处要如实说的张力：</strong>README 现在把带自编辑能力的那套单独 harness 归到 "<b>Earlier Exo</b>" 和 <code>examples/self-improving-agent</code>（标注为 experiment in self-evolution），主推的反而是一个"用 markdown 定义 agent、托管在 API 后"的运行时。也就是说：<b>自进化的参考实现开源了、能跑，但不是 README 首页主打的稳定产品形态</b>，README 自己挂着 "Under construction"、安装文档仍在写。论文作者也承认默认 guardian 只查 build success。开源程度属实，成熟度要打折。</div>
+
+<h2>二、核心思想：把优化循环折叠进任务执行</h2>
+<p>传统做法（Meta-Harness、GEPA、AlphaEvolve）是<b>外部优化循环</b>：先备好 benchmark，候选 harness 跑几百道题，按得分回头改代码。Exo 指出这在真实生产里三处卡壳：<span class="tag b">75% 团队无评测集</span><span class="tag b">长任务单次跑数天/数周</span><span class="tag b">harness 在执行中固定不变</span>。它的解法是把优化器搬进正在运行的 agent 内部。</p>
+<div class="orig">
+"Harnesses have two special properties that allow us to bring the optimizer into the core policy itself. First, a harness revision can be realized in the same action domain as ordinary task work, which we refer to as <b>optimizer symmetry</b>... Second, the harness is <b>operationally homoiconic</b>: its policy is code, and that code is represented as files the agent can observe and manipulate with its code-editing tools."
+</div>
+<p>两条性质：<strong>优化器对称性</strong>（改 harness 和做任务用同一套动作：看源码、改文件、跑测试、请求激活）+ <strong>操作上是同构的</strong>（策略即代码、代码即 agent 能读写的文件）。于是"何时改、怎么改"这套改进策略本身也成了可编辑对象——每一代 successor 都能用新的改进策略，且仍能继续改自己，不依赖模型重训。</p>
+
+<h2>三、两个失败模式与两条契约</h2>
+<p>让 agent 边跑边改自己，论文点出两个致命失败模式，这是整篇最硬的部分：</p>
+<table>
+<tr><th>失败模式</th><th>原文</th><th>后果</th></tr>
+<tr><td><strong>Fate-sharing</strong>（命运共享）</td><td>"a faulty edit can disable both the agent and the logic it would use to diagnose and repair itself"</td><td>一次坏改动同时废掉 agent 和它用来诊断修复自己的那套逻辑</td></tr>
+<tr><td><strong>Unprotected state</strong>（无保护状态）</td><td>"edits to unprotected state can erase accumulated progress and execution evidence, including records of failed revisions"</td><td>改动抹掉累计进展与执行证据，连"哪些改失败过"的记录都没了</td></tr>
+</table>
+<p>对应两条形式化契约（原文明写）：</p>
+<div class="orig">
+<b>Storage contract:</b> "The storage contract requires this history to be append-only: H(d<sub>t</sub>) ⪯ H(d<sub>t+1</sub>)... Existing records cannot be overwritten or deleted. Memory and task artifacts may have mutable current values, but updates must retain prior versions for recovery."
+</div>
+<div class="orig">
+<b>Replacement contract:</b> "Activating this as the active policy must therefore require a check that lies outside of the policy itself. We call this mechanism the <b>guardian</b> G(s<sub>t</sub>, π′)... π<sub>t+1</sub> = π′ if G=1, else π<sub>t</sub>."
+</div>
+<div class="quote">这两条契约的诚实边界（论文自己写）：<strong>"this protection holds regardless of how the agent chooses its edits, but does not on its own guarantee improved behavior or continued progress."</strong> ——保护的是"改不坏、赖不掉账"，<b>不保证越改越好</b>。这一句，和咱们项目"哈希能证一致、不证判据有效"是同一件事的两种说法。</div>
+
+<h2>四、架构：kernel / userspace 式的两层切分</h2>
+<p>借 Exokernel 思想（"expose it at the lowest level of abstraction to maximize the space of behaviors that can be expressed above it"），把 harness 切成两层：</p>
+<table>
+<tr><th>受保护机制层（kernel 类比）</th><th>可编辑策略层 executor（userspace 类比）</th></tr>
+<tr><td>规范化执行历史（append-only、带 cost/token 注解、可查询）</td><td>工具实现与选择、上下文组装与压缩、prompting、记忆/技能索引检索</td></tr>
+<tr><td>带版本的 artifact store（记忆、技能、沙箱快照）</td><td>外部集成：服务适配器、任务调度</td></tr>
+<tr><td>凭证存储、沙箱 API、独立的 guardian（控制权在策略之外）</td><td>以及"何时/如何发起进一步自我改进"的那套程序本身</td></tr>
+</table>
+<p>关键操作顺序：① 把 executor 源码挂载进沙箱，agent 用现成工具就能看改；② 通过一个受保护工具请求替换，guardian 构建候选、通过检查才激活。替换请求与结果都记进事件历史。<strong>独立回滚</strong>：executor 策略、durable 状态、环境沙箱三者可分别回滚，且回滚保留原始执行记录——"allowing the agent to retain evidence of what it tried even after a rollback"，失败尝试的证据留给未来决策。</p>
+
+<h2>五、实验数字（作者自报，需打折看）</h2>
+<table>
+<tr><th>场景</th><th>结果</th></tr>
+<tr><td>开放世界游戏（RuneScape 类），独立运行</td><td>战斗 $3.71 vs Codex $7.26 / Pi $7.95；成本降 12–53%，完成率相当</td></tr>
+<tr><td>迁移运行（换新账号、带着学到的 harness）</td><td>战斗 $3.71→$1.92；成本降 45–82%（最大增益在迁移）</td></tr>
+<tr><td>AppWorld / SREGym（对比同起点但不能编辑的策略）</td><td>留出集成本降 35–61%，正确率相当；AppWorld 平均任务时间 -13%，SREGym 中位诊断时间 -35%</td></tr>
+<tr><td>CLB 编码（含反思成本）</td><td>成本 -14%，shell 步数 -15%，两边都解决全部问题</td></tr>
+</table>
+<div class="note"><strong>反例也如实摆着：</strong>低复用任务不划算。做 quest（每个任务步骤、物品、地点都不同）时，Exo 每个 quest 点 $0.28，反而比 Codex $0.24、Pi $0.21 更贵。更关键的是<strong>智能门槛</strong>——用 gpt-5-mini 跑 AppWorld，三次 seed 几乎不做 harness 编辑、也不复用工具，成本/通过率与对照持平（$6.63/59% vs $6.73/55%）。作者的结论原文："there is an <strong>intelligence floor</strong> necessary to reap the benefits of Exo's architecture."</div>
+
+<h2>六、诚实的局限（论文附录原文，含金量最高）</h2>
+<div class="orig">
+"Guardian acceptance establishes only the properties actually checked: <b>build success alone guarantees neither task correctness nor improvement.</b> ... Preservation alone does not ensure liveness."
+</div>
+<div class="orig">
+"<b>Snapshot scope</b> depends on the provider: Docker image snapshots omit process memory and host-mounted source. <b>Neither reverses external effects</b>, which require domain-specific recovery."
+</div>
+<div class="orig">
+"The storage and replacement mechanisms must remain outside the executor's editing authority. Direct storage access or unrestricted administrative deletion would invalidate complete mediation; the broadly writable development configuration does not enforce these restrictions."
+</div>
+<div class="quote">翻译成人话：<br>① 默认 guardian 只验"能不能编译"，<b>不保证任务正确、更不保证变强</b>；更强的 guardian（LLM 当裁判、在 fork 环境里试跑）要花更多成本，怎么按改动后果匹配验证强度是开放问题。<br>② 快照回卷<b>不能撤销已经发生的外部副作用</b>（发出去的消息、已调用的 API），这跟咱们之前静态审计里"rebase || true 吞失败"是亲缘问题。<br>③ 保护成立的前提是机制层在 agent 编辑权限之外；但<b>宽松可写的开发配置本身并不强制这个隔离</b>——纸面契约 ≠ 实现强制。作者在 LinkedIn 讨论里也有同行追问"沙箱回卷 ≠ 外部效果回卷"，正是这一点。</div>
+
+<h2>七、与咱们项目的对照（这才是用户真正关心的"分别"）</h2>
+<table>
+<tr><th>维度</th><th>Exo</th><th>咱们 svl-agent</th><th>判断</th></tr>
+<tr><td>优化循环位置</td><td>折叠进任务执行，agent 运行时自改 harness</td><td>内核自选议程、root_cause_trace 自诊断、execute_agenda 落真实心跳</td><td class="ok">同构：都在"执行中自我改"</td></tr>
+<tr><td>不可篡改的账本</td><td>append-only canonical history，含失败修订记录</td><td>base_beat_log / 预注册 SHA / 逐字锚点 / 不伪造日志</td><td class="ok">同一条纪律，且咱们更强调预注册先于取证</td></tr>
+<tr><td>激活闸门</td><td>guardian G（默认只查 build success）</td><td>判定权归用户、constitution 锁、权威态校验</td><td class="ok">咱们的闸门更严：外部裁定 + 哈希锚定，不是 LLM 自查</td></tr>
+<tr><td>验证器本身可被改</td><td>verifier 明文列为可改对象（L5）</td><td><code>verify_external.py</code> 跳过缺失样本的洞仍挂着（§4S17 裁决存档不动手）</td><td class="warn">同一道题：谁来验证验证器</td></tr>
+<tr><td>自主等级</td><td>论文自称 in-harness learning，策略全可编辑</td><td>L2 扎实 / L3 partial / L4 弱(Ambient=0) / L5 未到</td><td class="warn">功能形态像 L4/L5，证据等级还在 L2/L3</td></tr>
+<tr><td>心跳节律</td><td>无"日落而息"概念，随任务运行</td><td>真实心跳 + GHA 授时，自动 cron 首次真跳，NIGHT/slept=true</td><td class="ok">咱们独有的一条：时间湿地上的节律</td></tr>
+</table>
+<div class="good"><strong>最值得记住的一句对照：</strong>Exo 说它的架构有 "<b>intelligence floor</b>"——模型不够聪明时，给再多自编辑自由也没用，agent 不会发现有效改动也不会复用。咱们的诚实结论恰好是它的镜像：咱们不缺"能改的机制"（REORIENT 补丁、心跳、归巢都真实跑通），缺的是 L3 的 <code>independent_tests</code> 和 L5 那种"独立评测证明改后更会改"的证据。<b>Exo 缺的是让自由生效的智能门槛，咱们缺的是让改动可证的评测门槛——墙在两面，但同一堵。</b></div>
+
+<h2>八、诚实边界</h2>
+<ul>
+<li>本报告为外部论文检索与对照研究，未改任何代码、未碰权威态、不宣布等级；判定权仍归用户。</li>
+<li>论文标题/编号/作者已回 arXiv abs 页核实：Exo = <code>2611.00463</code>；用户给的 <code>2611.16591</code> = Singularity-Bench（第二次编号错配印证）。</li>
+<li>仓库数据来自 GitHub 官方 API 现场实查（stars/forks/提交/README/SELF.md），非网文转述；实验数字为<b>作者自报</b>，本轮未做独立复现，按论文口径打折看。</li>
+<li>论文全文（HTML v1）与作者站点 PDF 一手读取；英文引用为原文逐字，中文为对照解读。</li>
+</ul>
+
+<div class="foot">一手来源：arXiv:2611.00463v1（Exo 全文）· exoharness/exo（GitHub API 实查）· krentsel-exo-preprint.pdf（作者站点，含附录契约与安全证明）· 项目状态为 2026-11-28 现场实读，非记忆复述。</div>
+
+</div></body></html>
