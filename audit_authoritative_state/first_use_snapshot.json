@@ -1,0 +1,14 @@
+{
+  "at_utc": "2026-11-27T02:42:00Z",
+  "first_use": {
+    "capture_verdict": "CONSISTENT",
+    "selfbite": {
+      "baseline_consistent": true,
+      "drift_kb_caught": true,
+      "handoff_drift_caught": true,
+      "verdict_guard_rejects": true,
+      "all_caught": true
+    },
+    "note": "首用即一致；三注入全抓。本快照只读固化，不随重跑改写（防追认失败）。"
+  }
+}

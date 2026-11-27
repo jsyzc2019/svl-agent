@@ -1,0 +1,36 @@
+{
+  "schema": "prereg/authoritative-state/v1",
+  "round": "§4hg",
+  "at_utc": "2026-11-27T02:40:00Z",
+  "trigger": "用户 2026-11-27 '再持续工作一小时，方向自定'。现场核验发现：权威数字（round/测试数/KB/Safari/内核版本/宪法锁/判定三值）只能从 SESSION_HANDOFF.md 第43行的 28258 字符超长散文行用正则抽取——改字/换行/措辞都会断；且 kernel.py build_report() 里 'round':'§4bh' 是硬编码旧值。此即 NEXT_STAGE_PLAN P4 第一条『硬编码字符串锚点改结构化定位』未落地者。",
+  "target_object": "权威态的结构化定位（非判定态本身）",
+  "why_not_pseudo_work": [
+    "NEXT_STAGE_PLAN §P4 第一条白纸黑字未完成（§4gx 只做了第二条 KB 空字段）",
+    "非内审递归：对象不是判据有效性，是把散文锚点改结构化——§4ga 收窄的是 vanity/stop_pivot/narrowing 自审家族，本轮不属该家族",
+    "判定态三值/宪法锁/十案/§100 全部只读，不编译门禁，不抬 l3/absolute"
+  ],
+  "claim": "把权威态从『唯一真相=散文超长行』升级为『结构化 authoritative_state.json 为一等可读真相 + 散文行由它生成/校验』，且不改变任何权威数字、不新增判定权。",
+  "preregistered_criteria": {
+    "C1_single_source": "结构化文件 authoritative_state.json 必须逐字段可从机器可读一手源现场抽取：kernel_version←kernel.py 常量、verdict/l3/absolute←audit_l3_gap_targeted/result.json、constitution_sha256←constitution.json 字节、kb_count←knowledge_base_store.json items、safari_rounds←safari_log.jsonl 行数、round/tests_passed←handoff 权威行（唯一仍需正则的过渡字段，须显式标注 fragile=true）。",
+    "C2_no_drift": "生成器把现有 handoff 权威数字抽入结构化文件后，逐字段与现场核验值相等；round=§4hf, tests=1718, kb=501, safari=133, kernel=7.5.0, verdict=GAP_INCONCLUSIVE, l3=false, absolute=false, constitution_sha256=fe56291b...。任何不等即判 DRIFT，不写回、不覆盖。",
+    "C3_handoff_consistency": "校验器 check_handoff() 反向比对：散文权威行的 regex 抽取值必须 == 结构化文件值；不一致判 HANDOFF_DRIFT，报告差异字段但不自动改写散文（防自证）。",
+    "C4_no_verdict_change": "生成器与校验器运行前后：result.json 字节 sha256 恒 0f3ccb13...、verdict/l3/absolute 三值恒 GAP_INCONCLUSIVE/false/false、constitution.sha256 恒 fe56291b...。任一变动立即 AssertionError。",
+    "C5_negative_selfbite": "三注入负向自咬必须在临时副本上被抓：①篡改结构化文件 kb_count=999 → check() 返回 DRIFT；②篡改散文行 tests 数字 → check_handoff() 返回 HANDOFF_DRIFT；③篡改 result.json verdict → 前置守卫生效拒绝运行。判据不放宽。",
+    "C6_p4_gap_closed": "结构化定位落地后，新会话核验不再依赖读 28258 字符超长行——只读 authoritative_state.json（<3KB）即可拿到全部权威数字；脆弱字段（round/tests）显式标 fragile 并列在 migration 字段，作为下一步把它们也机器化的诚实清单，不假装已全结构化。"
+  },
+  "hard_boundaries": [
+    "不改判定态三值、不动宪法锁、不碰十案/§100、不编译新门禁",
+    "不联网摄食、不 spawn（生命内核判定纪律）",
+    "不构成投资建议；因子有效性小话不入仓",
+    "不自动改写 handoff 权威散文行（只报告漂移，改写权归用户/后续预注册）",
+    "负向注入只在临时副本，不污染生产文件"
+  ],
+  "failure_criteria": [
+    "若 check() 对篡改 kb_count 不报 DRIFT → 判据失效，就地修工具不放宽",
+    "若生成器改动了 result.json/宪法锁字节 → 立即回滚（cp -a 基线）并如实记录",
+    "若 round/tests 无法从散文抽取（正则断）→ 如实标 fragile=true 并在 migration 列出，不伪造机器源",
+    "若结构化文件与散文行无法同时一致 → 报告 HANDOFF_DRIFT 交用户裁定，不自行抹平"
+  ],
+  "honest_layer": "本轮改变的是『权威态的可读/可校验结构』（P4 工程去脆弱化），不是判定、不是认知增量、不是新证据。诚实标注：round/tests 两字段仍依赖散文正则，结构化不等于彻底消除锚点脆弱，migration 字段公开剩余债务。",
+  "hash_convention": "d.pop('sha256',None) 后 hashlib.sha256(json.dumps(d,ensure_ascii=False,sort_keys=True).encode()).hexdigest()；本文件自身 sha256 写在 prereg_authoritative_state_20261127.sha256"
+}

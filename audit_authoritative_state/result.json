@@ -1,0 +1,54 @@
+{
+  "captured_state": {
+    "absolute_claimed": false,
+    "constitution_lock_ok": true,
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "handoff_authority_line": 43,
+    "kb_count": 502,
+    "kernel_version": "7.5.0",
+    "l3_claimed": false,
+    "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "round": "§4hg",
+    "safari_rounds": 133,
+    "tests_passed": 1728,
+    "verdict": "GAP_INCONCLUSIVE"
+  },
+  "hard_boundaries": {
+    "constitution_lock": "fe56291b 未动",
+    "no_l3_raise": true,
+    "no_network": true,
+    "no_new_gate": true,
+    "no_spawn": true,
+    "result_json_sha_stable": true,
+    "verdict_l3_absolute": "GAP_INCONCLUSIVE/false/false 未动"
+  },
+  "honest_layer": {
+    "changed": "权威态的可读/可校验结构（散文超长行 → 结构化 JSON <3KB + 三方校验）",
+    "not_changed": "判定三值/宪法锁/KB/Safari/测试数均未变；非新证据非认知增量",
+    "not_pseudo_work": "NEXT_STAGE_PLAN P4 第一条白纸黑字未完成；非内审递归（对象非判据有效性）",
+    "remaining_debt": "round/tests 仍依赖 handoff 散文正则（fragile=true），migration 已公开"
+  },
+  "negative_selfbite": {
+    "all_caught": true,
+    "baseline_consistent": true,
+    "drift_kb_caught": true,
+    "handoff_drift_caught": true,
+    "verdict_guard_rejects": true
+  },
+  "prereg_sha256": "0a7e1115f1b280ea1bef88c6339ea00d567687ef58e515e303455a545e860725",
+  "round": "§4hg",
+  "schema": "audit/authoritative-state/v1",
+  "self_bites": [],
+  "state_sha256": "70ea7fc9391bd48285fe6fb69d5fd5add950475b73c489ed9989727d09bfa5ed",
+  "target_object": "权威态结构化定位（P4 第一条）",
+  "three_way_check": {
+    "drifts": [],
+    "fields_checked": 11,
+    "handoff_drifts": [],
+    "ok": true,
+    "sha256_ok": true,
+    "verdict": "CONSISTENT"
+  },
+  "trigger": "用户 2026-11-27 '再持续工作一小时，方向自定'",
+  "verdict": "STRUCTURED_ANCHOR_OPERATIONAL"
+}

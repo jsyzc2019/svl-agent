@@ -1,0 +1,36 @@
+{
+  "_sources": {
+    "constitution_sha256": "life_kernel/constitution.json (bytes)",
+    "kb_count": "knowledge_base_store.json::items",
+    "kernel_version": "life_kernel/kernel.py::KERNEL_VERSION",
+    "round/tests_passed": "SESSION_HANDOFF.md 权威行 [FRAGILE: 散文正则]",
+    "safari_rounds": "life_kernel/data/safari_log.jsonl (lines)",
+    "verdict/l3_claimed/absolute_claimed": "audit_l3_gap_targeted/result.json"
+  },
+  "absolute_claimed": false,
+  "captured_at_utc": null,
+  "constitution_lock_ok": true,
+  "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+  "fragile_fields": [
+    "round",
+    "tests_passed"
+  ],
+  "handoff_authority_line": 43,
+  "kb_count": 502,
+  "kernel_version": "7.5.0",
+  "l3_claimed": false,
+  "migration": {
+    "note": "round/tests 仍依赖 handoff 散文正则；下一步把它们机器化（如 round 从 safari_log 末条 + 轮次注册表取、tests 从 CI 结果文件取），本轮不假装已彻底消除锚点。",
+    "pending": [
+      "round",
+      "tests_passed"
+    ]
+  },
+  "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+  "round": "§4hg",
+  "safari_rounds": 133,
+  "schema": "authoritative-state/v1",
+  "sha256": "70ea7fc9391bd48285fe6fb69d5fd5add950475b73c489ed9989727d09bfa5ed",
+  "tests_passed": 1728,
+  "verdict": "GAP_INCONCLUSIVE"
+}

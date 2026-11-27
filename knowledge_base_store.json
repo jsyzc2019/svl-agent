@@ -10322,6 +10322,19 @@
       "evidence": "一手现场;裁定留档完整性;可纠错溯源闭环;执行回执机械核验;首用失配快照不追认;补录不改实质;不新裁定不代裁;负向自咬;判定态不动",
       "addressable": false,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META196",
+      "kind": "thinking_experience",
+      "mechanism": "权威数字藏在散文超长行里=单点脆弱(P4第一条,§4hg):SESSION_HANDOFF.md第43行28258字符,\nround/测试数/KB/Safari/版本/宪法锁/判定三值全靠正则从这坨散文抽,改字/换行/措辞即断(历史多次assert失败同源),\nkernel.py build_report()的round硬编码§4bh也是同一病。非内审递归(对象=可读结构非判据有效性),非因子小话。\n预注册(sha0a7e1115)先于取证锁C1-C6;纯函数life_kernel/authoritative_state.py从机器源现场抽取+\n三方校验(structured vs live vs handoff散文),首用CONSISTENT;\nround/tests仍依赖散文正则(fragile=true,migration公开剩余债务,不假装全结构化)",
+      "trigger": "当你每次核验权威数字都要读几万字散文行;当一个数字改字就断正则;当新会话自举被迫解析超长行;\n当同一权威值在多处硬编码(round=§4bh vs §4hf)而无人察觉",
+      "action": "把权威态镜像成结构化authoritative_state.json(<3KB,一等可读真相)+capture/check三方校验;\n判定三值/宪法锁/result.json字节做前置红线守卫(漂移即AssertionError);\n三注入负向自咬(篡改kb/散文tests/verdict)全抓且判据不放宽;\nhandoff散文只报告漂移不自动改写(改写权归用户/后续预注册);\nfragile字段与migration清单诚实标注剩余债务;不编译门禁不抬l3,判定权归用户",
+      "provenance": "§4hg prereg_authoritative_state_20261127.json(sha0a7e1115)+life_kernel/authoritative_state.py+\nauthoritative_state.json+audit_authoritative_state/{result.json,first_use_snapshot.json}+\ntests/test_authoritative_state.py(10项)+tests/test_evidence_chain.py(目录计数68→69)",
+      "timestamp": "2026-11-27T02:45:00.000000Z",
+      "support": "首用CONSISTENT(11字段零漂移),三注入自咬全过;\n结构化文件<4KB替代读28K超长行;全量1718→1728(+10守卫);\nresult.json字节0f3ccb13/宪法锁fe56291b/判定三值GAP_INCONCLUSIVE-false-false未动;\nround/tests仍fragile(诚实标注非彻底消除);不编译门禁未新增异厂调用不构成投资建议;因子小话不入仓",
+      "evidence": "audit_authoritative_state/result.json",
+      "addressable": true,
+      "improvement_class": "preserve"
     }
   ],
   "thresholds": {
