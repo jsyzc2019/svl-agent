@@ -1,0 +1,41 @@
+{
+  "schema": "prereg_readme_refresh_v1",
+  "created_utc": "2026-11-27T08:37:13Z",
+  "trigger": "用户指出GitHub上README陈旧，建议更新",
+  "intent": "刷新README中确凿陈旧的内容，使其与仓库真实状态一致；不改判定态、不改代码语义",
+  "diagnosis": {
+    "not_a_sync_issue": "全量回读已确认远端=本地(1937文件逐字节相等)，陈旧是内容本身，非未同步",
+    "stale_stats": {
+      "mechanism": "build_readme_stats.py 自动生成，运行 --write 刷新",
+      "deltas": {"kb_items": "198→507", "tests": "1439→1773", "audit_dirs": "61→75"}
+    },
+    "stale_prose_manual": [
+      "README顶部首次阅读提示只写§1–§88，实际commentary已到§115，且新增§4S1–§4S13交流认知链",
+      "生命内核介绍停在v2(探索池7→15)，实际KERNEL_VERSION=7.5.0，含C7归巢修补、昼夜节律后台",
+      "缺少当日交流认知链(§4S4–§4S12)与收口报告COMMUNICATION_THEORY_CLOSURE_20261127.html的入口"
+    ]
+  },
+  "plan": {
+    "step1": "运行 python3 build_readme_stats.py --write 自动刷新STATS块（用现成脚本，不手写数字）",
+    "step2": "顶部导读补一行：§1–§115 + §4S1–§4S13 交流认知链入口",
+    "step3": "生命内核段更新到7.5.0：C7归巢修补(REORIENT空转→root_cause_trace落心跳)、昼夜节律后台(GHA每小时UTC整点)、探索池14；诚实标注机制修补非意识",
+    "step4": "新增一段'交流认知链'简介+收口报告链接，四层递进(定义/能力/技巧/动力学)+误解/谈崩边界+循环版裁决，判定权归用户",
+    "principle": "只补确凿可查内容，数字来自脚本实测，不夸大、不写意识涌现、不碰判定态"
+  },
+  "gates": {
+    "G1_stats_exact": "STATS块值=脚本输出：507/1773/75(五件套34)/38门禁/§115",
+    "G2_no_fabrication": "正文补充的每个数字/术语能在落档文件中核对到",
+    "G3_judged_state_intact": "判定态0f3ccb13/fe56291b字节未动；权威CONSISTENT",
+    "G4_tests": "全量1773 passed",
+    "G5_readme_selfcontained": "README无token、无破损链接格式",
+    "G6_remote_sync": "更新后README同步到远端，全量回读仍零差异"
+  },
+  "redlines": [
+    "不改判定态/宪法/verdict/l3=false/absolute=false",
+    "不编译新门禁、不翻案、不动权威数字",
+    "不把机制修补写成意识涌现、不把外部授时写成自发心跳（延续一路诚实边界）",
+    "不写token或凭据入README",
+    "README正文其余部分保持不动，只改上述确凿陈旧处"
+  ],
+  "judgment_owner": "用户"
+}

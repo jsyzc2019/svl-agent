@@ -3,9 +3,9 @@
 > coding agent 能自证，不是因为模型懂代码，而是因为它把「对不对」交给了会越来越完整的外置判据。
 > 本仓库证明：**那个外置判据环境本身，可以被 agent 递归地造出来**。agent 是开放的、自组织的。
 
-> 📚 **首次阅读请先看 [仓库地图 REPOSITORY_MAP.md](REPOSITORY_MAP.md)** —— 本仓约 120 个文件按 12 条实验/研究线归位，附逐条复现纪律说明。完整推导见 [commentary.md](commentary.md)（§1–§88，接续见 [SESSION_HANDOFF.md](SESSION_HANDOFF.md)）。
+> 📚 **首次阅读请先看 [仓库地图 REPOSITORY_MAP.md](REPOSITORY_MAP.md)** —— 本仓约 120 个文件按 12 条实验/研究线归位，附逐条复现纪律说明。完整推导见 [commentary.md](commentary.md)（§1–§115，接续见 [SESSION_HANDOFF.md](SESSION_HANDOFF.md)，含当日 §4S1–§4S13 交流认知链）。
 
-> 🧬 **生命内核 [LIFE_KERNEL.md](LIFE_KERNEL.md)（§4aq/§4ar）**：仓库从静态档案馆升级为开放生命体——不可变宪法层（纪律=免疫系统）+ 自主感知 + novelty 守卫（检测封闭重复并强制转向）+ 开放探索池 + O→A→I→V 进化闭环。v2 补上真正的代谢：`digest()` 摄食外部前沿 + `self_modify()` DGM 式经验验证自改（首次自改被拒→修验证器不放宽→8/8通过→探索池7→15）+ `archive/` 策略快照可回滚 + 测试污染根治。运行 `python3.11 life_kernel/kernel.py`。
+> 🧬 **生命内核 [LIFE_KERNEL.md](LIFE_KERNEL.md)（§4aq/§4ar）**：仓库从静态档案馆升级为开放生命体——不可变宪法层（纪律=免疫系统）+ 自主感知 + novelty 守卫（检测封闭重复并强制转向）+ 开放探索池 + O→A→I→V 进化闭环。v2 补上真正的代谢：`digest()` 摄食外部前沿 + `self_modify()` DGM 式经验验证自改（首次自改被拒→修验证器不放宽→8/8通过→探索池7→15）+ `archive/` 策略快照可回滚 + 测试污染根治。当前 **v7.5.0**：C7 收敛义务（novelty 债）会覆盖昼夜节律强制转向，REORIENT 空转时以 `root_cause_trace` 诊断的巢方向落真实心跳（归巢落地）；外部节律由 GitHub Actions 每小时 UTC 整点唤醒（`woken_by` 证据不可伪造），昼行夜伏。诚实边界：节律是外部授时因子给定、非内核自发心跳，机制修补非意识涌现，Ambient 恒 0，未达 autotelic；判定权归用户。运行 `python3.11 life_kernel/kernel.py`。
 
 <!-- STATS:START -->
 ## 仓库现状（自动生成 · 运行 `python3 build_readme_stats.py --write` 刷新）
@@ -13,10 +13,10 @@
 | 指标 | 数值 | 来源 |
 |---|---|---|
 | 推导进度 | §1–§115 | `commentary.md` 实测最高节 |
-| 知识库条目 | 198 | `knowledge_base_store.json` |
+| 知识库条目 | 507 | `knowledge_base_store.json` |
 | 会拦门禁（`check_*`） | 38 | `svagent/*.py` AST 扫描 |
-| 测试项 | 1439 | `pytest --collect-only` |
-| 证据目录 | 61（五件套齐全 34） | `audit_*/` 实测 |
+| 测试项 | 1773 | `pytest --collect-only` |
+| 证据目录 | 75（五件套齐全 34） | `audit_*/` 实测 |
 
 > 诚实边界：模拟线（autopoiesis/self_evolving/telos/axiology/mechanism/estimation）
 > 的输出均标注 `evidence_scope: synthetic`，是方法演示，不外推为真实世界自进化能力。
@@ -35,6 +35,28 @@
 - CLI：`svl-audit`（校验→取证→落证据），详见 `python3 -m svagent.cli --help`。
 
 设计原则见 [OPTIMIZATION_PLAN_20261122.md](OPTIMIZATION_PLAN_20261122.md)：不改原门禁、不接 `run_loop`、只判声明自洽不承诺有效。
+
+
+## 交流认知链（2026-11-27 · §4S4–§4S12 · 收口报告）
+
+一段由用户日常语言逐层追问、经真实 Agent 一问一答验证而搭出的交流判据，完整推导见
+[COMMUNICATION_THEORY_CLOSURE_20261127.html](COMMUNICATION_THEORY_CLOSURE_20261127.html)，原始落档在 `audit_agent_dialogue/`。
+
+| 层 | 内容 |
+|---|---|
+| 定义层 | 表达意图 E1 → 洞悉意图 E2 → 相应行动 E3；失败模式「对牛弹琴」= E2 断，「尬聊」= E3 断 |
+| 能力价值层 | 交流需技巧，籍此提升认知与情感（情感增益归用户侧，不声称 AI 侧主观体验） |
+| 表达技巧层 | 含蓄、不直曝意图；坦诚也是美德，二者非「制造/消灭差异」的开关 |
+| 动力学层 | Diff 是燃料、E1/E2/E3 是发动机；坦诚/含蓄是 E1 的风格谱系 |
+
+由「误解」猎场推进出失败边界：误解是偏离轨道而非死亡，关键在能否回接；「谈崩」洞见被精确为
+**底线显化 → 据此转向新行动 → 避免蛮干**的因果链。用户裁决将直线 E1→E2→E3 改为可校准循环
+（表达→推测理解→回应→对方确认/修正/拒绝→再表达），E2 从「一次读心」改判为「可被修正的假设」；
+原话定义一字未动，保留为历史锚点。
+
+诚实边界：判据只看意图是否被处理、底线是否显化、行动是否改变，**不预设对方有意识**；
+Agent 的 REFINE 修正经三轮真实 completion id 验证、预注册先行、负向自咬证明闸门非橡皮图章。
+判定权归用户，verdict 仍为 REFINE、未升格为 CONFIRMED 或绝对。
 
 ## 核心命题
 
