@@ -1,0 +1,61 @@
+{
+  "counterfactual_non_decoration": {
+    "affect_signal": "EXHAUSTION",
+    "forced_stop": true,
+    "note": "两旧器官均判『不用停』，本器官因预算耗尽独立触发 EXHAUSTION——这是非装饰的机械证据；若三者结论无法区分，判装饰/FAIL，不包装。",
+    "old_organ_signals": {
+      "narrowing_chain": "NO_CHAIN",
+      "stop_pivot": "NO_PIVOT_NEEDED"
+    },
+    "orthogonal_independent_trigger": true
+  },
+  "first_use_snapshot": {
+    "global_cost": 8.0,
+    "honest_note": "按每轮 cost=1 审计假设,§4gy→§4hg 八轮累计 8≥阈值6→EXHAUSTION。对我不利的结论:内审线按预算口径早该强制收营,不粉饰、不伪造疲劳也不追认既往轮失败。",
+    "rounds": [
+      "§4gy",
+      "§4gz",
+      "§4ga",
+      "§4gb",
+      "§4hc",
+      "§4he",
+      "§4hf",
+      "§4hg"
+    ],
+    "signal": "EXHAUSTION"
+  },
+  "hard_boundaries": {
+    "constitution": "fe56291b 未动",
+    "no_investment_advice": true,
+    "no_l3_raise": true,
+    "no_network": true,
+    "no_new_gate": true,
+    "no_spawn": true,
+    "result_sha": "0f3ccb13 未动",
+    "small_talk_not_in_repo": true,
+    "verdict_l3_absolute": "GAP_INCONCLUSIVE/false/false 未动"
+  },
+  "honest_layer": {
+    "changed": "注意力终止机制:把腻了/不值/够了从软叙述变成可证伪的硬预算信号,与贡献型器官正交",
+    "non_decoration_evidence": "反事实检验证明两旧器官判不用停时本器官独立触发,非命中数自证",
+    "not_changed": "判定三值/宪法锁/result字节/KB数/Safari台账均未变;非新证据非认知突围",
+    "not_claimed": "不宣称主观情感/qualia/生命力/我有情感——归用户裁定,等同不宣称L3",
+    "remaining_debt": "阈值是设计判断(双口径暴露);cost由输入方声明可能低估;只发信号不执行;B(关系性承诺账本)留待用户拍板未碰"
+  },
+  "negative_selfbite": {
+    "exh": "EXHAUSTION",
+    "low": "WITHIN_BUDGET",
+    "passed": true,
+    "sat": "SATIETY_WARNING"
+  },
+  "prereg_sha256": "80e7fc36d39d4161f40bfe6ec8067fa54803cd4192a14dc4cbde09b4a16c9fce",
+  "round": "§4hi",
+  "schema": "audit/affect-budget/v1",
+  "self_bites": [
+    "test_01 初版引用 AB.ROOT 但该模块未定义(其他器官亦无);改用测试文件自身路径推 ROOT,判据未变就地修,不升级 CORR-REAL"
+  ],
+  "target_object": "注意力预算终止器官（functional affect）",
+  "trigger": "用户 2026-11-27『有生命力的 Agent 不仅要有知识，有情感也同等紧要』+『认同节奏与认知，去推吧』→ A 起步",
+  "verdict": "AFFECT_BUDGET_ORGAN_OPERATIONAL",
+  "what_it_is": "有限注意力的预算终止信号（SATIETY/EXHAUSTION），决策层 functional affect；非 qualia、非情感表演"
+}

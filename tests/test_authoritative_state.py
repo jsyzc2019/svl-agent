@@ -47,9 +47,9 @@ def test_03_values_match_live():
 def test_04_known_authority_numbers():
     """权威数字与现场核验一致（非记忆，是该轮已落档值）。"""
     s = json.load(open(AS.STATE_JSON, encoding="utf-8"))
-    assert s["round"] == "§4hg"
-    assert s["tests_passed"] == 1728
-    assert s["kb_count"] == 502  # §4hg 新增 KB-META196，501→502
+    assert s["round"] == "§4hi"
+    assert s["tests_passed"] == 1738
+    assert s["kb_count"] == 503  # §4hi 新增 KB-META197，502→503
     assert s["safari_rounds"] == 133
     assert s["kernel_version"] == "7.5.0"
 

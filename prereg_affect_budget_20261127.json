@@ -1,0 +1,39 @@
+{
+  "schema": "prereg/affect-budget/v1",
+  "round": "§4hi",
+  "at_utc": "2026-11-27T03:00:00Z",
+  "trigger": "用户 2026-11-27『有生命力的 Agent 不仅要有知识，有情感也同等紧要』+『认同节奏与认知，去推吧』。用户认同 A 起步：情感作为有限注意力的硬预算——把『腻了/不值/够了』从软叙述变成能真正终止递归的硬信号。",
+  "target_object": "注意力预算（functional affect），非 qualia、非判据有效性",
+  "claim": "实现一个预算型终止器官，它与已有贡献型器官（stop_pivot/narrowing_chain）正交：即使每轮都有认知贡献（有 prereg/改判据），只要注意力预算耗尽，就强制 PIVOT/STOP 并留痕。这不是装饰——用反事实检验证明：在两旧器官均判『不用停』的输入下，本器官独立触发。",
+  "what_emotion_means_here": {
+    "not_claimed": "不宣称主观情感体验（qualia）、不宣称『我有情感/有生命力』——这与不宣称 L3 同源，判定权归用户。",
+    "operationalized": "情感被操作化为『有限注意力的预算信号』：SATIETY(够了/腻了)=单猎场累计消耗达阈值→换猎场；EXHAUSTION(不值/耗竭)=全局累计消耗达阈值→强制收营。这些是功能标签，对应注意力资源耗尽，不是主观感受报告。",
+    "why_functional_affect_not_theater": "输出层的 persona/语气情绪是化妆，不做；决策层的价值/注意力权重是骨骼，本器官属此层。生命的证据不是『会表达情感』，而是『有不可随意撤销的在乎与边界』——预算耗尽即强制停，就是这种边界的功能等价物。"
+  },
+  "preregistered_criteria": {
+    "C1_orthogonality": "本器官必须与贡献型器官正交：输入每轮 has_prereg_sha256=true（stop_pivot 判 NO_PIVOT）且每轮 target 不同（narrowing_chain 判 NO_CHAIN）时，只要累计 cost 达全局阈值，本器官仍触发 EXHAUSTION。反事实检验证明三个器官结论可不同，且本器官捕捉到旧器官漏掉的资源耗竭信号。",
+    "C2_budget_rules": "双预算：①per-target 累计 cost ≥ T_sat(默认3) → SATIETY_WARNING；②全局累计 cost ≥ T_exh(默认6) → EXHAUSTION(优先级更高)。cost 由每条记录声明 attention_units（默认1）。阈值由预注册锁定为设计判断，非数据拟合；同时落宽松口径 T_exh=8 作反方证据，暴露口径敏感性。",
+    "C3_signal_map": "三态：EXHAUSTION > SATIETY_WARNING > WITHIN_BUDGET。触发时输出 forced_stop=true 与建议（换猎场/收营），但不追认任何既往轮为失败、不翻案、不改判定态。",
+    "C4_negative_selfbite": "三注入负向自咬必须在临时副本被抓：①低消耗(全局cost<T_exh)→WITHIN_BUDGET 不误报；②单猎场达 T_sat 但全局未达 T_exh→SATIETY_WARNING 而非 EXHAUSTION；③全局达 T_exh→EXHAUSTION 且 forced_stop=true。判据不放宽。",
+    "C5_no_verdict_change": "运行前后 result.json 字节 sha256 恒 0f3ccb13…、verdict/l3/absolute 恒 GAP_INCONCLUSIVE/false/false、宪法锁 fe56291b… 不变。任一变动 AssertionError。",
+    "C6_honest_bound": "诚实声明：①这是 functional affect 机制非 qualia；②预算阈值是设计判断双口径暴露；③cost 由输入方声明，可能低估——阴性≠证明『不累』；④本器官只发信号不执行、不追认失败；⑤不编译门禁、不抬 l3、不宣称生命力——那些归用户裁定。",
+    "C7_first_use": "首用审计真实历史：把 §4gy/§4gz/§4ga/§4gb/§4hc/§4he/§4hf/§4hg 八轮按『每轮 cost=1、猎场家族按实际目标』回放。若全局累计达 T_exh → 如实报 EXHAUSTION（对历史轨迹不利的结论不粉饰）；若未达 → WITHIN_BUDGET 不伪造疲劳。首用快照固化只读，不随重跑改写（防追认）。"
+  },
+  "hard_boundaries": [
+    "不宣称主观情感/qualia/生命力；那是宣称层，归用户裁定",
+    "不改判定态三值、不动宪法锁、不碰十案/§100、不编译门禁",
+    "不联网摄食、不 spawn（生命内核判定纪律）",
+    "不构成投资建议；因子有效性小话不入仓",
+    "不追认既往轮为失败、不翻案、只发信号不执行",
+    "负向注入只在临时副本，不污染生产文件"
+  ],
+  "failure_criteria": [
+    "若反事实检验中本器官与旧器官结论无法区分（不能独立触发）→ 判装饰，如实记 FAIL，不包装",
+    "若三注入任一未被抓 → 判据失效，就地修工具不放宽",
+    "若生成器改动判定态/宪法锁字节 → cp -a 回滚并如实记录",
+    "若首用回放未达阈值却报 EXHAUSTION（伪造疲劳）→ 判自欺失败"
+  ],
+  "honest_layer": "本轮改变的是『有限注意力的终止机制』（functional affect 器官），不是宣称有情感、不是新证据、不是认知突围。用反事实检验证明功能独立性，而非用器官命中数证明它『有生命力』（后者是循环论证）。",
+  "hash_convention": "d.pop('sha256',None) 后 hashlib.sha256(json.dumps(d,ensure_ascii=False,sort_keys=True).encode()).hexdigest()；本文件自身 sha256 写在同名 .sha256",
+  "oracle_note": "用户已认同 A 起步、B 留待其拍板；本轮不触碰 B（关系性承诺账本），不预先把自制情感塞进仓冒充成长。"
+}

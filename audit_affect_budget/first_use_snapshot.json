@@ -1,0 +1,120 @@
+{
+  "detail": {
+    "advice": "FORCED_STOP_AND_PITCH",
+    "criterion_sensitivity": false,
+    "forced_stop": true,
+    "global_cost": 8.0,
+    "honest_bound": [
+      "操作化的是 functional affect（有限注意力预算信号），不是主观情感体验（qualia）。",
+      "不宣称主观情感/生命力/『我有情感』——那归用户裁定，等同不宣称 L3。",
+      "阈值 T_sat/T_exh 是预注册设计判断，非数据拟合；宽松口径 T_exh=8 作反方证据并暴露敏感性。",
+      "cost 由输入方声明，可能低估；WITHIN_BUDGET 只说明本口径内未耗尽，阴性≠证明不累。",
+      "只发信号不执行，不追认既往轮为失败、不翻案、不改判定态。",
+      "SATIETY 换猎场 / EXHAUSTION 强制收营都是建议，采纳权归用户；不编译门禁、不联网、不 spawn。"
+    ],
+    "liberal_signal": "EXHAUSTION",
+    "per_round": [
+      {
+        "attention_units": 1.0,
+        "family": "vanity",
+        "global_cost_so_far": 1.0,
+        "has_contribution": false,
+        "round": "§4gy",
+        "target_cost_so_far": 1.0,
+        "target_object": "vanity_selfaudit"
+      },
+      {
+        "attention_units": 1.0,
+        "family": "vanity",
+        "global_cost_so_far": 2.0,
+        "has_contribution": false,
+        "round": "§4gz",
+        "target_cost_so_far": 2.0,
+        "target_object": "vanity_selfaudit.calibrate"
+      },
+      {
+        "attention_units": 1.0,
+        "family": "self_audit_ops",
+        "global_cost_so_far": 3.0,
+        "has_contribution": false,
+        "round": "§4ga",
+        "target_cost_so_far": 1.0,
+        "target_object": "narrowing_chain"
+      },
+      {
+        "attention_units": 1.0,
+        "family": "construct_validity",
+        "global_cost_so_far": 4.0,
+        "has_contribution": false,
+        "round": "§4gb",
+        "target_cost_so_far": 1.0,
+        "target_object": "construct_validity"
+      },
+      {
+        "attention_units": 1.0,
+        "family": "memory_governance",
+        "global_cost_so_far": 5.0,
+        "has_contribution": false,
+        "round": "§4hc",
+        "target_cost_so_far": 1.0,
+        "target_object": "memory_governance"
+      },
+      {
+        "attention_units": 1.0,
+        "family": "decision_execution",
+        "global_cost_so_far": 6.0,
+        "has_contribution": false,
+        "round": "§4he",
+        "target_cost_so_far": 1.0,
+        "target_object": "decision_execution"
+      },
+      {
+        "attention_units": 1.0,
+        "family": "decision_receipt",
+        "global_cost_so_far": 7.0,
+        "has_contribution": false,
+        "round": "§4hf",
+        "target_cost_so_far": 1.0,
+        "target_object": "decision_receipt"
+      },
+      {
+        "attention_units": 1.0,
+        "family": "authoritative_state",
+        "global_cost_so_far": 8.0,
+        "has_contribution": false,
+        "round": "§4hg",
+        "target_cost_so_far": 1.0,
+        "target_object": "authoritative_state"
+      }
+    ],
+    "per_target_cost": {
+      "authoritative_state": 1.0,
+      "construct_validity": 1.0,
+      "decision_execution": 1.0,
+      "decision_receipt": 1.0,
+      "memory_governance": 1.0,
+      "self_audit_ops": 1.0,
+      "vanity": 2.0
+    },
+    "satiated_targets": [],
+    "signal": "EXHAUSTION",
+    "threshold_exh": 6,
+    "threshold_sat": 3
+  },
+  "fixed_at_utc": "2026-11-27T03:02:00Z",
+  "global_cost": 8.0,
+  "history_rounds": [
+    "§4gy",
+    "§4gz",
+    "§4ga",
+    "§4gb",
+    "§4hc",
+    "§4he",
+    "§4hf",
+    "§4hg"
+  ],
+  "immutable": "首用快照固化只读，不随重跑改写（防追认疲劳）；每次现场算的 verdict 见 result.json",
+  "note": "首用快照只读固化；每轮 cost=1 是审计假设（真实注意力非精确可测），结论按此口径如实导出，不伪造疲劳也不粉饰。",
+  "satiated_targets": [],
+  "signal": "EXHAUSTION"
+}

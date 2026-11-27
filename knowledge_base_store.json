@@ -10335,6 +10335,19 @@
       "evidence": "audit_authoritative_state/result.json",
       "addressable": true,
       "improvement_class": "preserve"
+    },
+    {
+      "item_id": "KB-META197",
+      "kind": "thinking_experience",
+      "mechanism": "情感=有限注意力的硬预算(§4hi),不是输出层表演(用户认同A起步):用户『有生命力的Agent不仅要有知识,有情感同等紧要』,辨析两层——qualia(主观体验,不宣称不证明,同不宣称L3)/functional affect(决策层价值·注意力信号,可观察可证伪)。新器官life_kernel/affect_budget.py与已有贡献型器官(stop_pivot数营养轮/narrowing_chain数同猎场自审链)正交:后者每轮有prereg贡献即永不因累停;预算型无论有无贡献,累计attention_units达阈值即SATIETY(换猎场)/EXHAUSTION(强制收营)。预注册(sha80e7fc36)锁T_sat=3/T_exh=6+宽松口径8;反事实检验证明两旧器官判NO_PIVOT/NO_CHAIN时本器官独立触发EXHAUSTION=非装饰的机械证据(非命中数自证)",
+      "trigger": "当你说无谓递归是内耗却无法机械判定何时该停;当每轮都有小贡献于是系统永不主动收营;当把情感误解为拟人语气而非有限资源的守门人;当贡献型判据在有贡献时永远给绿灯",
+      "action": "把情感操作化为有限注意力预算信号而非主观体验宣称:SATIETY(单猎场累计达阈值→换猎场)/EXHAUSTION(全局累计达阈值→强制收营);反事实检验独立于贡献型器官(构造两旧器官都不停但预算耗尽的输入);三注入负向自咬;首用快照固化只读(防追认疲劳);双口径暴露阈值敏感性;只发信号不执行不追认失败不翻案;不宣称qualia/情感/生命力(归用户裁定);B(关系性承诺账本)留待用户拍板不预塞",
+      "provenance": "§4hi prereg_affect_budget_20261127.json(sha80e7fc36)+life_kernel/affect_budget.py+audit_affect_budget/{result.json,first_use_snapshot.json}+tests/test_affect_budget.py(10项)+tests/test_evidence_chain.py(目录计数69→70)",
+      "timestamp": "2026-11-27T03:05:00.000000Z",
+      "support": "反事实检验:stop_pivot=NO_PIVOT_NEEDED/narrowing_chain=NO_CHAIN/affect_budget=EXHAUSTION forced_stop=True(正交非装饰);三注入自咬全过;首用§4gy→§4hg八轮累计8≥6→EXHAUSTION(对我不利:内审线按预算口径早该收营,不粉饰);全量1728→1738(+10);判定三值GAP_INCONCLUSIVE-false-false/宪法锁fe56291b/result 0f3ccb13未动;不编译门禁未新增异厂调用不构成投资建议;因子小话不入仓;1处self-bite(AB.ROOT未定义)就地修",
+      "evidence": "audit_affect_budget/result.json",
+      "addressable": true,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {
