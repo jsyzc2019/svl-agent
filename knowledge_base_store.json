@@ -10281,6 +10281,19 @@
       "evidence": "一手现场;P0找自己信条的错;拿证据审本仓判据;代理不等于构念;点估计带区间;基础率富集不外推;阈值敏感;硬边界不判个股;阴性≠证明;历史口径差异留痕;判定态不动",
       "addressable": false,
       "improvement_class": "fix"
+    },
+    {
+      "item_id": "KB-META193",
+      "kind": "thinking_experience",
+      "mechanism": "记忆治理：KB每轮+1却从无整体体检,首次机械审计(§4hc WORK_ITEMS P0):provenance字段498条中496有/2缺(KB-AUDIT68/69,§4ap构念效度轮)。缺的两条mechanism内嵌锚点可机械抽候选(KB-AUDIT68→prove_canary_construct_validity.py+§4al; KB-AUDIT69→prereg.json+sha4988673d/5ad35731+§4ap),但按硬边界只出候选不写回KB正文,采纳交用户裁定。support形态list419/number47/string32分歧如实记为观察项不擅改口径(改口径须新预注册防事后挑)。工具self-bite:锚点正则\\b把中文当word char致紧邻中文的sha/§4xx抽不到,改ASCII显式边界修复,判据未变。",
+      "trigger": "当知识库持续增条却从不整体体检时;当声称字段完整性达标却没核每个字段时;当历史轮次条目漏填溯源字段时;当想顺手改口径把数字型字段统一时(那是事后挑)",
+      "action": "纯函数器官只读审:①provenance完整性(缺失数)②缺失项mechanism/support能否抽到路径/sha/§4xx锚点判可恢复③support形态分布仅观察不改。可恢复项生成候选串标注非自动采纳,写回与否交用户裁定;无锚点标UNRECOVERABLE不臆造;三注入负向自咬(完整不报/无锚点不可恢复/有锚点可恢复);判定态三值/宪法/§100/十案全不动;不删条目不改improvement_class;阴性≠证明只记本次快照。",
+      "provenance": "§4hc prereg_memory_governance_20261127.json(sha f1ddc07d)+life_kernel/memory_governance.py+audit_memory_governance/{engine.py,result.json}+tests/test_memory_governance.py",
+      "timestamp": "2026-11-27T00:30:51.000000Z",
+      "support": "498条现场:provenance缺2(KB-AUDIT68/69)均可恢复;裁决GOVERNANCE_GAP_FOUND;support形态list419/number47/string32;三注入自咬全过;1处self-bite(\\b中文边界)就地修;8守卫;全量1702→1710;判定态三值GAP_INCONCLUSIVE/l3=false/absolute=false与宪法锁字节未动;候选provenance未写回KB(交裁定);不编译门禁未新增异厂调用;因子小话未入仓",
+      "evidence": "一手现场;WORK_ITEMS P0记忆治理;可纠错溯源链;少而精体检;候选不写回判定权归用户;观察项不擅改口径;阴性≠证明;工具self-bite就地修不升级CORR-REAL;判定态不动",
+      "addressable": false,
+      "improvement_class": "fix"
     }
   ],
   "thresholds": {

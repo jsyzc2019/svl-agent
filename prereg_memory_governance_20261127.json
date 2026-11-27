@@ -1,0 +1,62 @@
+{
+  "round": "§4hc",
+  "title": "记忆治理审计：KB 可纠错溯源完整性 + 少而精结构体检",
+  "authority": "WORK_ITEMS.md P0『记忆库/记忆治理——记忆写入的少而精判据、可纠错溯源链』；用户『持续按你的想法去推』(2026-11-27)",
+  "time_anchor_utc": "2026-11-27T00:28:40.000000+00:00",
+  "what_this_is": "WORK_ITEMS P0 记忆治理钩子的首次机械执行。对象是 KB 整体内容质量（可纠错溯源链 + 少而精结构），不是我自己上一轮的判据——故非 §4ga 已判该收敛的内审递归。KB 每轮+1 却从未做过整体体检，这是真实缺口。",
+  "data_tier": "A 本仓 KB 一手（knowledge_base_store.json 498 条）现场抽取。",
+  "pre_registered_belief": "KB 字段完整性在 §4gx 回填 improvement_class 后已达标（498/498），provenance 也应完整。本轮检验该信念。",
+  "audits": [
+    {
+      "id": "MG1_provenance_completeness",
+      "claim": "每条 KB 应有非空 provenance 以支持可纠错溯源链（WORK_ITEMS P0 明确钩子）。",
+      "predicate": "provenance 字段缺失或空字符串的条目数",
+      "falsifier": "若 0 条缺失，则本项阴性，如实记录不制造工作。"
+    },
+    {
+      "id": "MG2_provenance_recoverability",
+      "claim": "缺失 provenance 的条目，其 mechanism/support 里应内嵌可追溯锚点（文件路径/SHA256/轮次），使回填不靠臆造。",
+      "predicate": "对每条缺 provenance 者，检查 mechanism/support 是否含路径或 sha256 或轮次标记 §4xx；能提取则候选可回填，否则标 UNRECOVERABLE 交人。",
+      "falsifier": "若缺失条目无任何内嵌锚点，则不得自动回填，标 UNRECOVERABLE。"
+    },
+    {
+      "id": "MG3_field_shape_observe",
+      "claim": "support 字段形态应一致（现察到 list/number/string 三种）——这是观察项，不是本轮要修的缺口。",
+      "predicate": "统计 support 形态分布，作为诚实观察落档；不擅自改口径（改口径须新预注册，防事后挑）。",
+      "falsifier": "不适用（观察项）。"
+    }
+  ],
+  "reusable_organ": {
+    "name": "memory_governance.py",
+    "kind": "纯函数，只读 KB，不改判定态、不联网、不 spawn",
+    "functions": [
+      "audit_provenance(items) -> 缺失条目 id 列表 + 每条可恢复性判定（锚点证据）",
+      "audit_field_shape(items) -> 字段出现率 + support 形态分布（观察）",
+      "suggest_provenance(item) -> 从 mechanism/support 抽取路径/sha/轮次生成候选字符串，标注 candidate 非自动采纳"
+    ],
+    "verdict_tree": {
+      "GOVERNANCE_GAP_FOUND": "MG1 缺失>0 且 MG2 全部可恢复 → 有可回填的结构缺口",
+      "GAP_UNRECOVERABLE": "MG1 缺失>0 但有条目无锚点 → 部分交人",
+      "NO_GAP": "MG1 缺失=0 → 阴性，如实记录不制造工作"
+    },
+    "hard_limit": "只生成候选 provenance 字符串，不自动写回 KB 正文（写回是独立决策，交用户裁定）；不改 improvement_class/support 口径；判定态三值/宪法/§100/十案全不动。"
+  },
+  "negative_self_bite": [
+    "注入一条 provenance 完整的样本 → audit 不得报缺失",
+    "注入一条 provenance 缺失但无任何锚点的样本 → 必须标 UNRECOVERABLE，不得臆造候选",
+    "注入一条 provenance 缺失但含 §4xx+路径的样本 → 应判可恢复并抽到锚点"
+  ],
+  "honest_bounds": [
+    "MG3 support 形态分歧是观察项，本轮不改——历史数字型 support 语义可疑但改口径须新预注册，避免事后挑。",
+    "candidate provenance 由 mechanism 内嵌锚点机械抽取，是建议非事实；采纳与否交用户裁定，不擅自写回 KB。",
+    "本轮不删任何 KB 条目、不填 improvement_class（§4gx 已完成）、不碰因子有效性小话。",
+    "阴性≠证明：即使 MG1=0 也不宣称 KB 永久完整，只记本次快照。",
+    "判定态三值 verdict=GAP_INCONCLUSIVE/l3=false/absolute=false、宪法锁、§100、十案全不动。"
+  ],
+  "does_not_change": [
+    "verdict / l3 / absolute / 宪法锁 / §100 / 十案",
+    "KB 正文（provenance 只出候选不写回）/ improvement_class / support 口径",
+    "不编译新门禁 / 不新增异厂调用 / 不判个股 / 不构成投资建议"
+  ],
+  "sha256": "f1ddc07d1e6e6eee151936bba7e3b7c5919253feb86cfdc221fbae3079095a11"
+}

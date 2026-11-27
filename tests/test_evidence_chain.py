@@ -75,7 +75,8 @@ def test_audit_all_counts():
     # §4gu 论证取证工作台产品化目录（audit_argument_audit，规则+引擎+验证结果+截图，非五件套）→ total 63→64
     # §4gy vanity 自检反用回自己目录（audit_vanity_selfaudit，预注册+引擎+结果，非五件套）→ total 64→65
     # §4gb 财报构念效度目录（audit_finance_construct_validity，预注册+引擎+结果+候选证伪记录，非五件套）→ total 65→66
-    assert a["total"] == 66
+    # §4hc 记忆治理审计目录（audit_memory_governance，预注册+引擎+结果，候选不写回，非五件套）→ total 66→67
+    assert a["total"] == 67
     assert a["five_piece_complete"] == 34
     assert a["three_locks_intact"] == 31
     assert 0 < a["three_locks_intact"] <= a["total"]

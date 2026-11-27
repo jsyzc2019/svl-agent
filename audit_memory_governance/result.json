@@ -1,0 +1,105 @@
+{
+  "round": "§4hc",
+  "prereg_sha256_locked": "f1ddc07d1e6e6eee151936bba7e3b7c5919253feb86cfdc221fbae3079095a11",
+  "prereg_hash_ok": true,
+  "data_tier": "A 本仓 KB 一手现场抽取",
+  "source_sha256_16": "5e94eb30a5b1b0d9",
+  "verdict_triplet_before": [
+    "GAP_INCONCLUSIVE",
+    false,
+    false
+  ],
+  "verdict_triplet_after": [
+    "GAP_INCONCLUSIVE",
+    false,
+    false
+  ],
+  "n_items": 498,
+  "organ_result": {
+    "verdict": "GOVERNANCE_GAP_FOUND",
+    "mg1_provenance": {
+      "verdict": "GOVERNANCE_GAP_FOUND",
+      "missing_count": 2,
+      "unrecoverable_count": 0,
+      "items": [
+        {
+          "item_id": "KB-AUDIT68",
+          "kind": "reasoning_lesson",
+          "recoverable": true,
+          "anchors": {
+            "paths": [
+              "prove_canary_construct_validity.py"
+            ],
+            "shas": [],
+            "rounds": [
+              "§4al"
+            ]
+          },
+          "verdict": "RECOVERABLE"
+        },
+        {
+          "item_id": "KB-AUDIT69",
+          "kind": "reasoning_lesson",
+          "recoverable": true,
+          "anchors": {
+            "paths": [
+              "prereg.json"
+            ],
+            "shas": [
+              "4988673d",
+              "5ad35731"
+            ],
+            "rounds": [
+              "§4ap"
+            ]
+          },
+          "verdict": "RECOVERABLE"
+        }
+      ]
+    },
+    "mg3_field_shape": {
+      "n": 498,
+      "field_presence": {
+        "item_id": 498,
+        "kind": 498,
+        "mechanism": 498,
+        "trigger": 498,
+        "action": 498,
+        "provenance": 496,
+        "timestamp": 498,
+        "support": 498,
+        "evidence": 498,
+        "addressable": 498,
+        "improvement_class": 498
+      },
+      "support_shape": {
+        "list": 419,
+        "number": 47,
+        "string": 32
+      }
+    },
+    "suggestions": [
+      {
+        "item_id": "KB-AUDIT68",
+        "candidate": "候选(非自动采纳): prove_canary_construct_validity.py | 轮次:§4al"
+      },
+      {
+        "item_id": "KB-AUDIT69",
+        "candidate": "候选(非自动采纳): prereg.json | sha:4988673d,5ad35731 | 轮次:§4ap"
+      }
+    ],
+    "hard_limit": "候选 provenance 仅建议，不自动写回 KB；不改 improvement_class/support 口径；判定态不动。"
+  },
+  "negative_self_bite": {
+    "passed": true,
+    "detail": {
+      "complete_not_flagged": true,
+      "noanchor_unrecoverable": true,
+      "anchor_recoverable": true
+    }
+  },
+  "self_bites": [
+    "锚点正则初版用 \\b 边界, Python re 把中文当 word char, 导致紧邻中文的 sha256(锁5ad35731回放)与轮次(§4al)抽不到, 候选串偏单薄; 按『改工具不改判据』改 \\b 为 ASCII 显式边界 (?<![0-9a-zA-Z])...(?![0-9a-zA-Z]), 修复后可恢复性与判定未变, 候选锚点变完整。就地记 self-bite 不升级 CORR-REAL。"
+  ],
+  "honest_summary": "WORK_ITEMS P0 记忆治理首次机械执行：KB 498 条现场体检。MG1 provenance 缺失 2 条（['KB-AUDIT68', 'KB-AUDIT69']），裁决=GOVERNANCE_GAP_FOUND。缺的两条 mechanism 内嵌锚点（路径/sha/§4xx）可机械抽候选，但按硬边界只生成候选不写回 KB 正文，是否采纳交用户裁定。MG3 support 形态分歧（list/number/string）如实记为观察项，不擅改口径（改口径须新预注册防事后挑）。负向自咬=True。判定态三值/宪法锁/§100/十案全不动，不删条目不改 improvement_class。"
+}
