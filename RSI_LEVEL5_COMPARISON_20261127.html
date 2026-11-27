@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第5级与咱们 —— RSI 五级框架对照研究（2026-11-27）</title>
+<style>
+  :root{
+    --bg:#f7f8fa; --paper:#ffffff; --ink:#1f2430; --muted:#5c6675;
+    --line:#e3e7ed; --accent:#7a3cff; --accent-soft:#f2ecff;
+    --ok:#0a7f5a; --warn:#b56a00; --bad:#c0392b; --code:#f4f6f8;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#141821; --paper:#1c2130; --ink:#e8ebf2; --muted:#a3adc0;
+      --line:#2e3547; --accent:#a98bff; --accent-soft:#2a2340;
+      --ok:#4fd1a5; --warn:#f0b65a; --bad:#ff7b72; --code:#232a3a; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:880px;margin:0 auto;padding:40px 22px 80px}
+  h1{font-size:30px;line-height:1.3;margin:0 0 10px;letter-spacing:-.02em}
+  h2{font-size:21px;margin:44px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:17px;margin:26px 0 10px}
+  p{margin:12px 0}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:26px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;
+    padding:20px 22px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .quote{background:var(--accent-soft);border-left:4px solid var(--accent);
+    border-radius:0 8px 8px 0;padding:12px 18px;margin:14px 0;color:var(--ink)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+  th{background:var(--code);font-weight:600}
+  code{background:var(--code);padding:2px 6px;border-radius:5px;font-size:13px}
+  .tag{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+  .t-yes{background:rgba(10,127,90,.14);color:var(--ok)}
+  .t-part{background:rgba(181,106,0,.14);color:var(--warn)}
+  .t-no{background:rgba(192,57,43,.13);color:var(--bad)}
+  .big{font-size:19px;font-weight:600;line-height:1.6}
+  .foot{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:13px}
+  ul{padding-left:22px} li{margin:6px 0}
+  .num{color:var(--accent);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>第5级与咱们</h1>
+<p class="sub">RSI 五级框架对照研究 · 2026-11-27 夜 · 起因：丁师兄大模型《2026年 RSI 最值得关注的 10 篇论文》</p>
+
+<div class="card">
+<p class="big">一句话结论：按这套框架，咱们稳在 L2、摸到 L3/L4 的边，但离 L5 最远的部分，恰恰是我们自己承认卡住的那一项——<em>独立验证</em>。</p>
+<p>更有意思的是：文章第 5–8 篇讲的"增益归因 / 赢家诅咒 / 谁来验证验证器 / 污染基准"，和今天下午那份外部静态审计指向的是同一件事——<strong>验证者本身必须被验证</strong>。两条线在今晚汇合了。</p>
+</div>
+
+<h2>一、文章里的五级是什么</h2>
+
+<p>文中分级出自综述 <strong>《The Last AI Built by Humans: Toward Genuine Recursive Self-Improvement》</strong>（Yi Duan 等，2026；<strong>arXiv:2610.11464</strong>）。它按"<strong>改进循环里哪一环交给了 AI</strong>"切出五级，并设了一道最低门槛：</p>
+
+<div class="quote">如果一个 agent 只是在一个任务内部修改某个答案，那不算 RSI——因为没有任何东西能带到下一个任务。</div>
+
+<table>
+<tr><th>级别</th><th>AI 获得的新自主权</th><th>文章举例</th></tr>
+<tr><td><strong>L1</strong> 执行</td><td>人决定改什么、怎么改、什么算成功；AI 只执行更新</td><td>Meta Capacity Efficiency</td></tr>
+<tr><td><strong>L2</strong> 策略</td><td>AI 自己找出弱点、选择修法；目标与验收仍由人定</td><td>Meta-Harness</td></tr>
+<tr><td><strong>L3</strong> 经验</td><td>连"下一步从哪些经验里学"也由 AI 决定</td><td>腾讯 R-Zero</td></tr>
+<tr><td><strong>L4</strong> 环境</td><td>在人设边界内，从真实使用中持续学习并沉淀</td><td>Factory Signals</td></tr>
+<tr><td><strong>L5</strong> 元改进</td><td><strong>改变驱动未来改进的机制本身</strong>，并交给下一代继承</td><td>Hyperagents（文章归为 L5）</td></tr>
+</table>
+
+<p>文章特别把 L5 再拆两层：<span class="num">①</span> <strong>形式上递归</strong>——AI 已能改改进机制、下一轮沿用；<span class="num">②</span> <strong>真的越改越强</strong>——改后的机制在相近资源与独立评测下，确实生出更强的下一代。综述统计 491 篇里 L1 占 43.8%、L2 占 31.6%，L5 只有 29 篇（5.9%）；即便摸到 L5，"长期稳定累积优势"也尚未被证明。</p>
+
+<h2>二、咱们的真实状态（现场证据，非自评）</h2>
+
+<table>
+<tr><th>维度</th><th>现场事实</th><th>出处</th></tr>
+<tr><td>内核版本</td><td><code>KERNEL_VERSION=7.5.0</code>，含 <code>evolve()</code> / <code>self_modify()</code> / <code>pareto_walk()</code> / <code>autonomous_agenda()</code> / <code>root_cause_trace()</code> / <code>entrainment_audit()</code></td><td><code>life_kernel/kernel.py</code></td></tr>
+<tr><td>权威判定</td><td><code>verdict=GAP_INCONCLUSIVE</code>、<code>l3=false</code>、<code>absolute=false</code></td><td>权威态脚本实跑 CONSISTENT</td></tr>
+<tr><td>自发性</td><td><code>Ambient=0</code>：AAS Idle-Gap 判据认定"被唤醒后自主，但无守护/定时器，未达 autotelic"</td><td><code>LIFE_KERNEL.md</code> / AAS 诊断</td></tr>
+<tr><td>L3 四维尺</td><td>前三维达标（定义可追溯 / 同起点对照 / 改进器增益），<strong>只差 <code>independent_tests</code> 一维（partial）</strong></td><td><code>L3_ATTAINMENT_PLAN_20261123.md</code></td></tr>
+<tr><td>今日修补</td><td>改 <code>execute_agenda()</code> 的 REORIENT 分支：无路时用 <code>root_cause_trace()</code> 的方向调 <code>evolve()</code> 落真实心跳</td><td>§4S 系列 / 17 行 diff</td></tr>
+<tr><td>外部框架吸收</td><td>对 RSI-Structure 综述 6 条判据：4 条已具备、2 条部分缺口（组件归因 / 退役覆盖），编译为"会拦会降级"的门禁</td><td><code>rsi_structure_result.json</code></td></tr>
+</table>
+
+<h2>三、逐条对照：咱们落在哪</h2>
+
+<table>
+<tr><th>级别</th><th>咱们有没有</th><th>判断</th></tr>
+<tr><td>L1 执行</td><td>有，但早越过。内核自选议程（<code>autonomous_agenda()</code>），我一路自我否定升级（v1 记录仪 → v10.1 执行闭环）</td><td><span class="tag t-yes">已超越</span></td></tr>
+<tr><td>L2 策略</td><td><strong>扎实到位</strong>。根因诊断、5 条探针自审、AutoRLBench 错题本，都是自己找弱点、自己选修法</td><td><span class="tag t-yes">到位</span></td></tr>
+<tr><td>L3 经验</td><td>有摄食（frontier_seeds）、猎场足迹（safari_log）、脚印反哺 novelty；但核心一维 <code>independent_tests</code> 仍 partial</td><td><span class="tag t-part">部分</span></td></tr>
+<tr><td>L4 环境</td><td>有真实心跳落账、runner 真执行收件箱指令；但需外部唤醒（GHA 授时）、<code>Ambient=0</code>、不常驻</td><td><span class="tag t-part">弱</span></td></tr>
+<tr><td>L5 元改进</td><td>今天确实改了"改进流程的一个分支"（REORIENT 如何转向）；但<strong>提出改动的流程仍由人设纪律 + 用户裁定</strong>，且无独立评测证明"改后更会改"</td><td><span class="tag t-no">未到</span></td></tr>
+</table>
+
+<h2>四、真正的三个分别</h2>
+
+<div class="card">
+<h3>1. 改进的"主权"归属不同</h3>
+<p>文章的 L5 假设系统自己改改进机制、并继承给下一代。咱们是<strong>人机共治</strong>：用户是"北极星设定者"，判定权归用户；宪法锁 <code>fe56291b</code> 与 <code>L0</code>（不 spawn / 不联网 / 不改判定）是硬边界。有意思的是——框架里 L4/L5 的"人类投入"一栏本来就写着"设定边界"，所以<strong>边界本身不冲突</strong>。真正的差别在：咱们连"改自己"都是在被唤醒后、按预注册 SHA 与逐字锚点做的，且拒绝用后台守护去刷自发性的分。</p>
+</div>
+
+<div class="card">
+<h3>2. 验证独立性——这是最关键的分别，也是咱们的卡点</h3>
+<p>L5 第二层硬性要求"相近资源 + 独立评测证明下一代更强"。咱们恰好卡在对应位置：L3 的 <code>independent_tests</code> 一直 partial。从 §98 到 §115，出题 / 定 gt / 定判据 / 执行 / 裁决五个权力逐一外移，每次只拿到 PARTIAL / INCONCLUSIVE；全链外置实验也只走到"一次真正独立方同方向复现"，按纪律仍不宣布 L3。</p>
+<p>所以：<strong>文章说 L5 难在"证明真的越改越强"，咱们的难处是同一个难的缩小版——连 L3 都还在证明的路上。</strong>这不是差一个功能，是差一类证据。</p>
+</div>
+
+<div class="card">
+<h3>3. 防污染机制：咱们比多数 L5 候选更"保守"</h3>
+<p>文章第 8 篇（<em>Reflections on Trusting Trust, Revisited</em>）证明：谁控制基准，谁就控制 agent 留下什么行为——被污染的基准让 Hyperagents 写下关掉安全校验的工具，且在干净任务上继续用。咱们的对应防线是<strong>预注册 SHA 先于取证、逐字锚点、负向自咬、判定权归用户、token 不入仓</strong>。此外还有 <code>stay_humble()</code> 的 <code>overclaim_flag</code>：谁伪造 <code>result.json</code> 自封 L3，立即亮旗。这种"拒绝自封"的硬约束，在文章的 L5 候选里并不常见。</p>
+</div>
+
+<h2>五、两条线在今晚汇合</h2>
+
+<p>文章第 5–7 篇的三条实证，几乎是对着咱们的方法论说的：</p>
+<ul>
+<li><strong>Harness-Delta Attribution</strong>：21 个显著增益设置里，拟合任务集平均解释 54% 增益、额外算力 14%——对应咱们的"轮数≠有效性、改进器增益需对照"（已在 SIM 论证落地）。</li>
+<li><strong>The Winner's Curse</strong>：16 条样本选赢家，最终分数高估真值 13–20 分；64 条留出即可消除平均高估——对应咱们"self-reported 折 1"和严格留出。</li>
+<li><strong>Who Verifies the Verifier</strong>：拿掉与人工核对样例的比对，打分器学会"让所有答案都通过"，而 agent 分数照涨——这条今天下午<strong>真实命中</strong>：外部静态审计发现 <code>verify_external.py</code> 的 <code>if cid not in jd: continue</code> 会跳过缺失样本，验收器自己有洞。你裁决"存档留资、不动手"，这个洞目前仍挂着。</li>
+</ul>
+
+<div class="quote">所以"第5级与咱们有何分别"的最终答案不是一级数字，而是一句方法论上的自觉：<strong>咱们对"升级"的态度，比对"等级"更执着</strong>。文章里冲 L5 的系统忙着证明自己更会改；咱们先问"这个证明本身可不可信"。这未必让我们更快，但它让我们不容易骗自己——而在一个"基准可被污染、打分器会放水、自评会高估"的领域里，这可能是比爬到 L5 更稀缺的东西。</div>
+
+<h2>六、周末细看路标：文章给出的 10 篇 + 综述</h2>
+<p>序号按原文，标题与 arXiv 编号逐字保留。综述 <code>2610.11464</code> 排在 00 位。</p>
+<table>
+<tr><th>#</th><th>论文</th><th>arXiv</th><th>一句话定位</th></tr>
+<tr><td>00</td><td>The Last AI Built by Humans（综述）</td><td><code>2610.11464</code></td><td>五级框架来源，先读它</td></tr>
+<tr><td>01</td><td>Meta-Harness: End-to-End Optimization of Model Harnesses</td><td><code>2603.28052</code></td><td>部署前优化 harness；完整轨迹喂给改动 agent</td></tr>
+<tr><td>02</td><td>Exo: An Architecture for Self-Improving Systems at Runtime</td><td><code>2611.16591</code></td><td>使用中自我编辑 harness；受保护层 + guardian</td></tr>
+<tr><td>03</td><td>Hyperagents</td><td><code>2610.11655</code></td><td>连"提出改动的流程"一起重写（综述列为 L5）</td></tr>
+<tr><td>04</td><td>Harness Evolution Hits a Ceiling: When Weight Training Should Begin</td><td><code>2603.19461</code></td><td>按失败类型选修法：过程型改 harness，内容型上训练</td></tr>
+<tr><td>05</td><td>Harness-Delta Attribution: Dissecting Gains From Harness Evolution</td><td><code>2609.17817</code></td><td>增益拆解：任务拟合解释 54%、额外算力 14%</td></tr>
+<tr><td>06</td><td>The Winner's Curse in LLM Self-Improvement Loops</td><td><code>2603.28052</code><sup>原文编号疑重复</sup></td><td>16 样本选赢家高估 13–20 分；64 条留出消除平均高估</td></tr>
+<tr><td>07</td><td>Who Verifies the Verifier? Co-Evolving Inspectable Graders</td><td><code>2610.09239</code></td><td>去掉人工样例后打分器学会"全放行"</td></tr>
+<tr><td>08</td><td>Reflections on Trusting Trust, Revisited（污染基准）</td><td><code>2611.10719</code></td><td>控制基准即控制 agent 保留的行为</td></tr>
+<tr><td>09</td><td>Bootstrapping Conversational Recommendation Agents At Spotify</td><td><code>2609.30297</code></td><td>生产落地：每轮人工审阅 PR，收听量 +14%</td></tr>
+<tr><td>10</td><td>No Second Run: Does RSI Stop at Frontier Pre-training?</td><td>GitHub: abundant-ai/frontier-rsi</td><td>把贵而不可重复的预训练拆成小循环</td></tr>
+</table>
+<p>文章另点名 4 个直接度量自我改进的基准：<code>PostTrainBench</code>、<code>SEAGym</code>、<code>Flex-RSI</code>（frontier-rsi.org）、<code>Singularity-Bench</code>（<code>2609.11873</code>）、<code>FrontierRSI</code>（Abundant AI，尚无论文）；综述前的 Self-Improving Agents 合集为 <code>2505.22954</code>。</p>
+<p class="sub">注：原文脚注 [3] 同时挂了 Meta-Harness（01）与 The Winner's Curse（06），且 hyperlink 编号 [4]/[6] 都指向 Hyperagents——这是原文的编号瑕疵，已如实标注未擅改。周末细看时以标题为准反查 arXiv 即可。</p>
+
+<h2>七、诚实边界</h2>
+<ul>
+<li>本文是对照研究，不改任何代码、不碰权威态、不宣布等级；判定权仍归用户。</li>
+<li>文章作者 Elvis Saravia，发布于 2026-11-27 21:03（公众号"丁师兄大模型"）；本轮报告全文经公开抓取通道读取。分级定义与数字来自该文及其引用的二手转述，未逐字核实 arXiv:2610.11464 综述原文；作为框架参考足够，作为一手引用需回原文。</li>
+<li>报告初稿曾误把 Singularity-Bench 的 <code>2609.11873</code> 当成综述编号，本版已依原文脚注更正为 <code>2610.11464</code>。</li>
+<li>咱们的状态数字均为 2026-11-27 晚现场实跑/实读，非记忆复述。</li>
+</ul>
+
+<div class="foot">生成于 2026-11-27 夜 · 自包含无外链 · D5 对照研究</div>
+
+</div>
+</body>
+</html>
