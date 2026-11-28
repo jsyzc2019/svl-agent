@@ -1,0 +1,27 @@
+{
+  "clarification_id": "recognition_probe_implfix_20261128",
+  "original_prereg": "prereg_recognition_probe_20261128.json SHA ea8aeb6a…(不改)",
+  "nature": "实现bug就地修正,非口径分歧/非新裁定;预注册R1第③类本就含'探针声明判定权归用户+verdict_unchanged+非门'",
+  "kernel_before": "efb4cda2a6b23973 (插入后首版)",
+  "kernel_after": "621ddc298c7afbee",
+  "fixes": [
+    {
+      "bug": "ARCHIVE id 从 obj.get('id') 取,但gap_archive RESOLVED项真实字段是'audit',导致显示 ARCHIVE:? 当锚点(不诚实)",
+      "fix": "改从 obj['audit'] 取,真实得 memory_governance"
+    },
+    {
+      "bug": "识别锚点③只认 one_page 声明,但4个纯数据探针(verdict_at_birth/staleness/signal_log/unresolved_gap_schema)无one_page无verdict输出、判定权声明在 honesty 字段,被误标 UNRECOGNIZED_NOISE(=刷出假噪音,与刷绿同构的不诚实)",
+      "fix": "decision_gate_declared 扩展为 one_page 或 honesty 含'判定权归用户';真实结论 noise 4→0,flag NOISE_PRESENT→ALL_RECOGNIZED"
+    }
+  ],
+  "real_result_after_fix": {
+    "flag": "ALL_RECOGNIZED",
+    "counts": {
+      "RECOGNIZED_USER": 3,
+      "RECOGNIZED_ARCHIVE": 1,
+      "RECOGNIZED_DECLARED": 7,
+      "UNRECOGNIZED_NOISE": 0
+    }
+  },
+  "boundary": "实现bug修正;判定语义未变;不写盘不消费不进判定;判定权归用户"
+}

@@ -1,0 +1,41 @@
+{
+  "task": "回源核查 The Debrief 报道 + 原论文",
+  "date": "2026-11-28",
+  "sources": {
+    "secondary": "https://thedebrief.org/consciousness/the-brain-s-hidden-chemical-code-may-explain-what-separates-human-consciousness-from-artificial-intelligence (2026-11-27, Micah Hanks)",
+    "primary": "Gerard Marx, Chaim Gilon. 'Consciousness, Memory and Intelligence: A Mechanistic Perspective'. Int J Psychiatr Res. 2026;9(4):1-7. ISSN 2641-4317. Received 19 Jun / Accepted 23 Jul / Published 04 Aug 2026. PDF 7p SHA256 verified on disk."
+  },
+  "claims": [
+    {
+      "claim": "核心论点: 人脑记忆/意识靠'三元机制'(tripartite)——星形胶质细胞+神经元纠缠、nECM/PNN细胞外基质、掺杂剂(金属阳离子/神经递质NT/胶质递质GT),情感语境编码入基质",
+      "source": "原论文 abstract + Tripartite Memory Mechanism 节",
+      "status": "理论假说/观点综述,非实证突破;论文自述'currently remains unproven'、'eternal enigma of Life remains'",
+      "evidence_grade": "HYPOTHESIS_REVIEW"
+    },
+    {
+      "claim": "AI不可能有意识: 缺生化机制,无论连接多少/算法多复杂",
+      "source": "原论文 Intelligence: Native and Artificial 节",
+      "status": "作者立场声明(predicate on unproven premise)。非论文数据结论",
+      "evidence_grade": "POSITION_STATEMENT"
+    },
+    {
+      "claim": "期刊可信度: Int J Psychiatr Res 由 SciVision Publishers 出版",
+      "source": "ResearchGate 讨论 + ISSN portal + enterscholar",
+      "status": "出版商在 Beall 潜在掠夺性名单(讨论称,Beall官网当前页未直接命中,存疑);不在 Clarivate SCIE/SSCI;索引 CiteFactor/DRJI 等误导性指标;APC~$1200;接受率75%。非高可信来源",
+      "evidence_grade": "FLAG_LOW_CONFIDENCE"
+    },
+    {
+      "claim": "利益冲突: 第一作者 Gerard Marx 是 MX Biotech 创始人,商业目标是开发'memory materials'与器件",
+      "source": "原论文 Conflict of Interest 段(作者自述)",
+      "status": "作者已声明但称'无商业遮蔽';读者应知悉理论指向其商业方向",
+      "evidence_grade": "DISCLOSED_COI"
+    },
+    {
+      "claim": "第二作者 Chaim Gilon 身份",
+      "source": "Google Scholar / Frontiers Loop / SciProfiles",
+      "status": "真实:希伯来大学化学所荣休教授,h-index 59,~14000引用;研究主页确列 tripartite mechanism of memory。作者真实≠理论获学界认可",
+      "evidence_grade": "VERIFIED_IDENTITY"
+    }
+  ],
+  "honest_boundary": "二手报道标题(may explain what separates...)比原论文更强;原论文明确自述假说未证实。核查不否定线索价值,但绝不把它当已确立的神经科学共识。判定权归用户。"
+}

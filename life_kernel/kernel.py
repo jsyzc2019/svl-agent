@@ -3796,6 +3796,161 @@ def support_escape_probe(metric_side=None, behavior_side=None):
     }
 
 
+def recognition_probe(verdict_sources=None, decisions_path=None, gap_archive_path=None):
+    """§4S81【只读自检·无识别的读数=伪装成信息的噪音】对应 Marx & Gilon 2026
+    'Consciousness, Memory and Intelligence: A Mechanistic Perspective' 一句锋利话:
+    "A code or data without 'recognition' is just noise posing as 'information'."
+    原文把星形胶质细胞的"识别(recognition)"当作把编码记忆变成有意义信息的闸门。
+
+    本探针取结构同构(非认知机制宣称): 内核产出的 verdict 读数本身只是 code/data,
+    须有"判定权归属锚点"(谁有权裁定它)才算被识别,否则就是"伪装成信息的噪音"。
+    识别锚点三类(权威来源):
+      ① DECISIONS_*.json 的 user_verdict + status=EXECUTED  -> RECOGNIZED_USER
+      ② gap_archive_*.json 的 RESOLVED_EXECUTED             -> RECOGNIZED_ARCHIVE
+      ③ 探针自身声明'判定权归用户' + verdict_unchanged=True
+         + is_gate_verdict=False                            -> RECOGNIZED_DECLARED
+    无任何锚点的读数 -> UNRECOGNIZED_NOISE(标注,不删除、不伪造裁定、不替用户裁定)。
+
+    严格边界: 内核不是大脑、没有星形胶质细胞/recognition认知机制,本探针只做
+    '判定权归属结构是否在位'的自检镜,绝不宣称内核有真实识别能力。原论文是
+    hypothesis未证实的观点综述、发表在低可信期刊、第一作者有商业COI——本探针只
+    借它一句锋利镜面,不接受其神经科学结论。verdict_sources/decisions_path/
+    gap_archive_path 可注入做隔离负向测试,生产恒 None 读真实。不写盘不消费不进判定。
+    预注册 prereg_recognition_probe_20261128.json SHA ea8aeb6a… 改码前锁死。
+    """
+    # ---- 真实判定权锚点来源 ----
+    user_recognized_ids = set()
+    if decisions_path is None:
+        decisions_path = os.path.join(HERE, os.pardir, "DECISIONS_20261127.json")
+    try:
+        dec = json.load(open(decisions_path, encoding="utf-8"))
+        for d in (dec.get("decisions") or []):
+            if (isinstance(d, dict) and d.get("user_verdict")
+                    and str(d.get("status", "")).upper() == "EXECUTED"):
+                user_recognized_ids.add(str(d.get("id")))
+    except (OSError, ValueError):
+        dec = {}
+
+    archive_recognized_ids = set()
+    if gap_archive_path is None:
+        gap_archive_path = os.path.join(HERE, os.pardir, "gap_archive_20261128.json")
+    try:
+        arc = json.load(open(gap_archive_path, encoding="utf-8"))
+        # 归档账里 class=RESOLVED_EXECUTED 即已被真实裁定回填的项
+        def _walk_resolved(obj):
+            found = []
+            if isinstance(obj, dict):
+                if str(obj.get("class", "")).upper() == "RESOLVED_EXECUTED":
+                    found.append(str(obj.get("audit", obj.get("id", obj.get("gap", "?")))))
+                for v in obj.values():
+                    found.extend(_walk_resolved(v))
+            elif isinstance(obj, list):
+                for v in obj:
+                    found.extend(_walk_resolved(v))
+            return found
+        archive_recognized_ids.update(_walk_resolved(arc))
+    except (OSError, ValueError):
+        arc = {}
+
+    # ---- verdict 载体(可注入) ----
+    if verdict_sources is None:
+        # 真实: 扫内核各只读探针的返回值,取 verdict/判定权声明字段
+        real = [
+            ("verdict_at_birth_probe", verdict_at_birth_probe()),
+            ("staleness_probe", staleness_probe()),
+            ("signal_log_probe", signal_log_probe()),
+            ("decision_digest", decision_digest()),
+            ("unresolved_gap_schema_probe", unresolved_gap_schema_probe()),
+            ("gap_convergence_probe", gap_convergence_probe()),
+            ("support_escape_probe", support_escape_probe()),
+        ]
+        verdict_sources = []
+        for name, r in real:
+            one_page = str(r.get("one_page") or "")
+            honesty = str(r.get("honesty") or "")
+            verdict_sources.append({
+                "name": name,
+                "verdict": r.get("verdict") or r.get("escape_flag") or r.get("gap_flag"),
+                "decision_gate_declared": ("判定权归用户" in one_page or "判定权归用户" in honesty),
+                "verdict_unchanged": r.get("verdict_unchanged"),
+                "is_gate_verdict": r.get("is_gate_verdict"),
+            })
+        # 真实台账裁定项也作为 verdict 载体(已被用户裁定)
+        for uid in sorted(user_recognized_ids):
+            verdict_sources.append({"name": "DECISIONS:" + uid,
+                                    "verdict": "EXECUTED", "user_verdict_id": uid})
+        for gid in sorted(archive_recognized_ids):
+            verdict_sources.append({"name": "ARCHIVE:" + gid,
+                                    "verdict": "RESOLVED_EXECUTED", "archive_id": gid})
+
+    # ---- 逐载体分类: 有无判定权归属锚点 ----
+    rows = []
+    for v in verdict_sources:
+        name = str(v.get("name", "?"))
+        uid = str(v.get("user_verdict_id", ""))
+        gid = str(v.get("archive_id", ""))
+        if uid and uid in user_recognized_ids:
+            cls, anchor = "RECOGNIZED_USER", "DECISIONS user_verdict+EXECUTED"
+        elif gid and gid in archive_recognized_ids:
+            cls, anchor = "RECOGNIZED_ARCHIVE", "gap_archive RESOLVED_EXECUTED"
+        elif (v.get("decision_gate_declared") is True
+              and v.get("verdict_unchanged") is True
+              and v.get("is_gate_verdict") is False):
+            cls, anchor = "RECOGNIZED_DECLARED", "判定权归用户+verdict_unchanged+非门"
+        else:
+            cls, anchor = "UNRECOGNIZED_NOISE", "无判定权归属锚点"
+        rows.append({
+            "name": name,
+            "verdict": str(v.get("verdict", "")),
+            "class": cls,
+            "recognition_anchor": anchor,
+        })
+
+    counts = {
+        "RECOGNIZED_USER": sum(1 for r in rows if r["class"] == "RECOGNIZED_USER"),
+        "RECOGNIZED_ARCHIVE": sum(1 for r in rows if r["class"] == "RECOGNIZED_ARCHIVE"),
+        "RECOGNIZED_DECLARED": sum(1 for r in rows if r["class"] == "RECOGNIZED_DECLARED"),
+        "UNRECOGNIZED_NOISE": sum(1 for r in rows if r["class"] == "UNRECOGNIZED_NOISE"),
+    }
+    noise_rows = [r for r in rows if r["class"] == "UNRECOGNIZED_NOISE"]
+    if not rows:
+        recognition_flag = "NO_VERDICT_CLAIM"
+    elif noise_rows:
+        recognition_flag = "NOISE_PRESENT"
+    else:
+        recognition_flag = "ALL_RECOGNIZED"
+
+    one_page = " | ".join([
+        "recognition自检(判定权归属结构,非认知机制)",
+        "verdict载体%d" % len(rows),
+        "用户裁定%d" % counts["RECOGNIZED_USER"],
+        "归档裁定%d" % counts["RECOGNIZED_ARCHIVE"],
+        "探针声明%d" % counts["RECOGNIZED_DECLARED"],
+        "无锚点噪音%d" % counts["UNRECOGNIZED_NOISE"],
+        "flag=%s" % recognition_flag,
+    ]) + " → 判定权归用户"
+
+    return {
+        "recognition_flag": recognition_flag,
+        "rows": rows,
+        "counts": counts,
+        "noise_rows": noise_rows,
+        "user_recognized_ids": sorted(user_recognized_ids),
+        "archive_recognized_ids": sorted(archive_recognized_ids),
+        "one_page": one_page,
+        "honesty": ("借原论文'A code or data without recognition is just noise posing as information'"
+                    "的锋利镜面做判定权归属结构自检: verdict读数须有判定权归属锚点才算被识别, "
+                    "无锚点=UNRECOGNIZED_NOISE(标注,不删除/不伪造裁定/不替用户裁定); "
+                    "内核无星形胶质细胞/recognition认知机制,不宣称真实识别能力; 原论文hypothesis未证实、"
+                    "发表于低可信期刊(SciVision/Beall潜在掠夺名单存疑,不在SCIE/SSCI)、第一作者有商业COI, "
+                    "本探针只借镜面不接受其神经科学结论; 注入仅负向测试,生产恒None读真实; "
+                    "只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": ("Marx & Gilon 2026 Int J Psychiatr Res 9(4):1-7 (二手The Debrief 2026-11-27); "
+                     "§4S81; prereg_recognition_probe_20261128.json SHA ea8aeb6a…"),
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
 def takeover_request(action, nonce=None, note="", log_path=None, record=True):
     """【本机接管·下行】本机写一条接管指令到共享收件箱，供下次 runner 消费。
 

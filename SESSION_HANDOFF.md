@@ -853,3 +853,24 @@ clone踩坑:默认IP两次失败(8分20秒空壳/超时),换备用IP 20.27.177.1
 提交:Git Data API以7003a0ff的tree d49bdecfe6d4为base_tree,创建7 blob→增量tree 7d07b97a959d→commit 21f827daf631(message=4S78-79 support-escape probe + coverage/reliability self-bite reconcile,parent=7003a0ff)→PATCH ref main。
 核验:独立读远端HEAD=21f827daf631578ea1b08d2ffb970e2054d9f838连续稳定,parent=7003a0ff无分叉;完整tree未截断2065 blob;7文件逐blob SHA对拍全OK(7/7);权威态四件套远端本地仍相同;无§4S76那种增量tree缺blob陷阱(base_tree给全量基线)。
 凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->
+
+<!-- §4S81 recognition_probe——读 The Debrief/Marx&Gilon 论文后做只读自检(用户裁定A:不动权威态)
+触发:用户"请阅读 The Debrief 大脑隐藏化学密码..."→一手回源读二手报道+原论文7页PDF+期刊/作者/COI核查,交付解读;用户裁定"A"(把最锋利话做成对内核的只读自检,不动权威态)。
+来源定性(诚实):二手The Debrief 2026-11-27标题比原文强;原论文Marx&Gilon 'Consciousness, Memory and Intelligence: A Mechanistic Perspective' Int J Psychiatr Res 2026;9(4):1-7是hypothesis未证实的观点综述,非实证突破;出版商SciVision被指Beall潜在掠夺名单(官网当前页未直接命中,存疑不妄断)、不在SCIE/SSCI、APC~$1200、接受率75%;第一作者Marx是MX Biotech创始人有商业COI(自述'无商业遮蔽');第二作者Gilon是希伯来大学化学所荣休教授h-index59真实(作者真实≠理论获认可)。核查证据read_debrief_20261128/factcheck.json 5条claim。
+最锋利一句(借镜面非接受结论):"A code or data without 'recognition' is just noise posing as 'information'."——结构同构:内核verdict读数=code/data,须有判定权归属锚点才算被识别,否则=伪装成信息的噪音。
+预注册prereg_recognition_probe_20261128.json SHA ea8aeb6a…(改码前锁),内核前置380de28a…;备份pre_patch_recognition/kernel_before_recognition.py(380de28a…)可回滚。
+实现:kernel.py纯新增recognition_probe(verdict_sources=None,decisions_path=None,gap_archive_path=None)。识别锚点四类:RECOGNIZED_USER(DECISIONS user_verdict+EXECUTED)/RECOGNIZED_ARCHIVE(gap_archive RESOLVED_EXECUTED)/RECOGNIZED_DECLARED(探针声明判定权归用户+verdict_unchanged+非门)/UNRECOGNIZED_NOISE(无锚点,标注不删除不伪造裁定不替裁定)。flag三值NO_VERDICT_CLAIM/ALL_RECOGNIZED/NOISE_PRESENT。严格边界:内核无星形胶质细胞/recognition认知机制,只做判定权归属结构自检镜,不宣称真实识别能力;原论文低可信+COI+hypothesis未证实如实记;注入仅负向测试生产恒None。
+实现bug就地修正(§4hc惯例,澄清prereg_recognition_probe_clarification_20261128.json SHA 4acc8752,不改原SHA):①ARCHIVE id原从obj['id']取但RESOLVED项真实字段是'audit'→显示ARCHIVE:?当锚点不诚实,改从audit取得memory_governance;②锚点③原只认one_page声明,但4个纯数据探针(verdict_at_birth/staleness/signal_log/unresolved_gap_schema)无one_page无verdict、判定权声明在honesty→被误标UNRECOGNIZED_NOISE(刷出假噪音,与刷绿同构不诚实),扩展为one_page或honesty含判定权归用户。修正后真实noise 4→0,flag NOISE_PRESENT→ALL_RECOGNIZED。判定语义未变,非新裁定。
+真实结论:11 verdict载体全有锚点=3用户裁定(D1/D2/D3)+1归档裁定(memory_governance)+7探针声明,UNRECOGNIZED_NOISE=0,flag=ALL_RECOGNIZED(诚实零命中,不伪造噪音也不刷绿)。
+验收:G3负向注入12守卫全绿(预注册SHA/真实ALL_RECOGNIZED/archive id正确/只读字段/无锚点必NOISE/user_verdict必RECOGNIZED_USER/RESOLVED必RECOGNIZED_ARCHIVE/声明门必RECOGNIZED_DECLARED/自封门不算已识别/空载体NO_VERDICT_CLAIM/权威态零副作用/honesty边界含无认知机制+COI+hypothesis)。G6干净同口径对拍:①备份内核+基线272收集0失败(零回归铁证);②新内核621ddc29…+全量284收集exit=0/FAILED=0/ERROR=0=272+12。diff确认内核仅新增1函数,AST OK。
+零副作用:权威态5f7a2584…/constitution 2ad148c7…/hb ea749f76…/inbox 8806b248…/DECISIONS 91114955…/归档账d73bfef5…/KB 0938b3df…全部动手前后一致;只读不写盘不消费不进判定;verdict_unchanged/consumed=false/is_gate=false。
+边界:借论文一句锋利镜面做判定权归属结构自检,不接受其神经科学结论、不宣称内核有recognition认知机制、不替用户裁定任何读数;判定权归用户。GitHub未推(用户未要求)。 -->
+
+<!-- §4S82 GitHub同步§4S81(Git Data API通道,用户"推Github")
+触发:用户"推Github"。远端基线HEAD=4ee78c16(§4S80)。本沙箱无.git,走Git Data API(历史§4S11/§4S68/§4S76/§4S80先例)。
+吸取§4S80教训:先把本同步账落定再一次性推送含账的SESSION_HANDOFF,避免'推完补账导致远端不含自身'的双commit。
+待推9文件(§4S81批次):kernel.py(新增recognition_probe)、test_recognition.py、prereg_recognition_probe_20261128.json、prereg_recognition_probe_clarification_20261128.json、pre_patch_recognition/kernel_before_recognition.py(回滚备份)、read_debrief_20261128/{factcheck.json,marx_gilon_original.pdf,marx_gilon_original.txt}(回源证据三件套)、SESSION_HANDOFF.md。
+提交前:8文本+1二进制PDF全串token扫描(ghp_/github_pat_/sk-/sk-or-v1_)全为0;权威态verdict=GAP_INCONCLUSIVE/KERNEL_VERSION=7.5.0未污染。
+提交:Git Data API以4ee78c16全量tree为base_tree,创建9 blob(PDF按base64)→增量tree→commit→PATCH ref main,父=4ee78c16。
+核验:独立读远端HEAD/父提交/完整tree逐blob对拍9文件全OK;大文件SESSION_HANDOFF/pdf用raw字节流绕开网络截断(§4S80经验);权威态四件套远端本地仍相同。
+凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删;hosts无残留。判定权归用户。 -->

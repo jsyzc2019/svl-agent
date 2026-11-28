@@ -1,0 +1,387 @@
+Research Article                                                                                                     ISSN 2641-4317
+                              International Journal of Psychiatry Research
+
+     Consciousness, Memory and Intelligence: A Mechanistic Perspective
+                                               Gerard Marx1* and Chaim Gilon2
+
+                                                                     *
+                                                                      Correspondence:
+MX Biotech Ltd., Jerusalem, Israel.
+1                                                                    Gerard Marx, MX Biotech Ltd., Jerusalem, Israel,
+                                                                     E-mail: gerardmarx@gmail.com
+Institute of Chemistry, Hebrew University, Jerusalem, Israel.
+2
+
+                                                                     Received: 19 Jun 2026; Accepted: 23 Jul 2026; Published: 04 Aug 2026
+
+
+Citation: Gerard Marx, Chaim Gilon. Consciousness, Memory and Intelligence: A Mechanistic Perspective. Int J Psychiatr Res. 2026;
+9(4); 1-7.
+
+
+                                                                ABSTRACT
+       We critically review a number of academic efforts to define consciousness and note that none addresses the physiologic
+       or biochemical constraints on biologic systems that generate mentality. Many refer to "map", "structure", "framework",
+       "schema" or "concept", but provide no graphic equivalent or physiologically credible mechanism.
+
+       Later, we forward our own biochemical Tripartite mechanism of brain memory. We suggest a mechanism whereby the
+       encoding of cognitive information (cog-info) could be described as a process conceptually analogous to computer memory
+       but with emotive context embodied as neurotransmitters (NTs) and gliotransmitters (GTs). The central proposition is that
+       memory is encoded in the matrix (nECM/PNN) surrounding brain cells. Moreover, we recognize the brain astrocytes
+       as the cellular components driving the process of mentation. Memory arises from a coordinated tripartite process. The
+       chemographic shorthand for the tripartite mechanism permits one to consider the physicality of brain memory code as
+       analogous to that proposed by Landauer for computer memory. Our augmented tripartite mechanism of memory enumerates
+       the key components that enable such biochemical interactions. It is based on the interactions brain cells with the nECM/
+       PNN encasing all cells and the dopants (metals, GTs and NTs). Thus, the cooperative interactions of brain astrocytes
+       entangled with neurons enables the phase change that transcends caloric energy into mentality, manifest as emotive
+       memory, consciousness and body reactions of muscles and glands. We may have recognized a fragment from the entangled
+       mysteries of consciousness, memory, and intelligence, but the eternal enigma of Life remains.
+
+Keywords                                                             Citations
+Memory, Tripartite mechanism, Astrocytes, Cognitive information,     Bergson [1] provided a philosophic treatise on the relation between
+Mentation.                                                           "matter" and "thought". His insightful discussion was interesting
+                                                                     but he did not suggest a biologically relevant mechanism...no
+Background                                                           code, no process.
+Consciousness is powered by caloric energy though details remain
+mysterious. It is characterized by memory and in evolved creatures   McGinn [2] discussed philosophic ideas (of Hume, Nagel, Locke,
+by intelligence. Many have attempted to identify the process         Chomsky, Fodor, Strawson); about the relation between mind
+that generates the consciousness of living beings. We note that      and brain. He admited that there must be some natural property
+consciousness and memory are entangled qualities. The former we      of the brains of organisms that generates consciousness, that
+experience, the latter we measure by time duration of recall.        it is just a further biological development. Consciousness is
+                                                                     an epiphenomental property of biological systems. Ultimately
+Below we critically review a number of academic efforts to define    concluded that for us to comprehend the psychophysical nexus of
+consciousness [1-19]. We note that none addresses the physiologic    consciousnes:. "Consciousness is theoretically epiphenomental in
+or biochemical constraints on biologic systems that generate         the task of accounting for physical events".
+mentality. Later, we will forward our own biochemical Tripartite
+mechanism of brain memory.                                           GM: This is not a solution. He throws up his hands admits to
+                                                                     enigma.
+Int J Psychiatr Res, 2026                                                                                        Volume 9 | Issue 4 | 1 of 7
+Coter [3] presented a symposium of some 14 "neuroscientists".            Hobson [8] provided short bios of >30 neuroscientists,
+Looking through all the essays, we did not detect a map, blueprint       psychologists and physiologists, but no biochemists. There was
+or schematic that could be understood in the common meaning              slight mention of neurotransmitters and some chemically defined
+of the word "structure". Rather, the various authors presented           molecules (i.e. atropine, acetylcholine). But no description of a
+tables, lists, diagrams of clouds connected with lines, diagrams         chemically defined process for encpding experience into memory.
+of pseudo-kinetics of human recall, of word memory retention and         Note, they all assumed a "naked neuron".
+schematics, of the logical processing of lingual memory. None
+even approaches a mechanism that even mentions the physiology            Searle [9] suggested a strictly non-physiologic process; the cover
+of the brain. Words missing in the index are: Chemistry. biology,        presented a human head with 3 eyes. Admited that consciousness
+emotions, neurons, astrocytes, animal, physiology. Nowhere is            is an "ordinary" biological phenomenon. Reviewed propositions
+a "structure" presented as a diagram, blueprint or drawing. A            offered by Crick, Hertz, Edelman, Penrose, Godel, Chalmers and
+forgettable series of misnamed essays.                                   Dennet. Concluded by stating: "The syntax of the program mis not
+                                                                         intrinsic to the physics of the hardware, but rather required an
+Dennet [4] was a voluminous tome that explained nothing. Some            outside interpreter who assigns a computational interpretation to
+quotes illuminate the morass of words, some of which he ascribed         the system." Note also the silly cover...a man with 3 eyes.
+to Descartes:
+"It was only our non-mechanical, non-physical minds that make            Tononi [10] proposed thought experiments to claim that
+human beings intelligent and conscious".                                 consciousness is integrated information. Suggests probability
+"the representation of presence is not the same as the presence of       distribution between points representing the informational
+representation".                                                         relationships among elements generated by causal mechanisms
+The book is full of non-sensical discussions and diagrams that           (connections). Provided many diagrams and schemas, though
+have nothing to do with clarifying the mystery of consciousness          none had physiologic relevance.
+(i.e. Laffer curve of government taxation policy, Figure 5.5). These     Comment: Talked about "information" but did not propose how
+are hardly explanatory and render the book obtuse and hard to            such is rendered operational in a physiologic context. Also did not
+read.                                                                    refer to the emotive context of cognitive informtion.
+
+Chalmers DJ [5]                                                          Fingelkurts et al. [11] suggested that the basic essence of brain
+A run-on philosohical treatise that purports to ascribe "qualia"         functional architecture constitutes a theory of consciousness. The
+(phenomental qualities) to the experience of consciousness.              problem of producing man-made“machine” consciousness and
+Suggests that consciousness is a concomitant of physical systems.        “artificial” thought was a matter of duplicating all levels of the
+However, the tome remains vague as to the physicality of the             operational architectonics hierarchy (with its inherent rules and
+system that generates mental states. Chalmers runs head-on into          mechanisms) found in the brain electromagnetic field.
+the enigma of consciousness and cites many historical decriptions        Comment: The above has no relevance to brain physiology,
+of the enigma. However, he does not provide an evolutionary trail        anatpmy or biochemistry.
+of the biologic emergence of mentality as evinced by memory. He
+does provide a reproduced schema (from Edelman) of higher order          Churchland [12] was a good review of the problem of defining
+of consiousness that only applies to verbal humans but provides          consciousness in ontological or epistemological or computational
+no mechanistic guide. Contrary to the title, he does not provide         terms. Provided diagrams of brains but only presented "naked"
+a fundamental theory that comports to the evolution, physiology,         neurons for consideration. No credible physiologic discussion of
+and biochemistry of the brain of all animals that experience             mentality.
+consciousness.
+                                                                         Dehaene [13] attempted to develop objective mechanism of
+Crick & Koch [6,7] attempted to find the neural correlate(s) of          subjectve states. Presented correlations of anatomical electrical
+consciousness. They were interested in the general nature of neural      responses to psychological states. Considered synaptic spines as
+activities that produce a particular aspect of consciousness, focusing   repositories of memory.
+on the visual system of primates. They mentioned "framework" but
+did not provide a visual structure or a biologically credible logical    Hobson [14]. Short bios of >30 neuroscientists, psychologists and
+schema. Later, Koch mentioned integrated information theory,             physiologists, but no biochemists.
+global holistic properties, qualia and a blueprint for building          There is slight mention of neurotransmitters and some chemically
+sentient machines, but not one diagram or schematic that purports        defined molecules (i.e. atropine, acetylcholine). But no description
+to be a blueprint. Lacked any discussion relevant to the physiology      of a chemically defined process for encpding experience into
+of biological systems. A glaring unrecognized assumption was             memory.
+that the neurons they presented are "naked neurons", ignoring the        Note also 'Naked neuron".
+nECM/PNN surrounding all brain cells, as well as the presence of
+other cells, namely astrocytes.                                          Chang, [15].
+                                                                         Chang aims to enrich our understanding of inorganic chemistry in
+Int J Psychiatr Res, 2026                                                                                           Volume 9 | Issue 4 | 2 of 7
+living systems. He cites references to the roles of inorganic metals   "framework", "schema" or "concept", but provided no graphic
+on various processes that govern the operation of living systems.      equivalent or physiologically credible mechanism. They exhibited
+His laboratory monitored various techniques to monitor metals          epidemic failure to recognize basic physiology by focusing on
+in brain tissue, particularly Cu. The work focused on neuronal         "naked" neurons, ignoring the other cells (i.e. astrocytes) and
+depolarization at synapses and expanded this concept to general        the extracellular matrix (nECM/PNN) that engulfs them all.
+signaling in the entire body.                                          Overlooking the emotive context of cognitive information reflects
+Comment: While this approach is useful as an overview of               an imperfect understanding of brain processes. We note that a
+biological processes that regulate body functions, it does not         formula or equation that ignores 3 parameters out of a 6 parametric
+address the specific phenomenon of consciousness. He expands on        model cannot be solved. Similarly, their ignoring 3 physiologic
+the concept that transition metals as diverse signaling elements       compartments of the brain that empower mentality renders
+but does not apply this to the phenomenon of consciousness.            comprehension of brain processes beyond their ken (See tripartite
+Rather, he focuses on the role of copper on lypolysis and cAMP         mechanism of memory discussed below).
+redox signaling. Overall, his heart is in the right place but his
+mind is not focused on mentation.                                      The linguist Noam Chomsky [18], verbalized criteria regarding
+                                                                       any theory of how the brain generates mentality:
+Miller Jr, [16].                                                       • “Since the subject is a physical organism, the system attributed
+Evolutionary biology is an epiphenomenon of integrated self-           to it must have finite representations.”
+referential information managemen, framed as a complex                 • “An empirical argument must be brought to bear.”
+reciprocating interactome that consists of the assessment,
+                                                                       In the following, we pursue this path.
+communication and deployment of information by self-referential
+organisms. Refers to "informational architecture" but does nøt
+                                                                       Mentality
+identify the physicality of such in a biologic system.
+                                                                       The brain is a complex organ whose mental talents we have yet
+                                                                       to plumb. Our life experience is funneled through the brain, its
+Hawkins [17] a biography of auther's husband, the psychologist
+                                                                       mentation processes are manifest as memory, emotions and
+David Hawkins.
+                                                                       thought. But somehow, we cannot grasp the mechanism of material
+Contrary to the title, no map was sketched out, only one table was     cells generating mental ability, also termed "mind". The metrics of
+presented that applied only to humans.                                 physics, thermodynamics as well as biology do not apply (Tables
+                                                                       1-3). We note that brain activity is constrained by a physical skull
+Rappoport [18] suggested a "well-defined response (R) process"         and has metabolic needs identical to those of other anatomic
+though it has no bearing on biological events. He presumed his         compartments (i.e. liver, kidney, blood, heart, etc). Its unique
+argument to be "supported by distinct excitatory networks located      ability to achieve mentality are necessarily constrained by cellular
+in different cortical layers, hippocampal fields and by distinct       capabilities. and biochemical processes. Below we summarize
+molecular agents". None of these was defined. He arbitrarily           some metrics that may have bearing on brain processing cognitive
+assigned discrete emotive tasks to molecules and named, but did        information (cog-info) (Tables 1-3).
+not define operational neural circuits.
+                                                                       Table 1: Metrics of Physics and Quantum Mechanics.
+Zilbergerts [19] Discusses many talmudic views of consciousness,        Force
+touching on idols, Golems, zombies (i.e. Frankenstein) and free         Distance
+will. Intellect is considered as a Godlike talent even referred to      Speed
+in the early chapters of the Torah (Bible). Challenges rationalist      Mass
+traditions that elevate the intellect as the most divine aspect of      Momentum (linear, angular)
+human nature, possessing an inner sense of agency (i.e. curiosity,      Density
+desire, emotions), totally lacking in electronic devices and            Magnetic Field
+associated software (AI). Expresses concern that AI is increasingly     Electric signal
+replicating human capabilities and severing humanity's                  Resistance
+considerations of God.                                                  Wavelength, flux
+                                                                        Quantal units (Schroedinger, Heisenberg)
+NB: None of the theologic discussions relates to the physiologic        Constants (k Boltzmann; h Planck; g gravity)
+basis of consciousness.
+                                                                       Table 2: Metrics of Thermodynamics.
+Overall Comment                                                         Heat
+As many of the titles in the above cited works suggest,, they           Energy
+attempted to conceptualize a framework to comprehend the                Entropy
+physiologic process that results in brain consciousness. But            Work
+a critical reading of the above reveals that they employed a            Chaos
+linguistic "slight of hand". They refered to a "map", "structure",
+
+Int J Psychiatr Res, 2026                                                                                         Volume 9 | Issue 4 | 3 of 7
+Table 3: Metrics of Biology and Bio-Analytics.                            Tripartite Memory Mechanism [34-41]
+ Cell types                                                               We suggest an alternate mechanism whereby the encoding of
+ Cell groupings                                                           cognitive information (cog-info). Biologic memory could be
+ Cell Morphology                                                          described as a process conceptually analogous to computer
+ Connectivity                                                             memory. The central proposition is that memory is encoded in the
+ Signaling (electric, chemical)                                           matrix (nECM/PNN) surrounding brain cells [40-46]. Moreover,
+ Temperature                                                              we recognize the brain astrocytes as the cellular components
+ Caloric energy                                                           driving the processing of cognitive informstion [47-61]. Memory
+ Metabolism                                                               arises from a coordinated tripartite process enabled by the below
+ Drugs                                                                    itemized compnents:
+ EEG                                                                      Cells (astrocytes entangled with neurons)
+ PET                                                                      Matrix (nENM/PNN)
+ CT                                                                       Dopants (metal cations, gliotransmittters and neurotransmitters,
+ fMRI                                                                     GTs, NTs).
+
+Many efforts have been made to model the brain as a type of               The chemographic shorthand for the tripartite mechanism permits
+computer [19-28]. The root commonality of the brain and computer          one to consider the physicality of brain memory code analogous
+was suggested as being based on recall (memory). Both computers           to that proposed by Landauer for computer memory (ref). Though
+and brains perform feats of memory, though the relevant processes         a hexagonal shape more properly represents a saccharide unit, for
+are necessarily different and operate with vastly different energy        notational convenience, we adopted a square image with electron
+requirements. For example, in a computer chip, information                pairs, to represent the nECM "address" (Figure 1).
+(info) is physically encoded in a matrix with inorganic dopants
+representing a pattern of 0 and 1 in the chip's matrix, translatable      Clusters of brain astrocytes entangled with neural circuits perform
+by the processor circuits into memory and algorithms (Table 4).           the mentation process [46-60]. Neurons connect to sense organs
+But contrary to some efforts [21-28], it has no code for empathic         and to one another by electrodynamic synaptic contacts. These
+states (i.e. emotions).                                                   elongated, dendritic neurons permit long distance signaling
+                                                                          between the brain and the body's distal sensors, muscles and
+Table 4: Metrics of computer memory chip.                                 organs. By contrast, the many rounded clusters of astrocytes in
+ Matrix (Si, Ge, WO3 film, MnO2 )                                         the brain are intimately attached to neurons and to each other, all
+ Dopants (As, Sb, Cd, B, Ga, In)                                          engulfed in the nECM/PNN process cognitive information [52-
+ Voltage                                                                  61]. The cells contacts are immediate with synaptic and direct
+ Hard-wired connections                                                   membrane connections between astrocytes and neurons as well as
+ Clock speed                                                              intimate, contacts with the nECM/PNN.
+ Algorithms
+
+Q: What is the physicality of the brain's memory talent? Is there
+a biologic equivalent to Landauer's physicality of computer info
+[18] that applies to the brain's cognitive information (cog-info)?
+A: See tripartite mechanism below.
+
+Sci-Fi
+A recurring idea forwarded by films and science fiction stories, as
+well as a few scientific articles, is that computers, bots, robots (and
+so on) can possess consciousness [29-31]. Some have questioned
+whether AI devices can be deemed conscious, can experience
+emotions and have "rights" afforded to other conscious living
+beings.
+
+But it seems to us that that science itself does not yet even have        Figure 1: Tripartite mechanism of the chemical formation of emotive
+the beginning of an answer to the question of what defines                memory units with metal cations and NTs, of which there are more than 5
+consciousness. Consciousness, which earthly life possesses,               and 100 respectively (n metal > 5; nNT >100).
+appears to be of a totally different order phenomena than all
+other physical effects of matter (Tables 1-3). Thermodynamically          Intelligence: Native and Artificial (AI)
+speaking, mentality reflects a "phase change", whereby biologic           Consciousness is the wellspring of memory and intelligence.
+systems convert caloric energy into consciousness.                        From the perspective of biology, consciousness and awareness are
+                                                                          synonymous descriptions of the subjective experience of living
+Int J Psychiatr Res, 2026                                                                                              Volume 9 | Issue 4 | 4 of 7
+beings. It is evident in bacterial colonies which remember good         entangled with neurons), of the nECM/PNN encasing all cells and
+and bad environments [65-68]. To seek the biologic source of            of dopants (metals, GTs and NTs) that perform as encoders of
+intelligence which employs memory, we look to primitive neural          cognitive information. Thus, the cooperative interactions of brain
+creatures, c.elegans [69-73] from which all other complex neural        cells enables the phase change that transcends caloric energy into
+creatures evolved (see Darwin). That being said, intelligence           mentality.
+cannot be described as simple consciousness. Intelligence is a
+characteristic of complex recalled sensory stimuli powered by           Memory is a critical facet of the survival of conscious creatures.
+the processing talent of neural nets operating in tandem with           Not with standing our mechanistic understanding of memory, the
+clusters of other cells, such as astrocytes and microglia [49-64].      enigma of conscious life remains.
+Such interactive cell groups, organized as ganglia or brains, recall
+memory of past experience to instigate adaptive behaviour ensuring      Acknowlegements
+survival. In that context, intelligence is twinned to memory.           By GM: A memorium to my late wife, the artist Georgette Batlle
+                                                                        (1940-2009), my muse. I thank my brother Rabbi Dr. Tzvi Marx
+In humans, a measure of intelligence is expressed as an IQ number       (Amsterdam, Jerusalem) for relevant discussions and suggested
+based on a linguistic test, though other capabilities are manifest      references. I am indebted to my daughter and son, Danae and
+as intelligence, such as a talent for music, or mathematics or art.     Jonathan respectively, for filial support and encouragement.
+For non-verbal animals, intelligence is manifest by the actions
+of groups (ants, bees, birds, bats) that ensure survival of the         Conflict of Interest
+group. Individual animals manifest intelligence by using tools          GM is a founder of MX Biotech Ltd., with the commercial goal to
+or by communicating to each other (dolphins, whales, elephants,         develop new “memory materials” and devices.
+wolves).                                                                CG is an emeritus professor at the Institute of Chemistry, The
+                                                                        Hebrew University of Jerusalem. He is active in developing
+Electronic devices actuating AI considered care inherently              technologies for the conversion of peptides and active regions of
+"demotive", incapable of achieving the emotive states                   proteins into orally available drugs.
+characteristics of biologic creatures. Thus, they cannot be
+considered as "conscious" or "intelligent", no matter how many          Notwithstanding, the ideas forwarded here are scientifically
+connections their circuits make or how convoluted their algorithms.     genuine and presented in good faith, without commercial clouding
+                                                                        of the concepts expressed therein.
+We may not be able to describe the process of consciousness in
+reductionist terms, but we can identify memory as a key aspect          References
+of a mental talent expressed as intelligence. In that regard, we        1.  Bergson H. Matter and Memory. Allen & Co., London. Dover,
+provide a Molecular Information Theory in which brain cells (i.e.           New York. 1912.
+neurons and astrocytes) interface with a matrix which embodies          2. McGinn C. Can We Solve the Mind--Body Problem? Mind.
+a biochemical memory code as the above-described Tripartite                 1989; 98: 349-366.
+Mechanism of Memory. We may have recognized a fragment                  3. Coter CE (Ed). A Symposium: The Structure of Human
+from the entangled mysteries of consciousness, memory, and                  Memory. Freeman & Co. New York. 1975.
+intelligence, but the eternal enigma of Life remains.
+                                                                        4. Dennet DC. Consciousness Explained. Little Brown & Co.,
+                                                                            New York. 1991.
+Conclusion
+A code or data without "recognition" is just noise posing as            5. Chalmers DJ. The Conscious Mind: In Search for a
+"information". We incline to the proposition that the astrocyte             Fundamental Theory. New York: Oxford University Press.
+clusters in the brain transform sensation (cog-info) into encoded           1996.
+memory. They "read” and "recognize" the memory encoded within           6. Crick F, Koch C. A framework for consciousness. Nature
+the nECM/PNN, from which they recall and impart meaning.                    Neuroscience. 2003; 6: 119-126.
+Thus, the astrocytes perform the mentation functions manifest as        7. Koch C. Consciousness. Confessions of global holistic
+memory and emotive reaction. The neurons provide the sensory                properties of a Romantic Reductionist. MIT Press, Cambridge,
+"input" from the body and perform as actuators of body (glands              MA. 2012.
+and muscles) responses ("output"), instigated by the astrocytes         8. Searle JR. The Mystery of Consciousness. New York Review
+with which they are anatomically entangled.                                 of Books, New York. 1997.
+                                                                        9. Edelman G, Tononi G. A universe of consciousness: How
+Just as any clinical description of a body organ (i.e. spleen, liver,
+                                                                            matter becomes imagination. Basic books New York. 2000.
+lungs, blood, etc) requires a biochemical characterization, so too
+the brain's biochemical operation that underlies mentality, must        10. Tononi G. “Consciousness as integrated information: A
+be recognized. Our augmented tripartite mechanism of memory                 provisional manifesto”. Biol Bulletin. 2008; 215: 216-242.
+enumerates the key operative components of this biochemical             11. Andrew A Fingelkurts, Alexander A Fingelkurts, Carlos FH
+process. It is based on the interactions of cells (astrocytes               Neves. Machine"consciousness and "artificial" thought: an
+Int J Psychiatr Res, 2026                                                                                         Volume 9 | Issue 4 | 5 of 7
+    operational architectonics model guided approach. Brain Res.      30. Averbeck BB, Latham PE, Pouget A. Neural correlations,
+    2012; 1428: 80-92.                                                    population coding and computation. Nature Rev Neurosci.
+12. Churchland PM. Matter and Consciousness. MIT Press,                   2015; 7: 358-366.
+    Cambridge, MA. 2013.                                              31. Asimov I, Robot I. Gnome Press. New York. 1950.
+13. Dehaene S. Consciousness and the Brain. Penguin Press, New        32. Blade Runner. Science fiction film directed by Ridley Scott
+    York. 2014.                                                           screenplay by Hampton Fancher and David Peoples. 1982.
+14. Hobson A. Conscious States. The AIM Mode of waking,               33. Ex Machina – Movie. Director: Garland A. 2015.
+    sleeping and dreaming. 2017.                                      34. Marx G, Gilon C. The molecular basis of memory. ACS
+15. Chang CJ. Bioinorganic life and neural activity: Toward a             Chemical Neurosci. 2012; 3: 633-642.
+    chemistry of consciousness? Acc Chem Res. 2017; 50: 535-538.      35. Marx G, Gilon C. The molecular basis of memory. MBM
+16. Miller Jr WB. Biological information systems: Evolution as            Pt 2: The chemistry of the tripartite mechanism. ACS Chem
+    cognition-based information management. Prog Biophys Mol              Neurosci. 2013; 4: 983-993.
+    Biol. 2018; 134: 1-26.                                            36. Marx G, Gilon C. The molecular basis of neural memory.
+17. Hawkins S. The Man Who Mapped Consciousness. Hay                      Part 10. The sins and redemption of neurobiology. J Neurol
+    House, New York. 2025.                                                Neurocrit Care. 2018; 1: 1-7.
+18. Rappoport A. The Science of the Brain: Function, Dysfunction      37. Marx G, Gilon C. The molecular basis of neural memory. Part
+    and Disease. Academic Press, New York. 2025.                          8. Case studies of “neuro-mimetic” technologies. Res. Med.
+19. Zilbergerts M. Algorithms, zombies, and Maimonide’s God: A            Eng. Sci. 2018; 7: RMES.000651.
+    Jewish theology of consciousness for the age of AI. Rabbinical    38. Marx G, Gilon C. The molecular basis of neural memory.
+    Council of America, NY. Tradition. 2026; 58: 122-149.                 Part 11. Chem-electric Write /Read Processes. J Neurosurg
+20. Chomsky N. Reflections on Language. Random House,                     Imaging Techniques. 2020; 6: 283-301.
+    NewYork. 1975.                                                    39. Marx G, Gilon C. Interpreting neural morphology. Acta
+21. Landauer R. The physical nature of information. Physics               Scientific Neurology. 2020; 3: 1-4
+    Letters. 1996; 217: 188-193.                                      40. Marx G, Gilon C. The molecular basis of neural memory. Pt 5.
+22. Sejnowski TJ, Koch C, Churchland PS. Computational                    Development of a chemography for the tripartite mechanism:
+    neuroscience. Science. 1988; 24: 1299-1330.                           From alchemy to brain chemistry. Israel J. Chem. 2021;
+23. Franklin S. Artificial Minds. MIT Press, Cambridge, MA. 1995.         e202100088.
+24. Robinson P, Kaliouby R. Computation of emotions in man            41. Marx G, Gilon C. Mechanism of Memory and Mentation.
+    and machines. Philos Trans Roy Soc Lond B Biol Sci. 2009;             Acta Scientific Neurology. 2025; 8: 44-56.
+    364: 3441-3447.                                                   42. Rauch U. Brain matrix: structure, turnover and necessity.
+25. Valverdu J, Casacuberta D. Handbook of Research on                    Biochem Soc Trans. 2007; 35: 656-659.
+    Synthetic Emotions and Sociable Robotics: New Applications        43. Dityatev A, Seidenbecher CI, Schachner M. Compartmenta-
+    in Affective Computing and Artificial Intelligence. Information       lization from the outside: The extracellular matrix and
+    Science Reference. Hershey, New York. 2009.                           functional microdomains in the brain. Trends Neurosci. 2010;
+26. Guidolin D, Albertin G, Guescini M, et al. Central nervous            33: 503-513.
+    system and computation. Q Rev Biol. 2011; 86: 265-285.            44. Vargova L, Sykova E. Astrocytes and extracellular matrix in
+27. Hasson C. Modeling Emotional Mechanisms for an                        extrasynaptic volume transmission. Phil Trans R Soc B Biol
+    Autonomous Robot: A Developmental and Social Perspective.             Sci. 2014; 369: 20130608.
+    PhD Thesis, University of Cergy-Pontoise. France. 2011.           45. Bentivoglio M, Cotrufo T, Ferrar S, et al. The original
+28. Bosse T, Broekens J, Dias J, et al. Emotion Modeling. Towards         histological slides of Camillo Golgi and his discoveries on
+    Pragmatic Computational Models of Affective Processes.                neuronal structure. Front. Neuroanat. 2019; 13: 3.
+    Springer, New York. 2014.                                         46. Rauti R, Renous N, Maoz BM. Mimicking the brain
+      a. Hudlicka E. From habits to standards: Towards systematic         extracellular matrix in vitro: A review of current methodologies
+         design of emotion models and affective architecture:             and challenges. Isr J Chem. 2020; 60: 1141-1151.
+         2014; 3-23.                                                  47. Burket JA, Webb JD, Deutsch SI. Perineuronal nets (PNN)
+      b. Dastani M, Floor C. Meyer JJ. Programming agents with            and metal cations in the microenvironments of interneurons:
+         emotions: 57-75. AIMS Medical Science. 2014; 4: 241-260.         Relevance to neuro-development and neuro-developmental
+      c. Lowe R, Kiryazov K. Utilizing emotions in autonomous             disorders. Biomolecules. 2021; 11: 1235-1245.
+         robots: An enactive approach. 2014; 76-98.                   48. Lemieux P, Lev-Ram V, Tsien RY, et al. Perineuronal nets and
+29. Gershman SJ, Horvitz EJ, Tenenbaum JB. Computational                  the neuronal extracellular matrix can be imaged by genetically
+    rationality: A converging paradigm for intelligence in brains,        encoded labeling of HAPLN1 in vitro and in vivo. bioRxiv.
+    minds, and machines. Science. 2015; 349: 273-278.                     2023.
+Int J Psychiatr Res, 2026                                                                                        Volume 9 | Issue 4 | 6 of 7
+49. Robertson JM. The Astrocentric Hypothesis: Proposed role                61. Guttenplan KA, Maxwell I, Santos E, et al. GPCR signaling
+    of astrocytes in consciousness and memory formation. J                      gates astrocyte responsiveness to neurotransmitters and
+    Physiology. 2002; 96: 251-255.                                              control of neuronal activity. Science. 2025; 388: 763-768.
+50. Shaham S. Glia-neuron interactions in the nervous system of             62. Williamson MR, Kwon W, Woo J, et al. Learning-associated
+    C.elegans. Curr Opin Neurobiol. 2006; 16: 522-528.                          astrocyte ensembles regulate memory all. Nature. 2025; 637:
+51. Giaume C, Koulakoff A, Roux L, et al. Astroglial networks: A                478-486.
+    step further in neuroglial and gliovascular interactions Nature         63. Kozachkova L, Slotinea JJ, Krotovd D. Neuron–astrocyte
+    Reviews Neuroscience. 2010; 11: 87-99.                                      associative memory. PNAS. 2025; 21: e2417788122.
+52. Robertson JM. Astrocyte domains and the three-dimensional               64. Robertson JM. The Astroglia Syncytial Theory of
+    and seamless expression of consciousness and explicit                       Consciousness. Int J Mol Sci. 2025; 26: 5785.
+    memories. Med Hypotheses. 2013; 81: 1017-1024.                          65. Chih-Yu Yang, Maja Bialecka Fornal, Collen Weatherwax,
+53. Zorec R, Horvat A, Vardjan N, et al. Memory formation                       et al. Encoding membrane-potential-based memory within a
+    shaped by astroglia. Front Integr. Neurosci. 2015; 9: 56.                   microbial community. Cell Syst. 2020; 10: 417-423.e3.
+54. Robertson. The Gliocentric Brain. Int J Mol Sci Int J Mol. Sci.         66. Gosztolai A, Barahona M. Cellular memory enhances
+    2018; 19: 3033.                                                             bacterial chemotactic navigation in rugged environments.
+55. Tan CX, Eroglu C. Cell adhesion molecules regulating                        Communications Physics. 2020; 3: 47-56.
+    astrocyte-neuron interactions. Curr Opin Neurobiol. 2021;               67. Cuentas-Condori A, Miller DM. Synaptic remodeling, lessons
+    69: 170-177.                                                                from C.elegans. J Neurogenet. 2020; 34: 307-322.
+56. Rangel-Gomez M, Alberini CM, Deneen B, et al. Symposium:                68. Coleman GA, Davín AA, Mahendrarajah TA, et al. A rooted
+    Neuron–Glial interactions: Implications for plasticity,                     phylogeny resolves early bacterial evolution. Science. 2021;
+    behavior, and cognition. J Neurosci. 2024; 44: e1231242024.                 372: 588.
+57. Escalada P, Ezkurdia A, Ramírez MJ, et al. Essential role of            69. Gally C, Bessereau JL. C.elegans: of neurons and genes. Med
+    astrocytes in learning and memory. Int J Mol Sci. 2024; 25:                 Sci. 2003; 19: 725-734.
+    1899-1914.                                                              70. Roth G, Dicke U. Evolution of the brain and intelligence.
+58. Lines J, Corkrum M, Aguilar J, et al. The duality of astrocyte              Trends Cogn Sci. 2005; 9: 250-257.
+    neuromodulation: Astrocytes sense neuromodulators and are               71. Shaham S. Glia-neuron interactions in the nervous system of
+    neuromodulators. J Neurochemistry. 2025; 169: e70054.                       C.elegans. Curr Opin Neurobiol. 2006; 16: 522-528.
+59. Eroglu. Astrocytes, hidden puppet masters of the brain.                 72. Ardiel EL, Rankin CH. An elegant mind: Learning and
+    Science. 2025; 488: 705-706.                                                memory in Caenorhabditis elegans. Learn Mem. 2010; 17:
+60. Chen AB, Duque M, Rymbek A, et al. Norepineprine changes                    191-201.
+    in behavioral state through astroglial purinergic signaling.            73. Sasakura H, Mori I. Behavioral plasticity, learning, and
+    Science. 2025; 388: 769-775.                                                memory in C. elegans. Curr Opin Neurobiol. 2013; 23: 92-99.
+
+
+
+
+         © 2026 Gerard Marx, et al. This article is distributed under the terms of the Creative Commons Attribution 4.0 International License
+
+Int J Psychiatr Res, 2026                                                                                                   Volume 9 | Issue 4 | 7 of 7
+

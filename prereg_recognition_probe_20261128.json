@@ -1,0 +1,41 @@
+{
+  "prereg_id": "recognition_probe_20261128",
+  "created_at": "2026-11-28T19:00:00+08:00",
+  "trigger": "用户裁定 A: 读 The Debrief 原论文后做只读自检探针",
+  "based_on": {
+    "secondary": "The Debrief 2026-11-27 The Brain's Hidden Chemical Code...",
+    "primary": "Marx & Gilon 2026 Consciousness, Memory and Intelligence: A Mechanistic Perspective, Int J Psychiatr Res 9(4):1-7",
+    "key_sentence": "A code or data without recognition is just noise posing as information."
+  },
+  "kernel_sha256_before": "380de28af2fb5b34",
+  "kernel_version": "7.5.0",
+  "new_function": "recognition_probe(verdict_sources=None, decisions_path=None, gap_archive_path=None)",
+  "semantic_mapping": {
+    "code_or_data": "内核产出的 verdict 读数(各只读探针返回值 + 台账 verdict)",
+    "recognition": "判定权归属锚点: ①DECISIONS user_verdict/status=EXECUTED ②gap_archive RESOLVED_EXECUTED ③探针声明判定权归用户且verdict_unchanged=True且is_gate_verdict=False",
+    "noise": "读数存在但无判定权归属锚点=伪装成信息的噪音(不替裁定,只标注)"
+  },
+  "locked_rules": {
+    "R1": "逐 verdict 载体分类: RECOGNIZED_USER(有DECISIONS user_verdict+EXECUTED) / RECOGNIZED_ARCHIVE(gap_archive RESOLVED_EXECUTED) / RECOGNIZED_DECLARED(探针声明判定权归用户+verdict_unchanged+非门) / UNRECOGNIZED_NOISE(都无)",
+    "R2": "recognition_flag: NO_VERDICT_CLAIM(无读数) / ALL_RECOGNIZED(全有锚点) / NOISE_PRESENT(存在无锚点读数)",
+    "R3": "只读: 不写盘、不消费、不进判定、不改任何verdict/权威态/DECISIONS/归档账",
+    "R4": "注入 verdict_sources/decisions_path/gap_archive_path 做隔离负向测试,生产恒 None 读真实",
+    "R5": "verdict_unchanged=True, consumed=False, is_gate_verdict=False; one_page 结尾判定权归用户",
+    "R6": "honesty 明确: 借原论文一句锋利镜面,不接受其神经科学结论;期刊低可信+COI如实记;不宣称内核有识别认知机制,只做判定权归属结构自检;原论文hypothesis未证实",
+    "R7": "UNRECOGNIZED_NOISE 是标注非裁定: 不因发现噪音就删除读数或伪造裁定锚点"
+  },
+  "acceptance": {
+    "G1_minimal": "纯新增1函数,AST OK,diff确认kernel仅增函数不改既有",
+    "G2_real": "真实运行: 有verdict载体、有RECOGNIZED锚点、按真实数据暴露NOISE_PRESENT或ALL_RECOGNIZED,数字来自真实探针",
+    "G3_negative": "负向注入全真失败: 无锚点verdict必NOISE_PRESENT且UNRECOGNIZED_NOISE; DECISIONS EXECUTED+user_verdict必RECOGNIZED_USER; RESOLVED_EXECUTED必RECOGNIZED_ARCHIVE; 声明判定权归用户+verdict_unchanged必RECOGNIZED_DECLARED; 空注入NO_VERDICT_CLAIM",
+    "G4_readonly": "不写盘不消费不进判定;权威态四件套+DECISIONS+gap_archive哈希前后一致",
+    "G6_regression": "干净同口径对拍: 备份内核+基线测试=原passed数; 新内核+全量=原+n守卫; 零回归"
+  },
+  "will_not_change": [
+    "kernel既有函数/阈值/权威态四件套",
+    "DECISIONS_20261127.json / gap_archive_20261128.json / knowledge_base_store.json",
+    "任何既有 verdict / 11条心跳判定 / tagbook",
+    "原论文任何结论(仅借镜面)"
+  ],
+  "boundary": "不宣称内核有真实recognition认知机制;只做判定权归属的结构自检镜;不替用户裁定任何一条读数;判定权归用户"
+}
