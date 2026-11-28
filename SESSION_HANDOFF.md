@@ -773,3 +773,10 @@ clone踩坑:默认IP两次失败(8分20秒空壳/超时),换备用IP 20.27.177.1
 验收:test_gap_backfill.py 9例全绿(不洗白/3真悬置保留/verdict≤40字符/原字段保留/?'消失/权威态零副作用);干净同口径对拍=回填前数据+回填前测试230passed(原基线),回填后数据+全部测试239passed=230+9,内核哈希8299913d…全程未变,零回归。
 零副作用:权威态5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…哈希动手前后一致;内核AST OK;回执35条全原字段保留。回执gap_backfill_receipt_20261128.json记每文件前后哈希;备份audit_backup_pre_backfill/71文件可逐文件回滚。
 边界:回填是把已有判定态提升为顶层verdict,非新判定/翻案/修复;真悬置保留(WEAK_SIGNAL/SCOPED/GAP_INCONCLUSIVE不冒充PASS)。判定权归用户。 -->
+
+<!-- §4S72 GitHub同步§4S69-71(Git Data API通道)
+用户裁定"更新Github"。远端基线HEAD=5c7062e1(§4S68)。本沙箱无.git,走clone比对→提交→推送。
+过程:git clone连续3次超时(默认IP+备用IP 20.27.177.113均8m20s空壳,80MB仓库+网络拥塞),不再赌git大文件传输,改走GitHub Git Data API(历史§4S11/§4S68 API通道先例):GET递归tree(2042 blob未截断)→本地算git blob SHA比对得精确增量9新增+37修改(35审计result.json+kernel.py+SESSION_HANDOFF;test_decision_digest/test_gap_schema为新增含断言演进)→批量创建46 blob(ThreadPool并发6)→新tree=5b14420e(base_tree=远端29e1bf79)→commit=deed4fb9→PATCH ref更新main。
+核验:API独立核验远端HEAD=deed4fb99bce4f184a6eda0558a48ddf5e4f38ce,commit message=§4S69-§4S71;拉远端新tree与本地全对齐=新增0/修改0/相同2051;抽查SESSION_HANDOFF/kernel.py/audit_finance_construct_validity三文件blob SHA一致。提交前核验46文件无明文token(ghp_/sk_)、权威态GAP_INCONCLUSIVE/l3=false/KERNEL_VERSION=7.5.0未污染。
+凭据纪律:token全程只在上传区(600)与临时gh_token.tmp(600),脚本用完即删(gh_token.tmp已删、临时clone3已删、api_sync脚本已删、/tmp tree文件已删);/etc/hosts无github.com残留;两份凭据原样留上传区。
+本轮账(§4S69-72)已在推送前落定,一次性同步,无§4S65那种'推完再补账'问题。判定权归用户。 -->
