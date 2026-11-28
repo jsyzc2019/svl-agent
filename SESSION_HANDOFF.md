@@ -1047,3 +1047,21 @@ DoR标注硬纪律(一手prompt.py/validate_dor.py/README):5 binary(tested_end_t
 提交:Git Data API以170170db全量tree为base_tree,创建待推blob→增量tree→commit→PATCH ref main,父=170170db。
 核验(已完成):远端HEAD=2baf51e9父=170170db,递归tree 2123 blobs未截断,14/14逐blob git-blob-sha1对拍全一致;权威态四件套远端本地哈希相同(fb5f566a/0c2c0132/2267ed50/ce48a3c6,本次不推权威态)。
 凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->
+
+<!-- §4S99 fullchain验证器P0洞修复+改前vs改后对打独立评测 2026-11-29 00:40：用户裁定"人不是可靠裁判者;判定权归用户被交接淹没是退化;往改前vs改后独立评测证据上迈;该改的大胆改"。本轮先自查发现上轮(§4S97/98总结)把已完成的P0/P1说成"还挂着"=实质退化,当场承认并纠正。边界仍守=不碰verdict/l3/absolute/宪法不自封等级。
+事实核对(现场实读非账本文字):P0洞只在audit_l3_gap_targeted/verify_external.py修过(§4S25用户授权,sha256=4b346282),另两个副本中audit_external_orchestrator是另一种验收器(71行无replay段不涉此洞),audit_l3_fullchain_external/verify_external.py(v1 8项)第148-163行仍是`if cid not in jd:continue`静默跳过=同类洞未继承到后代。改前版本/tmp/verify_external_before_p0.py=v2改前(对应gap_targeted),fullchain改前备份落life_kernel/pre_patch_fullchain_p0/(3275d885)。diff确认改前vs改后(gap_targeted)仅05段。
+关键设计:fullchain真实包judgments.json带合法_meta键(17 keys vs 16样本),严格相等校验必须排除下划线开头元数据键否则误伤历史包;gap_targeted版无_meta故未排除——不能照搬,按本包实情补`if not k.startswith("_")`。finish()只读打印不写盘→对打可跑真实包零副作用。
+预注册prereg_fullchain_p0_holdout_20261129.json SHA cfb5c052(改码前锁死)。修复:仅fullchain第05判定段,去掉静默continue改严格id集相等(sids/jids,missing或extra非空hard-fail并写detail),相等分支保留原逐字judge一致性。diff仅05段37行替换,py_compile OK,sha256 3275d885→1f2d1dad。真实完整包改前改后均8/8 PASS agree=16/16不误伤。
+改前vs改后同口径对打(audit_l3_fullchain_external/holdout_duel_20261129/duel_log.json sha256 cb402f58):同一交付包/tmp副本只改judgments.json id集其余字节一致,ground truth by construction=id集不等即应拒。6案例全中: C0完整beforePASS/afterPASS;C1删1判定beforePASS(agree15/15静默跳过)/afterFAIL(missing P01);C2删3判定beforePASS(13/13)/afterFAIL;C3注入extra beforePASS/afterFAIL(extra EXTRA_ID);C4删全部beforeFAIL(0/0)/afterFAIL;C5合法_meta beforePASS/afterPASS不误伤。残缺包检测率before0/3→after3/3=改后更会抓残缺的独立评测证据。
+夹具诚实修正:初版对打用整体8/8判整体,篡改judgments.json后其.sha256校验项FAIL掩盖05段差异→假阴性(before也FAIL);改测量口径为只比05_replay段本身(与改动面对齐)。这正是Who-Verifies-the-Verifier同构陷阱:下游整体分数无法验证被改那一环,测量口径必须精确对准改动对象否则验证器自己有洞。ground truth未改。
+负向自咬:把after退回静默跳过逻辑跑C1/C2/C3→全部重新PASS抓不到,证实检测率差异0/3→3/3确凿来自05段id集校验非夹具偶然。
+12守卫(audit_l3_fullchain_external/tests/test_p0_inheritance_holdout.py)全绿(预注册SHA/备份哈希/修复在位/洞已堵/_meta排除/py_compile/真实包不误伤/对打检测率/六案例全中/负向自咬记录/只读不写盘/七件套零副作用)。G6干净同口径对拍:改后全量2050=2038+12零失败,改前基线(换回3275d885+移走守卫)2038零失败=零回归铁证,恢复后1f2d1dad编译OK。
+零副作用:权威态五f7a2584/constitution2ad148c7/hb ea749f76/inbox8806b248/DECISIONS91114955/归档账d73bfef5/KB0938b3df七件套动手前后逐一相同;只读不写盘不消费不进判定;verdict不变/consumed=false。token全串扫描0,临时文件清理。
+诚实边界:只证'改后验证器更会抓残缺交付(0/3→3/3)'这一机械事实,不证L3/L5达成不宣布等级;改前vs改后对打是RSL'真的越改越强'在本仓的最小同构证据非全域证明;one-page仍由材料与机械判据说话。GitHub见§4S100。 -->
+
+<!-- §4S100 GitHub同步§4S99(用户裁定"该改的大胆改",Git Data API通道)
+触发:用户纠正退化后裁定大胆改,§4S99完成fullchain P0洞修复+改前vs改后对打证据,本轮推远端。远端基线HEAD=736d4b8b(§4S98);本沙箱无.git走Git Data API(§4S11/68/.../98先例)。吸取§4S82/98教训:先落本同步账再一次性推含账SESSION_HANDOFF,避免双commit。
+待推6文件:①audit_l3_fullchain_external/verify_external.py(改后1f2d1dad,仅05段id集校验) ②prereg_fullchain_p0_holdout_20261129.json(cfb5c052) ③audit_l3_fullchain_external/holdout_duel_20261129/duel_log.json(cb402f58) ④audit_l3_fullchain_external/tests/test_p0_inheritance_holdout.py(12守卫) ⑤life_kernel/pre_patch_fullchain_p0/verify_external_before_p0.py(改前备份3275d885) ⑥SESSION_HANDOFF.md(含§4S99/100)。
+提交前:6文件token全串扫描(ghp_[36]/github_pat_[60]/sk-or-v1-[20])全部0;权威态verdict=GAP_INCONCLUSIVE/KERNEL_VERSION=7.5.0未污染;全量2050零失败+G6对拍2038基线零回归已证。
+提交:Git Data API以736d4b8b全量tree为base_tree,创建blob→增量tree→commit→PATCH ref main,父=736d4b8b(完整SHA)。凭据token只在shell变量与header不回显不落盘。
+核验:独立读远端HEAD/父、递归tree逐blob git-sha1对拍;权威态四件套远端本地哈希相同(本轮不推权威态);判定权归用户。 -->

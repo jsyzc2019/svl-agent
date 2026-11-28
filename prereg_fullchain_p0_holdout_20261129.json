@@ -1,0 +1,51 @@
+{
+  "schema": "prereg_verifier_p0_inheritance_20261129",
+  "created_at": "+08:00 2026-11-29T00:34:39",
+  "trigger": "用户裁定：人不是可靠裁判者；往'改前vs改后独立评测证据'上迈；该改的大胆改。推翻'判定权归用户=不行动'的退化解读。边界仍守：不碰verdict/l3/absolute/宪法，不自封等级。",
+  "consensus_source": "本会话 2026-11-29 00:29 用户明示（历史共识已被多轮交接压缩淹没）",
+  "scope": {
+    "fix_target": "audit_l3_fullchain_external/verify_external.py 第05判定段",
+    "sha256_before": "3275d8859289e099...",
+    "backup": "life_kernel/pre_patch_fullchain_p0/verify_external_before_p0.py",
+    "sibling_already_fixed": "audit_l3_gap_targeted/verify_external.py sha256=4b346282 (§4S25 用户授权)",
+    "diff_constraint": "仅第05判定段；其余字节不动；py_compile通过"
+  },
+  "defect": "改前 `if cid not in jd: continue` 静默跳过缺失判定，使 collapsed/partial 验证器（judgments缺样本）混过 05_replay_consistent；Who-Verifies-the-Verifier 的活体。",
+  "fix_contract": {
+    "id_set": "sids={p.id for p in samples_blind.pairs}; jids={k for k in judgments if not k.startswith('_')}（排除_meta等元数据键，兼容fullchain真实包的_meta）",
+    "hard_fail": "missing=sids-jids 或 extra=jids-sids 非空 → 05_replay_consistent=False 并写 detail；不再静默跳过",
+    "equal_branch": "id集相等时保留原逐字judge一致性逻辑 total==len(sids) and agree==total"
+  },
+  "holdout_duel": {
+    "question": "改后验证器是否比改前更会抓残缺交付（证明'改后更会改'）？",
+    "before": "life_kernel/pre_patch_fullchain_p0/verify_external_before_p0.py (v1 8项, 含洞)",
+    "after": "audit_l3_fullchain_external/verify_external.py (修后)",
+    "same_input": "同一组交付包副本（/tmp），只改judgments.json的id集，其余字节一致",
+    "cases": [
+      "C0 完整包16判定 → before PASS / after PASS（不误伤）",
+      "C1 删1条判定(N01) → before PASS(静默跳过15/15) / after FAIL(missing N01)",
+      "C2 删3条判定 → before PASS / after FAIL(missing 3)",
+      "C3 注入extra判定 → before PASS / after FAIL(extra)",
+      "C4 删全部判定 → before: total=0 → FAIL(total>0假) / after FAIL(missing 全)",
+      "C5 合法_meta键 → before PASS / after PASS（不过度拒绝元数据）"
+    ],
+    "ground_truth_by_construction": "id集与样本集不等即应拒绝；这是结构真理，非模型判断",
+    "metric": "detection_rate = 残缺包被拒数/残缺包总数；before vs after",
+    "negative_self_bite": "若把after的id集校验退回静默跳过，C1/C2/C3应重新PASS——证明抓到的差异来自修复本身而非夹具"
+  },
+  "discipline": {
+    "read_only": "验收器finish()仅打印不写盘；对打在/tmp交付包副本上做，真实交付包零改动",
+    "authority_zero_side_effect": "七件套哈希前后逐一相同；不写verdict/l3/absolute/constitution/authoritative_state",
+    "no_self_crowning": "对打只证'改后更会抓残缺'，不证L3/L5达成，不宣布等级；仍由材料与机械判据说话",
+    "verdict_unchanged": true,
+    "consumed": false
+  },
+  "acceptance": [
+    "改后diff仅05段，py_compile OK",
+    "C0/C5 before与after均PASS（不误伤完整包/合法元数据）",
+    "C1/C2/C3 before PASS而after FAIL（抓到collapse）",
+    "负向自咬：after退回静默跳过后C1/C2/C3重新PASS",
+    "全量测试零回归",
+    "七件套哈希不变、token零命中、临时文件清理"
+  ]
+}

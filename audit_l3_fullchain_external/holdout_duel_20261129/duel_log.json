@@ -1,0 +1,109 @@
+{
+  "schema": "holdout_duel_v2_v1_20261129",
+  "generated_at": "2026-11-29T00:36+08:00",
+  "before": "life_kernel/pre_patch_fullchain_p0/verify_external_before_p0.py",
+  "after": "audit_l3_fullchain_external/verify_external.py (§4S99 fix)",
+  "ground_truth": "id-set inequality -> reject (structural, by construction)",
+  "cases": [
+    {
+      "case": "C0_full",
+      "desc": "完整包",
+      "expected": [
+        "PASS",
+        "PASS"
+      ],
+      "before": "PASS",
+      "after": "PASS",
+      "before_line": "[PASS] 05_replay_consistent: agree=16/16",
+      "after_line": "[PASS] 05_replay_consistent: agree=16/16 ids=16=16",
+      "match": true
+    },
+    {
+      "case": "C1_del1",
+      "desc": "删1判定",
+      "expected": [
+        "PASS",
+        "FAIL"
+      ],
+      "before": "PASS",
+      "after": "FAIL",
+      "before_line": "[PASS] 05_replay_consistent: agree=15/15",
+      "after_line": "[FAIL] 05_replay_consistent: id-set mismatch: missing=['P01'] extra=[] (samples=16 judgments=15)",
+      "match": true
+    },
+    {
+      "case": "C2_del3",
+      "desc": "删3判定",
+      "expected": [
+        "PASS",
+        "FAIL"
+      ],
+      "before": "PASS",
+      "after": "FAIL",
+      "before_line": "[PASS] 05_replay_consistent: agree=13/13",
+      "after_line": "[FAIL] 05_replay_consistent: id-set mismatch: missing=['P01', 'P02', 'P03'] extra=[] (samples=16 judgments=13)",
+      "match": true
+    },
+    {
+      "case": "C3_extra",
+      "desc": "注入extra",
+      "expected": [
+        "PASS",
+        "FAIL"
+      ],
+      "before": "PASS",
+      "after": "FAIL",
+      "before_line": "[PASS] 05_replay_consistent: agree=16/16",
+      "after_line": "[FAIL] 05_replay_consistent: id-set mismatch: missing=[] extra=['EXTRA_ID'] (samples=16 judgments=17)",
+      "match": true
+    },
+    {
+      "case": "C4_delall",
+      "desc": "删全部判定",
+      "expected": [
+        "FAIL",
+        "FAIL"
+      ],
+      "before": "FAIL",
+      "after": "FAIL",
+      "before_line": "[FAIL] 05_replay_consistent: agree=0/0",
+      "after_line": "[FAIL] 05_replay_consistent: id-set mismatch: missing=['P01', 'P02', 'P03', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P13', 'P14', 'P15', 'P16'] extra=[] (samples=16 judgments=0)",
+      "match": true
+    },
+    {
+      "case": "C5_meta",
+      "desc": "合法_meta键",
+      "expected": [
+        "PASS",
+        "PASS"
+      ],
+      "before": "PASS",
+      "after": "PASS",
+      "before_line": "[PASS] 05_replay_consistent: agree=16/16",
+      "after_line": "[PASS] 05_replay_consistent: agree=16/16 ids=16=16",
+      "match": true
+    }
+  ],
+  "detection_rate": {
+    "before": "0/3",
+    "after": "3/3"
+  },
+  "all_match": true,
+  "negative_self_bite": {
+    "method": "把after退回静默跳过逻辑(=before)，跑C1/C2/C3",
+    "result": "C1=PASS agree=15/15, C2=PASS agree=13/13, C3=PASS agree=16/16 — 残缺包重新被静默放行",
+    "conclusion": "检测率差异 0/3→3/3 确凿来自05段id集校验，非夹具偶然"
+  },
+  "fixture_correction_honesty": {
+    "issue": "初版对打用整体8/8 PASS判整体，篡改judgments.json后其.sha256校验项FAIL，掩盖05段差异→假阴性(before也判FAIL)",
+    "fix": "测量口径改为只比05_replay_consistent段本身，与改动面对齐",
+    "lesson": "这正是 Who-Verifies-the-Verifier 的同构陷阱：下游整体分数无法验证被改的那一环；测量口径必须精确对准改动对象，否则验证器自己有洞",
+    "ground_truth_unmodified": true
+  },
+  "authority_zero_side_effect": {
+    "finish_write_disk": false,
+    "real_delivery_pkg_untouched": true,
+    "duel_on_tmp_copies": true,
+    "verdict_l3_absolute_constitution": "untouched"
+  }
+}

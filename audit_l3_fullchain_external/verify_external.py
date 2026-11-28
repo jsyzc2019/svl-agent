@@ -147,18 +147,31 @@ def main():
         import criterion  # noqa
         sb = load(f"{BASE}/samples_blind.json")
         jd = load(f"{BASE}/judgments.json")
-        agree, total = 0, 0
-        for p in sb["pairs"]:
-            cid = p["id"]
-            if cid not in jd:
-                continue
-            got = criterion.judge(p["text_a"], p["text_b"])
-            got_bool = bool(got[0]) if isinstance(got, tuple) else bool(got)
-            exp_bool = bool(jd[cid].get("verdict"))
-            agree += int(got_bool == exp_bool)
-            total += 1
-        rec("05_replay_consistent", total > 0 and agree == total,
-            f"agree={agree}/{total}")
+        # P0 fix (§4S99, user-authorized; mirror of §4S25 on v2 sibling):
+        # previously a missing judgment was silently skipped via
+        # `if cid not in jd: continue`, letting a collapsed/partial verifier
+        # pass by ignoring samples. Now strict id-set equality: missing OR
+        # extra sample ids hard-fail. Meta keys (e.g. `_meta`) are excluded
+        # because the genuine fullchain delivery legitimately carries `_meta`.
+        sids = {p["id"] for p in sb["pairs"]}
+        jids = {k for k in jd.keys() if not k.startswith("_")}
+        missing = sorted(sids - jids)
+        extra = sorted(jids - sids)
+        if missing or extra:
+            rec("05_replay_consistent", False,
+                f"id-set mismatch: missing={missing} extra={extra} "
+                f"(samples={len(sids)} judgments={len(jids)})")
+        else:
+            agree, total = 0, 0
+            for p in sb["pairs"]:
+                cid = p["id"]
+                got = criterion.judge(p["text_a"], p["text_b"])
+                got_bool = bool(got[0]) if isinstance(got, tuple) else bool(got)
+                exp_bool = bool(jd[cid].get("verdict"))
+                agree += int(got_bool == exp_bool)
+                total += 1
+            rec("05_replay_consistent", total == len(sids) and agree == total,
+                f"agree={agree}/{total} ids={len(sids)}={len(jids)}")
     except Exception as e:
         rec("05_replay_consistent", False, repr(e))
 
