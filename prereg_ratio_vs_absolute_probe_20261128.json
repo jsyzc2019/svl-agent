@@ -1,0 +1,39 @@
+{
+  "prereg_id": "ratio_vs_absolute_probe_20261128",
+  "created_at": "2026-11-28T20:40:00+08:00",
+  "trigger": "用户裁定A:回源 Cherrad et al. 2026 Nat Commun 迷走传入解离态论文后,把'相对指标改善≠绝对指标改善/分母游戏'的最锋利统计镜做成对内核只读自检",
+  "based_on": {
+    "primary": "Cherrad N. et al. 2026 Nature Communications DOI 10.1038/s41467-026-79135-y (一手 Nature 官网元数据/摘要/声明 + Crossref 已核; 全文PDF反爬未逐字核对,逐图数字标二手交叉一致): Fig4/5 EEG SO/delta 相对功率升高,但 delta/sigma 绝对功率均下降、整体 flattening — 相对富集≠绝对增强的分母游戏",
+    "kernel_counterparts": [
+      "最锋利对偶: verdict_at_birth.synced_rate=0.9091(coverage含8条补判) vs authentic_birth_rate=0.1818(reliability真就位2/11), fabrication_warning明写不可把字段补齐误读为生成当下就位 — 与 §4S79 support_escape 的 coverage/reliability 同构",
+      "其余真实相对率读数(均配有绝对量计数伴侣): abstention_rate=0.0909(count1/11), stale_rate=0.0/undated_rate=0.0(counts/total13), pass_weak_rate=0.0(pass_weak_count0/11), weakened_rate=0.0(weakened_count0/1014), misread_rate=0.0(misread_count0), corroboration_ratio=0.296(cross8/tag27), synced_rate/coverage 与 authentic_birth_rate"
+    ],
+    "key_mirror": "论文'相对功率↑但绝对功率↓,只看相对会误判睡更深' ≡ 内核synced_rate/coverage看着高(含补判)但reliability真就位低; 诚实做法=每个率读数都配绝对量并显式暴露差"
+  },
+  "kernel_sha256_before": "7007e500f36c8b73",
+  "kernel_version": "7.5.0",
+  "new_function": "ratio_vs_absolute_probe(ratio_signals=None)",
+  "locked_rules": {
+    "R1": "扫描面精确限定真实存在的相对率读数,每条必须同时给出绝对量伴侣(分子计数/分母计数或计数total),杜绝只报率不报绝对量的分母游戏: synced_rate(coverage)配authentic_birth_count=2/backfilled_sync_count=8/total=11; authentic_birth_rate配authentic_birth_count=2/total=11; abstention_rate配abstention_count=1/total=11; stale_rate/undated_rate配counts/total; pass_weak_rate配pass_weak_count/state_counts; weakened_rate配weakened_count/total_asserts; misread_rate配misread_count/total; corroboration_ratio配cross_corroborated_tags/per_tag。不伪造不存在的率,不拿0率刷纪律在位",
+    "R2": "每条判定'是否配有绝对量'(paired): 率有对应绝对量计数伴侣且evidence非空=PAIRED_WITH_ABSOLUTE; 否则=UNPAIRED_RATIO(标注非裁定,不删除不伪造)。关键: 对synced_rate须显式暴露coverage=0.9091与reliability=0.1818的差(0.7273),不把coverage高读成就位好(接回§4S79权威对偶)",
+    "R3": "flag三值: NO_RATIO_CLAIM(无率读数)/ALL_PAIRED(全部率配有绝对量)/UNPAIRED_PRESENT(存在无绝对量的率)。honesty必须如实: 内核非EEG/无功率谱/无真实神经信号,不宣称真实相对功率或真实分母游戏攻击面; 只做'率读数是否配绝对量防误读'的统计纪律同构自检; synced_rate对偶取自§4S79权威口径,接回不等于刷绿(就位2/缺口14如实保留)",
+    "R4": "只读: 不写盘不消费不进判定,不改任何verdict/权威态/DECISIONS/归档账/KB; 不改被扫探针字段; 调用各probe均为其默认只读口径",
+    "R5": "注入ratio_signals做隔离负向测试,生产恒None读真实; verdict_unchanged=True,consumed=False,is_gate_verdict=False; one_page结尾'判定权归用户'",
+    "R6": "honesty明确: 借论文'相对≠绝对'锋利镜面做结构自检; 内核无真实EEG功率谱/无真实慢波或纺锤,只做统计纪律同构不宣称等价生理机制; UNPAIRED_RATIO是标注非裁定不替用户裁定; 逐图数字为二手交叉一致不当原文逐字; 判定权归用户",
+    "R7": "诚实排除: 不把0问题率(weakened/misread/stale/pass_weak)当作'纪律在位'刷绿——它们同样须配绝对量(count=0/total)才算paired,单看率=0不是本探针的判定对象"
+  },
+  "acceptance": {
+    "G1_minimal": "纯新增1函数,AST OK,diff确认kernel仅增函数不改既有",
+    "G2_real": "真实运行: 9条相对率全部配对绝对量,flag=ALL_PAIRED,synced_rate对偶显式暴露coverage0.9091/reliability0.1818/gap0.7273, UNPAIRED=0(诚实零命中不伪造风险也不刷保证)",
+    "G3_negative": "负向注入全真失败: 只报率不给绝对量必UNPAIRED_PRESENT+UNPAIRED_RATIO; coverage高但无reliability对偶必UNPAIRED; 全paired必ALL_PAIRED; 空注入NO_RATIO_CLAIM; 0率无count伴侣必UNPAIRED(不拿0刷绿)",
+    "G4_readonly": "不写盘不消费不进判定; 权威态四件套+DECISIONS+gap_archive+KB哈希前后一致",
+    "G6_regression": "干净同口径对拍: 备份内核+基线测试=原passed数(308); 新内核+全量=308+12; 零回归"
+  },
+  "will_not_change": [
+    "kernel既有函数/阈值/权威态四件套",
+    "DECISIONS_20261127.json / gap_archive_20261128.json / knowledge_base_store.json / read_natcomm_vagal_20261128/*",
+    "任何既有 verdict / 11条心跳判定 / tagbook / 被扫探针返回字段 / verdict_at_birth台账",
+    "Nature论文任何数据(仅借镜面)"
+  ],
+  "boundary": "不宣称内核有EEG/功率谱/相对-绝对功率或真实分母游戏攻击面; 只做'率读数是否配绝对量防误读'统计纪律同构的结构自检; 逐图数字二手交叉一致不冒充原文; 不替用户裁定; 判定权归用户"
+}

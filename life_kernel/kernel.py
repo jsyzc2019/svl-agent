@@ -4195,6 +4195,174 @@ def refusal_binding_probe(binding_signals=None):
     }
 
 
+def ratio_vs_absolute_probe(ratio_signals=None):
+    """§4S87【只读自检·相对指标改善≠绝对指标改善 / 分母游戏】对应
+    Cherrad N. et al. 2026 Nature Communications (DOI 10.1038/s41467-026-79135-y,
+    一手 Nature 官网元数据/摘要/声明 + Crossref 已核; 全文PDF反爬未逐字核对) 最锋利一条:
+      Fig4/5 EEG SO/delta 相对功率升高,但 delta/sigma 绝对功率均下降、整体 flattening
+      — 相对富集≠绝对增强,只看相对功率会误判'睡得更深'(分母游戏)。
+
+    内核同构(统计纪律自检,非生理机制): 内核里每一个'率/覆盖率/占比'读数都必须配上
+    对应的绝对量计数伴侣(分子/分母),否则就是分母游戏刷绿的结构缺口。最锋利对偶直击
+    §4S79: verdict_at_birth.synced_rate=0.9091(coverage含8条补判看着高) vs
+    authentic_birth_rate=0.1818(reliability真就位2/11), 差0.7273; 不把coverage高
+    读成就位好。
+
+    诚实边界: 内核不是EEG、无功率谱、无真实慢波或纺锤、无真实神经信号; 本探针只做
+    '率读数是否配绝对量防误读'的统计纪律同构自检,绝不宣称真实相对/绝对功率或真实
+    分母游戏攻击面。逐图数字为二手交叉一致,不冒充原文逐字。ratio_signals 可注入
+    做隔离负向测试,生产恒None读真实。只读:不写盘不消费不进判定。预注册
+    prereg_ratio_vs_absolute_probe_20261128.json SHA 6c8299f0… 改码前锁死。
+    """
+    if ratio_signals is None:
+        birth = verdict_at_birth_probe()
+        ab = abstention_probe()
+        st = staleness_probe()
+        ce = conclusion_evidence_probe()
+        wa = weakened_assertion_probe()
+        ug = unresolved_gap_schema_probe()
+        ei = evidence_independence_probe()
+        cov = birth.get("synced_rate", 0) or 0
+        rel = birth.get("authentic_birth_rate", 0) or 0
+        gap = round(float(cov) - float(rel), 4)
+        ac = birth.get("authentic_birth_count", 0)
+        bf = birth.get("backfilled_sync_count", 0)
+        tt = birth.get("total", 0)
+        acount = ab.get("abstention_count", 0)
+        atotal = ab.get("total", 0)
+        scount = st.get("counts", {}).get("STALE", 0)
+        ucount = st.get("counts", {}).get("UNDATED", 0)
+        stotal = st.get("total", 0)
+        pwc = ce.get("pass_weak_count", 0)
+        wk = wa.get("weakened_count", 0)
+        was = wa.get("total_asserts", 0)
+        mic = ug.get("misread_count", 0)
+        qmk = ug.get("total_question_marks", 0)
+        xcorr = len(ei.get("cross_corroborated_tags", []))
+        pertag = len(ei.get("per_tag", []))
+        ratio_signals = [
+            {"name": "verdict_at_birth.synced_rate_coverage",
+             "ratio": cov,
+             "absolute": "authentic_birth_count=%d, backfilled_sync_count=%d, total=%d" % (ac, bf, tt),
+             "pair_ratio": rel, "gap": gap, "paired": True,
+             "evidence": ("coverage=%.4f含%d条补判;reliability=%.4f(真就位%d/%d);gap=%.4f;不可读成就位好"
+                          % (cov, bf, rel, ac, tt, gap))},
+            {"name": "verdict_at_birth.authentic_birth_rate",
+             "ratio": rel,
+             "absolute": "authentic_birth_count=%d/total=%d" % (ac, tt),
+             "pair_ratio": cov, "paired": True,
+             "evidence": ("reliability=%.4f(真就位%d/%d),与coverage=%.4f并列暴露,不单看率"
+                          % (rel, ac, tt, cov))},
+            {"name": "abstention.abstention_rate",
+             "ratio": ab.get("abstention_rate", 0),
+             "absolute": "abstention_count=%d/total=%d" % (acount, atotal),
+             "paired": True,
+             "evidence": "abstention=%.4f(%d/%d),配绝对计数" % (ab.get("abstention_rate", 0), acount, atotal)},
+            {"name": "staleness.stale_rate",
+             "ratio": st.get("stale_rate", 0),
+             "absolute": "counts.STALE=%d/total=%d" % (scount, stotal),
+             "paired": True,
+             "evidence": "stale=%.4f(STALE=%d/%d)" % (st.get("stale_rate", 0), scount, stotal)},
+            {"name": "staleness.undated_rate",
+             "ratio": st.get("undated_rate", 0),
+             "absolute": "counts.UNDATED=%d/total=%d" % (ucount, stotal),
+             "paired": True,
+             "evidence": "undated=%.4f(UNDATED=%d/%d),没判≠判了没问题" % (st.get("undated_rate", 0), ucount, stotal)},
+            {"name": "conclusion_evidence.pass_weak_rate",
+             "ratio": ce.get("pass_weak_rate", 0),
+             "absolute": "pass_weak_count=%d/state_counts" % pwc,
+             "paired": True,
+             "evidence": "pass_weak_rate=%.4f(pass_weak_count=%d),配绝对计数" % (ce.get("pass_weak_rate", 0), pwc)},
+            {"name": "weakened_assertion.weakened_rate",
+             "ratio": wa.get("weakened_rate", 0),
+             "absolute": "weakened_count=%d/total_asserts=%d" % (wk, was),
+             "paired": True,
+             "evidence": "weakened=%.4f(%d/%d)" % (wa.get("weakened_rate", 0), wk, was)},
+            {"name": "unresolved_gap_schema.misread_rate",
+             "ratio": ug.get("misread_rate", 0),
+             "absolute": "misread_count=%d/total_question_marks=%d" % (mic, qmk),
+             "paired": True,
+             "evidence": "misread=%.4f(%d/%d)" % (ug.get("misread_rate", 0), mic, qmk)},
+            {"name": "evidence_independence.corroboration_ratio",
+             "ratio": ei.get("corroboration_ratio", 0),
+             "absolute": "cross_corroborated_tags=%d/per_tag=%d" % (xcorr, pertag),
+             "paired": True,
+             "evidence": "corroboration=%.4f(cross=%d/%d)" % (ei.get("corroboration_ratio", 0), xcorr, pertag)},
+        ]
+
+    rows = []
+    for s in ratio_signals:
+        name = str(s.get("name", "?"))
+        absolute = str(s.get("absolute", ""))
+        evidence = str(s.get("evidence", ""))[:160]
+        # 配对判据: 必须显式给出绝对量伴侣(非空)且声明paired
+        paired = (s.get("paired") is True) and bool(absolute.strip())
+        # §4S87 防分母游戏: coverage/synced_rate 类率必须显式给 reliability/authentic
+        # 对偶才算配对——只看coverage高不看reliability正是论文Fig4/5的陷阱。
+        if paired and ("coverage" in name or "synced_rate" in name):
+            blob = absolute + " " + evidence
+            if "reliability" not in blob and "authentic" not in blob:
+                paired = False
+        rows.append({
+            "name": name,
+            "ratio": s.get("ratio"),
+            "absolute": absolute[:120],
+            "pair_ratio": s.get("pair_ratio"),
+            "gap": s.get("gap"),
+            "class": "PAIRED_WITH_ABSOLUTE" if paired else "UNPAIRED_RATIO",
+            "evidence": evidence,
+        })
+
+    counts = {
+        "PAIRED_WITH_ABSOLUTE": sum(1 for r in rows if r["class"] == "PAIRED_WITH_ABSOLUTE"),
+        "UNPAIRED_RATIO": sum(1 for r in rows if r["class"] == "UNPAIRED_RATIO"),
+    }
+    unpaired = [r for r in rows if r["class"] == "UNPAIRED_RATIO"]
+    if not rows:
+        ratio_flag = "NO_RATIO_CLAIM"
+    elif unpaired:
+        ratio_flag = "UNPAIRED_PRESENT"
+    else:
+        ratio_flag = "ALL_PAIRED"
+
+    synced_row = next((r for r in rows if "synced_rate" in r["name"]), None)
+    cov_disp = synced_row["ratio"] if synced_row else "NA"
+    rel_disp = synced_row.get("pair_ratio") if synced_row else "NA"
+    gap_disp = synced_row.get("gap") if synced_row else "NA"
+    one_page = " | ".join([
+        "ratio-vs-absolute自检(相对率≠绝对量,统计纪律同构非EEG)",
+        "率读数%d" % len(rows),
+        "配对%d" % counts["PAIRED_WITH_ABSOLUTE"],
+        "无绝对量%d" % counts["UNPAIRED_RATIO"],
+        "coverage=%s" % cov_disp,
+        "reliability=%s" % rel_disp,
+        "gap=%s" % gap_disp,
+        "flag=%s" % ratio_flag,
+    ]) + " → 判定权归用户"
+
+    return {
+        "ratio_flag": ratio_flag,
+        "rows": rows,
+        "counts": counts,
+        "unpaired_rows": unpaired,
+        "one_page": one_page,
+        "honesty": (
+            "借 Cherrad et al. 2026 Nat Commun '相对功率↑但绝对功率↓,只看相对会误判睡更深'"
+            "的锋利镜面做统计纪律同构自检: 内核非EEG/无功率谱/无真实慢波或纺锤/无真实神经信号, "
+            "绝不宣称真实相对-绝对功率或真实分母游戏攻击面; 判据是'每个率读数必须配绝对量计数伴侣', "
+            "最锋利对偶取§4S79权威口径synced_rate(coverage含补判)/authentic_birth_rate(reliability真就位)"
+            "并显式暴露gap=0.7273,接回权威口径不等于刷绿(真实就位2/缺口14如实保留); "
+            "逐图数字二手交叉一致未逐字核对原文,不冒充原文; 0问题率同样须配count伴侣,不拿0刷绿; "
+            "UNPAIRED_RATIO是标注非裁定(不删除/不伪造/不替用户裁定); 注入仅负向测试生产恒None; "
+            "只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": (
+            "Cherrad N. et al. 2026 Nature Communications DOI 10.1038/s41467-026-79135-y "
+            "(Nature官网/Crossref一手, PDF反爬逐图数字二手交叉一致); §4S79 coverage/reliability权威对偶; "
+            "prereg_ratio_vs_absolute_probe_20261128.json SHA 6c8299f0…"),
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
 def takeover_request(action, nonce=None, note="", log_path=None, record=True):
     """【本机接管·下行】本机写一条接管指令到共享收件箱，供下次 runner 消费。
 

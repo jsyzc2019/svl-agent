@@ -914,3 +914,23 @@ R7防重蹈recognition误标:明确排除纯诊断探针(test_green_vs_productio
 提交:Git Data API以ecc731ef全量tree为base_tree,创建17 blob→增量tree→commit→PATCH ref main,父=ecc731ef。
 核验:独立读远端HEAD/父提交、逐文件raw字节对拍(绕开大tree截断);权威态四件套远端本地仍相同(本次不推权威态)。
 凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->
+
+<!-- §4S87 ratio_vs_absolute_probe——Nat Commun迷走论文'相对指标改善≠绝对指标改善/分母游戏'只读自检(用户裁定A)
+触发:用户回源 Cherrad et al. 2026 Nat Commun 迷走传入解离态论文后裁定"A"(把最锋利统计镜做成对内核只读自检,不动权威态)。
+一手依据(已核):DOI 10.1038/s41467-026-79135-y,Nature官网元数据/摘要/12作者/日期/COI/CC BY 4.0一手确认,Crossref对得上;全文PDF被反爬挡住,Fig4/5逐图数字(相对功率↑但delta/sigma绝对功率↓/整体flattening)标二手交叉一致不冒充原文逐字。来源等级A但诚实分层。
+最锋利镜面:论文"低频相对功率↑被误读为睡更深,其实是高频掉得更多的分母游戏" ≡ 内核synced_rate=0.9091(coverage含8条补判看着高) vs authentic_birth_rate=0.1818(reliability真就位2/11),gap=0.7273——与§4S79 support_escape同构,直击分母游戏刷绿。
+预注册prereg_ratio_vs_absolute_probe_20261128.json SHA 6c8299f0…(改码前锁死),内核前置7007e500…;备份pre_patch_ratio_vs_absolute/kernel_before_ratio_vs_absolute.py(7007e500…)可回滚。
+实现:kernel.py纯新增ratio_vs_absolute_probe(ratio_signals=None)。扫描面精确锁定9条真实相对率读数,每条必须配绝对量计数伴侣:①synced_rate(coverage)配authentic_birth_count=2/backfilled=8/total=11 ②authentic_birth_rate配2/11 ③abstention_rate配1/11 ④stale_rate配STALE=0/13 ⑤undated_rate配UNDATED=0/13 ⑥pass_weak_rate配pass_weak_count=0 ⑦weakened_rate配weakened_count/total_asserts ⑧misread_rate配misread_count/qmark ⑨corroboration_ratio配cross=8/per_tag=27。配对判据:absolute非空且声明paired;对coverage/synced_rate类率额外强制blob含reliability/authentic对偶(无对偶即UNPAIRED,防分母游戏)。0问题率无count伴侣也判UNPAIRED(不拿0刷绿)。分类PAIRED_WITH_ABSOLUTE/UNPAIRED_RATIO,flag三值NO_RATIO_CLAIM/ALL_PAIRED/UNPAIRED_PRESENT。
+真实结论:9条全配对,0无配对,flag=ALL_PAIRED(诚实零命中不伪造风险也不刷保证);最锋利对偶显式暴露coverage=0.9091/reliability=0.1818/gap=0.7273,接回权威口径不等于刷绿(就位2/缺口14如实保留)。
+验收:G3负向注入12守卫全绿(预注册SHA/真实ALL_PAIRED/9条精确扫描面+绝对量evidence落地/coverage-reliability-gap暴露/只读字段/只报率无绝对量必UNPAIRED/coverage高无对偶必UNPAIRED/0率无count必UNPAIRED/全paired必ALL_PAIRED/空注入NO_RATIO_CLAIM/honesty含非EEG+无功率谱+不宣称真实+二手不冒充+0率须配count+标注非裁定+判定权归用户/权威态零副作用)。G6干净同口径对拍:①新内核011b7da5…+全量320收集exit=0/FAILED=0/ERROR=0=308+12;②备份内核7007e500…+基线308收集exit=0/FAILED=0(零回归铁证);③恢复后011b7da5…AST OK。diff确认内核仅新增1函数,函数集合无变化。
+诚实边界:内核非EEG/无功率谱/无真实慢波或纺锤/无真实神经信号,不宣称真实相对-绝对功率或真实分母游戏攻击面;只做"率读数是否配绝对量防误读"统计纪律同构自检;逐图数字二手交叉一致不冒充原文;UNPAIRED_RATIO是标注非裁定;不替用户裁定;判定权归用户。
+零副作用:权威态5f7a2584…/constitution 2ad148c7…/hb ea749f76…/inbox 8806b248…/DECISIONS 91114955…/归档账d73bfef5…/KB 0938b3df…七件套动手前后逐一相同;只读不写盘不消费不进判定,不改被扫探针字段;verdict_unchanged/consumed=false/is_gate=false。GitHub本轮未推(用户未要求)。 -->
+
+<!-- §4S88 GitHub同步§4S87(Git Data API通道,用户"推Github")
+触发:用户"推Github"。远端基线HEAD=82e55163(§4S86)。本沙箱无.git,走Git Data API(§4S11/68/76/80/82/84/86先例)。
+吸取§4S82教训:先落本同步账再一次性推含账SESSION_HANDOFF,远端HEAD直接含自身,无双commit。
+待推6文件:kernel.py(新增ratio_vs_absolute_probe)、test_ratio_vs_absolute.py(12守卫)、prereg_ratio_vs_absolute_probe_20261128.json、pre_patch_ratio_vs_absolute/kernel_before_ratio_vs_absolute.py(回滚备份)、read_natcomm_vagal_20261128/factcheck.json(Nat Commun迷走论文回源证据)、SESSION_HANDOFF.md(含§4S87/§4S88)。远端逐文件检查:kernel.py与SESSION_HANDOFF.md已存在(改动),其余4文件MISSING(404)为新增。
+提交前:6文件token全串扫描(ghp_/github_pat_/sk-/sk-or-v1_);SESSION_HANDOFF命中13处均为历史纪律描述文字(ghp_/sk-字样+§4S58/65/86叙述,非真实key值,§4S86账第818行已载同类),新文件与kernel.py全为0;权威态verdict=GAP_INCONCLUSIVE/KERNEL_VERSION=7.5.0未污染。
+提交:Git Data API以82e55163全量tree为base_tree,创建6 blob→增量tree→commit→PATCH ref main,父=82e55163。
+核验:独立读远端HEAD/父提交、逐文件raw字节对拍(绕开大tree截断);权威态四件套远端本地仍相同(本次不推权威态)。
+凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->

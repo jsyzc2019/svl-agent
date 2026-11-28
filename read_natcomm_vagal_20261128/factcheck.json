@@ -1,0 +1,76 @@
+{
+  "task": "回源核查 Cherrad et al. 2026 Nat Commun 迷走传入解离态论文",
+  "date": "2026-11-28",
+  "user_citation_check": {
+    "status": "VERIFIED",
+    "detail": "用户给出的标题/12位作者顺序/收稿2025-11-17/接收2026-10-14/在线2026-11-13 与 Nature 官网 + Crossref 一手完全一致"
+  },
+  "primary_sources": {
+    "nature_article": "https://www.nature.com/articles/s41467-026-79135-y (HTML 254026B 本地缓存 read_natcomm_vagal_20261128/nature_page.html; 摘要/作者/单位/声明/许可全文抽取)",
+    "doi": "10.1038/s41467-026-79135-y",
+    "crossref": "api.crossref.org/works/10.1038/s41467-026-79135-y — type=journal-article, container=Nature Communications, publisher=Springer Nature, published=2026-11-13, created=2026-11-13T10:43:36Z, author_count=12, license=CC BY 4.0",
+    "fulltext_status": "PDF 端点被站点反爬挡住(?proof=true/?download=1 均返回254026B HTML);页面静态HTML只含Abstract+声明(52 p/6612字符),不含Results/Methods正文/图表;Europe PMC 暂无(inEPMC=0,太新)。逐图数字无法一手逐字核对,已诚实降级标注"
+  },
+  "source_quality_contrast": "与上一轮 The Debrief/Marx&Gilon 不同:本文是 Nature Communications(SCIE Q1)、作者声明无利益冲突、CC BY 4.0、提供 Transparent Peer Review file/Reporting Summary/Supplementary。来源等级 A(高可信),但仍不把二手解读数字冒充原文逐字。",
+  "abstract_primary": [
+    "Parasympathetic nervous system activity, vital for restorative sleep, is influenced by vagal sensory afferents, but how these shape brain-body correlates of sleep remains open.",
+    "chemogenetic VSN stimulation during the resting phase induced a non-rapid-eye-movement sleep (NREMS)-like state with enriched, but homeostatically regulated, low-frequency (0.75-4 Hz) EEG activity, yet suppressed REMS.",
+    "Simultaneously, brain-body temperatures dropped while LC activity increased.",
+    "The gradual recovery towards normal NREMS-REMS-cycles was accelerated by external warming, identifying cooling as key contributing factor.",
+    "conclusion: VSN activation can promote brain-body correlates as a continuum of normal NREMS while engaging wake-promoting forebrain neuromodulation, revealing a coexistence of classically incompatible sleep- and wake-associated signatures."
+  ],
+  "onehand_confirmed": {
+    "authors_units": "12作者;通讯Anita Lüthi(洛桑大学基础神经科学系);含Paul Franken(睡眠稳态模型权威,洛桑基因组中心+萨里睡眠研究中心);Osorio-Forero 兼荷兰神经科学研究所",
+    "dates": "Received 17 Nov 2025 / Accepted 14 Oct 2026 / Published online 13 Nov 2026",
+    "COI": "The authors declare no competing interests.",
+    "license": "CC BY 4.0; Open Access; Springer Nature  jurisdictional neutral statement"
+  },
+  "secondary_crosschecked": [
+    {
+      "claim": "VSNs 胞体在颈静脉-结状神经节(JNG),VGLUT2+,投射同侧NTS/AP;DMV(运动背核)基本不染",
+      "source": "澎湃+三篇公众号交叉一致(对应Fig1)",
+      "grade": "SECONDARY_CONSISTENT"
+    },
+    {
+      "claim": "离体脑片光遗传:107个NTS记录神经元中18个(~17%)有光诱发EPSC,13个形态回溯;DNQX 10uM 压到<10%支持AMPA谷氨酸能;13/18潜伏期固定提示单突触,10/13兼有多突触成分",
+      "source": "博雅生苑+第四篇公众号(Fig1)",
+      "grade": "SECONDARY_CONSISTENT",
+      "note": "18/107是脑片采样阳性率,不是'全NTS只有17%接受迷走输入',也不是107只动物"
+    },
+    {
+      "claim": "CNO 1.5/2.5 mg/kg (i.p.) 化学遗传激活;cFos: NTS/AP 60-90min升高(NaCl n=7/CNO n=8);心率可逆下降(9/11可量化);活动减少但翻正反射保留(n=5)排除麻醉",
+      "source": "多源交叉(Fig2)",
+      "grade": "SECONDARY_CONSISTENT"
+    },
+    {
+      "claim": "反直觉核心:LC cFos双侧升高(n=6/组);jGCaMP8s LC群体光度(n=5)持续高于自发觉醒、infraslow波动消失;GRABNE1h 丘脑NA张力>=3h不衰减;血浆皮质酮未升高排除应激",
+      "source": "多源交叉(Fig3)",
+      "grade": "SECONDARY_CONSISTENT",
+      "note": "LC钙信号≠单单位放电≠NE浓度;无LC抑制/损毁因果实验"
+    },
+    {
+      "claim": "EEG陷阱:SO(0.75-1.5Hz)/delta(1.5-4Hz)相对功率升高,但sigma(10-15Hz纺锤)占比下降且无动态波动;delta与sigma的绝对功率均下降、整体低振幅flattening;REM受抑(1.5mg/kg约74min/2.5mg/kg约174min首个REM,n=11)",
+      "source": "多源交叉(Fig4/5)",
+      "grade": "SECONDARY_CONSISTENT",
+      "note": "这是最锋利的一条:相对富集≠绝对增强,分母游戏"
+    },
+    {
+      "claim": "48h记录(n=9)delta功率按正常稳态衰减(Process S模型吻合,Franken参数);REM丢失24h内完全代偿;心率12h内恢复",
+      "source": "多源交叉(Fig6)",
+      "grade": "SECONDARY_CONSISTENT"
+    },
+    {
+      "claim": "皮层温度最大降约6.7C(n=7);降温幅度与REM潜伏期强负相关 R2=0.943 p=8.2e-9;REM复现温度近恒定(阈值样);1h环境加温(n=8)缩小降温、缩短REM潜伏期、加快频谱恢复且不改药物暴露(n=4)",
+      "source": "多源交叉(Fig7/8)",
+      "grade": "SECONDARY_CONSISTENT",
+      "note": "相关非因果,但加温是干预实验更有力;降温幅度个体差异大"
+    },
+    {
+      "claim": "作者坚持称NREMS-like而非torpor-like:降温不到10C休眠标准,缺乏主动产热调控",
+      "source": "公众号精读",
+      "grade": "SECONDARY_SINGLE",
+      "note": "未一手核对原文措辞"
+    }
+  ],
+  "honest_boundary": "一手确认:元数据/摘要/日期/COI/许可/期刊等级;全文PDF被反爬挡住,Results逐图数字来自3-4篇二手解读交叉一致但未逐字核对原文,已全部标注SECONDARY。不把'类NREM'说成'睡得更好',不把降温相关性说成唯一因果,不外推到人类临床VNS。判定权归用户。"
+}
