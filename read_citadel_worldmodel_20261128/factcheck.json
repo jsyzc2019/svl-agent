@@ -1,0 +1,70 @@
+{
+  "prereg_id": "read_citadel_worldmodel_20261128",
+  "read_at": "2026-11-28T22:45:00+08:00",
+  "user_article": {
+    "title": "Citadel Securities：如何构建持续更新的世界模型",
+    "author": "狄奥尼索斯之歌（知乎/公众号）",
+    "published": "2026-11-08 10:00 新加坡",
+    "note": "用户以截图提供。经检索命中微信公众号全文(mp.weixin.qq.com/s?__biz=MzY4MTE1NjM5Nw==&mid=2247484808)，内容与截图AI摘要逐条对应，一手确认。",
+    "source_grade": "B（对一手演讲的中文精编转述）"
+  },
+  "primary_talk": {
+    "title": "Your Company Has No Model of Itself. Agents Can Build One",
+    "speaker": "Joao Wenzel, Citadel Securities",
+    "event": "AI Engineer conference",
+    "date": "2026-11-08（约18分56秒，YouTube jDwc0aXTAFg）",
+    "primary_transcript": "https://sozai.app/transcript/company-no-model-itself-agents-build-one-joao-wenzel-citadel-securities (全文逐字转写)",
+    "source_grade": "A（演讲逐字转写一手，可核对具体字段/数字/措辞）"
+  },
+  "open_source_investigation": {
+    "user_request": "深入研究其开源代码",
+    "verdict": "NO_PUBLIC_CODE——该演讲对应的Citadel Securities内部组织世界模型系统没有公开开源代码",
+    "evidence": [
+      "GitHub用户搜索 Joao Wenzel → WenzelJoao = 'João Vitor Wenzel Moreira'(巴西SENAI学生,22个课程作业仓库:TechBistro/GoalTrack/SA_Clinica等,无一个与组织记忆/世界模型相关),非演讲者本人",
+      "GitHub用户 joaowenzel = 空账号(1 repo,无name/company/bio),无法关联Citadel",
+      "GitHub仓库搜索 'institutional memory state estimator' → total_count=0; 'company world model slack deck' → 0",
+      "演讲全文转写(sozai.app)通篇无 GitHub/repo/open source/source code/notebook 提及",
+      "视频聚合页(bestblogs.dev/en/video/0d3c61fc0)确认无任何源代码/仓库/补充材料外链",
+      "觉醒学院文章全文仅出现一个演示字段JSON(slack传感器状态),无代码仓库",
+      "Citadel Securities为自建技术到芯片的做市商,>2/3员工写代码,该系统是其内部专有institutional memory layer,属核心内部工具,不公开"
+    ],
+    "honesty": "严格不编造仓库。用户要'深入研究开源代码',但一手核查结论是不存在公开代码——如实告知,并转向真正可深挖的一手材料:演讲逐字转写中的工程实现细节(记录schema/五阶段循环/专家工作流/回测设计/传感器失效)。同名的WenzelJoao是另一个人,绝不能张冠李戴。"
+  },
+  "engineering_details_from_primary_transcript": {
+    "positioning": "机构记忆层(institutional memory layer):记录团队关系(重组后不再交流)、项目历史(为何多次改范围)、组织政治(谁在场/说了什么/没说什么)",
+    "three_strategy_questions": ["Where do we stand right now", "What's going to happen next", "How did we get here"],
+    "two_evidence_channels": {
+      "top_down": "PPT/战略文档/状态报告——整洁但有人为加工,'西瓜项目'(外绿内红)",
+      "bottom_up": "会议纪要/Slack/代码变更/agent session traces——噪声大但接近真相",
+      "fusion": "证据在模型层汇合,不由任何单一来源裁决"
+    },
+    "state_estimator_logic": "信念随'距上次支持证据的时间'增长而信任衰减、边界模糊;新证据到来则不确定性坍缩;更新质量看三件事:①距上次信号多久 ②来源是否仍可信 ③是否与其他传感器一致",
+    "five_stage_loop": {
+      "update": "每月新PPT+上月记录→纵向记录链;区分'被报告的'与'证据指向的'(PPT绿但评论有未解决依赖→标黄);关键纪律:不回改历史月份,只前馈修复,为评测留干净时序基线;每条记录写:当时报告了什么/证据指向哪里/为什么",
+      "age": "每个事实有半衰期;3年数据:约一半交付日期2个月内变动,其中90%推迟;每条声明绑定作出日期,判断带新近度偏置",
+      "observe": "放弃'一把梭YOLO全量语料'(细节丢失),改为专家智能体分头提取+其他智能体交叉复核;单个项目'有洞察更新'数量翻倍以上",
+      "grade": "回测:取过去某日快照,对比当时标记与其后真实标签;被标记'可疑绿'项目后3个月转黄/红概率=未标记2倍(中文精编给出精确数:18% vs 10%);不是精确预测哪里错,而是指出该看哪里",
+      "correct": "在用户所在处(Slack/邮件/应用)收集反馈;区分问'事实'(只修一条输出)vs问'规则'(修一类输出);记录区分'智能体推断的'与'人确认过的',只有人确认写confirmed字段;决策矩阵:有把握+低风险→自动应用,没把握+低风险→等更多证据,高风险→精心设计问谁/何时问(一次点击确认是上限)"
+    },
+    "sensor_failure_example": {
+      "analogy": "高速时速表失灵≠车速为0,只是传感器故障",
+      "bug": "早期把渠道静默当零信号→误判'频道安静是不是出事了'",
+      "fix": "分离记录'上次尝试取信息时间'与'上次正常取得时间',两者有差距按故障处理而非按状态处理",
+      "record_schema_json": {"slack": {"last_tried": "2026-03-16", "last_ok": "2026-02-20", "state": "unseen"}}
+    },
+    "status_deck_extraction": "XML解析('绿色'十六进制色码概念难题)与视觉模型(低分辨率截图分不清31还是81)互相印证,合成得真画面",
+    "identity_across_renames": "项目3月改名,靠参与人连续性+目标连续性推断仍是Northstar项目",
+    "outputs": ["引导领导层对话(从文档与证据不一致处开场)", "管理者每周简报(什么卡住/什么变安静)", "所有智能体可依赖的共享上下文层(3年积累,新agent接入不必从零摸索)"],
+    "open_problems": ["实体归一:同一客户在CRM/13F/纪要/播客四条记录四个名字无统一ID(62亿vs80亿美元),实践'读取时合并/每类事实指定所有者/歧义问人而非硬合", "反馈经济性:何时自动应用vs何时问人"]
+  },
+  "kernel_mirror": {
+    "sharpest_mirror": "演讲最锋利:'报告说的'≠'证据支持的'(西瓜项目外绿内红)≡内核synced_rate0.9091(报告绿)vs authentic_birth2/11(证据黄),已由§4S79/87/90/91镜像;新增最锋利一面='传感器静默≠零信号'≡内核数据缺失/未读文件不能被当成'确认无变化',须区分unseen与zero。",
+    "sensor_failure_mirror": "last_tried/last_ok/state=unseen三字段≡内核权威态实读失败(UNREADABLE)不能判为'verdict无变化',应判'传感器未观测'——与§4S90 write_through的UNREADABLE计数、§4S79 BIRTH_UNVERIFIABLE同构",
+    "half_life_mirror": "每个事实有半衰期+90%交付日期推迟≡内核心跳/账本时间戳老化:旧锚点声明应按新近度加权,不能用三个月前的判定当今天现实",
+    "feed_forward_mirror": "不回改历史月份只前馈修复≡内核§4S89增量不变量:权威态/历史落账不可回改,新判定只向前生效,为回测留干净基线",
+    "grade_backtest_mirror": "用后续真实标签回测当时预警(18%vs10%)≡内核G6同口径对拍+§4S90写穿:探针当时的flag应能被后续权威态实读检验",
+    "honesty_boundary": "无公开代码,不编造仓库;同名WenzelJoao是另一个人;演讲是经验分享非同行评议论文,数字为讲者自报;内核无组织/Slack/PPT/传感器,只做结构同构自检;判定权归用户"
+  },
+  "excluded": ["WenzelJoao(João Vitor Wenzel Moreira,巴西SENAI学生,非演讲者)", "joaowenzel(空账号)"],
+  "rights": "判定权归用户"
+}

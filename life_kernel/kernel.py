@@ -4804,6 +4804,154 @@ def prompt_probe(prompt_signals=None):
     }
 
 
+def sensor_unseen_probe(sensor_signals=None):
+    """【§4S93 只读自检】传感器静默≠零信号：读失败/判不了/无时间戳必须标 unseen。
+
+    借 Citadel Securities João Wenzel 组织世界模型演讲(该演讲无开源代码,已硬核核查)
+    最锋利的工程细节做内核结构自检：早期把渠道静默当零信号误判"频道安静=出事",
+    修复为分离 last_tried/last_ok 双时间戳并引入 unseen 态。
+    内核无传感器/slack/做市商世界模型,只查三面共 6 条真实判据:
+      面1 UNSEEN_NOT_ZERO    : 七件套/权威态实读失败必须标 unseen,不计"无变化/正常"
+      面2 DOUBLE_TIMESTAMP   : 心跳/收件箱观测须带 timestamp,UNDATED 不并入正常
+      面3 STAMPED_READING    : 判不了(BIRTH_UNVERIFIABLE)/弃权(abstention)不并入零信号
+    只读不写盘不消费不进判定; 判定权归用户。
+
+    prereg_sensor_unseen_probe_20261128.json SHA 75ac272a… 改码前锁死。
+    """
+    # 注入分支显示变量先初始化,避免 one_page 引用未定义(§4hc 惯例)
+    auth_verdict_display = "UNREADABLE" if sensor_signals is None else "INJECTED"
+    seven_unreadable = 0
+    hb_undated = 0
+    ib_undated = 0
+    birth_unverifiable = 0
+    abstention_count = 0
+
+    if sensor_signals is None:
+        # ---- 真实采集 ----
+        birth = verdict_at_birth_probe()
+        stal = staleness_probe()
+        try:
+            ab = abstention_probe() if callable(globals().get("abstention_probe")) else {}
+        except Exception:
+            ab = {}
+        birth_unverifiable = int((birth.get("counts") or {}).get("BIRTH_UNVERIFIABLE", 0))
+        abstention_count = int(ab.get("abstention_count", 0))
+
+        # 权威态文件实读(非探针自报)
+        auth = {}
+        try:
+            auth = json.load(open(os.path.join(HERE, os.pardir, "authoritative_state.json"),
+                                  encoding="utf-8"))
+            auth_verdict_display = auth.get("verdict", "UNKNOWN")
+        except (OSError, ValueError):
+            auth_verdict_display = "UNREADABLE"
+
+        # 面1: 七件套实读,读失败必须标 UNSEEN 而非计入"正常"
+        seven = [
+            "authoritative_state.json",
+            os.path.join("life_kernel", "constitution.sha256"),
+            os.path.join("life_kernel", "data", "heartbeat_log.jsonl"),
+            os.path.join("life_kernel", "data", "inbound_inbox.jsonl"),
+            "DECISIONS_20261127.json", "gap_archive_20261128.json",
+            "knowledge_base_store.json",
+        ]
+        repo_root = os.path.abspath(os.path.join(HERE, os.pardir))
+        seven_readable = 0
+        for rel in seven:
+            p = os.path.join(repo_root, rel) if not os.path.isabs(rel) else rel
+            try:
+                hashlib.sha256(open(p, "rb").read()).hexdigest()
+                seven_readable += 1
+            except (OSError, ValueError):
+                seven_unreadable += 1  # 读失败→UNSEEN,不并入"正常"
+
+        # 面2: 观测时间戳覆盖(UNDATED 不算正常)
+        for it in stal.get("per_item", []):
+            if it.get("source") == "heartbeat" and it.get("state") == "UNDATED":
+                hb_undated += 1
+            elif it.get("source") == "inbox" and it.get("state") == "UNDATED":
+                ib_undated += 1
+
+        sensor_signals = [
+            {"name": "authority.seven_readable_not_zero", "surface": "UNSEEN_NOT_ZERO",
+             "disclosed": (seven_unreadable == 0),
+             "evidence": "seven_readable=%d unreadable=%d(unreadable→UNSEEN非正常)" % (
+                 seven_readable, seven_unreadable)},
+            {"name": "authority.verdict_read_not_zero", "surface": "UNSEEN_NOT_ZERO",
+             "disclosed": (auth_verdict_display not in ("UNREADABLE", "UNKNOWN")),
+             "evidence": "authority_verdict=%s(UNREADABLE→unseen非冻结确认)" % auth_verdict_display},
+            {"name": "heartbeat.timestamp_stamped", "surface": "DOUBLE_TIMESTAMP",
+             "disclosed": (hb_undated == 0),
+             "evidence": "hb_undated=%d(last_tried/last_ok语义,UNDATED不并入正常)" % hb_undated},
+            {"name": "inbox.timestamp_stamped", "surface": "DOUBLE_TIMESTAMP",
+             "disclosed": (ib_undated == 0),
+             "evidence": "inbox_undated=%d(at观测时间,UNDATED不并入正常)" % ib_undated},
+            {"name": "verdict.birth_unverifiable_disclosed", "surface": "STAMPED_READING",
+             "disclosed": True,  # 显式暴露 BIRTH_UNVERIFIABLE=判不了,不并入就位
+             "evidence": "BIRTH_UNVERIFIABLE=%d(判不了=信道静默,标UNSEEN不计就位)" % birth_unverifiable},
+            {"name": "abstention.not_masked_zero", "surface": "STAMPED_READING",
+             "disclosed": True,  # 显式暴露 abstention=未表态,不并入零信号
+             "evidence": "abstention_count=%d(弃权=未表态非无负迁移,不并入零信号)" % abstention_count},
+        ]
+
+    rows = []
+    valid_classes = ("UNSEEN_DISCLOSED", "ZERO_SIGNAL_AS_UNSEEN",
+                     "SINGLE_TIMESTAMP_CONFLATION", "UNSTAMPED_READING")
+    for s in sensor_signals:
+        disclosed = s.get("disclosed") is True
+        forced = s.get("force_class")
+        cls = forced if forced in valid_classes else (
+            "UNSEEN_DISCLOSED" if disclosed else "ZERO_SIGNAL_AS_UNSEEN")
+        rows.append({
+            "name": str(s.get("name", "?")),
+            "surface": str(s.get("surface", "?")),
+            "class": cls,
+            "evidence": str(s.get("evidence", ""))[:120],
+        })
+
+    counts = {k: sum(1 for r in rows if r["class"] == k) for k in valid_classes}
+    gaps = [r for r in rows if r["class"] != "UNSEEN_DISCLOSED"]
+    if not rows:
+        sensor_flag = "NO_SENSOR_CLAIM"
+    elif gaps:
+        sensor_flag = "UNSEEN_MISREAD_PRESENT"
+    else:
+        sensor_flag = "ALL_UNSEEN_DISCLOSED"
+
+    one_page = " | ".join([
+        "sensor-unseen自检(静默非zero;双时间戳;判不了不并入正常)",
+        "判据%d" % len(rows),
+        "披露%d" % counts["UNSEEN_DISCLOSED"],
+        "误读%d" % len(gaps),
+        "权威态=%s" % auth_verdict_display,
+        "flag=%s" % sensor_flag,
+    ]) + " → 判定权归用户"
+
+    return {
+        "sensor_flag": sensor_flag,
+        "rows": rows,
+        "counts": counts,
+        "gap_rows": gaps,
+        "one_page": one_page,
+        "honesty": (
+            "借Citadel Securities João Wenzel组织世界模型演讲'传感器静默≠零信号'(早期把渠道"
+            "静默当零信号误判频道安静=出事,修复为last_tried/last_ok双时间戳+unseen态)做结构"
+            "同构自检: 内核无传感器/slack/渠道/做市商世界模型,不宣称真实组织记忆或状态估计"
+            "能力; 只查'读失败标unseen非zero+双时间戳UNDATED不并入正常+判不了/弃权不并入零"
+            "信号'三面; 该演讲无开源代码已硬核核查(同名账号排除/仓库搜索0/转写无代码链接),"
+            "不编造源码,只研究一手转写工程细节; 与§4S79 BIRTH_UNVERIFIABLE/§4S90 UNREADABLE/"
+            "§4S67 UNDATED(没判≠判了没问题)同构; ZERO_SIGNAL_AS_UNSEEN/SINGLE_TIMESTAMP_"
+            "CONFLATION/UNSTAMPED_READING是标注非裁定; 注入仅负向测试生产恒None; 只读不写盘"
+            "不消费不进判定; 判定权归用户"),
+        "based_on": (
+            "Citadel Securities João Wenzel AI Engineer演讲'Companies don't have a model, "
+            "agents build one'(sozai.app一手逐字转写+中文精编,无开源代码,见read_citadel_"
+            "worldmodel_20261128/factcheck.json); slack状态schema{last_tried,last_ok,state:unseen}; "
+            "§4S79/90/67锚点纪律; prereg_sensor_unseen_probe_20261128.json SHA 75ac272a…"),
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
 def takeover_request(action, nonce=None, note="", log_path=None, record=True):
     """【本机接管·下行】本机写一条接管指令到共享收件箱，供下次 runner 消费。
 

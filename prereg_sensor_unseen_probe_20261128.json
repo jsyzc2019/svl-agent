@@ -1,0 +1,68 @@
+{
+  "prereg_id": "prereg_sensor_unseen_probe_20261128",
+  "created_at": "2026-11-28T22:52:00+08:00",
+  "locked_before_code": true,
+  "trigger": "用户给Citadel Securities组织世界模型演讲图文(João Wenzel, AI Engineer),要求检索并深入研究开源代码;硬核核查确认无开源仓库(演讲者同名账号排除/仓库搜索0/转写无代码链接);转向研究一手工程细节,其中'传感器静默≠零速度'(last_tried/last_ok双时间戳+unseen态)最锋利;用户裁定A做成只读自检探针",
+  "source": {
+    "primary": "sozai.app演讲逐字转写 + 中文精编全文(jxxy.net/ai/articles/company-self-model-agents)",
+    "key_quote": "早期把渠道静默当零信号,误判'频道安静=出事';修复为分离last_tried/last_ok时间戳,新增unseen态",
+    "example_schema": "{ 'slack': { 'last_tried': '2026-03-16', 'last_ok': '2026-02-20', 'state': 'unseen' } }",
+    "open_source_verdict": "NO_PUBLIC_CODE — 金融机构内部专有系统,非开源;核查证据链见 read_citadel_worldmodel_20261128/factcheck.json",
+    "source_level": "一手转写A级(工程细节),无开源代码可深挖已如实降级"
+  },
+  "kernel_mirror": "传感器静默≠零信号 ≡ 内核把'权威态实读失败UNREADABLE/文件缺失/判不了UNVERIFIABLE'误当'确认无变化/零信号/验证就位'是同类错误;应标unseen而非zero,与§4S79 BIRTH_UNVERIFIABLE、§4S90 UNREADABLE、§4S67 UNDATED(没判≠判了没问题)同构",
+  "function_name": "sensor_unseen_probe",
+  "signature": "sensor_unseen_probe(sensor_signals=None)",
+  "read_only": true,
+  "side_effects": "none — 不写盘、不消费、不进判定、不改被扫字段",
+  "scan_surface": {
+    "surface1_UNSEEN_NOT_ZERO": {
+      "checks": [
+        "authority.seven_readable: 七件套实读字节,任一UNREADABLE必须标UNSEEN_ATTEMPTED,不得计入'无变化/正常'",
+        "authority.verdict_read: 权威态verdict实读失败(UNREADABLE/UNKNOWN)必须标unseen,不得当GAP_INCONCLUSIVE冻结确认"
+      ],
+      "fail_class": "ZERO_SIGNAL_AS_UNSEEN"
+    },
+    "surface2_DOUBLE_TIMESTAMP": {
+      "checks": [
+        "heartbeat.timestamp_stamped: 每条心跳带timestamp观测时间,UNDATED不得并入正常(§4S67纪律)",
+        "inbox.timestamp_stamped: 每条收件箱带at观测时间,UNDATED不得并入正常"
+      ],
+      "fail_class": "SINGLE_TIMESTAMP_CONFLATION"
+    },
+    "surface3_STAMPED_READING": {
+      "checks": [
+        "verdict.birth_unverifiable_disclosed: verdict_at_birth的BIRTH_UNVERIFIABLE(=判不了,信道静默)必须显式标UNSEEN不得计就位",
+        "abstention.not_masked_zero: abstention_count(弃权=未表态非无负迁移)必须显式暴露不并入零信号"
+      ],
+      "fail_class": "UNSTAMPED_READING"
+    }
+  },
+  "classification": {
+    "rows": ["UNSEEN_DISCLOSED", "ZERO_SIGNAL_AS_UNSEEN", "SINGLE_TIMESTAMP_CONFLATION", "UNSTAMPED_READING"],
+    "flag_values": ["NO_SENSOR_CLAIM", "ALL_UNSEEN_DISCLOSED", "UNSEEN_MISREAD_PRESENT"],
+    "force_class_injection": "注入方显式force_class覆盖仅供负向测试,生产恒None"
+  },
+  "real_expected": {
+    "seven_readable": "7/7 READABLE(哈希5f7a2584/2ad148c7/ea749f76/8806b248/91114955/d73bfef5/0938b3df)",
+    "heartbeat_timestamp": "11/11带timestamp",
+    "inbox_timestamp": "13/13带at,UNDATED=0",
+    "birth_unverifiable": 1,
+    "abstention_count": 1,
+    "expected_flag": "ALL_UNSEEN_DISCLOSED"
+  },
+  "g6_acceptance": {
+    "baseline": "备份内核328cea44 + 基线356收集0失败",
+    "new": "新内核 + 全量368收集0失败(=356+12)",
+    "restore": "恢复后新内核AST OK,权威态七件套哈希逐一相同",
+    "diff": "仅新增1函数,函数集合无变化"
+  },
+  "honesty_requirements": [
+    "内核无传感器/slack/渠道/做市商世界模型",
+    "不宣称真实组织记忆或状态估计能力",
+    "只做'读失败标unseen非zero+双时间戳语义+判不了不并入正常'结构同构自检",
+    "Citadel演讲无开源代码已硬核核查,不编造源码",
+    "标注非裁定,判定权归用户"
+  ],
+  "boundary": "判定权归用户"
+}

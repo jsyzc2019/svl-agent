@@ -978,3 +978,23 @@ R7防重蹈recognition误标:明确排除纯诊断探针(test_green_vs_productio
 提交:Git Data API以ecd588f6全量tree为base_tree,创建15 blob→增量tree→commit→PATCH ref main,父=ecd588f6。
 核验:独立读远端HEAD/父提交、递归tree逐blob对拍(绕开大contents响应截断);权威态四件套远端本地仍相同(本次不推权威态)。
 凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->
+
+<!-- §4S93 sensor_unseen_probe——Citadel证券组织世界模型'传感器静默≠零信号/last_tried-last_ok双时间戳/unseen态'只读自检(用户裁定A并更新远端)
+触发:用户给Citadel Securities João Wenzel AI Engineer演讲图文,要求检索并深入研究开源代码;硬核核查确认该演讲无开源仓库(演讲者同名账号WenzelJoao=巴西SENAI学生非本人/joaowenzel空账号/仓库搜索institutional memory state estimator=0/sozai逐字转写与视频页均无代码链接),诚实降级为研究一手转写工程细节;用户裁定A做只读自检。
+一手依据(已核):sozai.app演讲逐字转写+中文精编(jxxy.net/ai/articles/company-self-model-agents)工程细节;最锋利工程点=早期把渠道静默当零信号误判'频道安静=出事',修复为分离last_tried/last_ok并加unseen态,演示schema{slack:{last_tried:'2026-03-16',last_ok:'2026-02-20',state:'unseen'}};五阶段循环update/age/observe/grade/correct(3年数据约一半交付日期2月内变动其中90%推迟;可疑绿后3月转黄红概率2倍);source level A(转写一手)但无开源代码已硬核核查不编造。
+最锋利镜面:传感器静默≠零信号 ≡ 内核把'权威态实读失败UNREADABLE/文件缺失/判不了UNVERIFIABLE/无时间戳UNDATED'误当'确认无变化/零信号/验证就位'是同类错误;应标unseen而非zero;与§4S79 BIRTH_UNVERIFIABLE/§4S90 UNREADABLE/§4S67 UNDATED(没判≠判了没问题)同构。
+预注册prereg_sensor_unseen_probe_20261128.json SHA 75ac272a…(改码前锁死),内核前置328cea44…;备份pre_patch_sensor_unseen/kernel_before_sensor_unseen.py(328cea44…)可回滚。
+实现:kernel.py纯新增sensor_unseen_probe(sensor_signals=None),diff确认仅新增1函数,AST OK。三面6条真实判据:面1 UNSEEN_NOT_ZERO①七件套实读7/7可读unreadable=0(读失败标UNSEEN非正常)②权威态verdict实读GAP_INCONCLUSIVE(UNREADABLE→unseen非冻结确认);面2 DOUBLE_TIMESTAMP③心跳hb_undated=0(last_tried/last_ok语义UNDATED不并入正常)④收件箱inbox_undated=0(at观测时间);面3 STAMPED_READING⑤BIRTH_UNVERIFIABLE=1显式暴露(判不了=信道静默标UNSEEN不计就位)⑥abstention_count=1显式暴露(弃权=未表态非无负迁移不并入零信号)。分类UNSEEN_DISCLOSED/ZERO_SIGNAL_AS_UNSEEN/SINGLE_TIMESTAMP_CONFLATION/UNSTAMPED_READING,flag三值NO_SENSOR_CLAIM/ALL_UNSEEN_DISCLOSED/UNSEEN_MISREAD_PRESENT。注入force_class显式覆盖仅供负向测试,生产恒None。
+真实结论:6条全披露,0误读,flag=ALL_UNSEEN_DISCLOSED(诚实零命中不伪造风险也不刷保证);七件套7/7可读、权威态实读GAP_INCONCLUSIVE、hb/inbox undated=0、BIRTH_UNVERIFIABLE=1/abstention=1显式暴露。
+验收:G3负向注入12守卫全绿(预注册SHA75ac272a/真实ALL_UNSEEN_DISCLOSED/三面6条精确扫描面/七件套实读+权威实读落地/双时间戳+不可验证暴露落地/只读字段/读失败当零信号必ZERO_SIGNAL_AS_UNSEEN/单时间戳混淆必SINGLE_TIMESTAMP_CONFLATION/未标注读数必UNSTAMPED_READING/全披露与空注入边界/honesty含无传感器不宣称世界模型无开源代码不编造没判≠判了没问题同构非裁定Citadel源/七件套零副作用)。G6干净同口径对拍:①新内核33ab6a10…+全量368收集exit=0/FAILED=0/ERROR=0=356+12;②备份内核328cea44…+基线356收集exit=0/FAILED=0/ERROR=0(零回归铁证);③恢复后33ab6a10…AST OK。diff确认仅新增1函数,函数集合无变化。
+诚实边界:内核无传感器/slack/渠道/做市商世界模型,不宣称真实组织记忆或状态估计能力;只做'读失败标unseen非zero+双时间戳UNDATED不并入正常+判不了/弃权不并入零信号'结构同构自检;演讲无开源代码已硬核核查(同名账号排除/仓库搜索0/转写无代码链接)不编造源码只研究一手转写工程细节;ZERO_SIGNAL_AS_UNSEEN/SINGLE_TIMESTAMP_CONFLATION/UNSTAMPED_READING标注非裁定;不替用户裁定;判定权归用户。
+零副作用:权威态5f7a2584…/constitution 2ad148c7…/hb ea749f76…/inbox 8806b248…/DECISIONS 91114955…/归档账d73bfef5…/KB 0938b3df…七件套动手前后逐一相同;只读不写盘不消费不进判定;verdict_unchanged/consumed=false/is_gate=false。GitHub见§4S94同步账。 -->
+
+<!-- §4S94 GitHub同步§4S93(Git Data API通道,用户"A,并更新远端")
+触发:用户裁定A实现sensor_unseen_probe并要求更新远端。远端基线HEAD=9e70f769(§4S92)。本沙箱无.git,走Git Data API(§4S11/68/76/80/82/84/86/88/92先例)。
+吸取§4S82教训:先落本同步账再一次性推含账SESSION_HANDOFF,远端HEAD直接含自身,无双commit。
+待推文件:kernel.py(新增sensor_unseen_probe,328cea44→33ab6a10)、SESSION_HANDOFF.md(含§4S93/94)、prereg_sensor_unseen_probe_20261128.json、test_sensor_unseen.py、pre_patch_sensor_unseen/kernel_before_sensor_unseen.py、read_citadel_worldmodel_20261128/factcheck.json。远端逐文件检查:kernel.py与SESSION_HANDOFF.md已存在(改动),其余MISSING(404)为新增。
+提交前:待推文件token全串扫描(ghp_[36]/github_pat_[60]/sk-or-v1-[20]);SESSION_HANDOFF历史纪律描述文字sk-/ghp_子串非真key(§4S86/88/92已载同类);权威态verdict=GAP_INCONCLUSIVE/KERNEL_VERSION=7.5.0未污染。
+提交:Git Data API以9e70f769全量tree为base_tree,创建待推blob→增量tree→commit→PATCH ref main,父=9e70f769。
+核验:独立读远端HEAD/父提交、递归tree逐blob对拍(绕开大contents响应截断);权威态四件套远端本地仍相同(本次不推权威态)。
+凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->
