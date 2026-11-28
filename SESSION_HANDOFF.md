@@ -737,3 +737,10 @@ B3(验证器塌缩探针,prereg_borrow_wave2_b3_20261128.json SHA 80861f1d…冻
 实现踩坑:内核是import datetime模块式导入,初写datetime.now(timezone.utc)报AttributeError,改datetime.datetime/datetime.timezone命名空间后AST OK。
 验收:G3负向注入7例全绿(40天前→STALE/坏时间戳→UNDATED不并入FRESH/stale_days边界可注入/每条不静默丢弃/收件箱注入inbound_unread随变);G6同口径对拍新内核206==备份内核206零回归,全量213=206+7守卫。内核SHA 194fee2c…,备份 pre_patch_staleness_signal/kernel_before_staleness_signal.py(1ad410f1…)可回滚。
 权威态零副作用:authoritative_state=5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…哈希动手前后一致。SKILL.md是agent指令文本非验证器,内核只做结构类比。判定权归用户。 -->
+
+<!-- §4S68 GitHub同步§4S66-67 20261128
+触发:用户"推一下"。远端HEAD原=6eae850(§4S65)。本沙箱无.git,clone→比对→提交→推送。
+clone踩坑:默认IP两次失败(8分20秒空壳/超时),换备用IP 20.27.177.113成功(7分31秒),hosts用完即恢复无残留。
+比对:本地相对远端16新增+2修改(SESSION_HANDOFF.md/kernel.py),全量差异与预期一致,排除pre_patch_*/.pytest_cache/.bak噪音。token核验:待提交文件无明文ghp_/sk-,权威态GAP_INCONCLUSIVE/l3=false/absolute=false未污染。
+提交fc43e05:18文件4033行新增,含§4S66深研证据(research_yc_garrytan_20261128/13份SKILL.md原文+evidence.json)、§4S67两探针(kernel.py)+守卫测试+预注册。
+推送:6eae850..fc43e05 main->main,status=## main...origin/main无ahead。API独立核验远端HEAD=fc43e05b1251一致。凭据纪律:token全程只在上传区(600)与临时push URL,用完即清(clone config token数0,临时clone已删),hosts无残留,凭据文件原样留存上传区。判定权归用户。 -->
