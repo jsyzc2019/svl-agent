@@ -1,0 +1,73 @@
+{
+  "prereg_id": "prereg_navigation_calibration_probe_20261128",
+  "created_at": "2026-11-28T23:36:00+08:00",
+  "kernel_sha_before": "33ab6a10f7640e5a",
+  "locked_before_code": true,
+  "trigger": "用户给康奈尔大学与ASAPP论文DecisionRAG(arXiv 2610.35868 Retriever-Free Retrieval),回源核查后裁定A做只读自检探针",
+  "source": {
+    "arxiv_id": "2610.35868",
+    "title": "Retriever-Free Retrieval: Navigating Documents with Decision Models",
+    "authors": "Chao Wan, Paul Junger, Beixi Du, Bodong Liu, Navaneetha Krishnan, Kilian Q. Weinberger (Cornell + ASAPP)",
+    "source_level": "A (arXiv abs+HTML全文98K curl本地解析,一手可读,无订阅墙)",
+    "open_source": "NO_OFFICIAL_CODE_REPO; 附录G开放权重judge(open-weight≠开源代码),CC BY 4.0; GitHub三组检索全0,不编造源码",
+    "factcheck": "read_arxiv_decisionrag_20261128/factcheck.json"
+  },
+  "kernel_mirror": "论文'能力不对称'(检索器漏掉证据生成器捞不回)+共享上下文可比性(候选放一起打分才可比,单独看着相关的在更好候选面前P(Yes)被压低)+CRITICAL召回上限≠首位命中(dense top100含gold 98.4%但导航首位命中70.1%>61.9%)+不可逆剪枝(pruned branches never expanded)",
+  "function_name": "navigation_calibration_probe",
+  "signature": "navigation_calibration_probe(nav_signals=None)",
+  "read_only": true,
+  "side_effects": "none — 不写盘、不消费、不进判定、不改被扫字段",
+  "scan_surface": {
+    "surface1_SHARED_CONTEXT_COMPARABLE": {
+      "checks": [
+        "recognition.four_classes_jointly: 四类判定(USER/ARCHIVE/DECLARED/NOISE)必须在同一次probe返回里并列可比,单独各判都通过却未并列即SEPARATE_NOT_COMPARABLE",
+        "recognition.flag_and_noise: recognition_flag=ALL_RECOGNIZED 且 UNRECOGNIZED_NOISE=0 在统一判定口径下成立"
+      ],
+      "fail_class": "SEPARATE_NOT_COMPARABLE"
+    },
+    "surface2_RECALL_VS_TOP1": {
+      "checks": [
+        "birth.synced_and_authentic_dual: synced_rate(召回/coverage=0.9091)必须与authentic_birth_rate(首位真就位=0.1818)双列,只报召回不报首位即RECALL_MASKS_TOP1",
+        "birth.backfill_exposed: backfilled_sync_count=8 / authentic=2 / total=11 显式暴露'召回含8条背填,真就位仅2'"
+      ],
+      "fail_class": "RECALL_MASKS_TOP1"
+    },
+    "surface3_IRREVERSIBLE_PRUNE": {
+      "checks": [
+        "archive.class_disclosed: 归档账14条gap_entries的class分布(ACCEPTED_BOUNDARY/HISTORICAL_IMMUTABLE/RESOLVED_EXECUTED)显式带'不再追/不动/已恢复'处置,裸标NOISE无处置即PRUNED_IRREVERSIBLE",
+        "archive.budget_and_recovery: decision字段显式给出剪枝预算与可恢复路径(13条不再追/9条不动/1条RESOLVED),不静默丢弃"
+      ],
+      "fail_class": "PRUNED_IRREVERSIBLE"
+    }
+  },
+  "classification": {
+    "rows": ["CALIBRATED", "SEPARATE_NOT_COMPARABLE", "RECALL_MASKS_TOP1", "PRUNED_IRREVERSIBLE"],
+    "flag_values": ["NO_NAVIGATION_CLAIM", "ALL_CALIBRATED", "CALIBRATION_GAP_PRESENT"],
+    "force_class_injection": "注入方显式force_class覆盖仅供负向测试,生产恒None"
+  },
+  "real_expected": {
+    "recognition_counts": "USER=3 ARCHIVE=1 DECLARED=7 NOISE=0, ALL_RECOGNIZED",
+    "synced_rate": 0.9091,
+    "authentic_birth_rate": 0.1818,
+    "authentic_birth_count": 2,
+    "backfilled_sync_count": 8,
+    "total": 11,
+    "archive_entries": 14,
+    "archive_counts": "ACCEPTED_BOUNDARY=13 / HISTORICAL_IMMUTABLE=9 / RESOLVED_EXECUTED=1 / DEFERRED_USER_DECISION=0",
+    "expected_flag": "ALL_CALIBRATED"
+  },
+  "g6_acceptance": {
+    "baseline": "备份内核33ab6a10 + 基线368收集0失败",
+    "new": "新内核 + 全量380收集0失败(=368+12)",
+    "restore": "恢复后新内核AST OK,权威态七件套哈希逐一相同",
+    "diff": "仅新增1函数,函数集合无变化"
+  },
+  "honesty_requirements": [
+    "内核无语料层级/决策模型/token概率/RAG,不宣称真实检索能力",
+    "只做'共享上下文可比+召回vs首位双列+不可逆剪枝显式处置'结构同构自检",
+    "DecisionRAG无官方开源代码仓库已核查,不编造源码,开放权重judge≠开源代码",
+    "九个主指标格非全赢(NQ R@10裸Jev 86.7<Dense 87.2)诚实标注",
+    "SEPARATE_NOT_COMPARABLE/RECALL_MASKS_TOP1/PRUNED_IRREVERSIBLE标注非裁定,判定权归用户"
+  ],
+  "boundary": "判定权归用户"
+}

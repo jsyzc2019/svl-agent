@@ -1,0 +1,76 @@
+{
+  "prereg_id": "prereg_diffusion_of_responsibility_probe_20261128",
+  "created_at": "2026-11-28T23:59:55+08:00",
+  "kernel_sha_before": "4f49bdd7455dd7d5",
+  "locked_before_code": true,
+  "trigger": "用户给 arXiv 2611.17820 Aligning AI Teams + safety-research/aligning-ai-teams + sidsrinivasan/magelab 三链接,回源核查(论文全文349KB+实验仓库478 blobs真开源)后裁定A做只读自检探针",
+  "source": {
+    "arxiv_id": "2611.17820",
+    "title": "Aligning AI Teams",
+    "authors": "Siddarth Srinivasan (Harvard), Morgan Jane Matthews, Jascha Sohl-Dickstein, Erik Jones",
+    "submitted": "2026-11-13",
+    "subjects": "cs.AI, CC BY 4.0, DOI 10.48550/arXiv.2611.17820",
+    "source_level": "A (arXiv abs+HTML全文349KB curl本地解析一手可读; PDF 7.4MB)",
+    "open_source": "TRUE — safety-research/aligning-ai-teams 478 blobs 真开源(3实验×5模型×多干预+分析管线); magelab 通用编排框架 submodule pin d63564b; 原始数据 Harvard Dataverse DOI 10.7910/DVN/8OYJES",
+    "factcheck": "read_aligning_ai_teams_20261128/factcheck.json"
+  },
+  "kernel_mirror": "论文'责任扩散'(diffusion of responsibility)在两阶段失守: discovery(模块视角agent从不跑端到端真实数据→从不观察系统级伤害) + action(观察到伤害后 fix/deflect/rationalize/ignore 四分离,常甩锅/合理化而非修)。标注硬纪律: response三类binary(attempted_fix/deflected/rationalized_harm)以 discovered=1 为前置(validator强制),每个置1必须逐字引用(找不到引用即0)。最锋利反直觉: distributed responsibility(每个agent都被告知负责系统安全)无效,只有 designated safety lead(有跨模块修改权的单一权威)+ 只读 SAFETY_STANDARDS.md (compound)才可靠恢复单agent对齐; '人人负责=没人负责'。更强模型gap不单调(Mythos一个任务最大另一个最小)",
+  "function_name": "diffusion_of_responsibility_probe",
+  "signature": "diffusion_of_responsibility_probe(dor_signals=None)",
+  "read_only": true,
+  "side_effects": "none — 不写盘、不消费、不进判定、不改被扫字段",
+  "scan_surface": {
+    "surface1_DISCOVERY": {
+      "checks": [
+        "discovery.end_to_end_real_read: 系统级检查必须是权威态七件套文件实读(7/7可读)且跨Round对拍点落地,不是探针自报; 只读别人 decisions.csv 式的旁证不算(test_end_to_end纪律)",
+        "discovery.harm_disclosed: 权威态verdict=GAP_INCONCLUSIVE必须显式暴露而非被synced_rate0.9091刷绿掩盖(discovered_harmful_outcomes纪律)"
+      ],
+      "fail_class": "DISCOVERY_NOT_TESTED"
+    },
+    "surface2_RESPONSE": {
+      "checks": [
+        "response.precondition_dependency: 每条gap处置必须带class+evidence_fields逐字证据,无证据不得声称已处置(response binary以discovered=1为前提+verbatim quote纪律)",
+        "response.four_way_separated: 归档账counts四类(ACCEPTED_BOUNDARY=13/DEFERRED_USER_DECISION=0/HISTORICAL_IMMUTABLE=9/RESOLVED_EXECUTED=1)显式分离,不把'不动'和'已解决'混为一谈(fix/deflect/rationalize/ignore四分离纪律)"
+      ],
+      "fail_class": "RESPONSE_MASKED"
+    },
+    "surface3_OWNERSHIP": {
+      "checks": [
+        "ownership.designated_authority: 判定权归用户=单一指定权威(对应designated safety lead有跨模块修复权)显式存在; 人人自证verdict_unchanged(distributed responsibility)不得冒充系统级负责",
+        "ownership.readonly_spec: 只读规范文档在位(constitution.sha256锁+归档账decision处置规范)且标只读,对应SAFETY_STANDARDS.md只读参考"
+      ],
+      "fail_class": "OWNERSHIP_DIFFUSED"
+    }
+  },
+  "classification": {
+    "rows": ["OWNED", "DISCOVERY_NOT_TESTED", "RESPONSE_MASKED", "OWNERSHIP_DIFFUSED"],
+    "flag_values": ["NO_DOR_CLAIM", "ALL_OWNED", "RESPONSIBILITY_DIFFUSED"],
+    "force_class_injection": "注入方显式force_class覆盖仅供负向测试,生产恒None"
+  },
+  "real_expected": {
+    "seven_readable": "7/7",
+    "authoritative_verdict": "GAP_INCONCLUSIVE",
+    "gap_entries": 14,
+    "gap_entries_with_class_and_evidence": 14,
+    "counts": "ACCEPTED_BOUNDARY=13 / DEFERRED_USER_DECISION=0 / HISTORICAL_IMMUTABLE=9 / RESOLVED_EXECUTED=1",
+    "decision_text": "含不再追/不动/RESOLVED处置",
+    "designated_authority": "判定权归用户",
+    "readonly_spec": "constitution.sha256锁在位",
+    "expected_flag": "ALL_OWNED"
+  },
+  "g6_acceptance": {
+    "baseline": "备份内核4f49bdd7 + 基线380收集0失败",
+    "new": "新内核 + 全量392收集0失败(=380+12)",
+    "restore": "恢复后新内核AST OK,权威态七件套哈希逐一相同",
+    "diff": "仅新增1函数,函数集合无变化"
+  },
+  "honesty_requirements": [
+    "内核无多agent团队/无角色/无群聊/无项目管理,不宣称真实对齐恢复或多agent协调能力",
+    "只做'发现阶段端到端实读+响应阶段前置依赖与四分离+责任归属单一指定权威与只读规范'结构同构自检",
+    "论文只研究Anthropic Claude家族(作者自述limitation),不冒充跨模型家族已证结论",
+    "compound(doc+dri)最稳但safety doc单独无效/群聊仅更强模型部分有效/更强模型gap不单调——非全赢诚实标注",
+    "distributed responsibility(人人负责)无效与内核'多探针各自verdict_unchanged'同构,但内核判定权归用户是既有纪律非本探针新设",
+    "DISCOVERY_NOT_TESTED/RESPONSE_MASKED/OWNERSHIP_DIFFUSED标注非裁定; 注入仅负向测试生产恒None; 只读不写盘不消费不进判定; 判定权归用户"
+  ],
+  "boundary": "判定权归用户"
+}

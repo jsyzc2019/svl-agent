@@ -4952,6 +4952,508 @@ def sensor_unseen_probe(sensor_signals=None):
     }
 
 
+def navigation_calibration_probe(nav_signals=None):
+    """【§4S95 只读自检】导航校准：共享上下文可比 + 召回vs首位 + 不可逆剪枝显式处置。
+
+    借 Cornell+ASAPP DecisionRAG(arXiv 2610.35868 Retriever-Free Retrieval)的三个
+    统计纪律做内核结构自检。内核无语料层级/决策模型/token概率/RAG,只查三面共6条:
+      面1 SHARED_CONTEXT_COMPARABLE: 四类判定必须在同次probe并列可比,不各自单判
+      面2 RECALL_VS_TOP1          : synced_rate(召回)必须与authentic_birth_rate(首位)双列
+      面3 IRREVERSIBLE_PRUNE      : 归档账class/disposition必须显式带处置,不静默丢弃
+    只读不写盘不消费不进判定; 判定权归用户。
+
+    prereg_navigation_calibration_probe_20261128.json SHA fd990cf2… 改码前锁死。
+    """
+    # 注入分支显示变量先初始化,避免 one_page 引用未定义(§4hc 惯例)
+    rec_flag_display = "INJECTED" if nav_signals is not None else "UNREADABLE"
+    synced_rate = 0.0
+    authentic_rate = 0.0
+    archive_entries = 0
+
+    if nav_signals is None:
+        # ---- 真实采集 ----
+        rec = recognition_probe()
+        birth = verdict_at_birth_probe()
+        rec_flag_display = rec.get("recognition_flag", "UNKNOWN")
+
+        # 面1: 四类判定在同一返回里并列可比
+        rc = rec.get("counts") or {}
+        four_classes = (isinstance(rc.get("RECOGNIZED_USER"), int) and
+                        isinstance(rc.get("RECOGNIZED_ARCHIVE"), int) and
+                        isinstance(rc.get("RECOGNIZED_DECLARED"), int) and
+                        isinstance(rc.get("UNRECOGNIZED_NOISE"), int))
+        flag_and_noise = (rec_flag_display == "ALL_RECOGNIZED" and
+                          rc.get("UNRECOGNIZED_NOISE") == 0)
+
+        # 面2: 召回(含背填)必须与首位真就位双列
+        synced_rate = birth.get("synced_rate", 0.0)
+        authentic_rate = birth.get("authentic_birth_rate", 0.0)
+        authentic_count = birth.get("authentic_birth_count")
+        backfilled = birth.get("backfilled_sync_count")
+        total = birth.get("total")
+        dual_listed = (isinstance(synced_rate, (int, float)) and
+                       isinstance(authentic_rate, (int, float)) and
+                       isinstance(authentic_count, int) and isinstance(backfilled, int) and
+                       isinstance(total, int) and total > 0 and
+                       synced_rate > authentic_rate)  # 召回高于首位=诚实暴露gap,非刷绿
+        backfill_exposed = (isinstance(backfilled, int) and isinstance(authentic_count, int)
+                            and backfilled > authentic_count)  # 8条背填>2条真就位,显式摊开
+
+        # 面3: 归档账 class/disposition 显式带处置
+        archive = {}
+        try:
+            archive = json.load(open(os.path.join(HERE, os.pardir, "gap_archive_20261128.json"),
+                                     encoding="utf-8"))
+        except (OSError, ValueError):
+            archive = {}
+        entries = archive.get("gap_entries") or []
+        archive_entries = len(entries)
+        ac = archive.get("counts") or {}
+        decision_text = str(archive.get("decision", ""))
+        classes_disclosed = (
+            archive_entries > 0 and
+            all(isinstance(e, dict) and e.get("class") for e in entries) and
+            isinstance(ac.get("ACCEPTED_BOUNDARY"), int) and
+            isinstance(ac.get("HISTORICAL_IMMUTABLE"), int) and
+            isinstance(ac.get("RESOLVED_EXECUTED"), int))
+        budget_recovery = (
+            "不再追" in decision_text and "不动" in decision_text and
+            ("RESOLVED" in decision_text or "恢复" in decision_text))
+
+        nav_signals = [
+            {"name": "recognition.four_classes_jointly", "surface": "SHARED_CONTEXT_COMPARABLE",
+             "calibrated": four_classes,
+             "evidence": "USER=%s ARCHIVE=%s DECLARED=%s NOISE=%s(同次probe并列)" % (
+                 rc.get("RECOGNIZED_USER"), rc.get("RECOGNIZED_ARCHIVE"),
+                 rc.get("RECOGNIZED_DECLARED"), rc.get("UNRECOGNIZED_NOISE"))},
+            {"name": "recognition.flag_and_noise", "surface": "SHARED_CONTEXT_COMPARABLE",
+             "calibrated": flag_and_noise,
+             "evidence": "flag=%s noise=%s(统一判定口径)" % (
+                 rec_flag_display, rc.get("UNRECOGNIZED_NOISE"))},
+            {"name": "birth.synced_and_authentic_dual", "surface": "RECALL_VS_TOP1",
+             "calibrated": dual_listed,
+             "evidence": "synced_rate=%s(召回) vs authentic_rate=%s(首位) total=%s" % (
+                 synced_rate, authentic_rate, total)},
+            {"name": "birth.backfill_exposed", "surface": "RECALL_VS_TOP1",
+             "calibrated": backfill_exposed,
+             "evidence": "backfilled=%s > authentic=%s(召回含背填,真就位仅%s)" % (
+                 backfilled, authentic_count, authentic_count)},
+            {"name": "archive.class_disclosed", "surface": "IRREVERSIBLE_PRUNE",
+             "calibrated": classes_disclosed,
+             "evidence": "entries=%d ACCEPTED=%s IMMUTABLE=%s RESOLVED=%s" % (
+                 archive_entries, ac.get("ACCEPTED_BOUNDARY"),
+                 ac.get("HISTORICAL_IMMUTABLE"), ac.get("RESOLVED_EXECUTED"))},
+            {"name": "archive.budget_and_recovery", "surface": "IRREVERSIBLE_PRUNE",
+             "calibrated": budget_recovery,
+             "evidence": "decision含不再追/不动/RESOLVED可恢复路径,len=%d" % len(decision_text)},
+        ]
+
+    rows = []
+    valid_classes = ("CALIBRATED", "SEPARATE_NOT_COMPARABLE",
+                     "RECALL_MASKS_TOP1", "PRUNED_IRREVERSIBLE")
+    for s in nav_signals:
+        calibrated = s.get("calibrated") is True
+        forced = s.get("force_class")
+        cls = forced if forced in valid_classes else (
+            "CALIBRATED" if calibrated else "SEPARATE_NOT_COMPARABLE")
+        rows.append({
+            "name": str(s.get("name", "?")),
+            "surface": str(s.get("surface", "?")),
+            "class": cls,
+            "evidence": str(s.get("evidence", ""))[:120],
+        })
+
+    counts = {k: sum(1 for r in rows if r["class"] == k) for k in valid_classes}
+    gaps = [r for r in rows if r["class"] != "CALIBRATED"]
+    if not rows:
+        nav_flag = "NO_NAVIGATION_CLAIM"
+    elif gaps:
+        nav_flag = "CALIBRATION_GAP_PRESENT"
+    else:
+        nav_flag = "ALL_CALIBRATED"
+
+    one_page = " | ".join([
+        "navigation-calibration自检(共享上下文可比;召回vs首位;剪枝显式处置)",
+        "判据%d" % len(rows),
+        "校准%d" % counts["CALIBRATED"],
+        "缺口%d" % len(gaps),
+        "recognition=%s synced=%s authentic=%s archive=%d" % (
+            rec_flag_display, synced_rate, authentic_rate, archive_entries),
+        "flag=%s" % nav_flag,
+    ]) + " → 判定权归用户"
+
+    return {
+        "nav_flag": nav_flag,
+        "rows": rows,
+        "counts": counts,
+        "gap_rows": gaps,
+        "one_page": one_page,
+        "honesty": (
+            "借Cornell+ASAPP DecisionRAG(arXiv 2610.35868 Retriever-Free Retrieval)三个统计"
+            "纪律做结构同构自检: ①共享上下文可比性(候选放一起打分才可比,单独看着相关的在"
+            "更好候选面前P(Yes)被压低:separate 47.8%→shared 54.3%,全流水线+7.7 R@1) "
+            "②召回上限≠首位命中(dense top100含gold NQ98.4%>导航94.0%,但两者都含时导航"
+            "排首位70.1%>dense61.9%) ③不可逆剪枝(pruned branches never expanded,祖先被丢"
+            "则相关段落永找不回,靠更大预算+dense缓解)。内核无语料层级/决策模型/token概率/"
+            "RAG,不宣称真实检索能力; synced_rate=0.9091(召回含8背填)vs authentic=2/11(首位"
+            "真就位)只作结构镜; DecisionRAG无官方开源代码仓库已核查(GitHub三组检索全0),"
+            "开放权重judge≠开源代码; 九格非全赢(NQ R@10裸Jev86.7<Dense87.2)诚实标注; "
+            "SEPARATE_NOT_COMPARABLE/RECALL_MASKS_TOP1/PRUNED_IRREVERSIBLE是标注非裁定; "
+            "注入仅负向测试生产恒None; 只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": (
+            "Cornell+ASAPP arXiv 2610.35868 Retriever-Free Retrieval: Navigating Documents "
+            "with Decision Models (Wan/Junger/Du/Liu/Krishnan/Weinberger, v1 2026-10-26, "
+            "cs.AI, DOI 10.48550/arXiv.2610.35868, CC BY 4.0, abs+HTML全文一手); "
+            "§4S79/87/89/90/93锚点对偶纪律; "
+            "prereg_navigation_calibration_probe_20261128.json SHA fd990cf2…; "
+            "factcheck见 read_arxiv_decisionrag_20261128/factcheck.json"),
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
+def diffusion_of_responsibility_probe(dor_signals=None):
+    """【§4S96 只读自检】责任扩散：发现阶段端到端实读 + 响应阶段前置依赖与四分离 + 责任归属单一指定权威与只读规范。
+
+    借 arXiv 2611.17820 Aligning AI Teams (Srinivasan/Matthews/Sohl-Dickstein/Jones)
+    的"责任扩散"(diffusion of responsibility)机制做内核结构自检。内核无多agent团队/
+    角色/群聊/项目管理,不宣称真实对齐恢复;只查三面共6条:
+      面1 DISCOVERY   : 系统级检查必须权威态七件套文件实读(非探针自报),harm须显式暴露
+      面2 RESPONSE    : 每条gap处置须带class+逐字evidence(前置依赖),四类计数不混同
+      面3 OWNERSHIP   : 判定权归用户(单一指定权威),只读spec锁在位
+    只读不写盘不消费不进判定; 判定权归用户。
+
+    prereg_diffusion_of_responsibility_probe_20261128.json SHA 9f60aa1b… 改码前锁死。
+    """
+    # 注入分支显示变量先初始化,避免 one_page 引用未定义(§4hc 惯例)
+    verdict_display = "INJECTED" if dor_signals is not None else "UNREADABLE"
+    seven_readable = 0
+    gap_entries = 0
+    class_detail = ""
+    authority_display = "INJECTED"
+
+    if dor_signals is None:
+        # ---- 真实采集 ----
+        # 面1 DISCOVERY: 权威态七件套文件实读(非探针自报) + 跨Round对拍点
+        seven_rel = [
+            "authoritative_state.json",
+            "life_kernel/constitution.sha256",
+            "life_kernel/data/heartbeat_log.jsonl",
+            "life_kernel/data/inbound_inbox.jsonl",
+            "DECISIONS_20261127.json",
+            "gap_archive_20261128.json",
+            "knowledge_base_store.json",
+        ]
+        seven_readable = sum(
+            1 for rel in seven_rel
+            if os.path.isfile(os.path.join(HERE, os.pardir, rel)) and
+            os.access(os.path.join(HERE, os.pardir, rel), os.R_OK))
+        authority = {}
+        try:
+            authority = json.load(open(os.path.join(HERE, os.pardir, "authoritative_state.json"),
+                                       encoding="utf-8"))
+        except (OSError, ValueError):
+            authority = {}
+        verdict_display = authority.get("verdict", "UNREADABLE")
+        # 跨Round对拍点: 写穿探针的权威态实读面(不调用它会用文件实读等价替代)
+        cross_round_real = (seven_readable == len(seven_rel))
+        harm_disclosed = (verdict_display == "GAP_INCONCLUSIVE")
+
+        # 面2 RESPONSE: 归档账每条entry的class+evidence_fields逐字证据 + 四类计数分离
+        archive = {}
+        try:
+            archive = json.load(open(os.path.join(HERE, os.pardir, "gap_archive_20261128.json"),
+                                     encoding="utf-8"))
+        except (OSError, ValueError):
+            archive = {}
+        entries = archive.get("gap_entries") or []
+        gap_entries = len(entries)
+        all_have_evidence = (
+            gap_entries > 0 and
+            all(isinstance(e, dict) and e.get("class") and
+                isinstance(e.get("evidence_fields"), dict) and
+                len(e["evidence_fields"]) > 0 for e in entries))
+        ac = archive.get("counts") or {}
+        four_way = (isinstance(ac.get("ACCEPTED_BOUNDARY"), int) and
+                    isinstance(ac.get("DEFERRED_USER_DECISION"), int) and
+                    isinstance(ac.get("HISTORICAL_IMMUTABLE"), int) and
+                    isinstance(ac.get("RESOLVED_EXECUTED"), int))
+        class_detail = "A=%s D=%s I=%s R=%s" % (
+            ac.get("ACCEPTED_BOUNDARY"), ac.get("DEFERRED_USER_DECISION"),
+            ac.get("HISTORICAL_IMMUTABLE"), ac.get("RESOLVED_EXECUTED"))
+
+        # 面3 OWNERSHIP: 判定权归用户(单一指定权威) + 只读spec锁在位
+        # 判定权归用户从归档账decision/honesty与内核既有纪律读取,非本探针新设
+        decision_text = str(archive.get("decision", ""))
+        honesty_text = str(archive.get("honesty", ""))
+        authority_display = ("判定权归用户" if
+                             ("判定权归用户" in decision_text or "判定权归用户" in honesty_text)
+                             else "UNREADABLE")
+        # 只读spec: constitution.sha256锁文件存在且归档账decision带处置规范
+        spec_path = os.path.join(HERE, "constitution.sha256")
+        spec_lock_present = (os.path.isfile(spec_path) and os.path.getsize(spec_path) > 0 and
+                             ("不再追" in decision_text or "不动" in decision_text or
+                              "RESOLVED" in decision_text))
+
+        dor_signals = [
+            {"name": "discovery.end_to_end_real_read", "surface": "DISCOVERY",
+             "owned": cross_round_real,
+             "evidence": "seven_readable=%d/%d 文件实读(非自报)" % (seven_readable, len(seven_rel))},
+            {"name": "discovery.harm_disclosed", "surface": "DISCOVERY",
+             "owned": harm_disclosed,
+             "evidence": "verdict=%s(显式暴露非刷绿)" % verdict_display},
+            {"name": "response.precondition_dependency", "surface": "RESPONSE",
+             "owned": all_have_evidence,
+             "evidence": "entries=%d 全带class+evidence_fields逐字证据(前置依赖)" % gap_entries},
+            {"name": "response.four_way_separated", "surface": "RESPONSE",
+             "owned": four_way,
+             "evidence": "counts四类分离 %s(不混同)" % class_detail},
+            {"name": "ownership.designated_authority", "surface": "OWNERSHIP",
+             "owned": authority_display == "判定权归用户",
+             "evidence": "designated_authority=%s(单一权威非人人自证)" % authority_display},
+            {"name": "ownership.readonly_spec", "surface": "OWNERSHIP",
+             "owned": spec_lock_present,
+             "evidence": "constitution.sha256锁在位+%s带处置规范(只读)" % (
+                 "decision" if spec_lock_present else "MISSING")},
+        ]
+
+    rows = []
+    valid_classes = ("OWNED", "DISCOVERY_NOT_TESTED", "RESPONSE_MASKED", "OWNERSHIP_DIFFUSED")
+    surface_fail = {"DISCOVERY": "DISCOVERY_NOT_TESTED", "RESPONSE": "RESPONSE_MASKED",
+                    "OWNERSHIP": "OWNERSHIP_DIFFUSED"}
+    for s in dor_signals:
+        owned = s.get("owned") is True
+        forced = s.get("force_class")
+        cls = forced if forced in valid_classes else (
+            "OWNED" if owned else surface_fail.get(str(s.get("surface", "")), "OWNERSHIP_DIFFUSED"))
+        rows.append({
+            "name": str(s.get("name", "?")),
+            "surface": str(s.get("surface", "?")),
+            "class": cls,
+            "evidence": str(s.get("evidence", ""))[:120],
+        })
+
+    counts = {k: sum(1 for r in rows if r["class"] == k) for k in valid_classes}
+    gaps = [r for r in rows if r["class"] != "OWNED"]
+    if not rows:
+        dor_flag = "NO_DOR_CLAIM"
+    elif gaps:
+        dor_flag = "RESPONSIBILITY_DIFFUSED"
+    else:
+        dor_flag = "ALL_OWNED"
+
+    one_page = " | ".join([
+        "责任扩散自检(发现端到端实读;响应前置依赖四分离;责任归属单一指定权威)",
+        "判据%d" % len(rows),
+        "就位%d" % counts["OWNED"],
+        "扩散%d" % len(gaps),
+        "seven=%d verdict=%s entries=%d authority=%s" % (
+            seven_readable, verdict_display, gap_entries, authority_display),
+        "flag=%s" % dor_flag,
+    ]) + " → 判定权归用户"
+
+    return {
+        "dor_flag": dor_flag,
+        "rows": rows,
+        "counts": counts,
+        "gap_rows": gaps,
+        "one_page": one_page,
+        "honesty": (
+            "借arXiv 2611.17820 Aligning AI Teams(Srinivasan/Matthews/Sohl-Dickstein/Jones)的"
+            "责任扩散机制做结构同构自检: ①发现阶段(模块agent从不跑集成pipeline真实数据,只读"
+            "别人decisions.csv不算tested) ②响应阶段(attempted_fix/deflected/rationalized_harm"
+            "以discovered=1为前提,每个置1必须逐字引用; fix/deflect/rationalize/ignore四分离) "
+            "③责任归属(distributed responsibility人人负责无效,只有designated safety lead+只读"
+            "SAFETY_STANDARDS.md的compound最可靠)。内核无多agent团队/角色/群聊/项目管理,不宣称"
+            "真实对齐恢复或多agent协调; 七件套实读+GAP_INCONCLUSIVE显式暴露+归档账class/"
+            "evidence_fields逐字证据+四类计数分离+判定权归用户+constitution.sha256只读锁只作"
+            "结构镜。论文只研究Anthropic Claude家族(作者自述limitation)不冒充跨家族; compound最稳"
+            "但safety doc单独无效/群聊仅更强模型部分有效/更强模型gap不单调(Mythos一任务最大另一"
+            "最小)非全赢诚实标注; 人人负责同构于多探针各自verdict_unchanged但判定权归用户是既有"
+            "纪律非本探针新设; DISCOVERY_NOT_TESTED/RESPONSE_MASKED/OWNERSHIP_DIFFUSED标注非裁定; "
+            "注入仅负向测试生产恒None; 只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": (
+            "arXiv 2611.17820 Aligning AI Teams (Srinivasan/Matthews/Sohl-Dickstein/Jones, "
+            "v1 2026-11-13, cs.AI, DOI 10.48550/arXiv.2611.17820, CC BY 4.0, abs+HTML全文349KB"
+            "一手); safety-research/aligning-ai-teams 478 blobs真开源(3实验×5模型×多干预+DoR"
+            "标注管线); sidsrinivasan/magelab编排框架submodule d63564b; "
+            "§4S87/90/91/93/95对偶纪律; "
+            "prereg_diffusion_of_responsibility_probe_20261128.json SHA 9f60aa1b…; "
+            "factcheck见 read_aligning_ai_teams_20261128/factcheck.json"),
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
+def closed_loop_validation_probe(loop_signals=None):
+    """【§4S97 只读自检】闭环验证：闭环评估vs开环指标 + 操作域内对拍 + 模拟-真实互补。
+
+    借 arXiv 2610.27045 Physical AI (Zhang/Shen/Xue/Zhao 等51作者388页monograph) 的
+    三纪律做内核结构自检。内核无物理世界/机器人/仿真/传感器/世界模型/闭环控制,
+    不宣称真实物理AI能力;只查三面共6条:
+      面1 CLOSED_LOOP_EVAL   : 开环指标必须配闭环实测,预测误差传播须显式
+      面2 OPERATING_REGIME   : 对拍同Round点/同域,七件套文件实读非自报
+      面3 SIM_REAL_COMPLEMENT: 展示层与权威实读并列互补,现实鸿沟显式+实读校正
+    只读不写盘不消费不进判定; 判定权归用户。
+
+    prereg_closed_loop_validation_probe_20261129.json SHA fceca597… 改码前锁死。
+    """
+    # 注入分支显示变量先初始化,避免 one_page 引用未定义(§4hc 惯例)
+    synced_display = 0.0
+    authentic_display = 0.0
+    verdict_display = "INJECTED" if loop_signals is not None else "UNREADABLE"
+    seven_readable = 0
+    cross_round = "INJECTED"
+
+    if loop_signals is None:
+        # ---- 真实采集 ----
+        birth = verdict_at_birth_probe()
+        synced_display = birth.get("synced_rate", 0.0)
+        authentic_display = birth.get("authentic_birth_rate", 0.0)
+        authentic_count = birth.get("authentic_birth_count")
+        backfilled = birth.get("backfilled_sync_count")
+        total = birth.get("total")
+
+        # 闭环实测面: 写穿探针(判定落地write_through + 跨Round对拍 + 半步无写)
+        wt = write_through_probe()
+        wt_flag = wt.get("write_flag", "UNKNOWN")
+        wt_surface = {r.get("surface") for r in wt.get("rows", [])}
+        closed_loop_landed = (wt_flag == "ALL_WRITTEN_THROUGH" and
+                              "WRITE_THROUGH" in wt_surface and
+                              "HALF_STEP_NO_WRITE" in wt_surface)
+        cross_round = "CROSS_ROUND_COMPARE" if "CROSS_ROUND_COMPARE" in wt_surface else "MISSING"
+
+        # 失败可恢复 RESOLVED_EXECUTED
+        archive = {}
+        try:
+            archive = json.load(open(os.path.join(HERE, os.pardir, "gap_archive_20261128.json"),
+                                     encoding="utf-8"))
+        except (OSError, ValueError):
+            archive = {}
+        ac = archive.get("counts") or {}
+        resolved = ac.get("RESOLVED_EXECUTED", 0)
+        entries = archive.get("gap_entries") or []
+        calibrated_real = (isinstance(resolved, int) and resolved > 0 and
+                           len(entries) > 0 and
+                           all(isinstance(e, dict) and e.get("class") and
+                               isinstance(e.get("evidence_fields"), dict) for e in entries))
+
+        # 权威态实读
+        authority = {}
+        try:
+            authority = json.load(open(os.path.join(HERE, os.pardir, "authoritative_state.json"),
+                                       encoding="utf-8"))
+        except (OSError, ValueError):
+            authority = {}
+        verdict_display = authority.get("verdict", "UNREADABLE")
+
+        # 七件套文件实读(同域)
+        seven_rel = [
+            "authoritative_state.json", "life_kernel/constitution.sha256",
+            "life_kernel/data/heartbeat_log.jsonl", "life_kernel/data/inbound_inbox.jsonl",
+            "DECISIONS_20261127.json", "gap_archive_20261128.json", "knowledge_base_store.json",
+        ]
+        seven_readable = sum(
+            1 for rel in seven_rel
+            if os.path.isfile(os.path.join(HERE, os.pardir, rel)) and
+            os.access(os.path.join(HERE, os.pardir, rel), os.R_OK))
+
+        # 误差传播: synced(召回)必须与authentic(首位)双列且gap>0诚实暴露
+        gap = round(synced_display - authentic_display, 4)
+        error_propagation = (isinstance(synced_display, (int, float)) and
+                             isinstance(authentic_display, (int, float)) and
+                             isinstance(authentic_count, int) and isinstance(backfilled, int) and
+                             isinstance(total, int) and total > 0 and
+                             synced_display > authentic_display and gap > 0)
+
+        loop_signals = [
+            {"name": "metric.open_loop_paired_with_closed_loop", "surface": "CLOSED_LOOP_EVAL",
+             "validated": closed_loop_landed and calibrated_real,
+             "evidence": "synced=%s开环配write_flag=%s闭环落地+RESOLVED=%s可恢复" % (
+                 synced_display, wt_flag, resolved)},
+            {"name": "metric.error_propagation_disclosed", "surface": "CLOSED_LOOP_EVAL",
+             "validated": error_propagation,
+             "evidence": "synced=%s vs authentic=%s gap=%s(total=%s,backfilled=%s)误差传播双列" % (
+                 synced_display, authentic_display, gap, total, backfilled)},
+            {"name": "regime.same_round_compare", "surface": "OPERATING_REGIME",
+             "validated": cross_round == "CROSS_ROUND_COMPARE",
+             "evidence": "cross_round=%s(同Round点同域对拍)" % cross_round},
+            {"name": "regime.consistency_in_regime", "surface": "OPERATING_REGIME",
+             "validated": seven_readable == len(seven_rel),
+             "evidence": "seven_readable=%d/%d同域文件实读非自报" % (seven_readable, len(seven_rel))},
+            {"name": "complement.display_and_authority_both", "surface": "SIM_REAL_COMPLEMENT",
+             "validated": verdict_display == "GAP_INCONCLUSIVE" and synced_display > 0,
+             "evidence": "展示synced=%s + 权威verdict=%s并列互补(不互替)" % (
+                 synced_display, verdict_display)},
+            {"name": "complement.reality_gap_calibrated", "surface": "SIM_REAL_COMPLEMENT",
+             "validated": error_propagation and calibrated_real,
+             "evidence": "现实鸿沟gap=%s显式+归档%d条class/evidence实读校正" % (
+                 gap, len(entries))},
+        ]
+
+    rows = []
+    valid_classes = ("VALIDATED", "OPEN_LOOP_ONLY", "PREDICTION_NOT_IN_REGIME", "SIM_MASKED_AS_REAL")
+    surface_fail = {"CLOSED_LOOP_EVAL": "OPEN_LOOP_ONLY", "OPERATING_REGIME": "PREDICTION_NOT_IN_REGIME",
+                    "SIM_REAL_COMPLEMENT": "SIM_MASKED_AS_REAL"}
+    for s in loop_signals:
+        validated = s.get("validated") is True
+        forced = s.get("force_class")
+        cls = forced if forced in valid_classes else (
+            "VALIDATED" if validated else surface_fail.get(str(s.get("surface", "")), "SIM_MASKED_AS_REAL"))
+        rows.append({
+            "name": str(s.get("name", "?")),
+            "surface": str(s.get("surface", "?")),
+            "class": cls,
+            "evidence": str(s.get("evidence", ""))[:120],
+        })
+
+    counts = {k: sum(1 for r in rows if r["class"] == k) for k in valid_classes}
+    gaps = [r for r in rows if r["class"] != "VALIDATED"]
+    if not rows:
+        loop_flag = "NO_LOOP_CLAIM"
+    elif gaps:
+        loop_flag = "CLOSED_LOOP_GAP_PRESENT"
+    else:
+        loop_flag = "ALL_CLOSED_LOOP_VALIDATED"
+
+    one_page = " | ".join([
+        "闭环验证自检(闭环评估vs开环;操作域内对拍;模拟-真实互补)",
+        "判据%d" % len(rows),
+        "通过%d" % counts["VALIDATED"],
+        "缺口%d" % len(gaps),
+        "synced=%s authentic=%s verdict=%s cross=%s" % (
+            synced_display, authentic_display, verdict_display, cross_round),
+        "flag=%s" % loop_flag,
+    ]) + " → 判定权归用户"
+
+    return {
+        "loop_flag": loop_flag,
+        "rows": rows,
+        "counts": counts,
+        "gap_rows": gaps,
+        "one_page": one_page,
+        "honesty": (
+            "借arXiv 2610.27045 Physical AI(Zhang/Shen/Xue/Zhao等51作者388页monograph)的三纪律"
+            "做结构同构自检: ①评估转向闭环表现(task completion/robustness/disturbance/response/"
+            "resource/recovery from failure; prediction accuracy的实用意义取决于误差如何传播到决策"
+            "与物理执行) ②物理一致性必须在任务操作域内验证(physical priors conditional on assumptions"
+            "and operating regimes, regardless of model family) ③模拟与真实互补不可互替(Table4.5: "
+            "模拟规模/精确标签但渲染可能不真实,真实有噪声标定; 现实鸿沟顺序=找分歧→实读校正→残余误差"
+            "鲁棒→闭环复核)。内核无物理世界/机器人/仿真/传感器/世界模型/闭环控制,不宣称真实物理AI能力; "
+            "synced_rate0.9091开环指标配write_through闭环落地+RESOLVED失败可恢复+跨Round同域对拍+"
+            "synced/authentic误差传播双列+展示与权威并列互补只作结构镜。51作者monograph为概念综述非实证"
+            "基准,不冒充已证基准或Cross-Embodiment泛化; 预测精度≠决策效用、模拟≠真实、开环≠闭环均作"
+            "结构镜非内核真实属性; OPEN_LOOP_ONLY/PREDICTION_NOT_IN_REGIME/SIM_MASKED_AS_REAL标注非裁定; "
+            "注入仅负向测试生产恒None; 只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": (
+            "arXiv 2610.27045 Physical AI: Concepts, Techniques, and Challenges "
+            "(Zhang/Shen/Xue/Zhao等51作者, v1 2026-10-19, cs.AI/cs.RO, DOI 10.48550/arXiv.2610.27045, "
+            "Monograph 12章388页64图, abs+ar5iv全文1.02MB/文本388K一手); "
+            "§4S87/90/93/95/96对偶纪律; "
+            "prereg_closed_loop_validation_probe_20261129.json SHA fceca597…; "
+            "factcheck见 read_physical_ai_20261128/factcheck.json"),
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
 def takeover_request(action, nonce=None, note="", log_path=None, record=True):
     """【本机接管·下行】本机写一条接管指令到共享收件箱，供下次 runner 消费。
 

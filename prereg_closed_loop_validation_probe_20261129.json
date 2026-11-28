@@ -1,0 +1,74 @@
+{
+  "prereg_id": "prereg_closed_loop_validation_probe_20261129",
+  "created_at": "2026-11-29T00:07:11+08:00",
+  "kernel_sha_before": "8243f5673dd07063",
+  "locked_before_code": true,
+  "trigger": "用户给 arXiv 2610.27045 Physical AI: Concepts, Techniques, and Challenges (51作者388页monograph),回源核查(ar5iv全文1.02MB/文本388K)后裁定A做只读自检探针,并要求更新Github",
+  "source": {
+    "arxiv_id": "2610.27045",
+    "title": "Physical AI: Concepts, Techniques, and Challenges",
+    "authors": "Weinan Zhang, Chunhua Shen, Tianfan Xue, Bin Zhao 等51作者",
+    "submitted": "2026-10-19",
+    "subjects": "cs.AI; cs.RO, DOI 10.48550/arXiv.2610.27045, CC BY",
+    "source_level": "A (arxiv.org/html未生成; ar5iv.labs.arxiv.org/html/2610.27045 全文1.02MB/文本388K curl本地解析一手可读,无订阅墙)",
+    "format": "Monograph, 12 chapters, 388 pages, 64 figures",
+    "factcheck": "read_physical_ai_20261128/factcheck.json"
+  },
+  "kernel_mirror": "Physical AI 的定义即闭环: 'artificial systems that perceive, model, and act upon the physical world through continuous feedback under real-world constraints'。最锋利三纪律: ①评估转向闭环表现('shift evaluation toward closed-loop performance... task completion, robustness to disturbance, response time, resource consumption, and recovery from failure. Prediction accuracy remains valuable, but its practical significance depends on how prediction errors propagate through decisions and physical execution') ②物理一致性必须在操作域内验证('physical consistency requires validation within the task's operating regime, regardless of the model family') ③模拟与真实互补不可互替(Table 4.5: 模拟规模/精确标签但渲染可能不真实, 真实有噪声/标定; 现实鸿沟处置顺序=找分歧→实读校正→残余误差鲁棒→闭环复核)",
+  "function_name": "closed_loop_validation_probe",
+  "signature": "closed_loop_validation_probe(loop_signals=None)",
+  "read_only": true,
+  "side_effects": "none — 不写盘、不消费、不进判定、不改被扫字段",
+  "scan_surface": {
+    "surface1_CLOSED_LOOP_EVAL": {
+      "checks": [
+        "metric.open_loop_paired_with_closed_loop: 开环指标(synced_rate=0.9091)必须配闭环实测(判定落地write_through + 失败可恢复RESOLVED_EXECUTED),只报开环预测精度=OPEN_LOOP_ONLY",
+        "metric.error_propagation_disclosed: 预测误差如何传播到决策/执行须显式——synced_rate(召回)必须与authentic_birth_rate(首位)双列,gap诚实暴露"
+      ],
+      "fail_class": "OPEN_LOOP_ONLY"
+    },
+    "surface2_OPERATING_REGIME": {
+      "checks": [
+        "regime.same_round_compare: 对拍必须在同一Round点/同操作域(write_through的CROSS_ROUND_COMPARE面),跨Round各自单判通过不代表同域一致",
+        "regime.consistency_in_regime: 七件套文件实读(同域)落地,不用探针自报替代; physical consistency requires validation within the operating regime"
+      ],
+      "fail_class": "PREDICTION_NOT_IN_REGIME"
+    },
+    "surface3_SIM_REAL_COMPLEMENT": {
+      "checks": [
+        "complement.display_and_authority_both: 展示层读数(synced_rate)与权威实读(verdict=GAP_INCONCLUSIVE)并列互补,不互相替代; 只报展示层=SIM_MASKED_AS_REAL",
+        "complement.reality_gap_calibrated: 现实鸿沟显式暴露(synced 0.9091 vs authentic 0.1818 gap=0.7273)+实读校正路径(归档账class/evidence_fields)"
+      ],
+      "fail_class": "SIM_MASKED_AS_REAL"
+    }
+  },
+  "classification": {
+    "rows": ["VALIDATED", "OPEN_LOOP_ONLY", "PREDICTION_NOT_IN_REGIME", "SIM_MASKED_AS_REAL"],
+    "flag_values": ["NO_LOOP_CLAIM", "ALL_CLOSED_LOOP_VALIDATED", "CLOSED_LOOP_GAP_PRESENT"],
+    "force_class_injection": "注入方显式force_class覆盖仅供负向测试,生产恒None"
+  },
+  "real_expected": {
+    "synced_rate": 0.9091,
+    "authentic_birth_rate": 0.1818,
+    "gap": 0.7273,
+    "cross_round_surface": "CROSS_ROUND_COMPARE",
+    "seven_readable": "7/7",
+    "authoritative_verdict": "GAP_INCONCLUSIVE",
+    "resolved_executed": 1,
+    "expected_flag": "ALL_CLOSED_LOOP_VALIDATED"
+  },
+  "g6_acceptance": {
+    "baseline": "备份内核8243f567 + 基线392收集0失败",
+    "new": "新内核 + 全量404收集0失败(=392+12)",
+    "restore": "恢复后新内核AST OK,权威态七件套哈希逐一相同",
+    "diff": "仅新增1函数,函数集合无变化"
+  },
+  "honesty_requirements": [
+    "内核无物理世界/机器人/仿真/传感器/世界模型/闭环控制,不宣称真实物理AI能力",
+    "只做'闭环评估vs开环指标+操作域内对拍+模拟-真实互补'结构同构自检",
+    "51作者monograph为概念综述非实证基准,不冒充已证基准结论或Cross-Embodiment泛化已证",
+    "预测精度≠决策效用、模拟≠真实、开环≠闭环——均作结构镜非内核真实属性",
+    "OPEN_LOOP_ONLY/PREDICTION_NOT_IN_REGIME/SIM_MASKED_AS_REAL标注非裁定; 注入仅负向测试生产恒None; 只读不写盘不消费不进判定; 判定权归用户"
+  ],
+  "boundary": "判定权归用户"
+}

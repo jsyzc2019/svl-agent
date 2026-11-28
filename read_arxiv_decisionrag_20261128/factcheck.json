@@ -1,0 +1,96 @@
+{
+  "factcheck_id": "read_arxiv_decisionrag_20261128",
+  "created_at": "2026-11-28T23:18:00+08:00",
+  "user_query": "请检索并阅读:康奈尔大学与 ASAPP 的论文, DecisionRAG:让决策模型参与寻找资料",
+  "source_level": "A (arXiv abs页 + HTML全文98K字符 curl本地解析,一手可读; 无订阅墙)",
+  "paper": {
+    "arxiv_id": "2610.35868",
+    "version": "v1",
+    "submitted": "2026-10-26T17:59:44Z",
+    "title": "Retriever-Free Retrieval: Navigating Documents with Decision Models",
+    "method_name": "DecisionRAG",
+    "note": "用户给的'DecisionRAG:让决策模型参与寻找资料'是中文意译/方法名,真实论文标题是Retriever-Free Retrieval,二者不矛盾已对齐",
+    "authors_order": ["Chao Wan", "Paul Jünger", "Beixi Du", "Bodong Liu", "Navaneetha Krishnan", "Kilian Q. Weinberger"],
+    "affiliations": {
+      "Cornell University CS": ["Chao Wan", "Paul Jünger", "Beixi Du", "Bodong Liu", "Kilian Q. Weinberger"],
+      "ASAPP New York": ["Navaneetha Krishnan", "Kilian Q. Weinberger"]
+    },
+    "equal_contribution": "Chao Wan 与 Paul Jünger († Equal contribution)",
+    "correspondence": ["cw862@cornell.edu", "pj287@cornell.edu"],
+    "subjects": "cs.AI",
+    "doi": "10.48550/arXiv.2610.35868",
+    "license": "CC BY 4.0",
+    "funding": ["NSF OAC-2118310", "NSF IIS-2530143", "AI Research Institutes DMR-2433348", "NewYork-Presbyterian NYP-Cornell Cardiovascular AI Collaboration", "arXiv"]
+  },
+  "core_claim": {
+    "capability_asymmetry": "retriever漏掉的证据,再强的generator也捞不回来;检索器仍停留BM25词频/固定向量近邻,与生成模型能力严重不对称(Figure 1)",
+    "decision_model": "Jev (TypeSafe AI 2026):给定共享context和一组问题,单次前向即对每题每个选项给出概率分布(yes/no题即P(Yes)),不采样任何token,并行判多候选",
+    "navigate_not_search": "像人逛图书馆:从宽泛主题沿语料固有结构(主题→文档→章节→段落)逐层判断哪些分支值得深入;每个level一次前向,不生成token;无第一阶段检索器、无预建索引、无任务特定训练",
+    "shared_context": "候选放同一上下文一起打分才可比:a candidate that would look relevant on its own receives a lower P(Yes) when a clearly better one is present——单独看着相关的候选,在更好候选面前P(Yes)被压低,概率因此被校准可比",
+    "complexity": "T(N)≈t_req·⌈log_b N⌉,平衡层级下顺序决策数随语料规模对数增长(Algorithm 1, Eq.4)"
+  },
+  "datasets_four_benchmarks": {
+    "MultiDoc2Dial": "4 centers / 413 pages / 4,110 passages; 4,201 turns; gold=1 passage",
+    "ConditionalQA": "652 pages / 58,483 paragraphs; 285 questions(271 labeled); gold=1-22 paragraphs",
+    "MTRAG_IBM_Cloud": "172 products / 8,578 pages / 72,442 passages; 205 turns(188 labeled); gold=1-7 passages",
+    "Natural_Questions_DAPR": "1,000 clusters / 108,626 pages / 2.68M paragraphs; 500 test questions; gold=1-3 paragraphs"
+  },
+  "key_numbers_verbatim_from_tables": {
+    "Table2_retrieval_no_task_training": {
+      "BM25": {"MD2D_R@1": 20.6, "NQ_Hit@1": 16.4},
+      "Dense": {"MD2D_R@1": 27.9, "NQ_Hit@1": 46.2},
+      "Dense_top100_Qwen3_Reranker": {"MD2D_R@1": 33.6, "CQA_Hit@1": 64.6, "NQ_Hit@1": 48.0},
+      "Dense_top20_GPT5": {"MD2D_R@1": 47.5, "CQA_Hit@1": 73.4, "NQ_Hit@1": 60.8},
+      "DecisionRAG_Jev": {"MD2D_R@1": 47.4, "MD2D_R@10": 83.6, "CQA_Hit@1": 69.7, "CQA_R@10": 71.9, "MTRAG_R@5": 34.2, "MTRAG_nDCG@5": 62.3, "NQ_Hit@1": 65.4, "NQ_R@10": 86.7, "NQ_nDCG@10": 76.0},
+      "DecisionRAG_Jev_plus_dense": {"MD2D_R@1": 48.5, "MD2D_R@10": 84.7, "CQA_Hit@1": 73.4, "CQA_R@10": 76.3, "MTRAG_R@5": 36.6, "MTRAG_nDCG@5": 65.0, "NQ_Hit@1": 66.4, "NQ_R@10": 88.9, "NQ_nDCG@10": 77.6},
+      "claim_from_abstract": "outperforms dense+8B reranker by 13.8 R@1 on MultiDoc2Dial (48.5-33.6=14.9 或 47.4-33.6=13.8,后者对应abstract口径) and 17.4 Hit@1 on NQ (66.4-48.0=18.4 或 65.4-48.0=17.4,后者对应abstract口径)",
+      "honest_caveat": "九个主指标格里DecisionRAG并非全赢:如NQ R@10 DecisionRAG_Jev=86.7 < Dense=87.2;CQA Hit@1裸Jev 69.7 < GPT5 73.4(加dense后才73.4追平);四个基准九个格子赢约六格输约三格(二手icorer口径,一手逐格数已列上)"
+    },
+    "Table4_task_trained": {
+      "DPR": {"MD2D_R@1": 49.0}, "SFRe2g": {"MD2D_R@1": 55.0},
+      "DecisionRAG_8B_trained": {"MD2D_R@1": 60.7, "MD2D_R@10": 85.8},
+      "claim": "60.7 超过best published task-trained retriever(SFRe2g 55.0) by 5.7 points"
+    },
+    "Table5_latency_cost": {
+      "DecisionRAG_Jev": {"MD2D": 0.68, "CQA": 0.82, "MTRAG": 1.76, "NQ": 1.73},
+      "Dense_top100_Qwen3RR": {"MD2D": 7.5, "NQ": 5.8},
+      "Dense_top20_GPT5": {"MD2D": 11.8, "NQ": 15.0},
+      "cost_per_query": "0.2-2.3 cents",
+      "decisions_vs_generation": "GPT-5逐token生成决策 vs DecisionRAG: 34-145x slower, 21-25x more expensive,且accuracy无一致增益(CQA GPT5领先4.1但NQ落后6.0)"
+    },
+    "Section6_1_shared_context": {
+      "separate_vs_shared": "Hit@1 47.8%(each candidate separate request) → 54.3%(50 candidates/request), 更大request几乎无额外收益;200全量多选排序60.6%比二元judgment 54.3%再高6.8点",
+      "full_pipeline": "MultiDoc2Dial passages of all selected pages scored together raises R@1 from 36.7% to 44.4% (+7.7 points, 95%CI [3.3,12.2])",
+      "NQ_1000_candidates": "53.7% Hit@1(binary top255再多选) vs 47.6%(binary alone)"
+    },
+    "Section6_3_navigation_vs_rerank": {
+      "claim": "navigate hierarchy outperforms reranking retriever candidates: CQA Hit@1 +7.7 (CI[2.6,13.3]), NQ +7.0 ([3.4,10.8]), MD2D与MTRAG平",
+      "CRITICAL_recall_vs_rank1": "dense top100 contains gold more often than navigated candidates (NQ 98.4% vs 94.0%; CQA 98.5% vs 91.1%), BUT when both contain it, navigation ranks it first more often (NQ 70.1% vs 61.9%; CQA 76.7% vs 67.3%) — 召回上限高≠首位命中高,整体页按阅读顺序呈现而非孤立段落"
+    },
+    "Section6_multiple_choice": "MD2D R@1 50.1→51.3, CQA Hit@1 71.9→76.5 (Table7); 额外请求0.12-0.15s,成本+4-33%"
+  },
+  "limitations_authors_stated": [
+    "Section7: 依赖语料层级结构与节点描述,组织差的文档或无信息量描述会伤害检索质量",
+    "Section7: navigation剪枝不可逆(prunes branches irreversibly),祖先被丢弃则相关段落永远找不到;更大exploration budget与补充dense retrieval可缓解",
+    "Section6.6: 顶层剪枝既是便宜的原因也是丢证据之处,需研究保留多少cluster才能匹配全量打分召回",
+    "Appendix E.1: 不同ID下相同段落的评估敏感性; E.2: ConditionalQA在DAPR相关性判定下的敏感性",
+    "gold evidence占比: dense top100召回上限更高但首位命中更低(见CRITICAL_recall_vs_rank1)"
+  ],
+  "open_source_check": {
+    "verdict": "NO_OFFICIAL_CODE_REPO; 有开放权重judge(open-weight)在附录G,CC BY 4.0",
+    "evidence": [
+      "arXiv abs页与HTML全文'github'命中仅为arxiv UI(Report GitHub Issue),无仓库链接",
+      "全文'open-source'/'open source'/'code is'/'publicly available'命中=0",
+      "附录G 'Open-Weight Judge Training':训练并开放权重decision model(开放权重≠开源代码)",
+      "GitHub API三组检索(DecisionRAG+Jev / Retriever-Free Retrieval decision models / DecisionRAG+Cornell)全部 total_count=0"
+    ],
+    "hard honest_rule": "不编造源码,只研究一手全文方法/数字/局限"
+  },
+  "kernel_mirror_candidate": {
+    "sharpest_mirror": "论文'能力不对称'(检索器漏掉的证据生成器捞不回) ≡ 内核如果被扫探针/展示层把判据漏掉的锚点,再强的判定也捞不回;而DecisionRAG的'共享上下文可比性'(候选放一起打分才可比,单独看着相关的在更好候选面前P(Yes)被压低) ≡ 内核G6对拍必须同口径/同上下文并列,不能各自单独判都'通过'",
+    "second_mirror": "CRITICAL_recall_vs_rank1: 召回上限高(dense 98.4%)≠首位命中高(70.1%) ≡ 内核synced_rate=0.9091(coverage高)≠authentic_birth=2/11(真就位低),与§4S87 ratio_vs_absolute同构但换了'召回vs首位'角度",
+    "third_mirror": "不可逆剪枝(pruned documents never expanded) ≡ 内核归档账/判定锚点一旦标NOISE或consumed就不可逆,须显式标注剪枝预算与可恢复路径",
+    "honesty": "内核无语料层级/决策模型/token概率/RAG,只做结构同构自检,不宣称真实检索能力"
+  },
+  "deliverable": "回源核查完成,待用户裁定A/B/C(未执行任何内核改动)"
+}

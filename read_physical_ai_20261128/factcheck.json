@@ -1,0 +1,73 @@
+{
+  "task_id": "read_physical_ai_20261128",
+  "at": "2026-11-29T00:05:00+08:00",
+  "source_level": "A — 论文一手全文(ar5iv HTML 全文 1.02MB / 文本 388K 字符)",
+  "materials": [
+    {
+      "type": "paper",
+      "url": "https://arxiv.org/abs/2610.27045",
+      "pdf": "https://arxiv.org/pdf/2610.27045",
+      "arxiv_id": "2610.27045",
+      "version": "v1",
+      "submitted": "2026-10-19",
+      "title": "Physical AI: Concepts, Techniques, and Challenges",
+      "authors_count": 51,
+      "first_authors": ["Weinan Zhang", "Chunhua Shen", "Tianfan Xue", "Bin Zhao", "Bingqi Jiang"],
+      "corresponding_notable": ["Ming Zhou", "Haotian Wang", "Bowen Zhou", "Shangding Gu"],
+      "subjects": "cs.AI; cs.RO",
+      "doi": "10.48550/arXiv.2610.27045",
+      "format": "Monograph, 12 chapters, 388 pages, 64 figures",
+      "pdf_bytes": 22937000,
+      "ar5iv_html_bytes": 1018603,
+      "text_len_chars": 388080,
+      "fulltext": "arxiv.org/html/2610.27045v1 未生成(HTML_SIZE≈0); ar5iv.labs.arxiv.org/html/2610.27045 全文1.02MB一手可读,无订阅墙",
+      "verified": true
+    }
+  ],
+  "definition_quote": "artificial systems that perceive, model, and act upon the physical world through continuous feedback under real-world constraints",
+  "positioning": "区别于 conventional digital AI / embodied AI / cyber-physical systems / digital twins; 基础横跨 physics, control, cognition, learning, reasoning; 闭环连接 perception→prediction→decision→action→adaptation; 目标从 narrow automation → generalizable physical AI → Physical AGI",
+  "key_techniques": [
+    "multimodal perception", "physical data and simulation", "world models", "embodied foundation models",
+    "motor-control systems", "multi-agent coordination", "hardware-software co-design"
+  ],
+  "key_challenges": [
+    "sim-to-real transfer", "reliability", "real-time execution", "evaluation", "safety", "governance", "long-term deployment"
+  ],
+  "sharpest_quotes": [
+    {
+      "topic": "评估转向闭环表现",
+      "quote": "These characteristics shift evaluation toward closed-loop performance. Relevant measures include task completion, robustness to disturbance, response time, resource consumption, and recovery from failure. Prediction accuracy remains valuable, but its practical significance depends on how prediction errors propagate through decisions and physical execution.",
+      "mirror": "内核 synced_rate0.9091(开环指标/预测精度)的实用意义取决于误差如何传播到决策与判定; 真正该查的是闭环: 判定是否落地(write_through)/失败是否可恢复(归档账RESOLVED)/抗扰(synced vs authentic对偶)"
+    },
+    {
+      "topic": "物理一致性必须在操作域内验证",
+      "quote": "Physical priors are themselves conditional on assumptions and operating regimes. For example, an inaccurate friction model or an inappropriate rigid-body approximation can produce systematic errors. Physical consistency therefore requires validation within the task's operating regime, regardless of the model family.",
+      "mirror": "同口径对拍(G6)必须在同一操作域/同一Round点比较; 跨模型家族/跨Round各自单判都通过不代表同域一致(§4S95 SEPARATE_NOT_COMPARABLE)"
+    },
+    {
+      "topic": "模拟与真实各自贡献 + 现实鸿沟处置顺序",
+      "quote": "This sequence consists of finding where simulation and reality disagree, correcting the simulator with measurements, training policies that are robust to the remaining error, and checking the result in closed loop on the physical system.",
+      "mirror": "展示层(模拟)与权威态(真实)分歧→用实读测量校正→对剩余误差做鲁棒→闭环复核; 与§4S90 write_through(展示vs写穿)+§4S93 unseen(静默≠零)同构"
+    },
+    {
+      "topic": "定义即反馈闭环",
+      "quote": "By connecting perception, prediction, decision-making, action, and adaptation in a closed loop, this monograph identifies the technical challenges and research directions required to advance from narrow automation toward more generalizable physical AI and, ultimately, physical artificial general intelligence (Physical AGI).",
+      "mirror": "内核心跳→判定→落账→对拍→复核的闭环; narrow automation=synced_rate刷绿, generalizable=authentic闭环就位"
+    }
+  ],
+  "simulated_vs_real_table": {
+    "source": "Table 4.5 Complementary strengths of simulated and real data (正文一手)",
+    "aspects": [
+      "Scale and cost: 模拟=Millions of episodes, cost dominated by building scenes and compute; 真实=limited by robots/operators/resets, cost grows with every episode",
+      "Perception and labels: 模拟=Exact poses/contacts/masks/depth though rendering may look unrealistic; 真实=Sensor noise/calibration..."
+    ],
+    "reading": "模拟有规模与精确标签但渲染可能不真实; 真实有噪声与标定问题; 两者互补,不可互相替代——对应内核'自报指标'与'权威实读'互补不可互替"
+  },
+  "mirror_to_kernel_candidate": {
+    "name": "closed_loop_validation_probe (建议名,未裁定未实现)",
+    "surface1_CLOSED_LOOP_EVAL": "开环指标(synced_rate/prediction accuracy)必须配闭环实测: 判定是否落地(write_through)/失败是否可恢复(RESOLVED)/抗扰对偶(synced vs authentic); 只报开环=OPEN_LOOP_ONLY",
+    "surface2_OPERATING_REGIME": "对拍必须在同一操作域/同Round点; 跨模型家族或跨Round单判通过不代表同域一致=PREDICTION_NOT_IN_REGIME",
+    "surface3_SIM_REAL_COMPLEMENT": "展示层读数与权威实读互补不可互替,现实鸿沟须显式暴露并经实读校正+闭环复核; 模拟刷绿冒充真实=SIM_MASKED_AS_REAL"
+  },
+  "boundary": "内核无物理世界/机器人/仿真/传感器/世界模型,不宣称真实物理AI能力; 仅做结构同构自检; 51作者monograph为概念综述非实证基准,不冒充已证基准结论; 判定权归用户"
+}
