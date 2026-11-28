@@ -1,0 +1,83 @@
+{
+  "prereg_id": "§4S73_anthropic_verifier_selfcheck",
+  "date": "2026-11-28",
+  "locked_before_code_change": true,
+  "trigger": "用户授权'A'——认真读完 Anthropic《Migrating our Messages API to Rust》(2026-11-25)后,选A:把文章三处最锋利的点做成对现有内核的只读自检,不动权威态",
+  "based_on": [
+    "Anthropic《Migrating our Messages API to Rust》一手回源 2026-11-25",
+    "文章三锋利点:①98%测试通过vs25%生产匹配(测试绿≠生产对);②审计发现100+被削弱的assertion(测试可被改成放过错误代码);③verifier奖励匹配输出/web search shortcut被工程师拒(验证器可被gaming,人类守ship gate)",
+    "内核现有纪律:verdict_at_birth反伪造(fabrication_warning)、同口径全量对拍、负向自咬、判定权归用户"
+  ],
+  "scope": "只新增三个只读自检探针 + 守卫测试;不改任何既有判据/阈值/权威态/心跳台账;不写盘;不消费消息;不进判定",
+  "kernel_sha_before": "8299913d18df7d2534adc9b598050b9049fce9e27d3a8f4d58acffbf89bef8ef",
+  "kernel_version": "7.5.0",
+  "probes": [
+    {
+      "name": "test_green_vs_production_probe",
+      "signature": "test_green_vs_production_probe()",
+      "purpose": "对应文章①:测试通过率高≠生产(真实台账)正确率高。量'239 passed的测试绿'与'真实就位/未解缺口'之间的落差,拒绝把测试全绿冒充内核无缺口。",
+      "sources": {
+        "test_green": "从 life_kernel/tests/*.py 统计测试函数数(test_ 前缀)与断言数(assert),作为'测试侧'信号——只读源码文本,不执行测试",
+        "production_truth": "verdict_at_birth_probe()的 authentic_birth_count/backfilled_sync_count + regression_vs_gap_probe()的 unresolved_gap_count + conclusion_evidence_probe()的 pass_weak_count"
+      },
+      "output_fields": ["test_function_count", "assert_count", "assert_density", "authentic_birth", "backfilled", "unresolved_gaps", "weak_evidence", "gap_flag", "honesty"],
+      "gap_flag_rule": "若 backfilled>authentic_birth 或 unresolved_gaps>0 或 weak_evidence>0 → 'GREEN_TESTS_BUT_UNVERIFIED_TRUTH';否则 'ALIGNED';flag只是标注不裁定",
+      "honesty_rules": [
+        "只读源码文本统计测试函数/断言数,不执行pytest、不把'239 passed'硬编码为正确证据",
+        "测试绿是'测试侧'信号,真实就位是'台账侧'信号,两者分列不互相顶替",
+        "gap_flag 是结构对照非结论;verdict_unchanged=true,consumed=false,is_gate_verdict=false"
+      ]
+    },
+    {
+      "name": "weakened_assertion_probe",
+      "signature": "weakened_assertion_probe(tests_dir=None)",
+      "purpose": "对应文章②:审计porter测试发现100+被削弱的assertion。用机械规则扫本仓测试源码,检测'断言被写成恒真/无条件'的削弱模式,拒绝让测试绿掩盖错误代码。",
+      "detection_rules": [
+        "assert True / assert 1 / assert 'x' 等常量真值断言(恒真,等于没断言)",
+        "assert ... or True / assert ... or 1(永真短路)",
+        "只有 assert x is not None 而 x 未被后续用于判定(弱存在断言)——标记 but 不判错",
+        "pytest.skip / @pytest.mark.skip 跳过整段测试",
+        "注释掉的断言(行首# assert)",
+        "assertTrue(True) / assert 1==1 等无条件"
+      ],
+      "sources": "tests_dir 默认 life_kernel/tests;只读 .py 文本,不import不执行;可注入隔离目录做负向测试",
+      "output_fields": ["files_scanned", "total_asserts", "weakened_count", "weakened_rate", "per_finding", "clean_flag", "honesty"],
+      "honesty_rules": [
+        "纯静态文本规则,不执行测试、不下'测试错'的结论,只列出可疑断言供人工裁定",
+        "弱化≠作弊:正当的skip(如平台差异)也会被列出,标 suspect 非 guilty",
+        "零命中时不伪造命中,clean_flag=true 但附'仅覆盖上述规则'的边界声明",
+        "只读: verdict_unchanged=true, consumed=false, is_gate_verdict=false"
+      ]
+    },
+    {
+      "name": "verifier_gaming_probe",
+      "signature": "verifier_gaming_probe(verifier_signals=None)",
+      "purpose": "对应文章③:verifier奖励匹配输出,agent找最便宜的路(web search shortcut被工程师拒)。检测本仓是否存在'验证信号只奖输出匹配、却无ship gate'的裸露口子,并核对人类守门(判定权归用户)的结构是否在位。",
+      "sources": {
+        "verifier_signals": "默认聚合本仓已有判据的 gate 字段:每个探针返回值的 is_gate_verdict/verdict_unchanged/consumed 三元组;可注入自定义信号列表做负向测试",
+        "ship_gate_checks": [
+          "所有被扫判据返回值必须 is_gate_verdict=false(没有判据自封为门)",
+          "所有被扫判据返回值必须 verdict_unchanged=true(没有判据改动权威判定)",
+          "decision_digest() 的 one_page 末尾必须含'判定权归用户'(入口声明未丢)",
+          "verdict_at_birth_probe() 的 fabrication_warning 必须非空(反伪造闸门在位)"
+        ]
+      },
+      "output_fields": ["probes_checked", "gate_violations", "ship_gate_intact", "decision_gate_declared", "fabrication_guard_present", "honesty"],
+      "gate_violation_rule": "任一被扫判据 is_gate_verdict=true 或 verdict_unchanged≠true → 记入 gate_violations;ship_gate_intact = (gate_violations为空 且 decision_gate_declared 且 fabrication_guard_present)",
+      "honesty_rules": [
+        "本探针检测'守门结构是否在位',不是宣称本仓已具备工程审查能力;人不在环只能是结构声明",
+        "注入自定义信号是用于负向测试的非恒真证据,生产调用恒None读真实判据",
+        "ship_gate_intact=true 仅表示结构齐全,不代表实际决策已被人类复核",
+        "只读: verdict_unchanged=true, consumed=false, is_gate_verdict=false"
+      ]
+    }
+  ],
+  "acceptance_gates": {
+    "G1": "本预注册SHA写完后计算,先于任何 kernel.py 改动",
+    "G2": "真实数据跑三探针:①GREEN_TESTS_BUT_UNVERIFIED_TRUTH应被触发(测试全绿但真实未就位);②本仓测试静态扫描如实报告;③ship_gate结构齐全,不伪造违规",
+    "G3": "负向注入全部按预期真通过/真失败:注入恒真assertion必须被抓;注入is_gate_verdict=true判据必须报violation;注入测试侧vs台账侧对齐时gap_flag须翻转",
+    "G6": "同口径全量对拍:移走新守卫测试后 新内核==备份内核(239 passed);加回守卫=239+N",
+    "G_zero_side_effect": "authoritative_state=5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248… 哈希动手前后完全一致"
+  },
+  "honesty_boundary": "三个探针只是把文章的镜面立到内核前做结构自检;只读、不写盘、不消费、不进判定;判定权归用户"
+}

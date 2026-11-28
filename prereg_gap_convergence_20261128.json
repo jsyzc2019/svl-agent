@@ -1,0 +1,52 @@
+{
+  "prereg_id": "§4S74_gap_convergence",
+  "date": "2026-11-28",
+  "locked_before_code_change": true,
+  "trigger": "用户'进一步处理那个'——承接§4S73的 GREEN_TESTS_BUT_UNVERIFIED_TRUTH,裁定'③补锚点+只读探针'",
+  "based_on": [
+    "§4S73 三探针:测试侧239函数/817断言全绿,台账侧就位2/补判8/缺口14/弱证据5",
+    "一手勘察四类落差:①补判8条全post_hoc_recomputed_current_criterion(历史事实,改=伪造就位,不可动);②缺口14条真悬置(判定权归用户);③弱证据5条=3个真实机制方向(帕累托游走/向外求刺激/听到外部)但tagbook无锚点;④测试绿是测试侧信号本身无错",
+    "铁证(只读模拟):_direction_content_verdict只读guard.state不看tagbook,补3锚点后11条真实心跳verdict零改变(authentic2/backfill8不变),novelty对'新方向'的判定敏感性会变(未来判定,非篡改历史)"
+  ],
+  "kernel_sha_before": "23664e2f353dbbb9cde85ed8f9f126b46e8116c78f52acb482a799414b10786e",
+  "kernel_version": "7.5.0",
+  "scope": "两件事:①在tagbook新增3个特异锚点(修③弱证据覆盖缺口);②新增一个只读收敛探针把四类落差逐条摊成可裁定清单+可追溯快照。绝不改补判/缺口/权威态/心跳/判定;不刷绿。",
+  "change_1_tagbook": {
+    "location": "_tags_of() 的 tagbook 字典,新增3个tag(只加特异词,排除泛词)",
+    "entries": [
+      {"tag": "pareto_walk", "keywords": ["帕累托", "次优", "游走", "脚印"], "fixes": "帕累托次优随机游走方向"},
+      {"tag": "restless_seek", "keywords": ["向外求新刺激", "本底好奇心", "探索天空", "求新刺激"], "fixes": "向外求新刺激方向(3条心跳)"},
+      {"tag": "external_call", "keywords": ["外部世界的呼唤", "听到外部", "未读消息"], "fixes": "听到外部世界的呼唤方向"}
+    ],
+    "non_greenwash_proof": "补锚点只影响_tags_of主题标签;verdict现算(_direction_content_verdict)只读guard.state不看tagbook;11条真实心跳verdict逐条核对零改变,authentic2/backfill8不变。补锚点=补证据锚点,非改判定。",
+    "known_side_effect": "novelty_guard等用_tags_of的判据对'新方向'的判定敏感性改变(CONVERGED→DIVERSE),属未来判定口径演进,非篡改已落盘历史;须在账中如实声明。",
+    "expected_data_change": "conclusion_evidence_probe: pass_weak_count 5→0, PASS_SUBSTANTIVE 4→9; decision_digest: weak_evidence 5→0, total_decisions 21→16; 既有测试断言须随数据演进更新但保留负向注入"
+  },
+  "change_2_probe": {
+    "name": "gap_convergence_probe",
+    "signature": "gap_convergence_probe(ledger_path=None, now=None)",
+    "purpose": "把 GREEN_TESTS_BUT_UNVERIFIED_TRUTH 的四类落差逐条摊成可裁定清单,每条标'能动性'(IMMUTABLE/USER_DECISION/MECHANICAL_FIXED/TEST_SIDE),并给趋势快照——但只读,不替用户裁定、不写台账。",
+    "four_gaps": [
+      {"id": "post_hoc_backfill", "source": "verdict_at_birth_probe.per_heartbeat 中 backfill=true", "actionability": "IMMUTABLE", "reason": "历史post_hoc补判,改=伪造生成当下就位"},
+      {"id": "unresolved_gaps", "source": "regression_vs_gap_probe.unresolved_gap_verdict_dist", "actionability": "USER_DECISION", "reason": "真悬置态,判定权归用户"},
+      {"id": "weak_evidence", "source": "conclusion_evidence_probe.per_heartbeat state=PASS_WEAK_EVIDENCE", "actionability": "MECHANICAL_FIXED", "reason": "tagbook锚点覆盖缺口,本轮§4S74已补;修订后应为0"},
+      {"id": "test_green", "source": "测试函数/断言数(只读源码文本)", "actionability": "TEST_SIDE", "reason": "测试侧信号,非台账真相"}
+    ],
+    "output_fields": ["gap_flag", "four_gaps", "actionability_summary", "one_page", "snapshot", "honesty"],
+    "snapshot_semantics": "快照只读现算,ledger_path可注入做负向测试;生产恒None不写盘。快照含今日时间戳+四类计数,供跨日人工比对趋势,但本轮不落盘。",
+    "honesty_rules": [
+      "逐条摊开不刷绿:补判/缺口如实保留,不因补了锚点就把flag强行改ALIGNED(除非真实台账全就位)",
+      "actionability是标注非裁定:IMMUTABLE/USER_DECISION/MECHANICAL_FIXED/TEST_SIDE只说明能动性,不替决策",
+      "gap_flag沿用test_green_vs_production_probe口径,不在本探针里另算(避免双口径)",
+      "只读: verdict_unchanged=true, consumed=false, is_gate_verdict=false"
+    ]
+  },
+  "acceptance_gates": {
+    "G1": "本预注册SHA写完后计算,先于任何kernel.py改动",
+    "G2": "真实数据:补锚点后pass_weak 5→0、决策单weak 5→0;11条verdict零改变;补判8/缺口14如实保留未被动",
+    "G3": "负向注入:注入backfill>authentic仍触发flag(不因修了弱证据就刷绿);注入快照账本读数随变;actionability四类齐全;非恒真",
+    "G6": "同口径全量对拍:按数据演进更新旧测试断言后,新内核全部守卫零回归;全量=基线+新增守卫",
+    "G_zero_side_effect": "authoritative_state=5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…四哈希动手前后完全一致;11条心跳verdict逐条零改变"
+  },
+  "honesty_boundary": "补锚点只补证据标签不补判定;收敛探针只摊开落差不替裁定;判定权归用户"
+}

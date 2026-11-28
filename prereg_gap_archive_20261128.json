@@ -1,0 +1,33 @@
+{
+  "prereg_id": "§4S75_gap_archive",
+  "date": "2026-11-28",
+  "locked_before_artifact_change": true,
+  "trigger": "用户'按你的倾向归档,并更新Github'——采纳§4S74末尾建议:停止追缺口,分层归档",
+  "based_on": [
+    "§4S74 勘察:14缺口=13结构性硬边界+1可收敛(memory_governance),8补判=历史post_hoc已自愈",
+    "缺口why/hard_bound一手证据:l3类即便CONFIRMED也不宣称绝对独立/无限回归未破;自身不利证据类(finance/vanity)缺口本身即诚实结论",
+    "§4S69 元判断:观测器官已过剩,瓶颈在决策堆积,再加探针边际收益低"
+  ],
+  "scope": "只新增一个只读归档账JSON(gap_archive_20261128.json),逐条标注14缺口+8补判的归档类别与一手依据;不改内核/判定/权威态/心跳/审计文件/KB;不写回任何provenance候选",
+  "kernel_sha_before": "8597810652fca73d0d85c2df957a3a97644c035edca60c8ddd58af27e0066fe1",
+  "archive_classes": {
+    "ACCEPTED_BOUNDARY": "13条:结构性硬边界(跨厂商/跨领域/L3类10 + 自身不利证据类3),附一手why/hard_bound原文摘录;归档=接受为已知边界不再追,非判定翻转",
+    "HISTORICAL_IMMUTABLE": "8条补判:历史post_hoc,机制已自愈(新心跳idx10/11 backfill=False),改=伪造,不动",
+    "DEFERRED_USER_DECISION": "1条memory_governance:KB-AUDIT68/69 provenance可机械抽候选但不动KB,保留待用户裁定"
+  },
+  "honesty_rules": [
+    "归档是元信息标注,不改变任何verdict/审计result.json/KB正文/权威态",
+    "ACCEPTED_BOUNDARY不是'已解决',是'已确认为边界,不再投入验证';不洗白成PASS",
+    "每条依据从真实result.json的why/hard_bound/honest_summary字段原文摘录,不臆造",
+    "DEFERRED项只列候选动作不执行,判定权归用户",
+    "归档账只读生成,可复算;不进任何探针判定链"
+  ],
+  "acceptance_gates": {
+    "G1": "预注册SHA写完后计算,先于归档账生成",
+    "G2": "归档账14+8条齐全,分类数=13/8/1,每条依据来自真实字段",
+    "G3": "复算归档账字节一致(只读可复现);分类计数求和自检",
+    "G6": "内核SHA不变,权威态四哈希不变,11条verdict不变,全量测试零回归",
+    "G_zero_side_effect": "不改任何审计result.json/KB/判定/权威态;只新增归档账JSON一个文件"
+  },
+  "honesty_boundary": "归档=停止追并把理由落账,不是解决缺口;判定权归用户"
+}

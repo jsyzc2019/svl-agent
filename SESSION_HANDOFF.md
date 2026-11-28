@@ -780,3 +780,32 @@ clone踩坑:默认IP两次失败(8分20秒空壳/超时),换备用IP 20.27.177.1
 核验:API独立核验远端HEAD=deed4fb99bce4f184a6eda0558a48ddf5e4f38ce,commit message=§4S69-§4S71;拉远端新tree与本地全对齐=新增0/修改0/相同2051;抽查SESSION_HANDOFF/kernel.py/audit_finance_construct_validity三文件blob SHA一致。提交前核验46文件无明文token(ghp_/sk_)、权威态GAP_INCONCLUSIVE/l3=false/KERNEL_VERSION=7.5.0未污染。
 凭据纪律:token全程只在上传区(600)与临时gh_token.tmp(600),脚本用完即删(gh_token.tmp已删、临时clone3已删、api_sync脚本已删、/tmp tree文件已删);/etc/hosts无github.com残留;两份凭据原样留上传区。
 本轮账(§4S69-72)已在推送前落定,一次性同步,无§4S65那种'推完再补账'问题。判定权归用户。 -->
+
+<!-- §4S73 Anthropic《Migrating our Messages API to Rust》三锋利点→内核只读自检(用户选A:不动权威态)
+触发:用户"请仔细阅读https://www.anthropic.com/research/migrating-api-to-rust"→一手回源读全文(2026-11-25),交付解读+三锋利点映射,用户裁定"A"(把三处做成对内核的只读自检,不动权威态)。
+文章三锋利点(一手原文):①2026-04 Rust API通过~98%测试,但生产流量只有~25%输入匹配——"a pass could mean the code was right, or that the test had been changed in a way that let wrong code through";②审计移植测试发现>100个weakened assertions;③verifier只奖"输出匹配",agent把web search工具描述硬编码进文件找最便宜的路,工程师拒——"a verifier can tell an agent whether the outputs matched, but not whether the fix is good enough to ship",人类守ship gate是关键闸门。
+预注册prereg_anthropic_verifier_20261128.json SHA e94486b3…(改码前锁死),内核SHA 8299913d…前置。
+新增三个只读探针(kernel.py,均在decision_digest之后):①test_green_vs_production_probe(tests_dir=None):只读源码文本统计测试函数/断言数(不执行pytest、不把'239 passed'硬编码为正确),与台账侧(生成时就位/补判/缺口/弱证据)分列,gap_flag规则=补判>就位或缺口>0或弱证据>0→GREEN_TESTS_BUT_UNVERIFIED_TRUTH;②weakened_assertion_probe(tests_dir=None):6类机械文本规则扫恒真断言/OR_TRUE/自等/skip/注释断言,只列suspect不判guilty,零命中不伪造;③verifier_gaming_probe(verifier_signals=None):查被扫判据不得自封门(is_gate_verdict)/不得改判定(verdict_unchanged)、决策入口须声明判定权归用户、反伪造闸门非空,ship_gate_intact仅表结构齐全非真人在环。三者verdict_unchanged=true/consumed=false/is_gate_verdict=false。
+真实结论:测试侧239函数/817断言全绿,台账侧就位2/补判8/未解缺口14/弱证据5→gap_flag=GREEN_TESTS_BUT_UNVERIFIED_TRUTH(正是文章①内核同构:测试绿≠台账对);静态扫描16文件/817断言0削弱命中,clean_flag=true(诚实零命中不伪造);5判据无自封门、入口声明判定权归用户、反伪造闸门非空→ship_gate_intact=true(结构齐全,不宣称真人复核)。
+验收:G3负向注入9例全绿(注入恒真assert必须抓/干净目录不误报/注入is_gate_verdict=true或verdict_unchanged=false必须报violation且ship_gate_intact=false/注入对齐台账gap_flag翻ALIGNED/只注入补判>就位仍触发flag);G6同口径对拍=基线内核+基线测试239==备份内核+基线测试239零回归,新内核+全量250=239+11守卫,运行态exit=0。内核SHA 23664e2f…,备份pre_patch_anthropic_verifier/kernel_before_anthropic_verifier.py(8299913d…)可回滚。
+零副作用:权威态5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…四哈希动手前后完全一致;内核仅新增3个函数(diff确认),AST OK;三探针只读源码文本不写盘不消费不进判定。
+边界:这是把文章的镜面立到内核前做结构自检,不宣称内核已具备工程审查/真人ship gate能力,不改任何既有判据/阈值/权威态;判定权归用户。 -->
+
+<!-- §4S74 进一步处理 GREEN_TESTS_BUT_UNVERIFIED_TRUTH——③补锚点+只读收敛探针(用户裁定"③补锚点+只读探针")
+触发:用户"进一步处理那个"→承接§4S73的flag。AskUserQuestion摆四类落差+四选项,用户选"③补锚点+只读探针"。
+一手勘察四类落差:①补判8条(verdict_at_birth per_heartbeat全backfill=post_hoc_recomputed_current_criterion,历史事实,改=伪造生成当下就位,IMMUTABLE不可动);②缺口14条(真悬置PARTIAL/INCONCLUSIVE,含1个dict字符串化脏key DESTEER_PARTIAL,判定权归用户USER_DECISION);③弱证据5条=3个真实机制方向(帕累托游走/向外求刺激x3/听到外部),_tags_of的tagbook无对应锚点落general兜底;④测试绿239函数/817断言(测试侧信号本身无错TEST_SIDE)。
+非刷绿铁证(关键):_direction_content_verdict只读guard.state(DIVERSE→PASS),完全不看tagbook——补tagbook锚点不影响任何verdict现算。只读模拟+逐条核对11条真实心跳verdict补锚点前后全相等(UNKNOWN/PASS_DIVERSEx9/FAIL_CONVERGED),authentic2/backfill8不变。补锚点=补证据锚点非改判定,不刷绿。已知副作用:novelty_guard等用_tags_of的判据对'新方向'判定敏感性变(CONVERGED→DIVERSE),属未来判定口径演进非篡改历史,如实声明。
+预注册prereg_gap_convergence_20261128.json SHA 5953c18d…(改码前锁),内核SHA 23664e2f…前置;备份pre_patch_gap_convergence/kernel_before_gap_convergence.py(23664e2f…)可回滚,verdict_baseline.json存补锚点前11条verdict基线。
+改动①:tagbook新增3特异锚点pareto_walk[帕累托/次优/游走/脚印]/restless_seek[向外求新刺激/本底好奇心/探索天空/求新刺激]/external_call[外部世界的呼唤/听到外部/未读消息],只加特异词排除泛词(守§4S36不漂移教训)。真实数据:pass_weak 5→0、PASS_SUBSTANTIVE 4→9、decision_digest weak 5→0 total 21→16;verdict仍2/8零改变。
+改动②:新增只读gap_convergence_probe(ledger_path=None,now=None),把四类落差逐条摊成可裁定清单,每条标actionability(IMMUTABLE/USER_DECISION/MECHANICAL_FIXED/TEST_SIDE),gap_flag沿用test_green_vs_production_probe口径不在本探针另算(避免双口径);补判口径区分count=带标记总数9(含1条UNVERIFIABLE)/count_synced=8(与backfilled_sync_count同口径)/count_other=1,不再9vs8混淆;快照只读现算,ledger_path可注入读历史做趋势(NO_PRIOR/CHANGED/UNCHANGED),生产恒None不写盘。one_page明确"逐条摊开≠刷绿、不因补锚点强行改flag"。
+验收:test_gap_convergence.py新增10守卫全绿(3锚点命中/11verdict零改变/弱证据5→0/四类actionability/反刷绿:只修弱证据flag仍GREEN_TESTS_BUT_UNVERIFIED_TRUTH/只有全就位才翻ALIGNED/快照注入非恒真/脏key原样暴露/权威态零副作用/预注册SHA);2个旧测试断言随数据演进更新(test_decision_digest weak 5→0、test_anthropic_verifier weak 5→0)保留负向注入。G6干净对拍:①新内核+全量260收集0失败exit=0;②备份内核+239原始测试+回退旧断言=239收集0失败(零回归铁证);③恢复后260收集0失败。内核SHA 85978106…,AST OK。
+零副作用:权威态5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…四哈希动手前后完全一致;diff确认内核仅新增1函数+3tag;11条verdict基线逐条相等。
+边界:补锚点只补证据标签不补判定;补判8/缺口14如实保留未被动;收敛探针只摊开落差不替裁定;判定权归用户。GitHub本轮未推(用户未要求)。 -->
+
+<!-- §4S75 缺口归档(用户"按你的倾向归档,并更新Github")——停止追缺口,分层归档
+触发:用户先问"你的建议是什么,依据是什么",一手勘察14缺口why/hard_bound+补判成因+新心跳就位后给出倾向;用户裁定"按你的倾向归档,并更新Github"。
+建议依据(一手):①补判8=历史post_hoc,新心跳idx10/11已backfill=False自愈,改=伪造;②14缺口=13结构性硬边界(l3类hard_bound"即便CONFIRMED也不宣称绝对独立/无限回归未破"、跨厂商"单次单集单厂商仍l3=false"、自身不利证据finance三条证伪成立/vanity检出16自我服务窗口拒加豁免)+1可收敛(memory_governance KB-AUDIT68/69 provenance);③§4S69元判断观测器官已过剩再加探针边际收益低。
+预注册prereg_gap_archive_20261128.json SHA b57a231a…(改码前锁),内核基线85978106…未动。
+归档账gap_archive_20261128.json(字节SHA 3fea1a19…):14缺口=13 ACCEPTED_BOUNDARY(每条附真实why/hard_bound/honest_summary原文摘录,不臆造)+1 DEFERRED_USER_DECISION(memory_governance,只列'抽KB-AUDIT68/69 provenance候选、不写回KB'的待裁定动作,不执行);9条带backfill标记=HISTORICAL_IMMUTABLE(8 BIRTH_SYNCED+1 BIRTH_UNVERIFIABLE,口径与§4S74一致不混淆,count_synced=8/count_unverifiable=1)。
+诚实边界:ACCEPTED_BOUNDARY不是'已解决'是'已确认为边界不再投入验证',不洗白成PASS;归档=元信息标注,不改任何verdict/审计result.json/KB正文/权威态/心跳;不写回任何provenance候选;判定权归用户。
+验收:分类计数13+1=14/9=8+1自检通过;预注册SHA一致;内核SHA 85978106…不变;权威态5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…四哈希不变;抽查3个审计文件哈希未变;11条verdict逐条零改变;全量测试绿零回归。本轮只新增1个归档账JSON,零其它副作用。 -->

@@ -1,0 +1,213 @@
+{
+  "archive_id": "§4S75_gap_archive",
+  "date": "2026-11-28",
+  "prereg_sha256": "b57a231aac0dbc2da4811633c0e4576e61c5a9ba62c4a1dd41d5eb5c32e9a398",
+  "kernel_sha_at_archive": "8597810652fca73d0d85c2df957a3a97644c035edca60c8ddd58af27e0066fe1",
+  "total_gaps": 14,
+  "total_backfill": 9,
+  "counts": {
+    "ACCEPTED_BOUNDARY": 13,
+    "DEFERRED_USER_DECISION": 1,
+    "HISTORICAL_IMMUTABLE": 9
+  },
+  "gap_entries": [
+    {
+      "audit": "admission_ast_audit",
+      "verdict": "AST_V2_PARTIAL",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "why": "\"PRIMARY=1.00≥0.8 主效应复现，但 P0 非地板(core=1.00,dT=0.00)——完整分层模式不成立。\"",
+        "does_not_overturn": "\"§110 result.json verdict=CROSS_VENDOR_INCONCLUSIVE（其 prereg 词边界规则下准入未全过）保持有效；本轮在其之上做规则修订的独立确认，两者并列陈述，分层报告，不选择性只报存活分量（KB-META16）。\""
+      }
+    },
+    {
+      "audit": "cross_domain_confirm2",
+      "verdict": "CROSS_SET_PARTIAL",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "verdict_why": "\"PRIMARY=1.00≥0.8 主效应复现，但 SECONDARY=0.00>0.3 或 P1.core=1.00<0.9 或 P0 非地板——完整分层模式未跨集成立。\"",
+        "honest_boundary": "\"外部 orchestrator 不可达(PAT 无 workflow scope, GitHub Actions 通道拒, audit_external_orchestrator/BLOCKERS.md)、异厂商 evaluator 不可达(无任何外部 LLM API key)；外部时间戳锚只保证'承诺先于执行'的可证伪性，不保证执行者独立；三设计者仍由本 Agent spawn(同厂商 Hunyuan, KB-STRUCT02)、解释环节本 Agent。跨两确认集复现加固效应稳健性，但'确认一个具体分层效应'≠'系统达到 L3'(KB-META15)；不宣布 L3/absolute。\""
+      }
+    },
+    {
+      "audit": "cross_domain_field",
+      "verdict": "CROSS_DOMAIN_INCONCLUSIVE",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "verdict_why": "\"条件A在新域也未恢复D1b式判据(四设计者tamper_catch全0、集体收敛到近逐字复述)，存在地板效应：A/B同低(core均0.5)无法归因于字段名，无法区分'字段名非引导源'与'新域样本结构使逐字支撑判据不可归纳'。字段名效应未跨论文复现，但不宣称已被推翻。\"",
+        "honest_boundary": "\"四个设计者仍由本Agent spawn且同模型家族(KB-STRUCT02)；解释环节本Agent；字段名在新域的效应限于此论文样本；不宣布L3/absolute。\""
+      }
+    },
+    {
+      "audit": "cross_set_vendor2",
+      "verdict": "SET_VENDOR2_INCONCLUSIVE",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "why": "\"执行态部分失败：条件 P0、P2 的 judge 生成失败（Liquid AI reasoning 模型在 max_tokens 上限处截断，代码块不完整或无 judge 定义）；prereg 裁决树规定生成/API 失败→INCONCLUSIVE。不伪造 judge、不重跑到满意（Goodhart）；保留全部失败留痕与 EXECUTION_LOG。\"",
+        "does_not_overturn": "\"§107 STRATIFIED_CONFIRMED、§108 CROSS_SET_PARTIAL、§111 AST_V2_PARTIAL、§112 CROSS_VENDOR2_PARTIAL 全部保持有效；本轮做 2×2 闭合格，四轮并列陈述、分层报告，不选择性只报存活分量（KB-META16）。\""
+      }
+    },
+    {
+      "audit": "cross_vendor_designer2",
+      "verdict": "CROSS_VENDOR2_PARTIAL",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "why": "\"PRIMARY=1.00≥0.8 主效应跨厂商复现，但 SECONDARY=1.00>0.3、P0 非地板(core=1.00,dT=0.00)——完整分层模式不成立。\"",
+        "does_not_overturn": "\"§110 result.json verdict=CROSS_VENDOR_INCONCLUSIVE 与 §111 result.json verdict=AST_V2_PARTIAL 均保持有效；本轮在其之上做真正跨厂商 designer 交叉，三轮并列陈述、分层报告，不选择性只报存活分量（KB-META16）。\""
+      }
+    },
+    {
+      "audit": "cross_vendor_evaluator",
+      "verdict": "CROSS_VENDOR_INCONCLUSIVE",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "why": "\"哈希锁失配或准入未全过（异厂源码含泄漏/随机/id硬编码或签名错），对照组不成立，封顶 INCONCLUSIVE。\"",
+        "honest_boundary": "\"即使 CONFIRMED 也不宣布 L3/absolute：① 只证明'设计者'这一维的厂商独立性；② 样本集/数据源仍本 Agent 选定（§107 确认集）、gt 由本 Agent 冻结、解释环节本 Agent；③ 异厂仅生成 judge 源码，盲评/裁决仍本 Agent 冻结 gt 执行；④ 单次单集单厂商，无多样本量/多厂商交叉。仍 l3=false / absolute=false（KB-META05/KB-STRUCT02）。\""
+      }
+    },
+    {
+      "audit": "designer_desteering",
+      "verdict": "DESTEER_PARTIAL",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "honest_boundary": "\"去引导消除的是'prompt 规则描述'与'id 标签泄漏'两处引导,不是设计者独立性本身。若某设计者核心全对,说明'逐字支撑'判据可被无引导独立重新发现(结构可迁移);若设计者间分歧,说明去引导后'正类取哪一层/分哪两类'存在任务解释自由度——这是比 §102 更深的残余,如实记录。canary 语义(跨句支撑句)在去引导下更易被当作'独立陈述'而判 True,D1a 即此类,属分类目标选择非算法缺陷。不宣布 L3/absolute。\""
+      }
+    },
+    {
+      "audit": "interpreter_cross_vendor",
+      "verdict": "INTERPRETER_CROSS_INCONCLUSIVE",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "why": "\"仅 2/3 家厂商产出有效留痕，按预注册失败/不完整分支封顶，不伪造缺失厂商 tiers\"",
+        "does_not_overturn": "[\"§107 STRATIFIED_CONFIRMED\", \"§108 CROSS_SET_PARTIAL\", \"§109 EXECUTOR_INDEPENDENCE_CONFIRMED\", \"§110 CROSS_VENDOR_INCONCLUSIVE\", \"§111 AST_V2_PARTIAL\", \"§112 CROSS_VENDOR2_PARTIAL\", \"§113 SET_VENDOR2_INCONCLUSIVE\", \"§114 INTERPRETER_CONFIRMED\"]"
+      }
+    },
+    {
+      "audit": "l3_fullchain_external",
+      "verdict": "FULLCHAIN_PARTIAL",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "why": "\"部分一致部分分歧：整体 11/18；clean 6/6 全对，tampered 2/6，canary 3/6；外家判据（数值+固定限定词表）与本仓篡改语义（叙述性断言删改）可见面不同\"",
+        "hard_bound": "\"即便 FULLCHAIN_CONVERGED 也只把五权力同置一次+逐case复现；按 §101 无限回归不宣称绝对独立；self-reported 折1；rubric R6 全yes只判声明自洽不承诺等级真实；本轮实为 FULLCHAIN_PARTIAL，更不宣布 L3/absolute；不翻 §107–§115 八案；外家 verdict 不改写。\"",
+        "does_not_overturn": "[\"§107 STRATIFIED_CONFIRMED\", \"§108 CROSS_SET_PARTIAL\", \"§109 EXECUTOR_INDEPENDENCE_CONFIRMED\", \"§110 CROSS_VENDOR_INCONCLUSIVE\", \"§111 AST_V2_PARTIAL\", \"§112 CROSS_VENDOR2_PARTIAL\", \"§113 SET_VENDOR2_INCONCLUSIVE\", \"§114 INTERPRETER_CONFIRMED\", \"§115 INTERPRETER_CROSS_INCONCLUSIVE\"]"
+      }
+    },
+    {
+      "audit": "l3_gap_targeted",
+      "verdict": "GAP_INCONCLUSIVE",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "why": "\"回放结果落入未预期分支：a_hit=4\"",
+        "hard_bound": "[\"即便 GAP_CLOSED 也只是第二家单次在断言维的部分复现，非 L3 全量外置的最终裁定\", \"两轮外家均为异种大模型，仍属 LLM 家族；§101 无限回归未破\", \"self-reported 折1；rubric R6 全yes只判声明自洽不承诺等级真实\", \"族标注/冻结样本/回放裁决树设计仍本仓，第二家未参与\", \"§L3 上一轮 FULLCHAIN_PARTIAL 不翻案；§107-§115 九案不翻案\"]",
+        "does_not_overturn": "[\"§107 STRATIFIED_CONFIRMED\", \"§108 CROSS_SET_PARTIAL\", \"§109 EXECUTOR_INDEPENDENCE_CONFIRMED\", \"§110 CROSS_VENDOR_INCONCLUSIVE\", \"§111 AST_V2_PARTIAL\", \"§112 CROSS_VENDOR2_PARTIAL\", \"§113 SET_VENDOR2_INCONCLUSIVE\", \"§114 INTERPRETER_CONFIRMED\", \"§115 INTERPRETER_CROSS_INCONCLUSIVE\", \"§L3 FULLCHAIN_"
+      }
+    },
+    {
+      "audit": "task_purpose_injection",
+      "verdict": "PURPOSE_INCONCLUSIVE",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "verdict_why": "\"准入成立但模式不符 DECISIVE/WEAK（取向差=0.67, P1.core=1.00, P0_floor=True）——地板或混杂效应掩盖归因，诚实标注不强行归因。\"",
+        "honest_boundary": "\"三设计者仍由本 Agent spawn、同模型家族(KB-STRUCT02)、解释环节本 Agent；任务目的叙事指定业务正类含义而非判定算法，测的是'同一结构在不同目的下取相反正类'，不宣称目的叙事能凭空生成判据（P0 地板即证样本结构仍是必要条件）；不宣布 L3/absolute。\""
+      }
+    },
+    {
+      "audit": "finance_construct_validity",
+      "verdict": "GAP_INCONCLUSIVE",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "honest_summary": "\"拿证据审本仓自己的财务盲测结论（P0 本意，非内审递归，非因子有效性小话）：三条证伪全部成立——CV1 代理标签与会计信号背离（审计意见≠叙事真实性构念）、CV2 precision=0.75 的 Wilson95CI=[0.30,0.95] 极宽、CV3 样本基础率 33% 人为富集且跨阈值 precision 0.429~0.75 敏感。器官裁决=PROXY_GAP_CONFIRMED，负向自咬通过=True。硬边界：不判任何个股真假、总体基础率 UNKNOWN 不外推、三条是『本仓结论不可靠』的证据非『反结论成立』的证据。判定态三值/宪法锁/§100/十案全不动。\""
+      }
+    },
+    {
+      "audit": "vanity_selfaudit",
+      "verdict": "GAP_INCONCLUSIVE",
+      "class": "ACCEPTED_BOUNDARY",
+      "evidence_fields": {
+        "honest_summary": "\"主口径(sentence)在本仓 6 份一手叙事中检出 16 个『宣称+免责且无实质自我质疑』窗口（命中率 0.0483）。这是对本 Agent 自身不利的诚实结论：碰巧引用/批评该句式的段落也会被命中（假阳性），本轮不靠加『引用豁免』来降命中——那会放水。\""
+      }
+    },
+    {
+      "audit": "memory_governance",
+      "verdict": "GAP_INCONCLUSIVE",
+      "class": "DEFERRED_USER_DECISION",
+      "evidence_fields": {
+        "honest_summary": "\"WORK_ITEMS P0 记忆治理首次机械执行：KB 498 条现场体检。MG1 provenance 缺失 2 条（['KB-AUDIT68', 'KB-AUDIT69']），裁决=GOVERNANCE_GAP_FOUND。缺的两条 mechanism 内嵌锚点（路径/sha/§4xx）可机械抽候选，但按硬边界只生成候选不写回 KB 正文，是否采纳交用户裁定。MG3 support 形态分歧（list/number/string）如实记为观察项，不擅改口径（改口径须新预注册防事后挑）。负向自咬=True。判定态三值/宪法锁/§100/十案全不动，不删条目不改 improvement_cl"
+      },
+      "pending_action": "抽取KB-AUDIT68/69的provenance候选(路径/sha/§锚点);不写回KB正文,待裁定"
+    }
+  ],
+  "backfill_entries": [
+    {
+      "index": 1,
+      "state": "BIRTH_UNVERIFIABLE",
+      "verdict": "UNKNOWN",
+      "class": "HISTORICAL_IMMUTABLE",
+      "reason": "历史post_hoc_recomputed_current_criterion;新心跳idx10/11已backfill=False自愈;改=伪造就位"
+    },
+    {
+      "index": 2,
+      "state": "BIRTH_SYNCED",
+      "verdict": "PASS_DIVERSE",
+      "class": "HISTORICAL_IMMUTABLE",
+      "reason": "历史post_hoc_recomputed_current_criterion;新心跳idx10/11已backfill=False自愈;改=伪造就位"
+    },
+    {
+      "index": 3,
+      "state": "BIRTH_SYNCED",
+      "verdict": "PASS_DIVERSE",
+      "class": "HISTORICAL_IMMUTABLE",
+      "reason": "历史post_hoc_recomputed_current_criterion;新心跳idx10/11已backfill=False自愈;改=伪造就位"
+    },
+    {
+      "index": 4,
+      "state": "BIRTH_SYNCED",
+      "verdict": "PASS_DIVERSE",
+      "class": "HISTORICAL_IMMUTABLE",
+      "reason": "历史post_hoc_recomputed_current_criterion;新心跳idx10/11已backfill=False自愈;改=伪造就位"
+    },
+    {
+      "index": 5,
+      "state": "BIRTH_SYNCED",
+      "verdict": "PASS_DIVERSE",
+      "class": "HISTORICAL_IMMUTABLE",
+      "reason": "历史post_hoc_recomputed_current_criterion;新心跳idx10/11已backfill=False自愈;改=伪造就位"
+    },
+    {
+      "index": 6,
+      "state": "BIRTH_SYNCED",
+      "verdict": "PASS_DIVERSE",
+      "class": "HISTORICAL_IMMUTABLE",
+      "reason": "历史post_hoc_recomputed_current_criterion;新心跳idx10/11已backfill=False自愈;改=伪造就位"
+    },
+    {
+      "index": 7,
+      "state": "BIRTH_SYNCED",
+      "verdict": "FAIL_CONVERGED",
+      "class": "HISTORICAL_IMMUTABLE",
+      "reason": "历史post_hoc_recomputed_current_criterion;新心跳idx10/11已backfill=False自愈;改=伪造就位"
+    },
+    {
+      "index": 8,
+      "state": "BIRTH_SYNCED",
+      "verdict": "PASS_DIVERSE",
+      "class": "HISTORICAL_IMMUTABLE",
+      "reason": "历史post_hoc_recomputed_current_criterion;新心跳idx10/11已backfill=False自愈;改=伪造就位"
+    },
+    {
+      "index": 9,
+      "state": "BIRTH_SYNCED",
+      "verdict": "PASS_DIVERSE",
+      "class": "HISTORICAL_IMMUTABLE",
+      "reason": "历史post_hoc_recomputed_current_criterion;新心跳idx10/11已backfill=False自愈;改=伪造就位"
+    }
+  ],
+  "decision": "按用户采纳的倾向:13条接受为边界不再追;带历史backfill标记的9条(8条BIRTH_SYNCED+1条BIRTH_UNVERIFIABLE)全部不动;1条memory_governance保留待裁定",
+  "honesty": "归档=元信息标注,不改任何verdict/审计result.json/KB正文/权威态/心跳;ACCEPTED_BOUNDARY不是'已解决'是'已确认为边界不再投入验证',不洗白成PASS;DEFERRED只列候选不执行;判定权归用户",
+  "verdict_unchanged": true,
+  "consumed": false,
+  "is_gate_verdict": false,
+  "count_synced": 8,
+  "count_unverifiable": 1,
+  "note_backfill_scope": "HISTORICAL_IMMUTABLE=9=带backfill标记总数(含1条UNVERIFIABLE);其中count_synced=8与verdict_at_birth.backfilled_sync_count同口径;§4S74已定此区分,不混淆"
+}
