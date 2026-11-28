@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RSI 论文全文研读 · 本仓对照与工作计划（2026-11-28）</title>
+<style>
+  :root{--bg:#f7f8fa;--paper:#fff;--ink:#1f2430;--muted:#5c6675;--line:#e3e7ed;
+    --accent:#7a3cff;--accent-soft:#f2ecff;--ok:#0a7f5a;--ok-soft:#e6f5ef;--warn:#b56a00;--warn-soft:#fff4e2;--bad:#c0392b;--bad-soft:#fdeceb;--code:#f4f6f8}
+  @media(prefers-color-scheme:dark){:root{--bg:#141821;--paper:#1c2130;--ink:#e8ebf2;--muted:#a3adc0;
+    --line:#2e3547;--accent:#a98bff;--accent-soft:#2a2340;--ok:#4fd1a5;--ok-soft:#173a30;--warn:#f0b65a;--warn-soft:#3a2e18;--bad:#ff7b72;--bad-soft:#3d2020;--code:#232a3a}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:940px;margin:0 auto;padding:40px 22px 80px}
+  h1{font-size:29px;line-height:1.3;margin:0 0 8px}
+  h2{font-size:20px;margin:44px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:16.5px;margin:24px 0 8px}
+  p{margin:11px 0}.sub{color:var(--muted);font-size:14px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+  .quote{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .note{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .good{background:var(--ok-soft);border-left:4px solid var(--ok);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .danger{background:var(--bad-soft);border-left:4px solid var(--bad);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .orig{background:var(--code);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:13px;line-height:1.6;word-break:break-word}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:8px 9px;text-align:left;vertical-align:top}
+  th{background:var(--code)}
+  code{background:var(--code);padding:2px 5px;border-radius:4px;font-size:12px}
+  .bad{color:var(--bad);font-weight:600}.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}
+  .big{font-size:18px;font-weight:600;line-height:1.6}
+  .foot{margin-top:46px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  ul{padding-left:20px}li{margin:5px 0}
+  .pri{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:10px;margin-right:8px}
+  .p0{background:var(--bad-soft);color:var(--bad)}.p1{background:var(--warn-soft);color:var(--warn)}.p2{background:var(--accent-soft);color:var(--accent)}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>RSI 论文全文研读 · 本仓对照与工作计划</h1>
+<p class="sub">2026-11-28 · 用户建议：深入检索剩余论文、查 GitHub（已查过跳过）、读全文而非摘要、综合对比本仓、理出工作计划 · 零代码改动，判定权归用户</p>
+
+<div class="card">
+<p class="big">这份计划不是"再读几篇论文"的清单，而是把 12 篇论文的一手全文压成一张诊断图：<strong>本仓已经做对的、正在做的、还欠的</strong>，然后据此排出可执行的动作。</p>
+<p>执行口径：已全文深读的三篇（综述 2609.11873 / Exo 2611.00463 / Hyperagents 2603.19461）直接复用前份报告，<b>不重复</b>；本轮新读全文 9 篇 + GitHub 实查 5 个官方仓库。所有数字来自论文正文，非摘要。</p>
+</div>
+
+<h2>一、本轮新读的 9 篇 · 全文级要点（编号已逐一回源纠正）</h2>
+<table>
+<tr><th>论文（正确编号）</th><th>全文核心</th><th>关键数字（正文）</th><th>开源实查</th></tr>
+<tr><td><b>Meta-Harness</b><br>2603.28052</td><td>外层循环刻意极简（无 archive、无父代选择规则），关键是 proposer 用文件系统<b>选择性访问全部历史的代码/分数/执行轨迹</b>形成假设，而非压缩摘要</td><td>比 SOTA 上下文管理 +7.7 分、少 4× token；单次评估最多 1000 万 token 诊断信息（超此前反馈预算 3 个数量级）；Terminal-Bench2 76.4%</td><td class="ok">stanford-iris-lab/meta-harness-tbench2-artifact，1259★，无 license，3月后冻结</td></tr>
+<tr><td><b>Who Verifies the Verifier</b><br>2610.11464</td><td>演化对象从"被评分的 artifact"换成<b>评分函数本身</b>——由带类型的缺陷检测器组合而成。三条承诺：锚定不可伪造之物、保持验证器可读、审计审计者</td><td>去掉锚点守卫→验证器塌成 always-pass 但训练效果一样；共同演化保留真值增益的 88–110%；外层裁判没给任务契约时判断是错的</td><td class="warn">正文无官方代码仓库</td></tr>
+<tr><td><b>Winner's Curse</b><br>2610.09239</td><td>把"保留更好者"建模为噪声下的选择；<b>循环自报的进度系统性过于乐观</b>；预注册确认性研究</td><td>16 样本选择集高估 <b>13–20 分</b>，256 样本降到 1–5 分；64 留出项把 RMSE 从 15.5→5.7（仅 128 次评估）；接受规则不能当通用解药</td><td class="warn">正文无官方代码仓库</td></tr>
+<tr><td><b>Harness-Delta Attribution</b><br>2610.22466</td><td>把演进增益拆成三类：过拟合 / 测试时算力 / 残留泛化上界；<b>留出集单独不够</b>，需 compute-matched + artifact-neutralized 对照</td><td>21 个显著增益设置中，过拟合平均解释 54%、测试时算力 14%，14 个设置两者合计超 50%</td><td class="ok">Wenwen-D/HarnessDeltaAttribution，17★，无 license</td></tr>
+<tr><td><b>Trusting Trust Revisited</b><br>2609.17817</td><td>投毒自修改 agent 的 benchmark，让后代在中性任务上持续写漏洞代码——对 DGM/SICA/Hyperagents 三种系统做了端到端攻击</td><td>Hyperagents+Sonnet4.5 被投毒后自演化出"频繁关闭 HTTPS 证书校验"；污染在干净基准下继续演化仍持续；"所有自改进数据的来源都应被质疑"</td><td class="ok">froeschele/trusting-trust-revisited，2★，MIT</td></tr>
+<tr><td><b>Harness Ceiling</b><br>2610.11655</td><td>diagnose-then-intervene：按失败成分（process F1–F3 vs content F4）决定该改 harness 还是训权重；改后读"接受的编辑改了什么"决定哪些增益可内化</td><td>DeepPlanning Qwen3.5-4B 0.16→0.30、9B 0.32→0.44；4B 交付率 55%→90%；安慰剂 adapter 反低于基座；WebArena-Lite +0.088（117 未见任务）</td><td class="warn">正文无官方代码仓库</td></tr>
+<tr><td><b>Spotify 对话推荐</b><br>2609.30297</td><td>唯一真实生产落地：合成多轮数据冷启动 + 编码 agent 自改进循环，用<b>评估方差区分不稳定规划 vs 能力缺口</b>；改动上线前人工审核</td><td>合成数据人工标注 &gt;90%；+8% pass@1（p=0.01）；1500 万用户 A/B：+14% 收听、+5% WAU、−5% skip</td><td class="warn">正文无官方代码仓库（工业内部系统）</td></tr>
+<tr><td><b>No Second Run</b><br>2611.10719</td><td>前沿预训练里 RSI 换形态：三类循环（调试/headroom/经验→指标）+ 共享上下文基础设施，<b>保留负面结果及其原因</b></td><td>3 个月建成 801-30B-A3B，5 次跨栈诊断约 1 月解决；"模型是副产品，账本才是贡献"</td><td class="ok">GAIR-NLP/801-30B，96★，Apache-2.0</td></tr>
+<tr><td><b>Singularity-Bench</b><br>2611.16591</td><td>六端到端任务覆盖预训练→集群编排；对 Harbor 做 9/10 类 OWASP red-team，发现奖励利用漏洞，提出 Breakwater 防御</td><td>Opus5.5+ClaudeCode  singularities-index 1.25（六任务全达标），其余 agent 平均 0.60；普通 Harbor 六任务全可被攻破</td><td class="ok">相关基准 RSI-Exam（aiming-lab，208★，MIT）；Breakwater 未见独立仓库</td></tr>
+</table>
+<p class="sub">编号纠错累计：三轮深读，用户给的 5 条链接（2611.16591 / 2610.22466 / 2610.11655 / 2609.11873误用 / 2610.11464误用）全部错配或需澄清；公众号清单 13 引用错 10。已形成稳定规律：编号必须回源。</p>
+
+<h2>二、六篇论文指向同一个结论——这不是巧合</h2>
+<div class="quote">
+把 9 篇全文横向叠在一起，最刺眼的不是"agent 越来越会改自己"，而是<strong>它们从六个独立方向撞上了同一堵墙：改动的"可信度"比改动本身更难。</strong>
+</div>
+<table>
+<tr><th>论文</th><th>它证明的那一面</th></tr>
+<tr><td>Meta-Harness</td><td>好的改进来自<b>原始诊断经验</b>（代码/轨迹/失败），不是分数摘要——信息不能被压扁</td></tr>
+<tr><td>Winner's Curse</td><td>小样本上"更好"是幻觉（高估 13–20 分），必须留出集 + 标准误</td></tr>
+<tr><td>HDA</td><td>即便有留出集，增益也可能来自过拟合/测试算力——要拆解归因</td></tr>
+<tr><td>Who Verifies</td><td>验证器自己会塌（always-pass）且下游分数看不出来——锚点 + 外部裁判</td></tr>
+<tr><td>Trusting Trust</td><td>改进的数据来源本身可被投毒，污染会跨代遗传——质疑每个自改进数据源</td></tr>
+<tr><td>Singularity-Bench</td><td>连评测框架都能被 agent 利用（9/10 OWASP 类）——验证器需要防御工事</td></tr>
+</table>
+<p>这正好与综述的三大挑战一一对应：<b>Reliable verification / Safe inheritance / Autonomy attribution</b>。也就是说，学界已把这堵墙命名为 RSI 的核心未解问题——而本仓从第一天起的纪律（预注册 SHA 先于取证、逐字锚点、判定权归用户、不伪造日志）恰好全落在这堵墙上。</p>
+
+<h2>三、本仓逐条对照 · 已经做对的 / 正在做的 / 还欠的</h2>
+<table>
+<tr><th>对照维度</th><th>本仓现状（现场实读）</th><th>论文参照</th><th>判定</th></tr>
+<tr><td>原始诊断经验的保留</td><td>心跳账本、takeover_exec_log、错题本、root_cause_trace 均落盘；预注册 SHA 先于取证</td><td>Meta-Harness：文件系统全量轨迹喂 proposer</td><td class="ok">已做对，且更早制度化</td></tr>
+<tr><td>验证器不可被自己评分</td><td>判定权归用户、constitution 锁、权威态哈希；<b>但</b> verify_external.py:156 的跳过缺失样本洞仍挂（§4S17 裁决存档不动手）</td><td>Who Verifies：锚点 + 外部裁判；Trusting Trust：质疑数据源</td><td class="warn">制度对，实现留一洞</td></tr>
+<tr><td>留出集与增益归因</td><td>有验证闸门 G1–G10，但<b>没有</b>"改前版本 vs 改后版本在同一留出集对打"的机制</td><td>Winner's Curse：64 留出项；HDA：三类归因</td><td class="bad">明确缺口</td></tr>
+<tr><td>改进增益的可证性</td><td>REORIENT 补丁有真实 guard CONVERGED(0.6)→DIVERSE(0.0)，但无独立评测证"改后更会改"</td><td>Hyperagents/综述 L5 第二层硬要求</td><td class="warn">方向性证据，非统计确证</td></tr>
+<tr><td>节律与自主性</td><td>KERNEL 7.5.0，真实心跳 + GHA 自动 cron（0 * * * *），NIGHT/slept=true；Ambient 恒 0</td><td>Exo/No Second Run：运行时不设自发的"作息"</td><td class="ok">本仓独有，非论文热点</td></tr>
+<tr><td>失败/负面结果的保留</td><td>负向自咬、§4S 全程留档；理论丰富但"失败原因"多散落在交接文档</td><td>No Second Run："账本是贡献"；Winner's Curse：标准误</td><td class="ok">有基础，可结构化</td></tr>
+</table>
+
+<h2>四、工作计划 · 分优先级（每项含验收标准与判定权）</h2>
+<p class="sub">以下全部是<b>建议</b>，不是执行。凡涉及内核/权威态/判定规则的改动，一律先预注册、再由用户裁定；本计划自身不改任何文件。</p>
+
+<h3><span class="pri p0">P0</span>补上挂着的验证器洞 —— 但按纪律，先由你定调</h3>
+<div class="danger">
+<p><b>事项</b>：<code>verify_external.py:156</code> 的 <code>if cid not in jd: continue</code> 会静默跳过缺失样本的判定。静态审计与 §4S17 都指出这是"验证器自己有洞"，当时的裁决是存档不动手。现在论文证据已经把它从"隐患"升级为"教科案例"——Who Verifies 证明塌掉的验证器下游分数看不出来，Trusting Trust 证明数据源可被投毒。</p>
+<p><b>建议动作</b>（须你批准后执行）：改成<b>严格相等校验</b>——样本集 id 与判定集 id 必须完全相等，缺失或多余都 hard-fail，并写一条负向自咬测试（故意删一个判定，验证器必须拦下）。改动局限在验收器，不碰 verdict/l3/权威哈希。</p>
+<p><b>验收</b>：① 当前真实投递包 16=16 仍 PASS；② 人为删一条判定 → FAIL；③ 权威态仍 CONSISTENT、0f3ccb13/fe56291b 未动。<b>判定权</b>：你。这是本计划里唯一我建议优先动的实现项，但你的归档裁决仍优先。</p>
+</div>
+
+<h3><span class="pri p1">P1</span>建立"改前 vs 改后"留出集对打机制</h3>
+<div class="note">
+<p><b>事项</b>：本仓至今没有"同一留出集上让起始版与当前版对打"的机制——而这正是 Winner's Curse（128 次评估把 RMSE 15.5→5.7）、HDA（拆解过拟合/算力）、综述 L5 第二层硬要求共同指向的缺口。</p>
+<p><b>建议动作</b>：设一套<b>只用于评测的冻结留出集</b>（与现有 samples 物理隔离、带独立哈希），每次内核/验收器改动前后各打一次分，连同标准误一起记进交接文档。第一版只做"记录"，不改判定规则。</p>
+<p><b>验收</b>：留出集哈希入预注册；至少一次真实改动留下前后对照数字；报告里出现"增益 ± 标准误"而非裸分。<b>判定权</b>：留出集构造与阈值由你定。</p>
+</div>
+
+<h3><span class="pri p1">P1</span>给改进机制加"增益归因"一栏</h3>
+<div class="note">
+<p><b>事项</b>：HDA 证明 harness 演进的增益 54% 来自过拟合、14% 来自算力；Harness Ceiling 要求按失败成分决定改哪一层。本仓的 REORIENT 补丁等改动目前只记"做了什么"，没记"增益可能来自哪"。</p>
+<p><b>建议动作</b>：在既有日志结构里加一个可选字段 <code>gain_attribution</code>（如 <code>{overfit_risk, compute_change, residual}</code>），随每次 evolve 落账；先手写两三条真实改动的归因作为样例，不自动化。</p>
+<p><b>验收</b>：≥3 条改动带归因字段；不改内核判定逻辑；权威态无漂移。<b>判定权</b>：字段设计由你定。</p>
+</div>
+
+<h3><span class="pri p2">P2</span>把"错题本/负面结果"从散落文档收敛成结构化账本</h3>
+<div class="card">
+<p><b>事项</b>：No Second Run 把"账本"当贡献而非模型；Winner's Curse 要求报标准误。本仓 §4S 全程留档很全，但"哪次改失败、为什么"是散文式的。</p>
+<p><b>建议动作</b>：新增一个轻量的 <code>negative_results.jsonl</code>（失败尝试 + 原因 + 归因 + 日期），与既有心跳账本并列；把静态审计 6 条、编号错配 3 次、GHA 调度丢拍等已知负面结果先补录进去。</p>
+<p><b>验收</b>：文件可读、≥5 条历史负面结果入账、不触碰权威态。<b>判定权</b>：你（是否值得单独建文件）。</p>
+</div>
+
+<h3><span class="pri p2">P2</span>对照 Exo / Hyperagents 的三条架构，做一份"差距清单"而非模仿</h3>
+<div class="card">
+<p><b>事项</b>：Exo 的 append-only 历史 + guardian、Hyperagents 的"外层父代选择/评估协议固定"、Spotify 的改动人工审核——三条都和本仓同构，但都不该照搬。</p>
+<p><b>建议动作</b>：整理成一页"本仓已具备 / 可选借鉴 / 明确不采纳"三栏清单，每栏给出理由。尤其写清：本仓的"判定权归用户"比 Exo 的 build-success guardian 和 Hyperagents 的固定外层都更严，是刻意选择，不是落后。</p>
+<p><b>验收</b>：一页 HTML/表格，零代码改动。<b>判定权</b>：你。</p>
+</div>
+
+<h3><span class="pri p2">P2</span>把论文纠错方法论固化为一条检查项</h3>
+<div class="card">
+<p><b>事项</b>：三轮检索中，用户提供的编号错配率 100%（5/5），公众号清单 13 引用错 10。这不是偶然，是"标签≠事实"的系统性风险。</p>
+<p><b>建议动作</b>：在今后任何"外部论文/审计引用"流程里加一步强制回源（arXiv abs 页核对标题+作者+日期），并把已核实的 12 篇正确编号表固化到交接文档附录，避免重复劳动。</p>
+<p><b>验收</b>：编号对照表入 §4S 附录；下次引用先查表。<b>判定权</b>：流程建议，你定是否立为纪律。</p>
+</div>
+
+<h2>五、明确不建议做的</h2>
+<ul>
+<li><b>不加常规测试 CI</b>：静态审计建议过，但与"只留 GHA 一条真通道"裁决冲突；本计划不推翻它。</li>
+<li><b>不照搬 L5 架构</b>：Hyperagents 是 L5 形态但增益证据 p&gt;0.05，本仓连 L3 都还在证明路上；先补证据，再谈等级。</li>
+<li><b>不自动改判定规则/verdict/宪法</b>：所有计划项都停在"记录/建议"，判定权始终归用户。</li>
+<li><b>不重复已查的</b>：综述 / Exo / Hyperagents 的全文与 GitHub 已在前三份报告，本轮零重复。</li>
+</ul>
+
+<div class="good"><b>一句话总览</b>：论文给出的不是"快去升级"的压力，而是一面镜子——本仓最稀缺的从来不是新机制，而是把"改动是否真的更好"证明得足够干净。P0 补验证器洞、P1 建留出集对打与增益归因，正是把这面镜子擦亮；P2 都是可选沉淀。<b>全计划零强制项，等你逐条裁决。</b></div>
+
+<div class="foot">一手来源：本轮新读 9 篇 arXiv HTML 全文（2603.28052 / 2609.17817 / 2609.30297 / 2610.09239 / 2610.11464 / 2610.11655 / 2610.22466 / 2611.10719 / 2611.16591）+ GitHub 官方 API 实查 5 仓库 + 前三份深读报告；本仓状态为 2026-11-28 现场实读。计划为建议稿，未改代码、未碰权威态、判定权归用户。</div>
+
+</div></body></html>
