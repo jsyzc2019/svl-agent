@@ -1,0 +1,140 @@
+{
+  "research_id": "§4S66_yc_garrytan_opensource_deepdive",
+  "date": "2026-11-28",
+  "trigger": "用户: 微信公众号李rumor《YC CEO把自己开源了》该文章值得读,文章中提到的开源项目库值得深研",
+  "method": "先 verify 再享受——文章是二手转述,先一手回源 GitHub 仓库 + 逐字读 SKILL.md 原文,再拿标尺量自己内核",
+  "article": {
+    "title": "YC CEO把自己开源了",
+    "author": "李rumor",
+    "source_url": "http://mp.weixin.qq.com/s?__biz=MzAxMTk4NDkwNw==&mid=2247497409&idx=1&sn=5341ebb5f2c145f2543a32174723b709",
+    "fetch_channel": "WebSearch 公开网页通道全文(搜狗/付费通道未启用,零费用)",
+    "six_methods_claimed": [
+      "一手原话永远比二手转述值钱(signal-detector)",
+      "不带具体问题别阅读(strategic-reading)",
+      "给脑子里的想法分级(concept-synthesis T1-T4)",
+      "模糊回答必须被推第二次(office-hours 6 forcing questions)",
+      "不查到根因就不修(investigate + 3-strike)",
+      "让AI标注自己不知道(briefing 标缺失/标过时)"
+    ]
+  },
+  "first_hand_verification": {
+    "note": "文章是二手转述,以下均为 2026-11-28 一手 GitHub API 回源,文章数字全面过时",
+    "gbrain": {
+      "url": "https://github.com/garrytan/gbrain",
+      "desc": "Garry's Opinionated OpenClaw/Hermes Agent Brain",
+      "stars_article": 14000,
+      "stars_actual": 33671,
+      "forks": 5044,
+      "license": "MIT",
+      "default_branch": "master",
+      "created": "2026-04-05",
+      "pushed": "2026-11-28T06:50:58Z",
+      "skill_dir_count": 80,
+      "top_level_skills_read": ["signal-detector", "strategic-reading", "concept-synthesis", "briefing", "fact-check", "academic-verify", "measure-before-you-fix", "resolve-before-asking", "data-loss-gate", "brain-ingest-gate"]
+    },
+    "gstack": {
+      "url": "https://github.com/garrytan/gstack",
+      "desc": "Use Garry Tan's exact Claude Code setup: 23 opinionated tools that serve as CEO, Designer, Eng Manager, Release Manager, Doc Engineer, and QA",
+      "stars_article": 92000,
+      "stars_actual": 142831,
+      "forks": 21076,
+      "license": "MIT",
+      "default_branch": "main",
+      "repo_size_KB": 289722,
+      "pushed": "2026-11-28T01:01:30Z",
+      "top_level_skill_count": 62,
+      "article_claimed_command_count": 13,
+      "discrepancy": "文章说13个命令/23 tools,仓库现状顶层62个skill;数字口径不一,无法一一对应"
+    }
+  },
+  "evidence_files": {
+    "dir": "research_yc_garrytan_20261128/skills/",
+    "count": 13,
+    "sha256": {
+      "signal-detector.md": "f7022c35d7da7e8179f5548fe2cee39382cd680182dd7b9c2e03986c6bdcc428",
+      "strategic-reading.md": "8323eac2c1da2802c46b38e6a5fa07bf863ec345eaea32ca7f885da1598c8ded",
+      "concept-synthesis.md": "3f1109f108dd7a65ecf897592b5dd211da5505842713fd1f1fe6ba9dcd7c2a67",
+      "briefing.md": "121c9cde497ec0c8b5b7c7b1b5428f06c055164daf71e5bbe55fb30a8fcb0c76",
+      "gstack_office_hours_phase2a.md": "f62e3fbd1dc864f99ab9d7ee25930534d2ea5c22786ce5d67d0b0aa72290ba05"
+    }
+  },
+  "verbatim_rules_first_hand": {
+    "signal_detector": [
+      "**Capture exact phrasing.** The user's language IS the insight. Don't paraphrase.",
+      "Applies only after explicit automatic-capture opt-in (skips: no recorded choice, capture off, chat-only requests...)",
+      "A stored opt-in or an explicitly enabled memory.auto_writeback mode can supply that choice; off, a missing or unreadable choice cannot. Reading this skill, installing GBrain, an available API key, silence, or an announcement that capture is on does not authorize it.",
+      "A request to remember one fact authorizes that fact, not future ambient capture.",
+      "Citations on every fact written",
+      "Anti-pattern: Capture exact phrasing... instead of paraphrasing the user's original thinking"
+    ],
+    "strategic_reading": [
+      "This is reading with a mission.",
+      "Every recommendation must cite the source... Direct quotes are mandatory.",
+      "The source text is unavailable or truncated: say which parts were read; do not extend the playbook beyond what was read.",
+      "Short/medium/long-term breakdown is mandatory."
+    ],
+    "concept_synthesis": [
+      "Phase 3: Synthesize (LLM, T1+T2 only)",
+      "T3/T4 — stub only (no LLM synthesis)",
+      "No concept should be T1 with < 4 months span or < 6 mentions.",
+      "Grounding labels (VERIFIED / OPINION / NEEDS_SOURCE / UNSAFE)... Do not store confident falsehoods — deployed, they make the user less [safe].",
+      "Phases 1-4 only merge up — they never remove anything. (cull is reversible)",
+      "Default is DON'T merge; the judge must earn [it]."
+    ],
+    "briefing": [
+      "Never generate a briefing from memory alone; always query gbrain for current data.",
+      "Uncited facts. Every claim must include [Source: slug, updated DATE]. A fact without a citation is unverifiable.",
+      "Stale context presented as current. If a page hasn't been updated in 30+ days, flag the staleness explicitly rather than presenting it as fresh.",
+      "One section's source fails (rate_limited, timeout): ship the rest of the briefing and name the missing section; never silently drop it.",
+      "The briefing is read-only by default. Do not create or update pages unless the user explicitly requests it."
+    ],
+    "office_hours_6_forcing_questions": [
+      "Q1 Demand Reality: What's the strongest evidence you have that someone actually wants this — not 'is interested,' not 'signed up for a waitlist,' but would be genuinely upset if it disappeared tomorrow?",
+      "Q2 Status Quo: What are your users doing right now to solve this problem — even badly? What does that workaround cost them?",
+      "Q3 Desperate Specificity: Name the actual human who needs this most. What's their title? What gets them promoted? What gets them fired? What keeps them up at night?",
+      "Q4 Narrowest Wedge: What's the smallest possible version of this that someone would pay real money for — this week, not after you build the platform?",
+      "Q5 Observation & Surprise: Have you actually sat down and watched someone use this without helping them? What did they do that surprised you?",
+      "Q6 Future-Fit: If the world looks meaningfully different in 3 years — and it will — does your product become more essential or less?",
+      "Anti-Sycophancy (verbatim bans): 'That's an interesting approach' / 'There are many ways to think about this' / 'You might want to consider...' / 'That could work' / 'I can see why you'd think that'",
+      "Push once, then push again. The first answer... is usually the polished version. The real answer comes after the second or third push.",
+      "Specificity is the only currency. Interest is not demand. The user's words beat the founder's pitch. Watch, don't demo. The status quo is your real competitor."
+    ]
+  },
+  "discrepancies_found": [
+    {
+      "claim": "文章: gbrain 14k stars / gstack 92k stars / gstack 13个命令",
+      "actual": "一手: gbrain 33671 / gstack 142831 / gstack顶层62个skill(仓库描述写23 tools)",
+      "verdict": "二手转述全面过时,数字不可信——再次印证'先verify再享受'"
+    },
+    {
+      "claim": "文章把 investigate 描述为 gstack 的独立工具,含'不查根因不修'+3-strike",
+      "actual": "gstack 顶层62个skill无 investigate 目录;但 office-hours SKILL.md 里有 'Bug fixes hit root cause, not symptom' 和 ETHOS.md 的 search-first;3-strike 未在一手文件逐字找到",
+      "verdict": "根因条款一手可证;3-strike 属文章转述,未在读到的原文逐字命中,标为二手待核,不冒充已验"
+    },
+    {
+      "claim": "文章: 三层信号过滤器(我觉得/我看见/我付钱)是'从skill里梳理出来,Garry没明确编号'",
+      "actual": "一手 office-hours 有 'Rank evidence: prepay > signed contract > paid pilot > priced LOI > unpriced LOI > praise' 和 'Interest is not demand'",
+      "verdict": "文章自己已诚实标注这是它的梳理而非Garry原话——这一点文章做得对,一手也确有同精神的证据排序"
+    }
+  ],
+  "battle_test_mapped_to_own_kernel": {
+    "recap": "拿一手硬规则当标尺,量 life_kernel 内核 KERNEL_VERSION=7.5.0 的真实实现",
+    "already_have": [
+      {"rule": "signal-detector: 原话照抄不释义 + 授权门", "kernel": "receive_external()/read_inbound(): source_tier分层、只收不执行、正文不进判定、consumed=false;外部消息持续可见留痕", "status": "已实现且更强——内核连'正文不进判定'都做了,比signal-detector更严"},
+      {"rule": "strategic-reading: 截断就说读了哪些,不外推", "kernel": "verdict_at_birth_probe 的 BIRTH_UNVERIFIABLE + abstention 的 abstention_masked_zero:'没判≠判了没问题'", "status": "已实现——弃权不算验证就位,诚实口径"},
+      {"rule": "briefing: 标过时/标缺失/read-only默认", "kernel": "所有探针 verdict_unchanged=true / is_gate_verdict=false / 只读不写盘;_freshness() 新鲜度门", "status": "read-only与标缺失已实现;30天标过时有 _freshness 但非专门标注"},
+      {"rule": "office-hours: 模糊回答推第二次 + 禁止客气话", "kernel": "§4S54 外部响应性判据: 若外部输入长期从未改变行动/计划/追问=封闭;echo_responsiveness_probe", "status": "精神同构——判据本身就是'不能假装开放'"},
+      {"rule": "concept-synthesis: 只对T1/T2深整合,证据分级", "kernel": "conclusion_evidence_probe: 结论轴×证据轴双轴;tagbook特异锚点", "status": "精神同构——结论对≠证据实,已量化5/9弱证据"}
+    ],
+    "genuine_gaps": [
+      {"rule": "briefing: 30+天资料显式标'信息可能过时'", "kernel": "_freshness() 有新鲜度计算但未对每条证据输出'STALE'标注字段", "status": "可补的只读判据缺口——但需要用户裁定是否值得做"},
+      {"rule": "signal-detector: 一行 signal log 让循环可debug", "kernel": "有 verdict_at_birth_probe 的 per_heartbeat 明细,但无统一的'本轮听到/判了什么'信号日志", "status": "可选增强"}
+    ]
+  },
+  "honesty_boundary": "本轮全程只读回源+落证据文件,零改内核/权威态/心跳;一手SKILL.md是agent指令文本,不是可执行验证器,内核无法照搬其数值;判定权归用户",
+  "authoritative_state_unchanged": {
+    "authoritative_state.json": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "constitution.json": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "heartbeat_log.jsonl": "ea749f76826dc59c0a964f22a4563e38120c062fb18c9093806395b26110ad35"
+  }
+}

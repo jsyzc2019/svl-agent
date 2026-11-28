@@ -1120,6 +1120,145 @@ def verdict_at_birth_probe(log_path=None):
     }
 
 
+def _parse_iso_age_days(ts, now_dt):
+    """解析 ISO8601 时间戳,返回距 now 的天数;无/坏时间戳返回 None(=UNDATED)。"""
+    if not ts:
+        return None
+    try:
+        s = str(ts).strip()
+        if s.endswith("Z"):
+            s = s[:-1] + "+00:00"
+        dt = datetime.datetime.fromisoformat(s)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=datetime.timezone.utc)
+        return (now_dt - dt).total_seconds() / 86400.0
+    except (ValueError, TypeError, OverflowError):
+        return None
+
+
+def staleness_probe(now=None, heartbeat_log=None, inbox_log=None, stale_days=30):
+    """§4S67【只读·证据年龄标注】逐条标 FRESH/STALE/UNDATED,对应 gbrain briefing
+    原文"If a page hasn't been updated in 30+ days, flag the staleness explicitly
+    rather than presenting it as fresh"。
+
+    语义区分: _freshness() 量的是主题重叠度(越不重叠越fresh),本探针量的是时间戳年龄,
+    两者不可互相顶替。UNDATED(无/坏时间戳)绝不当FRESH——纪律"没判≠判了没问题"/
+    "沉默≠覆盖";STALE/UNDATED 都显式列出,不静默丢弃任何条目。
+    只读:不写盘、不消费、不进判定。预注册 prereg_staleness_signal_20261128.json 锁死。
+    """
+    if now is None:
+        now_dt = datetime.datetime.now(datetime.timezone.utc)
+    elif isinstance(now, str):
+        s = now.strip()
+        if s.endswith("Z"):
+            s = s[:-1] + "+00:00"
+        now_dt = datetime.datetime.fromisoformat(s)
+        if now_dt.tzinfo is None:
+            now_dt = now_dt.replace(tzinfo=datetime.timezone.utc)
+    else:
+        now_dt = now
+        if now_dt.tzinfo is None:
+            now_dt = now_dt.replace(tzinfo=datetime.timezone.utc)
+    stale_days = float(stale_days)
+
+    items = []
+    # 心跳: timestamp 字段
+    for i, hb in enumerate(_load_heartbeats(heartbeat_log)):
+        ts = hb.get("timestamp")
+        age = _parse_iso_age_days(ts, now_dt)
+        if age is None:
+            state = "UNDATED"
+        elif age >= stale_days:
+            state = "STALE"
+        else:
+            state = "FRESH"
+        items.append({"source": "heartbeat", "index": i + 1, "timestamp": ts,
+                      "age_days": None if age is None else round(age, 3), "state": state})
+    # 收件箱: at 字段(注入路径给 inbox_log,否则给 heartbeat_log 的 sibling)
+    ib_path = inbox_log if inbox_log else (_sibling(heartbeat_log, "inbound_inbox.jsonl") if heartbeat_log else None)
+    msgs = read_inbound(log_path=ib_path)["messages"]
+    for i, m in enumerate(msgs):
+        ts = m.get("at")
+        age = _parse_iso_age_days(ts, now_dt)
+        if age is None:
+            state = "UNDATED"
+        elif age >= stale_days:
+            state = "STALE"
+        else:
+            state = "FRESH"
+        items.append({"source": "inbox", "index": i + 1, "timestamp": ts,
+                      "age_days": None if age is None else round(age, 3), "state": state})
+
+    counts = {"FRESH": 0, "STALE": 0, "UNDATED": 0}
+    for it in items:
+        counts[it["state"]] += 1
+    total = len(items)
+    named_missing = [it for it in items if it["state"] in ("STALE", "UNDATED")]
+    return {
+        "total": total,
+        "counts": counts,
+        "stale_rate": round(counts["STALE"] / total, 4) if total else 0.0,
+        "undated_rate": round(counts["UNDATED"] / total, 4) if total else 0.0,
+        "stale_days": stale_days,
+        "now": now_dt.isoformat(),
+        "per_item": items,
+        "named_missing_sections": named_missing,
+        "honesty": ("STALE/UNDATED 显式列出,不静默丢弃(briefing: never silently drop); "
+                    "UNDATED 不并入 FRESH(没判≠判了没问题/沉默≠覆盖); "
+                    "时间戳年龄语义,与 _freshness() 的主题重叠语义不同,不可互相顶替; "
+                    "只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": "gbrain briefing SKILL.md 原文 §4S66 一手回源; prereg_staleness_signal_20261128.json",
+        "consumed": False, "verdict_unchanged": True, "is_gate_verdict": False,
+    }
+
+
+def signal_log_probe(log_path=None, inbox_log=None, now=None):
+    """§4S67【只读·一行信号日志】聚合已有只读判据,让"听到→判断→落账"循环可 debug,
+    对应 gbrain signal-detector 原文"Always log a one-line summary... makes the ambient
+    capture loop debuggable"。纯聚合,不产生新判定、不写盘、不消费。
+    one_line 里每个数字都来自真实判据返回值,不硬编码。预注册锁死。
+    """
+    ib_path = inbox_log if inbox_log else (_sibling(log_path, "inbound_inbox.jsonl") if log_path else None)
+    ib = read_inbound(unread_only=True, log_path=ib_path)
+    unread = ib["count"]
+
+    judgments = _external_judgments(log_path=log_path)
+    jd_counts = {}
+    for j in (judgments.get("judgments") or []):
+        d = j.get("disposition") or j.get("verdict") or "UNKNOWN"
+        jd_counts[d] = jd_counts.get(d, 0) + 1
+
+    echo_v = echo_responsiveness_probe(log_path=log_path).get("verdict", "UNKNOWN")
+    birth = verdict_at_birth_probe(log_path=log_path)
+    birth_auth = birth.get("authentic_birth_count", 0)
+    birth_backfill = birth.get("backfilled_sync_count", 0)
+    stale = staleness_probe(now=now, heartbeat_log=log_path, inbox_log=ib_path)
+
+    hbs = _load_heartbeats(log_path)
+    parts = [
+        "Signals: H=%d" % len(hbs),
+        "inbound=%d" % unread,
+        "C2(%s)" % ",".join("%s=%d" % (k, v) for k, v in sorted(jd_counts.items())) if jd_counts else "C2(none)",
+        "echo=%s" % echo_v,
+        "birth_auth=%d/backfill=%d" % (birth_auth, birth_backfill),
+        "stale=%d/undated=%d" % (stale["counts"]["STALE"], stale["counts"]["UNDATED"]),
+    ]
+    return {
+        "heartbeats": len(hbs),
+        "inbound_unread": unread,
+        "inbound_judgments": jd_counts,
+        "echo_verdict": echo_v,
+        "birth_authentic": birth_auth,
+        "birth_backfilled": birth_backfill,
+        "staleness_counts": stale["counts"],
+        "one_line": " ".join(parts),
+        "honesty": ("纯聚合已存在只读判据,不产生新判定/不写盘/不消费/不进判定; "
+                    "one_line 每个数字来自真实判据返回值,不硬编码; 判定权归用户"),
+        "based_on": "gbrain signal-detector SKILL.md 原文 §4S66 一手回源; prereg_staleness_signal_20261128.json",
+        "consumed": False, "verdict_unchanged": True, "is_gate_verdict": False,
+    }
+
+
 def _dominates(a, b):
     """双目标支配：novelty 与 freshness 都不差，且至少一项严格更优。"""
     return (a["novelty"] >= b["novelty"] and a["freshness"] >= b["freshness"]

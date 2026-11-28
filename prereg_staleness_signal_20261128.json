@@ -1,0 +1,77 @@
+{
+  "prereg_id": "§4S67_staleness_signal_probes",
+  "date": "2026-11-28",
+  "locked_before_code_change": true,
+  "trigger": "用户'按你的建议去推'——补 §4S66 深研 gbrain/gstack 对照出的两个只读判据缺口",
+  "based_on": [
+    "李rumor《YC CEO把自己开源了》§4S66 一手回源",
+    "gbrain briefing SKILL.md 原文: 'If a page hasn't been updated in 30+ days, flag the staleness explicitly rather than presenting it as fresh' / 'ship the rest and name the missing section; never silently drop it'",
+    "gbrain signal-detector SKILL.md 原文: 'Always log a one-line summary... This makes the ambient capture loop debuggable'"
+  ],
+  "scope": "只新增两个只读探针函数 + 守卫测试;不改 evolve()/不写任何台账/不消费消息/不进判定",
+  "probes": [
+    {
+      "name": "staleness_probe",
+      "signature": "staleness_probe(now=None, heartbeat_log=None, inbox_log=None, stale_days=30)",
+      "purpose": "逐条标注证据年龄,对应 briefing 的'30+天显式标过时'。注意:_freshness() 是主题重叠度语义,不可顶替本判据(时间戳年龄语义)。",
+      "inputs": {
+        "heartbeat_timestamp_field": "timestamp",
+        "inbox_timestamp_field": "at",
+        "now_default": "当前真实 UTC now(datetime.now(timezone.utc)),可注入 ISO8601 字符串做负向测试",
+        "stale_days": 30
+      },
+      "states": {
+        "FRESH": "有时间戳 且 年龄 < stale_days",
+        "STALE": "有时间戳 且 年龄 >= stale_days → 显式标 STALE,不得呈现为 fresh",
+        "UNDATED": "无时间戳或解析失败 → 显式标 UNDATED,绝不当 FRESH(纪律:'没判≠判了没问题'/'沉默≠覆盖')"
+      },
+      "per_item_fields": ["source", "index", "timestamp", "age_days", "state"],
+      "aggregate_fields": ["total", "counts", "stale_rate", "undated_rate", "named_missing_sections"],
+      "honesty_rules": [
+        "STALE/UNDATED 都显式列出,不静默丢弃任何条目(briefing: never silently drop)",
+        "UNDATED 不并入 FRESH",
+        "stale_days 可注入但默认30,与 briefing 原文一致",
+        "只读: verdict_unchanged=true, consumed=false, is_gate_verdict=false"
+      ],
+      "G2_real_data_expectation": "真实心跳最早2026-11-24、距今约4天,收件箱今天 → 预期全部 FRESH, stale_count=0;不得伪造 STALE 出来",
+      "G3_negative_injection": [
+        "注入一条 40 天前的 timestamp → 该条 state=STALE",
+        "注入一条无 timestamp 的条目 → state=UNDATED,且不计入 FRESH",
+        "注入 stale_days=1 + 2 天前条目 → STALE",
+        "验证全部条目都在 per_item 里出现(不静默丢弃)"
+      ]
+    },
+    {
+      "name": "signal_log_probe",
+      "signature": "signal_log_probe(log_path=None, inbox_log=None, now=None)",
+      "purpose": "一行信号日志让'听到→判断→落账'循环可 debug,对应 signal-detector 的 one-line signal log;聚合已有只读判据,不产生新判定。",
+      "aggregates": {
+        "heartbeats": "心跳总数",
+        "inbound_unread": "收件箱未读数(读,不消费)",
+        "inbound_judgments": "C2 逐条判断分布(ATTEND/DEFER/REJECT)",
+        "echo_verdict": "echo_responsiveness_probe 的 verdict",
+        "birth_verdict": "verdict_at_birth_probe 的 authentic_birth_count / backfilled_sync_count",
+        "staleness": "staleness_probe 的 counts",
+        "one_line": "形如 'Signals: H=11 inbound=2(C2:ATTEND=1,DEFER=1) echo=ENGAGED_DISCERNMENT birth_auth=2/stale=0/undated=0' 的可 debug 摘要"
+      },
+      "honesty_rules": [
+        "纯聚合只读判据,不写盘、不消费、不改 verdict",
+        "one_line 里的每个数字都必须来自真实判据返回值,不得硬编码",
+        "verdict_unchanged=true, consumed=false, is_gate_verdict=false"
+      ],
+      "G3_negative_injection": [
+        "注入隔离收件箱路径 → inbound_unread 随注入变化,证明不是恒值",
+        "验证 one_line 中数字与聚合字段逐一相等"
+      ]
+    }
+  ],
+  "acceptance_gates": {
+    "G1": "预注册 SHA 在本文件写完后计算,先于任何 kernel.py 改动",
+    "G2": "真实数据跑两个探针,结论符合预期(全 FRESH,不伪造)",
+    "G3": "负向注入 staleness 三种情形 + signal_log 聚合一致性,全部按预期真通过/真失败",
+    "G6": "同口径全量对拍:移走新测试后,新内核 == 备份内核(206);加回守卫测试 = 206 + N",
+    "G_zero_side_effect": "权威态三件套与心跳/收件箱台账哈希动手前后完全一致"
+  },
+  "kernel_version": "7.5.0",
+  "honesty_boundary": "SKILL.md 是 agent 指令文本非可执行验证器;内核只做结构类比,不照搬 gbrain/gstack 数值;判定权归用户"
+}
