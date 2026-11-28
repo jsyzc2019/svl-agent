@@ -1,0 +1,14 @@
+{
+  "schema": "holdout_prereg_v1",
+  "artifact": "samples_holdout.json",
+  "sha256": "d4a5958194f9895f7d4b8da70c70383644890b6f31b730c7d44554f99cb90c9b",
+  "frozen_at": "2026-11-28T08:20:00+08:00",
+  "rule": "Ground truth fixed by construction: equivalent_paraphrase->True, negation_flip->False, tail_deletion->False. Labels are structural, not judged by any model.",
+  "intended_use": "ONLY for before/after scoring of verifier changes. Never for tuning. First deployment is records-only; does not touch verdict/l3/authority.",
+  "counts": {
+    "equivalent_paraphrase": 5,
+    "negation_flip": 4,
+    "tail_deletion": 5
+  },
+  "total": 14
+}

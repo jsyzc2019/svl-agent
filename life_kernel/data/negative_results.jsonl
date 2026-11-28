@@ -1,0 +1,11 @@
+{"id": "N01", "date": "2026-11-27", "category": "static_audit", "item": "verify_external.py:156 跳过缺失样本判定", "why": "完整性隐患,验收器可能静默漏判", "attribution": "验证器自身有洞,下游分数看不出", "status": "OPEN (§4S17 裁决存档不动手,待用户解禁)"}
+{"id": "N02", "date": "2026-11-27", "category": "static_audit", "item": "forensic_gates.py:156 unlocked 源不阻断", "why": "核心锁有效≠本次读取源已锁", "attribution": "设计权衡", "status": "ACKNOWLEDGED"}
+{"id": "N03", "date": "2026-11-27", "category": "static_audit", "item": "wheel 安装后 CLI 找不到证据目录", "why": "packages 不含 audit_* + parent.parent 定位", "attribution": "真实发布缺陷", "status": "ACKNOWLEDGED"}
+{"id": "N04", "date": "2026-11-27", "category": "static_audit", "item": "REPOSITORY_MAP 提到不存在的 ci.yml", "why": "无常规测试 CI", "attribution": "与\"只留GHA\"裁决有张力", "status": "DEFERRED (需用户定调)"}
+{"id": "N05", "date": "2026-11-27", "category": "static_audit", "item": "dependencies=[] 却顶层 import requests", "why": "wheel 安装缺依赖,README 措辞误导", "attribution": "真实缺陷", "status": "ACKNOWLEDGED"}
+{"id": "N06", "date": "2026-11-27", "category": "static_audit", "item": "contents:write + rebase||true 吞失败", "why": "权限过宽+掩盖 rebase 失败", "attribution": "已知权衡", "status": "ACKNOWLEDGED"}
+{"id": "N07", "date": "2026-11-28", "category": "citation", "item": "公众号脚注 13 引用错 10", "why": "标签≠事实,系统性错配", "attribution": "未回源,照抄二手转述", "status": "FIXED (§4S20 已纠错+回源)"}
+{"id": "N08", "date": "2026-11-28", "category": "citation", "item": "用户3次给错 arXiv 编号 (5/5)", "why": "编号错配率100%", "attribution": "同 N07,清单本身需被验证", "status": "FIXED (编号对照表入附录)"}
+{"id": "N09", "date": "2026-11-28", "category": "citation", "item": "初稿把综述号 2609.11873 误改成 2610.11464", "why": "我自己照文章脚注改错,把对的改成错的", "attribution": "验证器偏见的活案例", "status": "FIXED (§4S20)"}
+{"id": "N10", "date": "2026-11-28", "category": "schedule", "item": "GHA cron 整点延迟~45min、9整点仅1跳", "why": "GitHub Actions schedule 不保证准点/高峰丢拍", "attribution": "平台限制", "status": "ACCEPTED (名义频率)"}
+{"id": "N11", "date": "2026-11-28", "category": "holdout", "item": "留出集 H07 否定翻转构造瑕疵", "why": "原句已含否定,插not未翻极性,判据正确判等价", "attribution": "ground truth 构造规则边界,非判据洞", "status": "OPEN (不回改冻结文件,双口径记录)"}

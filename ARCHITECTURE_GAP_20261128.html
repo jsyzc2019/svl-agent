@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本仓 vs Exo / Hyperagents · 三栏架构差距清单（2026-11-28）</title>
+<style>
+  :root{--bg:#f7f8fa;--paper:#fff;--ink:#1f2430;--muted:#5c6675;--line:#e3e7ed;
+    --accent:#7a3cff;--accent-soft:#f2ecff;--ok:#0a7f5a;--ok-soft:#e6f5ef;--warn:#b56a00;--warn-soft:#fff4e2;--bad:#c0392b;--bad-soft:#fdeceb;--code:#f4f6f8}
+  @media(prefers-color-scheme:dark){:root{--bg:#141821;--paper:#1c2130;--ink:#e8ebf2;--muted:#a3adc0;
+    --line:#2e3547;--accent:#a98bff;--accent-soft:#2a2340;--ok:#4fd1a5;--ok-soft:#173a30;--warn:#f0b65a;--warn-soft:#3a2e18;--bad:#ff7b72;--bad-soft:#3d2020;--code:#232a3a}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:40px 22px 80px}
+  h1{font-size:27px;line-height:1.3;margin:0 0 8px}
+  h2{font-size:19px;margin:40px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  p{margin:10px 0}.sub{color:var(--muted);font-size:14px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .quote{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .note{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .good{background:var(--ok-soft);border-left:4px solid var(--ok);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+  th{background:var(--code)}
+  code{background:var(--code);padding:2px 5px;border-radius:4px;font-size:12px}
+  .ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+  .col-have{background:var(--ok-soft)}.col-maybe{background:var(--warn-soft)}.col-no{background:var(--bad-soft)}
+  .foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  ul{padding-left:20px}li{margin:5px 0}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>本仓 vs Exo / Hyperagents · 三栏架构差距清单</h1>
+<p class="sub">2026-11-28 · 工作计划 P2b：整理"本仓已具备 / 可选借鉴 / 明确不采纳"三栏，每栏给理由 · 一页表格，零代码改动，判定权归用户</p>
+
+<div class="quote">
+<b>先定调</b>：这份清单不是"本仓落后多少"的差距表，而是"哪些是本仓刻意选择"的说明表。三篇读下来最一致的结论是——<b>大家都在想办法让改动可信，而不是只让改动发生</b>。本仓从第一天起的纪律（预注册 SHA、逐字锚点、判定权归用户、不伪造日志）已经站在这堵墙上。
+</div>
+
+<h2>三栏对照</h2>
+<table>
+<thead><tr><th style="width:22%">维度</th><th class="col-have" style="width:26%">本仓已具备 ✓</th><th class="col-maybe" style="width:26%">可选借鉴 ~</th><th class="col-no" style="width:26%">明确不采纳 ✗</th></tr></thead>
+<tbody>
+<tr>
+<td><b>改动的可信闸门</b></td>
+<td class="col-have">判定权归用户 + constitution 锁 + 权威态哈希 + 预注册 SHA 先于取证。比 Exo/Hyperagents 都严。</td>
+<td class="col-maybe">Exo 的独立 guardian 外部检查、append-only 执行历史——本仓的负向自咬已部分覆盖。</td>
+<td class="col-no">把判定权交给 agent 自己或固定的 build-success 检查：那正是本仓宪法禁止的。</td>
+</tr>
+<tr>
+<td><b>验证器本身</b></td>
+<td class="col-have">验证闸门 G1–G10、负向自咬、三方一致性校验。</td>
+<td class="col-maybe">Who Verifies 的"锚定不可伪造之物 + 审计审计者"——本轮留出集已落地第一版。</td>
+<td class="col-no">用 agent 下游分数验证验证器（已证伪：塌成 always-pass 也看不出）。</td>
+</tr>
+<tr>
+<td><b>原始诊断经验</b></td>
+<td class="col-have">心跳账本、takeover_exec_log、错题本、root_cause_trace 全量落盘。</td>
+<td class="col-maybe">Meta-Harness 的文件系统全量轨迹喂 proposer——本仓已有数据，差的是"改前改后对打"。</td>
+<td class="col-no">把诊断经验压扁成分数摘要（Meta-Harness 证明信息不能压扁）。</td>
+</tr>
+<tr>
+<td><b>增益归因</b></td>
+<td class="col-have">本轮已建 gain_attribution 样例（3 条）+ 留出集对打（+57.15pp±14.54pp）。</td>
+<td class="col-maybe">HDA 三类归因（过拟合/算力/残留）、Harness Ceiling 失败成分分类。</td>
+<td class="col-no">裸报分数不给标准误/归因（Winner's Curse：16 样本高估 13–20 分）。</td>
+</tr>
+<tr>
+<td><b>节律与自主性</b></td>
+<td class="col-have">KERNEL 7.5.0 真实心跳 + GHA 自动 cron，NIGHT/slept=true；本仓独有。</td>
+<td class="col-maybe">—</td>
+<td class="col-no">Exo 的运行时自编辑自由：论文自承有 intelligence floor，智能不够给自由也没用。</td>
+</tr>
+<tr>
+<td><b>外层协议</b></td>
+<td class="col-have">判定权归用户是<b>设计公理</b>，写进宪法，不可由内核改。</td>
+<td class="col-maybe">Hyperagents 外层父代选择/评估协议固定——但那是实验安全约束，非公理。</td>
+<td class="col-no">照搬 Hyperagents 的元认知自修改：它连 L3 都还在证明路上，增益 p>0.05。</td>
+</tr>
+<tr>
+<td><b>负面结果</b></td>
+<td class="col-have">§4S 全程留档 + 本轮 negative_results.jsonl（11 条）结构化。</td>
+<td class="col-maybe">No Second Run "账本是贡献" ——本仓已在收敛，可继续制度化。</td>
+<td class="col-no">只记成功不记失败（Winner's Curse：幸存者偏差让自报进度系统性乐观）。</td>
+</tr>
+<tr>
+<td><b>CI 通道</b></td>
+<td class="col-have">只留 GHA 一条真通道，用户裁决。</td>
+<td class="col-maybe">—</td>
+<td class="col-no">加常规测试 CI——与"只留 GHA"裁决冲突，本清单不推翻。</td>
+</tr>
+</tbody>
+</table>
+
+<div class="good">
+<b>一句话结论</b>：本仓的"判定权归用户"比 Exo 的 build-success guardian、Hyperagents 的固定外层协议都更严——这是<b>刻意选择，不是落后</b>。差距不在"要不要把人留在环里"，而在"改动是否真的更好"的<b>证据密度</b>：这正是本周 P0/P1 在补的东西。
+</div>
+
+<div class="note">
+<b>诚实边界</b>：Exo/Hyperagents 的形态看似 L4/L5，但 Hyperagents 唯一够 L5 的工作增益 p>0.05、跨运行累积不显著；本仓 L2 扎实、L3 的 <code>independent_tests</code> 仍 partial、L5 未到。功能形态相近 ≠ 证据等级相近。本清单对照的是<b>机制</b>，不是宣布等级。
+</div>
+
+<p class="foot">依据：Exo 深度报告（arXiv:2611.00463 + exoharness/exo 实查）、Hyperagents 深度报告（arXiv:2603.19461 + facebookresearch/HyperAgents 实查）、RSI 论文全文研读（9 篇）+ 本仓现状现场实读。零代码改动，权威态未触碰，判定权归用户。</p>
+
+</div></body></html>

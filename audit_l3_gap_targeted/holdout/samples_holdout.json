@@ -1,0 +1,121 @@
+{
+  "schema": "holdout_assertion_preservation_v1",
+  "note": "Frozen evaluation-only holdout. Source = GPT-3 paper 2005.14165, disjoint from dev set (HippoRAG 2405.14831 / N01-N16). Expected labels pre-registered BEFORE any scoring. Never used to tune criterion.",
+  "source_paper": "2005.14165",
+  "dev_set": "l3_external_audit_v2/samples_blind.json (N01-N16)",
+  "created_at": "2026-11-28T08:20:00+08:00",
+  "pairs": [
+    {
+      "id": "H01",
+      "text_a": "GPT-3 achieves strong performance on many NLP datasets, including translation, question-answering, and cloze tasks, as well as several tasks that require on-the-fly reasoning or domain adaptation, such as unscrambling words, using a novel word in a sentence, or performing 3-digit arithmetic.",
+      "text_b": "It is worth noting that gPT-3 achieves strong performance on many NLP datasets, including translation, question-answering, and cloze tasks, as well as several tasks that require on-the-fly reasoning or domain adaptation, such as unscrambling words, using a novel word in a sentence, or performing 3-digit arithmetic.",
+      "expected": true,
+      "rule": "equivalent_paraphrase",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H02",
+      "text_a": "At the same time, we also identify some datasets where GPT-3’s few-shot learning still struggles, as well as some datasets where GPT-3 faces methodological issues related to training on large web corpora.",
+      "text_b": "At the same time, we also identify some datasets where GPT-3’s few-shot learning still not struggles, as well as some datasets where GPT-3 faces methodological issues related to training on large web corpora.",
+      "expected": false,
+      "rule": "negation_flip",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H03",
+      "text_a": "Finally, we find that GPT-3 can generate samples of news articles which human evaluators have difficulty distinguishing from articles written by humans.",
+      "text_b": "Finally.",
+      "expected": false,
+      "rule": "tail_deletion",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H04",
+      "text_a": "First, from a practical perspective, the need for a large dataset of labeled examples for every new task limits the applicability of language models.",
+      "text_b": "It is worth noting that first, from a practical perspective, the need for a large dataset of labeled examples for every new task limits the applicability of language models.",
+      "expected": true,
+      "rule": "equivalent_paraphrase",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H05",
+      "text_a": "For many of these tasks it is difficult to collect a large supervised training dataset, especially when the process must be repeated for every new task.",
+      "text_b": "For many of these tasks it is difficult to collect a large supervised training dataset.",
+      "expected": false,
+      "rule": "tail_deletion",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H06",
+      "text_a": "Second, the potential to exploit spurious correlations in training data fundamentally grows with the expressiveness of the model and the narrowness of the training distribution.",
+      "text_b": "It is worth noting that second, the potential to exploit spurious correlations in training data fundamentally grows with the expressiveness of the model and the narrowness of the training distribution.",
+      "expected": true,
+      "rule": "equivalent_paraphrase",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H07",
+      "text_a": "There is evidence that suggests that the generalization achieved under this paradigm can be poor because the model is overly specific to the training distribution and does not generalize well outside it [ 138 , 88 ] .",
+      "text_b": "There is not evidence that suggests that the generalization achieved under this paradigm can be poor because the model is overly specific to the training distribution and does not generalize well outside it [ 138 , 88 ] .",
+      "expected": false,
+      "rule": "negation_flip",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H08",
+      "text_a": "Thus, the performance of fine-tuned models on specific benchmarks, even when it is nominally at human-level, may exaggerate actual performance on the underlying task [ 36 , 91 ] .",
+      "text_b": "Thus, the performance of fine-tuned models on specific benchmarks, even when it is nominally at human-level, may exaggerate actual performance on the underlying task [ 36 .",
+      "expected": false,
+      "rule": "tail_deletion",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H09",
+      "text_a": "Third, humans do not require large supervised datasets to learn most language tasks – a brief directive in natural language (e.g.",
+      "text_b": "It is worth noting that third, humans do not require large supervised datasets to learn most language tasks – a brief directive in natural language (e.g.",
+      "expected": true,
+      "rule": "equivalent_paraphrase",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H10",
+      "text_a": "Aside from pointing to a conceptual limitation in our current NLP techniques, this adaptability has practical advantages – it allows humans to seamlessly mix together or switch between many tasks and skills, for example performing addition during a lengthy dialogue.",
+      "text_b": "Aside from pointing to a conceptual limitation in our current NLP techniques, this adaptability has not practical advantages – it allows humans to seamlessly mix together or switch between many tasks and skills, for example performing addition during a lengthy dialogue.",
+      "expected": false,
+      "rule": "negation_flip",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H11",
+      "text_a": "To avoid this confusion, we use the term “meta-learning” to capture the inner-loop / outer-loop structure of the general method, and the term “in context-learning” to refer to the inner loop of meta-learning.",
+      "text_b": "To avoid this confusion, we use the term “meta-learning” to capture the inner-loop / outer-loop structure of the general method.",
+      "expected": false,
+      "rule": "tail_deletion",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H12",
+      "text_a": "Meta-learning clearly requires substantial improvement in order to be viable as a practical method of solving language tasks.",
+      "text_b": "It is worth noting that meta-learning clearly requires substantial improvement in order to be viable as a practical method of solving language tasks.",
+      "expected": true,
+      "rule": "equivalent_paraphrase",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H13",
+      "text_a": "Each increase has brought improvements in text synthesis and/or downstream NLP tasks, and there is evidence suggesting that log loss, which correlates well with many downstream tasks, follows a smooth trend of improvement with scale [ 57 ] .",
+      "text_b": "Each increase has not brought improvements in text synthesis and/or downstream NLP tasks, and there is evidence suggesting that log loss, which correlates well with many downstream tasks, follows a smooth trend of improvement with scale [ 57 ] .",
+      "expected": false,
+      "rule": "negation_flip",
+      "source": "2005.14165 (GPT-3 paper)"
+    },
+    {
+      "id": "H14",
+      "text_a": "Since in-context learning involves absorbing many skills and tasks within the parameters of the model, it is plausible that in-context learning abilities might show similarly strong gains with scale.",
+      "text_b": "Since in-context learning involves absorbing many skills and tasks within the parameters of the model.",
+      "expected": false,
+      "rule": "tail_deletion",
+      "source": "2005.14165 (GPT-3 paper)"
+    }
+  ]
+}
