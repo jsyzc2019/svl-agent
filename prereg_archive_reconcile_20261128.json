@@ -1,0 +1,61 @@
+{
+  "prereg_id": "prereg_archive_reconcile_20261128",
+  "round": "§4S77",
+  "created_at": "2026-11-28",
+  "trigger": "用户『推进这悬着的』——承接§4S75归档账里唯一标DEFERRED_USER_DECISION的memory_governance项",
+  "one_line": "一手核实发现该事项并非悬置：DECISIONS_20261127.json D1 status=EXECUTED、KB现场507条provenance缺失=0，事项已于11-27裁定并回填；§4S75归档账抄了11-27 00:30回填前的result.json旧快照(honest_summary写'未写回/交裁定')，误标DEFERRED_USER_DECISION并推到GitHub。本轮只修正账目口径，不二次写回KB(那会污染已修好的provenance)。",
+  "discovery_evidence": {
+    "DECISIONS_20261127.json_D1": {
+      "id": "D1-provenance-backfill",
+      "user_verdict": "采纳回填",
+      "status": "EXECUTED",
+      "receipt_at_utc": "2026-11-27T02:26:16.000000+00:00",
+      "items": ["KB-AUDIT68", "KB-AUDIT69"],
+      "receipt_probe": "KB-AUDIT68/69 provenance 均含裁定采纳回填"
+    },
+    "KB_site_check": {
+      "file": "knowledge_base_store.json",
+      "total_items": 507,
+      "provenance_missing": 0,
+      "both_audit_entries_contain_backfill_marker": true
+    },
+    "root_cause": "§4S75归档账evidence_fields直接摘录audit_memory_governance/result.json的honest_summary，该文件是11-27 00:30回填前的审计快照(当时确实缺2、未写回、交裁定)，未追认后续§4he裁定结果；引用了正确的历史快照但用它描述了当前状态，导致账实不符。"
+  },
+  "correction_spec": {
+    "target_file": "gap_archive_20261128.json",
+    "memory_governance_entry": {
+      "class": "DEFERRED_USER_DECISION -> RESOLVED_EXECUTED",
+      "pending_action": "删除待裁定动作；改为resolution说明：D1于11-27 EXECUTED、KB两条provenance已回填含裁定标注、现场缺失=0",
+      "resolution_evidence": ["DECISIONS_20261127.json D1 status=EXECUTED", "knowledge_base_store.json KB-AUDIT68/69 provenance含'裁定采纳回填'", "现场507条provenance缺失=0"]
+    },
+    "counts": {"DEFERRED_USER_DECISION": "1 -> 0", "RESOLVED_EXECUTED": "0 -> 1"},
+    "decision_field": "去掉'1条memory_governance保留待裁定'，改为'1条memory_governance已核实为RESOLVED_EXECUTED(11-27 D1回填完成)'",
+    "honesty_field": "补一句：本修正基于裁决回执与KB现场，不虚构新裁定；原DEFERRED标注是引用回填前旧快照所致的账实不符，如实留痕"
+  },
+  "scope": {
+    "will_change": ["gap_archive_20261128.json（元信息标注）", "SESSION_HANDOFF.md（新增§4S77，不改写§4S75历史段）", "新建澄清文件说明预注册口径被新证据修正"],
+    "will_not_change": ["life_kernel/kernel.py", "knowledge_base_store.json（绝不二次写回provenance）", "audit_memory_governance/result.json（当时审计事实快照，不追认）", "prereg_gap_archive_20261128.json（原预注册锁，保留原SHA）", "authoritative_state.json / constitution.json / heartbeat_log / inbound_inbox", "判定态三值/宪法锁/§100/十案/11条verdict"],
+    "reason_no_rewrite_kb": "KB两条provenance已是回填后正确值，再写=二次回填污染；本轮是账目修正非重做裁定。"
+  },
+  "baseline_sha256_before": {
+    "kernel.py": "8597810652fca73d0d85c2df957a3a97644c035edca60c8ddd58af27e0066fe1",
+    "knowledge_base_store.json": "0938b3df748db94036dea332726f300b8e295abf6052c7d00aac57e8be5a4230",
+    "authoritative_state.json": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "constitution.json": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "heartbeat_log.jsonl": "ea749f76826dc59c0a964f22a4563e38120c062fb18c9093806395b26110ad35",
+    "inbound_inbox.jsonl": "8806b248883658a160aabd4450a20588f01420169894b95df5b6f0de810a34e7",
+    "audit_memory_governance/result.json": "198193619ca446b038fe7db54349c77d97872d1ed3fe8e6cc0854ae3e50e808f",
+    "gap_archive_20261128.json": "3fea1a19ccbd669639ec8a8e58de30bac386c77690858754ed431e6ec7c0e1c0"
+  },
+  "acceptance": [
+    "gap_archive新分类计数自检：13 ACCEPTED + 1 RESOLVED + 9 HISTORICAL_IMMUTABLE = 14缺口/9补判不变",
+    "memory_governance条目resolution有D1原文+KB现场双证据，不含pending_action",
+    "内核/KB/审计/权威态四件套/11条verdict哈希动手前后一致",
+    "全量测试零回归（探针不读归档账，自然成立，仍实测）",
+    "不出现二次写回KB（KB文件SHA不变）"
+  ],
+  "verdict_unchanged": true,
+  "consumed": false,
+  "is_gate_verdict": false,
+  "boundary": "账目口径修正非新裁定；判定权归用户；RESOLVED_EXECUTED指'该缺口已被11-27裁定回填完成'，不宣称任何新能力或翻案。"
+}

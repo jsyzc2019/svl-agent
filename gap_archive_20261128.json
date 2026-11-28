@@ -7,8 +7,9 @@
   "total_backfill": 9,
   "counts": {
     "ACCEPTED_BOUNDARY": 13,
-    "DEFERRED_USER_DECISION": 1,
-    "HISTORICAL_IMMUTABLE": 9
+    "DEFERRED_USER_DECISION": 0,
+    "HISTORICAL_IMMUTABLE": 9,
+    "RESOLVED_EXECUTED": 1
   },
   "gap_entries": [
     {
@@ -130,11 +131,20 @@
     {
       "audit": "memory_governance",
       "verdict": "GAP_INCONCLUSIVE",
-      "class": "DEFERRED_USER_DECISION",
+      "class": "RESOLVED_EXECUTED",
       "evidence_fields": {
         "honest_summary": "\"WORK_ITEMS P0 记忆治理首次机械执行：KB 498 条现场体检。MG1 provenance 缺失 2 条（['KB-AUDIT68', 'KB-AUDIT69']），裁决=GOVERNANCE_GAP_FOUND。缺的两条 mechanism 内嵌锚点（路径/sha/§4xx）可机械抽候选，但按硬边界只生成候选不写回 KB 正文，是否采纳交用户裁定。MG3 support 形态分歧（list/number/string）如实记为观察项，不擅改口径（改口径须新预注册防事后挑）。负向自咬=True。判定态三值/宪法锁/§100/十案全不动，不删条目不改 improvement_cl"
       },
-      "pending_action": "抽取KB-AUDIT68/69的provenance候选(路径/sha/§锚点);不写回KB正文,待裁定"
+      "resolution": {
+        "verdict": "该缺口已于2026-11-27裁定并回填完成，非悬置",
+        "evidence": [
+          "DECISIONS_20261127.json D1-provenance-backfill: user_verdict=采纳回填, status=EXECUTED, receipt@2026-11-27T02:26:16Z",
+          "knowledge_base_store.json KB-AUDIT68/69 provenance 均含\"用户2026-11-27裁定采纳回填(DECISIONS_20261127.json D1)\"标注",
+          "现场只读: KB 507条, provenance缺失=0"
+        ],
+        "why_was_deferred": "§4S75归档账直接摘录audit_memory_governance/result.json的honest_summary,而该文件是11-27 00:30回填前快照(当时确实缺2/未写回/交裁定);引用了正确的历史快照却用来描述当前状态,造成账实不符",
+        "no_rewrite_kb": "KB两条provenance已是回填后正确值,再写=二次回填污染;本轮只修正账目口径,不碰KB正文"
+      }
     }
   ],
   "backfill_entries": [
@@ -202,12 +212,19 @@
       "reason": "历史post_hoc_recomputed_current_criterion;新心跳idx10/11已backfill=False自愈;改=伪造就位"
     }
   ],
-  "decision": "按用户采纳的倾向:13条接受为边界不再追;带历史backfill标记的9条(8条BIRTH_SYNCED+1条BIRTH_UNVERIFIABLE)全部不动;1条memory_governance保留待裁定",
-  "honesty": "归档=元信息标注,不改任何verdict/审计result.json/KB正文/权威态/心跳;ACCEPTED_BOUNDARY不是'已解决'是'已确认为边界不再投入验证',不洗白成PASS;DEFERRED只列候选不执行;判定权归用户",
+  "decision": "按用户采纳的倾向:13条接受为边界不再追;带历史backfill标记的9条(8条BIRTH_SYNCED+1条BIRTH_UNVERIFIABLE)全部不动;1条memory_governance经§4S77核实为RESOLVED_EXECUTED(11-27 D1已裁定回填完成,现场KB缺失=0),非悬置",
+  "honesty": "归档=元信息标注,不改任何verdict/审计result.json/KB正文/权威态/心跳;ACCEPTED_BOUNDARY不是'已解决'是'已确认为边界不再投入验证',不洗白成PASS;DEFERRED只列候选不执行;判定权归用户 §4S77账实修正:原DEFERRED标注=引用11-27回填前旧快照所致账实不符,依DECISIONS_20261127.json D1回执+KB现场(507条缺失0)改为RESOLVED_EXECUTED,如实留痕不虚构新裁定,不二次写回KB。",
   "verdict_unchanged": true,
   "consumed": false,
   "is_gate_verdict": false,
   "count_synced": 8,
   "count_unverifiable": 1,
-  "note_backfill_scope": "HISTORICAL_IMMUTABLE=9=带backfill标记总数(含1条UNVERIFIABLE);其中count_synced=8与verdict_at_birth.backfilled_sync_count同口径;§4S74已定此区分,不混淆"
+  "note_backfill_scope": "HISTORICAL_IMMUTABLE=9=带backfill标记总数(含1条UNVERIFIABLE);其中count_synced=8与verdict_at_birth.backfilled_sync_count同口径;§4S74已定此区分,不混淆",
+  "reconciliation": {
+    "round": "§4S77",
+    "prereg_sha256": "3799169f466ec8703e9a0be422002f1dd6fe1ba68551f82131574ccfb7d970d2",
+    "archive_sha_before": "3fea1a19ccbd669639ec8a8e58de30bac386c77690858754ed431e6ec7c0e1c0",
+    "trigger": "用户'推进这悬着的'——一手核实发现该事项11-27已EXECUTED,真正缺口是§4S75账实不符",
+    "classified": "账目口径修正,非新裁定、非二次回填、非翻案"
+  }
 }

@@ -816,3 +816,12 @@ clone踩坑:默认IP两次失败(8分20秒空壳/超时),换备用IP 20.27.177.1
 二次踩坑:Git Data API的create tree返回的tree只含本次提交条目(非全量),复用f4871e6b的tree sha只取到5个blob,导致首次成功commit a452ce14里4个新文件缺失+2个修改未生效。核验远端完整tree(r?recursive=1)发现缺失后,以a452ce14为基线补推6文件,得最终commit e6a454f8。
 核验:远端HEAD独立=e6a454f8904e727b6279b60a020c88c8fc7e9af7,连续3读稳定;完整tree 2248 blob未截断;本轮11文件零缺失零不匹配(逐blob SHA对拍);runner两条日志保留(远端版本,未被本地落后版回退)。11文件=gap_archive/prereg×3/test×2/pre_patch_gap_convergence×2/SESSION_HANDOFF/kernel/test_decision_digest。
 安全:提交前精确token全串扫描(ghp_36位/github_pat_76位/sk-ant/sk-or-v1)全为0;SESSION_HANDOFF命中的ghp_/sk-是历史纪律描述文字非真token(账里早载,已推过);权威态GAP_INCONCLUSIVE在,kernel_version 7.5.0;hosts github条目0,workspace无明文token文件。凭据仅上传区600原样。后台runner并发写入是真实心跳机制非错误,判定权归用户。 -->
+
+<!-- §4S77 推进"悬着的"memory_governance——发现是账实不符(已完成项被账记成待办),只修正账目口径
+触发:用户"推进这悬着的"——承接§4S75归档账里唯一标DEFERRED_USER_DECISION的memory_governance项(原写"抽KB-AUDIT68/69 provenance候选、不写回KB、待裁定")。
+一手核实(关键反转):该事项根本没悬置——DECISIONS_20261127.json D1-provenance-backfill user_verdict=采纳回填/status=EXECUTED/receipt@2026-11-27T02:26:16Z(evidence_probe="KB-AUDIT68/69 provenance均含裁定采纳回填");现场读knowledge_base_store.json KB 507条provenance缺失=0,KB-AUDIT68/69两条provenance均含"用户2026-11-27裁定采纳回填(DECISIONS_20261127.json D1)"标注;KB-META194亦载"provenance缺2→0,KB总数499不变"。故11-27已裁定回填完成。
+账实不符根因:§4S75归档账evidence_fields直接摘录audit_memory_governance/result.json的honest_summary,而该文件是11-27 00:30回填前审计快照(当时确实缺2/未写回/交裁定);引用了正确的历史快照却用来描述当前状态→误标DEFERRED_USER_DECISION,且§4S76已推GitHub。真正缺口是账目口径非KB回填;若照字面"推进写回KB"=二次回填污染已修好的provenance。
+边界:账目口径修正非新裁定、非翻案、非二次回填;RESOLVED_EXECUTED指"该缺口已被11-27 D1裁定回填完成",不宣称新能力;判定权归用户。
+预注册prereg_archive_reconcile_20261128.json SHA 3799169f…(改账前锁),明确will_not_change含kernel/KB正文/审计result/原预注册锁/权威态四件套/11条verdict。
+修正:gap_archive_20261128.json(3fea1a19…→d73bfef5…)memory_governance class DEFERRED_USER_DECISION→RESOLVED_EXECUTED,删pending_action,加resolution{D1原文+KB现场双证据+根因说明+no_rewrite_kb};counts DEFERRED 1→0/RESOLVED 0→1;decision/honesty字段如实更新留痕;加reconciliation元数据(预注册SHA/前SHA/触发/定性)。原§4S75历史段不改写,预注册锁prereg_gap_archive保留原SHA(新证据另出澄清),审计result.json是当时事实快照不追认。
+验收:计数13 ACCEPTED+1 RESOLVED+9 IMMUTABLE自检过;memory_governance有3条双证据无pending_action;预注册SHA一致;内核SHA 85978106…/KB 0938b3df…/权威态5f7a2584…+constitution fe56291b…+heartbeat ea749f76…+inbox 8806b248…/审计result 19819361…全部动手前后一致;11条verdict零改变;全量测试260收集exit=0/FAILED=0零回归。本轮只改1个归档账JSON+新增1个预注册JSON,KB一字未动(无二次回填)。 --> 
