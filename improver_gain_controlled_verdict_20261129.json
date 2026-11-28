@@ -1,0 +1,27 @@
+{
+  "schema": "igc-verdict/v1",
+  "claim": "§4S99 fullchain验证器P0修复的改前vs改后对打(0/3→3/3)构成改进器受控增益证据",
+  "evaluated_at": "2026-11-29T00:56+08:00",
+  "four_dims": {
+    "matched_budget_controlled": "partial",
+    "shared_start_artifacts": "yes",
+    "evaluator_fixed_independent": "yes",
+    "improver_gain_isolated": "no"
+  },
+  "dim_rationale": {
+    "matched_budget_controlled": "partial：对打用同一交付包副本、计算预算相同，但 duel_log 未显式记录 evaluation-call 候选/预算上限（SpecRSI 硬要求），不编造 → partial",
+    "shared_start_artifacts": "yes：C0-C5 全部从同一真实交付包 l3_external_audit 复制，仅改 judgments.json id 集，起点 identical",
+    "evaluator_fixed_independent": "yes：判据 05_replay_consistent 固定未改，判据构造器与执行器分离，对打只改交付包 id 集不动判据",
+    "improver_gain_isolated": "no：检测率 0/3→3/3 证明的是『验证器改后更会抓残缺』=产品/判据能力增益；本仓无 frozen-vs-GVO 逐轮累计改进的独立证据，不能冒充改进器过程增益（KB-RSI07）"
+  },
+  "action": "flag",
+  "action_code": "flag",
+  "code": "IGC.IMPROVER_GAIN_CONFLATED",
+  "message": "无 frozen-vs-GVO 逐轮累计增益隔离——把 product capability 增益冒充 process revision 增益",
+  "honest_not_self_sealed": true,
+  "why_not_ok": "按 A1-V 不自封：四维未全 yes（matched partial + gain isolated no），如实判 flag，不调阈值迁就。IGC.ok 只判声明自洽不承诺真实有效——本裁决连声明自洽都不满足，故 flag。",
+  "what_it_does_prove": "只证『验证器改后更会抓残缺(0/3→3/3)』这一机械事实（事实层，A1-F 归机械证据）",
+  "what_it_does_not_prove": "不证 L3/L5 达成、不证改进器过程增益、不证受控对照达标（价值层，A1-V 归用户且不自封）",
+  "igc_module_sha": "svagent/improver_gain_controlled_honesty.py",
+  "prereg": "prereg_adjudication_amendment_20261129.json SHA b3cb9f04"
+}

@@ -1,0 +1,65 @@
+{
+  "schema": "prereg-constitutional-amendment/v1",
+  "task": "宪法层机制化『人不是可靠裁判者』+ 改进器增益受控证据链落地",
+  "date": "2026-11-29T00:52+08:00",
+  "trigger": "用户：『继续推下一层。建议把人不是可靠裁判者在宪法层面机制化，这样就不会大退化。』承接 §4S99 自查确认的退化（用判定权归用户当挡箭牌、把已完成的P0/P1说成挂账）。",
+  "user_intent": [
+    "把『事实层裁定权归机械证据，人不做事实裁判』在宪法层机制化，防会话交接遗忘导致的退化",
+    "继续推下一层：用受控对照证据证明改进器本身被改后更会改"
+  ],
+  "object_type": "宪法修正案（与 constitution.json 同级、不可变、SHA256 锁死）+ 只读自检探针 + 改进器受控证据账；不改本体、不进判定、不自封等级",
+  "locked_before_execution": {
+    "kernel_sha_before": "ae2b035c9491286f",
+    "constitution_body_sha": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "constitution_body_lock_sha": "2ad148c7",
+    "amendment_sha": "425e4c645c70e595070a46dfbacb82034fa55fccc9f565980adc39c3b6f86fd9",
+    "amendment_lock_file": "life_kernel/constitution_amendment.sha256",
+    "seven_piece_baseline": ["5f7a2584", "2ad148c7", "ea749f76", "8806b248", "91114955", "d73bfef5", "0938b3df"]
+  },
+  "why_amendment_not_body": "constitution.json 自声明 immutable=true 且 mutability 明令『任何 heartbeat/进化过程不得修改本文件；启动时校验 SHA256 不符即停机』；直接改本体触发 authoritative_state.py RED_LINE_DRIFT 与 self_identity.py integrity_guard 停机级红线。修正案与本体同级同锁，既机制化又不违宪、零破坏面。",
+  "increment_vs_existing": {
+    "C3": "已有『盲评与机械验收、自报不可采信』，但未把裁定权按事实层/价值层切分，也未规定会话遗忘不构成退化理由。",
+    "C8": "已有『最终裁定权归用户、不自封』，但语义笼统被误读为『事实层也等人裁定』——本轮精确限定其仅适用价值/等级层。",
+    "§4S99": "已造改前vs改后对打(0/3→3/3)，但用 improver_gain_controlled_honesty 四维受控判据裁决该证据是否达标尚未做——本轮补上，并核对四维对本仓是否诚实成立。",
+    "true_increment": [
+      "宪法层新增不可变修正案，把裁定权分层写成可机械检查条款(A1-F/A1-V/A1-M)",
+      "新增只读探针实读修正案+本体锁+活体对打证据，负向注入证明篡改/退化被抓",
+      "用 IGC 四维受控判据对 §4S99 对打做诚实裁决，区分『产品增益』与『改进器增益』"
+    ]
+  },
+  "planned_capability": {
+    "probe": "adjudication_boundary_probe(amendment_signals=None) -> 只读判据，三面判据",
+    "faces": [
+      "FACE_AMENDMENT: 修正案存在+SHA256锁一致+三条款A1-F/A1-V/A1-M齐备+不可变声明",
+      "FACE_BOUNDARY: 本体宪法锁仍fe56291b未动+verdict/l3/absolute权威态未自封+价值层裁定权归用户保留",
+      "FACE_EVIDENCE: §4S99改前vs改后对打证据在位+IGC四维受控裁决结果落地"
+    ],
+    "classes": ["BOUNDARY_CLEAR", "AMENDMENT_TAMPERED", "FACT_LAYER_DEFECT", "SELF_SEALED_LEVEL"],
+    "flags": ["NO_ADJUDICATION_CLAIM", "ALL_BOUNDARIES_HELD", "ADJUDICATION_BOUNDARY_BROKEN"],
+    "injection": "force_class 显式覆盖仅供负向测试，生产恒 None"
+  },
+  "igc_four_dimensions_honest_assessment": {
+    "note": "预注册阶段先声明诚实预期，执行时以现场实读裁决，不事后调阈值",
+    "matched_budget_controlled": "预期 partial：§4S99 对打用同一交付包副本、预算相同，但未显式记录 evaluation-call 预算上限（论文 SpecRSI 硬要求）",
+    "shared_start_artifacts": "预期 yes：C0-C5 全部从同一真实交付包 l3_external_audit 复制，仅改 judgments.json id 集",
+    "evaluator_fixed_independent": "预期 yes：判据 05_replay_consistent 固定未改，构造器与执行器分离，对打只改交付包 id 集",
+    "improver_gain_isolated": "预期 no：§4S99 检测率 0/3→3/3 证明的是『验证器改后更会抓残缺』，属产品/判据能力增益；本仓无 frozen-vs-GVO 逐轮累计改进的独立证据，不能冒充改进器过程增益",
+    "honest_verdict_expectation": "IGC 应判 flag/downgrade（非 ok）——不得因『造了证据』就宣称满足 L5 受控验证；正是 A1-V 不自封要求的体现"
+  },
+  "acceptance_criteria": [
+    "修正案+锁文件存在，SHA256 逐字节一致，本体宪法锁 fe56291b 未动",
+    "12 守卫全绿：含 A1-F/A1-V/A1-M 三面精确扫描 + 三类负向注入（篡改修正案/事实层自封/自封等级）+ 全通过与空注入边界 + honesty 措辞",
+    "G6 同口径对拍：新内核全量 = 基线+12 零失败；换回备份内核+移走守卫基线零失败（零回归）；恢复后 AST OK、仅新增 1 函数",
+    "IGC 四维以现场实读裁决，预期非 ok（诚实不自封）；对打证据与裁决落结构化账",
+    "七件套哈希逐一等于基线（本轮不动任何权威态/宪法本体）；token 全串扫描 0；临时文件清理",
+    "落账 §4S101；Git Data API 推远端逐 blob 对拍；token 只进 shell 变量不回显不落盘"
+  ],
+  "honesty_boundaries": [
+    "不宣称人完全不可靠——价值层裁定权仍归用户（A1-V）",
+    "不修改 constitution.json 本体、不动 verdict/l3/absolute/冻结基准、不自封 L3/L5",
+    "IGC 四维裁决若非全 yes，如实判 flag/downgrade，不调阈值迁就结果（C2/C5）",
+    "对打证据只证『验证器改后更会抓残缺』这一机械事实，不证 L5 达成",
+    "修正案不自动执行——它是可机械检查的条款，需探针实读才生效；不宣称写入即根除退化",
+    "判定权归用户仅限价值层（A1-V）；事实层归机械证据（A1-F）"
+  ]
+}

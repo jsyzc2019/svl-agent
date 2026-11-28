@@ -5454,6 +5454,183 @@ def closed_loop_validation_probe(loop_signals=None):
     }
 
 
+def adjudication_boundary_probe(amendment_signals=None):
+    """【§4S101 只读自检】裁定权分层：事实层归机械证据，人不是可靠裁判者。
+
+    把用户共识『人不是可靠裁判者』在宪法层机制化——通过与 constitution.json 同级的
+    不可变修正案 constitution_amendment.json (SHA256 锁死) 落地。不修改宪法本体、不进
+    判定、不自封等级。三面共6条:
+      面1 AMENDMENT     : 修正案存在+SHA256锁一致+三条款A1-F/A1-V/A1-M+不可变声明+不碰本体
+      面2 BOUNDARY      : 本体锁fe56291b未动+verdict/l3/absolute未自封+价值层裁定权归用户保留
+      面3 EVIDENCE      : §4S99对打证据在位+IGC四维受控裁决落地(诚实非自封)
+    只读不写盘不消费不进判定; 事实层裁定权归机械证据(A1-F), 价值层归用户(A1-V)。
+
+    prereg_adjudication_amendment_20261129.json SHA b3cb9f04… 改码前锁死。
+    """
+    # 注入分支变量先初始化(§4hc惯例,避免 one_page 引用未定义)
+    amendment_present = False
+    amendment_lock_ok = False
+    body_lock = "INJECTED"
+    verdict_display = "INJECTED" if amendment_signals is not None else "UNREADABLE"
+    l3_display = "INJECTED"
+    absolute_display = "INJECTED"
+    duel_detection = "INJECTED"
+    igc_verdict = "INJECTED"
+
+    if amendment_signals is None:
+        # ---- 真实采集 ----
+        am_path = os.path.join(HERE, "constitution_amendment.json")
+        am_lock_path = os.path.join(HERE, "constitution_amendment.sha256")
+        try:
+            am_bytes = open(am_path, "rb").read()
+            am = json.loads(am_bytes.decode("utf-8"))
+            amendment_present = True
+        except (OSError, ValueError):
+            am = {}
+        try:
+            declared = open(am_lock_path, encoding="utf-8").read().split()[0]
+            actual = hashlib.sha256(am_bytes).hexdigest() if amendment_present else "UNREADABLE"
+            amendment_lock_ok = (declared == actual)
+        except (OSError, IndexError):
+            declared, actual = "UNREADABLE", "UNREADABLE"
+
+        am_ids = {a.get("id") for a in am.get("articles", []) if isinstance(a, dict)}
+        three_articles = {"A1-F", "A1-V", "A1-M"} <= am_ids
+        am_immutable = (am.get("immutable") is True)
+        am_no_body_touch = (
+            am.get("relation_to_base", "").find("不修改") >= 0 and
+            am.get("amends", "").find("C8") >= 0
+        )
+
+        # 面2: 本体锁实读(必须与基线一致,修正案不得碰本体)
+        body_lock = open(CONSTITUTION_LOCK, encoding="utf-8").read().split()[0]
+        body_lock_intact = body_lock.startswith("fe56291b")
+
+        # 权威态实读(不因修正案自封)
+        try:
+            result = json.load(open(os.path.join(ROOT, "audit_l3_gap_targeted", "result.json"),
+                                    encoding="utf-8"))
+            verdict_display = result.get("verdict")
+            l3_display = result.get("l3_claimed")
+            absolute_display = result.get("absolute_claimed")
+        except (OSError, ValueError):
+            verdict_display, l3_display, absolute_display = "UNREADABLE", None, None
+        not_self_sealed = (verdict_display == "GAP_INCONCLUSIVE" and
+                           l3_display is False and absolute_display is False)
+        # 价值层裁定权归用户条款仍在(A1-V 明确归用户)
+        a1v_rule = ""
+        for a in am.get("articles", []):
+            if isinstance(a, dict) and a.get("id") == "A1-V":
+                a1v_rule = a.get("rule", "")
+        value_layer_reserved = ("裁定权归用户" in a1v_rule and "不自封" in a1v_rule)
+
+        # 面3: §4S99 对打证据 + 诚实 IGC 裁决落账
+        try:
+            duel = json.load(open(os.path.join(ROOT, "audit_l3_fullchain_external",
+                                               "holdout_duel_20261129", "duel_log.json"),
+                                  encoding="utf-8"))
+            duel_detection = "%s→%s" % (duel.get("detection_rate", {}).get("before", "?"),
+                                        duel.get("detection_rate", {}).get("after", "?"))
+            duel_present = (duel.get("all_match") is True and duel_detection == "0/3→3/3")
+        except (OSError, ValueError):
+            duel_present = False
+        igc_ledger_path = os.path.join(ROOT, "improver_gain_controlled_verdict_20261129.json")
+        try:
+            igc_ledger = json.load(open(igc_ledger_path, encoding="utf-8"))
+            igc_verdict = igc_ledger.get("action_code", "UNREADABLE")
+            igc_honest = (igc_ledger.get("honest_not_self_sealed") is True and
+                          igc_verdict in ("flag", "downgrade") and
+                          igc_ledger.get("four_dims") is not None)
+        except (OSError, ValueError):
+            igc_honest = False
+    else:
+        # ---- 负向注入: 显式强制分类 ----
+        sig = amendment_signals or {}
+        am = {}
+        declared, actual = "INJECTED", "INJECTED"
+        three_articles = bool(sig.get("three_articles", True))
+        am_immutable = bool(sig.get("am_immutable", True))
+        am_no_body_touch = bool(sig.get("am_no_body_touch", True))
+        body_lock_intact = bool(sig.get("body_lock_intact", True))
+        not_self_sealed = bool(sig.get("not_self_sealed", True))
+        value_layer_reserved = bool(sig.get("value_layer_reserved", True))
+        duel_present = bool(sig.get("duel_present", True))
+        igc_honest = bool(sig.get("igc_honest", True))
+        igc_ledger_path = ""
+
+    # 三面6条判据分类
+    if amendment_signals is not None:
+        force = (amendment_signals or {}).get("force_class")
+        if force == "AMENDMENT_TAMPERED":
+            amendment_lock_ok, amendment_present = False, False
+        elif force == "FACT_LAYER_DEFECT":
+            not_self_sealed, duel_present, igc_honest = False, False, False
+        elif force == "SELF_SEALED_LEVEL":
+            not_self_sealed, value_layer_reserved = False, False
+        duel_detection = "INJECTED"
+        igc_verdict = "INJECTED"
+
+    rows = [
+        {"face": "AMENDMENT", "name": "修正案在位", "class": "AMENDMENT" if amendment_present else "AMENDMENT_TAMPERED",
+         "evidence": "constitution_amendment.json 存在" if amendment_present else "修正案缺失"},
+        {"face": "AMENDMENT", "name": "修正案SHA256锁一致", "class": "AMENDMENT" if amendment_lock_ok else "AMENDMENT_TAMPERED",
+         "evidence": "declared=%s actual=%s" % (str(declared)[:10], str(actual)[:10])},
+        {"face": "AMENDMENT", "name": "三条款+不可变+不碰本体", "class": "AMENDMENT" if (three_articles and am_immutable and am_no_body_touch) else "AMENDMENT_TAMPERED",
+         "evidence": "A1-F/A1-V/A1-M齐备=%s immutable=%s 不碰本体=%s" % (three_articles, am_immutable, am_no_body_touch)},
+        {"face": "BOUNDARY", "name": "本体锁未动+未自封", "class": "BOUNDARY" if (body_lock_intact and not_self_sealed) else "FACT_LAYER_DEFECT",
+         "evidence": "body_lock=%s verdict=%s l3=%s absolute=%s" % (str(body_lock)[:10], verdict_display, l3_display, absolute_display)},
+        {"face": "BOUNDARY", "name": "价值层裁定权归用户保留", "class": "BOUNDARY" if value_layer_reserved else "SELF_SEALED_LEVEL",
+         "evidence": "A1-V含裁定权归用户+不自封=%s" % value_layer_reserved},
+        {"face": "EVIDENCE", "name": "对打证据+IGC诚实裁决", "class": "EVIDENCE" if (duel_present and igc_honest) else "FACT_LAYER_DEFECT",
+         "evidence": "detection=%s igc=%s(flag/downgrade不自封)" % (duel_detection, igc_verdict)},
+    ]
+    # face -> ok class 映射(三面各自的 ok class 与 face 同名)
+    ok_of = {"AMENDMENT": "AMENDMENT", "BOUNDARY": "BOUNDARY", "EVIDENCE": "EVIDENCE"}
+    broken = [r for r in rows if r["class"] != ok_of[r["face"]]]
+    n_ok = len(rows) - len(broken)
+    if amendment_signals is None and not broken:
+        flag = "ALL_BOUNDARIES_HELD"
+    elif amendment_signals is None:
+        flag = "ADJUDICATION_BOUNDARY_BROKEN"
+    else:
+        flag = "NO_ADJUDICATION_CLAIM"
+
+    counts = {"AMENDMENT": 0, "BOUNDARY": 0, "EVIDENCE": 0, "BROKEN": len(broken)}
+    for r in rows:
+        counts[r["face"]] = counts.get(r["face"], 0) + 1
+    one_page = (
+        "【裁定权分层·只读自检】事实层裁定权归机械证据，人不是可靠裁判者（宪法修正案A1机制化）。"
+        "三面6条：修正案在位+SHA锁一致+三条款不可变不碰本体（%d/3）；"
+        "本体锁fe56291b未动+verdict=GAP_INCONCLUSIVE/l3=false/absolute=false未自封+价值层裁定权归用户保留（%d/2）；"
+        "§4S99对打%s在位+IGC四维诚实裁决%s(flag/downgrade不自封)（%d/1）。"
+        "结果 flag=%s 缺口=%d。事实层不靠人裁定，价值层才归用户；不修改宪法本体、不进判定、不自封等级。"
+        "注入仅负向测试生产恒None；只读不写盘不消费不进判定。"
+    ) % (counts["AMENDMENT"], counts["BOUNDARY"], duel_detection, igc_verdict, counts["EVIDENCE"], flag, len(broken))
+
+    return {
+        "probe": "adjudication_boundary_probe",
+        "schema": "adjudication-boundary/v1",
+        "flag": flag,
+        "counts": counts,
+        "n_ok": n_ok,
+        "n_total": len(rows),
+        "rows": rows,
+        "amendment_sha": str(actual)[:16],
+        "body_lock": str(body_lock)[:10],
+        "duel_detection": duel_detection,
+        "igc_verdict": igc_verdict,
+        "one_page": one_page,
+        "based_on": (
+            "用户共识『人不是可靠裁判者』(§4S99自查确认的退化); "
+            "constitution.json C3/C8 + constitution_amendment.json A1-F/A1-V/A1-M(SHA425e4c64); "
+            "§4S99 duel_log(0/3→3/3); "
+            "svagent/improver_gain_controlled_honesty.py (SpecRSI arXiv2610.16491四维); "
+            "prereg_adjudication_amendment_20261129.json SHA b3cb9f04…"
+        ),
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
 def takeover_request(action, nonce=None, note="", log_path=None, record=True):
     """【本机接管·下行】本机写一条接管指令到共享收件箱，供下次 runner 消费。
 
