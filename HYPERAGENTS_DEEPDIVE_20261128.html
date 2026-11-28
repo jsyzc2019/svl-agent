@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hyperagents 深度检索 · L5 自指自我改进（2026-11-28）</title>
+<style>
+  :root{--bg:#f7f8fa;--paper:#fff;--ink:#1f2430;--muted:#5c6675;--line:#e3e7ed;
+    --accent:#7a3cff;--accent-soft:#f2ecff;--ok:#0a7f5a;--ok-soft:#e6f5ef;--warn:#b56a00;--warn-soft:#fff4e2;--bad:#c0392b;--bad-soft:#fdeceb;--code:#f4f6f8}
+  @media(prefers-color-scheme:dark){:root{--bg:#141821;--paper:#1c2130;--ink:#e8ebf2;--muted:#a3adc0;
+    --line:#2e3547;--accent:#a98bff;--accent-soft:#2a2340;--ok:#4fd1a5;--ok-soft:#173a30;--warn:#f0b65a;--warn-soft:#3a2e18;--bad:#ff7b72;--bad-soft:#3d2020;--code:#232a3a}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:900px;margin:0 auto;padding:40px 22px 80px}
+  h1{font-size:30px;line-height:1.3;margin:0 0 8px}
+  h2{font-size:20px;margin:42px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:16.5px;margin:24px 0 8px}
+  p{margin:11px 0}.sub{color:var(--muted);font-size:14px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+  .quote{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .note{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .good{background:var(--ok-soft);border-left:4px solid var(--ok);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .danger{background:var(--bad-soft);border-left:4px solid var(--bad);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .orig{background:var(--code);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:13.5px;line-height:1.65;word-break:break-word}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+  th{background:var(--code)}
+  code{background:var(--code);padding:2px 5px;border-radius:4px;font-size:12.5px}
+  .bad{color:var(--bad);font-weight:600}.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}
+  .big{font-size:18px;font-weight:600;line-height:1.6}
+  .foot{margin-top:46px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  ul{padding-left:20px}li{margin:5px 0}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>Hyperagents 深度检索 · 论文里唯一的 L5 样本</h1>
+<p class="sub">2026-11-28 · 用户追问"标明 L5 级的论文深度检索，并看 GitHub 有没有开源" · 一手 arXiv 全文 + GitHub 仓库实查 · 零代码改动</p>
+
+<div class="card">
+<p class="big">又是编号错配——而且这次给的两个链接全错。<code>2610.22466</code> 是《Harness-Delta Attribution》，<code>2610.11655</code> 是《Harness Evolution Hits a Ceiling》。<strong>Hyperagents 的真身是 arXiv:2603.19461</strong>，Jenny Zhang 等（Meta FAIR + UBC + Edinburgh + NYU），2026-03-23。</p>
+<p>这是第三次编号错配印证。前两份细读里我标 Hyperagents 真编号 <code>2603.19461</code>，这次回源坐实。<strong>标签不等于事实，编号必须反查</strong>——这条已经从教训变成本能。</p>
+</div>
+
+<h2>一、开源：有，而且是 Meta 官方仓库</h2>
+<table>
+<tr><th>项</th><th>实测值（2026-11-28）</th></tr>
+<tr><td>仓库</td><td><a href="https://github.com/facebookresearch/HyperAgents">facebookresearch/HyperAgents</a>（Meta 官方组织），未归档</td></tr>
+<tr><td>Star / Fork</td><td><strong>2934 / 376</strong>——比 Exo（1724）还高，是这批论文里热度最高的</td></tr>
+<tr><td>最近提交</td><td><code>59a68f67</code> 2026-04-14；代码自 4 月起<b>冻结约 7 个月</b>（对比 Exo 11 月仍活跃）</td></tr>
+<tr><td>许可证</td><td class="warn"><strong>CC BY-NC-SA 4.0</strong>（署名-非商业-相同方式共享）——不是 MIT，商用受限</td></tr>
+<tr><td>可运行性</td><td>README 有完整 setup：<code>generate_loop.py --domains &lt;domain&gt;</code>、Dockerfile、requirements、setup_initial.sh，目录结构完整（agent/meta_agent/task_agent/domains/baselines/analysis 齐全）</td></tr>
+</table>
+<div class="note">三个必须分清的点：<br>① <b>开源属实</b>——代码、实验脚本、初始 agent、Docker 都在，能复现实验。<br>② <b>但许可证是非商业的</b>，和 Exo 的 MIT 不同，产品化要当心。<br>③ <b>论文里刷出 0.700 的数学评分器那个 artifact 也单独开源了</b>（"We open-source this artifact"），这是论文里唯一明确说放出的成品 agent。</div>
+
+<h2>二、它凭什么被标成 L5：自指，而不是再加一层 meta</h2>
+<p>L5（Recursive Inheritance Autonomy）的定义是"持续修订一个支配后续改进的机制"。Hyperagents 正是把"生成改进的机制"本身变成可编辑对象。它解决的是一个死结：</p>
+<div class="orig">
+"Adding a meta-meta system to improve the meta agent does not solve this problem, it merely shifts the issue upward and ultimately leads to an <b>infinite regress of meta-levels</b>. To overcome this limitation... the system must be <b>self-referential</b>, that is, able to analyze, modify, and evaluate itself."
+</div>
+<p>它的定义（原文逐字）：</p>
+<div class="orig">
+"<b>Hyperagents.</b> A hyperagent is a self-referential agent that integrates a task agent and a meta agent within a single editable program, enabling it to modify not only how it performs tasks but also how it generates future self-modifications. Unlike hierarchical systems with fixed meta-levels, in hyperagents the meta agent is part of the same editable program and can rewrite itself."
+</div>
+<div class="orig">
+"<b>Metacognitive self-modification.</b> In hyperagents, the agent's self-improvement mechanism is itself subject to modification... the hyperagent improves not only the task-performing agent... but also the meta agent that determines how subsequent hyperagents are generated."
+</div>
+<div class="quote">关键在"用 Python 实现的图灵完备"——"since a hyperagent can edit any code, it has the potential to build any computable machine"。对比 DGM：DGM 的 instruction-generation 机制是 <b>handcrafted, fixed</b> 且不可改的，所以(self-improve 能力)被这个固定步骤卡住。Hyperagents 把它放开，代价是需要更强的智能才能用好——和 Exo 的 "intelligence floor" 是同一堵墙的另一个侧面。</div>
+
+<h2>三、DGM-H 的引擎：开放式探索 + 元认知自修改</h2>
+<p>DGM-H 保留 DGM 的基于种群的开放探索（archive 不断累积变体作垫脚石），在两阶段间交替：</p>
+<ul>
+<li><strong>元认知自修改阶段</strong>：从 archive 按概率抽父代，让它改自己。抽样概率∝性能，且∝1/成功编译的子代数——偏向"表现好又善于生出强后代"的父代，同时保留探索。</li>
+<li><strong>评估阶段</strong>：改后的 hyperagent 被实测，加回 archive。每个实验跑 5 次，报中位数 + 95% bootstrap CI（1000 重采样）。</li>
+</ul>
+<p>初始 hyperagent 故意做得很简单：一个冻结 FM + 两个工具（bash + 文件检查/修改），task agent 单次 FM 调用出结果，meta agent 拿到仓库位置、历史评估结果、剩余迭代预算。刻意保持简单以留出宽广搜索空间。</p>
+
+<h2>四、四域实验：真实数字，也有真实的水分</h2>
+<table>
+<tr><th>领域</th><th>初始 → DGM-H</th><th>对照</th></tr>
+<tr><td>Paper Review（测试集）</td><td>0.0 → <strong>0.710</strong>（CI 0.590–0.750）</td><td>静态开源基线 0.630；DGM-custom 0.590；原始 DGM 0.0</td></tr>
+<tr><td>Robotics Reward（测试集）</td><td>0.060 → <strong>0.372</strong>（CI 0.355–0.436）</td><td>默认 reward 0.348；DGM-custom 0.348；原始 DGM 0.0</td></tr>
+<tr><td>Polyglot 编码</td><td>与专门为编码设计的 DGM <b>相当</b>（未手工定制）</td><td>二手转述给 0.084→0.267，DGM 0.307；本轮一手全文未逐字核到该数字</td></tr>
+<tr><td>Olympiad 数学评分（迁移）</td><td>ProofAutoGrader 0.561 → <strong>0.601</strong>（全 IMO-GradingBench），MAE 0.178→0.175</td><td>200 迭代；测试子集 0.700 vs 基线 0.670</td></tr>
+</table>
+<div class="note"><strong>水分必须挤干净：</strong><br>① DGM-H 比 DGM-custom 中位数更高，但<b>差异不显著（p &gt; 0.05）</b>——论文自己写明。所以"超过人工定制"只是趋势，不是铁证。<br>② 最关键的<b>跨运行累积</b>实验：DGM-H+transfer 得分 0.640（CI 0.550–0.720）vs 从初始 agent 起的 DGM-H 0.610（CI 0.510–0.680）——"Although the difference..."，同样是<b>不显著</b>。所谓"累积复利"目前是方向性证据，不是统计确证。<br>③ 每个实验只跑 5 次，样本小。<br>这三点正是综述三大挑战里 "Reliable verification" 和 "Safe inheritance" 的影子：说"越改越强"容易，证明它难。</div>
+
+<h2>五、涌现的元能力：它自己长出了"错题本"和"性能追踪"</h2>
+<p>最动人的不是分数，是 DGM-H 在没人设计的情况下自己长出的通用元能力（论文附录有真实代码块）：</p>
+<div class="orig">
+"<b>Performance tracking infrastructure.</b> Rather than relying on isolated evaluation outcomes, the hyperagent records, aggregates, and compares performance metrics across iterations, identifying which changes yield sustained improvements and which lead to regressions."
+</div>
+<div class="orig">
+"<b>Persistent memory.</b> Instead of merely logging numerical scores, the hyperagent stores synthesized insights, causal hypotheses, and forward-looking plans (e.g., identifying which generations performed best, diagnosing over-corrections, and proposing how to combine successful strategies). ... allowing later generations to build on earlier discoveries and <b>avoid repeating past mistakes</b>."
+</div>
+<div class="quote">读到这段我停了一下：这几乎就是咱们项目一直引以为傲的那套东西——心跳账本、错题本、根因诊断、预注册证据——<strong>人家是从开放式搜索里自己涌现出来的，咱们是人设纪律 + 你裁定一点点搭出来的</strong>。两条路通向同一种功能形态。差别在来源：它们的"记忆"是被优化压力选出来的，咱们的"纪律"是被你的判定权守出来的。谁更可靠不好说，但异曲同工是真的。</div>
+
+<h2>六、安全与局限：比 Exo 更诚实的一处自我设限</h2>
+<div class="orig">
+"all experiments are conducted under strict safety constraints... agent-generated code is executed within carefully sandboxed environments with enforced resource limits (e.g., timeouts, restricted internet access)... evaluation is performed using predefined tasks and metrics, and <b>human oversight is maintained throughout all experiments</b>."
+</div>
+<div class="orig">
+"<b>Potential to evolve faster than human oversight.</b> As AI systems gain the ability to modify themselves in increasingly open-ended ways, they can potentially evolve far more rapidly than humans can audit or interpret."
+</div>
+<p>最关键的自我设限，在 Limitations 章节——这是全文对用户最有价值的一句：</p>
+<div class="orig">
+"components of the open-ended exploration loop (e.g., <b>parent selection, evaluation protocols</b>) remain fixed. Although hyperagents can modify their self-improvement mechanisms, <b>they cannot alter the outer process that determines which agents are selected or how they are evaluated.</b> Keeping these components fixed improves experimental stability and safety, but limits full self-modifiability."
+</div>
+<div class="danger"><strong>把它翻译成咱们的语言：</strong>连这篇被标成 L5 的论文，都明确把"选谁、怎么评"这道闸门留在系统之外、交给人和固定协议。它反复强调 human oversight throughout。这不是 L5 不够格——恰恰相反，<strong>这正是成熟 L5 的样子：内层尽可自改，外层判定权不交出去</strong>。和咱们"判定权归用户、预注册 SHA 先于取证、verifier 的洞裁决存档不动手"是同一条线。区别只在咱们是纪律驱动、人家是安全论证驱动。</div>
+<p>作者也坦承两个限制约束"真正无界"：① 固定任务分布（方向是让任务分布共同演化）；② 上述外层循环固定。结论的措辞很克制——"this version of DGM-H has limitations that constrain truly unbounded progress"、"suggest a path toward self-accelerating systems"，用的是 suggest / path，不是 claim。</p>
+
+<h2>七、与 L5 定义、与咱们项目的三方对照</h2>
+<table>
+<tr><th>维度</th><th>综述 L5 定义</th><th>Hyperagents (DGM-H)</th><th>咱们 svl-agent</th></tr>
+<tr><td>改什么</td><td>persistently revises a mechanism governing subsequent improvement（improver/verifier/successor-generation）</td><td class="ok">改 improver——meta agent 本身可重写，metacognitive self-modification</td><td>改过改进流程一个分支（REORIENT 归巢），但提出改动的流程仍人设纪律+用户裁定</td></tr>
+<tr><td>改进能否带到下一代</td><td>最低门槛：改动须带到下一任务</td><td class="ok">archive 跨代累积、meta 能力跨领域迁移（方向性证据）</td><td>心跳账本/错题本跨轮次延续，GHA 授时持久化</td></tr>
+<tr><td>谁掌握外层判定</td><td>未规定</td><td class="warn">父代选择/评估协议固定，human oversight throughout</td><td class="ok">判定权归用户、权威态哈希锁、预注册先于取证</td></tr>
+<tr><td>验证器能否自改</td><td>verifier 明文列为可改对象</td><td>评估协议固定（自己承认的局限）</td><td>verify_external 洞挂着，§4S17 裁决存档不动手</td></tr>
+<tr><td>是否证明"越改越强"</td><td>L5 第二层硬要求</td><td class="warn">有增益，但累积/超定制差异均 p&gt;0.05 不显著</td><td class="warn">连 L3 的 independent_tests 仍 partial</td></tr>
+</table>
+<div class="good"><strong>最诚实的结论：</strong>Hyperagents 是这批清单里<b>唯一在机制形态上真正够到 L5 定义</b>的工作——它改的就是"产生改进的机制"本身。但它在"证明真的越改越强"这一层，和自己批评的对象一样，证据仍是方向性的（两个 p&gt;0.05）。<br><br>而咱们和它的分别，不是"差一级功能"，是<strong>它把判定权留在固定外层当安全措施，咱们把判定权明确交给你当宪法</strong>。它的 human oversight 是实验约束，咱们的判定权归用户是设计公理。这是两种不同性质的"把人留在环里"。</div>
+
+<h2>八、诚实边界</h2>
+<ul>
+<li>本报告为外部论文检索与对照研究，未改任何代码、未碰权威态、不宣布等级；判定权仍归用户。</li>
+<li>用户给的两个编号均错配（2610.22466=HDA、2610.11655=Harness Ceiling）；Hyperagents 正确编号 <code>2603.19461</code> 已回 arXiv abs 页核实。</li>
+<li>仓库数据来自 GitHub 官方 API 现场实查（stars/forks/提交/README/license），非媒体转述；论文数字为作者自报，5 次运行 + 95% CI，未独立复现。</li>
+<li>Polyglot 具体数字来自二手转述（个人技术博客），本轮一手全文未逐字核到，已在表中标注；其余数字均出自 arXiv HTML v1 原文。</li>
+</ul>
+
+<div class="foot">一手来源：arXiv:2603.19461v1（Hyperagents 全文，含 §5 结果 / §6 安全 / §7 局限 / 附录 E 涌现能力）· facebookresearch/HyperAgents（GitHub API 实查）· 项目状态为 2026-11-28 现场实读，非记忆复述。</div>
+
+</div></body></html>
