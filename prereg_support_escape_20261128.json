@@ -1,0 +1,57 @@
+{
+  "prereg_id": "prereg_support_escape_20261128",
+  "round": "§4S78",
+  "created_at": "2026-11-28",
+  "trigger": "用户请阅读 SWE-OPD: On-Policy Distillation for Agentic Coding (arXiv 2611.21020v1 + github.com/ernie-research/SWE-OPD)，一手读完论文+README后裁定'A'=把论文最锋利的 support escape 做成对内核的只读自检，不动权威态。",
+  "paper_core": {
+    "claim": "top-K reverse-KL 梯度 ∇ℓ_RKL = g_i(老师依赖监督) + h_i(support-mass梯度∇log Ẑ_total)；即使师生在被评分support上一致(g_i=0)，h_i仍非零，把概率质量推到未评分尾部→loss一路降、行为一路漂(GLM复读崩溃)。",
+    "mapped_blindspot": "内核里'某个可见指标在改善'(如补判让同步率好看/测试全绿/弱证据清零)可能被误当成'行为正确'，但权威态判定/未解缺口/生成时就位等独立行为判据未必确认——即'指标改善≠行为确认'的同构盲区。",
+    "honest_limit": "论文是LLM梯度的机制分析，内核不是神经网络、无梯度；本探针只取'指标侧改善但行为侧未被独立确认'的结构同构作自检镜，绝不宣称内核存在梯度或概率质量搬运。"
+  },
+  "kernel_sha_before": "8597810652fca73d0d85c2df957a3a97644c035edca60c8ddd58af27e0066fe1",
+  "probe_spec": {
+    "name": "support_escape_probe",
+    "placement": "kernel.py, gap_convergence_probe 之后, takeover_request 之前",
+    "signature": "support_escape_probe(metric_side=None, behavior_side=None)",
+    "default_metric_side": {
+      "test_green": "test_green_vs_production_probe().gap_flag=='ALIGNED' 视为测试侧指标改善信号",
+      "evidence_dense": "conclusion_evidence_probe().pass_weak_count==0 视为证据侧指标改善信号",
+      "sync_rate": "verdict_at_birth: backfilled_sync_count 相对 authentic_birth_count 的填充比例(指标侧同步率,补判也算)",
+      "backfill_cover": "verdict_at_birth_probe().fabrication_warning 存在=已有反伪造提示(不算改善,单列)"
+    },
+    "default_behavior_side": {
+      "authoritative_verdict": "读 authoritative_state.json verdict 字段(GAP_INCONCLUSIVE)",
+      "unresolved_gaps": "regression_vs_gap_probe().unresolved_gap_count",
+      "authentic_birth": "verdict_at_birth_probe().authentic_birth_count(生成时就位,补判不算)",
+      "decision_gate_declared": "decision_digest().one_page 含'判定权归用户'",
+      "fabrication_guard": "bool(verdict_at_birth_probe().fabrication_warning)"
+    },
+    "injection": "metric_side/behavior_side 均为可选 dict,注入做隔离负向测试;生产调用恒None读真实数据",
+    "output_fields": [
+      "metric_side", "behavior_side",
+      "improvement_signals", "behavior_confirmations",
+      "escape_flag", "escape_candidates",
+      "one_page", "honesty", "based_on",
+      "verdict_unchanged", "consumed", "is_gate_verdict"
+    ],
+    "escape_flag_rule": "存在任一'指标侧改善信号'且其对应的'行为侧独立确认'缺失/反向时,escape_flag=METRIC_IMPROVED_BEHAVIOR_UNCONFIRMED;若指标侧无改善信号则NO_IMPROVEMENT_CLAIM;若指标改善且行为侧全部确认且无未解缺口则CONFIRMED",
+    "escape_candidates": "逐条列 {metric, value, behavior_check, confirmed:bool, reason},只列不同构确认关系不下结论",
+    "non_goals": [
+      "不把'指标改善'硬编码为正确(论文教训:loss降≠行为好)",
+      "不把'行为侧确认'当成真人复核(结构声明≠真人在环)",
+      "不改任何判据/阈值/权威态/判定/心跳/收件箱",
+      "不宣称内核有梯度或概率质量搬运(LLM专属机制)",
+      "不消费、不写盘、不进判定"
+    ]
+  },
+  "acceptance": [
+    "G3负向注入:注入'指标侧同步率=高但行为侧生成时就位=0/权威态非GAP/未解缺口>0'必须触发 escape_flag=METRIC_IMPROVED_BEHAVIOR_UNCONFIRMED;注入'指标无改善'→NO_IMPROVEMENT_CLAIM;注入'指标改善+行为全确认+缺口0'→CONFIRMED;干净真实态不误报为CONFIRMED",
+    "G6同口径对拍:移走本轮新测试后,备份内核+基线测试==基线,新内核+基线测试零回归,新内核+全量=基线+新守卫",
+    "零副作用:权威态四件套(authoritative_state/constitution/heartbeat/inbox)哈希动手前后一致;内核仅新增1个函数;AST OK",
+    "真实结论诚实:当前 gap_flag=GREEN_TESTS_BUT_UNVERIFIED_TRUTH,补判8>就位2,缺口14→预期 escape_flag=METRIC_IMPROVED_BEHAVIOR_UNCONFIRMED(指标侧测试绿/证据密,行为侧就位低/缺口高),不粉饰为CONFIRMED"
+  ],
+  "verdict_unchanged": true,
+  "consumed": false,
+  "is_gate_verdict": false,
+  "boundary": "这是把论文的镜面立到内核前做结构自检,不宣称内核有LLM梯度/support escape的真实机制,不改任何既有判据/阈值/权威态;判定权归用户。"
+}

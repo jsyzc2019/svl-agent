@@ -825,3 +825,23 @@ clone踩坑:默认IP两次失败(8分20秒空壳/超时),换备用IP 20.27.177.1
 预注册prereg_archive_reconcile_20261128.json SHA 3799169f…(改账前锁),明确will_not_change含kernel/KB正文/审计result/原预注册锁/权威态四件套/11条verdict。
 修正:gap_archive_20261128.json(3fea1a19…→d73bfef5…)memory_governance class DEFERRED_USER_DECISION→RESOLVED_EXECUTED,删pending_action,加resolution{D1原文+KB现场双证据+根因说明+no_rewrite_kb};counts DEFERRED 1→0/RESOLVED 0→1;decision/honesty字段如实更新留痕;加reconciliation元数据(预注册SHA/前SHA/触发/定性)。原§4S75历史段不改写,预注册锁prereg_gap_archive保留原SHA(新证据另出澄清),审计result.json是当时事实快照不追认。
 验收:计数13 ACCEPTED+1 RESOLVED+9 IMMUTABLE自检过;memory_governance有3条双证据无pending_action;预注册SHA一致;内核SHA 85978106…/KB 0938b3df…/权威态5f7a2584…+constitution fe56291b…+heartbeat ea749f76…+inbox 8806b248…/审计result 19819361…全部动手前后一致;11条verdict零改变;全量测试260收集exit=0/FAILED=0零回归。本轮只改1个归档账JSON+新增1个预注册JSON,KB一字未动(无二次回填)。 --> 
+
+<!-- §4S78 SWE-OPD论文《On-Policy Distillation for Agentic Coding》support escape→内核只读自检(用户选A:不动权威态)
+触发:用户"请阅读" arXiv 2611.21020v1 + github.com/ernie-research/SWE-OPD,一手回源读全文(PDF 1687行)+README原文,交付解读+同构映射,用户裁定"A"(把最锋利点做成对内核的只读自检,不动权威态)。
+论文最锋利点(一手原文§6):top-K reverse-KL梯度 ∇ℓ_RKL = g_i(老师依赖监督)+h_i(support-mass梯度∇log Ẑ_total);即使师生在被评分support上一致(g_i=0),h_i仍非零,把概率质量从被评分support推到未评分尾部→loss一路降、行为一路漂(GLM-4.5-Air复读崩溃,ST稳定)。论文结论:评估蒸馏不能只看训练目标,要看下游resolve+训练行为+资源成本。关键数字:Pro 35.9→39.4;跨tokenizer GLM←DeepSeek-V4-Flash Pro+3.9/Multi+4.6;offline省GPU-hours 59.4%-72.6%峰值减半;top-128覆盖99.97%老师质量但师生重叠仅62.1%(overlap≠coverage);SFT老师rollout反掉点(监督源关键)。
+预注册prereg_support_escape_20261128.json SHA 51c2e338…(改码前锁),内核SHA 85978106…前置;备份pre_patch_support_escape/kernel_before_support_escape.py(85978106…)可回滚。
+新增只读support_escape_probe(metric_side=None,behavior_side=None):取结构同构——指标侧自报改善(test_green/evidence_dense/同步率含补判)须经独立行为判据(权威态GAP_INCONCLUSIVE/缺口/生成时就位/判定门/反伪造闸门)确认;escape_flag三值 METRIC_IMPROVED_BEHAVIOR_UNCONFIRMED(有改善但行为未确认)/NO_IMPROVEMENT_CLAIM(无改善信号)/CONFIRMED(改善且行为全确认+缺口0+就位>0+门在+反伪造在);escape_candidates逐条摊开{metric,value,behavior_check,confirmed,reason}不下结论;注入dict做隔离负向测试,生产恒None读真实。严格诚实:内核非神经网络无梯度/概率质量搬运,探针只做结构同构自检镜,绝不宣称真实support escape机制;行为侧确认为结构声明非真人复核。
+真实结论:指标侧evidence_dense=true(弱证据清零)、sync_rate_incl_backfill=0.8(补判8计入同步)、test_green=false(gap_flag仍是GREEN_TESTS_BUT_UNVERIFIED_TRUTH故测试侧未自称改善);行为侧权威态GAP_INCONCLUSIVE/缺口14/就位2/门在/反伪造在→escape_flag=METRIC_IMPROVED_BEHAVIOR_UNCONFIRMED,逐条:证据密但未解缺口悬置、同步率含补判被刷高但就位少缺口未清。不粉饰为CONFIRMED。
+验收:G3负向注入6例全绿(指标改善行为未确认必UNCONFIRMED/无改善NO_IMPROVEMENT_CLAIM/全确认CONFIRMED/门缺失不得CONFIRMED/权威态GAP是未越权确认语义精确/诚实边界含无梯度声明);共10守卫全绿。G6同口径对拍:①新内核+全量270收集0失败;②备份内核+基线测试260收集0失败(零回归铁证);③恢复后270收集0失败。内核SHA 00e09bb1…,AST OK,diff确认仅新增1函数。
+零副作用:权威态5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…四哈希动手前后完全一致;内核仅新增1函数;探针只读源码文本+既有判据不写盘不消费不进判定。
+边界:把论文的镜面立到内核前做结构自检,不宣称内核有LLM梯度/support escape真实机制,不改任何既有判据/阈值/权威态;判定权归用户。GitHub本轮未推(用户未要求)。 -->
+
+<!-- §4S79 进一步处理support-escape镜子——工具口径self-bite就地修(coverage vs reliability权威对偶)
+触发:用户"需要的"——承接§4S78 support_escape镜子照出的METRIC_IMPROVED_BEHAVIOR_UNCONFIRMED,授权进一步处理。
+勘察定性(关键):镜子照出两块性质不同——①指标侧sync_rate_incl_backfill=0.8是§4S78自造的语义模糊指标(名为同步率实为补判占比),且没接内核verdict_at_birth已有的权威对偶synced_rate=0.9091(coverage含补判)/authentic_birth_rate=0.1818(reliability真就位)+fabrication_warning(明写不可把字段补齐误读为就位):这是SWE-OPD README key finding3"distinguish supervision coverage from reliability of updates"的同构落地缺口→可诚实修;②缺口14在§4S75已归档(13边界+1已解决,归档≠解决不洗白PASS)、补判8 IMMUTABLE→不动。故处理对象只能是镜子自身口径瑕疵,不是刷flag/翻案/动缺口补判。
+预注册prereg_support_escape_reconcile_20261128.json SHA 923d5f0b…(改码前锁),内核SHA 00e09bb1…前置;备份pre_patch_support_escape/kernel_before_sescape_reconcile.py(00e09bb1…)可回滚;原§4S78预注册51c2e338…保留。
+修正(support_escape_probe函数体内,41行):metric_side去自造sync_rate_incl_backfill,改读权威对偶synced_rate_coverage=0.9091/authentic_birth_rate=0.1818/coverage_reliability_gap=0.7273/backfill_share=0.7273(补判占比明确标注非同步率);improvement_signals用coverage_looks_good(coverage>=0.8)替代;escape_candidates的coverage_looks_good条value同时给coverage/reliability/gap,reason点明coverage≠reliability;one_page同步显示对偶;honesty/based_on记self-bite。兼容注入旧key(sync_rate_incl_backfill)按coverage语义处理。flag语义不变。
+真实结论:coverage=0.9091 vs reliability=0.1818,gap=0.7273(看着几乎全同步、真就位不足两成);escape_flag仍METRIC_IMPROVED_BEHAVIOR_UNCONFIRMED(接回权威口径不等于刷绿,就位2/缺口14如实保留);逐条:证据密但缺口悬置、覆盖率含补判看着高但reliability低。
+验收:test_support_escape.py更新为12守卫全绿(两预注册SHA/真实UNCONFIRMED/权威对偶gap暴露/self-bite移除自造指标/4负向注入含反刷绿:仅刷coverage到1.0但reliability低+缺口在绝不翻CONFIRMED/无梯度声明/权威态零副作用)。G6干净对拍:①新内核+全量272收集0失败;②备份内核(§4S79前)+无守卫260收集0失败(零回归铁证);③恢复后272收集0失败。内核SHA 380de28a…,AST OK,diff确认函数集合无变化仅support_escape_probe函数体内改。
+零副作用:权威态5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…四哈希动手前后一致;KB 0938b3df…/归档账d73bfef5…未动。
+边界:工具口径self-bite就地修(§4hc惯例:工具bug就地记不升级CORR-REAL,判据内容不变),不是新裁定/不翻案/不动缺口补判;判定权归用户。GitHub本轮未推(用户未要求)。 -->

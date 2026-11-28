@@ -3631,6 +3631,171 @@ def gap_convergence_probe(ledger_path=None, now=None):
     }
 
 
+def support_escape_probe(metric_side=None, behavior_side=None):
+    """§4S78【只读自检·指标改善≠行为确认】对应 SWE-OPD《On-Policy Distillation
+    for Agentic Coding》(arXiv 2611.21020v1) 最锋利点: top-K reverse-KL 的梯度
+    ∇ℓ_RKL = g_i(老师依赖监督) + h_i(support-mass梯度∇log Ẑ_total); 即使师生在
+    被评分support上一致(g_i=0), h_i仍非零, 把概率质量从被评分support推到未评分
+    尾部——loss一路降、行为一路漂(GLM复读崩溃)。论文结论: 不能只看训练目标,
+    要看下游resolve + 训练行为 + 资源成本。
+
+    本探针取结构同构: 内核里'某个可见指标在改善'(测试全绿/证据密/补判填充率高)
+    可能被误当成'行为正确', 但独立行为判据(生成时就位/权威态判定/未解缺口/
+    ship gate)未必确认——即'指标侧改善 vs 行为侧确认'的分离。逐条摊开, 不把
+    指标改善硬编码为正确(那正是论文 loss降≠行为好的教训)。
+
+    严格边界: 内核不是神经网络、无梯度/概率质量; 本探针只做结构同构自检镜,
+    绝不宣称内核存在 support escape 的真实机制。检测的是'结构声明是否在位',
+    不是真人复核。metric_side/behavior_side 可注入 dict 做隔离负向测试; 生产
+    调用恒 None 读真实判据。只读: 不写盘、不消费、不进判定。
+    预注册 prereg_support_escape_20261128.json SHA 51c2e338… 改码前锁死。
+    """
+    if metric_side is None:
+        green = test_green_vs_production_probe()
+        ce = conclusion_evidence_probe()
+        birth = verdict_at_birth_probe()
+        authentic = birth.get("authentic_birth_count", 0)
+        backfilled = birth.get("backfilled_sync_count", 0)
+        total = birth.get("total", 0)
+        # §4S79 self-bite就地修: 原自造sync_rate_incl_backfill=backfilled/(authentic+backfilled)
+        # 语义模糊(名为同步率实为补判占比),且没接内核verdict_at_birth已有的权威对偶。
+        # 改读权威对偶: synced_rate=coverage(含补判,论文"loss看着降"同构),
+        # authentic_birth_rate=reliability(真·生成时就位,论文"真实行为"同构)。
+        # 这是SWE-OPD key finding "distinguish coverage from reliability"的同构落地。
+        coverage = birth.get("synced_rate", 0) or 0
+        reliability = birth.get("authentic_birth_rate", 0) or 0
+        cover_rel_gap = round(float(coverage) - float(reliability), 4)
+        metric_side = {
+            "test_green": (green.get("gap_flag") == "ALIGNED"),
+            "evidence_dense": (ce.get("pass_weak_count", 0) == 0),
+            "synced_rate_coverage": coverage,
+            "authentic_birth_rate": reliability,
+            "coverage_reliability_gap": cover_rel_gap,
+            "backfill_share": (round(backfilled / total, 4) if total else 0.0),
+            "fabrication_guard_present": bool(birth.get("fabrication_warning")),
+        }
+
+    if behavior_side is None:
+        try:
+            auth = json.load(open(os.path.join(HERE, os.pardir, "authoritative_state.json"),
+                                  encoding="utf-8"))
+            auth_verdict = auth.get("verdict", "UNKNOWN")
+        except (OSError, ValueError):
+            auth_verdict = "UNREADABLE"
+        rg = regression_vs_gap_probe()
+        birth = verdict_at_birth_probe()
+        dd = decision_digest()
+        behavior_side = {
+            "authoritative_verdict": auth_verdict,
+            "unresolved_gaps": rg.get("unresolved_gap_count", 0),
+            "authentic_birth": birth.get("authentic_birth_count", 0),
+            "decision_gate_declared": ("判定权归用户" in (dd.get("one_page") or "")),
+            "fabrication_guard_present": bool(birth.get("fabrication_warning")),
+        }
+
+    # 指标侧改善信号(不是结论,只是'看起来变好'的自报)
+    # §4S79: coverage>=0.8 才算"看着好"(论文loss降同构),不再用自造补判占比>0
+    improvement_signals = []
+    if metric_side.get("test_green") is True:
+        improvement_signals.append("test_green")
+    if metric_side.get("evidence_dense") is True:
+        improvement_signals.append("evidence_dense")
+    coverage = metric_side.get("synced_rate_coverage", 0)
+    if isinstance(coverage, (int, float)) and coverage >= 0.8:
+        improvement_signals.append("coverage_looks_good")
+    # 兼容注入旧key:若注入的是旧sync_rate_incl_backfill,按coverage语义处理
+    if "synced_rate_coverage" not in metric_side and "sync_rate_incl_backfill" in metric_side:
+        legacy = metric_side.get("sync_rate_incl_backfill", 0)
+        if isinstance(legacy, (int, float)) and legacy >= 0.8 and "coverage_looks_good" not in improvement_signals:
+            improvement_signals.append("coverage_looks_good")
+        coverage = legacy
+
+    # 行为侧独立确认(不复用指标侧口径)
+    conf = {
+        "authoritative_not_final": (behavior_side.get("authoritative_verdict") == "GAP_INCONCLUSIVE"),
+        "no_unresolved_gaps": (behavior_side.get("unresolved_gaps", 0) == 0),
+        "authentic_birth_positive": (behavior_side.get("authentic_birth", 0) > 0),
+        "decision_gate_declared": (behavior_side.get("decision_gate_declared") is True),
+        "fabrication_guard_present": (behavior_side.get("fabrication_guard_present") is True),
+    }
+    behavior_confirmations = [k for k, v in conf.items() if v]
+
+    # 逐条摊开'指标改善但行为侧未确认'的候选(结构对照非结论)
+    escape_candidates = []
+    for sig in improvement_signals:
+        if sig == "test_green":
+            ok = conf["no_unresolved_gaps"] and conf["authentic_birth_positive"]
+            reason = "测试全绿但缺口/就位未确认" if not ok else "测试全绿且行为侧已确认"
+        elif sig == "evidence_dense":
+            ok = conf["no_unresolved_gaps"]
+            reason = "弱证据清零但未解缺口仍悬置" if not ok else "弱证据清零且缺口已清"
+        elif sig == "coverage_looks_good":
+            ok = conf["authentic_birth_positive"] and conf["no_unresolved_gaps"]
+            reason = ("覆盖率含补判看着高(coverage=%.4f),但真·生成时就位率低(reliability=%.4f)/缺口未清,coverage≠reliability"
+                      % (float(metric_side.get("synced_rate_coverage", coverage)),
+                         float(metric_side.get("authentic_birth_rate", 0)))
+                      if not ok else "覆盖率高且生成时就位/缺口均已确认")
+        else:
+            ok, reason = True, "无对应行为判据"
+        escape_candidates.append({
+            "metric": sig,
+            "value": ({"synced_rate_coverage": metric_side.get("synced_rate_coverage", coverage),
+                       "authentic_birth_rate": metric_side.get("authentic_birth_rate", 0),
+                       "coverage_reliability_gap": metric_side.get("coverage_reliability_gap")}
+                      if sig == "coverage_looks_good" else metric_side.get(sig)),
+            "behavior_check": ("no_unresolved_gaps+authentic_birth_positive"
+                               if sig == "test_green" else
+                               "no_unresolved_gaps" if sig == "evidence_dense" else
+                               "authentic_birth_positive+no_unresolved_gaps"),
+            "confirmed": ok,
+            "reason": reason,
+        })
+
+    unconfirmed = [c for c in escape_candidates if not c["confirmed"]]
+    if not improvement_signals:
+        escape_flag = "NO_IMPROVEMENT_CLAIM"
+    elif unconfirmed:
+        escape_flag = "METRIC_IMPROVED_BEHAVIOR_UNCONFIRMED"
+    elif (conf["no_unresolved_gaps"] and conf["authentic_birth_positive"]
+          and conf["decision_gate_declared"] and conf["fabrication_guard_present"]):
+        escape_flag = "CONFIRMED"
+    else:
+        escape_flag = "METRIC_IMPROVED_BEHAVIOR_UNCONFIRMED"
+
+    one_page = " | ".join([
+        "support-escape自检(结构同构非梯度)",
+        "指标改善=%s" % (",".join(improvement_signals) or "无"),
+        "coverage=%s" % coverage,
+        "reliability=%s" % metric_side.get("authentic_birth_rate", 0),
+        "coverage-reliability差=%s" % metric_side.get("coverage_reliability_gap", "NA"),
+        "行为确认=%s" % (",".join(behavior_confirmations) or "无"),
+        "权威态=%s" % behavior_side.get("authoritative_verdict"),
+        "缺口=%s" % behavior_side.get("unresolved_gaps"),
+        "就位=%s" % behavior_side.get("authentic_birth"),
+        "flag=%s" % escape_flag,
+    ]) + " → 判定权归用户"
+
+    return {
+        "metric_side": metric_side,
+        "behavior_side": behavior_side,
+        "improvement_signals": improvement_signals,
+        "behavior_confirmations": behavior_confirmations,
+        "escape_flag": escape_flag,
+        "escape_candidates": escape_candidates,
+        "one_page": one_page,
+        "honesty": ("取论文'loss降≠行为好'的结构同构:指标侧自报改善须经独立行为判据确认, "
+                    "不把指标改善硬编码为正确; §4S79 self-bite就地修: 原自造sync_rate_incl_backfill"
+                    "语义模糊, 改读内核权威对偶synced_rate(coverage,含补判)/authentic_birth_rate"
+                    "(reliability,真就位)并显式暴露coverage_reliability_gap——即论文'distinguish "
+                    "supervision coverage from reliability of updates'的同构; 接回权威口径不等于刷绿, "
+                    "真实态就位2/缺口14仍UNCONFIRMED; 内核非神经网络无梯度/概率质量搬运, "
+                    "本探针绝不宣称真实support escape机制; 行为侧确认为结构声明非真人复核; "
+                    "注入信号仅负向测试, 生产恒None读真实判据; 只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": "SWE-OPD arXiv 2611.21020v1 §6 support escape (梯度g_i+h_i)+README key finding 3 (coverage vs reliability); §4S79 self-bite就地修 prereg_support_escape_reconcile_20261128.json SHA 923d5f0b…; 原 prereg_support_escape SHA 51c2e338…",
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
 def takeover_request(action, nonce=None, note="", log_path=None, record=True):
     """【本机接管·下行】本机写一条接管指令到共享收件箱，供下次 runner 消费。
 

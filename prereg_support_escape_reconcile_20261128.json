@@ -1,0 +1,38 @@
+{
+  "prereg_id": "prereg_support_escape_reconcile_20261128",
+  "round": "§4S79",
+  "created_at": "2026-11-28",
+  "trigger": "用户'需要的'——承接§4S78 support_escape镜子照出的METRIC_IMPROVED_BEHAVIOR_UNCONFIRMED,授权进一步处理。",
+  "discovery": {
+    "self_bite": "§4S78的support_escape_probe指标侧自造了sync_rate_incl_backfill=backfilled/(authentic+backfilled)=0.8,语义模糊(名为同步率实为补判占比),且未用内核verdict_at_birth已有的权威对偶口径synced_rate=0.9091(含补判覆盖率)/authentic_birth_rate=0.1818(真·生成时就位率)+fabrication_warning(明写不可把字段补齐误读为生成当下就位)。",
+    "paper_core": "SWE-OPD README key finding 3原话: distinguishing supervision coverage from the reliability of the resulting updates。本仓权威对偶正是coverage(synced_rate)vs reliability(authentic_birth_rate)的同构,镜子却没接上。",
+    "honest_boundary": "缺口14在§4S75已归档(13 ACCEPTED_BOUNDARY+1 RESOLVED_EXECUTED,归档≠解决不洗白成PASS);补判8=IMMUTABLE历史不可动。故处理对象只能是镜子自身的口径瑕疵,不是刷flag、不是翻案、不是动缺口/补判。"
+  },
+  "kernel_sha_before": "00e09bb15cef846e1282c968d7cb02ef121c202536d01f806c2825e8fe784939",
+  "correction_spec": {
+    "target": "life_kernel/kernel.py support_escape_probe 的 metric_side 默认构造 + improvement_signals + escape_candidates + one_page",
+    "changes": [
+      "metric_side去掉自造sync_rate_incl_backfill,改读birth权威对偶:synced_rate_coverage=birth['synced_rate'](coverage),authentic_birth_rate=birth['authentic_birth_rate'](reliability),backfill_share=backfilled/total(补判占比,明确标注非同步率)",
+      "新增coverage_reliability_gap=round(coverage-reliability,4)(0.9091-0.1818=0.7273),显式暴露'看着几乎全同步vs真就位不足两成'的落差——这就是论文coverage≠reliability的同构载体",
+      "improvement_signals:coverage_looks_good(coverage>=0.8)替代原sync_rate_incl_backfill>0",
+      "escape_candidates里coverage_looks_good条:value同时给coverage/reliability/gap,behavior_check=authentic_birth_positive+no_unresolved_gaps,confirmed=False时reason='覆盖率含补判看着高,但生成时就位率低/缺口未清(coverage≠reliability)'",
+      "one_page同时显示coverage/reliability/gap,flag语义不变"
+    ],
+    "invariants": [
+      "flag语义不变:有改善信号且行为侧未确认→METRIC_IMPROVED_BEHAVIOR_UNCONFIRMED;无改善→NO_IMPROVEMENT_CLAIM;全确认→CONFIRMED",
+      "不因接回权威口径就把真实态刷成CONFIRMED(真实态就位2/缺口14→仍UNCONFIRMED)",
+      "注入dict接口保留,负向测试仍可隔离注入metric_side/behavior_side",
+      "行为侧判定不动(权威态/缺口/就位/门/反伪造),不改任何既有判据/阈值/权威态/审计/KB"
+    ]
+  },
+  "acceptance": [
+    "真实读数:metric_side含synced_rate_coverage=0.9091/authentic_birth_rate=0.1818/coverage_reliability_gap=0.7273;escape_flag仍METRIC_IMPROVED_BEHAVIOR_UNCONFIRMED(不刷绿)",
+    "G3负向注入:注入coverage高但reliability低+缺口>0必UNCONFIRMED且gap被暴露;注入coverage低→NO_IMPROVEMENT_CLAIM;注入coverage高+reliability高+缺口0+门在→CONFIRMED;仅刷coverage不得翻CONFIRMED",
+    "G6同口径对拍:备份内核+基线测试零回归;新内核+全量=基线+守卫",
+    "零副作用:权威态四件套哈希动手前后一致;内核仅改support_escape_probe一个函数;AST OK;KB/审计/缺口归档账未动"
+  ],
+  "verdict_unchanged": true,
+  "consumed": false,
+  "is_gate_verdict": false,
+  "boundary": "工具口径self-bite就地修(§4hc惯例:工具bug就地记不升级CORR-REAL,判据内容不变)。这是修镜子自身的口径,不是新裁定、不翻案、不动缺口/补判;判定权归用户。"
+}
