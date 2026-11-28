@@ -1,0 +1,61 @@
+{
+  "schema": "prereg-memory-footprint/v1",
+  "task": "记忆体物理层治理只读自检",
+  "date": "2026-11-29T01:06+08:00",
+  "trigger": "用户『高度重视记忆治理,记忆体超过50M』+『事上练练,去自由行』。按宪法修正案A1-M,不回头问是否推进,直接造机械证据。",
+  "user_intent": "把记忆体膨胀问题用机械判据查清并治理,不靠印象不粗暴瘦身",
+  "locked_before_execution": {
+    "kernel_sha_before": "00c82500c9b049d5",
+    "seven_piece_baseline": ["5f7a2584", "2ad148c7", "ea749f76", "8806b248", "91114955", "d73bfef5", "0938b3df"],
+    "baseline_total_tests": 2062
+  },
+  "mechanical_facts_measured": {
+    "du_total": "86M (含目录元数据)",
+    "python_walk_total": "79.99MB / 2455 files",
+    "class_A_source": "182 files / 25.27MB (downloads/received/sources/html/pdf/txt 回源证据)",
+    "class_B_asset": "1986 files / 47.86MB (判据/账本/代码/测试)",
+    "class_C_regenerable": "287 files / 6.86MB (__pycache__/*.pyc, 由.py重编译即得)"
+  },
+  "gap_analysis": {
+    "existing_content_layer_governance": [
+      "life_kernel/memory_governance.py (provenance完整性/字段形态)",
+      "svagent/memory_curation.py (selection/consolidation/nondestructive)",
+      "svagent/memory_scope.py / memory_provenance_honesty.py",
+      "svagent/memory_consolidation_governance_honesty.py (Epistemics arXiv2609.33013)",
+      "audit_memory/ CLS选择性巩固/回放/睡眠去重神经科学回源"
+    ],
+    "vacuum": "以上全管内容可信性,无一管物理体积/冷热/可再生物/三分类守恒。物理层是治理真空。",
+    "honest_core": "主体47.86MB是判据资产=特性非垃圾,不能粗暴瘦身;真正无争议可清只有6.86MB pyc。治理重点=分类透明+可再生物识别,不是数字达标。"
+  },
+  "planned_capability": {
+    "probe": "memory_footprint_probe(footprint_signals=None) -> 只读判据",
+    "faces": [
+      "FACE_CLASSIFICATION: 三分类穷尽(每文件归A/B/C恰一类)+体积守恒(A+B+C==total)+分类计数>0",
+      "FACE_DISPOSITION: C类pyc有.py伴生(可再生)+A/B类不可清(有权威锚/回源证据)+不误删判据资产",
+      "FACE_HONESTY: 诚实标注主体是资产非垃圾+不宣称清理解决50M+不进判定不自封"
+    ],
+    "classes": ["GOVERNED", "CLASSIFICATION_BROKEN", "UNSAFE_DISPOSITION", "OVERCLAIM"],
+    "flags": ["NO_FOOTPRINT_CLAIM", "FOOTPRINT_GOVERNED", "FOOTPRINT_GAP_PRESENT"],
+    "injection": "force_class 显式覆盖仅供负向测试,生产恒None"
+  },
+  "physical_cleanup_scope": {
+    "allowed": "仅删除 __pycache__/*.pyc (287 files/6.86MB), 由对应.py重编译即得,不碰权威态/证据/账本/源码",
+    "forbidden": "A类回源证据(182) + B类判据资产(1986) 一律不动",
+    "method": "先落清理清单(路径+大小+伴生.py校验)到结构化账,再删,删后可验证体积下降且测试全绿",
+    "reversibility": "pyc可再生;清单留痕;不清空源码"
+  },
+  "acceptance_criteria": [
+    "探针三面6条真实判据,只读不写盘",
+    "12守卫全绿:含三面负向注入(分类破损/不安全处置/过claims)+边界+honesty+七件套零副作用",
+    "G6同口径对拍:新内核2062+12零失败,备份内核基线2062零失败,恢复AST OK仅新增1函数",
+    "pyc清理:清单可验证、清理后体积下降、全量测试仍绿、七件套不变",
+    "七件套哈希逐一等于基线;token扫描0;落账§4S103;推GitHub逐blob对拍"
+  ],
+  "honesty_boundaries": [
+    "不宣称清理6.86MB解决了用户说的50M——主体47.86MB是判据资产,特性非垃圾",
+    "不删任何回源证据(A)或判据资产(B),只清可再生pyc(C)",
+    "探针只读,清理是独立显式动作且有清单/验证,不混同",
+    "不宣称记忆治理已完备——只做了物理层分类与可再生物识别,内容层治理既有",
+    "不进判定不自封等级,判定权归用户仅限价值层(A1-V),事实层归机械证据(A1-F)"
+  ]
+}

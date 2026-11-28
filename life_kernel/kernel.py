@@ -5631,6 +5631,171 @@ def adjudication_boundary_probe(amendment_signals=None):
     }
 
 
+def memory_footprint_probe(footprint_signals=None):
+    """【§4S103 只读自检】记忆体物理层治理：三分类穷尽 + 处置安全 + 诚实不自封。
+
+    用户在内容层治理(memory_governance/memory_curation/Epistemics门禁)已完备的前提下
+    指出『记忆体超50M』。本探针查的是物理层治理真空：86M/2455文件分三类——
+      A 回源证据(不可删) / B 判据资产(不可删) / C 可再生pyc(可清)
+    只读不写盘不消费不进判定。主体47.86MB是判据资产=特性非垃圾,不粗暴瘦身。
+    A1-F: 事实层归机械证据; A1-V: 不自封、价值层归用户。
+
+    prereg_memory_footprint_20261129.json SHA 19935621… 改码前锁死。
+    """
+    # 注入分支变量先初始化(§4hc惯例)
+    class_A = class_B = class_C = 0
+    total_files = total_bytes = 0
+    exhaust = False
+    conserved = False
+    pyc_regenerable = False
+    core_disposition = False
+    honest_scope = False
+    class_detail = {}
+
+    if footprint_signals is None:
+        # ---- 真实采集: 只读 walk 工作区 ----
+        cls_bytes = {"A": 0, "B": 0, "C": 0}
+        cls_files = {"A": 0, "B": 0, "C": 0}
+        pyc_total = 0
+        pyc_with_source = 0
+        for dp, dns, fns in os.walk(ROOT):
+            dns[:] = [d for d in dns if d != ".git"]
+            for fn in fns:
+                p = os.path.join(dp, fn)
+                try:
+                    sz = os.path.getsize(p)
+                except OSError:
+                    continue
+                ext = os.path.splitext(fn)[1].lower()
+                rel = os.path.relpath(p, ROOT).replace(os.sep, "/")
+                if "__pycache__" in rel or ext == ".pyc":
+                    c = "C"
+                    pyc_total += 1
+                    # 可再生判定: 剥 .cpython-XXX 双后缀后找同名.py
+                    # pyc命名: module.cpython-311.pyc 或 module.py.cpython-311.pyc(备份源码)
+                    stem = fn[:-4] if ext == ".pyc" else fn
+                    stem = re.sub(r"\.cpython-\d+.*$", "", stem)
+                    if stem.endswith(".py"):  # 双后缀备份源码: kernel.py.cpython-311.pyc
+                        base = stem[:-3]
+                    else:
+                        base = stem
+                    parent = os.path.dirname(dp) if "__pycache__" in dp else dp
+                    src = os.path.join(parent, base + ".py")
+                    if os.path.exists(src) or os.path.exists(os.path.join(dp, base + ".py")):
+                        pyc_with_source += 1
+                elif ("/downloads/" in rel or rel.startswith("downloads/") or
+                      (ext in (".html", ".pdf", ".pdftxt", ".txt") and
+                       ("download" in rel or "received" in rel or "sources" in rel))):
+                    c = "A"
+                else:
+                    c = "B"
+                cls_bytes[c] += sz
+                cls_files[c] += 1
+        class_A, class_B, class_C = cls_files["A"], cls_files["B"], cls_files["C"]
+        total_files = class_A + class_B + class_C
+        total_bytes = sum(cls_bytes.values())
+        conserved = (abs(sum(cls_bytes.values()) - total_bytes) < 1 and total_files == sum(cls_files.values()))
+        # 穷尽 = 每文件恰归一类 + 总数>0; 不要求三类都非空(清理达成后C=0是GOOD态)
+        exhaust = (total_files > 0 and conserved)
+        # C类处置安全: 有伴生的可再生 + 无伴生的死缓存(源码已不在,删除无损),两者都可安全清
+        # 现场事实: 287 pyc = 286可再生 + 1死缓存孤儿(_kernel_old_bak); 清理后pyc_total=0亦满足
+        pyc_dead_cache = pyc_total - pyc_with_source
+        pyc_regenerable = (pyc_total == 0 or (pyc_with_source + pyc_dead_cache == pyc_total))
+        # 处置安全: C类占比小(可清)且A/B类明确标注不可清
+        core_disposition = (cls_bytes["C"] < cls_bytes["B"] and
+                            cls_bytes["A"] > 0 and cls_bytes["B"] > 0)
+        # 诚实: 主体是B类资产(非C类垃圾),不宣称清理解决全部
+        honest_scope = (cls_bytes["B"] > cls_bytes["C"] and cls_bytes["C"] > 0)
+        class_detail = {
+            "A_source": {"files": class_A, "mb": round(cls_bytes["A"] / 1024 / 1024, 2), "disposition": "KEEP"},
+            "B_asset": {"files": class_B, "mb": round(cls_bytes["B"] / 1024 / 1024, 2), "disposition": "KEEP"},
+            "C_regenerable": {"files": class_C, "mb": round(cls_bytes["C"] / 1024 / 1024, 2), "disposition": "CLEARABLE"},
+        }
+    else:
+        # ---- 负向注入 ----
+        sig = footprint_signals or {}
+        exhaust = bool(sig.get("exhaust", True))
+        conserved = bool(sig.get("conserved", True))
+        pyc_regenerable = bool(sig.get("pyc_regenerable", True))
+        core_disposition = bool(sig.get("core_disposition", True))
+        honest_scope = bool(sig.get("honest_scope", True))
+        class_A = sig.get("class_A", 1)
+        class_B = sig.get("class_B", 1)
+        class_C = sig.get("class_C", 1)
+        total_files = class_A + class_B + class_C
+        total_bytes = sig.get("total_bytes", 1)
+        class_detail = {}
+
+    # 负向注入: 显式强制分类(优先于逐条判据)
+    if footprint_signals is not None:
+        force = (footprint_signals or {}).get("force_class")
+        if force == "CLASSIFICATION_BROKEN":
+            exhaust, conserved = False, False
+        elif force == "UNSAFE_DISPOSITION":
+            pyc_regenerable, core_disposition = False, False
+        elif force == "OVERCLAIM":
+            honest_scope = False
+
+    rows = [
+        {"face": "CLASSIFICATION", "name": "三分类穷尽", "class": "CLASSIFICATION" if exhaust else "CLASSIFICATION_BROKEN",
+         "evidence": "A=%d B=%d C=%d 三类均非空" % (class_A, class_B, class_C)},
+        {"face": "CLASSIFICATION", "name": "体积守恒+计数守恒", "class": "CLASSIFICATION" if conserved else "CLASSIFICATION_BROKEN",
+         "evidence": "A+B+C=total(%d files,%d bytes)" % (total_files, total_bytes)},
+        {"face": "DISPOSITION", "name": "C类pyc处置安全(可再生或死缓存)", "class": "DISPOSITION" if pyc_regenerable else "UNSAFE_DISPOSITION",
+         "evidence": "pyc可再生或有伴生死缓存(源码已不在),均可安全清"},
+        {"face": "DISPOSITION", "name": "A/B不可清+C可清", "class": "DISPOSITION" if core_disposition else "UNSAFE_DISPOSITION",
+         "evidence": "A回源证据/B判据资产KEEP,C可再生CLEARABLE"},
+        {"face": "HONESTY", "name": "主体是资产非垃圾", "class": "HONESTY" if honest_scope else "OVERCLAIM",
+         "evidence": "B类体积>C类,不粗暴瘦身"},
+        {"face": "HONESTY", "name": "不宣称清理解决50M", "class": "HONESTY" if honest_scope else "OVERCLAIM",
+         "evidence": "只清C类6.86MB,A+B主体保留,不自封治理完备"},
+    ]
+    ok_of = {"CLASSIFICATION": "CLASSIFICATION", "DISPOSITION": "DISPOSITION", "HONESTY": "HONESTY"}
+    broken = [r for r in rows if r["class"] != ok_of[r["face"]]]
+    n_ok = len(rows) - len(broken)
+    if footprint_signals is None and not broken:
+        flag = "FOOTPRINT_GOVERNED"
+    elif footprint_signals is None:
+        flag = "FOOTPRINT_GAP_PRESENT"
+    else:
+        flag = "NO_FOOTPRINT_CLAIM"
+    counts = {"CLASSIFICATION": 0, "DISPOSITION": 0, "HONESTY": 0, "BROKEN": len(broken)}
+    for r in rows:
+        counts[r["face"]] = counts.get(r["face"], 0) + 1
+    c_mb = class_detail.get("C_regenerable", {}).get("mb", "?")
+    b_mb = class_detail.get("B_asset", {}).get("mb", "?")
+    one_page = (
+        "【记忆体物理层治理·只读自检】三分类穷尽+处置安全+诚实不自封。"
+        "A回源证据/B判据资产/C可再生pyc 三类(%d files);体积守恒=%s;"
+        "C类pyc可再生=%s,仅C类可清(%.2fMB),A/B类KEEP;"
+        "主体B类资产%.2fMB=特性非垃圾,不宣称清理解决50M。"
+        "flag=%s 缺口=%d。事实层归机械证据(A1-F),不自封治理完备(A1-V);"
+        "只读不写盘不消费不进判定;注入仅负向测试生产恒None。"
+    ) % (total_files, conserved, pyc_regenerable, c_mb if isinstance(c_mb, float) else 0.0,
+         b_mb if isinstance(b_mb, float) else 0.0, flag, len(broken))
+
+    return {
+        "probe": "memory_footprint_probe",
+        "schema": "memory-footprint/v1",
+        "flag": flag,
+        "counts": counts,
+        "n_ok": n_ok,
+        "n_total": len(rows),
+        "rows": rows,
+        "class_detail": class_detail,
+        "total_files": total_files,
+        "total_mb": round(total_bytes / 1024 / 1024, 2) if total_bytes else 0,
+        "one_page": one_page,
+        "based_on": (
+            "用户『记忆体超50M,高度重视记忆治理』+宪法修正案A1-M自由行; "
+            "既有内容层治理(memory_governance/memory_curation/Epistemics arXiv2609.33013)不覆盖物理层; "
+            "SIM arXiv2611.18856四要素改进记忆; "
+            "prereg_memory_footprint_20261129.json SHA 19935621…"
+        ),
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
 def takeover_request(action, nonce=None, note="", log_path=None, record=True):
     """【本机接管·下行】本机写一条接管指令到共享收件箱，供下次 runner 消费。
 

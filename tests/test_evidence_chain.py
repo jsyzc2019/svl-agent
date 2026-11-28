@@ -84,7 +84,9 @@ def test_audit_all_counts():
     # §4S2 Safari 注意力预算前提打靶目录（audit_safari_affect_budget，结果+引擎+4篇一手原文，非五件套）→ total 72→73
     # §4S3 Safari 路标下一猎场目录（audit_safari_social_agents，结果+引擎+6件一手原文+SHA清单，非五件套）→ total 73→74
     # §4S4 真实Agent对话目录（audit_agent_dialogue，4轮真实一问一答逐字落档+completion id，非五件套）→ total 74→75
-    assert a["total"] == 75
+    # §4S103 记忆体物理层治理清理清单目录（audit_memory_footprint_20261129，仅cleanup_manifest.json，
+    #   非五件套/无三锁）→ total 75→76，five_piece/three_locks不变
+    assert a["total"] == 76
     assert a["five_piece_complete"] == 34
     assert a["three_locks_intact"] == 31
     assert 0 < a["three_locks_intact"] <= a["total"]

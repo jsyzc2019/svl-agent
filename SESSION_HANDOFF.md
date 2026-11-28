@@ -1084,3 +1084,22 @@ DoR标注硬纪律(一手prompt.py/validate_dor.py/README):5 binary(tested_end_t
 提交前:8文件token全串扫描(ghp_[36]/github_pat_[60]/sk-or-v1-[20])全部0;宪法本体constitution.json与锁2ad148c7未动(修正案不改本体);权威态verdict=GAP_INCONCLUSIVE/l3=false/absolute=false未污染;全量2062零失败+G6对拍2050基线零回归已证;七件套哈希逐一等于基线。
 提交:Git Data API以5144dfa3全量tree为base_tree,创建blob→增量tree→commit→PATCH ref main,父=5144dfa3(完整SHA)。凭据token只在shell变量与header不回显不落盘。
 核验:独立读远端HEAD/父、递归tree逐blob git-sha1对拍;权威态四件套远端本地哈希相同(本轮不推权威态、宪法本体也不推);判定权归用户仅限价值层(A1-V),事实层归机械证据(A1-F)。 -->
+
+<!-- §4S103 记忆体物理层治理 memory_footprint_probe + pyc清理 2026-11-29 01:15：用户"高度重视记忆治理,记忆体超50M"+"事上练练去自由行"。按宪法修正案A1-M不回头问是否推进,直接造机械证据;A1-F事实层归机械证据。
+机械事实(现场walk):workspace du 86M/Python字节80MB/2457文件分三类——A回源证据182文件25.27MB(KEEP,downloads/received/sources/html/pdf/txt)、B判据资产1988文件48.23MB(KEEP,代码/测试/账本/审计结论)、C可再生pyc 287文件6.88MB(CLEARABLE)。诚实核心:主体48MB是判据资产=特性非垃圾,不能粗暴瘦身;用户说的"50M"其实是B类资产,真正无争议可清仅6.9MB。
+治理真空确认:内容层治理已完备(memory_governance.py provenance/字段形态、memory_curation.py selection/consolidation/nondestructive、memory_scope/provenance_honesty、memory_consolidation_governance_honesty=Epistemics arXiv2609.33013、audit_memory/ CLS选择性巩固/回放/睡眠去重),但无一管物理体积/冷热/可再生物/三分类守恒。2505.22954查证是DGM非记忆论文,诚实降级不冒充。SIM arXiv2611.18856四要素改进记忆已读(improvement_memory.py)。本轮增量=物理层分类与可再生物识别,非重复内容层。
+实现:kernel.py纯新增memory_footprint_probe(footprint_signals=None),diff确认仅新增1函数无删除,AST OK。三面6条:面1 CLASSIFICATION①三分类穷尽(每文件恰归一类+总数>0,清理后C=0合法) ②体积守恒+计数守恒;面2 DISPOSITION③C类pyc处置安全(可再生伴生.py或死缓存源码已不在,均可安全清) ④A/B不可清+C可清;面3 HONESTY⑤主体是资产非垃圾(B>C体积) ⑥不宣称清理解决50M不自封治理完备。分类GOVERNED/CLASSIFICATION_BROKEN/UNSAFE_DISPOSITION/OVERCLAIM,flag三值NO_FOOTPRINT_CLAIM/FOOTPRINT_GOVERNED/FOOTPRINT_GAP_PRESENT。注入force_class仅负向测试生产恒None。
+判据两次self-bite(按C5改机制不放宽,预注册假设被现场事实推翻):①初版pyc伴生正则漏剥双后缀kernel.py.cpython-311.pyc→报pyc不可再生;修正则剥.cpython-\\d+后再剥结尾.py→286可再生;②真孤儿_kernel_old_bak.cpython-311.pyc源码已不在=死缓存,删除无损,判据精化为"可再生或死缓存均可安全清"不蒙混说有伴生;③"三分类穷尽"语义澄清为每文件恰归一类+守恒,非三类都非空(清理达成后C=0是GOOD态)。预注册19935621改码前锁死,kernel before=00c82500,备份life_kernel/pre_patch_memory_footprint/可回滚。
+真实结论:6条全就位flag=FOOTPRINT_GOVERNED(诚实零命中)。
+pyc清理(独立显式动作,与只读探针不混同):先落audit_memory_footprint_20261129/cleanup_manifest.json(SHA cd98bae8,288条=286可再生+2死缓存,6.90MB,逐条路径+字节+伴生.py校验),按清单删288 pyc+34空__pycache__目录释放6.9MB(du 86M→79M)零失败,七件套前后逐一相同。清理后探针仍GOVERNED(C=0合法),全量测试触发pyc自动重编译回281个——可再生铁证,同时诚实暴露:pyc是运行时缓存,清理治标不治本,du回到86M。真正记忆体口径应排除pyc(编译副产品非记忆),B类判据资产48MB才是主体且不可删。此边界如实记录不夸大清理效果。
+计数成长留痕:新增audit_memory_footprint_20261129证据目录(仅cleanup_manifest.json非五件套无三锁)→tests/test_evidence_chain.py的audit总目录数75→76,FivePiece=34/ThreeLocks=31不变(按测试注释"每新增完整证据目录total+1随仓库成长更新不放宽"规则),非放宽断言。
+验收:12守卫(life_kernel/tests/test_memory_footprint.py)全绿(预注册SHA/备份哈希/真实FOOTPRINT_GOVERNED/三面精确扫描2-2-2/分类守恒/处置安全含死缓存self-bite/诚实资产非垃圾/三类负向注入CLASSIFICATION_BROKEN+UNSAFE_DISPOSITION+OVERCLAIM/C=0清理达成态合法/只读字段/七件套零副作用)。G6干净同口径对拍:①新内核182befde…+全量2074收集exit=0/FAILED=0/ERROR=0=2062+12;②改前内核00c82500…+移走新测试+基线2062收集exit=0/FAILED=0/ERROR=0(含计数75→76更新也绿,零回归铁证);③恢复后182befde…AST OK仅新增1函数。清理后全量2074零失败。
+诚实边界:只证三分类穷尽+处置安全+诚实不自封的结构同构,不宣称记忆治理已完备(内容层治理既有、物理层只做分类与可再生物识别不建冷热自动分层);pyc清理治标不治本(运行时自动重编译),真正的记忆体口径应排除编译缓存;B类48MB判据资产是特性非垃圾不粗暴瘦身;不宣称清理解决用户说的50M;不进判定不自封等级;判定权归用户仅限价值层(A1-V),事实层归机械证据(A1-F)。
+零副作用:权威态5f7a2584…/constitution 2ad148c7…/hb ea749f76…/inbox 8806b248…/DECISIONS 91114955…/归档账d73bfef5…/KB 0938b3df…七件套动手前后逐一相同;只读探针不写盘不消费不进判定,清理仅删可再生pyc不碰权威态/证据/账本/源码;verdict_unchanged/consumed=false/is_gate=false。token全串扫描0。GitHub见§4S104。 -->
+
+<!-- §4S104 GitHub同步§4S103(用户"高度重视记忆治理+自由行",Git Data API通道)
+触发:用户裁定记忆治理+自由行,§4S103完成memory_footprint_probe+pyc清理,本轮推远端。远端基线HEAD=7e2b4002(§4S101/102);本沙箱无.git走Git Data API先例。先落本同步账再一次性推含账SESSION_HANDOFF避免双commit。
+待推7文件:①life_kernel/kernel.py(累积新增memory_footprint_probe,00c82500→182befde,仅新增1函数) ②prereg_memory_footprint_20261129.json(SHA19935621) ③life_kernel/tests/test_memory_footprint.py(12守卫) ④life_kernel/pre_patch_memory_footprint/kernel_before_memory_footprint.py(改前备份00c82500) ⑤audit_memory_footprint_20261129/cleanup_manifest.json(SHA cd98bae8,288条pyc清理清单) ⑥tests/test_evidence_chain.py(audit计数75→76留痕) ⑦SESSION_HANDOFF.md(含§4S103/104)。
+提交前:7文件token全串扫描(ghp_[36]/github_pat_[60]/sk-or-v1-[20])全部0;权威态verdict=GAP_INCONCLUSIVE未污染;宪法本体与七件套未动;全量2074零失败+G6对拍2062基线零回归已证;pyc清理后七件套逐一相同。
+提交:Git Data API以7e2b4002全量tree为base_tree,创建blob→增量tree→commit→PATCH ref main,父=7e2b4002完整SHA。凭据token只在shell变量与header不回显不落盘。
+核验:独立读远端HEAD/父、递归tree逐blob git-sha1对拍;权威态四件套远端本地哈希相同(本轮不推权威态);pyc缓存不推(可再生)。判定权归用户仅限价值层A1-V,事实层归机械证据A1-F。 -->

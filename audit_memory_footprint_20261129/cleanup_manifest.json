@@ -1,0 +1,1740 @@
+{
+  "schema": "pyc-cleanup-manifest/v1",
+  "date": "2026-11-29T01:10+08:00",
+  "count": 288,
+  "total_bytes": 7240184,
+  "total_mb": 6.9,
+  "rebuildable": 286,
+  "dead_cache": 2,
+  "safety": "仅删__pycache__/*.pyc; 可再生由.py重编译; 死缓存源码已不在删除无损; 不碰A回源/B资产/权威态/账本",
+  "items": [
+    {
+      "path": "__pycache__/backfill_gap_verdict_20261128.cpython-311.pyc",
+      "bytes": 12348,
+      "kind": "rebuildable",
+      "source_py": "./backfill_gap_verdict_20261128.py"
+    },
+    {
+      "path": "audit_admission_ast_audit/__pycache__/admission_v2.cpython-311.pyc",
+      "bytes": 7838,
+      "kind": "rebuildable",
+      "source_py": "./audit_admission_ast_audit/admission_v2.py"
+    },
+    {
+      "path": "audit_argument_audit/__pycache__/evaluate_layered.cpython-311.pyc",
+      "bytes": 7013,
+      "kind": "rebuildable",
+      "source_py": "./audit_argument_audit/evaluate_layered.py"
+    },
+    {
+      "path": "audit_argument_audit/__pycache__/scan.cpython-311.pyc",
+      "bytes": 2913,
+      "kind": "rebuildable",
+      "source_py": "./audit_argument_audit/scan.py"
+    },
+    {
+      "path": "audit_argument_audit/__pycache__/specificity_test.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 4437,
+      "kind": "rebuildable",
+      "source_py": "./audit_argument_audit/specificity_test.py"
+    },
+    {
+      "path": "audit_cross_domain_confirm2/designer_P0/__pycache__/judge_P0_by_agent.cpython-311.pyc",
+      "bytes": 4465,
+      "kind": "rebuildable",
+      "source_py": "./audit_cross_domain_confirm2/designer_P0/judge_P0_by_agent.py"
+    },
+    {
+      "path": "audit_cross_domain_confirm2/designer_P1/__pycache__/judge_P1_by_agent.cpython-311.pyc",
+      "bytes": 3620,
+      "kind": "rebuildable",
+      "source_py": "./audit_cross_domain_confirm2/designer_P1/judge_P1_by_agent.py"
+    },
+    {
+      "path": "audit_cross_domain_confirm2/designer_P2/__pycache__/judge_P2_by_agent.cpython-311.pyc",
+      "bytes": 4720,
+      "kind": "rebuildable",
+      "source_py": "./audit_cross_domain_confirm2/designer_P2/judge_P2_by_agent.py"
+    },
+    {
+      "path": "audit_cross_domain_field/designer_A1/__pycache__/judge_A1_by_agent.cpython-311.pyc",
+      "bytes": 4974,
+      "kind": "rebuildable",
+      "source_py": "./audit_cross_domain_field/designer_A1/judge_A1_by_agent.py"
+    },
+    {
+      "path": "audit_cross_domain_field/designer_A2/__pycache__/judge_A2_by_agent.cpython-311.pyc",
+      "bytes": 2797,
+      "kind": "rebuildable",
+      "source_py": "./audit_cross_domain_field/designer_A2/judge_A2_by_agent.py"
+    },
+    {
+      "path": "audit_cross_domain_field/designer_B1/__pycache__/judge_B1_by_agent.cpython-311.pyc",
+      "bytes": 5396,
+      "kind": "rebuildable",
+      "source_py": "./audit_cross_domain_field/designer_B1/judge_B1_by_agent.py"
+    },
+    {
+      "path": "audit_cross_domain_field/designer_B2/__pycache__/judge_B2_by_agent.cpython-311.pyc",
+      "bytes": 3795,
+      "kind": "rebuildable",
+      "source_py": "./audit_cross_domain_field/designer_B2/judge_B2_by_agent.py"
+    },
+    {
+      "path": "audit_frozen_holdout/__pycache__/engine.cpython-311.pyc",
+      "bytes": 12778,
+      "kind": "rebuildable",
+      "source_py": "./audit_frozen_holdout/engine.py"
+    },
+    {
+      "path": "audit_l3_evidence_rubric/__pycache__/engine.cpython-311.pyc",
+      "bytes": 5833,
+      "kind": "rebuildable",
+      "source_py": "./audit_l3_evidence_rubric/engine.py"
+    },
+    {
+      "path": "audit_l3_fullchain_external/__pycache__/verify_external.cpython-311.pyc",
+      "bytes": 19744,
+      "kind": "rebuildable",
+      "source_py": "./audit_l3_fullchain_external/verify_external.py"
+    },
+    {
+      "path": "audit_l3_fullchain_external/received/l3_external_audit/__pycache__/criterion.cpython-311.pyc",
+      "bytes": 8886,
+      "kind": "rebuildable",
+      "source_py": "./audit_l3_fullchain_external/received/l3_external_audit/criterion.py"
+    },
+    {
+      "path": "audit_l3_fullchain_external/tests/__pycache__/test_fullchain_external.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 20879,
+      "kind": "rebuildable",
+      "source_py": "./audit_l3_fullchain_external/tests/test_fullchain_external.py"
+    },
+    {
+      "path": "audit_l3_fullchain_external/tests/__pycache__/test_p0_inheritance_holdout.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 26225,
+      "kind": "rebuildable",
+      "source_py": "./audit_l3_fullchain_external/tests/test_p0_inheritance_holdout.py"
+    },
+    {
+      "path": "audit_l3_gap_targeted/__pycache__/verify_verifier.cpython-311.pyc",
+      "bytes": 9924,
+      "kind": "rebuildable",
+      "source_py": "./audit_l3_gap_targeted/verify_verifier.py"
+    },
+    {
+      "path": "audit_l3_gap_targeted/holdout/__pycache__/score.cpython-311.pyc",
+      "bytes": 4690,
+      "kind": "rebuildable",
+      "source_py": "./audit_l3_gap_targeted/holdout/score.py"
+    },
+    {
+      "path": "audit_l3_gap_targeted/received/l3_external_audit_v2/__pycache__/criterion.cpython-311.pyc",
+      "bytes": 9803,
+      "kind": "rebuildable",
+      "source_py": "./audit_l3_gap_targeted/received/l3_external_audit_v2/criterion.py"
+    },
+    {
+      "path": "audit_meta_canary/__pycache__/engine.cpython-311.pyc",
+      "bytes": 11444,
+      "kind": "rebuildable",
+      "source_py": "./audit_meta_canary/engine.py"
+    },
+    {
+      "path": "audit_safari_affect_budget/__pycache__/engine.cpython-311.pyc",
+      "bytes": 8599,
+      "kind": "rebuildable",
+      "source_py": "./audit_safari_affect_budget/engine.py"
+    },
+    {
+      "path": "audit_safari_self_identity/__pycache__/engine.cpython-311.pyc",
+      "bytes": 8032,
+      "kind": "rebuildable",
+      "source_py": "./audit_safari_self_identity/engine.py"
+    },
+    {
+      "path": "audit_shared_start_controlled/__pycache__/engine.cpython-311.pyc",
+      "bytes": 13835,
+      "kind": "rebuildable",
+      "source_py": "./audit_shared_start_controlled/engine.py"
+    },
+    {
+      "path": "audit_stratified_confirmation/designer_P0/__pycache__/judge_P0_by_agent.cpython-311.pyc",
+      "bytes": 3734,
+      "kind": "rebuildable",
+      "source_py": "./audit_stratified_confirmation/designer_P0/judge_P0_by_agent.py"
+    },
+    {
+      "path": "audit_stratified_confirmation/designer_P1/__pycache__/judge_P1_by_agent.cpython-311.pyc",
+      "bytes": 2974,
+      "kind": "rebuildable",
+      "source_py": "./audit_stratified_confirmation/designer_P1/judge_P1_by_agent.py"
+    },
+    {
+      "path": "audit_stratified_confirmation/designer_P2/__pycache__/judge_P2_by_agent.cpython-311.pyc",
+      "bytes": 5222,
+      "kind": "rebuildable",
+      "source_py": "./audit_stratified_confirmation/designer_P2/judge_P2_by_agent.py"
+    },
+    {
+      "path": "audit_task_purpose_injection/designer_P0/__pycache__/judge_P0_by_agent.cpython-311.pyc",
+      "bytes": 4562,
+      "kind": "rebuildable",
+      "source_py": "./audit_task_purpose_injection/designer_P0/judge_P0_by_agent.py"
+    },
+    {
+      "path": "audit_task_purpose_injection/designer_P1/__pycache__/judge_P1_by_agent.cpython-311.pyc",
+      "bytes": 4149,
+      "kind": "rebuildable",
+      "source_py": "./audit_task_purpose_injection/designer_P1/judge_P1_by_agent.py"
+    },
+    {
+      "path": "audit_task_purpose_injection/designer_P2/__pycache__/judge_P2_by_agent.cpython-311.pyc",
+      "bytes": 3066,
+      "kind": "rebuildable",
+      "source_py": "./audit_task_purpose_injection/designer_P2/judge_P2_by_agent.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/_kernel_old_bak.cpython-311.pyc",
+      "bytes": 243945,
+      "kind": "dead_cache",
+      "source_py": null
+    },
+    {
+      "path": "life_kernel/__pycache__/affect_budget.cpython-311.pyc",
+      "bytes": 11881,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/affect_budget.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/authoritative_state.cpython-311.pyc",
+      "bytes": 17002,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/authoritative_state.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/claim_honesty.cpython-311.pyc",
+      "bytes": 15061,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/claim_honesty.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/construct_validity.cpython-311.pyc",
+      "bytes": 7101,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/construct_validity.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/correction_ledger.cpython-311.pyc",
+      "bytes": 15511,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/correction_ledger.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/decision_receipt.cpython-311.pyc",
+      "bytes": 9416,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/decision_receipt.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/diagnose_v3_defects.cpython-311.pyc",
+      "bytes": 8538,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/diagnose_v3_defects.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/diagnose_volition_aas.cpython-311.pyc",
+      "bytes": 4530,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/diagnose_volition_aas.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/independent_sources.cpython-311.pyc",
+      "bytes": 8594,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/independent_sources.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/kernel.cpython-311.pyc",
+      "bytes": 447712,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/kernel.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/memory_governance.cpython-311.pyc",
+      "bytes": 9074,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/memory_governance.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/narrowing_chain.cpython-311.pyc",
+      "bytes": 6955,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/narrowing_chain.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/numeric_honesty.cpython-311.pyc",
+      "bytes": 12229,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/numeric_honesty.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/rx_diagnostic.cpython-311.pyc",
+      "bytes": 8392,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/rx_diagnostic.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/self_identity.cpython-311.pyc",
+      "bytes": 23582,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/self_identity.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/stop_pivot.cpython-311.pyc",
+      "bytes": 6365,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/stop_pivot.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/temporal_anchor.cpython-311.pyc",
+      "bytes": 14862,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/temporal_anchor.py"
+    },
+    {
+      "path": "life_kernel/__pycache__/vanity_selfaudit.cpython-311.pyc",
+      "bytes": 10306,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/vanity_selfaudit.py"
+    },
+    {
+      "path": "life_kernel/pre_patch_gap_convergence/__pycache__/kernel_before_gap_convergence.cpython-311.pyc",
+      "bytes": 314269,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/pre_patch_gap_convergence/kernel_before_gap_convergence.py"
+    },
+    {
+      "path": "life_kernel/pre_patch_heartbeat_window/__pycache__/kernel.py.cpython-311.pyc",
+      "bytes": 243979,
+      "kind": "dead_cache",
+      "source_py": null
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_adjudication_boundary.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 43390,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_adjudication_boundary.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_anthropic_verifier.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 37293,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_anthropic_verifier.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_assurance.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 26632,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_assurance.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_c2_differentiated_judgment.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 27593,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_c2_differentiated_judgment.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_c4_bounded_updatable.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 30732,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_c4_bounded_updatable.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_claim_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 15977,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_claim_honesty.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_closed_loop_validation.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 37239,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_closed_loop_validation.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_decision_digest.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29188,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_decision_digest.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_diffusion_of_responsibility.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 36284,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_diffusion_of_responsibility.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_echo_responsiveness.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 13330,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_echo_responsiveness.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_gap_backfill.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 23709,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_gap_backfill.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_gap_convergence.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 32367,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_gap_convergence.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_gap_schema.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 24995,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_gap_schema.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_heartbeat_echo_hrv.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 28771,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_heartbeat_echo_hrv.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_incremental_retention.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29467,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_incremental_retention.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_independent_sources.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 16098,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_independent_sources.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_life_kernel.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 525800,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_life_kernel.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_memory_footprint.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 36477,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_memory_footprint.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_navigation_calibration.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 37995,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_navigation_calibration.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_numeric_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 14251,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_numeric_honesty.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_promenade_heartbeat.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 17547,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_promenade_heartbeat.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_prompt_probe.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 33806,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_prompt_probe.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_ratio_vs_absolute.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 30477,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_ratio_vs_absolute.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_recognition.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 32034,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_recognition.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_refusal_binding.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 28700,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_refusal_binding.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_restless_promenade.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 21121,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_restless_promenade.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_sensor_unseen.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 35617,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_sensor_unseen.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_staleness_signal.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 27465,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_staleness_signal.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_support_escape.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 32082,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_support_escape.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_verdict_at_birth.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 21715,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_verdict_at_birth.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_verdict_backfill.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 16840,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_verdict_backfill.py"
+    },
+    {
+      "path": "life_kernel/tests/__pycache__/test_write_through.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 33895,
+      "kind": "rebuildable",
+      "source_py": "./life_kernel/tests/test_write_through.py"
+    },
+    {
+      "path": "svagent/__pycache__/__init__.cpython-311.pyc",
+      "bytes": 15544,
+      "kind": "rebuildable",
+      "source_py": "./svagent/__init__.py"
+    },
+    {
+      "path": "svagent/__pycache__/agi_essay_analysis.cpython-311.pyc",
+      "bytes": 13882,
+      "kind": "rebuildable",
+      "source_py": "./svagent/agi_essay_analysis.py"
+    },
+    {
+      "path": "svagent/__pycache__/ai_text_detect.cpython-311.pyc",
+      "bytes": 12401,
+      "kind": "rebuildable",
+      "source_py": "./svagent/ai_text_detect.py"
+    },
+    {
+      "path": "svagent/__pycache__/async_delegation_lifecycle.cpython-311.pyc",
+      "bytes": 9162,
+      "kind": "rebuildable",
+      "source_py": "./svagent/async_delegation_lifecycle.py"
+    },
+    {
+      "path": "svagent/__pycache__/autopoiesis.cpython-311.pyc",
+      "bytes": 39730,
+      "kind": "rebuildable",
+      "source_py": "./svagent/autopoiesis.py"
+    },
+    {
+      "path": "svagent/__pycache__/axiology.cpython-311.pyc",
+      "bytes": 41536,
+      "kind": "rebuildable",
+      "source_py": "./svagent/axiology.py"
+    },
+    {
+      "path": "svagent/__pycache__/backtest_integrity.cpython-311.pyc",
+      "bytes": 8176,
+      "kind": "rebuildable",
+      "source_py": "./svagent/backtest_integrity.py"
+    },
+    {
+      "path": "svagent/__pycache__/benchleaking_honesty.cpython-311.pyc",
+      "bytes": 9140,
+      "kind": "rebuildable",
+      "source_py": "./svagent/benchleaking_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/call_site_integrity.cpython-311.pyc",
+      "bytes": 9812,
+      "kind": "rebuildable",
+      "source_py": "./svagent/call_site_integrity.py"
+    },
+    {
+      "path": "svagent/__pycache__/causal_contribution_honesty.cpython-311.pyc",
+      "bytes": 9155,
+      "kind": "rebuildable",
+      "source_py": "./svagent/causal_contribution_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/cli.cpython-311.pyc",
+      "bytes": 6373,
+      "kind": "rebuildable",
+      "source_py": "./svagent/cli.py"
+    },
+    {
+      "path": "svagent/__pycache__/component_attribution.cpython-311.pyc",
+      "bytes": 7336,
+      "kind": "rebuildable",
+      "source_py": "./svagent/component_attribution.py"
+    },
+    {
+      "path": "svagent/__pycache__/compute_saturation_honesty.cpython-311.pyc",
+      "bytes": 8417,
+      "kind": "rebuildable",
+      "source_py": "./svagent/compute_saturation_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/config_conflict_isolation.cpython-311.pyc",
+      "bytes": 8777,
+      "kind": "rebuildable",
+      "source_py": "./svagent/config_conflict_isolation.py"
+    },
+    {
+      "path": "svagent/__pycache__/context_override_boundary.cpython-311.pyc",
+      "bytes": 8529,
+      "kind": "rebuildable",
+      "source_py": "./svagent/context_override_boundary.py"
+    },
+    {
+      "path": "svagent/__pycache__/core.cpython-311.pyc",
+      "bytes": 8709,
+      "kind": "rebuildable",
+      "source_py": "./svagent/core.py"
+    },
+    {
+      "path": "svagent/__pycache__/criterion_origin_honesty.cpython-311.pyc",
+      "bytes": 9807,
+      "kind": "rebuildable",
+      "source_py": "./svagent/criterion_origin_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/demo.cpython-311.pyc",
+      "bytes": 12780,
+      "kind": "rebuildable",
+      "source_py": "./svagent/demo.py"
+    },
+    {
+      "path": "svagent/__pycache__/disambiguation_gate.cpython-311.pyc",
+      "bytes": 13526,
+      "kind": "rebuildable",
+      "source_py": "./svagent/disambiguation_gate.py"
+    },
+    {
+      "path": "svagent/__pycache__/estimation.cpython-311.pyc",
+      "bytes": 32398,
+      "kind": "rebuildable",
+      "source_py": "./svagent/estimation.py"
+    },
+    {
+      "path": "svagent/__pycache__/evaluation_reliability.cpython-311.pyc",
+      "bytes": 8276,
+      "kind": "rebuildable",
+      "source_py": "./svagent/evaluation_reliability.py"
+    },
+    {
+      "path": "svagent/__pycache__/evaluator_independence_honesty.cpython-311.pyc",
+      "bytes": 9108,
+      "kind": "rebuildable",
+      "source_py": "./svagent/evaluator_independence_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/evidence_chain.cpython-311.pyc",
+      "bytes": 18589,
+      "kind": "rebuildable",
+      "source_py": "./svagent/evidence_chain.py"
+    },
+    {
+      "path": "svagent/__pycache__/evidence_scope.cpython-311.pyc",
+      "bytes": 3324,
+      "kind": "rebuildable",
+      "source_py": "./svagent/evidence_scope.py"
+    },
+    {
+      "path": "svagent/__pycache__/evolution.cpython-311.pyc",
+      "bytes": 22586,
+      "kind": "rebuildable",
+      "source_py": "./svagent/evolution.py"
+    },
+    {
+      "path": "svagent/__pycache__/experiment.cpython-311.pyc",
+      "bytes": 14780,
+      "kind": "rebuildable",
+      "source_py": "./svagent/experiment.py"
+    },
+    {
+      "path": "svagent/__pycache__/failure_causal_identifiability.cpython-311.pyc",
+      "bytes": 9661,
+      "kind": "rebuildable",
+      "source_py": "./svagent/failure_causal_identifiability.py"
+    },
+    {
+      "path": "svagent/__pycache__/finance_audit.cpython-311.pyc",
+      "bytes": 25336,
+      "kind": "rebuildable",
+      "source_py": "./svagent/finance_audit.py"
+    },
+    {
+      "path": "svagent/__pycache__/finance_blind_test.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 30161,
+      "kind": "rebuildable",
+      "source_py": "./svagent/finance_blind_test.py"
+    },
+    {
+      "path": "svagent/__pycache__/finance_fetch.cpython-311.pyc",
+      "bytes": 12754,
+      "kind": "rebuildable",
+      "source_py": "./svagent/finance_fetch.py"
+    },
+    {
+      "path": "svagent/__pycache__/forensic_gates.cpython-311.pyc",
+      "bytes": 15289,
+      "kind": "rebuildable",
+      "source_py": "./svagent/forensic_gates.py"
+    },
+    {
+      "path": "svagent/__pycache__/forensic_gates_ext.cpython-311.pyc",
+      "bytes": 10072,
+      "kind": "rebuildable",
+      "source_py": "./svagent/forensic_gates_ext.py"
+    },
+    {
+      "path": "svagent/__pycache__/forensic_gates_ext10.cpython-311.pyc",
+      "bytes": 11452,
+      "kind": "rebuildable",
+      "source_py": "./svagent/forensic_gates_ext10.py"
+    },
+    {
+      "path": "svagent/__pycache__/forensic_gates_ext2.cpython-311.pyc",
+      "bytes": 11547,
+      "kind": "rebuildable",
+      "source_py": "./svagent/forensic_gates_ext2.py"
+    },
+    {
+      "path": "svagent/__pycache__/forensic_gates_ext3.cpython-311.pyc",
+      "bytes": 11610,
+      "kind": "rebuildable",
+      "source_py": "./svagent/forensic_gates_ext3.py"
+    },
+    {
+      "path": "svagent/__pycache__/forensic_gates_ext4.cpython-311.pyc",
+      "bytes": 11670,
+      "kind": "rebuildable",
+      "source_py": "./svagent/forensic_gates_ext4.py"
+    },
+    {
+      "path": "svagent/__pycache__/forensic_gates_ext5.cpython-311.pyc",
+      "bytes": 11948,
+      "kind": "rebuildable",
+      "source_py": "./svagent/forensic_gates_ext5.py"
+    },
+    {
+      "path": "svagent/__pycache__/forensic_gates_ext6.cpython-311.pyc",
+      "bytes": 12054,
+      "kind": "rebuildable",
+      "source_py": "./svagent/forensic_gates_ext6.py"
+    },
+    {
+      "path": "svagent/__pycache__/forensic_gates_ext7.cpython-311.pyc",
+      "bytes": 11969,
+      "kind": "rebuildable",
+      "source_py": "./svagent/forensic_gates_ext7.py"
+    },
+    {
+      "path": "svagent/__pycache__/forensic_gates_ext8.cpython-311.pyc",
+      "bytes": 12139,
+      "kind": "rebuildable",
+      "source_py": "./svagent/forensic_gates_ext8.py"
+    },
+    {
+      "path": "svagent/__pycache__/forensic_gates_ext9.cpython-311.pyc",
+      "bytes": 11620,
+      "kind": "rebuildable",
+      "source_py": "./svagent/forensic_gates_ext9.py"
+    },
+    {
+      "path": "svagent/__pycache__/forensics.cpython-311.pyc",
+      "bytes": 11017,
+      "kind": "rebuildable",
+      "source_py": "./svagent/forensics.py"
+    },
+    {
+      "path": "svagent/__pycache__/goal_provenance_honesty.cpython-311.pyc",
+      "bytes": 8988,
+      "kind": "rebuildable",
+      "source_py": "./svagent/goal_provenance_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/growth_bridge.cpython-311.pyc",
+      "bytes": 12148,
+      "kind": "rebuildable",
+      "source_py": "./svagent/growth_bridge.py"
+    },
+    {
+      "path": "svagent/__pycache__/handoff.cpython-311.pyc",
+      "bytes": 2042,
+      "kind": "rebuildable",
+      "source_py": "./svagent/handoff.py"
+    },
+    {
+      "path": "svagent/__pycache__/harness.cpython-311.pyc",
+      "bytes": 3060,
+      "kind": "rebuildable",
+      "source_py": "./svagent/harness.py"
+    },
+    {
+      "path": "svagent/__pycache__/improvement_memory.cpython-311.pyc",
+      "bytes": 14604,
+      "kind": "rebuildable",
+      "source_py": "./svagent/improvement_memory.py"
+    },
+    {
+      "path": "svagent/__pycache__/improver_gain_controlled_honesty.cpython-311.pyc",
+      "bytes": 8945,
+      "kind": "rebuildable",
+      "source_py": "./svagent/improver_gain_controlled_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/induction_structure_honesty.cpython-311.pyc",
+      "bytes": 8666,
+      "kind": "rebuildable",
+      "source_py": "./svagent/induction_structure_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/insight.cpython-311.pyc",
+      "bytes": 45959,
+      "kind": "rebuildable",
+      "source_py": "./svagent/insight.py"
+    },
+    {
+      "path": "svagent/__pycache__/interface_contract_honesty.cpython-311.pyc",
+      "bytes": 9751,
+      "kind": "rebuildable",
+      "source_py": "./svagent/interface_contract_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/inventory_cycle.cpython-311.pyc",
+      "bytes": 16157,
+      "kind": "rebuildable",
+      "source_py": "./svagent/inventory_cycle.py"
+    },
+    {
+      "path": "svagent/__pycache__/judgment_robustness.cpython-311.pyc",
+      "bytes": 20183,
+      "kind": "rebuildable",
+      "source_py": "./svagent/judgment_robustness.py"
+    },
+    {
+      "path": "svagent/__pycache__/knowledge_base.cpython-311.pyc",
+      "bytes": 48837,
+      "kind": "rebuildable",
+      "source_py": "./svagent/knowledge_base.py"
+    },
+    {
+      "path": "svagent/__pycache__/lineage_guard.cpython-311.pyc",
+      "bytes": 7404,
+      "kind": "rebuildable",
+      "source_py": "./svagent/lineage_guard.py"
+    },
+    {
+      "path": "svagent/__pycache__/market_efficiency.cpython-311.pyc",
+      "bytes": 20907,
+      "kind": "rebuildable",
+      "source_py": "./svagent/market_efficiency.py"
+    },
+    {
+      "path": "svagent/__pycache__/maturity_evidence_honesty.cpython-311.pyc",
+      "bytes": 8103,
+      "kind": "rebuildable",
+      "source_py": "./svagent/maturity_evidence_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/mechanism.cpython-311.pyc",
+      "bytes": 25032,
+      "kind": "rebuildable",
+      "source_py": "./svagent/mechanism.py"
+    },
+    {
+      "path": "svagent/__pycache__/memory_consolidation_governance_honesty.cpython-311.pyc",
+      "bytes": 9231,
+      "kind": "rebuildable",
+      "source_py": "./svagent/memory_consolidation_governance_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/memory_curation.cpython-311.pyc",
+      "bytes": 7231,
+      "kind": "rebuildable",
+      "source_py": "./svagent/memory_curation.py"
+    },
+    {
+      "path": "svagent/__pycache__/memory_provenance_honesty.cpython-311.pyc",
+      "bytes": 9531,
+      "kind": "rebuildable",
+      "source_py": "./svagent/memory_provenance_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/memory_scope.cpython-311.pyc",
+      "bytes": 8604,
+      "kind": "rebuildable",
+      "source_py": "./svagent/memory_scope.py"
+    },
+    {
+      "path": "svagent/__pycache__/online_repair_honesty.cpython-311.pyc",
+      "bytes": 9116,
+      "kind": "rebuildable",
+      "source_py": "./svagent/online_repair_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/pdca.cpython-311.pyc",
+      "bytes": 35109,
+      "kind": "rebuildable",
+      "source_py": "./svagent/pdca.py"
+    },
+    {
+      "path": "svagent/__pycache__/policy_evolution_grounding.cpython-311.pyc",
+      "bytes": 10234,
+      "kind": "rebuildable",
+      "source_py": "./svagent/policy_evolution_grounding.py"
+    },
+    {
+      "path": "svagent/__pycache__/proactive_authorization.cpython-311.pyc",
+      "bytes": 8842,
+      "kind": "rebuildable",
+      "source_py": "./svagent/proactive_authorization.py"
+    },
+    {
+      "path": "svagent/__pycache__/proof_boundary_honesty.cpython-311.pyc",
+      "bytes": 9417,
+      "kind": "rebuildable",
+      "source_py": "./svagent/proof_boundary_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/redteam_robustness_honesty.cpython-311.pyc",
+      "bytes": 8900,
+      "kind": "rebuildable",
+      "source_py": "./svagent/redteam_robustness_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/retrieval_grounding.cpython-311.pyc",
+      "bytes": 7830,
+      "kind": "rebuildable",
+      "source_py": "./svagent/retrieval_grounding.py"
+    },
+    {
+      "path": "svagent/__pycache__/retro_audit.cpython-311.pyc",
+      "bytes": 13525,
+      "kind": "rebuildable",
+      "source_py": "./svagent/retro_audit.py"
+    },
+    {
+      "path": "svagent/__pycache__/retrospective.cpython-311.pyc",
+      "bytes": 46324,
+      "kind": "rebuildable",
+      "source_py": "./svagent/retrospective.py"
+    },
+    {
+      "path": "svagent/__pycache__/reviewer_evaluation.cpython-311.pyc",
+      "bytes": 8651,
+      "kind": "rebuildable",
+      "source_py": "./svagent/reviewer_evaluation.py"
+    },
+    {
+      "path": "svagent/__pycache__/rsi_claim_audit_honesty.cpython-311.pyc",
+      "bytes": 8897,
+      "kind": "rebuildable",
+      "source_py": "./svagent/rsi_claim_audit_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/rsi_prospect.cpython-311.pyc",
+      "bytes": 18978,
+      "kind": "rebuildable",
+      "source_py": "./svagent/rsi_prospect.py"
+    },
+    {
+      "path": "svagent/__pycache__/rsis_framework_analysis.cpython-311.pyc",
+      "bytes": 14953,
+      "kind": "rebuildable",
+      "source_py": "./svagent/rsis_framework_analysis.py"
+    },
+    {
+      "path": "svagent/__pycache__/scoring_integrity.cpython-311.pyc",
+      "bytes": 6628,
+      "kind": "rebuildable",
+      "source_py": "./svagent/scoring_integrity.py"
+    },
+    {
+      "path": "svagent/__pycache__/selective_supervision_honesty.cpython-311.pyc",
+      "bytes": 10042,
+      "kind": "rebuildable",
+      "source_py": "./svagent/selective_supervision_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/self_evolving.cpython-311.pyc",
+      "bytes": 27915,
+      "kind": "rebuildable",
+      "source_py": "./svagent/self_evolving.py"
+    },
+    {
+      "path": "svagent/__pycache__/self_knowledge_honesty.cpython-311.pyc",
+      "bytes": 10627,
+      "kind": "rebuildable",
+      "source_py": "./svagent/self_knowledge_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/serving_signal_gate.cpython-311.pyc",
+      "bytes": 7679,
+      "kind": "rebuildable",
+      "source_py": "./svagent/serving_signal_gate.py"
+    },
+    {
+      "path": "svagent/__pycache__/session_continuity.cpython-311.pyc",
+      "bytes": 9015,
+      "kind": "rebuildable",
+      "source_py": "./svagent/session_continuity.py"
+    },
+    {
+      "path": "svagent/__pycache__/silent_failure_honesty.cpython-311.pyc",
+      "bytes": 8593,
+      "kind": "rebuildable",
+      "source_py": "./svagent/silent_failure_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/sim_framework_analysis.cpython-311.pyc",
+      "bytes": 12745,
+      "kind": "rebuildable",
+      "source_py": "./svagent/sim_framework_analysis.py"
+    },
+    {
+      "path": "svagent/__pycache__/skill_admission_calibration.cpython-311.pyc",
+      "bytes": 9453,
+      "kind": "rebuildable",
+      "source_py": "./svagent/skill_admission_calibration.py"
+    },
+    {
+      "path": "svagent/__pycache__/skill_lifecycle_honesty.cpython-311.pyc",
+      "bytes": 8404,
+      "kind": "rebuildable",
+      "source_py": "./svagent/skill_lifecycle_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/ssq_randomness.cpython-311.pyc",
+      "bytes": 20215,
+      "kind": "rebuildable",
+      "source_py": "./svagent/ssq_randomness.py"
+    },
+    {
+      "path": "svagent/__pycache__/ssq_retrospective.cpython-311.pyc",
+      "bytes": 8686,
+      "kind": "rebuildable",
+      "source_py": "./svagent/ssq_retrospective.py"
+    },
+    {
+      "path": "svagent/__pycache__/supervision_viability.cpython-311.pyc",
+      "bytes": 10788,
+      "kind": "rebuildable",
+      "source_py": "./svagent/supervision_viability.py"
+    },
+    {
+      "path": "svagent/__pycache__/task_retrospective.cpython-311.pyc",
+      "bytes": 7995,
+      "kind": "rebuildable",
+      "source_py": "./svagent/task_retrospective.py"
+    },
+    {
+      "path": "svagent/__pycache__/telos.cpython-311.pyc",
+      "bytes": 30649,
+      "kind": "rebuildable",
+      "source_py": "./svagent/telos.py"
+    },
+    {
+      "path": "svagent/__pycache__/transfer_holdout.cpython-311.pyc",
+      "bytes": 9254,
+      "kind": "rebuildable",
+      "source_py": "./svagent/transfer_holdout.py"
+    },
+    {
+      "path": "svagent/__pycache__/verification_boundary_honesty.cpython-311.pyc",
+      "bytes": 10805,
+      "kind": "rebuildable",
+      "source_py": "./svagent/verification_boundary_honesty.py"
+    },
+    {
+      "path": "svagent/__pycache__/verifiers.cpython-311.pyc",
+      "bytes": 10618,
+      "kind": "rebuildable",
+      "source_py": "./svagent/verifiers.py"
+    },
+    {
+      "path": "tests/__pycache__/test_admission_ast_audit.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 32704,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_admission_ast_audit.py"
+    },
+    {
+      "path": "tests/__pycache__/test_affect_budget.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 23963,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_affect_budget.py"
+    },
+    {
+      "path": "tests/__pycache__/test_agi_essay_analysis.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 11664,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_agi_essay_analysis.py"
+    },
+    {
+      "path": "tests/__pycache__/test_ai_text_detect.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 8196,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_ai_text_detect.py"
+    },
+    {
+      "path": "tests/__pycache__/test_argument_audit.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 16041,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_argument_audit.py"
+    },
+    {
+      "path": "tests/__pycache__/test_argument_audit_specificity.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 16343,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_argument_audit_specificity.py"
+    },
+    {
+      "path": "tests/__pycache__/test_argument_audit_v2.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 21612,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_argument_audit_v2.py"
+    },
+    {
+      "path": "tests/__pycache__/test_async_delegation_lifecycle.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29542,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_async_delegation_lifecycle.py"
+    },
+    {
+      "path": "tests/__pycache__/test_authoritative_state.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 26147,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_authoritative_state.py"
+    },
+    {
+      "path": "tests/__pycache__/test_axiology.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 19181,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_axiology.py"
+    },
+    {
+      "path": "tests/__pycache__/test_backtest_integrity.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 25981,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_backtest_integrity.py"
+    },
+    {
+      "path": "tests/__pycache__/test_benchleaking_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 37509,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_benchleaking_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_call_site_integrity.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 8654,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_call_site_integrity.py"
+    },
+    {
+      "path": "tests/__pycache__/test_causal_contribution_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29415,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_causal_contribution_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_component_attribution.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 17976,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_component_attribution.py"
+    },
+    {
+      "path": "tests/__pycache__/test_compute_saturation_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29076,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_compute_saturation_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_config_conflict_isolation.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29089,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_config_conflict_isolation.py"
+    },
+    {
+      "path": "tests/__pycache__/test_context_override_boundary.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29120,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_context_override_boundary.py"
+    },
+    {
+      "path": "tests/__pycache__/test_correction_ledger.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29729,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_correction_ledger.py"
+    },
+    {
+      "path": "tests/__pycache__/test_criterion_generalization.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 22476,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_criterion_generalization.py"
+    },
+    {
+      "path": "tests/__pycache__/test_criterion_origin_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 50167,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_criterion_origin_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_criterion_portability.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 27918,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_criterion_portability.py"
+    },
+    {
+      "path": "tests/__pycache__/test_cross_domain_confirm2.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 45835,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_cross_domain_confirm2.py"
+    },
+    {
+      "path": "tests/__pycache__/test_cross_domain_field.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 33544,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_cross_domain_field.py"
+    },
+    {
+      "path": "tests/__pycache__/test_cross_set_vendor2.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 35158,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_cross_set_vendor2.py"
+    },
+    {
+      "path": "tests/__pycache__/test_cross_vendor_designer2.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 32346,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_cross_vendor_designer2.py"
+    },
+    {
+      "path": "tests/__pycache__/test_cross_vendor_evaluator.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 42063,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_cross_vendor_evaluator.py"
+    },
+    {
+      "path": "tests/__pycache__/test_decision_receipt.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 18494,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_decision_receipt.py"
+    },
+    {
+      "path": "tests/__pycache__/test_design_freedom_perturbation.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 21269,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_design_freedom_perturbation.py"
+    },
+    {
+      "path": "tests/__pycache__/test_designer_desteering.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 32433,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_designer_desteering.py"
+    },
+    {
+      "path": "tests/__pycache__/test_disambiguation_gate.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29888,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_disambiguation_gate.py"
+    },
+    {
+      "path": "tests/__pycache__/test_estimation.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 13200,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_estimation.py"
+    },
+    {
+      "path": "tests/__pycache__/test_evaluation_reliability.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 22113,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_evaluation_reliability.py"
+    },
+    {
+      "path": "tests/__pycache__/test_evaluator_independence_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 43101,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_evaluator_independence_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_evidence_chain.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 17830,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_evidence_chain.py"
+    },
+    {
+      "path": "tests/__pycache__/test_evidence_scope_and_cli.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 13609,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_evidence_scope_and_cli.py"
+    },
+    {
+      "path": "tests/__pycache__/test_external_orchestrator.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 18205,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_external_orchestrator.py"
+    },
+    {
+      "path": "tests/__pycache__/test_failure_causal_identifiability.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 30571,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_failure_causal_identifiability.py"
+    },
+    {
+      "path": "tests/__pycache__/test_field_neutral.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 30565,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_field_neutral.py"
+    },
+    {
+      "path": "tests/__pycache__/test_finance_audit.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 17967,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_finance_audit.py"
+    },
+    {
+      "path": "tests/__pycache__/test_finance_blind_test.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 20293,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_finance_blind_test.py"
+    },
+    {
+      "path": "tests/__pycache__/test_finance_construct_validity.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 24121,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_finance_construct_validity.py"
+    },
+    {
+      "path": "tests/__pycache__/test_forensic_gates.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 24676,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_forensic_gates.py"
+    },
+    {
+      "path": "tests/__pycache__/test_forensics.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 15408,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_forensics.py"
+    },
+    {
+      "path": "tests/__pycache__/test_frozen_holdout.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 24385,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_frozen_holdout.py"
+    },
+    {
+      "path": "tests/__pycache__/test_goal_provenance_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 39129,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_goal_provenance_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_growth_bridge.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 18597,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_growth_bridge.py"
+    },
+    {
+      "path": "tests/__pycache__/test_improvement_memory.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 37405,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_improvement_memory.py"
+    },
+    {
+      "path": "tests/__pycache__/test_improver_gain_controlled_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 41318,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_improver_gain_controlled_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_induction_structure_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29155,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_induction_structure_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_insight.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 14572,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_insight.py"
+    },
+    {
+      "path": "tests/__pycache__/test_interface_contract_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 37127,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_interface_contract_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_inventory_cycle.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 7600,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_inventory_cycle.py"
+    },
+    {
+      "path": "tests/__pycache__/test_judgment_robustness.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 33602,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_judgment_robustness.py"
+    },
+    {
+      "path": "tests/__pycache__/test_kb_class_backfill.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 17687,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_kb_class_backfill.py"
+    },
+    {
+      "path": "tests/__pycache__/test_knowledge_base.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 24332,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_knowledge_base.py"
+    },
+    {
+      "path": "tests/__pycache__/test_lineage_guard.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 22380,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_lineage_guard.py"
+    },
+    {
+      "path": "tests/__pycache__/test_market_efficiency.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 6190,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_market_efficiency.py"
+    },
+    {
+      "path": "tests/__pycache__/test_maturity_evidence_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 46092,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_maturity_evidence_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_mechanism.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 12681,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_mechanism.py"
+    },
+    {
+      "path": "tests/__pycache__/test_memory_consolidation_governance_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 37020,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_memory_consolidation_governance_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_memory_curation.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29531,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_memory_curation.py"
+    },
+    {
+      "path": "tests/__pycache__/test_memory_governance.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 19539,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_memory_governance.py"
+    },
+    {
+      "path": "tests/__pycache__/test_memory_provenance_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29958,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_memory_provenance_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_memory_scope.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 27540,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_memory_scope.py"
+    },
+    {
+      "path": "tests/__pycache__/test_meta_canary.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 19487,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_meta_canary.py"
+    },
+    {
+      "path": "tests/__pycache__/test_meta_propositions.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 26336,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_meta_propositions.py"
+    },
+    {
+      "path": "tests/__pycache__/test_narrowing_chain.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 23095,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_narrowing_chain.py"
+    },
+    {
+      "path": "tests/__pycache__/test_online_repair_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 30905,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_online_repair_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_pdca.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 17035,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_pdca.py"
+    },
+    {
+      "path": "tests/__pycache__/test_policy_evolution_grounding.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 30087,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_policy_evolution_grounding.py"
+    },
+    {
+      "path": "tests/__pycache__/test_proactive_authorization.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 35816,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_proactive_authorization.py"
+    },
+    {
+      "path": "tests/__pycache__/test_proof_boundary_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29492,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_proof_boundary_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_redteam_robustness_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 37598,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_redteam_robustness_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_retrieval_grounding.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 26959,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_retrieval_grounding.py"
+    },
+    {
+      "path": "tests/__pycache__/test_retro_audit.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 4464,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_retro_audit.py"
+    },
+    {
+      "path": "tests/__pycache__/test_retrospective.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 22690,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_retrospective.py"
+    },
+    {
+      "path": "tests/__pycache__/test_reviewer_evaluation.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 8406,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_reviewer_evaluation.py"
+    },
+    {
+      "path": "tests/__pycache__/test_rsi_claim_audit_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 37428,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_rsi_claim_audit_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_rsi_prospect.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 14789,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_rsi_prospect.py"
+    },
+    {
+      "path": "tests/__pycache__/test_rsis_framework_analysis.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 17549,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_rsis_framework_analysis.py"
+    },
+    {
+      "path": "tests/__pycache__/test_safari_affect_budget.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29841,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_safari_affect_budget.py"
+    },
+    {
+      "path": "tests/__pycache__/test_safari_self_identity.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 20386,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_safari_self_identity.py"
+    },
+    {
+      "path": "tests/__pycache__/test_scoring_integrity.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 13078,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_scoring_integrity.py"
+    },
+    {
+      "path": "tests/__pycache__/test_selective_supervision_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 50920,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_selective_supervision_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_self_identity.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 31750,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_self_identity.py"
+    },
+    {
+      "path": "tests/__pycache__/test_self_knowledge_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 36290,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_self_knowledge_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_serving_signal_gate.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 23899,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_serving_signal_gate.py"
+    },
+    {
+      "path": "tests/__pycache__/test_session_continuity.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 32337,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_session_continuity.py"
+    },
+    {
+      "path": "tests/__pycache__/test_shared_start_controlled.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 15998,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_shared_start_controlled.py"
+    },
+    {
+      "path": "tests/__pycache__/test_silent_failure_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 36629,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_silent_failure_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_sim_framework_analysis.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 15466,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_sim_framework_analysis.py"
+    },
+    {
+      "path": "tests/__pycache__/test_skill_admission_calibration.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 30947,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_skill_admission_calibration.py"
+    },
+    {
+      "path": "tests/__pycache__/test_skill_lifecycle_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 40791,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_skill_lifecycle_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_ssq_randomness.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 5639,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_ssq_randomness.py"
+    },
+    {
+      "path": "tests/__pycache__/test_stop_pivot.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 28116,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_stop_pivot.py"
+    },
+    {
+      "path": "tests/__pycache__/test_stratified_confirmation.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 37150,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_stratified_confirmation.py"
+    },
+    {
+      "path": "tests/__pycache__/test_supervision_viability.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 36761,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_supervision_viability.py"
+    },
+    {
+      "path": "tests/__pycache__/test_svagent.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 25202,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_svagent.py"
+    },
+    {
+      "path": "tests/__pycache__/test_task_purpose_injection.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 33886,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_task_purpose_injection.py"
+    },
+    {
+      "path": "tests/__pycache__/test_task_retrospective.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 26064,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_task_retrospective.py"
+    },
+    {
+      "path": "tests/__pycache__/test_taxonomy_capability_isomorphism.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 22489,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_taxonomy_capability_isomorphism.py"
+    },
+    {
+      "path": "tests/__pycache__/test_telos.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 17351,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_telos.py"
+    },
+    {
+      "path": "tests/__pycache__/test_temporal_anchor.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 35950,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_temporal_anchor.py"
+    },
+    {
+      "path": "tests/__pycache__/test_transfer_holdout.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 16242,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_transfer_holdout.py"
+    },
+    {
+      "path": "tests/__pycache__/test_vanity_calibration.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 24472,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_vanity_calibration.py"
+    },
+    {
+      "path": "tests/__pycache__/test_vanity_selfaudit.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 29944,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_vanity_selfaudit.py"
+    },
+    {
+      "path": "tests/__pycache__/test_verdict_source_global_scan.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 10104,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_verdict_source_global_scan.py"
+    },
+    {
+      "path": "tests/__pycache__/test_verdict_source_separation.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 16752,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_verdict_source_separation.py"
+    },
+    {
+      "path": "tests/__pycache__/test_verification_boundary_honesty.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 36905,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_verification_boundary_honesty.py"
+    },
+    {
+      "path": "tests/__pycache__/test_write_surface_extended.cpython-311-pytest-9.0.2.pyc",
+      "bytes": 10349,
+      "kind": "rebuildable",
+      "source_py": "./tests/test_write_surface_extended.py"
+    }
+  ]
+}
