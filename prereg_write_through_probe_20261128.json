@@ -1,0 +1,38 @@
+{
+  "prereg_id": "write_through_probe_20261128",
+  "created_at": "2026-11-28T21:18:00+08:00",
+  "trigger": "用户读知乎专栏 p/2109289366338138518《Reasoning-RL折腾几周没效果，最后发现是BF16权重更新的问题》(作者LLLu1,编辑2026-11-26)后裁定A:把'看板全绿但权重没变/同口径对拍在同一舍入下游'做成内核只读自检,不动权威态。更深一手源:Stanford Gao&Gao arXiv 2610.41073 Fair Cast(代码github.com/andrewgcodes/faircast)一手页面核实。",
+  "kernel_sha_before": "d715d6e77126dfc3",
+  "authority_seven_before": {
+    "authoritative_state.json": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "life_kernel/constitution.sha256": "2ad148c79918d65ea4519ccbca05bc0a5f967596fc37a528c28eddd930b953c3",
+    "life_kernel/data/heartbeat_log.jsonl": "ea749f76826dc59c0a964f22a4563e38120c062fb18c9093806395b26110ad35",
+    "life_kernel/data/inbound_inbox.jsonl": "8806b248883658a160aabd4450a20588f01420169894b95df5b6f0de810a34e7",
+    "DECISIONS_20261127.json": "91114955e85a46f7efbf1973733b452629978175ffba5a00d4f68c11ab73465e",
+    "gap_archive_20261128.json": "d73bfef59bda638e50950e9a24dd555ea8d9275591b8511a8ba3a78d0a08a325",
+    "knowledge_base_store.json": "0938b3df748db94036dea332726f300b8e295abf6052c7d00aac57e8be5a4230"
+  },
+  "function": "write_through_probe(write_signals=None)",
+  "insert_before": "takeover_request",
+  "pure_additive": true,
+  "scan_surfaces": {
+    "WRITE_THROUGH": "展示层自称已同步/已就位的读数(如synced_rate=0.9091)必须配权威层实读对偶(authentic_birth_count=2/11 或 权威态verdict实读);无对偶即SHOW_ONLY(看板正常但没写穿)",
+    "CROSS_ROUND_COMPARE": "对拍双方必须跨Round点:一方实读权威态文件,一方探针自报;若注入两条都来自同一show层(同一舍入下游)即SAME_SIDE_COMPARE(掩盖滞后)",
+    "HALF_STEP_NO_WRITE": "只读路径调用前后权威态七件套SHA逐一相同;任何字节变更即HALF_STEP_WRITE(亚阈值写入)"
+  },
+  "classification": ["WRITTEN_THROUGH", "SHOW_ONLY", "SAME_SIDE_COMPARE", "HALF_STEP_WRITE"],
+  "flag_values": ["NO_WRITE_CLAIM", "ALL_WRITTEN_THROUGH", "WRITE_GAP_PRESENT"],
+  "real_expected": "ALL_WRITTEN_THROUGH(诚实零命中:9条展示读数全有权威对偶,对拍跨Round点,权威态零字节变更)",
+  "guards": 12,
+  "g6_expect": {
+    "new_kernel_tests_collected": 344,
+    "baseline_tests_collected": 332,
+    "new_exit": 0, "baseline_exit": 0, "new_failed": 0, "baseline_failed": 0
+  },
+  "honesty": "内核无梯度/权重/浮点舍入/RL训练,不宣称真实BF16死区或训练收益;只做'看板正常≠状态改变+对拍不得在同一舍入下游'结构自检;知乎帖作者本人归因非受控不冒充已证因果;Fair Cast舍入滞后隐式正则特性只作镜像不宣称内核有等价正则;标注非裁定;判定权归用户",
+  "readonly": {
+    "verdict_unchanged": true, "consumed": false, "is_gate_verdict": false,
+    "no_disk_write": true, "no_authority_mutation": true
+  },
+  "boundary": "判定权归用户"
+}

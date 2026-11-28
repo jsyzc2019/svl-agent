@@ -1,0 +1,52 @@
+{
+  "prereg_id": "read_zhihu_bf16_20261128",
+  "read_at": "2026-11-28T21:14:00+08:00",
+  "source_url": "https://zhuanlan.zhihu.com/p/2109289366338138518",
+  "source_type": "个人实战复盘帖（知乎专栏），非同行评议论文",
+  "article": {
+    "title": "Reasoning-RL 折腾了几周没效果，最后发现是 BF16 权重更新的问题",
+    "author": "LLLu1（据授权转载标注；知乎页正文未显式署名，公众号转载注明作者LLLu1已获授权）",
+    "edited_at": "2026-11-26 20:34 浙江",
+    "content_id": "288309392",
+    "primary_text_available": true,
+    "note": "WebFetch 一手抓到全文（含公式、PyTorch 示例、修改前后对照表），非订阅墙"
+  },
+  "core_claim": {
+    "statement": "Reasoning-RL 多轮无收益；训练看板(Rollout/Reward/Loss/Grad Norm/Checkpoint)全部正常，但优化器更新写回 BF16 主权重时被舍入掉，权重几乎没变；改 FP32 主权重+BF16 混合精度计算后有收益。",
+    "author_caveat": "作者本人明确写'不排除其他影响因素''中间排查记录不全面''BF16主权重并非所有配置都无法有效更新'——归因是经验判断非受控因果。",
+    "source_grade": "B（个人复盘，核心数值原理可机械复现，但训练收益因果未受控）"
+  },
+  "mechanical_verification": {
+    "formula": "ULP(w)=2^(floor(log2|w|)-7)，BF16 8位指数+7位显式尾数",
+    "my_reproduction": "torch 2.10.0+cu128 实跑：w=0.02 的 BF16 网格值=0.02001953125，ULP=1.220703125e-4，半ULP=6.103515625e-05；1e-6/半ULP=0.0164（约61倍小于半ULP）",
+    "pytorch_demo_reproduced": "w_bf16 初始0.02001953125，100次add_(-1e-6)后仍0.02001953125（完全没变）；w_fp32同样100步累计-0.000100024；fp32→bf16=0.0198974609375（体现累积）",
+    "batch_check": "10万个w=0.02、step=1e-6，越过半ULP比例=0.0",
+    "verdict": "文章核心数值原理一手机械复现通过；其PyTorch示例结论成立。"
+  },
+  "deeper_primary_source": {
+    "paper_title": "bf16 Rounding Silently Discards Most RL Policy Updates: A Hidden Training-Inference Mismatch and an Unbiased One-Line Fix",
+    "authors": ["Andrew Gao (Stanford)", "William Gao (Stanford)"],
+    "arxiv_id": "2610.41073",
+    "arxiv_html": "https://arxiv.org/html/2610.41073",
+    "code": "https://github.com/andrewgcodes/faircast",
+    "verified_via": "WebSearch 命中 arxiv.org/html 与 ar5iv.labs.arxiv.org 一手页面，非仅博客转述",
+    "source_grade": "A（一手预印本页面）",
+    "key_numbers": {
+      "served_weights_changed_per_step_qwen3_1_7b": "0.4–0.5%",
+      "policy_lag_steps": "50–150 步",
+      "grid_spacing": "u≈|w|/128, 半ULP≈|w|/256",
+      "faircast_results": "25 组配对(0.6B–4B,AdamW/Muon)：胜18/平6/负1，均增益6.1分；zebra 0.57 vs RTN 0.33",
+      "cost": "每次1.7B导出 22–38ms，无新增超参",
+      "caveat": "舍入滞后有隐式正则作用，两配置移除后反变差，需显式补回 lag"
+    },
+    "diagnostic_blindspot": "现有 mismatch 修正比较的都是同一舍入下游的两个副本，比值≈1看着对齐，fp32主权重 vs served副本的红色比值从未形成——与内核'同口径对拍只在两处下游对拍、中间被Round截断不可见'同构。"
+  },
+  "kernel_mirror": {
+    "sharpest_mirror": "RL训练'看板全绿但权重没变'≡内核'探针/SHA/账本全在动但权威态verdict/锚点可能没变'。判据必须越过Show层直测Write层：不是看Loss/Grad Norm/心跳/探针数，而是看权重字节/权威态是否真被改写。",
+    "half_ulp_gate": "文章半ULP死区≡内核'半步判据'：单次只读探针不得在权威态留下半个字节变更；一切看起来的'更新'若<可观测阈值应判NOT_WRITTEN。",
+    "same_round_downstream": "Fair Cast'两个下游副本对拍≈1掩盖滞后'≡内核G6同口径对拍必须跨Round点(权威态实读 vs 探针自报)，不能只比两处都来自同一显示层的值。",
+    "honesty_boundary": "内核无梯度/权重/浮点舍入/RL训练，不宣称真实BF16死区或训练收益；只做'看板正常≠状态改变/同口径对拍不得在同一舍入下游'的结构自检镜；知乎帖作者本人归因非受控，不冒充已证因果。"
+  },
+  "excluded": [],
+  "rights": "判定权归用户"
+}

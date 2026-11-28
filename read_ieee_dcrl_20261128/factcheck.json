@@ -1,0 +1,51 @@
+{
+  "task": "回源核查 Du/Xu/Li/Jin DCRL 类别增量遥感语义分割论文",
+  "date": "2026-11-28",
+  "user_citation_check": {
+    "status": "VERIFIED",
+    "detail": "用户给出的标题、4位作者顺序(Yuanmin Du, Chunyan Xu, Yi-Chang Li, Zhong Jin)与 IEEE Xplore + Crossref 一手完全一致; 用户未给DOI/期刊/年份,由回源补齐"
+  },
+  "primary_sources": {
+    "ieee_xplore": "https://ieeexplore.ieee.org/document/11520879 (一手HTML: 标题/4作者/期刊TGRS Vol64/Article 5622015/发表15 May 2026/DOI/完整摘要; 全文PDF需订阅 'You do not have access to this PDF')",
+    "doi": "10.1109/TGRS.2026.3693920",
+    "crossref": "api.crossref.org/works/10.1109/TGRS.2026.3693920 — type=journal-article, container=IEEE Transactions on Geoscience and Remote Sensing, created=2026-05-15T19:53:34Z, published=2026, author_count=4, article-number=5622015-5622015",
+    "fulltext_status": "IEEE Xplore 全文PDF订阅墙挡住,静态页仅摘要+章节标题(I. Introduction/II. Related Works/III. Methods/IV. Experiments/V. Conclusion)+References不可用; 无arXiv可读全文命中; 方法细节/实验数字/图表无法一手逐字核对,诚实降级: 只据摘要原文,不编造数字"
+  },
+  "author_affiliations_crossref": {
+    "Yuanmin Du": "Nanjing University of Science and Technology",
+    "Chunyan Xu": "Nanjing University of Science and Technology",
+    "Yi-Chang Li": "China University of Petroleum-Beijing at Karamay",
+    "Zhong Jin": "Nanjing University of Science and Technology"
+  },
+  "source_quality": "IEEE TGRS(遥感领域主流SCI期刊,IEEE汇刊),4作者含南京理工/中石油大学; 来源等级A(高可信期刊),但无全文一手,方法机制仅摘要级; 与The Debrief低可信综述不同,既有 Nature Commun(高可信+摘要级)同类分层",
+  "abstract_primary": [
+    "CISS in remote sensing images: 让模型逐步适应新类别而不丢失分割旧类别的能力",
+    "现有CISS框架常困于旧类灾难性遗忘(CF)与新类特征判别不足",
+    "提出 DCRL (dual-consistency representation learning): 强制 interimage consistency(图像间一致性) + categorywise consistency(类别级一致性) 提升特征稳定性、防遗忘",
+    "interimage pixel consistency learning module: 在编码过程中促进类内紧凑(intraclass compactness)与类间可分离(interclass separability),强化细粒度特征表示",
+    "categorywise prototype refinement mechanism: 动态存储并更新新旧类别的代表性特征原型,确保跨增量阶段稳健一致的类别表示",
+    "三个遥感分割基准: Aeroscapes, WHDLD, Mars-seg; 声称显著增强新知识获取并有效保持旧类分割性能"
+  ],
+  "name_collision_excluded": [
+    {
+      "trap": "DCRL 缩写撞车",
+      "hit": "浙大+蚂蚁 arXiv 2606.03577《宽基线跨视角空间推理 / ReasonMatch-Bench》也用 DCRL(强化学习式训练),腾讯新闻 2026-06-10 报道",
+      "verdict": "不同论文: 机构(浙大/蚂蚁 vs 南理工/中石油)、任务(跨视角匹配 vs 遥感CISS)、arXiv编号全不同; 同名缩写不可张冠李戴,排除"
+    },
+    {
+      "trap": "Dual Consistency 近名",
+      "hit": "DC-SAM《In-Context Segment Anything via Dual Consistency》arXiv 2504.12080, IEEE TPAMI, 北邮+南洋理工",
+      "verdict": "不同论文: '双一致性'近名但任务(SAM上下文分割 vs 遥感CISS)、机构全不同,排除"
+    }
+  ],
+  "kernel_mirror_candidate": {
+    "sharpest": "类别增量 = 内核每读一篇论文/文章就纯新增一个只读探针(§4S编号S1→S87),但旧探针/旧判定/权威态必须不被新探针覆盖——即内核的'灾难性遗忘'同构: 新增不能洗白既有锚点",
+    "mapping": {
+      "旧类不被遗忘": "旧判定锚点(D1/D2/D3 user_verdict)+权威态verdict=GAP_INCONCLUSIVE+已归档缺口不洗白,新增探针一律verdict_unchanged/consumed=false",
+      "类内紧凑+类间可分离": "recognition_probe四类锚点分类(RECOGNIZED_USER/ARCHIVE/DECLARED vs UNRECOGNIZED_NOISE)——判定载体与噪音的可分离性",
+      "类别原型动态存储更新": "verdict_at_birth的fabrication_warning+synced_rate/coverage vs authentic_birth_rate/reliability对偶——原型的'看着更新'与'真就位'分离"
+    },
+    "honest_boundary": "内核非神经网络、无梯度、无遥感像素、无真实类别原型; 只做'增量轮次中旧知识锚点是否被覆盖'的结构自检镜,不宣称真实持续学习/抗遗忘能力; 全文PDF未一手核对,方法机制仅摘要级,不编造实验数字"
+  },
+  "honest_boundary": "一手确认: 标题/作者/机构/期刊/卷号/文章号/日期/DOI/完整摘要/三个数据集名称; 全文PDF订阅墙未核对,无全文数字/图表/公式; DCRL与DC-SAM同名近名论文已排除不混用。判定权归用户。"
+}

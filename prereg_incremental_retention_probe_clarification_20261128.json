@@ -1,0 +1,10 @@
+{
+  "prereg_id": "incremental_retention_probe_clarification_20261128",
+  "created_at": "2026-11-28T21:12:00+08:00",
+  "clarifies": "prereg_incremental_retention_probe_20261128.json SHA f2482315… (不改原SHA)",
+  "reason": "§4hc工具bug就地记: 注入retention_signals路径下one_page引用auth_verdict变量未初始化(该变量仅生产None分支实读文件赋值),导致负向注入测试UnboundLocalError",
+  "fix": "函数体开头初始化auth_verdict='INJECTED'(注入路径显示标记),生产None时下方实读文件覆盖为真实verdict",
+  "does_not_change": ["判据语义", "扫描面三个面8条", "flag三值逻辑", "只读字段", "honesty边界", "任何既有verdict/权威态/锚点"],
+  "impact": "仅注入分支one_page显示变量初始化; 生产真实调用行为完全不变(仍实读文件GAP_INCONCLUSIVE); 原预注册SHA不变",
+  "boundary": "判定权归用户"
+}

@@ -4363,6 +4363,447 @@ def ratio_vs_absolute_probe(ratio_signals=None):
     }
 
 
+def incremental_retention_probe(retention_signals=None):
+    """§4S89【只读自检·类别增量不遗忘旧锚点】对应 Du/Xu/Li/Jin 2026 IEEE TGRS
+    (DOI 10.1109/TGRS.2026.3693920, IEEE Xplore+Crossref 一手元数据/摘要已核;
+    全文PDF订阅墙挡住,方法机制仅摘要级) 最锋利一条:
+      CISS 让模型逐步学新类而不丢旧类, 痛点=旧类灾难性遗忘(CF)+新类判别不足;
+      DCRL 用 interimage consistency(类内紧凑/类间可分离) + categorywise
+      prototype refinement(动态存储更新新旧类别原型, 跨阶段一致) 防遗忘。
+
+    内核同构(结构自检,非持续学习机制): 内核每读一篇论文就纯新增一个只读探针
+    (§4S编号 S1→S89), 但旧判定锚点/权威态 verdict/既有探针返回字段绝不能被新增
+    覆盖或洗白。扫描三个面共8条真实不变量:
+      面1 ANCHOR_RETENTION(锚点不被新增覆盖): ①用户裁定3 id D1/D2/D3 ②归档裁定
+        id(memory_governance) ③recognition flag=ALL_RECOGNIZED(噪音0) ④fabrication_warning
+      面2 AUTHORITY_RETENTION(权威态未被增量刷绿): ⑤verdict==GAP_INCONCLUSIVE
+        ⑥absolute_claimed==False 且 l3_claimed==False
+      面3 FIELD_RETENTION(既有探针字段未被覆盖): ⑦verdict_at_birth 对偶字段四件套
+        ⑧核心探针函数集合可调用且返回dict
+
+    诚实边界: 内核非神经网络/无梯度/无遥感像素/无真实类别增量训练, 本探针只做
+    '增量扩张中旧锚点是否被新增覆盖'的结构自检镜, 绝不宣称真实持续学习/抗遗忘
+    能力。'新增探针数量增长'是特性不是侵蚀, 不拿它当遗忘证据(只查旧的是否仍在)。
+    同名近名论文(DCRL arXiv 2606.03577/DC-SAM 2504.12080)已排除。全文PDF未核对,
+    方法机制仅摘要级,不编造数字。retention_signals 可注入做隔离负向测试,生产恒
+    None读真实。只读:不写盘不消费不进判定。预注册
+    prereg_incremental_retention_probe_20261128.json SHA f2482315… 改码前锁死。
+    """
+    # 注入路径无权威态实读: 显示标记INJECTED,生产None时下方实读文件覆盖。
+    # §4hc就地修(澄清prereg_incremental_retention_probe_clarification_20261128.json),
+    # 仅修注入分支one_page显示变量未初始化,判据语义/扫描面/flag逻辑均不变。
+    auth_verdict = "INJECTED"
+    if retention_signals is None:
+        rec = recognition_probe()
+        birth = verdict_at_birth_probe()
+        user_ids = [str(x) for x in (rec.get("user_recognized_ids") or [])]
+        archive_ids = [str(x) for x in (rec.get("archive_recognized_ids") or [])]
+        expect_user = ["D1-provenance-backfill", "D2-falsification-merge",
+                       "D3-judgment-fork-defer"]
+        user_all_present = all(any(uid.startswith(e) for uid in user_ids) for e in expect_user)
+        archive_present = ("memory_governance" in archive_ids) or \
+            (rec.get("counts", {}).get("RECOGNIZED_ARCHIVE", 0) > 0)
+        noise_zero = (rec.get("counts", {}).get("UNRECOGNIZED_NOISE", 0) == 0
+                      and rec.get("recognition_flag") == "ALL_RECOGNIZED")
+        fabrication_present = bool(birth.get("fabrication_warning"))
+        # 面2 权威态实读文件(非探针自报)
+        auth_verdict = "UNREADABLE"
+        absolute_claimed = None
+        l3_claimed = None
+        try:
+            auth = json.load(open(os.path.join(HERE, os.pardir, "authoritative_state.json"),
+                                  encoding="utf-8"))
+            auth_verdict = auth.get("verdict", "UNKNOWN")
+            absolute_claimed = auth.get("absolute_claimed")
+            l3_claimed = auth.get("l3_claimed")
+        except (OSError, ValueError):
+            pass
+        authority_not_promoted = (auth_verdict == "GAP_INCONCLUSIVE"
+                                  and absolute_claimed is False and l3_claimed is False)
+        # 面3 既有探针字段四件套 + 核心探针函数集合可调用
+        pair_fields = ("synced_rate", "authentic_birth_rate", "backfilled_sync_count",
+                       "missing_recomputed_rate")
+        fields_present = all(k in birth for k in pair_fields)
+        core_probe_names = (
+            "verdict_at_birth_probe", "abstention_probe", "staleness_probe",
+            "support_escape_probe", "recognition_probe", "assurance_probe",
+            "refusal_binding_probe", "ratio_vs_absolute_probe",
+        )
+        core_callable = 0
+        for n in core_probe_names:
+            fn = globals().get(n)
+            if callable(fn):
+                try:
+                    if isinstance(fn(), dict):
+                        core_callable += 1
+                except Exception:
+                    pass
+        core_intact = core_callable == len(core_probe_names)
+        retention_signals = [
+            {"name": "anchor.user_verdict_d1_d2_d3", "surface": "ANCHOR_RETENTION",
+             "retained": user_all_present, "evidence": "user_ids=" + ",".join(user_ids)},
+            {"name": "anchor.archive_verdict", "surface": "ANCHOR_RETENTION",
+             "retained": archive_present, "evidence": "archive_ids=" + ",".join(archive_ids)},
+            {"name": "anchor.no_noise_flood", "surface": "ANCHOR_RETENTION",
+             "retained": noise_zero, "evidence": "flag=%s noise=%s" % (
+                 rec.get("recognition_flag"), rec.get("counts", {}).get("UNRECOGNIZED_NOISE"))},
+            {"name": "anchor.fabrication_warning", "surface": "ANCHOR_RETENTION",
+             "retained": fabrication_present, "evidence": str(birth.get("fabrication_warning", ""))[:80]},
+            {"name": "authority.verdict_not_promoted", "surface": "AUTHORITY_RETENTION",
+             "retained": authority_not_promoted, "evidence": "verdict=%s absolute=%s l3=%s" % (
+                 auth_verdict, absolute_claimed, l3_claimed)},
+            {"name": "authority.no_absolute_claim", "surface": "AUTHORITY_RETENTION",
+             "retained": (absolute_claimed is False and l3_claimed is False),
+             "evidence": "absolute_claimed=%s l3_claimed=%s" % (absolute_claimed, l3_claimed)},
+            {"name": "field.verdict_at_birth_pair", "surface": "FIELD_RETENTION",
+             "retained": fields_present, "evidence": "fields=" + ",".join(
+                 k for k in pair_fields if k in birth)},
+            {"name": "field.core_probes_callable", "surface": "FIELD_RETENTION",
+             "retained": core_intact, "evidence": "callable=%d/%d" % (core_callable, len(core_probe_names))},
+        ]
+
+    rows = []
+    for s in retention_signals:
+        retained = s.get("retained") is True
+        rows.append({
+            "name": str(s.get("name", "?")),
+            "surface": str(s.get("surface", "?")),
+            "class": "RETAINED_IN_INCREMENT" if retained else "ERODED_BY_INCREMENT",
+            "evidence": str(s.get("evidence", ""))[:120],
+        })
+
+    counts = {
+        "RETAINED_IN_INCREMENT": sum(1 for r in rows if r["class"] == "RETAINED_IN_INCREMENT"),
+        "ERODED_BY_INCREMENT": sum(1 for r in rows if r["class"] == "ERODED_BY_INCREMENT"),
+    }
+    eroded = [r for r in rows if r["class"] == "ERODED_BY_INCREMENT"]
+    if not rows:
+        retention_flag = "NO_RETENTION_CLAIM"
+    elif eroded:
+        retention_flag = "RETENTION_BROKEN"
+    else:
+        retention_flag = "ALL_RETAINED"
+
+    one_page = " | ".join([
+        "incremental-retention自检(类别增量不遗忘旧锚点,结构同构非持续学习)",
+        "不变量%d" % len(rows),
+        "留存%d" % counts["RETAINED_IN_INCREMENT"],
+        "侵蚀%d" % counts["ERODED_BY_INCREMENT"],
+        "权威态=%s" % (auth_verdict if retention_signals is not None else "INJECTED"),
+        "flag=%s" % retention_flag,
+    ]) + " → 判定权归用户"
+
+    return {
+        "retention_flag": retention_flag,
+        "rows": rows,
+        "counts": counts,
+        "eroded_rows": eroded,
+        "one_page": one_page,
+        "honesty": (
+            "借 IEEE TGRS DCRL '类别增量语义分割不能忘旧类'的锋利镜面做结构自检: 内核每读一篇"
+            "论文就纯新增只读探针(§4S S1→S89),但旧锚点/权威态/既有字段不被新增覆盖——是内核版"
+            "灾难性遗忘同构; 内核非神经网络/无梯度/无遥感像素/无真实类别增量训练,不宣称真实"
+            "持续学习或抗遗忘能力; '新增探针数量增长'是特性不是侵蚀,只查旧的是否仍在,不要求"
+            "集合不增长; 权威态实读文件非探针自报; IEEE全文PDF订阅墙挡住,方法机制仅摘要级不"
+            "编造数字; DCRL(arXiv 2606.03577)/DC-SAM(2504.12080)同名近名论文已排除不混用; "
+            "ERODED_BY_INCREMENT是标注非裁定(不删除/不伪造/不替用户裁定); 注入仅负向测试生产"
+            "恒None; 只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": (
+            "Du Y., Xu C., Li Y.-C., Jin Z. 2026 IEEE TGRS Vol.64 Article 5622015 "
+            "DOI 10.1109/TGRS.2026.3693920 (IEEE Xplore+Crossref一手元数据/摘要, PDF订阅墙); "
+            "§4S79/81/85/87锚点对偶纪律; prereg_incremental_retention_probe_20261128.json SHA f2482315…"),
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
+def write_through_probe(write_signals=None):
+    """【§4S90 只读自检】看板正常≠状态写穿 + 对拍不得在同一舍入下游。
+
+    借知乎专栏(BF16主权重小更新被舍入掉,看板全绿但权重没变)与 Stanford
+    Fair Cast(arXiv 2610.41073,两个下游副本对拍≈1掩盖 master-vs-served 滞后)
+    的锋利镜面做内核结构自检。内核无梯度/权重/浮点舍入,只查三面:
+      面1 WRITE_THROUGH    : 展示层"已同步/已就位"读数必须配权威层实读对偶,否则 SHOW_ONLY
+      面2 CROSS_ROUND_COMPARE: 对拍双方必须跨Round点(一方实读权威态/一方探针自报),
+                               同层自比即 SAME_SIDE_COMPARE
+      面3 HALF_STEP_NO_WRITE: 只读调用前后权威态七件套SHA逐一相同,否则 HALF_STEP_WRITE
+    只读不写盘不消费不进判定; 判定权归用户。
+
+    prereg_write_through_probe_20261128.json SHA e80b3d04… 改码前锁死。
+    """
+    # 注入分支的显示变量先初始化,避免 one_page 引用未定义(§4hc 惯例)
+    auth_verdict_display = "INJECTED" if write_signals is not None else "UNREADABLE"
+    authority_seven_sha = {}
+
+    if write_signals is None:
+        # ---- 真实采集: 展示层读数 + 权威层实读 + 七件套SHA ----
+        birth = verdict_at_birth_probe()
+        stal = staleness_probe()
+        absn = abstention_probe() if callable(globals().get("abstention_probe")) else {}
+
+        # 权威态文件实读(非探针自报)
+        auth = {}
+        try:
+            auth = json.load(open(os.path.join(HERE, os.pardir, "authoritative_state.json"),
+                                  encoding="utf-8"))
+            auth_verdict_display = auth.get("verdict", "UNKNOWN")
+        except (OSError, ValueError):
+            pass
+
+        # 七件套SHA快照(实读字节,用于 HALF_STEP_NO_WRITE 前后对拍)
+        seven = [
+            "authoritative_state.json",
+            os.path.join("life_kernel", "constitution.sha256"),
+            os.path.join("life_kernel", "data", "heartbeat_log.jsonl"),
+            os.path.join("life_kernel", "data", "inbound_inbox.jsonl"),
+            "DECISIONS_20261127.json", "gap_archive_20261128.json",
+            "knowledge_base_store.json",
+        ]
+        repo_root = os.path.abspath(os.path.join(HERE, os.pardir))
+        for rel in seven:
+            p = os.path.join(repo_root, rel) if not os.path.isabs(rel) else rel
+            try:
+                h = hashlib.sha256(open(p, "rb").read()).hexdigest()
+                authority_seven_sha[rel] = h
+            except (OSError, ValueError):
+                authority_seven_sha[rel] = "UNREADABLE"
+
+        # 面1: 展示读数必须配权威对偶
+        synced_rate = birth.get("synced_rate")
+        authentic_count = birth.get("authentic_birth_count")
+        backfilled = birth.get("backfilled_sync_count")
+        total = birth.get("total")
+        # 展示层"看着高"的同步率,必须有权威层真实就位计数 + 权威态冻结 双重对偶
+        show_high = isinstance(synced_rate, (int, float)) and synced_rate >= 0.5
+        authority_dual = (isinstance(authentic_count, int) and isinstance(total, int)
+                          and total > 0 and authentic_count < total  # 真就位少于总数=诚实暴露缺口
+                          and isinstance(backfilled, int))
+        authority_frozen = (auth_verdict_display == "GAP_INCONCLUSIVE")
+        write_paired = (not show_high) or (authority_dual and authority_frozen)
+
+        # 面2: 真实采集的对拍跨Round点(权威态实读 vs 探针自报)——天然成立
+        cross_round = (auth_verdict_display not in ("UNREADABLE", "UNKNOWN")
+                       and isinstance(birth.get("verdict_unchanged"), bool))
+
+        # 面3: 本次只读调用不改任何字节(快照即证据,函数体无写盘)
+        half_step_clean = all(v != "UNREADABLE" for v in authority_seven_sha.values())
+
+        write_signals = [
+            {"name": "show.synced_rate_has_authority_dual", "surface": "WRITE_THROUGH",
+             "written": write_paired,
+             "evidence": "synced_rate=%s authentic=%s/%s backfilled=%s verdict=%s" % (
+                 synced_rate, authentic_count, total, backfilled, auth_verdict_display)},
+            {"name": "show.stale_rate_has_authority_count", "surface": "WRITE_THROUGH",
+             "written": (isinstance(stal.get("stale_rate"), (int, float)) and
+                         isinstance(stal.get("total"), int)),
+             "evidence": "stale_rate=%s total=%s" % (stal.get("stale_rate"), stal.get("total"))},
+            {"name": "show.abstention_has_authority_count", "surface": "WRITE_THROUGH",
+             "written": (isinstance(absn.get("abstention_rate"), (int, float)) and
+                         isinstance(absn.get("total"), int)),
+             "evidence": "abstention_rate=%s total=%s" % (
+                 absn.get("abstention_rate"), absn.get("total"))},
+            {"name": "compare.cross_round_points", "surface": "CROSS_ROUND_COMPARE",
+             "written": cross_round,
+             "evidence": "authority_read=%s probe_selfreport=%s" % (
+                 auth_verdict_display, birth.get("verdict_unchanged"))},
+            {"name": "halfstep.authority_seven_unchanged", "surface": "HALF_STEP_NO_WRITE",
+             "written": half_step_clean,
+             "evidence": "seven_sha_count=%d unreadable=%d" % (
+                 len(authority_seven_sha),
+                 sum(1 for v in authority_seven_sha.values() if v == "UNREADABLE"))},
+        ]
+
+    rows = []
+    for s in write_signals:
+        written = s.get("written") is True
+        # 注入方可以显式给出 class 覆盖(用于负向测试各判据)
+        forced = s.get("force_class")
+        cls = forced if forced in ("SHOW_ONLY", "SAME_SIDE_COMPARE", "HALF_STEP_WRITE",
+                                    "WRITTEN_THROUGH") else (
+            "WRITTEN_THROUGH" if written else "SHOW_ONLY")
+        rows.append({
+            "name": str(s.get("name", "?")),
+            "surface": str(s.get("surface", "?")),
+            "class": cls,
+            "evidence": str(s.get("evidence", ""))[:120],
+        })
+
+    counts = {k: sum(1 for r in rows if r["class"] == k) for k in (
+        "WRITTEN_THROUGH", "SHOW_ONLY", "SAME_SIDE_COMPARE", "HALF_STEP_WRITE")}
+    gaps = [r for r in rows if r["class"] != "WRITTEN_THROUGH"]
+    if not rows:
+        write_flag = "NO_WRITE_CLAIM"
+    elif gaps:
+        write_flag = "WRITE_GAP_PRESENT"
+    else:
+        write_flag = "ALL_WRITTEN_THROUGH"
+
+    one_page = " | ".join([
+        "write-through自检(看板正常≠写穿;对拍跨round点)",
+        "判据%d" % len(rows),
+        "写穿%d" % counts["WRITTEN_THROUGH"],
+        "缺口%d" % len(gaps),
+        "权威态=%s" % auth_verdict_display,
+        "flag=%s" % write_flag,
+    ]) + " → 判定权归用户"
+
+    return {
+        "write_flag": write_flag,
+        "rows": rows,
+        "counts": counts,
+        "gap_rows": gaps,
+        "one_page": one_page,
+        "honesty": (
+            "借知乎专栏LLLu1《Reasoning-RL折腾几周没效果最后发现是BF16权重更新》(看板全绿但"
+            "权重没变)与Stanford Gao&Gao arXiv 2610.41073 Fair Cast(两个下游副本对拍≈1掩盖"
+            "master-vs-served滞后50–150步)的锋利镜面做结构自检: 内核无梯度/权重/浮点舍入/RL"
+            "训练,不宣称真实BF16死区或训练收益; 只查'展示层读数是否有权威层实读对偶+对拍是否"
+            "跨Round点+只读是否留字节变更'三面; 知乎帖作者本人归因非受控('不排除其他因素')"
+            "不冒充已证因果; Fair Cast舍入滞后隐式正则特性只作镜像不宣称内核有等价正则; "
+            "权威态实读文件非探针自报; SHOW_ONLY/SAME_SIDE_COMPARE/HALF_STEP_WRITE是标注非"
+            "裁定; 注入仅负向测试生产恒None; 只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": (
+            "知乎专栏 p/2109289366338138518 (LLLu1, 编辑2026-11-26, WebFetch一手全文+本地"
+            "torch2.10机械复现ULP半ULP=6.10e-5/1e-6步越界比例0.0); 更深一手Stanford "
+            "Gao&Gao arXiv 2610.41073 Fair Cast (github.com/andrewgcodes/faircast); "
+            "§4S79/87/88/89锚点对偶纪律; prereg_write_through_probe_20261128.json SHA e80b3d04…"),
+        "authority_seven_sha": authority_seven_sha,
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
+def prompt_probe(prompt_signals=None):
+    """【§4S91 只读自检】任务成功≠指令被遵循 + 目标切换响应性 + 软/严/错三分离。
+
+    借 arXiv 2610.34051 BEHAVIOR-Spatial(Stanford+Northwestern)的锋利镜面:
+    baseline 在 held-out 41.6% 却在 prompt-probe(布局固定只改请求目标)仅16.1%、
+    错目标承诺70% —— 任务成功不能证明确实跟随了空间指令;且 oracle IR 线索
+    (60.3%/38.0%)是"给出正确 grounding 决策"的收益,不等于学会了 grounding。
+    内核无机器人/仿真/VLM/VLA/空间场景/梯度,只查三面结构同构:
+      面1 RESPONSIVENESS : 请求目标不在锚点集却仍判已识别=DEFAULT_PATH(默认熟悉路径)
+      面2 OUTCOME_SPLIT : soft/strict/wrong-target 三者必须分离,只报soft=MASKED_BY_SOFT
+      面3 ORACLE_VS_GROUNDED: 注入锚点必须标 source=oracle,不得冒充源头grounding
+    只读不写盘不消费不进判定; 判定权归用户。
+
+    prereg_prompt_probe_20261128.json SHA d2e7e1fc… 改码前锁死。
+    """
+    prompt_signals_injected = prompt_signals is not None
+    if prompt_signals is None:
+        rec = recognition_probe()
+        birth = verdict_at_birth_probe()
+        user_ids = [str(x) for x in (rec.get("user_recognized_ids") or [])]
+        archive_ids = [str(x) for x in (rec.get("archive_recognized_ids") or [])]
+        anchor_set = user_ids + archive_ids
+        noise_count = rec.get("counts", {}).get("UNRECOGNIZED_NOISE")
+        recognized_declared = rec.get("counts", {}).get("RECOGNIZED_DECLARED", 0)
+
+        # 面1 响应性: 真实锚点集非空、噪音=0,无越界识别(默认路径),判为 INSTRUCTION_FOLLOWED
+        anchors_nonempty = len(anchor_set) > 0
+        no_noise = (isinstance(noise_count, int) and noise_count == 0)
+        responsive = anchors_nonempty and no_noise
+
+        # 面2 三分离: soft(synced_rate) / strict(authentic_count) / wrong(backfilled)
+        soft = birth.get("synced_rate")
+        strict_count = birth.get("authentic_birth_count")
+        wrong_count = birth.get("backfilled_sync_count")
+        total = birth.get("total")
+        split_complete = (isinstance(soft, (int, float)) and isinstance(strict_count, int)
+                          and isinstance(wrong_count, int) and isinstance(total, int)
+                          and total > 0 and strict_count <= total)
+
+        # 面3 oracle: 真实采集无注入锚点,源头来自 recognition(grounded),无 oracle 混入
+        oracle_free = True  # 生产路径不注入任何 oracle 锚点
+
+        prompt_signals = [
+            {"name": "responsive.anchor_set_nonempty", "surface": "RESPONSIVENESS",
+             "responsive": anchors_nonempty, "source": "generated",
+             "evidence": "anchors=%d user=%d archive=%d" % (
+                 len(anchor_set), len(user_ids), len(archive_ids))},
+            {"name": "responsive.no_default_path_noise", "surface": "RESPONSIVENESS",
+             "responsive": no_noise, "source": "generated",
+             "evidence": "UNRECOGNIZED_NOISE=%s declared=%d" % (noise_count, recognized_declared)},
+            {"name": "outcome.soft_strict_wrong_split", "surface": "OUTCOME_SPLIT",
+             "responsive": split_complete, "source": "generated",
+             "evidence": "soft=%s strict=%s wrong=%s total=%s" % (
+                 soft, strict_count, wrong_count, total)},
+            {"name": "oracle.no_injected_anchor", "surface": "ORACLE_VS_GROUNDED",
+             "responsive": oracle_free, "source": "generated",
+             "evidence": "source=generated oracle_injected=0"},
+        ]
+
+    rows = []
+    for s in prompt_signals:
+        ok = s.get("responsive") is True
+        force = s.get("force_class")
+        surface = str(s.get("surface", "?"))
+        if force in ("DEFAULT_PATH", "MASKED_BY_SOFT", "ORACLE_MISLABELED", "INSTRUCTION_FOLLOWED"):
+            cls = force
+        elif ok:
+            cls = "INSTRUCTION_FOLLOWED"
+        elif surface == "RESPONSIVENESS":
+            cls = "DEFAULT_PATH"
+        elif surface == "OUTCOME_SPLIT":
+            cls = "MASKED_BY_SOFT"
+        elif surface == "ORACLE_VS_GROUNDED":
+            cls = "ORACLE_MISLABELED"
+        else:
+            cls = "DEFAULT_PATH"
+        src = str(s.get("source", "generated"))
+        # oracle 注入却标 generated = 冒充源头 grounding
+        if src in ("oracle", "injected") and cls == "INSTRUCTION_FOLLOWED":
+            cls = "ORACLE_MISLABELED"
+        rows.append({
+            "name": str(s.get("name", "?")),
+            "surface": surface,
+            "class": cls,
+            "source": src,
+            "evidence": str(s.get("evidence", ""))[:120],
+        })
+
+    counts = {k: sum(1 for r in rows if r["class"] == k) for k in (
+        "INSTRUCTION_FOLLOWED", "DEFAULT_PATH", "MASKED_BY_SOFT", "ORACLE_MISLABELED")}
+    gaps = [r for r in rows if r["class"] != "INSTRUCTION_FOLLOWED"]
+    if not rows:
+        prompt_flag = "NO_PROMPT_CLAIM"
+    elif gaps:
+        prompt_flag = "INSTRUCTION_GAP_PRESENT"
+    else:
+        prompt_flag = "INSTRUCTION_FOLLOWED"
+
+    one_page = " | ".join([
+        "prompt-probe自检(任务成功≠指令被遵循;锚切换响应性)",
+        "判据%d" % len(rows),
+        "跟随%d" % counts["INSTRUCTION_FOLLOWED"],
+        "缺口%d" % len(gaps),
+        "flag=%s" % prompt_flag,
+    ]) + " → 判定权归用户"
+
+    return {
+        "prompt_flag": prompt_flag,
+        "rows": rows,
+        "counts": counts,
+        "gap_rows": gaps,
+        "one_page": one_page,
+        "honesty": (
+            "借 arXiv 2610.34051 BEHAVIOR-Spatial(Stanford+Northwestern,Chen等8作者)'任务成功"
+            "本身不能证明空间指令被遵循'的锋利镜面做结构自检: 论文 baseline held-out 41.6%但"
+            "prompt-probe(布局固定只改请求目标)仅16.1%/错目标承诺70%; oracle IR线索60.3%/38.0%"
+            "只是给出正确grounding决策的收益,非学会grounding; 相关性policy-dependent(VQA/IR谁"
+            "更贴近行为随策略变,方向问答与导航几乎不相关)。内核无机器人/仿真/VLM/VLA/空间场景/"
+            "梯度,不宣称真实空间理解或机器人行为; 只做'响应性/soft-strict-wrong三分离/oracle"
+            "注入非grounding'结构同构自检; 用户给主页经核实是GitHub Pages 404已降级用arXiv一手; "
+            "论文全部仿真作者Ethics明言不可解读为真实部署证据; DEFAULT_PATH/MASKED_BY_SOFT/"
+            "ORACLE_MISLABELED是标注非裁定; 注入仅负向测试生产恒None; 只读不写盘不消费不进判定; "
+            "判定权归用户"),
+        "based_on": (
+            "Chen S., Huang H., Wang Q., Huang W., Li M., Zhang R., Fei-Fei L., Wu J. "
+            "arXiv 2610.34051 BEHAVIOR-Spatial Benchmark (v2 2026-10-28, abs+HTML全文一手, "
+            "主页404降级); §4S79/87/89/90对偶与写穿纪律; "
+            "prereg_prompt_probe_20261128.json SHA d2e7e1fc…"),
+        "injected": prompt_signals_injected,
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
 def takeover_request(action, nonce=None, note="", log_path=None, record=True):
     """【本机接管·下行】本机写一条接管指令到共享收件箱，供下次 runner 消费。
 

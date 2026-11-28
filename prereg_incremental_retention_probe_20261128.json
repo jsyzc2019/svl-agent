@@ -1,0 +1,41 @@
+{
+  "prereg_id": "incremental_retention_probe_20261128",
+  "created_at": "2026-11-28T21:05:00+08:00",
+  "trigger": "用户'按你的建议'(裁定A):回源 IEEE TGRS DCRL 类别增量遥感语义分割论文后,把'类别增量中不遗忘旧锚点'做成对内核只读自检",
+  "based_on": {
+    "primary": "Du Y., Xu C., Li Y.-C., Jin Z. 2026 IEEE Trans. Geoscience and Remote Sensing Vol.64 Article 5622015 DOI 10.1109/TGRS.2026.3693920 (IEEE Xplore+Crossref一手元数据/摘要已核; 全文PDF订阅墙挡住,方法机制仅摘要级,不编造数字): CISS让模型逐步学新类而不丢旧类,痛点=旧类灾难性遗忘(CF)+新类判别不足; DCRL用interimage consistency(类内紧凑/类间可分离)+categorywise prototype refinement(动态存储更新新旧类别原型,跨阶段一致)",
+    "kernel_counterparts": [
+      "旧类不被新类遗忘 ≡ 内核每读一篇论文就纯新增一个只读探针(§4S编号S1→S87),但旧判定锚点D1/D2/D3+归档裁定+权威态verdict=GAP_INCONCLUSIVE+已归档缺口不洗白,新增探针一律verdict_unchanged/consumed=false",
+      "类内紧凑+类间可分离 ≡ recognition_probe四类锚点(RECOGNIZED_USER/ARCHIVE/DECLARED)与UNRECOGNIZED_NOISE的可分离性",
+      "类别原型动态存储更新 ≡ verdict_at_birth的fabrication_warning+synced_rate/coverage(看着更新)vs authentic_birth_rate/reliability(真就位)对偶"
+    ],
+    "key_mirror": "论文'类别增量不能忘旧类' ≡ 内核'增量轮次S1→S87中旧锚点/权威态/既有探针返回字段不被新增覆盖'; 新增允许,覆盖/洗白禁止",
+    "name_collision_excluded": "DCRL缩写撞车(浙大+蚂蚁arXiv 2606.03577跨视角空间推理)、DC-SAM(arxiv 2504.12080 TPAMI双一致性)均不同论文,排除不混用"
+  },
+  "kernel_sha256_before": "011b7da56620b482",
+  "kernel_version": "7.5.0",
+  "new_function": "incremental_retention_probe(retention_signals=None)",
+  "locked_rules": {
+    "R1": "扫描面精确限定三个面共8条真实锚点/不变量,全部读真实: 面1 ANCHOR_RETENTION(判定锚点不被新增覆盖)①recognition的3个用户裁定ids D1/D2/D3全在 ②归档裁定id在(真实memory_governance) ③recognition_flag=ALL_RECOGNIZED(噪音0,锚点未被新增探针冲淡成噪音) ④verdict_at_birth的fabrication_warning在位; 面2 AUTHORITY_RETENTION(权威态未被增量刷绿)⑤authoritative_state.verdict==GAP_INCONCLUSIVE ⑥absolute_claimed==False且l3_claimed==False; 面3 FIELD_RETENTION(既有探针返回字段未被覆盖)⑦verdict_at_birth对偶字段synced_rate/authentic_birth_rate/backfilled_sync_count/missing_recomputed_rate全在 ⑧核心探针函数集合可调用且返回dict(至少verdict_at_birth/abstention/staleness/support_escape/recognition/assurance/refusal_binding/ratio_vs_absolute)。不伪造不存在的锚点,不拿声明当在位",
+    "R2": "每条判定'旧知识在增量中是否留存'(retained): 真实读数成立=RETAINED_IN_INCREMENT; 被覆盖/冲刷/刷绿=ERODED_BY_INCREMENT(标注非裁定,不删除不伪造)。面1锚点id须与DECISIONS真实一致,面2权威态须实读文件非声明,面3字段须真实存在非占位",
+    "R3": "flag三值: NO_RETENTION_CLAIM(无载体)/ALL_RETAINED(全留存)/RETENTION_BROKEN(存在侵蚀)。honesty必须如实: 内核非神经网络/无梯度/无遥感像素/无真实类别增量训练,不宣称真实持续学习或抗遗忘能力; 只做'增量扩张中旧锚点是否被新增覆盖'的结构自检; 全文PDF订阅墙方法机制仅摘要级; DCRL/DC-SAM同名近名论文已排除",
+    "R4": "只读: 不写盘不消费不进判定,不改任何verdict/权威态/DECISIONS/归档账/KB; 不改被扫探针字段; 调用各probe均为其默认只读口径; 读authoritative_state用只读open",
+    "R5": "注入retention_signals做隔离负向测试,生产恒None读真实; verdict_unchanged=True,consumed=False,is_gate_verdict=False; one_page结尾'判定权归用户'",
+    "R6": "honesty明确: 借论文'类别增量不能忘旧类'锋利镜面做结构自检; 内核无真实持续学习/抗遗忘机制,只做结构同构不宣称等价; ERODED_BY_INCREMENT是标注非裁定; 判定权归用户",
+    "R7": "诚实排除: 不把'新增探针数量增长'当作遗忘证据(新增是特性不是侵蚀); 只检查旧锚点/权威态/既有字段是否仍在,不要求探针集合不增长; 权威态实读文件值非探针自报"
+  },
+  "acceptance": {
+    "G1_minimal": "纯新增1函数,AST OK,diff确认kernel仅增函数不改既有",
+    "G2_real": "真实运行: 8条锚点/不变量全留存,flag=ALL_RETAINED,3用户id=D1/D2/D3真实,权威态GAP_INCONCLUSIVE实读,ERODED=0(诚实零命中不伪造侵蚀也不刷保证)",
+    "G3_negative": "负向注入全真失败: 用户锚点缺失必RETENTION_BROKEN; 权威态被刷CONSISTENT必ERODED; 既有字段缺失必ERODED; 噪音混入必ERODED; 全retained必ALL_RETAINED; 空注入NO_RETENTION_CLAIM",
+    "G4_readonly": "不写盘不消费不进判定; 权威态四件套+DECISIONS+gap_archive+KB哈希前后一致",
+    "G6_regression": "干净同口径对拍: 备份内核+基线测试=原passed数(320); 新内核+全量=320+12; 零回归"
+  },
+  "will_not_change": [
+    "kernel既有函数/阈值/权威态四件套",
+    "DECISIONS_20261127.json / gap_archive_20261128.json / knowledge_base_store.json / read_ieee_dcrl_20261128/*",
+    "任何既有 verdict / 11条心跳判定 / tagbook / 被扫探针返回字段 / verdict_at_birth台账",
+    "IEEE TGRS论文任何数据(仅借镜面)"
+  ],
+  "boundary": "不宣称内核有真实持续学习/类别增量/抗遗忘机制; 只做'增量轮次中旧锚点是否被新增覆盖'结构自检; 全文PDF订阅墙方法机制仅摘要级不编造数字; 同名近名论文已排除; 不替用户裁定; 判定权归用户"
+}

@@ -1,0 +1,68 @@
+{
+  "prereg_id": "read_arxiv_behavior_spatial_20261128",
+  "read_at": "2026-11-28T22:22:00+08:00",
+  "urls": {
+    "homepage": "https://arielchen07.github.io/behavior-spatial/",
+    "paper": "https://arxiv.org/abs/2610.34051",
+    "html_full": "https://arxiv.org/html/2610.34051v2"
+  },
+  "source_grade": "A（arXiv一手abs页+HTML全文v2全文可读，98K字符，非订阅墙）",
+  "homepage_check": "用户给的主页URL经WebFetch核实为GitHub Pages 404页('There isn't a GitHub Pages site here')——未搭建或已下线，不能作一手来源；页面里论文链接是死的。已诚实降级：全部元数据/数字取自arXiv一手页。",
+  "paper": {
+    "title": "BEHAVIOR-Spatial Benchmark: Evaluating Spatial Understanding for Robotics",
+    "authors": ["Sirui Chen", "Huang Huang", "Qineng Wang", "Wenlong Huang", "Manling Li", "Ruohan Zhang", "Li Fei-Fei", "Jiajun Wu"],
+    "affiliations": ["Stanford University", "Northwestern University"],
+    "note": "Sirui Chen equal contribution; 主页域名 arielchen07 与一作 Sirui Chen 对得上",
+    "arxiv_id": "2610.34051",
+    "versions": "v1 submitted 25 Oct 2026, v2 revised 28 Oct 2026",
+    "subjects": ["cs.RO", "cs.CV"],
+    "doi": "10.48550/arXiv.2610.34051",
+    "license": "CC BY 4.0",
+    "built_on": "BEHAVIOR-1K (Li et al. 2024a), OmniGibson replay; VLA基于π0.5架构,替换VLM backbone为Qwen3.5-4B"
+  },
+  "scale": {
+    "vqa": "3,256 questions / 49 activities = 1,572 general + 1,684 task-specific; 1,078 single-frame + 494 multi-frame general; 1,082 manipulation + 602 navigation task-grounded",
+    "grounding_IR": "1,240 target-grounding queries / 14 manipulation tasks",
+    "action": "14 manipulation + 10 navigation tasks / 5 navigation scenes"
+  },
+  "three_suites": ["BEHAVIOR-Spatial-VQA(Understand)", "BEHAVIOR-Spatial-IR(point-based target grounding)", "BEHAVIOR-Spatial-Action(manipulation+navigation)"],
+  "core_diagnostic_protocol": {
+    "name": "prompt-probe / changed-instruction",
+    "definition": "训练布局与场景固定，只改变请求的目标对象/区域，测行为是否跟随语言指令——与held-out配置(泛化)区分开",
+    "metrics": ["soft success(目标选择意图行为代理)", "strict success(严格完成)", "wrong-target commitments(承诺到非指定目标比例)"]
+  },
+  "key_numbers_table4": {
+    "baseline_pi0.5-Qwen": {"held_soft": 41.6, "held_strict": 27.9, "probe_soft": 16.1, "probe_strict": 10.0, "probe_wrong": 70.0},
+    "plus_LoRA-VLM": {"held_soft": 43.5, "held_strict": 30.9, "probe_soft": 17.9, "probe_strict": 9.6, "probe_wrong": 68.1},
+    "plus_DROID_init": {"held_soft": 40.1, "held_strict": 24.7, "probe_soft": 16.6, "probe_strict": 8.9, "probe_wrong": 66.0},
+    "oracle_dot_IR": {"held_soft": 60.3, "held_strict": 44.8, "probe_soft": 38.0, "probe_strict": 24.9, "probe_wrong": 43.9},
+    "oracle_attn_map_IR": {"held_soft": 59.3, "held_strict": 39.0, "probe_soft": 35.0, "probe_strict": 17.0, "probe_wrong": 46.0},
+    "VLM_predicted_IR_dot": {"held_soft": 48.8, "note": "Qwen3.5-4B预测IR替代oracle仍保部分收益但低于oracle60.3"},
+    "reading": "LoRA/DROID对prompt-probe soft几乎无效(16.1→17.9/16.6),strict甚至下降(10.0→9.6/8.9);oracle视觉目标线索把probe soft 16.1→38.0、wrong 70→43.9;作者明确:这是'提供正确grounding决策'的收益,不等于模型学会从语言grounding"
+  },
+  "correlations_table3_spearman": {
+    "baseline": {"VQA_rho": 0.713, "IR_rho": 0.658},
+    "LoRA_VLM": {"VQA_rho": 0.616, "IR_rho": 0.581},
+    "dot_IR": {"VQA_rho": 0.560, "IR_rho": 0.701},
+    "IR_first_frame": {"VQA_rho": 0.612, "IR_rho": 0.618},
+    "attention_map": {"VQA_rho": 0.608, "IR_rho": 0.753},
+    "conclusion": "policy-dependent:强变体(dot-IR/attn-map)是IR grounding相关更高(0.701/0.753 > VQA 0.560/0.608);baseline/LoRA反而是VQA更高(0.713>0.658);原文'the metric that tracks the policy is the one the VLM has to generate, not the one it has to answer';方向问答accuracy与导航成功仅weak/little correlation"
+  },
+  "limitations_authors": [
+    "全部仿真，真实机器人迁移未验证",
+    "tupperware任务acting hand与target layer相关性可能混淆空间指令跟随与手部特定操作行为",
+    "成功率依赖episode timeout budget，跨运行比较需考虑执行时间差异",
+    "IR-conditioned训练需simulator-derived IR target centers，无grounding标注数据集需替代监督",
+    "Ethics:仿真表现不可解读为真实世界安全部署证据"
+  ],
+  "kernel_mirror": {
+    "sharpest_mirror": "论文最锋利一句'task success alone cannot establish whether spatial instructions are followed'——任务成功≠指令被遵循(策略可能靠熟悉布局捷径而非真跟语言)。内核同构:verdict正确/probe全绿≠判定锚点真被遵循;synced_rate高(0.9091)可能靠背填(8条)而非真就位(2/11)。",
+    "prompt_probe_mirror": "训练布局固定只改请求目标→行为跟着改才算真follow;内核同构:同一权威态/同一探针,当用户裁定目标(锚点)切换时应能区分'真按锚点走'vs'按默认熟悉路径走'——测响应性而非泛化。",
+    "soft_vs_strict_mirror": "soft success(选对目标意图) vs strict success(严格完成) vs wrong-target commitments(承诺错目标)三分离≡内核应区分'声称匹配/部分对偶/真锚定'与'错误锚点承诺',不能只看一个success率。",
+    "oracle_ir_mirror": "oracle视觉目标线索把38%但作者明说'不是学到的grounding'≡内核注入正确锚点能让对拍变绿不等于内核真能从来源grounding——必须区分注入的oracle与源头生成的锚点。",
+    "correlation_policy_dependent_mirror": "感知指标(VQA/IR)与行为成功的相关性随策略变体而变(baseline VQA高,强变体IR高),方向问答与导航几乎不相关≡内核任一'显示层指标'与'权威层状态'的相关性不能假定稳定,不能拿单一指标当通用代理。",
+    "honesty_boundary": "内核无机器人/仿真/VLM/VLA/空间场景/梯度,不宣称真实空间理解或机器人行为;只做'任务成功≠指令被遵循/软成功vs严格成功vs错目标承诺三分离/oracle线索≠学到了grounding/相关性随策略变'的结构自检镜;主页404已诚实降级用arXiv一手;全部仿真结果不迁移到内核真实能力。"
+  },
+  "excluded": [],
+  "rights": "判定权归用户"
+}
