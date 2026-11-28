@@ -894,3 +894,23 @@ R7防重蹈recognition误标:明确排除纯诊断探针(test_green_vs_productio
 提交:Git Data API以6a5b01bd全量tree为base_tree,创建5 blob→增量tree→commit→PATCH ref main,父=6a5b01bd。
 核验:独立读远端HEAD/父提交、逐文件raw字节对拍(绕开大tree截断);权威态四件套远端本地仍相同(本次不推权威态)。
 凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->
+
+<!-- §4S84-85 DSH守卫源码深研 + refusal_binding_probe只读自检(用户'继续挖AGENTS.md/tool pipeline守卫实现'→'可以去推')
+§4S84 深研(源码级,一手GitHub API):AGENTS.md192行+pipeline文档66行+源码7文件1722行(pipeline/contracts/tools_index/guard_repeat/guard_timeout/fork_tool_guard/fork_enforcement/creation_rec)+代码搜索tools.guard 21处。证据read_dsh_repo_20261128/guard_deepdive.json(6条AGENTS发现+10条源码发现)。
+关键一手:①单调守卫精确定义(contracts.ts:403-410)'guards have no allow result,listener ordering cannot turn a denial back into permission',checkGuards first-denial-wins(index.ts:394),无翻案通道;②管线prepare()顺序坐实:pre-execute→ask→仅allow才checkGuards→denial即isError;③approval拿不到答复必deny(APPROVAL_UNAVAILABLE/rejected/cancelled)非降级为allow(pipeline.ts:442-492);④frozen authoritative outcome(pipeline.ts:611/693)lossy宁reject;⑤诚实纠偏:packages/guard/下repeat-tool-reminder是自述'Advisory...without vetoing'、timeout-policy是'Cooperative wrapper',都不是单调拒绝守卫;真单调守卫是ctx.tools.guard()注册21处;⑥fork_tool_guard'未知即拒绝'(paths undefined/空/越界全deny,'unknown path set refused rather than treated as empty')+判定绑runtime唯一symbol token防replay(callId可复用会被replay),fork_enforcement'the monotonic guard that refuses whatever the verdict did not confirm'。AGENTS.md同构:released session只加version-named successor不覆盖已提交generation(补判不可回填);Model-visible⟺logged(无锚点读数=噪音);test:coverage才是CI门但100%coverage仍只是结构门(测试绿≠真相)。
+§4S85 refusal_binding_probe(用户'可以去推'):把'未知即拒绝+判定绑唯一不可复用源防replay'做成只读自检。预注册prereg_refusal_binding_probe_20261128.json SHA 7b9cd732…(改码前锁),内核前置dbfce1ea…;备份pre_patch_refusal_binding/kernel_before_refusal_binding.py可回滚。
+实现:kernel.py纯新增refusal_binding_probe(binding_signals=None),diff确认仅新增1函数(91a92),AST OK,5012→5116行。扫描面精确两类三载体:面1 SOURCE_BINDING①base_beat(woken_by='')返error(内核绝不代填,唯一外部源)②recognition判定锚点来自DECISIONS权威台账(真实D1/D2/D3非自填);面2 UNKNOWN_REFUSAL③abstention_zero_transfer的UNKNOWN单列abstention_masked_zero(masked=1/attributable=True,弃权不当零)。诚实排除dirty_keys=0(已治理非活证据,不拿0刷纪律在位)。逐条BOUND_IN_PLACE/UNBOUND_WEAK(标注非裁定);flag三值NO_BINDING_CLAIM/ALL_BOUND/UNBOUND_PRESENT。
+诚实边界:内核非fork runtime、无tool路径、无并发执行token、无真实replay攻击面;只做纪律同构自检不宣称等价安全机制;SOURCE_BINDING=判定源不可自填,UNKNOWN_REFUSAL=弃权不当零(非路径级拒绝);honesty如实记。
+真实结论:3载体全在位,0松动,flag=ALL_BOUND(诚实零命中,不刷松动也不刷保证)。
+验收:G3负向注入12守卫全绿(预注册SHA/真实ALL_BOUND/扫描面精确/真读数evidence/只读字段/空源放行必UNBOUND/锚点自填必UNBOUND/UNKNOWN算零必UNBOUND/全held必ALL_BOUND/空注入NO_BINDING_CLAIM/honesty含非等价安全机制+dirty_keys排除+标注非裁定/权威态零副作用)。G6干净同口径对拍:①备份内核+基线296收集exit=0/FAILED=0;②新内核7007e500…+全量308收集exit=0/FAILED=0/ERROR=0=296+12。
+零副作用:权威态5f7a2584…/constitution 2ad148c7…/hb ea749f76…/inbox 8806b248…/DECISIONS 91114955…/归档账d73bfef5…/KB 0938b3df…全不变;base_beat调用record=False零污染;只读不写盘不消费不进判定;verdict_unchanged/consumed=false/is_gate=false。
+边界:仅借fork_tool_guard锋利镜面做结构自检,不宣称等价安全机制,不替用户裁定;判定权归用户。GitHub未推(用户未要求)。 -->
+
+<!-- §4S86 GitHub同步§4S84-85(Git Data API通道,用户"推Github")
+触发:用户"推Github"。远端基线HEAD=ecc731ef(§4S83-84)。本沙箱无.git,走Git Data API(§4S11/68/76/80/82/84先例)。
+吸取§4S82教训:先落本同步账再一次性推含账SESSION_HANDOFF,远端HEAD直接含自身,无双commit。
+待推17文件:kernel.py(新增refusal_binding_probe)、test_refusal_binding.py(12守卫)、prereg_refusal_binding_probe_20261128.json、pre_patch_refusal_binding/kernel_before_refusal_binding.py(回滚备份)、read_dsh_repo_20261128/guard_deepdive.json(守卫深研证据)、read_dsh_repo_20261128/src/11个.ts一手源码证据(contracts/creation_rec/error-codes/events/executor/fork_enforcement/fork_tool_guard/guard_repeat/guard_timeout/pipeline/tools_index)、SESSION_HANDOFF.md(含§4S84/85/86)。
+提交前:17文件token全串扫描(ghp_/github_pat_/sk-/sk-or-v1_)全为0;权威态verdict=GAP_INCONCLUSIVE未污染。盘点大tree拉取被网络截断(IncompleteRead,§4S80老问题),改用Git Data API增量tree直接推,不依赖大tree差异盘点。
+提交:Git Data API以ecc731ef全量tree为base_tree,创建17 blob→增量tree→commit→PATCH ref main,父=ecc731ef。
+核验:独立读远端HEAD/父提交、逐文件raw字节对拍(绕开大tree截断);权威态四件套远端本地仍相同(本次不推权威态)。
+凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->

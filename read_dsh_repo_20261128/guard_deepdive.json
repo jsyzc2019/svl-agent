@@ -1,0 +1,90 @@
+{
+  "task": "深挖 DSH AGENTS.md + tool pipeline 守卫实现(源码级)",
+  "date": "2026-11-28",
+  "method": "GitHub API 一手拉取:AGENTS.md全文192行/pipeline文档66行 + 源码7文件1722行(pipeline.ts807/contracts.ts418/tools_index.ts/guard_repeat.ts/guard_timeout.ts/fork_tool_guard.ts/fork_enforcement.ts/creation_rec.ts) + 代码搜索tools.guard(21处)",
+  "agents_md_findings": [
+    {
+      "finding": "AGENTS.md 192行是仓库给agent的治理宪法:改packages/前必读architecture.md;Public API pre-stable必须更新所有consumer;SQLite用monotonic SCHEMA_VERSION;committed generation只增不覆盖不删除;前序版本不隐含fallback/downgrade支持",
+      "source": "AGENTS.md 前30行",
+      "maps_to": "内核'历史事实不可动/补判不可回填'同构——released session格式只加version-named successor,never move/overwrite/delete committed generations"
+    },
+    {
+      "finding": "Registrations are effects:每个contribution经ctx.effect()/ctx.on();registry.register()返回disposer",
+      "source": "AGENTS.md Conventions",
+      "maps_to": "Cordis reversibility,与内核只读探针'不写盘不消费'对偶"
+    },
+    {
+      "finding": "Model-visible ⟺ logged:到达模型请求的任何东西都必须可从session log重建;新model-visible输入必须有session event",
+      "source": "AGENTS.md Conventions",
+      "maps_to": "内核'每个verdict须有判定权归属锚点否则=伪装成信息的噪音'同构"
+    },
+    {
+      "finding": "Waterfall listeners MUST call next()否则短路链;Plugins not loop changes;No hardcoded tunables in plugins;Misconfiguration fails loud",
+      "source": "AGENTS.md Conventions",
+      "maps_to": "管线不可绕过/失败响亮,与内核'不静默降级/不伪造裁定'同构"
+    },
+    {
+      "finding": "test:coverage才是CI coverage gate(per-file 100% on packages/*/*/src),不是test;Never default to full suite;Coverage是门但只覆盖src表面",
+      "source": "AGENTS.md Commands",
+      "maps_to": "与内核'测试绿≠真相已验证'同构——100% coverage只是结构门,不保证行为真对"
+    },
+    {
+      "finding": "Host sandbox failures:凭据/网络/IPC被沙箱阻断时用最窄host escalation重试,但'Require sandbox evidence; never bypass test failures or the product sandbox'",
+      "source": "AGENTS.md Host sandbox failures",
+      "maps_to": "与DSH SAFETY.md'分层降风险不保证隔离'一致:升级通道存在但有证据纪律约束"
+    }
+  ],
+  "pipeline_guard_source_findings": [
+    {
+      "finding": "ToolGuard单调性精确定义(contracts.ts:403-410):'Returning a reason denies the call; returning undefined leaves it unchanged. Because guards have no allow result, listener ordering cannot turn a denial back into permission.'——守卫只有deny或abstain,没有allow,所以顺序无法把拒绝翻成允许",
+      "source": "packages/core/tools/src/contracts.ts:402-418 一手原文",
+      "significance": "这是'单调'的代码级定义,比书/文档的'Guard要单调'精确得多"
+    },
+    {
+      "finding": "checkGuards实现(index.ts:394-402):遍历[global,...chainLayers(agent)],第一个denial即返回;guard返回string转{reason},或ToolGuardDenial带结构化info;全undefined才放行",
+      "source": "packages/core/tools/src/index.ts:389-402",
+      "significance": "first-denial-wins,无overrides通道——结构上不存在'后来者翻案'"
+    },
+    {
+      "finding": "管线顺序(pipeline.ts prepare 191-235):tools/pre-execute waterfall→ask则serviceAsk→decision.kind==='allow'才checkGuards→denial即materializeFinalResult(isError=true)→dispatch。deny/cancel/ask-refused都跳过tool body;approvalCancelled且callerCancelled→post-result abort",
+      "source": "packages/core/tools/src/pipeline.ts:191-235",
+      "significance": "文档图的mermaid顺序在源码逐行坐实"
+    },
+    {
+      "finding": "approval降级为deny(pipeline.ts:442-492):ctx.get('approval')没有→APPROVAL_UNAVAILABLE deny;无agent路由→deny;outcome allowed-once放行,rejected/cancelled/unavailable全deny且带ApprovalError identity;assertNever兜底",
+      "source": "packages/core/tools/src/pipeline.ts:442-492",
+      "significance": "'拿不到答复就拒绝'一手坐实;deployment不组合ApprovalService时degrade to deny不是degrade to allow"
+    },
+    {
+      "finding": "frozen authoritative outcome(pipeline.ts:611/693):'Materialize the authoritative commit outcome once, immediately before tools/result';snapshot freeze lossless JSON,lossy则reject;'tools/result then observes the immutable, lossless-JSON outcome'",
+      "source": "packages/core/tools/src/pipeline.ts:611,693 + docs管线文末",
+      "significance": "冻结的权威结果=内核'权威态零副作用'同构,且明确lossy数据宁可拒绝也不静默丢失"
+    },
+    {
+      "finding": "关键分类纠正:packages/guard/下两个包并非单调拒绝守卫!repeat-tool-reminder源码自述'Advisory...enriches post-execute decisions with logged model context without vetoing or rewriting calls'(顾问式,不否决);timeout-policy是'Cooperative...wrapper arms deadline'(合作式包装)。真正的ToolGuard单调守卫注册点是ctx.tools.guard(),代码搜索21处",
+      "source": "guard_repeat.ts:1-5 / guard_timeout.ts:1-7 / GitHub code search",
+      "significance": "诚实纠偏:若按目录名'guard/'就断定是单调守卫会误判;真实单调守卫在extension/experimental里"
+    },
+    {
+      "finding": "真实单调守卫范例1(fork_tool_guard.ts:102-180):decideForkToolUse——tool不在host installed→deny(fork-tool-not-permitted);paths无法established→deny(fork-paths-unknown);paths空且非noFileEffect→deny;path越出granted workspace→deny;未知一律拒绝,绝不'未知当空/未知当允许'。注释:'an unknown path set is refused rather than treated as empty'",
+      "source": "packages/experimental/liveshare/src/host/fork_tool_guard.ts:100-180",
+      "significance": "与内核'脏key原样暴露不静默解析/verdict None不当噪音'同构——未知即拒绝是同一纪律"
+    },
+    {
+      "finding": "真实单调守卫范例2(fork_tool_guard.ts:31-38):token是runtime给每次执行的symbol handle,'The model-facing callId is caller-supplied and reusable, so a verdict keyed on it could be replayed by another call; this token is the runtime's own handle for exactly one execution'",
+      "source": "fork_tool_guard.ts:31-38 + fork_enforcement.ts:6",
+      "significance": "防replay:判定不能绑在可复用的caller id上,要绑runtime唯一token——与内核'判定权归属锚点不可自填/woken_by不可自填'同构"
+    },
+    {
+      "finding": "真实单调守卫范例3(fork_enforcement.ts):'the monotonic guard that refuses whatever the verdict did not confirm';scope注册失败→guard仍安装且名字被refused而非用owner工具serve;scope-registered shadow以不同definition应答→refused;view-only tier不装write replacement→guard拒绝该名字",
+      "source": "fork_enforcement.ts:6,209-213,340-341,113",
+      "significance": "registrations as effects+失败响亮+不静默降级,三原则在一处汇合"
+    },
+    {
+      "finding": "真实单调守卫范例4(creation_rec.ts:127-131):ctx.tools.guard((exec)=>{非creator agent/非plugin_manager/白名单list动作→return undefined(abstain);creator下→return拒绝原因字符串})",
+      "source": "packages/extensions/creation-recommendations/src/index.ts:127-131",
+      "significance": "最简demo:abstain用undefined,deny用reason string,无allow"
+    }
+  ],
+  "honest_boundary": "本轮基于GitHub API一手拉取的真实源码(7文件1722行)+代码搜索21处;未读全部14226 commits/未读pipeline.ts全部807行逐行(读了关键段)/未购书;对'guard/'目录名与真实守卫类型做了诚实纠偏。判定权归用户。"
+}

@@ -1,0 +1,39 @@
+{
+  "prereg_id": "refusal_binding_probe_20261128",
+  "created_at": "2026-11-28T19:50:00+08:00",
+  "trigger": "用户'可以去推':深挖DSH fork_tool_guard后,把'未知即拒绝+判定绑唯一不可复用源防replay'做成对内核只读自检",
+  "based_on": {
+    "primary": "deepseek-ai/deepseek-harness fork_tool_guard.ts/fork_enforcement.ts (GitHub API 一手 2026-11-28): 'an unknown path set is refused rather than treated as empty'; 'a verdict keyed on a reusable callId could be replayed; this token is the runtime handle for exactly one execution'; 'the monotonic guard that refuses whatever the verdict did not confirm'",
+    "kernel_counterparts": [
+      "面1绑定唯一源: base_beat(woken_by='') 返回error' woken_by required...内核绝不代填'(空源拒自填) + recognition_probe user ids来自DECISIONS权威台账(非自填)",
+      "面2未知不当空/零: abstention_zero_transfer_probe abstention_masked_zero_count=1/zero_claim_attributable_to_abstention=True(UNKNOWN不当成零副作用胜利)"
+    ],
+    "key_mirror": "未知路径拒绝而非当空集 ≡ UNKNOWN弃权不当零;判定绑runtime唯一token防replay ≡ woken_by仅外部源写入+判定锚点来自DECISIONS权威台账"
+  },
+  "kernel_sha256_before": "dbfce1eac806fae6",
+  "kernel_version": "7.5.0",
+  "new_function": "refusal_binding_probe(binding_signals=None)",
+  "locked_rules": {
+    "R1": "扫描面精确限定两类真实纪律载体(只纳入有真实活读数的,杜绝自造): 面1 SOURCE_BINDING: ①base_beat空woken_by拒自填(真实error) ②recognition判定锚点来自DECISIONS权威台账(真实user ids非自填); 面2 UNKNOWN_REFUSAL: ③abstention_zero_transfer的UNKNOWN单列abstention_masked_zero(真实count>0)且zero_claim_attributable_to_abstention真实True。排除:unresolved_gap_schema_probe的dirty_keys当前=0(已治理,非活证据,不得拿0当'纪律在位'刷表面)",
+    "R2": "每条载体判定'纪律是否在位'(held): 绑定/拒绝语义真实成立=BOUND_IN_PLACE;否则=UNBOUND_WEAK(标注非裁定,不删除不伪造)。面1①空源必须返回error ②锚点须来自权威ID集合;面2③UNKNOWN须单列且不计入measured_zero",
+    "R3": "flag三值: NO_BINDING_CLAIM(无载体)/ALL_BOUND(全在位)/UNBOUND_PRESENT(存在松动)。honesty必须如实:ds source-binding指woken_by外部唯一源+判定锚点不可自填,非真实runtime token防replay(内核无多执行并发runtime,不冒充fork token);unknown-refusal指UNKNOWN不当零,非路径级拒绝(内核无tool路径概念)",
+    "R4": "只读:不写盘不消费不进判定,不改任何verdict/权威态/DECISIONS/归档账;base_beat须record=False零污染;不改被扫探针字段",
+    "R5": "注入binding_signals做隔离负向测试,生产恒None读真实;verdict_unchanged=True,consumed=False,is_gate_verdict=False;one_page结尾'判定权归用户'",
+    "R6": "honesty明确:借fork_tool_guard'未知即拒绝/唯一token防replay'锋利镜面做结构自检;内核非fork/无tool路径/无并发runtime,只做纪律同构自检不宣称等价安全机制;UNBOUND_PRESENT是标注非裁定;判定权归用户",
+    "R7": "诚实排除dirty_keys=0不作为活证据;不把已治理的0当作纪律证明;不刷绿也不伪造松动"
+  },
+  "acceptance": {
+    "G1_minimal": "纯新增1函数,AST OK,diff确认kernel仅增函数不改既有",
+    "G2_real": "真实运行:面1①空源error ②锚点来自DECISIONS ③UNKNOWN单列count>0且attributable=True,flag=ALL_BOUND,dirty_keys排除(0不当活证据)",
+    "G3_negative": "负向注入全真失败:空源放行必UNBOUND;锚点自填(不在权威ID集)必UNBOUND;UNKNOWN被算进measured_zero必UNBOUND;全held必ALL_BOUND;空注入NO_BINDING_CLAIM",
+    "G4_readonly": "不写盘不消费不进判定;权威态四件套+DECISIONS+gap_archive+KB哈希前后一致;base_beat record=False零污染",
+    "G6_regression": "干净同口径对拍:备份内核+基线测试=原passed数;新内核+全量=原+n守卫;零回归"
+  },
+  "will_not_change": [
+    "kernel既有函数/阈值/权威态四件套",
+    "DECISIONS_20261127.json / gap_archive_20261128.json / knowledge_base_store.json / read_dsh_repo_20261128/*",
+    "任何既有 verdict / 11条心跳判定 / tagbook / 被扫探针返回字段 / base_beat台账",
+    "DSH fork_tool_guard任何源码(仅借镜面)"
+  ],
+  "boundary": "不宣称内核有fork runtime/唯一token防replay/路径级拒绝;只做'绑定唯一源+未知不当零'纪律同构的结构自检;不替用户裁定;判定权归用户"
+}

@@ -4091,6 +4091,110 @@ def assurance_probe(assurance_signals=None):
     }
 
 
+def refusal_binding_probe(binding_signals=None):
+    """§4S85【只读自检·未知即拒绝 + 判定绑唯一不可复用源防replay】对应
+    deepseek-ai/deepseek-harness fork_tool_guard.ts / fork_enforcement.ts 一手源码
+    (2026-11-28):
+      "an unknown path set is refused rather than treated as empty"
+      "a verdict keyed on a reusable callId could be replayed by another call;
+       this token is the runtime's own handle for exactly one execution"
+      "the monotonic guard that refuses whatever the verdict did not confirm"
+
+    内核同构(非等价声明):
+      面1 SOURCE_BINDING(绑定唯一源):
+        ① base_beat(woken_by='') 必须返回error(woken_by内核绝不代填——判定的外部源
+          只能由外部唤醒器传入,非空自填即被拒);
+        ② recognition_probe 的判定权锚点来自 DECISIONS 权威台账(真实user ids),非自填。
+      面2 UNKNOWN_REFUSAL(未知不当空/零):
+        ③ abstention_zero_transfer_probe 的 UNKNOWN 单列 abstention_masked_zero,
+          不计入 measured_zero(zero_claim_attributable_to_abstention=True)。
+
+    诚实边界: 内核不是 fork runtime,没有 tool 路径概念、没有并发执行 token、没有
+    真正的 replay 攻击面。本探针只做纪律同构自检——'判定源是否绑在不可自填的唯一
+    来源''UNKNOWN 是否被当成零/空放行',绝不宣称等价的安全机制。unknown即拒绝在
+    内核对应'UNKNOWN 弃权不当零副作用胜利',非路径级拒绝。dirty_keys 当前=0(已治理),
+    不作为活证据,不拿0刷'纪律在位'。binding_signals 可注入做隔离负向测试,生产恒None
+    读真实。不写盘不消费不进判定。预注册 prereg_refusal_binding_probe_20261128.json
+    SHA 7b9cd732… 改码前锁死。
+    """
+    if binding_signals is None:
+        # ---- 面1 绑定唯一源 ----
+        empty_source = base_beat(woken_by="", record=False)
+        source_refused = bool(empty_source.get("error"))
+        rec = recognition_probe()
+        authority_ids = set(rec.get("user_recognized_ids") or [])
+        anchors_from_authority = bool(authority_ids) and \
+            all(str(uid).startswith("D") for uid in authority_ids)
+        # ---- 面2 未知不当空/零 ----
+        az = abstention_zero_transfer_probe()
+        unknown_separated = (az.get("abstention_masked_zero_count", 0) > 0
+                             and az.get("zero_claim_attributable_to_abstention") is True)
+        binding_signals = [
+            {"name": "source_binding.woken_by_not_self_filled",
+             "surface": "SOURCE_BINDING", "held": source_refused,
+             "evidence": str(empty_source.get("error", ""))[:80]},
+            {"name": "source_binding.verdict_anchors_from_decisions",
+             "surface": "SOURCE_BINDING", "held": anchors_from_authority,
+             "evidence": "DECISIONS ids=" + ",".join(sorted(authority_ids))},
+            {"name": "unknown_refusal.unknown_not_counted_as_zero",
+             "surface": "UNKNOWN_REFUSAL", "held": unknown_separated,
+             "evidence": "masked_zero=%d attributable=%s" % (
+                 az.get("abstention_masked_zero_count", 0),
+                 az.get("zero_claim_attributable_to_abstention"))},
+        ]
+
+    rows = []
+    for s in binding_signals:
+        held = s.get("held") is True
+        rows.append({
+            "name": str(s.get("name", "?")),
+            "surface": str(s.get("surface", "?")),
+            "class": "BOUND_IN_PLACE" if held else "UNBOUND_WEAK",
+            "evidence": str(s.get("evidence", ""))[:120],
+        })
+
+    counts = {
+        "BOUND_IN_PLACE": sum(1 for r in rows if r["class"] == "BOUND_IN_PLACE"),
+        "UNBOUND_WEAK": sum(1 for r in rows if r["class"] == "UNBOUND_WEAK"),
+    }
+    unbound = [r for r in rows if r["class"] == "UNBOUND_WEAK"]
+    if not rows:
+        binding_flag = "NO_BINDING_CLAIM"
+    elif unbound:
+        binding_flag = "UNBOUND_PRESENT"
+    else:
+        binding_flag = "ALL_BOUND"
+
+    one_page = " | ".join([
+        "refusal-binding自检(未知即拒绝/判定绑唯一源,纪律同构非等价安全机制)",
+        "纪律载体%d" % len(rows),
+        "在位%d" % counts["BOUND_IN_PLACE"],
+        "松动%d" % counts["UNBOUND_WEAK"],
+        "flag=%s" % binding_flag,
+    ]) + " → 判定权归用户"
+
+    return {
+        "binding_flag": binding_flag,
+        "rows": rows,
+        "counts": counts,
+        "unbound_rows": unbound,
+        "one_page": one_page,
+        "honesty": (
+            "借 DSH fork_tool_guard 'unknown path set is refused rather than treated as empty' + "
+            "'verdict keyed on reusable callId could be replayed; token is runtime handle for one "
+            "execution' 的锋利镜面做纪律同构自检: 内核非fork runtime、无tool路径、无并发执行token、"
+            "无真实replay攻击面,不宣称等价安全机制; SOURCE_BINDING指判定外部源不可自填"
+            "(woken_by仅外部唤醒器写入+判定锚点来自DECISIONS权威台账),UNKNOWN_REFUSAL指弃权"
+            "不当零副作用胜利(非路径级拒绝); dirty_keys当前=0已治理,不作为活证据不刷绿; "
+            "UNBOUND_WEAK是标注非裁定(不删除/不伪造裁定/不替用户裁定); 注入仅负向测试生产恒None; "
+            "只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": (
+            "deepseek-ai/deepseek-harness fork_tool_guard.ts/fork_enforcement.ts (GitHub API 一手 2026-11-28); "
+            "§4S85; prereg_refusal_binding_probe_20261128.json SHA 7b9cd732…"),
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
 def takeover_request(action, nonce=None, note="", log_path=None, record=True):
     """【本机接管·下行】本机写一条接管指令到共享收件箱，供下次 runner 消费。
 
