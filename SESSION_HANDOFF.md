@@ -845,3 +845,11 @@ clone踩坑:默认IP两次失败(8分20秒空壳/超时),换备用IP 20.27.177.1
 验收:test_support_escape.py更新为12守卫全绿(两预注册SHA/真实UNCONFIRMED/权威对偶gap暴露/self-bite移除自造指标/4负向注入含反刷绿:仅刷coverage到1.0但reliability低+缺口在绝不翻CONFIRMED/无梯度声明/权威态零副作用)。G6干净对拍:①新内核+全量272收集0失败;②备份内核(§4S79前)+无守卫260收集0失败(零回归铁证);③恢复后272收集0失败。内核SHA 380de28a…,AST OK,diff确认函数集合无变化仅support_escape_probe函数体内改。
 零副作用:权威态5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…四哈希动手前后一致;KB 0938b3df…/归档账d73bfef5…未动。
 边界:工具口径self-bite就地修(§4hc惯例:工具bug就地记不升级CORR-REAL,判据内容不变),不是新裁定/不翻案/不动缺口补判;判定权归用户。GitHub本轮未推(用户未要求)。 -->
+
+<!-- §4S80 GitHub同步§4S78-79(Git Data API通道,用户"再继续"承接悬着项)
+触发:用户"再继续"。盘点确认三处标注"GitHub本轮未推"中§4S78/§4S79是唯一机械悬着项(不涉判定/翻案/刷绿),§4S77归档修正已在HEAD 7003a0ff。
+只读盘点:远端HEAD=7003a0ff(§4S77),本地内核SHA=380de28a/constitution锁fe56291b/auth 5f7a2584/hb ea749f76/inbox 8806b248/gap_archive d73bfef5/KB 0938b3df;权威态四件套+归档账+KB远端本地blob全相同零污染。精确blob差异=待推7文件(kernel.py改动+test_support_escape+两份prereg+两份pre_patch备份+SESSION_HANDOFF)。闭环验证:pre_patch_support_escape/kernel_before_support_escape.py的blob 868ec552f39c恰等于远端kernel.py(§4S78前置备份=远端现行内核),链条无断点。
+提交前:7文件token全串扫描(ghp_/github_pat_/sk-/sk-or-v1_)全为0;权威态verdict=GAP_INCONCLUSIVE/KERNEL_VERSION=7.5.0未污染。
+提交:Git Data API以7003a0ff的tree d49bdecfe6d4为base_tree,创建7 blob→增量tree 7d07b97a959d→commit 21f827daf631(message=4S78-79 support-escape probe + coverage/reliability self-bite reconcile,parent=7003a0ff)→PATCH ref main。
+核验:独立读远端HEAD=21f827daf631578ea1b08d2ffb970e2054d9f838连续稳定,parent=7003a0ff无分叉;完整tree未截断2065 blob;7文件逐blob SHA对拍全OK(7/7);权威态四件套远端本地仍相同;无§4S76那种增量tree缺blob陷阱(base_tree给全量基线)。
+凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->
