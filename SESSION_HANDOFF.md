@@ -976,7 +976,7 @@ R7防重蹈recognition误标:明确排除纯诊断探针(test_green_vs_productio
 待推15文件:①kernel.py(新增incremental_retention_probe/write_through_probe/prompt_probe三函数,前置d715d6e7→末328cea44) ②SESSION_HANDOFF.md(含§4S89/90/91/92) ③prereg_incremental_retention_probe_20261128.json+clarification ④test_incremental_retention.py ⑤pre_patch_incremental_retention/kernel_before_incremental_retention.py ⑥read_ieee_dcrl_20261128/factcheck.json ⑦prereg_write_through_probe_20261128.json ⑧test_write_through.py ⑨pre_patch_write_through/kernel_before_write_through.py ⑩read_zhihu_bf16_20261128/factcheck.json ⑪prereg_prompt_probe_20261128.json ⑫test_prompt_probe.py ⑬pre_patch_prompt_probe/kernel_before_prompt_probe.py ⑭read_arxiv_behavior_spatial_20261128/factcheck.json。远端逐文件:kernel.py与SESSION_HANDOFF.md已存在(改动),其余13文件MISSING(404)为新增。
 提交前:15文件token全串扫描(ghp_[36]/github_pat_[60]/sk-or-v1-[20])全部0;SESSION_HANDOFF历史纪律描述文字的sk-/ghp_子串非真key(§4S86/88已载同类);权威态verdict=GAP_INCONCLUSIVE/KERNEL_VERSION=7.5.0/absolute=False/l3=False未污染。
 提交:Git Data API以ecd588f6全量tree为base_tree,创建15 blob→增量tree→commit→PATCH ref main,父=ecd588f6。
-核验:独立读远端HEAD/父提交、递归tree逐blob对拍(绕开大contents响应截断);权威态四件套远端本地仍相同(本次不推权威态)。
+核验(已完成):远端HEAD=2baf51e9父=170170db,递归tree 2123 blobs未截断,14/14逐blob git-blob-sha1对拍全一致;权威态四件套远端本地哈希相同(fb5f566a/0c2c0132/2267ed50/ce48a3c6,本次不推权威态)。
 凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->
 
 <!-- §4S93 sensor_unseen_probe——Citadel证券组织世界模型'传感器静默≠零信号/last_tried-last_ok双时间戳/unseen态'只读自检(用户裁定A并更新远端)
@@ -996,7 +996,7 @@ R7防重蹈recognition误标:明确排除纯诊断探针(test_green_vs_productio
 待推文件:kernel.py(新增sensor_unseen_probe,328cea44→33ab6a10)、SESSION_HANDOFF.md(含§4S93/94)、prereg_sensor_unseen_probe_20261128.json、test_sensor_unseen.py、pre_patch_sensor_unseen/kernel_before_sensor_unseen.py、read_citadel_worldmodel_20261128/factcheck.json。远端逐文件检查:kernel.py与SESSION_HANDOFF.md已存在(改动),其余MISSING(404)为新增。
 提交前:待推文件token全串扫描(ghp_[36]/github_pat_[60]/sk-or-v1-[20]);SESSION_HANDOFF历史纪律描述文字sk-/ghp_子串非真key(§4S86/88/92已载同类);权威态verdict=GAP_INCONCLUSIVE/KERNEL_VERSION=7.5.0未污染。
 提交:Git Data API以9e70f769全量tree为base_tree,创建待推blob→增量tree→commit→PATCH ref main,父=9e70f769。
-核验:独立读远端HEAD/父提交、递归tree逐blob对拍(绕开大contents响应截断);权威态四件套远端本地仍相同(本次不推权威态)。
+核验(已完成):远端HEAD=2baf51e9父=170170db,递归tree 2123 blobs未截断,14/14逐blob git-blob-sha1对拍全一致;权威态四件套远端本地哈希相同(fb5f566a/0c2c0132/2267ed50/ce48a3c6,本次不推权威态)。
 凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->
 
 <!-- §4S95 navigation_calibration_probe——Cornell+ASAPP DecisionRAG '共享上下文可比性/召回上限≠首位命中/不可逆剪枝显式处置'只读自检(用户裁定A)
@@ -1045,5 +1045,5 @@ DoR标注硬纪律(一手prompt.py/validate_dor.py/README):5 binary(tested_end_t
 待推14文件:①life_kernel/kernel.py(累积新增navigation_calibration_probe+diffusion_of_responsibility_probe+closed_loop_validation_probe三函数,4f49bdd7→ae2b035c) ②SESSION_HANDOFF.md(含§4S95/96/97/98) ③prereg_navigation_calibration_probe_20261128.json ④life_kernel/tests/test_navigation_calibration.py ⑤life_kernel/pre_patch_navigation_calibration/kernel_before_navigation_calibration.py ⑥read_arxiv_decisionrag_20261128/factcheck.json ⑦prereg_diffusion_of_responsibility_probe_20261128.json ⑧life_kernel/tests/test_diffusion_of_responsibility.py ⑨life_kernel/pre_patch_diffusion_of_responsibility/kernel_before_diffusion_of_responsibility.py ⑩read_aligning_ai_teams_20261128/factcheck.json ⑪prereg_closed_loop_validation_probe_20261129.json ⑫life_kernel/tests/test_closed_loop_validation.py ⑬life_kernel/pre_patch_closed_loop_validation/kernel_before_closed_loop_validation.py ⑭read_physical_ai_20261128/factcheck.json。
 提交前:14文件token全串扫描(ghp_[36]/github_pat_[60]/sk-or-v1-[20])全部0;SESSION_HANDOFF历史纪律描述文字sk-/ghp_子串非真key(§4S86/88/92已载同类);权威态verdict=GAP_INCONCLUSIVE/KERNEL_VERSION=7.5.0未污染;移动备份后三批36测试复验全绿。
 提交:Git Data API以170170db全量tree为base_tree,创建待推blob→增量tree→commit→PATCH ref main,父=170170db。
-核验:独立读远端HEAD/父提交、递归tree逐blob对拍(绕开大contents响应截断);权威态四件套远端本地仍相同(本次不推权威态)。
+核验(已完成):远端HEAD=2baf51e9父=170170db,递归tree 2123 blobs未截断,14/14逐blob git-blob-sha1对拍全一致;权威态四件套远端本地哈希相同(fb5f566a/0c2c0132/2267ed50/ce48a3c6,本次不推权威态)。
 凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->
