@@ -3951,6 +3951,146 @@ def recognition_probe(verdict_sources=None, decisions_path=None, gap_archive_pat
     }
 
 
+def assurance_probe(assurance_signals=None):
+    """§4S83【只读自检·分层降低风险≠保证隔离/结构在位≠实质保证】对应
+    deepseek-ai/deepseek-harness SAFETY.md 原文(一手 2026-11-28):
+      "It has not undergone a security audit and must not be treated as
+       secure or production-ready."
+      "Sandboxing, approval prompts, and permission controls can reduce
+       risk, but they do not guarantee isolation or prevent damage."
+    官方比书更诚实: 沙箱/审批/权限三层只是降低风险, 不保证隔离; 未过安全审计,
+    不得视为安全或生产就绪。内核同构: verifier_gaming_probe 的 ship_gate_intact
+    =true 仅表结构齐全, 不代表实际决策已被人类复核。
+
+    本探针只做结构自检: 内核产出的'结构保证类信号'是否都携带'结构≠保证'的
+    诚实边界声明。扫描面精确限定三类真实信号(不扩到纯诊断探针):
+      ① verifier_gaming_probe.ship_gate_intact=True
+      ② support_escape_probe.behavior_confirmations 非空
+      ③ gate_readiness_probe.all_currently_diagnostic_only=True
+         + escalation_requires_user=True
+    每类的边界声明在 honesty 或 caveat 字段。无边界声明 = ASSURANCE_OVERCLAIM
+    (标注,不删除/不伪造裁定);自称 guaranteed/secure/production-ready 且无边界
+    = ASSURANCE_INFLATED;自封 is_gate_verdict=True = SELF_GATED。
+
+    严格边界: 内核未过安全审计、无真实隔离、无真人复核;本探针不宣称任何保证,
+    只检查'结构信号有没有如实声明自己不是保证'。DSH 是 developer preview,
+    原仓 SAFETY.md 只借镜面, 不把它当安全背书。assurance_signals 可注入做隔离
+    负向测试,生产恒 None 读真实。不写盘不消费不进判定,不改被扫探针任何字段。
+    预注册 prereg_assurance_probe_20261128.json SHA 7338c0fe… 改码前锁死。
+    """
+    # ---- 边界声明关键词(真实措辞覆盖: honesty/caveat 中的中文声明) ----
+    disclaimer_words = [
+        "结构齐全", "仅表结构", "非真人复核", "未被人类复核",
+        "需人工复核", "不等于门禁真的生效", "不保证", "结构声明",
+        "reduce risk", "do not guarantee", "not been audited",
+    ]
+    inflation_words = [
+        "guaranteed", "production-ready", "secure by default",
+        "保证安全", "保证隔离", "已过安全审计", "已审计",
+    ]
+
+    if assurance_signals is None:
+        # ---- 真实三类结构保证类信号(精确扫描面,不扩到纯诊断探针) ----
+        vg = verifier_gaming_probe()
+        se = support_escape_probe()
+        gr = gate_readiness_probe()
+        assurance_signals = [
+            {
+                "name": "verifier_gaming_probe.ship_gate_intact",
+                "structure_claim": "ship_gate_intact",
+                "structure_present": vg.get("ship_gate_intact") is True,
+                "disclaimer": str(vg.get("honesty") or ""),
+                "is_gate_verdict": vg.get("is_gate_verdict"),
+            },
+            {
+                "name": "support_escape_probe.behavior_confirmations",
+                "structure_claim": "behavior_confirmations",
+                "structure_present": bool(se.get("behavior_confirmations")),
+                "disclaimer": str(se.get("honesty") or ""),
+                "is_gate_verdict": se.get("is_gate_verdict"),
+            },
+            {
+                "name": "gate_readiness_probe.diagnostic_only_gate",
+                "structure_claim": "diagnostic_only_gate",
+                "structure_present": (gr.get("all_currently_diagnostic_only") is True
+                                      and gr.get("escalation_requires_user") is True),
+                "disclaimer": str(gr.get("caveat") or gr.get("honesty") or ""),
+                "is_gate_verdict": gr.get("is_gate_verdict"),
+            },
+        ]
+
+    # ---- 逐信号分类 ----
+    rows = []
+    for s in assurance_signals:
+        if s.get("structure_present") is not True:
+            continue  # 非结构保证类信号,不进扫描面
+        name = str(s.get("name", "?"))
+        claim = str(s.get("structure_claim", ""))
+        disc = str(s.get("disclaimer") or "")
+        has_disc = any(w in disc for w in disclaimer_words)
+        inflated = any(w in (claim + " " + disc).lower() for w in inflation_words)
+        if s.get("is_gate_verdict") is True:
+            cls, anchor = "SELF_GATED", "自封门禁 is_gate_verdict=True"
+        elif has_disc:
+            cls, anchor = "ASSURANCE_DECLARED", "边界声明在位: 结构≠保证"
+        elif inflated:
+            cls, anchor = "ASSURANCE_INFLATED", "自称保证/已审计但无边界声明"
+        else:
+            cls, anchor = "ASSURANCE_OVERCLAIM", "结构信号无边界声明"
+        rows.append({
+            "name": name,
+            "structure_claim": claim,
+            "class": cls,
+            "assurance_anchor": anchor,
+        })
+
+    counts = {
+        "ASSURANCE_DECLARED": sum(1 for r in rows if r["class"] == "ASSURANCE_DECLARED"),
+        "ASSURANCE_OVERCLAIM": sum(1 for r in rows if r["class"] == "ASSURANCE_OVERCLAIM"),
+        "ASSURANCE_INFLATED": sum(1 for r in rows if r["class"] == "ASSURANCE_INFLATED"),
+        "SELF_GATED": sum(1 for r in rows if r["class"] == "SELF_GATED"),
+    }
+    bad = [r for r in rows if r["class"] != "ASSURANCE_DECLARED"]
+    if not rows:
+        assurance_flag = "NO_STRUCTURE_CLAIM"
+    elif bad:
+        assurance_flag = "OVERCLAIM_PRESENT"
+    else:
+        assurance_flag = "ALL_DISCLAIMED"
+
+    one_page = " | ".join([
+        "assurance自检(分层降低风险≠保证/结构在位≠实质保证)",
+        "结构信号%d" % len(rows),
+        "边界声明%d" % counts["ASSURANCE_DECLARED"],
+        "无声明%d" % counts["ASSURANCE_OVERCLAIM"],
+        "自称保证%d" % counts["ASSURANCE_INFLATED"],
+        "自封门%d" % counts["SELF_GATED"],
+        "flag=%s" % assurance_flag,
+    ]) + " → 判定权归用户"
+
+    return {
+        "assurance_flag": assurance_flag,
+        "rows": rows,
+        "counts": counts,
+        "overclaim_rows": bad,
+        "one_page": one_page,
+        "honesty": (
+            "借 DSH SAFETY.md 'Sandboxing/approval/permission can reduce risk but do not "
+            "guarantee isolation; not audited, not secure or production-ready' 的锋利镜面做"
+            "结构自检: 内核结构信号(ship_gate_intact/behavior_confirmations/diagnostic_only_gate)"
+            "须携带'结构在位≠实质保证/≠真人复核'边界声明; 无声明=ASSURANCE_OVERCLAIM,自称保证"
+            "=ASSURANCE_INFLATED,自封门=SELF_GATED(均标注非裁定,不删除/不伪造裁定/不替用户裁定); "
+            "内核未过安全审计、无真实隔离、无真人复核,本探针不宣称任何保证; DSH 是developer "
+            "preview,SAFETY.md 只借镜面非安全背书; 注入仅负向测试生产恒None; "
+            "只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": (
+            "deepseek-ai/deepseek-harness SAFETY.md (GitHub API 一手 2026-11-28) + "
+            "verifier_gaming_probe honesty 'ship_gate_intact=true仅表结构齐全,不代表实际决策已被人类复核'; "
+            "§4S83; prereg_assurance_probe_20261128.json SHA 7338c0fe…"),
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
 def takeover_request(action, nonce=None, note="", log_path=None, record=True):
     """【本机接管·下行】本机写一条接管指令到共享收件箱，供下次 runner 消费。
 

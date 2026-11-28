@@ -874,3 +874,23 @@ clone踩坑:默认IP两次失败(8分20秒空壳/超时),换备用IP 20.27.177.1
 提交:Git Data API以4ee78c16全量tree为base_tree,创建9 blob(PDF按base64)→增量tree→commit→PATCH ref main,父=4ee78c16。
 核验:独立读远端HEAD/父提交/完整tree逐blob对拍9文件全OK;大文件SESSION_HANDOFF/pdf用raw字节流绕开网络截断(§4S80经验);权威态四件套远端本地仍相同。
 凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删;hosts无残留。判定权归用户。 -->
+
+<!-- §4S83 assurance_probe——DSH SAFETY.md'分层≠保证'×内核'ship_gate_intact结构齐全≠真人复核'只读自检(用户'很有必要做成只读自检')
+触发:用户深研DSH开源仓后确认'很有必要做成只读自检',把最锋利一条镜像做结构自检,不动权威态。
+一手依据:deepseek-ai/deepseek-harness SAFETY.md(GitHub API一手拉取2026-11-28)原文'It has not undergone a security audit and must not be treated as secure or production-ready'+'Sandboxing, approval prompts, and permission controls can reduce risk, but they do not guarantee isolation or prevent damage';内核同构verifier_gaming_probe honesty'ship_gate_intact=true仅表结构齐全,不代表实际决策已被人类复核'。官方比书更诚实:分层只降风险不保证隔离,与当前'结构在位≠真人复核'同构。
+预注册prereg_assurance_probe_20261128.json SHA 7338c0fe…(改码前锁),内核前置621ddc29…;备份pre_patch_assurance/kernel_before_assurance.py(621ddc29…)可回滚。
+实现:kernel.py纯新增assurance_probe(assurance_signals=None),diff确认仅新增1函数(90a91),AST OK,4872→5012行。扫描面精确三类真实结构保证信号:①verifier_gaming_probe.ship_gate_intact ②support_escape_probe.behavior_confirmations ③gate_readiness_probe.diagnostic_only_gate;边界声明取honesty/caveat,关键词含结构齐全/非真人复核/需人工复核/不等于门禁真的生效/不保证等。逐条分类ASSURANCE_DECLARED/OVERCLAIM(无声明)/INFLATED(自称guaranteed已审计)/SELF_GATED(自封门);flag三值NO_STRUCTURE_CLAIM/ALL_DISCLAIMED/OVERCLAIM_PRESENT。
+R7防重蹈recognition误标:明确排除纯诊断探针(test_green_vs_production/weakened_assertion/gap_convergence/recognition)——它们产gap_flag/clean_flag非结构保证信号;structure_present非True者不进扫描面。
+真实结论:3结构信号全带边界声明,0 overclaim/0 inflated/0 self_gated,flag=ALL_DISCLAIMED(诚实零命中,不伪造保证也不刷保证)。
+验收:G3负向注入12守卫全绿(预注册SHA/真实ALL_DISCLAIMED/扫描面精确三类/只读字段/无声明必OVERCLAIM/自称guaranteed必INFLATED/自封门必SELF_GATED不算已声明/带声明必DECLARED/空注入NO_STRUCTURE_CLAIM/非结构信号排除/honesty含未审计无隔离无复核非背书标注非裁定/权威态零副作用)。G6干净同口径对拍:①备份内核+基线284收集exit=0/FAILED=0(零回归铁证);②新内核dbfce1ea…+全量296收集exit=0/FAILED=0/ERROR=0=284+12。
+零副作用:权威态5f7a2584…/constitution 2ad148c7…/hb ea749f76…/inbox 8806b248…/DECISIONS 91114955…/归档账d73bfef5…/KB 0938b3df…全不变;只读不写盘不消费不进判定,不改被扫探针字段;verdict_unchanged/consumed=false/is_gate=false。
+边界:内核未过安全审计/无真实隔离/无真人复核,DSH SAFETY.md只借镜面非安全背书;不宣称任何保证,不替用户裁定;判定权归用户。GitHub未推(用户未要求)。 -->
+
+<!-- §4S84 GitHub同步§4S83(Git Data API通道,用户"推Github")
+触发:用户"推Github"。远端基线HEAD=6a5b01bd(§4S81-82)。本沙箱无.git,走Git Data API(§4S11/68/76/80/82先例)。
+吸取§4S82教训:先落本同步账再一次性推含账SESSION_HANDOFF,远端HEAD直接含自身,无双commit。
+待推5文件:kernel.py(新增assurance_probe)、test_assurance.py(12守卫)、prereg_assurance_probe_20261128.json、pre_patch_assurance/kernel_before_assurance.py(回滚备份)、SESSION_HANDOFF.md(含§4S83/§4S84)。
+提交前:5文件token全串扫描(ghp_/github_pat_/sk-/sk-or-v1_)全为0;权威态verdict=GAP_INCONCLUSIVE未污染。
+提交:Git Data API以6a5b01bd全量tree为base_tree,创建5 blob→增量tree→commit→PATCH ref main,父=6a5b01bd。
+核验:独立读远端HEAD/父提交、逐文件raw字节对拍(绕开大tree截断);权威态四件套远端本地仍相同(本次不推权威态)。
+凭据纪律:token全程只在shell变量与header,不回显/不落盘/不进/workspace;临时脚本/tmp即删。判定权归用户。 -->

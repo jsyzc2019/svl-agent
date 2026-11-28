@@ -1,0 +1,36 @@
+{
+  "prereg_id": "assurance_probe_20261128",
+  "created_at": "2026-11-28T19:40:00+08:00",
+  "trigger": "用户确认'很有必要做成只读自检':把 DSH SAFETY.md'分层不保证隔离' × 内核 ship_gate_intact'结构齐全≠真人复核'做成只读自检",
+  "based_on": {
+    "primary": "deepseek-ai/deepseek-harness SAFETY.md (GitHub API 一手拉取 2026-11-28): 'It has not undergone a security audit and must not be treated as secure or production-ready.' + 'Sandboxing, approval prompts, and permission controls can reduce risk, but they do not guarantee isolation or prevent damage.'",
+    "kernel_counterpart": "verifier_gaming_probe honesty: 'ship_gate_intact=true仅表结构齐全,不代表实际决策已被人类复核'",
+    "key_mirror": "分层只降低风险≠保证隔离  ≡  结构信号在位≠真人复核/实质保证"
+  },
+  "kernel_sha256_before": "621ddc298c7afbee",
+  "kernel_version": "7.5.0",
+  "new_function": "assurance_probe(assurance_signals=None)",
+  "locked_rules": {
+    "R1": "扫描面精确限定为三类真实'结构保证类信号'(非所有探针,避免recognition_probe那种误标): ①verifier_gaming_probe.ship_gate_intact=True ②support_escape_probe.behavior_confirmations非空 ③gate_readiness_probe.all_currently_diagnostic_only=True+escalation_requires_user=True。每类必须携带'结构≠保证'诚实标注(honesty或caveat字段)",
+    "R2": "disclaimer关键词集合(真实措辞覆盖): 结构齐全/仅表结构/非真人复核/未被人类复核/需人工复核/不等于门禁真的生效/不保证/guarantee/reduce risk/结构声明。命中任一即视为已声明边界",
+    "R3": "flag三值: NO_STRUCTURE_CLAIM(无结构信号)/ALL_DISCLAIMED(全带边界声明)/OVERCLAIM_PRESENT(存在无边界声明的结构信号)。逐条分类 ASSURANCE_DECLARED(有边界) / ASSURANCE_OVERCLAIM(无边界,标注非裁定) / ASSURANCE_INFLATED(自称guaranteed/secure/production-ready且无边界,标注非裁定) / SELF_GATED(自封门is_gate_verdict=True,标注非裁定)",
+    "R4": "只读: 不写盘、不消费、不进判定、不改任何verdict/权威态/DECISIONS/归档账;不改被扫探针的任何字段",
+    "R5": "注入assurance_signals做隔离负向测试,生产恒None读真实探针;verdict_unchanged=True,consumed=False,is_gate_verdict=False;one_page结尾'判定权归用户'",
+    "R6": "honesty明确: 借DSH SAFETY.md'分层≠保证'的锋利镜像做结构自检;不宣称内核有安全审计/真实隔离/真人复核;原仓是developer preview未过安全审计、沙箱审批权限只降风险不保证隔离;OVERCLAIM/INFLATED/SELF_GATED是标注非裁定,不删除读数不伪造裁定;判定权归用户",
+    "R7": "不把纯诊断探针(test_green_vs_production/weakened_assertion/gap_convergence/recognition)纳入扫描面——它们产出的是gap_flag/clean_flag/recognition_flag诊断读数,不是'结构保证类信号';重蹈recognition_probe误标噪音的覆辙即为失败"
+  },
+  "acceptance": {
+    "G1_minimal": "纯新增1函数,AST OK,diff确认kernel仅增函数不改既有",
+    "G2_real": "真实运行: 三类结构信号全部被扫到且全带边界声明,flag=ALL_DISCLAIMED,ASSURANCE_OVERCLAIM=0(诚实零命中,不伪造overclaim也不刷绿)",
+    "G3_negative": "负向注入全真失败: 无边界结构信号必OVERCLAIM_PRESENT且ASSURANCE_OVERCLAIM;自称guaranteed必ASSURANCE_INFLATED;自封门必SELF_GATED;带边界声明必ASSURANCE_DECLARED;空注入NO_STRUCTURE_CLAIM",
+    "G4_readonly": "不写盘不消费不进判定;权威态四件套+DECISIONS+gap_archive+KB哈希前后一致",
+    "G6_regression": "干净同口径对拍: 备份内核+基线测试=原passed数;新内核+全量=原+n守卫;零回归"
+  },
+  "will_not_change": [
+    "kernel既有函数/阈值/权威态四件套",
+    "DECISIONS_20261127.json / gap_archive_20261128.json / knowledge_base_store.json / read_dsh_repo_20261128/*",
+    "任何既有 verdict / 11条心跳判定 / tagbook / 被扫探针返回字段",
+    "DSH SAFETY.md 任何原文(仅借镜面)"
+  ],
+  "boundary": "不宣称内核通过安全审计/有真实隔离/有真人复核;只做'结构保证类信号是否携带边界声明'的结构自检镜;不替用户裁定任何读数;判定权归用户"
+}
