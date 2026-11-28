@@ -809,3 +809,10 @@ clone踩坑:默认IP两次失败(8分20秒空壳/超时),换备用IP 20.27.177.1
 归档账gap_archive_20261128.json(字节SHA 3fea1a19…):14缺口=13 ACCEPTED_BOUNDARY(每条附真实why/hard_bound/honest_summary原文摘录,不臆造)+1 DEFERRED_USER_DECISION(memory_governance,只列'抽KB-AUDIT68/69 provenance候选、不写回KB'的待裁定动作,不执行);9条带backfill标记=HISTORICAL_IMMUTABLE(8 BIRTH_SYNCED+1 BIRTH_UNVERIFIABLE,口径与§4S74一致不混淆,count_synced=8/count_unverifiable=1)。
 诚实边界:ACCEPTED_BOUNDARY不是'已解决'是'已确认为边界不再投入验证',不洗白成PASS;归档=元信息标注,不改任何verdict/审计result.json/KB正文/权威态/心跳;不写回任何provenance候选;判定权归用户。
 验收:分类计数13+1=14/9=8+1自检通过;预注册SHA一致;内核SHA 85978106…不变;权威态5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…四哈希不变;抽查3个审计文件哈希未变;11条verdict逐条零改变;全量测试绿零回归。本轮只新增1个归档账JSON,零其它副作用。 -->
+
+<!-- §4S76 GitHub同步§4S73-75(Git Data API通道,遇后台runner并发)
+用户"按你的倾向归档,并更新Github"。远端基线HEAD=b8129a8(§4S72);本沙箱无.git,走Git Data API。
+并发事件(如实记录):首次PATCH ref返回422,排查发现后台base beat runner在09:58:49Z自动推了commit c8e7b4be(父=b8129a8,改base_beat_log.jsonl/circadian_log.jsonl两条心跳日志)。以旧父建的commit f4871e6b作废(未成HEAD,无副作用)。改以c8e7b4be为新基线重建。
+二次踩坑:Git Data API的create tree返回的tree只含本次提交条目(非全量),复用f4871e6b的tree sha只取到5个blob,导致首次成功commit a452ce14里4个新文件缺失+2个修改未生效。核验远端完整tree(r?recursive=1)发现缺失后,以a452ce14为基线补推6文件,得最终commit e6a454f8。
+核验:远端HEAD独立=e6a454f8904e727b6279b60a020c88c8fc7e9af7,连续3读稳定;完整tree 2248 blob未截断;本轮11文件零缺失零不匹配(逐blob SHA对拍);runner两条日志保留(远端版本,未被本地落后版回退)。11文件=gap_archive/prereg×3/test×2/pre_patch_gap_convergence×2/SESSION_HANDOFF/kernel/test_decision_digest。
+安全:提交前精确token全串扫描(ghp_36位/github_pat_76位/sk-ant/sk-or-v1)全为0;SESSION_HANDOFF命中的ghp_/sk-是历史纪律描述文字非真token(账里早载,已推过);权威态GAP_INCONCLUSIVE在,kernel_version 7.5.0;hosts github条目0,workspace无明文token文件。凭据仅上传区600原样。后台runner并发写入是真实心跳机制非错误,判定权归用户。 -->
