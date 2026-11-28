@@ -108,5 +108,15 @@
     ]
   },
   "overall": "DEEP_READ_COMPLETE",
-  "decision": "V4 咬出的是 KB-AUDIT08（train-serving 口径不对等）的老条款新实例——且 GR 主动披露（vs HiGR 未披露），门禁正确给出 flag vs downgrade 的区分。按 §61 先例：加固 support、不新增KB、不编译新门禁（防vanity）。无独立新牙。"
+  "decision": "V4 咬出的是 KB-AUDIT08（train-serving 口径不对等）的老条款新实例——且 GR 主动披露（vs HiGR 未披露），门禁正确给出 flag vs downgrade 的区分。按 §61 先例：加固 support、不新增KB、不编译新门禁（防vanity）。无独立新牙。",
+  "verdict": "DECIDED_NARRATIVE",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "decision",
+    "source_value_preview": "V4 咬出的是 KB-AUDIT08（train-serving 口径不对等）的老条款新实例——且 GR 主动披露（vs HiGR 未披露），门禁正确给出 flag vs down",
+    "rule_id": "R5_decision_narrative",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

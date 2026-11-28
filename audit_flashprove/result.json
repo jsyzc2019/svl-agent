@@ -113,5 +113,15 @@
   },
   "drift_from_prereg": {},
   "all_aligned": true,
-  "prereg_sha256": "5306c3f82dce3d6bf43a949ed11d3f64b91d78fcf2972e4069d87c84ed6d36fa"
+  "prereg_sha256": "5306c3f82dce3d6bf43a949ed11d3f64b91d78fcf2972e4069d87c84ed6d36fa",
+  "verdict": "SCOPED",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "judges.*.verdict",
+    "source_value_preview": "[\"PASS\", \"PASS\", \"SCOPED\", \"PASS\", \"PASS\", \"PASS\", \"PASS\", \"PASS\"]",
+    "rule_id": "R2_judges_scoped",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

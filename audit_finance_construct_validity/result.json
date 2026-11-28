@@ -103,5 +103,15 @@
     }
   ],
   "honest_bound_history_note": "清单 §57 原文写『康美 FP』，但本仓 finance_blind_test_result.json 的 10 家样本里并无康美；实际 alarm=1 且 label_neg=0 的代理标签背离样本是奥瑞德(600666)。本轮如实按现场数据记为奥瑞德，不把奥瑞德冒充康美，也不臆造康美 FP 证据。此为历史叙述口径差异，公开留痕不作掩盖。",
-  "honest_summary": "拿证据审本仓自己的财务盲测结论（P0 本意，非内审递归，非因子有效性小话）：三条证伪全部成立——CV1 代理标签与会计信号背离（审计意见≠叙事真实性构念）、CV2 precision=0.75 的 Wilson95CI=[0.30,0.95] 极宽、CV3 样本基础率 33% 人为富集且跨阈值 precision 0.429~0.75 敏感。器官裁决=PROXY_GAP_CONFIRMED，负向自咬通过=True。硬边界：不判任何个股真假、总体基础率 UNKNOWN 不外推、三条是『本仓结论不可靠』的证据非『反结论成立』的证据。判定态三值/宪法锁/§100/十案全不动。"
+  "honest_summary": "拿证据审本仓自己的财务盲测结论（P0 本意，非内审递归，非因子有效性小话）：三条证伪全部成立——CV1 代理标签与会计信号背离（审计意见≠叙事真实性构念）、CV2 precision=0.75 的 Wilson95CI=[0.30,0.95] 极宽、CV3 样本基础率 33% 人为富集且跨阈值 precision 0.429~0.75 敏感。器官裁决=PROXY_GAP_CONFIRMED，负向自咬通过=True。硬边界：不判任何个股真假、总体基础率 UNKNOWN 不外推、三条是『本仓结论不可靠』的证据非『反结论成立』的证据。判定态三值/宪法锁/§100/十案全不动。",
+  "verdict": "GAP_INCONCLUSIVE",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "verdict_triplet_after",
+    "source_value_preview": "[\"GAP_INCONCLUSIVE\", false, false]",
+    "rule_id": "R1_triplet_after",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

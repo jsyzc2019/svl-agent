@@ -126,5 +126,15 @@
     "layer3_不可判定边界": "评审者实际能力是否真被侵蚀、某流程的评审是否真有效、AI 错时接受率是否在真实工程场景复现——本门只判『能力前提是否诚实披露』，不承诺评审真有效(KB-R07/KB-AUDIT03 存在≠执行)；审读外部工程流程，不判本仓。"
   },
   "gate_decision": "编译第 22 道门禁 supervision_viability（监督可行性：评审独立性能力前提）",
-  "kb_decision": "新增 KB-AUDIT17 + 加固 STRUCT02（Osmani 谱系折1）/STRUCT05（委托≠投降/生产≠评审能力）/AUDIT03（有评审环节≠评审者仍有独立判断）"
+  "kb_decision": "新增 KB-AUDIT17 + 加固 STRUCT02（Osmani 谱系折1）/STRUCT05（委托≠投降/生产≠评审能力）/AUDIT03（有评审环节≠评审者仍有独立判断）",
+  "verdict": "SCOPED",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "judges.*.verdict",
+    "source_value_preview": "[\"PASS\", \"PASS\", \"PASS\", \"PASS\", \"PASS\", \"PASS\", \"PASS\", \"PASS\"]",
+    "rule_id": "R2_judges_scoped",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

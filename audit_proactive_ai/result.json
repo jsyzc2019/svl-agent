@@ -149,5 +149,15 @@
     "layer3_不可判定边界": "主动 agent 是否真的校准、是否真的只在授权内行动——本门只判『声称的授权声明是否诚实自洽』，不承诺实际行为有效(KB-R07/KB-META01 存在≠有效性)；审读外部系统，不判本仓。"
   },
   "gate_decision": "编译新门禁 proactive_authorization (第20道)",
-  "kb_decision": "新增 KB-AUDIT15 + 加固 STRUCT02/STRUCT05/AUDIT03"
+  "kb_decision": "新增 KB-AUDIT15 + 加固 STRUCT02/STRUCT05/AUDIT03",
+  "verdict": "SCOPED",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "judges.*.verdict",
+    "source_value_preview": "[\"PASS\", \"PASS\", \"SCOPED\", \"PASS\", \"PASS\", \"PASS\", \"PASS\", \"PASS\"]",
+    "rule_id": "R2_judges_scoped",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

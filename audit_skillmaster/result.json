@@ -67,5 +67,15 @@
       "'移除外部teacher'需限定阶段: 冷启动SFT仍用Claude, 只有RL阶段自主",
       "工具选型/环境结构化程度是方法可迁移性的前提"
     ]
+  },
+  "verdict": "PASS",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "summary.all_pass",
+    "source_value_preview": "true",
+    "rule_id": "R6_summary_allpass",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
   }
 }

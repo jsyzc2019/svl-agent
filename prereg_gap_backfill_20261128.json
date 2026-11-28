@@ -1,0 +1,75 @@
+{
+  "prereg_id": "prereg_gap_backfill_20261128",
+  "created_at_utc": "2026-11-28T08:35:00Z",
+  "title": "35个'?'审计文件 verdict 保真回填",
+  "trigger": "用户§4S70裁定:'2个真空白要探探,33个如果回填好就回填'。勘察确认:35个'?'全是 schema 异构,判定藏在 verdict 之外的字段/嵌套里;2个'真空白'(flashprove/vanity)探明也有嵌套判定(judges.*.verdict / kernel_verdict_unchanged),所以主观上'真空'实为嵌套藏判定。回填 = 把已有真实判定态提升为顶层 verdict 键,让 regression_vs_gap_probe 不再误报'?'。",
+
+  "core_principle": "保真回填:verdict 值必须来自该文件已有的真实判定态,真悬置(SCOPED/INCONCLUSIVE/PARTIAL)必须保留悬置,完成态才标完成;绝不把悬置洗成完成态、绝不把长叙述文本塞进 verdict、绝不伪造原本不存在的判定。",
+
+  "no_side_effect": {
+    "authoritative_state": "不动 (5f7a2584…)",
+    "kernel_verdict": "不动 (GAP_INCONCLUSIVE / l3=false / absolute=false)",
+    "heartbeat_ledger": "不动",
+    "kernel_py": "不改判定函数,仅一次性迁移脚本改审计文件",
+    "original_fields_preserved": "所有原有字段(decision/gate_decision/verdict_triplet_*/evidence_grade/summary/...)原样保留,只新增 verdict 与 verdict_backfill 两个键"
+  },
+
+  "backup": {
+    "kernel": "life_kernel/pre_patch_gap_backfill/kernel_before_gap_backfill.py SHA=8299913d…",
+    "audit_files": "audit_backup_pre_backfill/ 71个result.json按目录结构全量备份(哈希抽查一致),一键可回滚",
+    "baseline_tests": "230 passed"
+  },
+
+  "backfill_mapping": {
+    "PRIORITY": [
+      "1. verdict_triplet_after 存在 → verdict = after[0] (当前态,如 GAP_INCONCLUSIVE/SCOPED 原样保留;这是最强证据,因为它是补平后的权威态)",
+      "2. 嵌套 judges.*.verdict 存在(flashprove) → 聚合:全PASS且all_aligned=True→PASS;否则→SCOPED",
+      "3. kernel_verdict_unchanged 存在(vanity) → verdict = kernel_verdict_unchanged (GAP_INCONCLUSIVE)",
+      "4. decision/final_decision/gate_decision/kb_decision/overall 值是短标记(≤40字符,如 DEEP_READ_COMPLETE/加固不新增/编译新门禁X) → verdict = 规范化短标记 DECIDED_<类别>",
+      "5. 同字段值是长叙述(>40字符,含'咬出/披露/设计选择'等) → verdict = DECIDED_NARRATIVE (不塞长文,仅标记该审计有决策结论)",
+      "6. summary 含 all_pass=True → verdict = PASS;summary 含 all_pass=False → verdict = SCOPED",
+      "7. status=EXECUTED → verdict = EXECUTED",
+      "8. 仅 evidence_grade 弱信号 → verdict = WEAK_SIGNAL_GRADED (不冒充明确结论)",
+      "9. paper_forensic_verdict 有 code → verdict = FORENSIC_<code>",
+      "10. verdict_impact/verdict_triplet_before 等只有 before → 若 before[0] 是悬置态,保留该悬置;否则 REFERENCED"
+    ],
+    "verdict_value_cap": 40,
+    "never": [
+      "不得把 GAP_INCONCLUSIVE/PARTIAL/SCOPED 洗成 PASS/DECIDED",
+      "不得把 >40字符叙述文本写入 verdict",
+      "不得新增原本不存在的判定(无信号则标 NO_SIGNAL_AT_TOPLEVEL 并如实说明)",
+      "不得删除/修改任何原有字段"
+    ]
+  },
+
+  "backfill_marker": {
+    "field": "verdict_backfill",
+    "subfields": ["applied", "source_field", "source_value_preview", "rule_id", "at_utc", "prereg_sha256", "note"],
+    "purpose": "让判据能区分'原生 verdict'与'回填 verdict',与 §4S64 心跳 verdict 补平反伪造纪律一致"
+  },
+
+  "expected": {
+    "files_to_fill": "35 (33 misread + 2 嵌套)",
+    "true_suspended_must_remain": ["audit_finance_construct_validity", "audit_memory_governance", "audit_vanity_selfaudit"],
+    "true_suspended_verdict": "GAP_INCONCLUSIVE",
+    "flashprove_verdict": "PASS (8 judges: 7 PASS + V3 SCOPED, all_aligned=True) — 保守取 SCOPED 亦可,须如实记录",
+    "after_fill_regression_probe": "unresolved_gap_count 应从46下降(35个'?'消失),但6个真INCONCLUSIVE+5个真PARTIAL=11个原生未解决必须仍在;若回填的2个GAP_INCONCLUSIVE保留,则未解决计数=13"
+  },
+
+  "guards": {
+    "G3_negative": [
+      "回放:finance/memory/vanity 回填后 verdict 必须仍是 GAP_INCONCLUSIVE(不洗白)",
+      "回放:任一回填文件 verdict 长度≤40字符(不塞长文)",
+      "回放:每个回填文件都有 verdict_backfill 标记且 source_field 非空",
+      "回放:所有原有字段键集合是回填前子集(原字段未删)",
+      "回放:权威态三件套+内核哈希未变",
+      "负向注入:构造一个含 GAP_INCONCLUSIVE 的 triplet_after → 回填必须保留悬置"
+    ],
+    "G6_same_caliber": "移走新测试,新内核与备份内核同口径全量对拍相等;零回归。",
+    "G_rollback": "用 audit_backup_pre_backfill 可逐文件还原;回执记录每个文件回填前后哈希。"
+  },
+
+  "honesty": "回填是把'已有判定态'提升为顶层 verdict,不是新判定、不是翻案、不是修复审计结论。真悬置保留悬置(WEAK_SIGNAL/SCOPED/GAP_INCONCLUSIVE 不冒充 PASS)。2个'真空白'实为嵌套藏判定,本次一并处理。判定权归用户。",
+
+  "based_on": "用户§4S70裁定'2个真空白要探探,33个如果回填好就回填';§4S70勘察实证35个'?'全是schema异构;嵌套勘察实证flashprove/vanity判定藏在深层"
+}

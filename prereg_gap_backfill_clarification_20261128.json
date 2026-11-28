@@ -1,0 +1,8 @@
+{
+  "clarifies": "prereg_gap_backfill_20261128.json SHA=ae8410fd…",
+  "at_utc": "2026-11-28T08:40:00Z",
+  "issue": "预注册 backfill_mapping.PRIORITY 把规则3(kernel_verdict_unchanged)列为第3位,但 dry-run 发现该字段在所有审计文件里都是'内核判定未变'的权威态旁注(值恒为 GAP_INCONCLUSIVE),不是审计自身结论。若按第3位优先,会把 audit_argument_audit(status=EXECUTED/完成态)、audit_vanity 等一堆完成态审计误判成 GAP_INCONCLUSIVE 悬置——这与保真原则冲突。",
+  "resolution": "实现时把 R3(kernel_verdict_unchanged)降级到本体判定字段(decision族/status/summary)之后,仅在文件无任何本体判定字段时才用(vanity 的情况)。真悬置文件 finance/memory 走 R1(verdict_triplet_after=['GAP_INCONCLUSIVE',...]) 保留 GAP_INCONCLUSIVE,不受影响。",
+  "impact": "audit_argument_audit: 原会误判 GAP_INCONCLUSIVE → 修正为 EXECUTED(R7_status)。其余含 kernel_verdict_unchanged 但本体是完成态的文件不再被误伤。",
+  "honesty": "这是 dry-run 抓到的实现优先级瑕疵,如实记录;不改原预注册文件保持其 SHA 不变;方向更保真(完成态不冒充悬置,悬置也不洗成完成)。判定权归用户。"
+}

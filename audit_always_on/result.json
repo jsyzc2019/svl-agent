@@ -175,5 +175,15 @@
     },
     "lazy_import_registered": true,
     "not_in_run_loop": true
+  },
+  "verdict": "DECIDED_NARRATIVE",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "decision",
+    "source_value_preview": "V5 咬出真缺口：本仓 14 道门禁无一覆盖『事件驱动系统的状态连续性与可恢复性』（DURABLE_STATE/SOURCE_OF_TRUTH_RECOVERY/SINGLE_CO",
+    "rule_id": "R5_decision_narrative",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
   }
 }

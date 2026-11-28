@@ -122,5 +122,15 @@
     },
     "all_match": true
   },
-  "honesty_boundary": "本门禁只判声明自洽，不承诺真能防认知投降（KB-STRUCT05 框架≠有效、KB-R07 自洽≠有效、KB-RSI07 自述折扣、KB-STRUCT02 同谱系折扣）"
+  "honesty_boundary": "本门禁只判声明自洽，不承诺真能防认知投降（KB-STRUCT05 框架≠有效、KB-R07 自洽≠有效、KB-RSI07 自述折扣、KB-STRUCT02 同谱系折扣）",
+  "verdict": "WEAK_SIGNAL_GRADED",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "evidence_grade",
+    "source_value_preview": "{'S01': '公众号 AINLP 原文（用户确认），52nlp 同步站全文，含英文原稿截图+参考链接；二手译文折1', 'S02': '独立第三方综述，明标个人实务观察/无量化",
+    "rule_id": "R8_grade_only",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

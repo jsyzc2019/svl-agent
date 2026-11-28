@@ -79,5 +79,15 @@
     "§4he 自身制造缺口：执行了裁定却忘回写 status，本轮由首用取证抓到并补录，如实认不粉饰（非 CORR-REAL 认知错误，是留档完整性遗漏）。"
   ],
   "honest_summary": "首用抓到 RECEIPT_MISMATCH：三项裁定 D1/D2/D3 现场探针全 EXECUTED，但 DECISIONS 三条 status 仍 PENDING_EXECUTION——裁定记录说待执行、handoff 说已执行，留档自相矛盾。此缺口由 §4he 自身制造（执行了裁定却忘回写 status），如实认，不粉饰。补录 action=执行规则只补 status+receipt 字段，不改裁定实质内容、不新裁定、不代用户裁定。负向自咬三注入（全一致不误报/两方向失配都抓）全过。",
-  "verdict_impact": "不动（verdict/l3/absolute 与宪法锁字节未变，判定态前后快照核验）"
+  "verdict_impact": "不动（verdict/l3/absolute 与宪法锁字节未变，判定态前后快照核验）",
+  "verdict": "REFERENCED",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "verdict_impact",
+    "source_value_preview": "\"不动（verdict/l3/absolute 与宪法锁字节未变，判定态前后快照核验）\"",
+    "rule_id": "R10_referenced",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

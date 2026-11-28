@@ -138,5 +138,15 @@
     "已实现与愿景须分级，不把 exploring 当 shipped",
     "同构不等于互证：OpenAI 用类似机制不构成本仓框架独立验证",
     "代码强固只编译工程纪律，不宣称复现其内部系统"
-  ]
+  ],
+  "verdict": "PASS",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "summary.all_pass",
+    "source_value_preview": "true",
+    "rule_id": "R6_summary_allpass",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

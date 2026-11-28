@@ -91,5 +91,15 @@
     "gate": "svagent/serving_signal_gate.py:check_serving_signal",
     "reason": "V2/V6咬出本仓四道门禁均未覆盖的独立维度：训练监督信号在服务时可得性。编译新门禁（预注册fddecbea锁存+6活体回归+17测试+惰性导入+源码自审），遵循用户'把断言落到代码'。",
     "kb_action": "新增1条KB条目（train-serving信号可得性，独立拦截动作）+ 加固KB-AUDIT04一条support；不接run_loop（§58选A）"
+  },
+  "verdict": "DECIDED_STRUCT",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "decision",
+    "source_value_preview": "{\"new_teeth\": true, \"gate\": \"svagent/serving_signal_gate.py:check_serving_signal\", \"reason",
+    "rule_id": "R4_decision_struct",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
   }
 }

@@ -145,5 +145,15 @@
     },
     "all_passed": true
   },
-  "honesty_boundary": "本门禁只判声明自洽，不承诺评估判据真可靠(KB-STRUCT05框架≠有效、KB-R07自洽≠有效、KB-RSI07自述折扣、preprint折1)"
+  "honesty_boundary": "本门禁只判声明自洽，不承诺评估判据真可靠(KB-STRUCT05框架≠有效、KB-R07自洽≠有效、KB-RSI07自述折扣、preprint折1)",
+  "verdict": "WEAK_SIGNAL_GRADED",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "evidence_grade",
+    "source_value_preview": "{'S01': 'preprint under review(未评审)折1；实验作者自报3次运行mean±std、无第三方复现；Table2数字为论文声称本机未重跑', 'S03'",
+    "rule_id": "R8_grade_only",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

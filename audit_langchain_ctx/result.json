@@ -105,5 +105,15 @@
     ]
   },
   "overall": "DEEP_READ_COMPLETE",
-  "decision": "V4 咬出检索文本污染是 GT.SOURCE_UNTRUSTED（审计输入层源身份 block）未覆盖的独立维度（agent 执行层外部文本溯源）。通过 KB-META01 会拦才入检验，编译新门禁 svagent/retrieval_grounding.py:check_retrieval_grounding（三条件：data标记/溯源校验/上下文隔离 + stale枚举），8活体回归+13测试+源码自审全过，惰性导入可用。新增 KB-AUDIT09（会拦才入），不灌水；遵循 §58 选 A 不接 run_loop。诚实边界：只判验证动作存在，不承诺防住注入（作者自认无完全防护）。"
+  "decision": "V4 咬出检索文本污染是 GT.SOURCE_UNTRUSTED（审计输入层源身份 block）未覆盖的独立维度（agent 执行层外部文本溯源）。通过 KB-META01 会拦才入检验，编译新门禁 svagent/retrieval_grounding.py:check_retrieval_grounding（三条件：data标记/溯源校验/上下文隔离 + stale枚举），8活体回归+13测试+源码自审全过，惰性导入可用。新增 KB-AUDIT09（会拦才入），不灌水；遵循 §58 选 A 不接 run_loop。诚实边界：只判验证动作存在，不承诺防住注入（作者自认无完全防护）。",
+  "verdict": "DECIDED_NARRATIVE",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "decision",
+    "source_value_preview": "V4 咬出检索文本污染是 GT.SOURCE_UNTRUSTED（审计输入层源身份 block）未覆盖的独立维度（agent 执行层外部文本溯源）。通过 KB-META01 会拦才",
+    "rule_id": "R5_decision_narrative",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

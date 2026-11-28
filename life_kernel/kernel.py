@@ -959,6 +959,102 @@ def regression_vs_gap_probe(bad_chains=None, audit_verdicts=None):
     }
 
 
+def unresolved_gap_schema_probe(audit_root=None):
+    """【只读·35个'?'schema误读诊断】揭示 regression_vs_gap_probe 单键兜底制造的假象。
+
+    regression_vs_gap_probe 用 json.load().get('verdict','?') 扫 audit_*/result.json,
+    verdict 键缺失就记 '?'——但这批历史审计文件只是判定字段名异构(decision/gate_decision/
+    verdicts/evidence_grade...),不是判定未知。本判据逐条用字段族重新分类,把'被误读的
+    明白账'(misread)与'真无顶层判定'(true_blank)拆开,并显式列真空白文件名供人工裁定。
+
+    只读、不写盘、不改历史审计文件、不改 regression_vs_gap_probe 口径、不进判定;
+    is_gate_verdict 恒 False,判定权归用户。审计根 audit_root 可注入(负向测试用隔离目录)。
+    """
+    import glob as _glob
+    if audit_root is None:
+        audit_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    files = sorted(_glob.glob(os.path.join(audit_root, "audit_*", "result.json")))
+
+    # 判定字段族(按优先级);值为该族识别到的首个字段名
+    DECISION_FIELDS = ("decision", "final_decision", "gate_decision",
+                       "kb_decision", "overall", "outcome", "conclusion")
+    PLURAL_FIELDS = ("verdicts", "verdict_triplet_before", "verdict_triplet_after",
+                     "paper_forensic_verdict", "verdict_impact")
+    GRADE_FIELDS = ("evidence_grade", "summary", "three_layer_honesty")
+    STATUS_DONE = {"EXECUTED", "PASS", "COMPLETE", "DONE"}
+
+    counts = {"UNREADABLE": 0, "DECISION_ALIAS": 0,
+              "VERDICT_PLURAL_OR_TRIPLET": 0, "STATUS_FIELD": 0,
+              "GRADE_OR_SUMMARY_ONLY": 0, "NO_TOPLEVEL_VERDICT": 0}
+    per_file = []
+    for f in files:
+        try:
+            d = json.load(open(f, encoding="utf-8"))
+        except Exception as e:
+            cls, field, preview = "UNREADABLE", None, ("PARSE_ERR:" + str(e)[:60])
+            d = None
+        else:
+            # 有 verdict 键的不在"?"分类范围,跳过
+            if "verdict" in d:
+                continue
+            cls, field, preview = None, None, ""
+            for k in DECISION_FIELDS:
+                if k in d:
+                    cls, field = "DECISION_ALIAS", k
+                    break
+            if cls is None:
+                for k in PLURAL_FIELDS:
+                    if k in d:
+                        cls, field = "VERDICT_PLURAL_OR_TRIPLET", k
+                        break
+            if cls is None:
+                st = d.get("status")
+                if st is not None and str(st).strip().upper() in STATUS_DONE:
+                    cls, field = "STATUS_FIELD", "status"
+            if cls is None:
+                for k in GRADE_FIELDS:
+                    if k in d:
+                        cls, field = "GRADE_OR_SUMMARY_ONLY", k
+                        break
+            if cls is None:
+                cls, field = "NO_TOPLEVEL_VERDICT", None
+            # 值摘要:只取判定字段值的前N字符,不读叙述性正文
+            if field is not None:
+                preview = json.dumps(d[field], ensure_ascii=False)[:90]
+        counts[cls] += 1
+        rel_dir = os.path.basename(os.path.dirname(f))
+        per_file.append({
+            "rel_dir": rel_dir,
+            "detected_class": cls,
+            "detected_field": field,
+            "value_preview": preview,
+        })
+
+    total = sum(counts.values())
+    misread = (counts["DECISION_ALIAS"] + counts["VERDICT_PLURAL_OR_TRIPLET"]
+               + counts["STATUS_FIELD"] + counts["GRADE_OR_SUMMARY_ONLY"])
+    true_blank = counts["NO_TOPLEVEL_VERDICT"]
+    blank_files = sorted(p["rel_dir"] for p in per_file
+                         if p["detected_class"] == "NO_TOPLEVEL_VERDICT")
+    return {
+        "total_question_marks": total,
+        "counts": counts,
+        "per_file": per_file,
+        "misread_count": misread,
+        "true_blank_count": true_blank,
+        "misread_rate": round(misread / total, 4) if total else 0.0,
+        "true_blank_files": blank_files,
+        "honesty": ("量的是'探针单键兜底造成的误读率',非宣称这35个审计的实质结论对错; "
+                    "GRADE_OR_SUMMARY_ONLY是弱判定信号不冒充明确结论; "
+                    "NO_TOPLEVEL_VERDICT只是顶层无判定字段,不代表嵌套里一定没有; "
+                    "不改历史审计文件、不改regression_vs_gap_probe口径、不替用户裁定; 判定权归用户。"),
+        "verdict_unchanged": True,
+        "is_gate_verdict": False,
+        "consumed": False,
+        "based_on": "§4S69决策收敛单判定权归用户; 勘察实证35个'?'中33个存在异构判定字段、2个真无顶层判定",
+    }
+
+
 def rejection_ledger_dedup_probe(bad_chains=None):
     """【只读·拒绝台账去重清单】GUARD gated buffer 拒绝台账防重复的只读同构。
 
@@ -3140,6 +3236,122 @@ def echo_responsiveness_probe(log_path=None, echo_mode=None, agenda_ids=None,
         "is_gate_verdict": False,  # 只读诊断非门禁，判定权归用户
         "verdict_unchanged": True, "constitution_ok": verify_constitution()["ok"],
         "honesty": "量的是机制是否满足外部标尺，非宣称有意识或真互动；CAUTIOUS是免责条款成立，须同时暴露C4弱的边际；外部模型的话是待检验标尺非判据权威",
+    }
+
+
+def decision_digest(log_path=None, inbox_log=None, now=None):
+    """§4S69【只读·决策收敛单】把散落在多个只读探针的读数聚成一张'待裁定清单'。
+
+    核心诚实:标注≠裁定。本函数只把选项与倾向摆清楚,不替用户决策、不消费消息、
+    不写台账、不进判定。消息正文(message字段)绝不读取。dirty key 原样暴露。
+    预注册 prereg_decision_digest_20261129.json SHA 32a62a50… 锁死。
+    """
+    # ---- ① 缺口聚类 ----
+    rg = regression_vs_gap_probe()
+    dist = rg.get("unresolved_gap_verdict_dist") or {}
+    clusters = {"UNCLASSIFIED": 0, "PARTIAL": 0, "INCONCLUSIVE": 0, "OTHER": 0}
+    gap_rows = []
+    dirty_keys = []
+    for raw_key, cnt in dist.items():
+        k = str(raw_key)
+        is_dirty = ("{" in k or "'" in k) and not k.startswith("?")
+        if is_dirty:
+            dirty_keys.append({"raw_key": k, "count": cnt, "dirty_key": True})
+        if k == "?" or k.startswith("?"):
+            cat = "UNCLASSIFIED"
+        elif "PARTIAL" in k.upper():
+            cat = "PARTIAL"
+        elif "INCONCLUSIVE" in k.upper():
+            cat = "INCONCLUSIVE"
+        else:
+            cat = "OTHER"
+        clusters[cat] += cnt
+        gap_rows.append({"raw_key": k, "count": cnt, "category": cat, "dirty_key": is_dirty})
+
+    # ---- ② 弱证据逐条(按 direction 精确去重) ----
+    ce = conclusion_evidence_probe()
+    weak = [x for x in ce.get("per_heartbeat", []) if x.get("state") == "PASS_WEAK_EVIDENCE"]
+    uniq = {}
+    for w in weak:
+        d = w.get("direction", "")
+        if d not in uniq:
+            uniq[d] = {"direction": d, "occurrences": 0,
+                       "direction_truncated": str(d)[:80], "evidence_tags": w.get("evidence_tags", [])}
+        uniq[d]["occurrences"] += 1
+    weak_rows = list(uniq.values())
+
+    # ---- ③ 收件箱消息(只读元信息,绝不读正文) ----
+    ib_path = inbox_log if inbox_log else (_sibling(log_path, "inbound_inbox.jsonl") if log_path else None)
+    unread = read_inbound(unread_only=True, log_path=ib_path)["messages"]
+    msg_rows = [{
+        "at": m.get("at"), "sender": m.get("sender"), "source_tier": m.get("source_tier"),
+        "nonce": m.get("nonce"), "channel": m.get("channel"),
+        "consumed": m.get("consumed"), "executed": m.get("executed"),
+        "body_read": False,
+    } for m in unread]
+
+    # ---- ④ vitals 快照 ----
+    birth = verdict_at_birth_probe(log_path=log_path)
+    echo = echo_responsiveness_probe(log_path=log_path)
+    stale = staleness_probe(now=now, heartbeat_log=log_path, inbox_log=ib_path)
+    base = base_status(log_path=log_path, now=now)
+    vitals = {
+        "authentic_birth_count": birth.get("authentic_birth_count"),
+        "backfilled_sync_count": birth.get("backfilled_sync_count"),
+        "echo_verdict": echo.get("verdict"),
+        "stale_count": stale["counts"]["STALE"],
+        "undated_count": stale["counts"]["UNDATED"],
+        "ambient_still_zero": base.get("ambient_still_zero"),
+        "base_beats": base.get("base_beats"),
+        "idle_gap_hours": base.get("idle_gap_hours"),
+    }
+
+    by_section = {
+        "gap_clusters": sum(clusters.values()),
+        "weak_evidence": len(weak),
+        "inbox_messages": len(msg_rows),
+    }
+    total_decisions = sum(by_section.values())
+    one_page = " | ".join([
+        "待裁定清单(不替你决定)",
+        "缺口%d={未分类%d/部分%d/无定论%d/其他%d}" % (
+            by_section["gap_clusters"], clusters["UNCLASSIFIED"], clusters["PARTIAL"],
+            clusters["INCONCLUSIVE"], clusters["OTHER"]),
+        "脏key%d" % len(dirty_keys),
+        "弱证据%d(独特方向%d)" % (by_section["weak_evidence"], len(weak_rows)),
+        "未读消息%d" % by_section["inbox_messages"],
+        "真就位%d/补判%d" % (vitals["authentic_birth_count"] or 0, vitals["backfilled_sync_count"] or 0),
+        "echo=%s ambient=%s" % (vitals["echo_verdict"], vitals["ambient_still_zero"]),
+    ]) + " → 判定权归用户"
+
+    sections = {
+        "gap_clusters": {
+            "counts": clusters, "total": by_section["gap_clusters"], "rows": gap_rows,
+            "dirty_keys": dirty_keys,
+            "options": ["接受为已知边界不再追", "指派具体复核", "降优先级挂起"],
+            "note": "按 verdict 前缀聚类;脏key原样暴露不静默解析;全部只标注不裁定。",
+        },
+        "weak_evidence": {
+            "total": by_section["weak_evidence"], "unique_directions": len(weak_rows), "rows": weak_rows,
+            "options": ["给该方向补特异 tagbook 锚点", "接受为读出假设不干预", "标为待人工复核"],
+            "note": "general兜底=tagbook无特异命中,弱证据≠证据错;不自动否决任何心跳。",
+        },
+        "inbox_messages": {
+            "total": by_section["inbox_messages"], "rows": msg_rows,
+            "options": ["保持未读(维持响应性留痕)", "仅消费授权首投(human_operator)", "两条都消费"],
+            "note": "只读元信息,message 正文绝不读取;不消费、不执行。",
+        },
+        "vitals": vitals,
+    }
+    return {
+        "total_decisions": total_decisions,
+        "by_section": by_section,
+        "one_page": one_page,
+        "sections": sections,
+        "honesty": ("标注≠裁定:本清单只把选项与倾向摆清楚,不替用户决策、不消费消息、不写台账、不进判定; "
+                    "消息正文绝不读取;脏key原样暴露;one_page数字来自真实探针返回值不硬编码; 判定权归用户"),
+        "based_on": "§4S69 决策收敛单; prereg_decision_digest_20261129.json SHA 32a62a50…",
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
     }
 
 

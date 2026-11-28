@@ -1,0 +1,79 @@
+{
+  "prereg_id": "prereg_gap_schema_20261128",
+  "created_at_utc": "2026-11-28T07:33:00Z",
+  "title": "35个'?'未分类缺口——schema误读诊断判据",
+  "trigger": "用户§4S69裁定:动决策收敛单里35个未分类('?')缺口。勘察发现这35个'?'是 regression_vs_gap_probe 用 json.load().get('verdict','?') 单键兜底制造的假象:35个 audit_*/result.json 并非判定未知,而是用了其它字段名表达判定。本判据只读揭示这一误读,不改历史审计文件。",
+  "core_claim": "35个'?'里绝大多数是判定字段名异构(schema heterogeneity)被探针误读,不是真糊涂账;真实无顶层判定的只是极少数。把明白账从'未分类'里正名出来,剩下的真空白才值得人工裁定。",
+
+  "scope": {
+    "scan_glob": "audit_*/result.json (与 regression_vs_gap_probe 完全相同的文件集合,保证口径对拍一致)",
+    "target": "仅 verdict 缺失(即 str(d.get('verdict','?'))=='?')或读取异常的文件;有 verdict 键的文件不在本判据分类范围",
+    "read_only": true,
+    "no_write_to_audit_files": true,
+    "no_reclassify_in_regression_probe": true,
+    "note": "不修改 regression_vs_gap_probe 的 verdict_dist 口径(那是 GUARD 命题判据,改口径属动判定);本判据是并列的新诊断,揭示根源。",
+    "reason": "改历史审计 result.json = 篡改台账;改既有判据口径 = 动判定。两者都不在授权范围。只新增只读诊断。"
+  },
+
+  "classification": {
+    "priority_order": ["UNREADABLE", "DECISION_ALIAS", "VERDICT_PLURAL_OR_TRIPLET", "STATUS_FIELD", "GRADE_OR_SUMMARY_ONLY", "NO_TOPLEVEL_VERDICT"],
+    "rules": {
+      "UNREADABLE": "JSON解析失败;单列,不臆测内容",
+      "DECISION_ALIAS": "含 decision/final_decision/gate_decision/kb_decision/overall/outcome/conclusion 任一(明确结论字段)",
+      "VERDICT_PLURAL_OR_TRIPLET": "含 verdicts/verdict_triplet_before/verdict_triplet_after/paper_forensic_verdict/verdict_impact 任一(复数或分项判定)",
+      "STATUS_FIELD": "status 字段且值为 EXECUTED/PASS/COMPLETE/DONE(执行态判定)",
+      "GRADE_OR_SUMMARY_ONLY": "仅含 evidence_grade/summary/three_layer_honesty(弱判定信号,非明确结论)",
+      "NO_TOPLEVEL_VERDICT": "无任何上述判定字段(真空白,需人工看嵌套)"
+    },
+    "aggregate": {
+      "misread_count": "前四类(DECISION_ALIAS+VERDICT_PLURAL_OR_TRIPLET+STATUS_FIELD+GRADE_OR_SUMMARY_ONLY)之和=表达了判定但字段名不是verdict=被误读的明白账",
+      "true_blank_count": "NO_TOPLEVEL_VERDICT=真无顶层判定",
+      "misread_rate": "misread_count / 35"
+    }
+  },
+
+  "expected_observation": {
+    "G2_real_data": {
+      "total_question_marks": 35,
+      "DECISION_ALIAS": 14,
+      "GRADE_OR_SUMMARY_ONLY": 14,
+      "VERDICT_PLURAL_OR_TRIPLET": 4,
+      "STATUS_FIELD": 1,
+      "NO_TOPLEVEL_VERDICT": 2,
+      "misread_count": 33,
+      "true_blank_count": 2,
+      "true_blank_files": ["audit_flashprove", "audit_vanity_selfaudit"]
+    },
+    "note": "以上为勘察时的真实读数,实现后须逐条复核;若不符,以实现输出为准并如实说明差异。"
+  },
+
+  "output_fields": {
+    "required": [
+      "total_question_marks", "counts", "per_file", "misread_count", "true_blank_count",
+      "misread_rate", "true_blank_files", "honesty", "verdict_unchanged",
+      "is_gate_verdict", "consumed", "based_on"
+    ],
+    "per_file_row": ["rel_dir", "detected_class", "detected_field", "value_preview"],
+    "value_preview_cap": 90,
+    "no_body_read": "只读判定字段与值摘要,不读取叙述性正文长文本(与收件箱正文不进判定同纪律)"
+  },
+
+  "honesty": "本判据量的是'探针单键兜底造成的误读率',非宣称这35个审计的实质结论对错;GRADE_OR_SUMMARY_ONLY是弱判定信号,不冒充明确结论;NO_TOPLEVEL_VERDICT只是'顶层无判定字段',不代表嵌套里一定没有;不改任何历史审计文件、不改regression_vs_gap_probe口径、不替用户裁定;判定权归用户。",
+
+  "guards": {
+    "G3_negative_injection": [
+      "构造 decision/gate_decision 文件→必须归 DECISION_ALIAS 且计入 misread",
+      "构造 verdicts 复数文件→必须归 VERDICT_PLURAL_OR_TRIPLET",
+      "构造 status=EXECUTED 文件→必须归 STATUS_FIELD",
+      "构造只有 evidence_grade 文件→必须归 GRADE_OR_SUMMARY_ONLY(不冒充明确结论)",
+      "构造空壳文件→必须归 NO_TOPLEVEL_VERDICT 且计入 true_blank",
+      "构造坏JSON文件→必须归 UNREADABLE 且不臆测",
+      "构造有 verdict 键的文件→必须被排除(不在35个分类范围)",
+      "验证 misread_count+true_blank_count+UNREADABLE == total_question_marks"
+    ],
+    "G6_same_caliber_diff": "移走新测试,新内核与备份内核同口径全量对拍须相等;加回守卫测试后增量为新测试数;零回归。",
+    "G_zero_side_effect": "权威态三件套+心跳/收件箱台账哈希动手前后一致;AST OK;判据 is_gate_verdict=False/verdict_unchanged=True/consumed=False。"
+  },
+
+  "based_on": "§4S69 决策收敛单判定权归用户;勘察实证:35个'?'中33个存在异构判定字段、2个真无顶层判定"
+}

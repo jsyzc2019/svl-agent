@@ -193,5 +193,15 @@
     "代码结论基于公开仓 19 文件，非逐行审阅训练框架依赖",
     "数据集/模型/环境镜像不在仓，无法验证实体本身",
     "核心'训练env→能力↑'是经验假设非定理；Best@k 依赖 verifier 精度非真值"
-  ]
+  ],
+  "verdict": "DECIDED_STRUCT",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "kb_decision",
+    "source_value_preview": "{\"new\": [], \"reinforce\": [\"KB-AUDIT07\", \"KB-STRUCT07\", \"KB-RSI06\", \"KB-META01\"], \"reason\":",
+    "rule_id": "R4_decision_struct",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

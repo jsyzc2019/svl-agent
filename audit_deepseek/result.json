@@ -112,5 +112,15 @@
     "layer3_不可判定边界": "客户端是否真的只依赖服务端裁决、加密内容是否真不可解密、安全风控是否真的有效、计费是否真按声明执行——本门只判『契约声明是否诚实披露控制边界』，不承诺系统行为有效（KB-R07/KB-AUDIT03 存在≠执行）；本门审读外部 API 契约与客户端，不判本仓。"
   },
   "gate_decision": "编译第 21 道门禁 interface_contract_honesty（客户端声称 vs 服务端裁决的契约边界诚实性）",
-  "kb_decision": "新增 KB-AUDIT16 + 加固 STRUCT02（五来源同主体折1）/STRUCT05（capability≠control）/AUDIT03（传入≠生效）"
+  "kb_decision": "新增 KB-AUDIT16 + 加固 STRUCT02（五来源同主体折1）/STRUCT05（capability≠control）/AUDIT03（传入≠生效）",
+  "verdict": "SCOPED",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "judges.*.verdict",
+    "source_value_preview": "[\"PASS\", \"PASS\", \"PASS\", \"PASS\", \"PASS\", \"PASS\", \"PASS\", \"PASS\"]",
+    "rule_id": "R2_judges_scoped",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

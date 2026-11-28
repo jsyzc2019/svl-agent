@@ -1,0 +1,72 @@
+{
+  "prereg_id": "§4S69_decision_digest",
+  "date": "2026-11-28",
+  "locked_before_code_change": true,
+  "trigger": "用户'推决策收敛单'——承接§4S68末尾建议①:把散落读数汇成一张待裁定清单,一次拍板",
+  "based_on": [
+    "§4S66-§4S68 深研与GitHub同步后的现状盘点",
+    "内核十几个只读探针已完备但决策堆积(46未解缺口/5弱证据/2未读消息)",
+    "诚实边界:标注≠裁定,收敛单只把选项摆清楚,不替用户决策"
+  ],
+  "scope": "只新增一个只读聚合函数 decision_digest() + 守卫测试;不改任何判据/不写台账/不消费消息/不替用户裁定/不进判定",
+  "probe": {
+    "name": "decision_digest",
+    "signature": "decision_digest(log_path=None, inbox_log=None, now=None)",
+    "purpose": "把散落在多个只读探针里的读数聚成一张'待裁定清单',每个缺口类别给出具体选项与建议倾向,但不执行、不消费、不裁定。",
+    "sections": [
+      {
+        "id": "gap_clusters",
+        "source": "regression_vs_gap_probe().unresolved_gap_verdict_dist",
+        "clustering_rule": "按 verdict 字符串前缀聚类:'?'→UNCLASSIFIED; 含'PARTIAL'→PARTIAL; 含'INCONCLUSIVE'→INCONCLUSIVE; 其余→OTHER。每个原始key原样保留在 raw_keys,不吞并。",
+        "dirty_key_handling": "若 key 不是简单字符串(如 dict 被字符串化的 DESTEER_PARTIAL),显式标 dirty_key=true 并原样列出,不得静默解析或丢弃——这本身就是一个待裁定项。",
+        "options_per_cluster": ["接受为已知边界不再追", "指派具体复核", "降优先级挂起"]
+      },
+      {
+        "id": "weak_evidence",
+        "source": "conclusion_evidence_probe().per_heartbeat 中 state=PASS_WEAK_EVIDENCE",
+        "clustering_rule": "按 direction 文本精确去重聚类,给出 unique_directions 与 occurrences;每条列出 direction 全文(不截断原文,另给 truncated 展示字段)。",
+        "note": "tagbook 无特异锚点=general 兜底,弱证据≠证据错;只标注供裁定,不自动否决。",
+        "options": ["给该方向补特异 tagbook 锚点", "接受为读出假设不干预", "标为待人工复核"]
+      },
+      {
+        "id": "inbox_messages",
+        "source": "read_inbound(unread_only=True)",
+        "per_message_fields": ["at", "sender", "source_tier", "nonce", "channel"],
+        "must_not_read": "message 正文字段绝不读取、绝不进清单(延续'正文不进判定'纪律)",
+        "options": ["保持未读(维持响应性留痕)", "仅消费授权首投(human_operator)", "两条都消费"]
+      },
+      {
+        "id": "vitals",
+        "source": "verdict_at_birth_probe / echo_responsiveness_probe / staleness_probe / base_status",
+        "fields": ["authentic_birth_count", "backfilled_sync_count", "echo_verdict", "stale_count", "ambient_still_zero", "base_beats", "idle_gap_hours"],
+        "note": "纯快照,不解释、不裁定"
+      }
+    ],
+    "aggregate_fields": ["total_decisions", "by_section", "one_page", "sections"],
+    "one_page": "一页式摘要:每个section一行'类别:数量→建议倾向',末尾固定'本清单不替用户裁定,判定权归用户'",
+    "honesty_rules": [
+      "不替用户裁定:任何 section 只给选项与倾向,不写'已决定/已消费/已裁定'",
+      "不读消息正文(message字段)",
+      "不消费消息、不写任何台账、不进判定",
+      "dirty_key 原样暴露,不静默解析",
+      "one_page 每个数字来自真实探针返回值,不硬编码",
+      "只读: verdict_unchanged=true, consumed=false, is_gate_verdict=false"
+    ],
+    "G3_negative_injection": [
+      "注入自定义 verdict_dist 含新PARTIAL key→聚类计数随之变化,证明非恒真",
+      "注入 dict 字符串化脏 key→dirty_key=true 且原样保留",
+      "注入重复 direction 的弱证据→unique_directions 去重、occurrences 累加",
+      "注入隔离收件箱→消息清单随注入变化,且正文字段不出现在任何输出",
+      "one_page 数字与各section计数逐一相等"
+    ]
+  },
+  "acceptance_gates": {
+    "G1": "预注册 SHA 写完后计算,先于任何 kernel.py 改动",
+    "G2": "真实数据跑收敛单,46缺口/5弱证据/2消息全部如实列出,不替用户裁定",
+    "G3": "负向注入全部按预期真通过/真失败",
+    "G6": "同口径全量对拍:移走新测试后 新内核==备份内核(213);加回守卫=213+N",
+    "G_zero_side_effect": "权威态与心跳/收件箱台账哈希动手前后完全一致"
+  },
+  "kernel_version": "7.5.0",
+  "honesty_boundary": "收敛单是'把选项摆清楚'的只读聚合,不是决策本身;判定权归用户"
+}

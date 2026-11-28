@@ -157,5 +157,15 @@
     }
   },
   "final_decision": "编译 memory_curation 新门禁 + 加固现有KB",
-  "honesty_boundary": "只判22来源谱系关系/机制叙事/本仓缺口，不判生物机制能否证成AI设计、不采信self-reported数字为独立验证、二手区域锁标S3不外推。"
+  "honesty_boundary": "只判22来源谱系关系/机制叙事/本仓缺口，不判生物机制能否证成AI设计、不采信self-reported数字为独立验证、二手区域锁标S3不外推。",
+  "verdict": "SCOPED",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "judges.*.verdict",
+    "source_value_preview": "[\"PASS\", \"DOWNGRADE\", \"SCOPED\", \"NEW_GATE_CANDIDATE\", \"COMPILE\", \"SCOPED\", \"DOWNGRADE\", \"P",
+    "rule_id": "R2_judges_scoped",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

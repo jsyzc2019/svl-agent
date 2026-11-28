@@ -222,5 +222,15 @@
     ]
   },
   "overall": "DEEP_READ_COMPLETE",
-  "decision": "V4 Lite 选择偏差是本篇最值得警惕的角度，但作者全文主动披露+两 agent held-out+点名倒挂，属诚实披露的实验设计选择而非隐瞒漏洞（§63 GR 先例）；本仓 backtest_integrity/scoring_integrity/transfer_holdout 角度不同但本场景已被披露缓解，编译新门禁将落成无法在外部对象会拦的玩具（KB-META01 不通过）→ 加固 KB-AUDIT04/07 指针，不新增不编译。V2 数字独立复算全命中（ρ=0.9286→0.93、26/28、1838实例）；V3 claim-vs-code 12 项全落地、缺失≠0 的诚实设计加分；V5/V8 scoped、V6 同构打折。本篇是一次高质量基准论文的方法学体检，本仓学到的是'缺失≠零'与'披露+held-out 使选择偏差从漏洞降为设计选择'两条可复用判据，均加固既有KB。"
+  "decision": "V4 Lite 选择偏差是本篇最值得警惕的角度，但作者全文主动披露+两 agent held-out+点名倒挂，属诚实披露的实验设计选择而非隐瞒漏洞（§63 GR 先例）；本仓 backtest_integrity/scoring_integrity/transfer_holdout 角度不同但本场景已被披露缓解，编译新门禁将落成无法在外部对象会拦的玩具（KB-META01 不通过）→ 加固 KB-AUDIT04/07 指针，不新增不编译。V2 数字独立复算全命中（ρ=0.9286→0.93、26/28、1838实例）；V3 claim-vs-code 12 项全落地、缺失≠0 的诚实设计加分；V5/V8 scoped、V6 同构打折。本篇是一次高质量基准论文的方法学体检，本仓学到的是'缺失≠零'与'披露+held-out 使选择偏差从漏洞降为设计选择'两条可复用判据，均加固既有KB。",
+  "verdict": "DECIDED_NARRATIVE",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "decision",
+    "source_value_preview": "V4 Lite 选择偏差是本篇最值得警惕的角度，但作者全文主动披露+两 agent held-out+点名倒挂，属诚实披露的实验设计选择而非隐瞒漏洞（§63 GR 先例）；本仓 b",
+    "rule_id": "R5_decision_narrative",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

@@ -90,5 +90,15 @@
     "Memory Trap 是对 6 个闭源模型的行为实验（经验证据），不普适为所有模型定律；结论随模型/任务/记忆内容而变（KB-SIM09 评估上下文是经验的一部分）",
     "Memory Trap 对象是 agent 自写记忆的过度泛化（自写记忆），与 retrieval_grounding（检索外部文本是 data 非 instruction）、memory_curation（内容精选/整理/非破坏）对象/动作均不同——拦截面独立",
     "本门定位为审读外部记忆系统的尺子，不判本仓；本仓同步纯函数库不接 run_loop（§58 选 A）"
-  ]
+  ],
+  "verdict": "SCOPED",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "judges.*.verdict",
+    "source_value_preview": "[\"PASS\", \"PASS\", \"SCOPED\", \"PASS\", \"PASS\", \"PASS\", \"PASS\", \"PASS\"]",
+    "rule_id": "R2_judges_scoped",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

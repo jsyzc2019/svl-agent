@@ -744,3 +744,32 @@ clone踩坑:默认IP两次失败(8分20秒空壳/超时),换备用IP 20.27.177.1
 比对:本地相对远端16新增+2修改(SESSION_HANDOFF.md/kernel.py),全量差异与预期一致,排除pre_patch_*/.pytest_cache/.bak噪音。token核验:待提交文件无明文ghp_/sk-,权威态GAP_INCONCLUSIVE/l3=false/absolute=false未污染。
 提交fc43e05:18文件4033行新增,含§4S66深研证据(research_yc_garrytan_20261128/13份SKILL.md原文+evidence.json)、§4S67两探针(kernel.py)+守卫测试+预注册。
 推送:6eae850..fc43e05 main->main,status=## main...origin/main无ahead。API独立核验远端HEAD=fc43e05b1251一致。凭据纪律:token全程只在上传区(600)与临时push URL,用完即清(clone config token数0,临时clone已删),hosts无残留,凭据文件原样留存上传区。判定权归用户。 -->
+
+<!-- §4S69 决策收敛单(把散落读数汇成一张待裁定清单) 20261128
+触发:用户"推决策收敛单",承接§4S68末尾建议①。元判断:观测器官已过剩(十几个只读探针),瓶颈在决策堆积不在观测,再加探针边际收益低。
+预注册 prereg_decision_digest_20261129.json SHA 32a62a50… 改码前锁死。新增只读聚合 decision_digest(log_path=None,inbox_log=None,now=None),核诚实:标注≠裁定,只把选项与倾向摆清楚,不替用户决策/不消费/不写台账/不进判定,消息正文message字段绝不读取。
+四段:①缺口聚类(源regression_vs_gap_probe的unresolved_gap_verdict_dist)按verdict前缀分UNCLASSIFIED/PARTIAL/INCONCLUSIVE/OTHER,脏key(dict被字符串化的DESTEER_PARTIAL)原样暴露dirty_key=true不静默吞;②弱证据逐条(conclusion_evidence_probe)按direction精确去重,给unique_directions+occurrences;③收件箱只读元信息(at/sender/source_tier/nonce/channel,body_read=False);④vitals快照(authentic_birth/backfill/echo/stale/ambient/base)。每段给3个选项供裁定,不自动选。
+真实结论one_page:缺口46={未分类35/部分5/无定论6/其他0}+脏key1,弱证据5(独特方向3:帕累托游走x1/向外求新刺激x3/外部呼唤x1),未读消息2,真就位2/补判8,echo=ENGAGED_DISCERNMENT,ambient=True。total_decisions=53。
+验收:G3负向注入8例全绿(新PARTIAL key改变聚类/脏key原样标记/弱证据去重/注入收件箱正文不泄漏/one_page数字对齐);G6同口径对拍新内核213==备份内核213零回归,全量221=213+8守卫。内核SHA 2aabbf4c…,备份 pre_patch_decision_digest/kernel_before_decision_digest.py(194fee2c…)可回滚。
+权威态零副作用:authoritative_state=5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…哈希动手前后一致。判定权归用户。 -->
+
+<!-- §4S70 动35个'?'——schema误读诊断(用户§4S69授权"动35个'?'")
+触发:决策收敛单里35个未分类('?')是最大糊涂账,用户裁定动它。勘察发现真相:这35个'?'不是判定未知,而是 regression_vs_gap_probe 用 json.load().get('verdict','?') 单键兜底制造的假象——35个 audit_*/result.json 用其它字段名(decision/gate_decision/verdicts/evidence_grade...)表达判定,探针只认verdict一键才误报'?'。明白账被读成糊涂账。
+口径:预注册prereg_gap_schema_20261128.json SHA=7518c41b…(改码前锁),只读诊断不改历史审计文件、不改regression_vs_gap_probe口径(那是GUARD命题判据,改口径=动判定)、不替用户裁定。
+实现:kernel.py新增unresolved_gap_schema_probe(audit_root=None),按判定字段族优先级分类:UNREADABLE/DECISION_ALIAS(14)/VERDICT_PLURAL_OR_TRIPLET(4)/STATUS_FIELD(1)/GRADE_OR_SUMMARY_ONLY(14)/NO_TOPLEVEL_VERDICT(2)。值摘要只取判定字段前90字符不读叙述正文。audit_root可注入做隔离负向测试。
+真实结论:35个'?'=33误读(94.29%)+2真空白(misread_count=33,true_blank_count=2)。2个真空白=audit_flashprove/audit_vanity_selfaudit(顶层无判定字段,需人工看嵌套,不臆测)。33个误读里14明确decision族/14弱信号evidence_grade族/4复数verdicts/1个status=EXECUTED。
+过程中一处实现bug如实修正:STATUS_DONE集合用小写{executed,...}却与.upper()结果'EXECUTED'比较,大小写不匹配致audit_argument_audit误落NO_TOPLEVEL_VERDICT;修正为大写集合后与预注册G2预期完全一致(未改预注册SHA,属实现bug非口径分歧)。
+守卫:test_gap_schema.py 9例全绿(decision/plural/status/grade/空壳/坏JSON/有verdict键排除/分区求和/真实数据);负向注入用临时目录不碰真实审计文件。G6同口径:新内核221==备份内核221零回归,全量230=221+9。内核SHA 8299913d…。
+零副作用:权威态5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…哈希动手前后一致;两个真空白审计文件哈希抽查未变(068e5068…/e928ecc2…);AST OK。备份pre_patch_gap_schema/kernel_before_gap_schema.py(2aabbf4c…)可回滚。
+边界:本判据只正名'被误读的明白账'、暴露2个真空白供裁定,不改任何历史审计文件也不改既有判据口径。2个真空白要不要人工深看嵌套、33个误读要不要回填verdict字段(改审计文件=改账),均待用户裁定。判定权归用户。 -->
+
+<!-- §4S71 探2真空白+35个'?'保真回填(用户§4S70裁定"2个真空白要探探,33个如果回填好就回填")
+①探2真空白:勘察推翻§4S70"真空白"判断——判定只是藏得更深。flashprove:judges.V1~V8各有verdict(7 PASS+V3 SCOPED),all_aligned=True,drift_from_prereg={}→判定在judges.*.verdict;vanity_selfaudit:kernel_verdict_unchanged=GAP_INCONCLUSIVE/l3_unchanged=False/result.signal=SELF_SERVING_DETECTED/judgment_fork.user_verdict=DEFERRED→判定散在嵌套。主观'真空'实为嵌套藏判定。
+②审33个判定值:发现异质内容——完成态(DEEP_READ_COMPLETE/all_pass=True/加固不新增/编译新门禁X)、叙述长文本(decision="V5咬出真缺口...")、2个verdict_triplet_before=['GAP_INCONCLUSIVE',False,False](曾补平,after仍GAP_INCONCLUSIVE=真悬置)。盲塞会把叙述文本塞进判定字段、把before悬置误当当前态(反向洗白)。
+口径:预注册prereg_gap_backfill_20261128.json SHA=ae8410fd…(改码前锁),保真原则=真悬置保留悬置/完成态才标完成/不塞长叙述/不伪造;全部打verdict_backfill标记(来源字段/规则/时间/口径SHA)可审计;71个审计result.json全量目录结构备份可回滚;权威态/内核判定/心跳/原字段全不动。
+执行:一次性脚本backfill_gap_verdict_20261128.py按10条规则映射(R1 triplet_after最强/R2 judges/R3 kernel_verdict_unchanged仅无本体判定时用/R4-7 decision族与status与summary/R8 evidence_grade弱信号/R10 before悬置保留),35文件回填、36已有verdict跳过、原字段全保留。过程中dry-run抓到优先级瑕疵:kernel_verdict_unchanged恒为GAP_INCONCLUSIVE旁注,若列第3位会把完成态审计误判悬置→降级到本体判定字段之后,另落澄清prereg_gap_backfill_clarification_20261128.json(不改原SHA)。
+真实结论:35个'?'全消失(诊断判据total_question_marks=35→0);未解决计数46→14=11原生(6 INCONCLUSIVE+5 PARTIAL)+3回填保留GAP_INCONCLUSIVE(finance_construct_validity/memory_governance/vanity_selfaudit)。真缺口一个没丢,反因3个真悬置从误读中被正确识别而从11涨到14——诚实修正非洗白。回填verdict分布:WEAK_SIGNAL_GRADED8/SCOPED8/PASS6/DECIDED_NARRATIVE4/GAP_INCONCLUSIVE3/DECIDED_STRUCT2/REFERENCED2/EXECUTED1/DECIDED_DEEP_READ_COMPLETE1。
+演进非迁就:2个旧测试断言随真实数据更新(decision_digest gap_clusters 46→14、gap_schema 35→0),负向注入测试全保留。
+验收:test_gap_backfill.py 9例全绿(不洗白/3真悬置保留/verdict≤40字符/原字段保留/?'消失/权威态零副作用);干净同口径对拍=回填前数据+回填前测试230passed(原基线),回填后数据+全部测试239passed=230+9,内核哈希8299913d…全程未变,零回归。
+零副作用:权威态5f7a2584…/constitution=fe56291b…/heartbeat_log=ea749f76…/inbound_inbox=8806b248…哈希动手前后一致;内核AST OK;回执35条全原字段保留。回执gap_backfill_receipt_20261128.json记每文件前后哈希;备份audit_backup_pre_backfill/71文件可逐文件回滚。
+边界:回填是把已有判定态提升为顶层verdict,非新判定/翻案/修复;真悬置保留(WEAK_SIGNAL/SCOPED/GAP_INCONCLUSIVE不冒充PASS)。判定权归用户。 -->

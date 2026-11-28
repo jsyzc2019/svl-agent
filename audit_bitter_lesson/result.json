@@ -106,5 +106,15 @@
     }
   },
   "final_decision": "加固不新增",
-  "honesty_boundary": "只判三来源哲学/纲领/叙事自洽与谱系关系，不判Bitter Lesson是否正确、roadmap是否可实现、幼儿园机器人真实学习效果。"
+  "honesty_boundary": "只判三来源哲学/纲领/叙事自洽与谱系关系，不判Bitter Lesson是否正确、roadmap是否可实现、幼儿园机器人真实学习效果。",
+  "verdict": "SCOPED",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "judges.*.verdict",
+    "source_value_preview": "[\"PASS\", \"DOWNGRADE\", \"UNVERIFIABLE\", \"SCOPED\", \"SCOPED\", \"NO_NEW_GATE\", \"PASS\", \"PASS\"]",
+    "rule_id": "R2_judges_scoped",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

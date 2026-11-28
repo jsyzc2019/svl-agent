@@ -1,0 +1,360 @@
+{
+  "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+  "at_utc": "2026-11-28T08:28:19Z",
+  "policy": "保真回填:真悬置保留悬置,完成态才标完成,不塞长叙述,不改原字段",
+  "entries": [
+    {
+      "dir": "audit_addy_critical_thinking",
+      "verdict": "WEAK_SIGNAL_GRADED",
+      "rule_id": "R8_grade_only",
+      "source_field": "evidence_grade",
+      "sha_before": "ffd5916e56b8dffecb2056e0e542bcbdea86332543dd2eb3bb46ea915b518b36",
+      "sha_after": "01555222efd188474d7b7fd21ee5e3d3f36866f0d42659749a2b933182dc4648",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_always_on",
+      "verdict": "DECIDED_NARRATIVE",
+      "rule_id": "R5_decision_narrative",
+      "source_field": "decision",
+      "sha_before": "4783488e1542f03eb2717e1c7a5b615c15287331a84c86c53d95332d3fd63d17",
+      "sha_after": "7bf5d4a4ce423c1e2663a682b84105c3c71d0bcc1754dd4dca778a13c849d2d6",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_ambition",
+      "verdict": "PASS",
+      "rule_id": "R6_summary_allpass",
+      "source_field": "summary.all_pass",
+      "sha_before": "bdd9742d9b74bb54b77c65a79158ad091e76b7fc804b7817587820ee7b6648c3",
+      "sha_after": "c13a4ba24abb5e8745b0b3bc4cae45cab51a0d612913d1fc6e2d5ac1142c07d5",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_argument_audit",
+      "verdict": "EXECUTED",
+      "rule_id": "R7_status",
+      "source_field": "status",
+      "sha_before": "c48c1d6930b52d8b1a7c73e9eddad05ef1fe9c2314cb20a6cf14fe44b32bed34",
+      "sha_after": "cdd0c1e03e0e63cc58c5e6e726744e0e34b755b663f20970f76345d65531dbc0",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_async_subagents",
+      "verdict": "SCOPED",
+      "rule_id": "R2_judges_scoped",
+      "source_field": "judges.*.verdict",
+      "sha_before": "d7367fd406600d77338cc3a15f6bf077136667fb155b029c626b02153caa323e",
+      "sha_after": "dcc6622cddc1d9aa6a3045fa8674737838fc75865e626f48fa2708ef08b95576",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_bitter_lesson",
+      "verdict": "SCOPED",
+      "rule_id": "R2_judges_scoped",
+      "source_field": "judges.*.verdict",
+      "sha_before": "476cf94e7b0f93ad53e9c19f29f90207487b6d2f3bb5d832ab95428f7f19ea0e",
+      "sha_after": "6a750251c978fc52b1414c94f9fa0229f366b51c35cc5fd1e7a500816c3c5e0b",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_claude_verify",
+      "verdict": "DECIDED_DEEP_READ_COMPLETE",
+      "rule_id": "R4_decision_short",
+      "source_field": "decision",
+      "sha_before": "f085f9843a7563276ec589f99d7dc75f92d43bd168f2c590503dbc32821805f7",
+      "sha_after": "464de3d4f24fcc7b51b74ad03727c58d33fc93313b6a92990d513f68e79e2651",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_cognitive_surrender",
+      "verdict": "SCOPED",
+      "rule_id": "R2_judges_scoped",
+      "source_field": "judges.*.verdict",
+      "sha_before": "5f1987da789aba68d7e6240dae17675338cb1a998c54f9c5254347e59b10604a",
+      "sha_after": "44cacf9eb69a2cc8c65412ef65867a74a89d3e4a41880bbcd430bea56f505b4d",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_decision_receipt",
+      "verdict": "REFERENCED",
+      "rule_id": "R10_referenced",
+      "source_field": "verdict_impact",
+      "sha_before": "615fffb702e9f59d6174178774aa3cd713a2071b989ac142778388c1a9bed62c",
+      "sha_after": "015850917bbeb93e5a55105552ff22bb90f3d3b56684f0a26b00c7a2bc65abed",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_deepseek",
+      "verdict": "SCOPED",
+      "rule_id": "R2_judges_scoped",
+      "source_field": "judges.*.verdict",
+      "sha_before": "4e72d16980134f8178aaa5f2efd5c5e348555b608d984e046096fe6b93d8b641",
+      "sha_after": "fd6a6a2d7f85a906d00a00e30a1e8c2cdc547602e8c9f21a7cef7df0b54dd6d4",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_dgm",
+      "verdict": "PASS",
+      "rule_id": "R6_summary_allpass",
+      "source_field": "summary.all_pass",
+      "sha_before": "e69f44cd6118012f5338a31c38e795a4172224a91674200a4f6876d2b21cc8be",
+      "sha_after": "05070ac5bb7afce9f23120191ebb73b5f251da9b5e2af614fddba820ca036032",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_evosteer",
+      "verdict": "WEAK_SIGNAL_GRADED",
+      "rule_id": "R8_grade_only",
+      "source_field": "evidence_grade",
+      "sha_before": "3972a0f54fb6224656b5b84731c8d7c1c53c77ee38708e4d449e4461f2ca7ffa",
+      "sha_after": "03bd3bb2bf0ba8479eaedb631ddd552e38534a1ee005d07db10602423e2fea3c",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_finance_construct_validity",
+      "verdict": "GAP_INCONCLUSIVE",
+      "rule_id": "R1_triplet_after",
+      "source_field": "verdict_triplet_after",
+      "sha_before": "766bec4a3aae8ccbe95e110bdbab3d9d1ae8beb7bf65d40591ba6200d22fcc0c",
+      "sha_after": "fc2f760e5dce6b2966d4cc466b999134490ada43c4a69d211695afdc82a978ac",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_flashprove",
+      "verdict": "SCOPED",
+      "rule_id": "R2_judges_scoped",
+      "source_field": "judges.*.verdict",
+      "sha_before": "068e5068c783c992eb02106a4c6ccfae692176b1af6575a37235f03fea6f1a34",
+      "sha_after": "6c175aeaa03b0b6e0a744e0c6a9a72f5447c3e56ab58fbf8540d2a0b6a902a1f",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_harnesspro",
+      "verdict": "WEAK_SIGNAL_GRADED",
+      "rule_id": "R8_grade_only",
+      "source_field": "evidence_grade",
+      "sha_before": "a3373079673ebd3a75d38c038231d9f24673bb39c059424bb9126e55322cf67f",
+      "sha_after": "32dc03685141aa2b55a45dee4aed338f13dc19f35197e033ca35d50d3886c197",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_higr",
+      "verdict": "DECIDED_STRUCT",
+      "rule_id": "R4_decision_struct",
+      "source_field": "decision",
+      "sha_before": "a39a1de0fd9a71f5c6a0a41d33a8d1ae293607a60e41b3312e296683287ca0c5",
+      "sha_after": "29fe365be71bee75664b2512eb38eee5c1f900a8082240b8805f8475dc52807a",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_langchain_ctx",
+      "verdict": "DECIDED_NARRATIVE",
+      "rule_id": "R5_decision_narrative",
+      "source_field": "decision",
+      "sha_before": "c0e79896f8bb5841806c04bfe9e6da629f43696cf677fafa742fc92b2845b377",
+      "sha_after": "918d65bb147ad69f23a6b4246e26231f793abd3fac1bf7a0570ca612739438d2",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_latent_taxonomies",
+      "verdict": "WEAK_SIGNAL_GRADED",
+      "rule_id": "R8_grade_only",
+      "source_field": "evidence_grade",
+      "sha_before": "17c7930864a7e38f4c1221e0a15b44cb1ed4d8b48117c518f7b0f8efa003fab1",
+      "sha_after": "60ac88a65add7f59e6a23b248b14b26957dba0d3cb6a6039e788362ca9266a2a",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_memory",
+      "verdict": "SCOPED",
+      "rule_id": "R2_judges_scoped",
+      "source_field": "judges.*.verdict",
+      "sha_before": "756bba3754bb49a8e40d1a4bcefa480ef8956de1eddfe6879c67f37d1bfe10e0",
+      "sha_after": "ffded2ffe26aafbafa47ce22b0db4a735fe649f69d371352ae43891904fad624",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_memory_governance",
+      "verdict": "GAP_INCONCLUSIVE",
+      "rule_id": "R1_triplet_after",
+      "source_field": "verdict_triplet_after",
+      "sha_before": "cda9224ef5a266ac5048aee9ad3d665f6f0b7d16c248bbd7272072fd635761b0",
+      "sha_after": "198193619ca446b038fe7db54349c77d97872d1ed3fe8e6cc0854ae3e50e808f",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_memory_trap",
+      "verdict": "SCOPED",
+      "rule_id": "R2_judges_scoped",
+      "source_field": "judges.*.verdict",
+      "sha_before": "e15abcfcd8f558b188daf96c040d6fe3a6c5382ba3fe9df5c4cb21844fef5b24",
+      "sha_after": "06cabbb18a50056679da18a7aeb706d9d07945e2b09b2e7b7917c4bd73bf225f",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_mllm_failure",
+      "verdict": "WEAK_SIGNAL_GRADED",
+      "rule_id": "R8_grade_only",
+      "source_field": "evidence_grade",
+      "sha_before": "20d8e87fd88ef35a8c73bcbabaf378072249112a51a9a594a56292f43adde2cd",
+      "sha_after": "e601d3e144dcbf0b0e85814b4142263688e1008cecb28153281ef225549f8d86",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_multimodal_memory",
+      "verdict": "WEAK_SIGNAL_GRADED",
+      "rule_id": "R8_grade_only",
+      "source_field": "evidence_grade",
+      "sha_before": "3097669ade574a2a4c53f6dc2cc043b50751f7839b47e55212dfb397d8704afc",
+      "sha_after": "f4389e8ac2a083c429a99eda5e9d7303ef8927d1ba76a8cfb31e5983ba4ca8d5",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_openai_perf",
+      "verdict": "PASS",
+      "rule_id": "R6_summary_allpass",
+      "source_field": "summary.all_pass",
+      "sha_before": "adc530f3d4b2484c6b5765ec0421e317c357aac54ec9128744cf70213ba3ccd2",
+      "sha_after": "2f11e536d86d37664a3a9055b93a4fa6f7fdaf68f83ad7ff49258a8695f40a3c",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_proactive_ai",
+      "verdict": "SCOPED",
+      "rule_id": "R2_judges_scoped",
+      "source_field": "judges.*.verdict",
+      "sha_before": "c0f54c547ad9ede2c9ec9aa9b791314e95636e45d64033d42a4c3a05d126cbd0",
+      "sha_after": "6e878fed2962b42c42c3671f938dbc0e58dab44698000db7c370377f42669643",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_reavideo",
+      "verdict": "PASS",
+      "rule_id": "R6_summary_allpass",
+      "source_field": "summary.all_pass",
+      "sha_before": "8395ce2dd289f5bb117e2eb6e3adbcbcea34ee67711fc4daca94880720eda83d",
+      "sha_after": "08e2cf57a9dca03246bb1e742773987107c26bfa3f91b2ecde28b93e3a639948",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_reveal",
+      "verdict": "PASS",
+      "rule_id": "R6_summary_allpass",
+      "source_field": "summary.all_pass",
+      "sha_before": "11349b357f7d8cca3403c1e318b7bee2670b756ba644f467d9776a8ffd7d9d3b",
+      "sha_after": "29066f6c2760e5c9f0e75125b2882dcd50baabdaf326867d49e3b83536750c8a",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_shared_start_controlled",
+      "verdict": "REFERENCED",
+      "rule_id": "R10_referenced",
+      "source_field": "paper_forensic_verdict",
+      "sha_before": "fcd13bd3fdd8c3d650a87096ae0095e1111ce35b295797c873fc8dab0f3e9039",
+      "sha_after": "55c7a7b8898657cc9f4ae4413a8bcaddad4b4a9a79556511f291148ea00cbae2",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_skillmaster",
+      "verdict": "PASS",
+      "rule_id": "R6_summary_allpass",
+      "source_field": "summary.all_pass",
+      "sha_before": "dcece0a7bbc671d831d46c104abad28f8f46c6e4012801a72ce90f70c45f962f",
+      "sha_after": "441a2ebcfa9814222b1dcffcdd80d43819ab603936098177a2d2334a460d6322",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_swarm",
+      "verdict": "DECIDED_NARRATIVE",
+      "rule_id": "R5_decision_narrative",
+      "source_field": "decision",
+      "sha_before": "3bc3794f29454fd485e08aef1c9ecdcf8919333511774b91d910c597825913a9",
+      "sha_after": "d3cb6276aad283eb4344f59c514a2541e1588bea6cb6f70e82750a2024f24e0c",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_swegym",
+      "verdict": "DECIDED_STRUCT",
+      "rule_id": "R4_decision_struct",
+      "source_field": "kb_decision",
+      "sha_before": "410401e943d9c6c98ed4c4e4d48b265a4fc2de8c7acc954c84ef864a7b6f15af",
+      "sha_after": "6d308040ac87d464e47b163e63e40fc37f595360a117346f8ab76af7071972af",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_system1_system2",
+      "verdict": "WEAK_SIGNAL_GRADED",
+      "rule_id": "R8_grade_only",
+      "source_field": "evidence_grade",
+      "sha_before": "20abc078498c358b987769be39f6748b4b882c38393e4fcca89f13b396db0d50",
+      "sha_after": "83185295a6ef8552f24e287c4e34d21bf8fd3f0607cf74af0947e984a5886101",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_tcsexam",
+      "verdict": "DECIDED_NARRATIVE",
+      "rule_id": "R5_decision_narrative",
+      "source_field": "decision",
+      "sha_before": "249ee13255f70036131ae55cd6e64c4db216a0ef1ff2b2367003743c68c891df",
+      "sha_after": "8976ab60d29a9e55f956ad9a5d0ba144bf0956b6c8bb616b3ecfe978a7fce0bc",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_ultrabert",
+      "verdict": "WEAK_SIGNAL_GRADED",
+      "rule_id": "R8_grade_only",
+      "source_field": "evidence_grade",
+      "sha_before": "77770ece4d921c6927cb23b681bfeb35eb4d1767c38aa7b7305c7f8ba99ab096",
+      "sha_after": "689af2b0fe6ef96fa774c07c84c95f2e3bb60930df48ed16320f7028704c41f3",
+      "original_fields_preserved": true
+    },
+    {
+      "dir": "audit_vanity_selfaudit",
+      "verdict": "GAP_INCONCLUSIVE",
+      "rule_id": "R3_kernel_verdict_unchanged",
+      "source_field": "kernel_verdict_unchanged",
+      "sha_before": "e928ecc27a4d7773d4785ce0d8ca57f1a0e81c59da90e446bbba11b210a985ba",
+      "sha_after": "c57a9b1994146585af918cf23852aa1b1179a30a090fb9aedb37241423c6711c",
+      "original_fields_preserved": true
+    }
+  ],
+  "refused_already_has_verdict": [
+    "audit_admission_ast_audit",
+    "audit_affect_budget",
+    "audit_agent_dialogue",
+    "audit_aggregation_dependence",
+    "audit_authoritative_state",
+    "audit_benchleaking_honesty",
+    "audit_criterion_portability",
+    "audit_cross_domain_confirm2",
+    "audit_cross_domain_field",
+    "audit_cross_set_vendor2",
+    "audit_cross_vendor_designer2",
+    "audit_cross_vendor_evaluator",
+    "audit_designer_desteering",
+    "audit_evaluator_independence",
+    "audit_external_orchestrator",
+    "audit_field_neutral",
+    "audit_frozen_holdout",
+    "audit_goal_provenance",
+    "audit_interpreter_cross_vendor",
+    "audit_interpreter_independence",
+    "audit_l3_evidence_rubric",
+    "audit_l3_fullchain_external",
+    "audit_l3_gap_targeted",
+    "audit_memory_epistemics",
+    "audit_meta_canary",
+    "audit_redteam_honesty",
+    "audit_rsi_claim_audit",
+    "audit_safari_affect_budget",
+    "audit_safari_self_identity",
+    "audit_safari_social_agents",
+    "audit_self_identity",
+    "audit_silent_failure",
+    "audit_skill_lifecycle_honesty",
+    "audit_stratified_confirmation",
+    "audit_task_purpose_injection",
+    "audit_temporal_anchor"
+  ]
+}

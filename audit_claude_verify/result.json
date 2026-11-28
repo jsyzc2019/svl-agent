@@ -163,5 +163,15 @@
     ]
   },
   "prereg_lock_ok": true,
-  "decision": "DEEP_READ_COMPLETE"
+  "decision": "DEEP_READ_COMPLETE",
+  "verdict": "DECIDED_DEEP_READ_COMPLETE",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "decision",
+    "source_value_preview": "DEEP_READ_COMPLETE",
+    "rule_id": "R4_decision_short",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }

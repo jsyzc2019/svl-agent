@@ -170,5 +170,15 @@
     },
     "conclusion": "仍未完整达 L3：shared-start 受控对照缺口已补（本轮量化 process revision 增益），但独立评估器仅部分达标（本仓外 common-data 已引入，判据锚点仍本仓自建，KB-STRUCT02 同构≠独立佐证）。R5 partial→flag，停在 L3 门槛前。不因用户期待抬级。"
   },
-  "honest_scope": "机制受控对照：测取证机制vs填表机制的篡改捕捉率差异(shared start+matched budget)；ground truth来自本仓外arXiv原文客观文本事实；evaluator规格本仓自建故独立性只到partial；不宣称真实RSI有效、不宣称已达L3(self-reported折1,KB-RSI07/SIM03/STRUCT02)"
+  "honest_scope": "机制受控对照：测取证机制vs填表机制的篡改捕捉率差异(shared start+matched budget)；ground truth来自本仓外arXiv原文客观文本事实；evaluator规格本仓自建故独立性只到partial；不宣称真实RSI有效、不宣称已达L3(self-reported折1,KB-RSI07/SIM03/STRUCT02)",
+  "verdict": "REFERENCED",
+  "verdict_backfill": {
+    "applied": true,
+    "source_field": "paper_forensic_verdict",
+    "source_value_preview": "{\"action\": \"ok\", \"code\": \"IGC.SELF_CONSISTENT\", \"inferred\": {\"matched_budget_controlled\": ",
+    "rule_id": "R10_referenced",
+    "at_utc": "2026-11-28T08:28:19Z",
+    "prereg_sha256": "ae8410fd632a228e505965966c12631f897bcef853ca617b97e4e523a70917ab",
+    "note": "保真回填:判定态来自该文件已有字段/嵌套,非新判定;真悬置保留,SCOPED/INCONCLUSIVE不洗成PASS"
+  }
 }
