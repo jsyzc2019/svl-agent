@@ -1,0 +1,50 @@
+{
+  "schema": "prereg-verification-honesty-landing-v1",
+  "id": "prereg_verification_honesty_landing_20261128",
+  "locked_at_utc": "2026-11-28T01:42:00Z",
+  "locked_after_evidence": true,
+  "evidence_locked_before_design": {
+    "note": "先读真实数据与源码再设计；三条建议各自确认有真实数据基础、无空转风险",
+    "rec_a": "14种子带 evidence_tier(B=10/C=4)+source_url(7独立host)；tag交叉印证有真区分力(rsi=5host/self_evo=4host/metacognition=3host vs archive/curation/measurement=1host),第①条可做独立来源门槛诊断",
+    "rec_b": "holdout 14对带expected,score.py可三口径打分(criterion/always_pass/always_fail);本仓无reviewer发现bug轨迹,原文三段召回诚实降级为三口径并列,不冒充原文三段",
+    "rec_c": "本仓无现成checklist文件;LIFE_KERNEL.md有纪律章节(§266词表误报守持);建专门纪律条文文件标注来源层级最清晰",
+    "rec_boundary": "verify_external.py:147-175 replay用sids/jids严格相等校验(§4S25已修);attribution_check三数字all_pass是注册门槛,三条诊断一律只读不进此门槛"
+  },
+  "user_authorization": {
+    "verbatim": "可以动",
+    "scope": "对 §4S37 报告末尾三条建议的落地授权：①≥2次独立证据门槛诊断 ②三段召回率诊断 ③不许sleep/retry to pass补审计条文",
+    "judgment_owner": "用户",
+    "note": "授权的是诊断与条文,不是改判定核心;仍按只读起步+负向自咬+权威态零副作用执行"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "429c7f8dde5eab4b755d0d0af86e5bcdea5c2aa43ad21a8f6230b706e0ef058f",
+    "samples_holdout_sha256_before": "d4a5958194f9895f7d4b8da70c70383644890b6f31b730c7d44554f99cb90c9",
+    "score_py_sha256_before": "3c1dea1199665bf8a49a39986d5aae96eebff842a53ce3a21750d6b53bbbce2f",
+    "result_json_sha256_before": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "authoritative_state_sha256_before": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "KERNEL_VERSION_before": "7.5.0"
+  },
+  "design": {
+    "approach": "三项全部只读：①kernel.py纯新增evidence_independence_probe(seeds=None)统计每个tag的独立host数/独立tier数,标single_source_tags与cross_corroborated_tags,is_gate_verdict=False;②kernel.py纯新增three_stage_recall_probe(pairs=None)对holdout用criterion/always_pass/always_fail三口径并列打分,报各口径accuracy与分歧样本,诚实标注本仓无reviewer三段轨迹故三口径≠原文三段,not_original_three_stage=True;③新建VERIFICATION_DISCIPLINE_20261128.md纪律条文,三条来源层级标注(原文直述/结构同构/本仓自有),不改LIFE_KERNEL.md正文",
+    "rec_a_detail": "evidence_independence_probe: 从digest()['seeds']读source_url的netloc为独立host、evidence_tier为层级;per-tag统计{seed_ids,independent_hosts,tiers,corroborated=independent_hosts>=2};整体报single_source_tags(独立host=1)/cross_corroborated_tags(>=2);基于原文'漏洞需≥2个PR才成候选规则'的同构,但本仓是seed来源非PR,verdict恒False",
+    "rec_b_detail": "three_stage_recall_probe: 读holdout samples_holdout.json的pairs,对每对跑criterion.judge/always_pass/always_fail三口径,各算accuracy与 Wilson区间;报per_sample_disagreements(三口径判定不一致的样本);诚实字段=本仓无原始发现/验证后/最终三段审查轨迹,三口径是判据健康度对照非召回分段;借鉴的是'合成一个总分会掩盖分段差别'的纪律,不是三段本身",
+    "rec_c_detail": "VERIFICATION_DISCIPLINE_20261128.md: 收录①验证规则放在被审改动够不到的地方②observe→enforce两阶段③漏洞成规则需≥2独立证据+证伪+人工批准④flaky不许sleep/retry to pass⑤三段召回不合成单一总分;每条标source_tier(原文直述/结构同构/本仓自有)与claude.dev锚点;纯文档零代码"
+  },
+  "no_touch": [
+    "KERNEL_VERSION", "verdict/l3/absolute(L3字段)", "constitution", "result.json", "authoritative_state.json",
+    "self_modify accepted门槛", "_validate_policy attribution_ok", "ATTRIBUTION_PROBES/COVERAGE_PROBES本体",
+    "verify_external.py/verify_verifier.py字节", "runtime_policy.json注册表", "build_report主流程",
+    "LIFE_KERNEL.md正文", "ARXIV_ID_REGISTRY.md"
+  ],
+  "acceptance_gates": {
+    "G1_最小改动": "kernel.py diff 精确=2纯函数(evidence_independence_probe+three_stage_recall_probe);版本仍7.5.0;no_touch函数体/常量未变;新纪律文件为独立新建",
+    "G2_第①条有效性": "evidence_independence_probe真实运行:rsi独立host>=4、self_evo>=4、metacognition>=3;single_source_tags含archive/curation/measurement;corroborated判定与host数一致",
+    "G3_第②条有效性": "three_stage_recall_probe真实运行:criterion口径accuracy≈0.9286(13/14与P1a对打一致)、always_pass≈0.357、always_fail≈0.643;分歧样本列出;not_original_three_stage=True与caveat在",
+    "G4_负向自咬": "①把某多host tag的所有seed source_url改成同一host→该tag从corroborated掉到single_source(证明读真数据非硬编码);②criterion口径的对打分与score.py:score_current()逐字相等(证明复用真判据);③空seed列表→两probe返回空结构不崩",
+    "G5_权威态": "result.json=0f3ccb13…/authoritative_state=5f7a2584…字节未动;verdict=GAP_INCONCLUSIVE/l3/absolute未动;KERNEL_VERSION=7.5.0;verify_external.py/verify_verifier.py未动",
+    "G6_全量测试": "完整测试套件passed数与基线1773一致,无新增失败",
+    "G7_诚实边界": "三处is_gate_verdict=False/not_original_three_stage=True/caveat均在;文档三条来源层级标注齐全;不声称获得验证能力/不冒充原文三段/不改判定"
+  },
+  "failure_branch": "任一 gate 不过→用 pre_patch_s37/kernel.py 回滚,如实记 self-bite,不迁就测试/不改判据/不升版本/不碰权威态",
+  "honesty": "本轮是Anthropic'验证器诚实'半边纪律的只读同构借鉴:①独立来源门槛基于seed host非PR,只诊断不阻塞;②三口径是判据健康度对照,本仓无reviewer发现bug三段轨迹,明确not_original_three_stage;③纪律条文提炼自原文+本仓既有实践,非新增能力。Ambient恒0,verdict不动,判定权归用户。"
+}

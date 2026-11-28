@@ -1,0 +1,51 @@
+{
+  "schema": "prereg_ledger_migration_v1",
+  "section": "§4S64",
+  "title": "补平历史心跳verdict缺口：带backfill标记的可审计回填",
+  "trigger": "用户『补平吧』→授权改账：给§4S63发现的8搏MISSING_RECOMPUTED+1搏UNVERIFIABLE回填verdict",
+  "at_local": "2026-11-28 12:51 GMT+8",
+  "prereg_before_change": true,
+  "baseline": {
+    "heartbeat_log_sha256": "5bce6660263b2e49c3d88a1bd14cdd4e822ece265ad5abc239b56c26fcd88b7f",
+    "kernel_sha256": "b28a238ff0946e260e2a8dbacbf24de0d3471a1e4f2ee36053f3046f6f812055",
+    "authoritative_state_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "KERNEL_VERSION": "7.5.0",
+    "backup": "life_kernel/pre_patch_verdict_birth/heartbeat_log_pre_backfill.jsonl",
+    "life_kernel_tests_passed": 202
+  },
+  "design_rationale": {
+    "user_authorization": "用户明确授权『补平吧』——这是§4S63末尾声明需单独授权的改账操作",
+    "anti_fabrication": "绝不把事后回填伪装成'生成当下就位'：每条回填的verdict带 verdict_backfill 元信息(来源/时间/口径/现算值),让 verdict_at_birth_probe 能区分'当时就判'与'事后补判',否则补平会把 synced_rate 从0.18刷成1.0=制造文章批判的假装验证",
+    "what_is_a_gap": "仅指 phase_verify.content_verdict 字段缺失的历史心跳；已落盘的2搏verdict一律不动",
+    "not_authoritative": "心跳台账是A级运行日志,非权威态(result/authoritative_state/宪法锁);补平不碰权威态、不改verdict/l3/absolute、不进判定"
+  },
+  "locked_constants": {
+    "BACKFILL_MARKER": "verdict_backfill",
+    "BACKFILL_SOURCE": "post_hoc_recomputed_current_criterion",
+    "UNVERIFIABLE_KEEP": "UNKNOWN态回填仍标UNKNOWN(承认判不了),不伪造为PASS",
+    "NEVER_OVERWRITE": "已存在 content_verdict 的心跳一律不改动"
+  },
+  "planned_changes": [
+    "C1 一次性迁移脚本(不进内核热路径): 读真实心跳台账,对每条缺 phase_verify.content_verdict 的心跳,用当前 _direction_content_verdict 现算verdict写入,并在 phase_verify 新增 verdict_backfill={source,at,criterion,criterion_sha256,reason};已落盘verdict者跳过;UNKNOWN照实写UNKNOWN",
+    "C2 迁移后 verdict_at_birth_probe 仍能工作: 回填的心跳落盘verdict==现算verdict→判BIRTH_SYNCED(因现口径已一致);但 per_heartbeat 增加 backfill 元信息透出,使'当时判'vs'补判'仍可外部审计",
+    "C3 不改 kernel.py 既有函数体(evolve/_direction_content_verdict/探针);不改权威态;测试新增 test_verdict_backfill.py 验证补平正确性+只读性+不伪造",
+    "C4 迁移结果落回执文件 verdict_backfill_receipt_20261128.json: 前后哈希/逐条状态/标记样本/权威态确认"
+  ],
+  "acceptance_gates": {
+    "G1_minimal": "只改心跳台账字段缺失者+新增迁移脚本/回执/测试,不改内核既有函数体,AST OK",
+    "G2_backfill_correct": "迁移后11搏全部有 content_verdict; 9搏带verdict_backfill标记(8原MISSING+1原UNVERIFIABLE);已落盘的2搏无标记且verdict未变;UNKNOWN那搏仍UNKNOWN",
+    "G3_no_fabrication": "verdict_at_birth_probe迁移后 synced_rate=1.0 但每搏backfill可审计——必须在回执与 honesty 中明确'1.0含事后补判,非全为生成当下就位',不宣称验证已在生成当下就位",
+    "G4_readonly_authoritative": "权威态三件套(result/authoritative_state/宪法锁)/verdict/l3/absolute/KERNEL_VERSION全未动",
+    "G5_recoverable": "备份文件存在且哈希=5bce6660…,可一键回滚",
+    "G6_zero_regression": "迁移后 life_kernel/tests 全量passed >= 202(基线); 同口径测试无回归",
+    "G7_honesty": "不销毁历史痕迹: 原台账备份保留; 回填有来源/时间/口径SHA; 判定权归用户"
+  },
+  "honesty_edges": [
+    "补平≠修复机制:evolve现版本本就会同步落verdict,补的只是历史遗留;不宣称内核因此获得新能力",
+    "回填verdict来自当前判据现算,非当时的真实判定——标记source=post_hoc_recomputed_current_criterion明示",
+    "BIRTH_UNVERIFIABLE那搏(样本不足)回填后仍是UNKNOWN,承认判不了,不伪造PASS",
+    "verdict_at_birth_probe的synced_rate升到1.0是字段补齐的数学结果,不等于'验证都在生成当下就位',必须在回执中显式警告",
+    "不进判定不消费外部消息不联网不spawn;判定权归用户"
+  ]
+}

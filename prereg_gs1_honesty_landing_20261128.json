@@ -1,0 +1,52 @@
+{
+  "schema": "prereg-gs1-honesty-landing-v1",
+  "id": "prereg_gs1_honesty_landing_20261128",
+  "locked_at_utc": "2026-11-28T01:59:00Z",
+  "locked_after_evidence": true,
+  "evidence_locked_before_design": {
+    "note": "先读真实数据与源码再设计；三条建议各自确认有真实数据基础、无空转风险后才锁设计",
+    "rec_a_反一味拒答": "心跳日志 life_kernel/data/heartbeat_log.jsonl 共9条，guard state 真实分布 COLD_START=1/DIVERSE=7/CONVERGED=1；关键发现=历史9条全部无 content_verdict 字段(§4S33加入前落盘)，故反拒答指标必须用 guard 从 _direction_content_verdict 现算，不能读落盘值；COLD_START→UNKNOWN(拒答态)有真实样本1条",
+    "rec_b_排列不变性": "three_stage_recall_probe 的 per_criterion/disagreement_count 对 pairs 重排不变(实测 equal=True)，但 disagreements 列表顺序随输入变化(实测 equal=False)；evidence_independence_probe 全字段对 seeds 重排不变。有真区分力：判定层顺序不变、展示层顺序敏感，值得显式自检并区分",
+    "rec_c_纪律条文": "VERIFICATION_DISCIPLINE_20261128.md 现56行、含V1-V5+共同边界，可追加V6(反一味拒答)+V7(排列不变性)两条，沿用来源层级标注格式"
+  },
+  "user_authorization": {
+    "verbatim": "按建议来",
+    "scope": "对 §4S39 报告末尾三条建议的落地授权：①反一味拒答指标(NHR防blanket abstention) ②输入重排判定不变性自检 ③补纪律条文",
+    "judgment_owner": "用户",
+    "note": "授权的是只读诊断与纪律条文,不是改判定核心;仍按预注册→最小改动→负向自咬→权威态零副作用走"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "22e3bd5fde9c80bcb2c4d90a353b5b10a2254a5af21a60b26e6c5192d943c9a3",
+    "discipline_md_sha256_before": "549a48c7fca03b867460a05d3d253fb921942bc63bbe90f3513d58ef6bb13355",
+    "result_json_sha256_before": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "authoritative_state_sha256_before": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "kernel_version": "7.5.0"
+  },
+  "design": {
+    "approach": "三项全部只读：①kernel.py新增 abstention_probe(log_path=None) 从心跳 guard 现算 content_verdict 分布，统计 UNKNOWN(拒答)/FAIL_*/PASS 占比，报 abstention_rate 与 is_blanket_abstention(全拒答告警)，标 not_original_nhr=True(本仓无错误标签/概率，不照搬GS1的NHR=拒答/(拒答+错误))，is_gate_verdict=False；②kernel.py新增 permutation_invariance_probe() 对 three_stage_recall_probe/evidence_independence_probe 做输入重排对比，区分判定层(per_criterion/独立host数,必须不变)与展示层(disagreements顺序,允许变但要显式标注)，is_gate_verdict=False；③纪律条文追加V6/V7两条",
+    "insertion_point": "kernel.py: three_stage_recall_probe 之后、_dominates 之前",
+    "no_empty_extractor": "三个函数都读真实数据(心跳/种子/holdout),不硬造输入;空输入返回空结构不崩"
+  },
+  "no_touch": [
+    "KERNEL_VERSION",
+    "verdict/l3/absolute(L3字段)",
+    "constitution",
+    "result.json",
+    "authoritative_state.json",
+    "self_modify accepted门槛",
+    "_validate_policy / verify_external / self_modify 函数体",
+    "ATTRIBUTION_PROBES / COVERAGE_PROBES 常量",
+    "既有 evidence_independence_probe / three_stage_recall_probe 函数体(仅新增,不改原函数)"
+  ],
+  "acceptance_gates": {
+    "G1_最小改动": "kernel.py diff 精确=2个纯新增函数;版本仍7.5.0;no_touch函数体/常量未变;纪律条文仅追加2条",
+    "G2_反拒答有效性": "abstention_probe 在真实9心跳上: abstention_rate=1/9≈0.111(仅COLD_START=1拒答), PASS=7, FAIL_CONVERGED=1, is_blanket_abstention=False; 现算值不依赖落盘content_verdict(实测历史全None)",
+    "G3_排列不变性有效性": "permutation_invariance_probe 报告: 判定层(per_criterion/independent_hosts)重排后 invariant=True, 展示层(disagreements顺序)显式标 sensitive=True但不影响判定; is_gate_verdict=False",
+    "G4_负向自咬": "①篡改心跳使全COLD_START→is_blanket_abstention=True(能检出一味拒答);②篡改一份pairs让criterion判定翻转→per_criterion不再invariant(自检非恒真);③空心跳/空pairs→返回空结构不崩",
+    "G5_权威态零副作用": "result.json=0f3ccb13… / authoritative_state=5f7a2584… 字节未动; verdict=GAP_INCONCLUSIVE, l3/absolute=false, 版本7.5.0",
+    "G6_零回归": "从/workspace根跑全量测试,改动前后通过数一致(基线1625 passed,历史1773为旧基线已标注)"
+  },
+  "failure_branch": "任一 gate 不过→用 pre_patch_s40/kernel.py 回滚,如实记self-bite,不迁就测试/不改判据/不升版本/不碰权威态",
+  "honesty": "本轮是GS1官方博客'Towards RSI Training'+NHR防blanket abstention+候选排列不变性的只读同构借鉴:①本仓无概率数值/错误标签,不照搬NHR公式,只做拒答占比与全拒答告警,标not_original_nhr;②排列不变性自检区分判定层(必须不变)与展示层(顺序敏感不参与判定),不把展示顺序当成判定缺陷;③纪律条文提炼自原文+本仓既有实践,非新增能力。结构同构不声称获得GS1能力;Ambient恒0,verdict判定权归用户。",
+  "based_on": "GS1官方博客 gs1.mybigai.ac.cn 'Towards RSI Training'(改动前后logits/概率/答案不变才测速度) + CRPO/Brier防过度自信 + deferral/explicit abstention + NHR防blanket abstention + 候选排列不变性; 经 §4S39 回源查证"
+}

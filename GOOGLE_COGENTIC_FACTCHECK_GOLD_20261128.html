@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>谷歌 Cogentic 六篇数学论文：回源查证 + 对本仓的金矿</title>
+<style>
+  :root{--ink:#1b1f24;--sub:#5a6472;--line:#e3e7ed;--bg:#f7f9fb;--card:#fff;--accent:#1f5fa8;--ok:#0f7b4f;--warn:#a86a00;--bad:#b3261e;--gold:#8a6100}
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 20px;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:27px;line-height:1.35;margin:0 0 8px}
+  h2{font-size:20px;margin:34px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:16px;margin:22px 0 8px;color:var(--accent)}
+  .meta{color:var(--sub);font-size:13px;margin-bottom:22px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+  .lead{border-left:4px solid var(--accent);background:#eef4fb}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:9px 11px;vertical-align:top;text-align:left}
+  th{background:#f0f3f7;font-weight:600}
+  tr:nth-child(even) td{background:#fbfcfd}
+  .ok{color:var(--ok);font-weight:600}
+  .warn{color:var(--warn);font-weight:600}
+  .bad{color:var(--bad);font-weight:600}
+  .tag{display:inline-block;padding:1px 8px;border-radius:12px;font-size:12px;font-weight:600;background:#eef2f6;color:var(--sub)}
+  .tag.g{background:#fff3d6;color:var(--gold)}
+  code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12.5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  blockquote{margin:12px 0;padding:10px 14px;background:#f6f8fa;border-left:3px solid #b7c4d3;color:#374151;font-size:13.5px}
+  .pill{display:inline-block;background:var(--accent);color:#fff;font-size:12px;padding:2px 9px;border-radius:12px;margin-right:6px}
+  ul{margin:8px 0 8px 20px;padding:0}
+  li{margin:5px 0}
+  .foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);color:var(--sub);font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>谷歌 Cogentic 六篇数学论文：回源查证 + 对本仓的金矿</h1>
+<div class="meta">查证时间 2026-11-28 ｜ 来源：DeepTech 深科技公众号（<code>mp.weixin.qq.com</code> …mid=2649809198）+ 网易/腾讯新闻/量子位三通道交叉 ｜ 论文一手：arXiv abs/HTML + GitHub 仓库 PDF 逐篇下载</div>
+
+<div class="card lead">
+<b>一句话结论：</b>文章主干<b>属实</b>——Cogentic 系统论文 <code>2609.40324</code> 与 GitHub 仓库均一手确认，六篇论文的六个核心数字<b>全部与 PDF 原文对上</b>；但抓到<b>两处二手口径偏差</b>和<b>一处须限定的说法</b>。真正的金矿不在"谷歌破了几道题"，而在 Cogentic 的架构本身——它把本仓一直在做的事（账本、验证器的验证、失败轨迹、判定权分离）在工程上跑了一遍，并且有一条恰好指向我们 B2 的下一层。
+</div>
+
+<h2>一、硬锚点回源：两个都真</h2>
+<table>
+<tr><th style="width:20%">锚点</th><th style="width:46%">文章说法</th><th>一手核实</th></tr>
+<tr><td>Cogentic 系统论文</td><td>References 给出 <code>2609.40324</code>；Cogentic 由 Google Research &amp; DeepMind 7 位研究人员打造，9 月亮相</td><td class="ok">✅ arXiv:2609.40324 = <i>Cogentic: Multi-Agent Orchestration for Automated Proof Discovery</i>，2026-09-30 提交（v2 10-01），作者 7 位（Yang Cai、Vineet Gupta、Yanchen Jiang、Christopher Liaw、Aranyak Mehta、Grigoris Velegkas、Di Wang），全部 Google Research。<b>编号/作者数/日期全对。</b></td></tr>
+<tr><td>GitHub 仓库</td><td>11-25 一次性上传 6 篇预印本，共 274 页；零人类干预；Lean 4 形式化"将在配套提交发布"</td><td class="ok">✅ <code>google-research/google-research/cogentic_research_papers</code> 真实存在，commit <code>4a7bc8a</code>（11-25）确为 "Add six Cogentic research papers"，六篇标题与文章逐字一致；commit message 原文 "Lean 4 formalizations of all six proofs <b>will be released</b> in a companion submission"——即<b>尚未公开</b>，文章这点诚实。</td></tr>
+</table>
+
+<h2>二、六篇论文核心数字：逐篇对 PDF 原文</h2>
+<p>六篇 PDF 从仓库 raw 链接直接下载，用 <code>pdftotext</code> 提取首页摘要逐字核对（非二手转述）：</p>
+<table>
+<tr><th style="width:17%">论文</th><th style="width:26%">文章/媒体说法</th><th style="width:34%">PDF 摘要原文</th><th>判定</th></tr>
+<tr><td>① 随机整数分解</td><td>指数 1/2→1/3；常数 105；改进 1992 年结果，34 年僵局</td><td><code>L_N[1/3, 105]</code> 期望时间、<code>L_N[1/3,40]</code> 工作空间；改进 Lenstra–Pomerance (1992) 的 <code>L_N[1/2,1]</code>；"relies on no unproven hypotheses"</td><td class="ok">✅ 全对</td></tr>
+<tr><td>② 确定性整数分解</td><td>首次无条件亚指数确定性分解；不依赖 GRH 构造二次非剩余</td><td><code>O exp 3(ln N)^{3/4} = L_N[3/4, o(1)]</code>；"zero randomness, zero unproven smoothness hypotheses, zero Riemann-hypothesis assumptions"；二次非剩余超越 Burgess(1957,1963)/Vinogradov(1927) 的 <code>p^{1/(4√e)}</code> 障碍</td><td class="ok">✅ 全对</td></tr>
+<tr><td>③ 离散对数</td><td>固定特征有限域，准多项式→亚准多项式；对无解情形返回可核验证书</td><td><code>(pn)^{o(log n)}</code>；"either returns x … or returns an explicit exponent certifying h ∉ ⟨g⟩"；改进 Kleinjung–Wesolowski(2022)、Lido(2026)</td><td class="ok">✅ 全对</td></tr>
+<tr><td>④ 纳什均衡</td><td>误差 1/3→1/5；"长期停留在 1/3 以上"</td><td>算法 <code>MaximinKiteNE</code>，poly(L) 输出精确有理 1/5 近似；原文明确写改进 "the earlier <b>1/3+δ</b> barrier (Deligkas et al.) <b>and the recent bound of approximately 0.30954+δ (Li and Li)</b>"</td><td class="warn">⚠️ 结论对，<b>前史被简化</b>：此前最好已是 0.30954，非"卡在 1/3 寸步难行"</td></tr>
+<tr><td>⑤ Log-Rank 猜想</td><td>打破"2014 年以来"平方根壁垒；改进幅度 5×10⁻⁶</td><td><code>D_cc(M) ≤ O(r^{1/2−ε})</code>，<code>ε=5×10⁻⁶</code>；原文引用改进对象是 <b>Lovett (2016)</b> 的 <code>O(√r log r)</code> 与 <b>Sudakov–Tomon (2023)</b> 的 <code>O(√r)</code></td><td class="warn">⚠️ ε 值全对；<b>"2014 年"与论文引用不符</b>（论文引 2016/2023）</td></tr>
+<tr><td>⑥ 边重构猜想</td><td>1964 年 Harary 猜想；边数放宽到顶点数的 1000 倍</td><td><code>m ≥ 1000 n₀</code> 或最小度 ≥ 2000；改进 Müller(1977) 的 <code>m &gt; n₀ log₂ n₀</code>；"lowers … to linear edge density with no logarithmic factors"</td><td class="ok">✅ 全对</td></tr>
+</table>
+
+<h3>两处偏差 + 一处限定，按"标签≠事实"纪律单列</h3>
+<div class="card">
+<ul>
+<li><b>纳什前史被压扁（口径偏差）：</b>文章/量子位说"误差长期徘徊在 1/3"，但一手摘要自己写了更近的 <code>0.30954+δ (Li and Li)</code>。这是把"历史障碍"当成"当前前沿"讲——结论 1/5 仍成立，只是<b>改进的真实参照是 0.30954，不是 1/3</b>。</li>
+<li><b>Log-Rank 年份串台（口径偏差）：</b>文章说"2014 年以来"，而一手引用的两个基线是 Lovett 2016 与 Sudakov–Tomon 2023；<b>2014</b> 在另一篇（离散对数）里出现（Barbulescu–Gaudry–Joux–Thomé 2014 的启发式机制）。疑似两篇年份混用，按编号回源纪律记下。</li>
+<li><b>"零人类干预"须限定（并非造假，但边界要写清）：</b>系统论文原文是 "Each run operated from the problem statement <b>without human mathematical intervention</b>; <b>domain experts subsequently verified every proof</b>"，并且 "problems are in the areas of <b>the research expertise of the authors</b>"。准确说法是<b>证明过程无人类数学介入 + 选题限于作者专长领域 + 专家事后逐篇核验</b>，不等于"完全无人"。文章多数地方措辞尚谨慎，自媒体标题则普遍越过这条线。</li>
+</ul>
+</div>
+
+<h2>三、金矿：Cogentic 架构 = 本仓命题的工程实测</h2>
+<p>系统论文 Section 2 全文（已抓 HTML v2 逐字读）给出了架构细节。把它和本仓深读过的论文放在一张表里——<b>每一行都有本仓已固化记录可对照</b>：</p>
+<table>
+<tr><th style="width:22%">Cogentic 一手机制（论文原话）</th><th style="width:25%">本仓已固化对照</th><th>为什么是金矿</th></tr>
+<tr><td><b>verified ledger</b>："promotes confirmed intermediate results into a persistent verified ledger that later rounds build on"；失败证明里的引理由 auditor 抽出、<b>重写成自足引理、隔离重验</b>后才入账</td><td>Exo 的 append-only <code>H(dt)⪯H(dt+1)</code>；No Second Run "<b>账本才是贡献</b>"</td><td><span class="tag g">强同构</span> 本仓 B4 只观察到"有快照锁、无只增不减断言"；Cogentic 给出了账本<b>如何生长</b>的操作定义：抽取→自足化→隔离重验→才允许复用。这比抽象单调性约束更可执行。</td></tr>
+<tr><td><b>record of attempts + dead ends</b>："records that track prior proof attempts and their verdicts"；"a bound excluded by a verified counterexample is written down as excluded, so that later rounds do not revisit them"</td><td>本仓 B2 <code>failure_trace_evidence</code>（读近期诊断全文，只读不改选向）</td><td><span class="tag g">指向 B2 下一层</span> 我们只把失败轨迹"摆出来看"；Cogentic 把死胡同<b>结构化成可复用约束</b>（被反例排除的界直接标 excluded）。这就是 B2 从"可见化"走向"可用化"的现成范式。</td></tr>
+<tr><td><b>两个对抗验证者</b>：逐个验 + 并排比对找 "shared blind spots"；"every step is wrong until justified, and every citation is incorrect until checked"</td><td>Who Verifies "<b>审计审计者</b>"；Trusting Trust "质疑每个数据源"；本仓 B3 <code>verify_verifier.py</code></td><td><span class="tag g">强同构</span> 我们的 B3 只检测判据是否塌成 always-pass；Cogentic 的"并排比对找共同盲区"是<b>多判据交叉</b>——正好补上单判据探针看不到的那类塌缩。</td></tr>
+<tr><td><b>summarizer 分层供料</b>：prover 不看全量历史，只看各自 briefing；"Longer documents are given as <b>paths rather than quoted in full</b>"，prover 自己按需打开</td><td>Meta-Harness 读全量轨迹 +7.7 分、少 4×token</td><td><span class="tag g">反直觉的一层</span> 我们 B2 的做法是"把全文读进 rationale"；Cogentic 更精细——<b>摘要器读全文、执行者读简报 + 路径</b>，每个 prover 拿到的还是不同视角的简报。这不是推翻 B2，是给 B2 的下一步：先摘要再按需回源，而非全文直灌。</td></tr>
+<tr><td><b>判定权分离</b>："neither the advisor nor the orchestrator is permitted a <b>mathematical opinion</b>: they cannot speculate on what the answer is likely to be, recommend a technique, or declare a direction promising or dead"</td><td>本仓铁律：<b>判定权归用户</b>，验证器只摆证据不宣布结论</td><td><span class="tag g">架构级同构</span> 调度者能做资源决策，但<b>不许对内容下判断</b>——这是"生成与裁决分离"被写进系统约束的罕见工程实例，可直接作为本仓边界纪律的外部佐证。</td></tr>
+<tr><td><b>吞吐 &gt; 验证带宽</b>："A system like this can produce candidate results <b>faster than they can be read</b>, and the gap widens as the compute budget grows … Balancing out the throughput of this generation and human understanding remains an important question"</td><td>本仓核心判断："<b>让改动可信，比让改动发生更难</b>"</td><td><span class="tag g">第三方独立表述</span> 相隔完全不同路线的同一堵墙：论文作者自己把"验证带宽跟不上生成"列为开放问题。本仓 P0/P1/B1–B3 一直在这堵墙上。</td></tr>
+<tr><td><b>自然语言证明 + 专家核验</b>："Cogentic operates in <b>natural language</b>, producing mathematical prose that domain experts can verify"（与 Lean 类工作明确对照）</td><td>本仓"逐字原话、逐条回源、判定权归人"</td><td><span class="tag g">分层要区分</span> 注意：9 月系统论文里 Cogentic <b>本身</b>输出自然语言证明；11 月六篇的 Lean 4 形式化是<b>另称配套、尚未公开</b>。把两层混为一谈会误判"已机器可验"——这正是本仓反复强调的证据层级。</td></tr>
+</table>
+
+<div class="card">
+<h3>诚实的边界</h3>
+<ul>
+<li><b>不声称数学界已接受：</b>六篇均未同行评议、Lean 4 代码未公开、无第三方复现。我们核的是"文章说法与论文原文是否一致"，<b>不是</b>"证明是否正确"——后者超出本仓能力，也超出任何非领域专家的判断。</li>
+<li><b>对照是结构同构，不是影响关系：</b>不声称 Cogentic 团队读过本仓或那些 RSI 论文；是说两套独立工作撞到同一个结构。同样，本仓 B2/B3 的下一步只是<b>借鉴范式</b>，不是照搬（数学证明的验证语义与 novelty search 的目标不同）。</li>
+<li><b>编号入表由用户裁定：</b>本次一手确认一个新 arXiv 编号 <code>2609.40324</code>（Cogentic 系统论文）。六篇成果是 GitHub 仓库 PDF、<b>无 arXiv 编号</b>，不属于编号表范畴。按纪律不擅自改引用基础设施。</li>
+<li><b>零代码改动：</b>本轮只核证与记录，未触碰内核、判据、判定态、宪法；权威态与两哈希保持基线。</li>
+</ul>
+</div>
+
+<div class="foot">
+一手材料：arXiv abs/HTML <code>2609.40324</code>；GitHub <code>google-research/cogentic_research_papers</code>（commit 4a7bc8a、README）；六篇 PDF 原文（raw.githubusercontent.com 下载 + pdftotext 提取首页摘要）。<br>
+二手材料：DeepTech 深科技公众号原文、网易/腾讯新闻/量子位/财湃转载与解读。<br>
+留痕见 <code>SESSION_HANDOFF.md §4S30</code>。
+</div>
+
+</div>
+</body>
+</html>

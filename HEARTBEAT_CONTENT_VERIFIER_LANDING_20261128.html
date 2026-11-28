@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心跳 verify 内容判据 + 验证器的验证器：落地验收</title>
+<style>
+  :root{--ink:#1b1f24;--sub:#5a6472;--line:#e3e7ed;--bg:#f7f9fb;--card:#fff;--accent:#1f5fa8;--ok:#0f7b4f;--bad:#b3261e;--gold:#8a6100}
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 20px;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1020px;margin:0 auto}
+  h1{font-size:25px;margin:0 0 8px}
+  h2{font-size:19px;margin:28px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  .meta{color:var(--sub);font-size:13px;margin-bottom:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:12px 0}
+  .lead{border-left:4px solid var(--gold);background:#fffaf0}
+  .good{border-left:4px solid var(--ok);background:#eef9f2}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#f0f3f7}
+  code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12.5px;font-family:ui-monospace,Menlo,monospace}
+  .ok{color:var(--ok);font-weight:600}.bad{color:var(--bad);font-weight:600}
+  ul{margin:6px 0 6px 20px;padding:0}li{margin:4px 0}
+  .foot{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);color:var(--sub);font-size:12.5px}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>心跳 verify 内容判据 + 验证器的验证器：落地验收</h1>
+<div class="meta">2026-11-28 ｜ 用户授权"可以走" ｜ 预注册 SHA <code>593612f8…</code> ｜ 交接 §4S32</div>
+
+<div class="card lead">
+<b>一句话：</b>心跳的 <code>phase_verify</code> 三项里，两项一直写死 <code>True</code>——是恒真的契约校验。这次给它补了一个<b>真正会失败的内容判据</b>（收敛空转即拒），并用 B3 式探针验证这个判据<b>自己没塌缩</b>。关键的诚实点：失败只做知情度标注、<b>不阻塞执行</b>（守 C7），不碰任何判定态。
+</div>
+
+<h2>一、动手前的发现：恒真从哪来</h2>
+<table>
+<tr><th style="width:34%">检查项</th><th>结果</th></tr>
+<tr><td><code>evolve()</code> 的 <code>phase_verify</code></td><td>三项中只有 <code>constitution_ok</code> 是真校验；<code>no_verdict_change</code> / <code>original_100_untouched</code> 写死 <code>True</code> → <b>恒真</b></td></tr>
+<tr><td>本仓已有真判据却没用上</td><td><code>verify_fix_effect()</code> 是三层内容判据（表达/敲除/适合度），有真负例 <code>NO_GENE_ACQUIRED</code>/<code>NO_CAUSAL_EFFECT</code>/<code>FITNESS_REGRESSION</code>，但<b>只在 self_modify 时用，心跳不读</b></td></tr>
+<tr><td>设计取舍</td><td>不把 <code>action_note</code> 文本硬喂 <code>verify_fix_effect</code>（会全假失败）；改复用 <code>novelty_guard</code> 的<b>真信号</b>做方向真实性判据——判据会随真输入翻转，非空转</td></tr>
+</table>
+
+<h2>二、改了什么（两纯函数 + 一并列字段）</h2>
+<div class="card good">
+<ul>
+<li><b><code>_direction_content_verdict(guard, direction, action_note)</code></b> 纯函数，四态：
+  <table style="margin-top:6px">
+  <tr><th>真实输入</th><th>verdict</th><th>verified</th></tr>
+  <tr><td>guard=CONVERGED（收敛空转）</td><td class="bad">FAIL_CONVERGED</td><td>False</td></tr>
+  <tr><td>guard=DIVERSE</td><td class="ok">PASS_DIVERSE</td><td>True</td></tr>
+  <tr><td>guard=COLD_START（样本不足）</td><td>UNKNOWN</td><td>False</td></tr>
+  <tr><td>缺 direction / 无 guard</td><td class="bad">FAIL_EMPTY / FAIL_NO_GUARD</td><td>False</td></tr>
+  </table>
+</li>
+<li><b><code>verify_heartbeat_content(hb)</code></b>：只读包装，从心跳真实字段取信号。</li>
+<li><b><code>evolve()</code> 的 <code>phase_verify</code> 加并列字段 <code>content_verdict</code></b>：不覆盖原三项；失败仅标注不阻塞。</li>
+</ul>
+<b>落地微调（如实记录）：</b>预注册写"三态"，实装扩为<b>四态</b>——<code>COLD_START</code> 诚实标 <code>UNKNOWN</code>，样本不足时不冒充通过。这比原设计更保守。
+</div>
+
+<h2>三、验收（预注册七门全过）</h2>
+<table>
+<tr><th style="width:15%">门</th><th>结果</th></tr>
+<tr><td>G2 真会失败</td><td class="ok">✅ 五态全部翻转正确：CONVERGED→FAIL、DIVERSE→PASS、COLD_START→UNKNOWN、空→FAIL_EMPTY、无 guard→FAIL_NO_GUARD</td></tr>
+<tr><td>G3 验证器的验证器</td><td class="ok">✅ B3 风格探针 <b>5/5 命中</b>，<code>collapse=none / HEALTHY</code>（非 always_pass、非 always_fail）——判据本身没塌缩</td></tr>
+<tr><td>G4 不改判定 + 不阻塞</td><td class="ok">✅ 真 CONVERGED 场景下 <code>content_verdict=FAIL_CONVERGED</code>（真失败），但原三项逐字 <code>True/True/True</code>、心跳照写；真 guard=CONVERGED</td></tr>
+<tr><td>G7 负向自咬</td><td class="ok">✅ 正例不误拒、负例必拒；篡改 guard 状态 → verdict 随之翻转，证明读真信号非硬编码</td></tr>
+<tr><td>G5/G6 权威态</td><td class="ok">✅ 1773 passed；CONSISTENT、drifts=[]；两哈希 <code>0f3ccb13…</code>/<code>fe56291b…</code> 未动；<code>verify_verifier.py</code> 字节未动</td></tr>
+<tr><td>G1 diff 范围</td><td class="ok">✅ 精确落 2 纯函数 + 1 并列字段；<code>KERNEL_VERSION</code> 仍 7.5.0；预注册 SHA <code>593612f8…</code> 完好</td></tr>
+</table>
+
+<div class="card">
+<h3>诚实边界</h3>
+<ul>
+<li>这是心跳内容真实性的<b>只读判据（知情度标注）</b>，不是 L5 演化验证器、不是证明验证。</li>
+<li>失败<b>只标注不阻塞</b>（守 C7：改知情度不改紧迫度）——不声称已获得 Cogentic / Who Verifies 的防护能力。</li>
+<li><code>content_verdict</code> 判的是"方向是否收敛空转"，<b>不是</b>"证明对不对"；本仓 <code>phase_verify</code> 仍无内容层数学 verdict。</li>
+<li>Ambient 恒 0，verdict/l3/absolute/宪法未动；判定权归用户。</li>
+</ul>
+</div>
+
+<div class="foot">
+一手依据：<code>life_kernel/kernel.py</code>（evolve / novelty_guard / verify_fix_effect 现场）+ <code>audit_l3_gap_targeted/verify_verifier.py</code>（B3 探针复用）。<br>
+预注册：<code>prereg_heartbeat_content_verifier_20261128.json</code>（SHA <code>593612f8…</code>）｜ 留痕：<code>SESSION_HANDOFF.md §4S32</code>。
+</div>
+
+</div></body></html>

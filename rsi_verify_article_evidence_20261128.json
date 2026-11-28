@@ -1,0 +1,71 @@
+{
+  "at": "2026-11-28T12:50:00+08:00",
+  "kernel_version": "7.5.0",
+  "topic": "李rumor公众号《RSI，先会verify的模型先享受》一手回源 + 内核对照",
+  "article_url": "http://mp.weixin.qq.com/s?__biz=MzAxMTk4NDkwNw==&mid=2247497480&idx=1&sn=3cdd585e6c9a4b5682411b11213dadd6",
+  "article_core_claim": "生成≠验证，验证能力必须单独优化；RSI的加速度取决于验证(verify)而非生成",
+  "retrieval": "搜狗微信通道触发验证码、AISkill付费通道未启用；改用公开网页搜索命中原文全文与极市平台授权转载，两版正文一致，零费用",
+  "primary_source_verification": [
+    {
+      "paper": "Learning to Self-Verify Makes Language Models Better Reasoners",
+      "venue": "ICML 2026 (PMLR 306:17291-17307, 43rd ICML)",
+      "url": "https://proceedings.mlr.press/v306/chen26es.html",
+      "status": "核心论点逐字对上",
+      "abstract_key": "improving generation does not lead to corresponding improvements in self-verification; learning to self-verify can effectively improve generation performance; generation and self-verification optimized as two independent but complementary objectives",
+      "article_fidelity": "准确"
+    },
+    {
+      "paper": "ReVeal: Self-Evolving Code Agents via Reliable Self-Verification",
+      "venue": "arXiv:2506.11442v2 (21 Oct 2025); ICLR 2026 (文章口径)",
+      "url": "https://arxiv.org/html/2506.11442",
+      "status": "论文真实、机构对上(MSRA/同济/中科大)，但文章转述有一处失真",
+      "article_distortion": "文章把'下一轮修代码的进步算给前一轮验证'归为奖励验证行为；论文原文精确区分:verification reward=生成的测试在golden code上通过比例，只给verification turn;下一轮代码改进是generation reward，由TAPO额外分配给前一轮verification turn。两类奖励被文章揉在一起。论文用single policy同时做生成与验证，非独立critic。",
+      "paper_prevents_hacking": "verification reward confined strictly to its own verification turn,防止reward hacking"
+    },
+    {
+      "paper": "SCoRe / RepExp",
+      "status": "文章引用未逐篇回源(只核最核心两篇)，标注为二手待核",
+      "urls": ["https://arxiv.org/html/2409.12917v2", "https://arxiv.org/html/2510.11686"]
+    }
+  ],
+  "kernel_self_check": {
+    "question": "生成能力涨了，验证能力跟没跟着涨？内核的验证器官是否独立于生成器官？",
+    "generation_side": {"heartbeat_count": 11, "mechanism": "evolve()落心跳/选议程"},
+    "verification_side": {
+      "organs": ["verify_heartbeat_content", "abstention_probe", "conclusion_evidence_probe", "abstention_zero_transfer_probe", "echo_responsiveness_probe"],
+      "independent_of_generation": true,
+      "read_only": true,
+      "is_gate_verdict": false,
+      "note": "验证器官全部只读、现算、不写盘、不进判定——结构上正是文章说的'验证需单独优化'，且刻意不让它驱动生成(判定权归用户)"
+    },
+    "real_data_findings": {
+      "abstention_rate": 0.0909,
+      "is_blanket_abstention": false,
+      "verdict_distribution": {"UNKNOWN": 1, "PASS_DIVERSE": 9, "FAIL_CONVERGED": 1},
+      "pass_weak_rate": 0.5556,
+      "pass_weak_count": 5,
+      "state_counts": {"PASS_SUBSTANTIVE": 4, "PASS_WEAK_EVIDENCE": 5, "FAIL_WEAK_EVIDENCE": 1, "UNKNOWN_EVIDENCE": 1},
+      "abstention_masked_zero_count": 1,
+      "zero_claim_attributable_to_abstention": true,
+      "stored_verdict_missing": 9,
+      "recomputed_from_guard": true
+    },
+    "honest_reading": [
+      "结构层:内核验证器官独立于生成器官(符合文章'验证单独优化')，且验证不驱动生成是刻意的诚实边界，非缺陷",
+      "数据层:判题能力并非一味拒答(弃权率9.09%,非blanket)，但9/11心跳落盘时无verdict、靠guard现算——'生成时没同步验证'的痕迹",
+      "弱点层:55.56%的结论通过是弱证据(PASS_WEAK_EVIDENCE,tagbook无特异锚点),文章'验证有效性难评估'在内核同构显现:读出(readout)假设强≠干预证实",
+      "弃权层:1搏abstention_masked_zero,'没判≠判了没问题'被显式标注而非庆祝",
+      "边界:本仓无RL/参数更新/答错标签,文章的RL训练结论只能做结构类比,不能照搬数值"
+    ]
+  },
+  "hash_at_evidence": {
+    "kernel.py": "318722881c7d76849f088a6be4786a1c5fd4403afee96af3ce7241e1f8070813",
+    "heartbeat_log.jsonl": "5bce6660263b2e49c3d88a1bd14cdd4e822ece265ad5abc239b56c26fcd88b7f",
+    "authoritative_state.json": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "constitution.json": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e"
+  },
+  "side_effects": "零写入内核/权威态/心跳；仅新增本evidence文件与SESSION_HANDOFF.md账注",
+  "verdict_unchanged": true,
+  "is_gate_verdict": false,
+  "判定权归用户": true
+}

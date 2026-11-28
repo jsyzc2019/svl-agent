@@ -1,0 +1,48 @@
+{
+  "schema": "prereg-borrow-wave2-b2-v1",
+  "id": "prereg_borrow_wave2_b2_20261128",
+  "locked_at_utc": "2026-11-28T00:34:33Z",
+  "locked_after_evidence": false,
+  "user_authorization": {
+    "verbatim": "按你的建议依次推",
+    "scope": "B2 把轨迹压扁成标签的反向：让 REORIENT 分支读近期失败/诊断轨迹全文(action_note)作为只读证据进 out，先只记录不改选向",
+    "judgment_owner": "用户",
+    "note": "授权的是建议清单 B2 的最小动作(读失败轨迹全文进 rationale/证据)，不扩权到改 propose 选向逻辑、不碰 parkto_walk/root_cause_trace"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "6676d182012f9c216f926d4a2dcf59850da1a20c32d4fa3ccc6f88adbb736aa2",
+    "kernel_after_b1_note": "B1 已加 _source_tier_profile + decision 字段(见 §4S27)，B2 在此基础上继续；判定态/权威态仍基线",
+    "kernel_version": "7.5.0",
+    "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "tests_before": 1773,
+    "verdict": "GAP_INCONCLUSIVE",
+    "observed_gap": "Meta-Harness 2603.28052: proposer 读全部历史代码/分数/轨迹形成假设(+7.7分少4xtoken);本仓 propose()/root_cause_trace() 只用 _tags_of 词集 jaccard,heartbeat_log 31KB 全文决策时不读"
+  },
+  "change": {
+    "file": "life_kernel/kernel.py",
+    "add_function": "_recent_failure_traces(n=3, log_path=None) 只读：从 heartbeat_log 取最近 n 条 phase_improve_action 全文+方向",
+    "edit": "execute_agenda 的 REORIENT 分支(仅 walk_triggered=false 的归巢子分支)在 out 里加只读字段 failure_trace_evidence；walk_triggered=true 路径不变",
+    "landing_note": "落地微调：不改写 decision.rationale 字符串(其属 autonomous_agenda 只读产物)，改为 REORIENT 执行 out 的并列只读证据字段,语义等价且副作用更小",
+    "no_touch": [
+      "KERNEL_VERSION",
+      "constitution.json",
+      "result.json",
+      "任何 urgency/chosen/rationale/门禁/阈值",
+      "pareto_walk/propose/root_cause_trace/self_modify/evolve 本体",
+      "B1 的 _source_tier_profile",
+      "其他 execute_agenda 分支"
+    ]
+  },
+  "acceptance_gates": {
+    "G1_最小改动": "diff 仅=新增 _recent_failure_traces + REORIENT 归巢分支加 1 字段；KERNEL_VERSION 仍 7.5.0",
+    "G2_全文可见": "构造有 heartbeat 的场景调 REORIENT，out.failure_trace_evidence 含最近诊断动作全文(非 jaccard 标签),条数<=n",
+    "G3_不改选向": "加字段前后 out 的 executed/walk/nest_direction/nest_executed 逐字相同；不喂回 propose/root_cause_trace",
+    "G4_全量测试": "python3 -m pytest 全量 1773 passed",
+    "G5_权威一致": "authoritative_state verdict=CONSISTENT, drifts=[]",
+    "G6_判定态未动": "result.json/constitution.json 两哈希字节未动",
+    "G7_负向自咬": "临时清空 heartbeat_log(隔离路径)后 failure_trace_evidence 应为空列表/标注无轨迹,证明读的是真数据非硬编码"
+  },
+  "failure_branch": "任一 gate 不过 → 用 pre_patch 备份+已知 B1 diff 回滚到本项前状态，如实记 self-bite，不迁就测试/不改判据/不升版本",
+  "honesty": "这是诊断经验可见化(Meta-Harness 借鉴的只读版)，不是照搬其 proposer 生成 harness 假设——本仓 propose 是 novelty search、目标不同，属信号形态同构；先只记录不改选向，不声称已获得 +7.7 分；Ambient 恒 0，verdict 不动"
+}

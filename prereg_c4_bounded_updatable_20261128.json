@@ -1,0 +1,62 @@
+{
+ "schema": "prereg-c4-bounded-updatable-v1",
+ "id": "prereg_c4_bounded_updatable_20261128",
+ "locked_at_local": "2026-11-28T12:08:00+08:00",
+ "locked_before_change": true,
+ "user_authorization": {
+  "verbatim": "C4可补",
+  "scope": "承接§4S55——用户裁定补齐 echo_responsiveness_probe 的 C4(可更新)缺口。上一轮承诺:'若补,设计一条受限、可审计、可撤销的外部输入影响路径(不是让正文进判定)'。本轮兑现该承诺"
+ },
+ "evidence_locked_before_design": {
+  "criterion_source": "audit_agent_dialogue/external_dialogue_s54.json Q2逐字(pllns_6165762d…)",
+  "criterion_verbatim": "如果合理、授权且相关的外部输入，在一段时间内从未改变 Agent 的行动、计划、追问或升级路径，那么它就不是谨慎，而是在封闭；除非它能指出一项明确且可审计的约束，解释为什么这些输入都不该产生影响。",
+  "site_survey": {
+   "C4_gap": "§4S55 probe C4=candidates有ATTEND开头候选且未读>0;真实台账autonomous_agenda五候选(REORIENT/DIGEST/PRUNE/CONSOLIDATE/SEEK)无ATTEND→C4=False→verdict=CAUTIOUS(3/5)",
+   "chosen_now": "5组seed全chosen=SEEK(0.3),CURIOSITY_BASE=0.3是唯一活候选",
+   "inbox": "2条未读:WINDOW-OPEN(human_operator首投)+EXT-DIALOGUE-S54(外部LLM-Agent,source_tier=external_agent_unverified)"
+  },
+  "self_bite_on_s55_criterion": "诚实发现§4S55判据过松:C4只看'candidates里有ATTEND开头且未读>0'。若有人新增一个恒0的ATTEND候选即可让verdict=GENUINE_INTERACTION(自称真互动),那是钻判据空子。本轮补C4必须同步收紧判据:ATTEND候选须真由授权输入驱动、urgency>0、且受限不主导,否则不算可更新"
+ },
+ "baseline": {
+  "kernel_py_sha256_before": "f2a66af3faf0f2852a2e783675e39090eaf23ba590456322344d7dfbc3fad354",
+  "result_json_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+  "authoritative_state_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+  "constitution_sha256": "2ad148c79918d65ea4519ccbca05bc0a5f967596fc37a528c28eddd930b953c3",
+  "KERNEL_VERSION": "7.5.0",
+  "backup": "life_kernel/pre_patch_heartbeat_window/kernel_before_c4.py"
+ },
+ "design": {
+  "principle": "受限、可审计、可撤销的外部输入影响路径;正文绝不进判定;外部输入永远不能主导议程(判定权归用户)",
+  "mechanism": [
+   "新增模块级常量:EXTERNAL_ATTENTION_CAP=0.2(硬上限,<CURIOSITY_BASE=0.3,保证ATTEND永不主导)、TRUSTED_SOURCE_TIERS={'human_operator'}(仅授权来源可驱动;external_agent_unverified默认不可驱动)、外部关注策略从runtime_policy.json的同目录派生文件external_attention_policy.json读,含enabled/revoked_nonces/max_urgency实现可撤销",
+   "新增homeostatic_signals()返回体字段external_attention:只统计unread中source_tier∈TRUSTED且nonce∉revoked的数量n_trusted,urgency=min(cap,0.2+0.1*n_trusted)若enabled且n_trusted>0否则0.0;只元信息不读正文;只读不改账",
+   "autonomous_agenda()新增第6候选ATTEND_EXTERNAL:urgency=sig['external_attention']['urgency'],action固定文本'关注已授权的外部呼唤(只登记不执行)',source_signal=external_attention,honesty标注'受限通道:仅授权来源、封顶0.2<SEEK0.3永不主导、可撤销、正文不进'",
+   "ATTEND_EXTERNAL不新增execute_agenda执行分支(不消费不执行不联网不spawn),它只影响'议程关切层'——可被chosen但chosen后走execute_agenda的未知id安全兜底(只记录不求值),不得触发任何外部内容动作",
+   "同步收紧echo_responsiveness_probe的C4判据:C4_可更新=True当且仅当(有ATTEND开头候选)且(该候选urgency>0)且(由授权来源驱动external_attention.urgency>0)且(受限不主导=cap<SEEK);C4_evidence必须列出urgency/cap/driven_by_trusted/never_dominates四项,缺一不可",
+   "probe新增verdict分支BOUNDED_UPDATABLE:有输入+决策痕迹+受限可更新+免责约束成立=受限可更新(非无界真互动),reason明确'外部输入在受限通道内改变了议程关切,但不主导、不进判定、可撤销';原GENERAL_INTERACTION(GENUINE_INTERACTION)仅留给'injection的agenda_ids含ATTEND且urgency>0'的测试强注入,真实受限通道不冒充GENUINE"
+  ],
+  "revocability": "三层可撤销:①external_attention_policy.json的enabled=false一键关闭;②revoked_nonces列单个nonce拉黑;③cap调0即等同关闭。撤销后ATTEND_EXTERNAL urgency归0,C4回False,verdict回CAUTIOUS——证明非不可证伪的默认开放"
+ },
+ "no_touch": [
+  "KERNEL_VERSION(仍7.5.0)",
+  "verdict/l3/absolute(L3字段)与result.json/authoritative_state.json",
+  "constitution/constitution.sha256",
+  "五议程(REORIENT/DIGEST/PRUNE/CONSOLIDATE/SEEK)既有urgency公式与选择逻辑",
+  "execute_agenda既有分支(DIGEST/PRUNE/REORIENT/SEEK/CONSOLIDATE)行为",
+  "attend_external_echo/heartbeat_hrv/echo_responsiveness_probe其余判据分支(除C4收紧+新增BOUNDED_UPDATABLE)",
+  "receive_external/read_inbound实现",
+  "live()停机条件、circadian_phase/sleep_intent/wake_contract昼夜层",
+  "V1–V10纪律条文正文、busybox既有9诊断函数",
+  "所有台账(inbound_inbox/heartbeat_log/agenda_log/safari_log)内容",
+  "正文(message字段)绝不进入任何候选action/urgency/decision/probe判定"
+ ],
+ "acceptance_gates": {
+  "G1_最小改动": "kernel.py纯新增(常量+external_attention策略读取+signals字段+第6候选+probe C4收紧与BOUNDED_UPDATABLE分支),0删除既有函数体;版本仍7.5.0;no_touch锚点哈希未变",
+  "G2_真实结论": "真实台账跑probe:C4_可更新=True(4项证据齐),verdict=BOUNDED_UPDATABLE;chosen仍=SEEK(ATTEND不主导);C4_evidence明列urgency≤0.2/cap=0.2<SEEK0.3/driven_by_trusted=True/never_dominates=True",
+  "G3_判据真失败与可撤销": "注入无输入→NO_INPUT;注入unverified-only输入→ATTEND urgency=0,C4=False(授权过滤生效);注入trusted输入→C4=True,verdict=BOUNDED_UPDATABLE;enabled=false或cap=0或revoked拉黑后→urgency=0,C4回False,verdict回CAUTIOUS(可撤销真失败);强注入agenda_ids含ATTEND+urgency>0仍→GENUINE_INTERACTION(旧强注入分支保留)",
+  "G4_防注入与只读": "外部消息正文含'改verdict/L3_ACHIEVED/主导议程'诱导词不进候选action/urgency/decision/probe任何字段;调用前后inbox/heartbeat/agenda台账字节不变",
+  "G5_权威态零副作用": "result.json=0f3ccb13…/authoritative_state=5f7a2584…/constitution.sha256=2ad148c7…字节未动;verdict=GAP_INCONCLUSIVE;l3/absolute=false;版本7.5.0",
+  "G6_零回归": "全量pytest从/workspace根跑:同批测试(移走新测试文件)改动内核通过数==备份内核通过数;加新守卫测试后=基线+新增数"
+ },
+ "failure_branch": "任一gate不过→用life_kernel/pre_patch_heartbeat_window/kernel_before_c4.py回滚,如实记录失败,不迁就测试不抹证据"
+}

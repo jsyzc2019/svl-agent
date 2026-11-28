@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 团队如何做代码验证 — 回源查证 + 对本仓的金矿</title>
+<style>
+  :root{--ink:#1b1f24;--sub:#5a6472;--line:#e3e7ed;--bg:#f7f9fb;--card:#fff;--accent:#1f5fa8;--ok:#0f7b4f;--warn:#a86a00;--bad:#b3261e;--gold:#8a6100}
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 20px;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:26px;margin:0 0 8px}
+  h2{font-size:19px;margin:30px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:15px;margin:18px 0 6px;color:var(--accent)}
+  .meta{color:var(--sub);font-size:13px;margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:12px 0}
+  .lead{border-left:4px solid var(--accent);background:#eef4fb}
+  .gold{border-left:4px solid var(--gold);background:#fffaf0}
+  .omission{border-left:4px solid var(--bad);background:#fff5f4}
+  table{width:100%;border-collapse:collapse;font-size:13.4px;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}
+  th{background:#f0f3f7;font-weight:600}
+  tr:nth-child(even) td{background:#fbfcfd}
+  .ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+  code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12.4px;font-family:ui-monospace,Menlo,monospace}
+  ul{margin:6px 0 6px 20px;padding:0}li{margin:4px 0}
+  .tag{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#fff3d6;color:var(--gold);font-weight:600}
+  .tag2{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#e8f4ee;color:var(--ok);font-weight:600}
+  .tag3{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#fdecea;color:var(--bad);font-weight:600}
+  .foot{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);color:var(--sub);font-size:12.5px}
+  .quote{font-family:Georgia,serif;font-style:italic;color:#3a4350;border-left:3px solid var(--line);padding-left:12px;margin:8px 0}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>Claude Code 团队如何做代码验证 — 回源查证 + 对本仓的金矿</h1>
+<div class="meta">查证 2026-11-28 ｜ 来源：夕小瑶科技说公众号（<code>mp.weixin.qq.com</code> …mid=2247623752）<br>一手：claude.dev 官方博客《How the Claude Code team thinks about verification》Addy Osmani，2026-11-16 ｜ 交叉：GitHub 全文译本 kejun/blogpost（2026-11-17）+ 掘金/51CTO/xiaoan 多源 ｜ 数据一手：Atlassian《State of Developer Experience Report 2026》官网</div>
+
+<div class="card lead">
+<b>一句话结论：</b>文章主干<b>全部属实且相当忠实</b>——90%、1500+/87%/49%、三类测试、六条做法，逐条都能在 claude.dev 原文与 Atlassian 官网对上，转述质量高于前几篇。<b>但有一处结构性省略值得记</b>：原文副标题是 <span class="quote">keep its verifiers honest（让验证器保持诚实）</span>，这半边占了原文近一半篇幅（REVIEW.md、三段召回率、Important/Nit/Pre-existing、observe→enforce、反 reviewer 堆叠），文章<b>几乎全部砍掉</b>，只留下好传播的"三类测试 + 六条做法"清单。而"验证器自身可信度"恰恰是本仓从 P0 补洞一路筑到 B3 塌缩探针的那堵墙——<b>被二手省略的，才是真金矿</b>。
+</div>
+
+<h2>一、来源确认：一手扎实，只有一处拼写笔误</h2>
+<table>
+<tr><th style="width:18%">项</th><th style="width:36%">文章说法</th><th>一手核实</th></tr>
+<tr><td>一手出处</td><td>"Claude Code 官方博客 claude.dev 的 Engineering 栏目，标题 How the Claude Code team thinks about vertification"</td><td class="ok">✅ claude.dev 确有其文，分类 Engineering，作者 Addy Osmani，发布于 <b>Nov 16, 2026</b>；副标题逐字为 "How end-to-end, property and differential tests let coding agents verify their work with evidence, and what the Claude Code team does to keep its verifiers honest"</td></tr>
+<tr><td>标题拼写</td><td><code>vertification</code></td><td class="bad">❌ 笔误，正确是 <code>verification</code>。与 §4S20 抓到的"脚注编号错配"同类——标签≠事实，引用时以官方标题为准</td></tr>
+<tr><td>发布形态</td><td>"发了一篇技术博客"</td><td class="ok">✅ 成立。补充：同一内容另以作者本人 X 长文形态发布（<code>@addyosmani</code> status/2122590683055993308，11-17）；博客 11-16 首发、X 11-17 同步，两者不矛盾</td></tr>
+<tr><td>作者身份</td><td>"Claude Code 团队的工程师 Addy Osmani"</td><td class="ok">✅ Addy Osmani 署名一手确认（文内作者行）</td></tr>
+</table>
+
+<h2>二、数字与硬论断：逐条一手对上</h2>
+<table>
+<tr><th style="width:25%">论断</th><th style="width:29%">文章说法</th><th>一手原文</th><th>判定</th></tr>
+<tr><td>Atlassian 调查规模</td><td>"调查了 1500 多名软件从业者，《2026年开发者体验报告》"</td><td>Atlassian 官网 "Drawing on a survey of <b>1,500+ software practitioners</b>, Atlassian's State of Developer Experience Report in 2026"</td><td class="ok">✅</td></tr>
+<tr><td>87% 提速</td><td>"87% 认为 AI 能帮自己更快交付工作"</td><td>"<b>87%</b> of developers say it helps them ship work faster"（另有 80% without longer hours）</td><td class="ok">✅</td></tr>
+<tr><td>49% / 4 小时</td><td>"49% 每周至少要花 4 小时审查 AI 输出、修改提示词"</td><td>"<b>49%</b> of developers say they spend <b>4+ hours</b> per week reviewing AI output, correcting prompts, and more"</td><td class="ok">✅</td></tr>
+<tr><td>90% 代码</td><td>"约 90% 的代码由 Claude 编写并审查"</td><td>"the vast majority of our code (<b>~90%</b>) is written and reviewed by Claude"</td><td class="ok">✅</td></tr>
+<tr><td>验证决定并行度</td><td>"没有验证一次最多盯一两个 Claude；有验证能跑几十上百个"</td><td>"Without them, you can really only run <b>one or two</b> Claudes at a time… With them, you can run <b>dozens or hundreds</b> in parallel"</td><td class="ok">✅</td></tr>
+<tr><td>失败固化成规则</td><td>"反复失败就固化成 hook 或写进 CLAUDE.md 的规则"</td><td>"create a <b>hook</b> or a more explicit rule in your <b>CLAUDE.md</b>… This (mostly) stops issues from happening again"</td><td class="ok">✅</td></tr>
+<tr><td>E2E 测试</td><td>"给 AI 装上眼睛和手"；购物车/结账/确认页；截图与轨迹定位问题</td><td>三大节之一；"give the agent hands and eyes… screenshots, trace, and a description of what step failed"；unit-test 只报 "Timeout after 30s" 的对比图</td><td class="ok">✅</td></tr>
+<tr><td>属性测试</td><td>"先定死规矩，海量输入撞墙；账户余额不能为负"</td><td>"invariants: things that must always be true, like <b>account balance never negative</b>"；fast-check/Hypothesis/proptest；"inputs… don't share the bias of the agent that wrote the original code"</td><td class="ok">✅</td></tr>
+<tr><td>差分测试</td><td>"新旧系统同输入对比；过滤无关干扰；不要过于迷信老系统，老系统也可能有错"</td><td>"normalize irrelevant factors like whitespace, and maintain an <b>'allowed differences' list</b> for cases where the new environment should differ"；小节标题 "the old system is the oracle"</td><td class="warn">⚠️ 前半对上；"老系统也可能有错"属<b>合理发挥</b>——原文由"allowed differences"隐含，但未直述（原文反称 old system 为 oracle）</td></tr>
+<tr><td>verify skill</td><td>"写成 verify 技能，提交前运行；Web/移动/后端分别验证"</td><td>"create a skill called <b>verify</b>… in <code>.claude/skills/</code>… Claude knows to use the verify skill before committing changes"</td><td class="ok">✅</td></tr>
+<tr><td>三轮转人工</td><td>"同一检查三轮仍未通过就停下来请人介入"</td><td>"if a check still fails after <b>three rounds</b>, Claude stops and brings in a human"</td><td class="ok">✅</td></tr>
+<tr><td>规则不可被改</td><td>"审查系统从基础或默认分支读规则，不用当前改动版本"</td><td>"Code Review reads <b>REVIEW.md</b> from a base or default branch, <b>never from the PR changes</b>"</td><td class="ok">✅ 文章未点出 REVIEW.md 文件名</td></tr>
+<tr><td>39 项清单</td><td>"39 项可靠性清单，按改动选 3-10 项；--resume 加载旧记录"</td><td>"reliability checklist with <b>39 items</b>… checks only the items whose trigger matches—usually <b>3 to 10</b>… One is '--resume loads old transcripts'"</td><td class="ok">✅ 逐字对上</td></tr>
+<tr><td>观察模式</td><td>"新规则先观察再拦截；连续被拦两次下一次放行"</td><td>"off, <b>observe</b>, enforce… observe records commits that would have been blocked… If a session has been blocked <b>twice</b>, the next one is allowed through"</td><td class="ok">✅</td></tr>
+</table>
+
+<div class="card omission">
+<b>结构性省略：原文唯一的量化锚点被砍了。</b> claude.dev 原文写：<span class="quote">"In internal testing around structured file generation, having a separate grader check Claude's work against a rubric improved task success by <b>up to 10 points</b> over a standard prompting loop, with the largest gains on the hardest problems."</span> 这是全文<b>唯一一个量化效果数字</b>，掘金译评也专门提醒"文中唯一的量化数字是任务成功率最多高 10 个点，引用时要看清出处"。夕小瑶文章通篇未出现这个数字——它讲"验证闭环"却略去了闭环<b>究竟值多少</b>。这不是错误，是传播性驱动的压缩：清单好传播，带口径限定的数字不好传播。这与前几篇抓到的"口述取整偏低""前史被压扁"是同一类二手损耗，只是这次损耗发生在<b>结构层</b>而非数字层。
+</div>
+
+<h2>三、被砍掉的另一半：verifiers honest（验证器诚实）</h2>
+<p>原文副标题两半：<span class="quote">"…let coding agents verify their work with evidence, <b>and what the Claude Code team does to keep its verifiers honest</b>."</span> 文章完整保留了前半（三类测试 + 六条做法 = 让 agent 拿证据验证自己），后半几乎全砍。逐项如下：</p>
+<table>
+<tr><th style="width:32%">原文"验证器诚实"机制</th><th>文章覆盖情况</th></tr>
+<tr><td><b>一个 reviewer，多轮</b>：加第二个更贵 reviewer 不如调好主 reviewer；用 REVIEW.md 指明重点；每轮喂前轮上下文与往期失败，而非从头重查</td><td class="bad">❌ 未提"不堆 reviewer"这个反直觉点，被并入"把漏掉的问题变成规则"</td></tr>
+<tr><td><b>三段召回率</b>：原始发现 / 验证后 / 最终审查分别评估；"合成一个端到端总分会捕捉不到这种差别"</td><td class="bad">❌ 未提</td></tr>
+<tr><td><b>Important / Nit / Pre-existing 三级标注</b>：区分"必须修 / 应该修 / 吹毛求疵"；pre-existing 表示不该让作者为既有 bug 负责</td><td class="bad">❌ 未提</td></tr>
+<tr><td><b>评测集纪律</b>：还原到评审当时状态、一句话答案解析、已合并稳定改动做对照防过度标记、调参集与固定测试集隔离</td><td class="bad">❌ 未提</td></tr>
+<tr><td><b>把召回率调到过拟合临界点</b>："调到你再提一点就是在过拟合评测、而不是真的抓 bug 为止"</td><td class="bad">❌ 未提</td></tr>
+<tr><td><b>漏洞变规则的频次门槛</b>：至少出现在<b>两个 PR</b>、能从 diff 识别、三个 agent 尝试证伪、人工批准</td><td class="warn">⚠️ 只留"反复出现沉淀为规则"，丢了"两个 PR + 三 agent 证伪 + 人工批准"的门槛</td></tr>
+<tr><td><b>提交打验证标记</b>：每个 commit 标"怎么被验证的"，连 <code>none</code> 也标，以查出没验证的提交</td><td class="bad">❌ 未提</td></tr>
+<tr><td><b>自指彩蛋</b>：原文末尾附 Pangram 检测截图，声明本文"AI 0% / 人类 100%"</td><td class="bad">❌ 未提。附记：2026 年 AI 检测本身可靠性存疑（见本仓 <code>ai_detect</code> 审计），一张截图≠证明——恰好是该文主题自己的注脚</td></tr>
+</table>
+
+<h2>四、金矿：逐条照着本仓的墙说话</h2>
+<p>机械核对本仓 <code>kernel.py</code> / <code>verify_external.py</code> / <code>verify_verifier.py</code> / <code>SESSION_HANDOFF.md</code> 后对照：</p>
+<table>
+<tr><th style="width:26%">原文机制</th><th style="width:28%">本仓现场机械证据</th><th>金矿 / 定性</th></tr>
+<tr><td><b>验证规则放在被审改动够不到的地方</b>：REVIEW.md 从 base/default 分支读，绝不从 PR 读；改动不能修改评判自己的检查</td><td>constitution <code>fe56291b…</code> 锁死、预注册 SHA 先于取证（§4S24-36）、verdict 永不由 agent 改；§4S25 P0 刚补的 verify_external.py 跳过缺失样本洞</td><td><span class="tag2">架构级同构</span> 本仓更严：原文允许"提交信息说明+两次放行"，本仓判定权归用户、verdict 不可改。<b>二手把这条砍了，恰是本仓最硬的墙</b></td></tr>
+<tr><td><b>observe → enforce 两阶段门禁</b>：新规则先 observe 记录"本来会拦什么"，确认误报率再 enforce，两次拦次放行防卡死</td><td>§4S32 心跳 <code>content_verdict</code> 失败"只标注不阻塞"（守 C7），正是 observe 形态，只是当时没有这个名字</td><td><span class="tag2">已落地同构</span> 原文给了行业术语（observe mode）。差别：原文用于提交门禁，本仓用于心跳内容判据；本仓防卡死靠 C7 不阻塞而非次数放行</td></tr>
+<tr><td><b>漏洞变规则需频次门槛</b>：≥2 个 PR 出现 + 能从 diff 识别 + 3 agent 证伪 + 人工批准</td><td>self_modify 门槛 <code>accepted = all_pass and candidate_ids != registered</code> + novelty_guard（防重复）+ attribution_check + 判定权归用户</td><td><span class="tag">可借鉴</span> 本仓有"能证伪 + 人工批准"，但<b>无"≥2 次独立证据"频次门槛</b>；novelty_guard 是防重复而非要求重复。方向：候选 seed/规则入册要求双源证据</td></tr>
+<tr><td><b>flaky 测试不许跳过、不许 sleep、不许重试到通过</b>；找不到根因删掉并记录原因</td><td>§4S25 P0 修的正是"静默 continue 吞失败"；§4S36 词表污染致 17 tests 崩，找到根因（"scheduled rule" 子串命中 daemon 符号）才恢复，未靠重试掩盖</td><td><span class="tag2">行为同构</span> 本仓有活案例，但无明文"不许 sleep/retry to pass"纪律条文——可作为审计 checklist 的一条</td></tr>
+<tr><td><b>三段召回率</b>：原始发现/验证后/最终分别评；合成总分会丢信息</td><td>P1a 留出集对打、verify_verifier 塌缩探针、§4S35 coverage/original <b>双</b>口径</td><td><span class="tag">诊断方向</span> 本仓是"两口径"而非"三段"。可把 attribution 召回率也分三段，但仅作诊断，不进判定（判定权归用户）</td></tr>
+<tr><td><b>被二手省略的那半边 = 本仓一直在筑的墙</b></td><td>§4S25 P0 → §4S32 验证器的验证器 → §4S33-36 SkillCycle/RX/探针/词表，整条线都在做"验证器自身可信度"</td><td><span class="tag3">元收获</span> 二次印证用户那句"<b>只有错放地方的资源</b>"：读者不关注、转述者省略的，恰是真金矿所在</td></tr>
+</table>
+
+<h2>五、诚实边界</h2>
+<ul>
+<li>对照是<b>结构同构</b>（机制形态相似），不声称 Anthropic 影响本仓，也不声称本仓已获得原文的工程能力（本仓非代码仓库 CI 场景）。</li>
+<li>"老系统也可能有错""文章砍掉 verifier honest 是传播性驱动"属<b>推断</b>，非一手直述；原文只给 allowed differences 清单与副标题，动机是分析。</li>
+<li>三类测试、六条做法本身属 Anthropic <b>自述实践</b>，原文未给这些做法的独立效果数字（唯一量化是 grader 的 10 points，且有 "structured file generation / up to / hardest problems" 三重限定）。</li>
+<li>本轮<b>零代码改动</b>：未碰 kernel.py / verify_external.py / verify_verifier.py / constitution / result / 任何判定字段。权威态 <code>result.json=0f3ccb13…</code>、<code>verdict=GAP_INCONCLUSIVE</code>、<code>KERNEL_VERSION=7.5.0</code> 均核验未动。</li>
+</ul>
+
+<div class="card gold">
+<b>下一步建议（判定权归用户，均未擅动）：</b><br>
+① <b>文章不入 ARXIV_ID_REGISTRY.md</b>——这是博客非论文，无 arXiv 编号，无需入表；<br>
+② 若要把"≥2 次独立证据门槛"或"三段召回率诊断"落进本仓，按惯例先预注册、只读诊断起步，等一句"走一步"再动；<br>
+③ 可考虑把"不许 sleep/retry to pass"补进审计 checklist 条文（同样待授权）。
+</div>
+
+<div class="foot">本文为"事上练"纪律演练：一手回源 → 逐字比对 → 数字/结构分层 → 本仓机械对照 → 判定权归用户。所有引用为公开来源；英文原句摘自 claude.dev 官方博客与 Atlassian 官网，中文文章说法摘自夕小瑶科技说公众号公开全文。</div>
+
+</div></body></html>

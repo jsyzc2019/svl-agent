@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>RX 修订候选只读诊断 · 落地验收 · 2026-11-28</title>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--mut:#8b949e;--bd:#30363d;--acc:#58a6ff;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--card:#161b22}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7}
+.wrap{max-width:1040px;margin:0 auto;padding:32px 22px 80px}
+h1{font-size:25px;margin:0 0 6px;color:#fff}h2{font-size:18px;margin:34px 0 12px;color:var(--acc);border-bottom:1px solid var(--bd);padding-bottom:7px}
+.sub{color:var(--mut);font-size:13px;margin-bottom:26px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:16px 20px;margin:14px 0}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}th,td{border:1px solid var(--bd);padding:9px 11px;text-align:left;vertical-align:top}th{background:#1c2128;color:var(--acc)}
+code{background:#1c2128;padding:1px 6px;border-radius:4px;font-size:12px;color:#a5d6ff}
+.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+.big{font-size:15px;padding:14px 18px;border-left:3px solid var(--acc);background:#111821}
+.big.warnbox{border-left-color:var(--warn)}
+.tag{display:inline-block;background:#1f2937;border:1px solid var(--bd);border-radius:20px;padding:2px 10px;font-size:12px;color:var(--mut);margin:2px}
+ul{margin:8px 0 8px 4px;padding-left:20px}li{margin:5px 0}
+.foot{margin-top:40px;color:var(--mut);font-size:12px;border-top:1px solid var(--bd);padding-top:16px}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>RX 修订候选只读诊断 · 落地验收</h1>
+<div class="sub">2026-11-28 · SkillCycle（arXiv:2610.09430）matched-pair 纪律的只读同构借鉴 · 接 Cogentic 死胡同记录 + SkillCycle 证据修订两条线 · 预注册 SHA <code>f319af39…</code></div>
+
+<div class="big">
+<b>一句话</b>：把 SkillCycle"敲掉一条规则、看净收益是否下降"的纪律，做成对本仓 14 个注册种子的 <b>leave-one-out 只读诊断</b>——只标"哪些值得人工复核"，<b>不自动 DROP、不改注册表</b>。动手前先读真数据，发现一个比"哪些种子过期"更重要的事实：<b>本仓的配对验证探针与摄食主题几乎不重叠</b>。
+</div>
+
+<h2>一、动手前的发现（先读数据，不凭想象造诊断器）</h2>
+<div class="card">
+<table>
+<tr><th>发现</th><th>机械证据</th><th>含义</th></tr>
+<tr><td>14 种子全注册，heldout_net=1</td><td><code>attribution_check(registered)={heldout_net:1}</code></td><td>整体配对信号为 +1，看似健康</td></tr>
+<tr><td>leave-one-out 只有 F12 有边际贡献</td><td>敲掉 F12 → heldout_net <b>1→0</b>（Δ=1）；其余 13 个敲掉 Δ=0</td><td>13 个种子对当前探针"敲掉无损"</td></tr>
+<tr><td class="warn">根因：探针集与种子主题错位</td><td>heldout 探针仅 3 主题（金融/哲学/安全）；14 种子多在 rsi/memory/workflow；F12 靠"可证伪标尺"偶然命中哲学探针</td><td class="warn">Δ=0 ≠ 种子无用，是探针太窄——这本身是配对验证的覆盖盲区</td></tr>
+<tr><td>结构冗余真信号</td><td>F02 与 F07 的 tags <b>完全相同</b>（metacognition, rsi, self_evo），jaccard=1.00</td><td>不依赖探针即可判定的硬冗余</td></tr>
+</table>
+<p class="warn">诚实边界（写进预注册才动手）：Δ≤0 只表示对这 3 个窄探针无边际贡献，不等于种子无用、更不等于该删。诊断必须把"探针窄"的盲区随候选一起报出。</p>
+</div>
+
+<h2>二、改了什么（两处，最小）</h2>
+<div class="card">
+<table>
+<tr><th>文件</th><th>改动</th><th>性质</th></tr>
+<tr><td><code>life_kernel/kernel.py</code></td><td>纯新增 <code>rx_revision_candidates(policy=None, log_path=None)</code>：对每个注册 seed 做 leave-one-out，输出 <code>{candidates, contributors, coverage_warning, is_drop_verdict:false, caveat}</code></td><td>只读、不写 policy、不进主流程</td></tr>
+<tr><td><code>life_kernel/rx_diagnostic.py</code></td><td>新 CLI，只 import + print，零判定逻辑，含 <code>--self-bite</code></td><td>按需调用，非每心跳计算</td></tr>
+</table>
+<p><b>落地微调</b>：原建议"给 seed 加字段"改为<b>独立 CLI</b>——leave-one-out 要跑 14 次 <code>attribution_check</code>，塞进 <code>autonomous_agenda</code> 会让每次心跳都算一遍，副作用更大。改为按需诊断，比 B1/B2 更保守，如实记录。</p>
+</div>
+
+<h2>三、真实诊断输出</h2>
+<div class="card">
+<p><b>真贡献者</b>（敲除有损失）：<span class="ok">F12 Δ=1</span> —— 唯一撑住 heldout_net=1 的种子。</p>
+<p><b>修订候选</b>（敲除无损 Δ=0，供人工复核，共 13 个）：</p>
+<p>
+<span class="tag">F01 j=.50</span><span class="tag">F02 j=1.00 twin=F07</span><span class="tag">F03 j=.20</span><span class="tag">F04 j=.50</span><span class="tag">F05 j=.20</span><span class="tag">F06 j=.20</span><span class="tag">F07 j=1.00 twin=F02</span><span class="tag">F08 j=.50</span><span class="tag">F09 j=.20</span><span class="tag">F10 j=.20</span><span class="tag">F11 j=.20</span><span class="tag">F13 j=.14</span><span class="tag">F14 j=.00</span>
+</p>
+<p class="warn"><b>盲区</b>：heldout 探针仅 3 主题，Δ≤0 只表示对这组窄探针无边际贡献，不等于种子无用；F12 靠"可证伪标尺"偶然命中哲学探针即为例证。</p>
+<p><b>裁决</b>：<code>is_drop_verdict = False</code> —— 保留 candidates 供人工复核，一个都不自动删。</p>
+</div>
+
+<h2>四、验收（七门全过）</h2>
+<div class="card">
+<table>
+<tr><th>门</th><th>判据</th><th>结果</th></tr>
+<tr><td>G1 最小改动</td><td>diff 仅 1 纯函数 + 新 CLI；版本仍 7.5.0；no_touch 逐字未变</td><td class="ok">PASS</td></tr>
+<tr><td>G2 诊断真实</td><td>contributors=[F12]Δ=1、candidates=13 个 Δ=0、F02/F07 twin</td><td class="ok">PASS</td></tr>
+<tr><td>G3 不改判定</td><td>policy/result/constitution 字节未动；verdict/l3/absolute 未碰；注册表 mtime 仍 11-27</td><td class="ok">PASS</td></tr>
+<tr><td>G4 诚实标注</td><td>is_drop_verdict=false + caveat + 3 探针 + coverage_warning 齐全</td><td class="ok">PASS</td></tr>
+<tr><td>G5 全量测试</td><td><code>python3 -m pytest</code></td><td class="ok">1773 passed</td></tr>
+<tr><td>G6 权威一致</td><td>verdict=CONSISTENT / sha256_ok=true / drifts=[]；两哈希未动</td><td class="ok">PASS</td></tr>
+<tr><td>G7 三重负向自咬</td><td>①空注册→候选空 ②只含 F12→F12 贡献者候选空 ③篡改 F01 命中哲学探针→Δ=1 退出候选</td><td class="ok">PASS（3/3）</td></tr>
+</table>
+</div>
+
+<h2>五、边界与处置</h2>
+<div class="card">
+<ul>
+<li><b>同构借鉴，非照搬</b>：借的是 SkillCycle"候选先证伪再标注"的纪律形态；它的 DROP/自动回滚依赖真实任务环境，本仓没有，直接搬会造假。</li>
+<li><b>Δ 是 tag 覆盖，不是任务收益</b>：11 个主题 tagbook 的词集匹配，粗糙且依赖探针集；篡改探针集合结论会翻转——这是负向自咬 G7c 已证的诚实边界。</li>
+<li><b>最深的发现不是"哪些种子过期"，而是"探针太窄"</b>：heldout 3 主题 vs 种子 rsi/memory/workflow 主题，几乎不重叠。要真正判断种子是否过期，先要给配对验证补上覆盖摄食主题的探针——那是下一层，但会碰判据设计，需另行裁定。</li>
+<li>新编号 2610.09430 仍待用户裁定是否入表（本项未入表）。</li>
+</ul>
+</div>
+
+<div class="foot">
+零权威态副作用：result.json=<span class="mono">0f3ccb13…</span>、constitution.json=<span class="mono">fe56291b…</span> 字节未动，verdict/l3/absolute/宪法未碰，runtime_policy 注册表未写。全量测试 1773 全绿，预注册 SHA <span class="mono">f319af39…</span> 完好。判定权归用户。留痕 §4S34。
+</div>
+
+</div></body></html>

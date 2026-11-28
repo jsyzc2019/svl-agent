@@ -1,0 +1,50 @@
+{
+  "schema": "prereg_kernel_organ_v1",
+  "section": "§4S63",
+  "title": "生成时同步落verdict：验证在生成当下就位的只读判据",
+  "trigger": "用户『推那个下一步』→授权把『生成时同步落verdict』做成新只读判据（承接§4S62 李rumor《RSI,先会verify的模型先享受》对照发现的9/11缺口）",
+  "at_local": "2026-11-28 12:55 GMT+8",
+  "prereg_before_change": true,
+  "baseline": {
+    "kernel_sha256": "318722881c7d76849f088a6be4786a1c5fd4403afee96af3ce7241e1f8070813",
+    "authoritative_state_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "KERNEL_VERSION": "7.5.0",
+    "life_kernel_tests_passed": 195,
+    "rollback": "life_kernel/pre_patch_verdict_birth/kernel_before_verdict_birth.py"
+  },
+  "design_rationale": {
+    "article_anchor": "§4S62 一手核实的《Learning to Self-Verify》(ICML 2026): improving generation does not lead to corresponding self-verification; 验证须在生成当下就位、独立于生成优化",
+    "gap": "真实11搏中9搏落盘时无 phase_verify.content_verdict，靠 abstention_probe 事后从 guard 现算——验证是'事后补判'而非'生成当下就位'。evolve() 现版本(1461行)已会同步写，但历史心跳没有",
+    "what_is_measured": "不篡改历史心跳(不回填verdict)，只机械量出'落盘自带verdict vs 事后现算'的比例与一致性——把文章主张变成会跑的尺子量本仓",
+    "not_a_gate": "纯只读诊断，is_gate_verdict=False、不改判定、不进议程、不回填历史心跳、verdict_unchanged"
+  },
+  "locked_constants": {
+    "SYNCED": "BIRTH_SYNCED",
+    "STALE": "BIRTH_STALE",
+    "MISSING_RECOMPUTED": "BIRTH_MISSING_RECOMPUTED",
+    "UNVERIFIABLE": "BIRTH_UNVERIFIABLE",
+    "comparison": "落盘 verdict 字符串 == 现算 verdict 字符串 才算 SYNCED；不等算 STALE；落盘缺失但现算出非UNKNOWN算MISSING_RECOMPUTED；两者皆无算UNVERIFIABLE"
+  },
+  "planned_changes": [
+    "C1 kernel.py 新增只读函数 verdict_at_birth_probe(log_path=None): 遍历真实心跳日志，逐条比对落盘 phase_verify.content_verdict.verdict 与 _direction_content_verdict(现算)，按四态分类计数",
+    "C2 返回体含: total/synced/stale/missing_recomputed/unverifiable 四态计数、synced_rate、birth_synced_rate(仅就有落盘verdict者)、per_heartbeat 逐条明细(索引/落盘verdict/现算verdict/状态)、honesty、consumed=False、verdict_unchanged=True、is_gate_verdict=False",
+    "C3 不改 evolve()(已会同步落verdict)、不改任何既有函数、不回填历史心跳——纯新增一个只读探针，最小改动",
+    "C4 新增守卫测试 tests/test_verdict_at_birth.py: 真实台账结论 + 负向注入会真失败 + 只读性 + 权威态零副作用"
+  ],
+  "acceptance_gates": {
+    "G1_minimal": "仅新增 verdict_at_birth_probe 一个函数 + 一个测试文件；不改 evolve/既有函数体；AST OK",
+    "G2_real_conclusion": "真实台账: total=11, 四态计数之和=11; 真实反映9搏MISSING_RECOMPUTED(历史无落盘verdict)、2搏若有落盘则比对; synced_rate<1诚实暴露缺口; 输出真实非硬编码",
+    "G3_truth_fail": "负向注入必须得不同结果: (a)全条自带verdict且与现算一致→synced率=1 (b)全条自带但verdict改成错误值→stale计数>0 (c)全条无落盘verdict→missing_recomputed=total (d)空日志→total=0不空转 (e)落盘verdict为UNKNOWN且现算也UNKNOWN→unverifiable>0",
+    "G4_readonly": "verdict_at_birth_probe 调用前后心跳日志/权威态字节不变，不写盘不回填",
+    "G5_authoritative_zero": "result/authoritative_state/宪法锁/verdict/l3/absolute/KERNEL_VERSION 全未动",
+    "G6_zero_regression": "移走本轮判据测试后，改动内核 life_kernel/tests 全量passed == 备份内核同口径passed(195); 加回守卫测试后全量passed = 基线+守卫数",
+    "G7_article_fidelity": "判据量的是'验证是否在生成当下就位'(文章核心主张)，非宣称内核有意识；结构性类比，不照搬论文RL数值"
+  },
+  "honesty_edges": [
+    "不回填历史心跳verdict——那是篡改台账，本判据只量不补",
+    "现算用当前判据口径，历史落盘verdict若与现算不符标STALE而非抹除，如实暴露判据演进",
+    "本仓无RL/参数更新/答错标签，文章训练结论只能结构类比",
+    "只读诊断不进判定不改议程；不消费不回复外部消息；判定权归用户"
+  ]
+}

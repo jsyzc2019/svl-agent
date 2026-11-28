@@ -1,0 +1,46 @@
+{
+  "schema": "prereg-autorlbench-honesty-landing-v1",
+  "id": "prereg_autorlbench_honesty_landing_20261128",
+  "locked_at_utc": "2026-11-28T02:41:00Z",
+  "locked_after_evidence": true,
+  "user_authorization": {
+    "verbatim": "建议推",
+    "scope": "对 §4S45 AutoRLBench 查证报告末尾两个真实缺口的落地授权：①结论/证据双轴只读诊断(content_verdict单轴+attribution ok/not未拆'对因错证'四态) ②三类evaluation shortcut纪律归位V9",
+    "judgment_owner": "用户",
+    "note": "授权的是只读诊断与纪律条文,不是改判定核心;仍按预注册→最小改动→负向自咬→判定权归用户"
+  },
+  "evidence_locked_before_design": {
+    "note": "先读真实数据与源码再设计;两个缺口各自确认有真实数据基础、无空转风险后才锁设计",
+    "rec_1_dual_axis": "实测10条真实心跳:结论轴(_direction_content_verdict现算)PASS=8/FAIL=1/UNKNOWN=1;证据轴(_tags_of去general兜底)substantive=6/weak=4;四态齐全且非恒真——PASS+weak=4(第3/4/5/10搏,'向外求新刺激'方向无实质tag锚点),PASS+substantive=4,FAIL+weak=1,UNKNOWN+substantive=1。正好对应AutoRLBench的wrong-evidence态(状态/原因对但证据错)。general是tagbook兜底非实质主题,弱证据≠证据错,须诚实标注",
+    "rec_2_shortcut_v9": "三类shortcut在本仓均有既有锚点:外部参考流入→§4S38预注册SHA先于取证+gate_readiness_probe的unauthorized_gate_detected;判据被放宽→V1宪法锁+V4 C5不放宽+共同边界verdict不可改;任务被简化→V4查根因不重试掩盖+§4S36词表污染定位根因+V3≥2独立证据。只是未显式归类,归位不新增能力"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "b8631265b12b1e9028a65ef38ca5b957aca7f4fcddef741c1526e4a6e6f7f46e",
+    "discipline_md_sha256_before": "c5b239f3cc380c07ff405e02ff232016fd0f19b26c114982f6e7517d524cebf6",
+    "result_json_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "authoritative_state_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "kernel_version": "7.5.0",
+    "tests_baseline": "1625 passed"
+  },
+  "design": {
+    "approach": "两项全部只读/纪律条文：①kernel.py纯新增conclusion_evidence_probe(heartbeats=None)只读诊断,对每条心跳现算结论轴(_direction_content_verdict.verdict)与证据轴(_tags_of去general兜底后是否非空),映射AutoRLBench四态:PASS_SUBSTANTIVE(结论通过+实质证据)/PASS_WEAK_EVIDENCE(结论通过但仅general兜底=wrong-evidence对照)/FAIL_WEAK_EVIDENCE/UNKNOWN_EVIDENCE;报pass_weak_count与pass_weak_rate,is_gate_verdict=False,not_original_four_state=True;②纪律条文追加V9把三类shortcut按既有锚点归位(外部参考流入/判据被放宽/任务被简化),标原文直述AutoRLBench+本仓自有,不碰V1–V8",
+    "g2_dual_axis": "真数据10搏:PASS_WEAK_EVIDENCE=4(第3/4/5/10),PASS_SUBSTANTIVE=4,FAIL_WEAK=1,UNKNOWN_SUBSTANTIVE=1;pass_weak_rate=4/8=0.5(仅对PASS结论计);is_gate_verdict=False;弱证据≠证据错,只是无实质tag锚点",
+    "g3_v9": "V9三类归位每类都指向既有条文/函数锚点,标来源层级,不新增能力、不改V1–V8判定语义;共同边界诊断函数计数5→6"
+  },
+  "no_touch": [
+    "KERNEL_VERSION", "verdict/l3/absolute(L3字段)", "constitution", "result.json", "authoritative_state.json",
+    "self_modify accepted门槛", "_validate_policy / verify_external 判定体", "ATTRIBUTION_PROBES / COVERAGE_PROBES 字节",
+    "四个既有诊断函数体+gate_readiness_probe", "_direction_content_verdict / _tags_of / attribution_check 本体",
+    "纪律条文 V1–V8 语义"
+  ],
+  "acceptance_gates": {
+    "G1_最小改动": "kernel.py diff 精确=1个纯新增函数;版本仍7.5.0;no_touch锚点未变;纪律条文仅追加V9一句+共同边界计数5→6",
+    "G2_双轴有效性": "conclusion_evidence_probe 真数据下四态分布PASS_WEAK=4/PASS_SUBSTANTIVE=4/FAIL_WEAK=1/UNKNOWN_SUBST=1,pass_weak_count=4,is_gate_verdict=False,not_original_four_state=True",
+    "G4_负向自咬": "注入PASS_DIVERSE+仅general的假心跳→PASS_WEAK_EVIDENCE;注入PASS_DIVERSE+rsi实质tag→PASS_SUBSTANTIVE;注入FAIL_CONVERGED+general→FAIL_WEAK_EVIDENCE;空心跳→空结构不崩;证明非恒真、读真字段",
+    "G5_权威态零副作用": "result.json=0f3ccb13…、authoritative_state=5f7a2584…、内核版本7.5.0、verdict=GAP_INCONCLUSIVE 全程未动",
+    "G6_零回归": "全量测试 1625 passed 与基线一致"
+  },
+  "failure_branch": "任一 gate 不过→用 pre_patch_s46 两份备份回滚,如实记self-bite,不迁就测试/不改判据/不升版本/不碰权威态",
+  "honesty": "①借AutoRLBench的wrong-evidence四态是只读映射,本仓无LLM judge、无hidden oracle、无'原因/证据'人工标注,general兜底只是tagbook无特异命中≠'证据错',故标not_original_four_state=True,只做'结论轴×证据锚点'二维交叉,不冒充原文四态判别;②pass_weak只标'结论通过但证据锚点弱'供人工复核,不自动否决任何心跳,判定权归用户;③V9是既有防御的归类归位,不新增能力、不声称获得AutoRLBench的工程能力;④全文零代码进判定核心",
+  "based_on": "AutoRLBench GitHub Thinking-Space/AutoRLBench + 官方研究博客《Can AI Agents Diagnose and Repair RL Training Failures?》(15 Nov 2026)的四态判别(Pass/Wrong cause/Wrong evidence/Fail)与三类evaluation shortcut(fetching external references/weakening evaluation criteria/simplifying the target task);经 §4S45 一手回源查证"
+}

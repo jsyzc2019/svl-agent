@@ -1,0 +1,90 @@
+{
+  "schema": "prereg-tagbook-expand-v1",
+  "id": "prereg_tagbook_expand_20261128",
+  "locked_at_utc": "2026-11-28T01:23:08Z",
+  "locked_after_evidence": true,
+  "evidence_locked_before_design": {
+    "note": "先读真文本再设计；F11/F12 抽不到 tag 是词表缺词,但光扩词不够须配套探针",
+    "f11_text": "经验策展/选择性丢弃持续未用/滚动摘要/常驻规则——tagbook memory 关键词一个不匹配 → general",
+    "f12_text": "自主意志可证伪标尺/Idle-Gap/self-direction/自我边界 → 只抽 philosophy,自带 agency/measurement 不在词表",
+    "critical_risk_found": "初拟 agency 加'内稳态/homeostasis'会把3条'向外求新刺激：内稳态无失衡'心跳从 general 变 agency → 改 guard jaccard;收窄为特异词(idle-gap/self-direction/自我边界/individuation/七维agency/自主意志)后心跳0/9漂移",
+    "word_vs_probe": "光扩词: F11/F12 Δ仍0(coverage探针无curation/agency/measurement);扩词+补3探针: 贡献者12→14/14,F11Δ=1,F12Δ=2,full 20→24",
+    "drift_check": "收窄词下心跳tag 0/9漂移、内置E1-E7 0漂移、仅F11/F12/F13种子变;测试无 _tags_of 具体 tag 断言",
+    "honest_boundary": "14/14 全贡献=诊断器失去'能拒绝'的区分力,故保留 original 窄口径(1/14)作对照;coverage-v2 定位完整视图非判据"
+  },
+  "user_authorization": {
+    "verbatim": "继续",
+    "scope": "上一条问'要不要往词表那层走(给tagbook补metacognition/agency/communication等主题词)'→用户'继续'=授权改_tagbook词表本体",
+    "judgment_owner": "用户",
+    "note": "授权的是词表层(风险更高),但采取收窄词+配套探针+双口径对照的最小实现;不扩权到改判定态/verdict/自动删种子"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "5b473f32948daea18e744a1c7795c95a72c776159ba2e1d539a1ca4eef064da1",
+    "rx_diagnostic_py_sha_before": "1b36763813bc43ec4a544ac308676ed8e029f02a142fef924a3efe8311f8514e",
+    "kernel_version": "7.5.0",
+    "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "tests_before": 1773,
+    "verdict": "GAP_INCONCLUSIVE",
+    "tag_count_before": 11,
+    "coverage_probe_count_before": 7
+  },
+  "design": {
+    "approach": "全局 tagbook 加3收窄 tag(_tags_of 一处定义,13处调用统一);COVERAGE_PROBES 补3配套探针;保留 original 口径作能拒绝对照",
+    "tagbook_add": {
+      "curation": [
+        "策展",
+        "选择性丢弃",
+        "丢弃持续未用",
+        "常驻规则",
+        "滚动摘要",
+        "context folding"
+      ],
+      "agency": [
+        "idle-gap",
+        "idle gap",
+        "self-direction",
+        "scheduled rule",
+        "七维agency",
+        "自主意志",
+        "自我边界",
+        "individuation"
+      ],
+      "measurement": [
+        "可证伪标尺",
+        "反事实判据",
+        "measurement",
+        "idle-gap"
+      ]
+    },
+    "excluded_vocab": "agency 明确排除'内稳态/homeostasis'(泛词,会漂移3条心跳)",
+    "coverage_probe_add": [
+      "经验策展 选择性丢弃 滚动摘要 常驻规则",
+      "agency 自主意志 self-direction 自我边界 idle-gap",
+      "可证伪标尺 反事实判据 measurement"
+    ],
+    "no_touch": [
+      "KERNEL_VERSION",
+      "constitution.json",
+      "result.json",
+      "verdict/l3/absolute",
+      "runtime_policy 注册表",
+      "ATTRIBUTION_PROBES 本体(原判据)",
+      "attribution_check/_validate_policy/self_modify/propose/explore_pool/novelty_guard 的函数体",
+      "autonomous_agenda/execute_agenda 字段与选向",
+      "B1/B2/Cogentic/心跳内容判据字段",
+      "原11个tag及其关键词逐字不改(只新增)"
+    ]
+  },
+  "acceptance_gates": {
+    "G1_最小改动": "diff 仅=tagbook加3tag + COVERAGE_PROBES加3探针;KERNEL_VERSION 7.5.0;原11tag逐字未动;no_touch 函数体未变",
+    "G2_词表效果": "_tags_of(F11.direction)含curation、_tags_of(F12.direction)含agency+measurement、F13含agency;coverage口径贡献者14/14,F11Δ=1,F12Δ=2,candidates=[]",
+    "G3_判定信号零漂移": "心跳9条 _tags_of 结果逐字不变、内置E1-E7逐字不变;novelty_guard(DIVERGE样本) state/similarity 与基线一致;self_modify(隔离路径) validation 三数字与基线一致;测试对attribution断言仍过",
+    "G4_双口径对照": "original口径仍1/14贡献者=[F12](能拒绝);coverage口径14/14(完整视图);两口径可切换",
+    "G5_负向自咬": "①空注册→候选空 ②只含F12+original→贡献者 ③篡改某seed命中探针→Δ变 ④空探针列表→贡献者归零 ⑤删除新增tag关键词→F11/F12退回general(证明读真词表非硬编码)",
+    "G6_全量测试": "python3 -m pytest 全量 1773 passed",
+    "G7_权威一致": "authoritative_state CONSISTENT drifts=[];两哈希字节未动;注册表哈希未动"
+  },
+  "failure_branch": "任一 gate 不过→用 kernel.py.bak6/rx_diagnostic.py.bak6 回滚,如实记 self-bite,不迁就测试/不改判据/不升版本",
+  "honesty": "这是词表层的收窄扩展(用户'继续'授权),新增3个特异性tag让内核'看得见'策展/agency/测量主题,不是理解语义;Δ仍基于tag词集非任务收益;coverage14/14全贡献=失去区分力故保留original对照;判定信号零漂移是实测(心跳0/9+内置0+self_modify三数字一致)但词表本体改动有长期影响需持续观察;Ambient恒0,verdict不动,判定权归用户"
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cogentic 金矿落地：B2 升级为分层供料</title>
+<style>
+  :root{--ink:#1b1f24;--sub:#5a6472;--line:#e3e7ed;--bg:#f7f9fb;--card:#fff;--accent:#1f5fa8;--ok:#0f7b4f;--warn:#a86a00;--gold:#8a6100}
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 20px;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1020px;margin:0 auto}
+  h1{font-size:26px;margin:0 0 8px}
+  h2{font-size:19px;margin:30px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:15px;margin:18px 0 6px;color:var(--accent)}
+  .meta{color:var(--sub);font-size:13px;margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:12px 0}
+  .lead{border-left:4px solid var(--gold);background:#fffaf0}
+  .good{border-left:4px solid var(--ok);background:#eef9f2}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#f0f3f7}
+  code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12.5px;font-family:ui-monospace,Menlo,monospace}
+  .ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}
+  ul{margin:6px 0 6px 20px;padding:0}li{margin:4px 0}
+  .tag{display:inline-block;padding:1px 8px;border-radius:12px;font-size:12px;background:#fff3d6;color:var(--gold);font-weight:600}
+  .foot{margin-top:28px;padding-top:12px;border-top:1px solid var(--line);color:var(--sub);font-size:12.5px}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>Cogentic 金矿落地：B2 升级为分层供料</h1>
+<div class="meta">2026-11-28 ｜ 用户授权"顺着金矿走一步" ｜ 预注册 SHA <code>735ceb6c…</code> ｜ 交接 §4S31</div>
+
+<div class="card lead">
+<b>一句话：</b>把 §4S30 挖到的 Cogentic 架构同构，落了最小一条——<b>briefing + 原文路径的分层供料</b>。但落之前先读真实数据，发现一个必须诚实面对的事实：<b>Cogentic 的"verifier 排除判决"在本仓没有数据基础</b>。于是把原建议的"死胡同结构化"降级为"叙述性信号标注"，并把降级理由写进预注册才动手。<b>不是照搬，是同构借鉴 + 诚实降级。</b>
+</div>
+
+<h2>一、动手前的诚实发现：为什么必须降级</h2>
+<p>按本仓纪律"预注册先于取证"，但这次特意<b>先看数据再设计</b>——反面教训是不凭想象造抽取器。读 9 条真实 heartbeat 后：</p>
+<table>
+<tr><th style="width:30%">检查项</th><th style="width:22%">结果</th><th>含义</th></tr>
+<tr><td><code>phase_verify</code> 字段</td><td>9/9 全为同一组恒真模板：<code>constitution_ok / no_verdict_change / original_100_untouched</code></td><td>这是<b>契约校验</b>（红线没碰），不是 Cogentic 那种"证明对不对"的<b>内容 verdict</b></td></tr>
+<tr><td>死胡同信号词（排除/证伪/走不通/被反例排除）</td><td class="warn">命中 <b>0</b></td><td>本仓 <b>没有</b> Cogentic 的 <code>bound excluded by verified counterexample</code>，硬造抽取器 = 空转</td></tr>
+<tr><td>叙述性失败/修复信号</td><td class="ok">rejected 1 / lesson 1 / passed 3 / repaired 1</td><td>action 全文里有真实信号，但<b>是叙述、不是判决</b> → 只能标为叙述性信号</td></tr>
+</table>
+<div class="card">
+<b>处置：</b>原建议"死胡同结构化 + 分层摘要按需回源" → 降级为 <b>"叙述性信号标注（<code>is_verifier_verdict: false</code> 明示）+ briefing + 路径分层供料"</code>。降级理由作为 <code>evidence_locked_before_design</code> 写进预注册后才动手——<b>金矿照挖，但不假装挖到没有的矿</b>。
+</div>
+
+<h2>二、改了什么（两处，最小）</h2>
+<div class="card good">
+<ul>
+<li><b>新增只读 <code>_failure_briefing(n=3, log_path=None)</code></b>：从 heartbeat 取近 n 条诊断，每条产出 <code>{at, direction, brief(机械截断120字), source_path(真实心跳路径), signals(五类词表命中), is_verifier_verdict: false}</code>。借鉴 Cogentic 的 "long documents given as <b>paths rather than quoted in full</b>"——摘要给简报，全文按需回源。</li>
+<li><b>REORIENT 归巢分支并列加 <code>out["failure_briefing"]</code></b>：<b>保留</b>原有 <code>failure_trace_evidence</code> 全文不删（向后兼容，§4S27 已固化），两字段并列；下游可各取所需。</li>
+</ul>
+<b>零越界：</b><code>KERNEL_VERSION</code> 仍 7.5.0；propose / root_cause_trace / self_modify / evolve / 判定 / 阈值 / 宪法全未碰；<b>不造 excluded verdict 抽取器</b>。
+</div>
+
+<h2>三、验收（预注册七门全过）</h2>
+<table>
+<tr><th style="width:16%">门</th><th>结果</th></tr>
+<tr><td>G2 分层供料</td><td class="ok">✅ 字段齐全；brief 机械截断≤120字；source_path 指向真实 heartbeat 文件；signals 为词表命中；<code>is_verifier_verdict=false</code></td></tr>
+<tr><td>G3 不改选向</td><td class="ok">✅ 用 monkeypatch 逼出 REORIENT 归巢子分支：两字段并列存在、全文旧字段内容不变、<code>chosen_action</code> 逐字未动</td></tr>
+<tr><td>G7 负向自咬（三重）</td><td class="ok">✅ ①隔离空日志→空列表；②篡改 action 插入"被拒/教训/修补/全过"→ signals 四类齐；③source_path 派生路径正确且存在</td></tr>
+<tr><td>G4 全量测试</td><td class="ok">✅ 1773 passed</td></tr>
+<tr><td>G5/G6 权威态</td><td class="ok">✅ CONSISTENT、drifts=[]、两哈希 <code>0f3ccb13…</code> / <code>fe56291b…</code> 字节未动</td></tr>
+<tr><td>G1 diff 范围</td><td class="ok">✅ 精确落在 1 新函数 + 1 并列字段；预注册 SHA <code>735ceb6c…</code> 完好</td></tr>
+</table>
+
+<div class="card">
+<h3>诚实边界</h3>
+<ul>
+<li>这是 Cogentic "briefing + paths" 的<b>只读借鉴</b>，不是照搬其 excluded ledger——本仓 <code>phase_verify</code> 是契约恒真校验、无内容 verdict，数据不支持 excluded 抽取。</li>
+<li>不声称已获得 Cogentic 的证明能力，也不声称塌缩防护；signals 只是叙述性词表命中，<code>is_verifier_verdict=false</code> 明示其层级。</li>
+<li>Ambient 恒 0，verdict 不动；判定权归用户。</li>
+</ul>
+</div>
+
+<div class="foot">
+一手依据：Cogentic 系统论文 arXiv:2609.40324（§4S30 回源）+ 本仓 kernel.py/heartbeat_log.jsonl 现场机械核对。<br>
+预注册：<code>prereg_cogentic_gold_b2_20261128.json</code>（SHA <code>735ceb6c…</code>）｜ 留痕：<code>SESSION_HANDOFF.md §4S31</code>。
+</div>
+
+</div></body></html>

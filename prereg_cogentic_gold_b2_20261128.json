@@ -1,0 +1,94 @@
+{
+  "schema": "prereg-cogentic-gold-b2-upgrade-v1",
+  "id": "prereg_cogentic_gold_b2_upgrade_20261128",
+  "locked_at_utc": "2026-11-28T00:59:32Z",
+  "locked_after_evidence": true,
+  "evidence_locked_before_design": {
+    "note": "先读真实数据再设计(反面教训:不凭想象造抽取器)",
+    "heartbeat_count": 9,
+    "phase_verify": "9/9 全为恒真模板 {constitution_ok,no_verdict_change,original_100_untouched}=契约校验非内容验证",
+    "excluded_signal_hits": 0,
+    "finding": "Cogentic 的 'bound excluded by verified counterexample' 在本仓无数据基础:phase_verify 无 verdict 内容、phase_improve_action 无排除/证伪信号词 → 不硬造 excluded 抽取器(否则空转)",
+    "narrative_signal_hits": {
+      "rejected": 1,
+      "lesson": 1,
+      "passed": 3,
+      "repaired": 1
+    },
+    "honest_adjustment": "原建议'死胡同结构化'降级为'叙述性信号标注(明确非verifier verdict)' + 'briefing+路径分层供料'"
+  },
+  "user_authorization": {
+    "verbatim": "顺着金矿走一步",
+    "scope": "把 B2 从'失败轨迹全文可见化'升级为 Cogentic 式'分层供料':摘要 briefing + 原文路径(paths not quoted in full) + 叙述性失败信号标注;仍是只读证据,不改选向",
+    "judgment_owner": "用户",
+    "note": "金矿=谷歌Cogentic架构与本仓的七条同构;本项只走其中'分层供料+失败记录'一条的最小只读版,不扩权到改 propose/判定/账本本体"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "f6d5272d74534d8cba6374c08d98a5d2e2fad90c3c0c5300447018bf3b483814",
+    "kernel_version": "7.5.0",
+    "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "tests_before": 1773,
+    "verdict": "GAP_INCONCLUSIVE",
+    "b2_current": "_recent_failure_traces(n=3) 返回全文 action 列表;REORIENT 加 failure_trace_evidence 字段(§4S27)"
+  },
+  "change": {
+    "file": "life_kernel/kernel.py",
+    "add_function": "_failure_briefing(n=3, log_path=None) 只读:从 heartbeat 取近 n 条诊断,每条产出 {at,direction,brief(机械截断),source_path(真实路径),signals(叙述性词表命中),is_verifier_verdict:false}",
+    "edit": "execute_agenda 的 REORIENT 归巢分支在 out 里并列新增 failure_briefing 字段;保留原 failure_trace_evidence 不动(向后兼容,两字段并列)",
+    "landing_note": "不删除/替换 failure_trace_evidence(既有产物,测试与 §4S27 已固化);新字段并列,副作用最小",
+    "signal_vocab": {
+      "rejected": [
+        "拒绝",
+        "被拒",
+        "驳回",
+        "否决"
+      ],
+      "stall": [
+        "空转",
+        "未触发",
+        "卡住",
+        "停滞"
+      ],
+      "lesson": [
+        "教训",
+        "失败",
+        "陷阱",
+        "弯路"
+      ],
+      "repaired": [
+        "修补",
+        "修复",
+        "改机制",
+        "修正"
+      ],
+      "passed": [
+        "全过",
+        "通过",
+        "passed"
+      ]
+    },
+    "no_touch": [
+      "KERNEL_VERSION",
+      "constitution.json",
+      "result.json",
+      "任何 urgency/chosen/rationale/门禁/阈值",
+      "pareto_walk/propose/root_cause_trace/self_modify/evolve 本体",
+      "_recent_failure_traces 本体",
+      "B1 的 _source_tier_profile",
+      "其他 execute_agenda 分支",
+      "不造 excluded verdict 抽取器"
+    ]
+  },
+  "acceptance_gates": {
+    "G1_最小改动": "diff 仅=新增 _failure_briefing + REORIENT 加 1 并列字段;KERNEL_VERSION 仍 7.5.0;no_touch 不变",
+    "G2_分层供料": "brief 为机械截断(非 jaccard 标签)、source_path 指向真实 heartbeat 文件、signals 为词表命中且 is_verifier_verdict=false",
+    "G3_不改选向": "加字段前后 out 的 executed/walk/nest_direction/nest_executed 逐字相同;旧 failure_trace_evidence 仍在且不变",
+    "G4_全量测试": "python3 -m pytest 全量 1773 passed",
+    "G5_权威一致": "authoritative_state verdict=CONSISTENT drifts=[]",
+    "G6_判定态未动": "result.json/constitution.json 两哈希字节未动",
+    "G7_负向自咬": "①隔离空日志→failure_briefing 为空;②篡改某条 action 插入'被拒'→该条 signals 含 rejected,证明读真数据非硬编码;③source_path 真实存在"
+  },
+  "failure_branch": "任一 gate 不过 → 用 pre_patch/kernel.py.bak2 回滚,如实记 self-bite,不迁就测试/不改判据/不升版本",
+  "honesty": "这是 Cogentic 'briefing+paths not quoted in full' 的只读借鉴,不是照搬其 excluded ledger——本仓 phase_verify 是契约恒真校验、无内容 verdict,数据不支持 excluded 抽取,故诚实降级为叙述性信号标注(is_verifier_verdict=false 明示)。不声称已获得 Cogentic 的证明能力,不声称塌缩防护;Ambient 恒 0,verdict 不动"
+}

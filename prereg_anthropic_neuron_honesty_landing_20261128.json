@@ -1,0 +1,46 @@
+{
+  "schema": "prereg-anthropic-neuron-honesty-landing-v1",
+  "id": "prereg_anthropic_neuron_honesty_landing_20261128",
+  "locked_at_utc": "2026-11-28T02:56:00Z",
+  "locked_after_evidence": true,
+  "user_authorization": {
+    "verbatim": "按建议推",
+    "scope": "对 §4S47 Anthropic《重回神经元》查证报告末尾两条建议的落地授权：①把'单一指标达标不能判定目标达成'补为纪律条文 V10（锚定 14/23 与 40%→75%）；②给 conclusion_evidence_probe 加'读出=假设、需干预检验'的 caveat 注脚（纯文案，不新增抽取）",
+    "judgment_owner": "用户",
+    "note": "授权的是纯纪律条文+纯文案注脚,不是新增抽取器/判定规则;不得借此升格任何诊断或改权威态"
+  },
+  "evidence_locked_before_design": {
+    "note": "先逐字回源两篇一手并读真实代码再锁设计;两条落点都确认有据、无空转",
+    "rec_1_v10": "一手 Part2 逐字坐实:'In 14 of the 23 models, the correct answer still has the highest probability...'; 'the auditor that sees only answers is correct in 40%, the auditor with steering in 61% and the auditor with readouts in 75%'; 'raises the share of facts ranked first from 32-47% to 72-84%'。单一 WMDP 指标达 chance 不能判定知识删除——本仓多口径/GAP_INCONCLUSIVE 的权威案例,锚点真实",
+    "rec_2_caveat": "一手 Part1 逐字坐实:\"We therefore treat a neuron's readout as a hypothesis about its function, and test it with interventions.\" 本仓 conclusion_evidence_probe 的证据轴=_tags_of tag 命中,只是'读出假设'而非'因果干预证实',加注脚是必要诚实、非新增抽取"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "070a0a2a89acf8ee2174500f3cb9ab1c4d40e4ef5665011ed7e8ad3181185b6f",
+    "discipline_md_sha256_before": "2d9aea9b1c3bde55a35ba93082c836e8f80e29112c71f697badd69f176ca33e4",
+    "result_json_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "authoritative_state_json_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "kernel_version": "7.5.0",
+    "verdict": "GAP_INCONCLUSIVE"
+  },
+  "design": {
+    "approach": "两条全部纪律条文/纯文案,零判定改动:①纪律条文 VERIFICATION_DISCIPLINE_20261128.md 追加 V10 条(单一指标达标≠目标达成),标来源层级(原文直述+本仓自有)并锚定 14/23 与 40%→61%→75% 两个一手数字,同步把共同边界第2条的'纪律条文 V1/V2/V4/V8/V9'改为含 V10;②kernel.py 的 conclusion_evidence_probe 仅在返回 caveat 字段末尾追加一段 Anthropic 注脚(读出=假设需干预检验),必要时在 based_on 追加一手锚点;不改四态逻辑、不改任何字段结构、不新增抽取、不新增函数",
+    "rec_2_scope_lock": "注脚只落在 caveat(与可选 based_on)字符串;per_heartbeat/state_counts/pass_weak_count/pass_weak_rate/not_original_four_state/is_gate_verdict 六项输出必须逐字不变"
+  },
+  "no_touch": [
+    "KERNEL_VERSION", "verdict/l3/absolute(L3字段)", "constitution", "result.json", "authoritative_state.json",
+    "self_modify accepted门槛", "_validate_policy / verify_external 判定体",
+    "ATTRIBUTION_PROBES / COVERAGE_PROBES", "conclusion_evidence_probe 的四态计算与除caveat/based_on外的全部返回字段",
+    "心跳日志/决策台账", "任何 CI / 测试文件"
+  ],
+  "acceptance_gates": {
+    "G1_最小改动": "kernel.py diff 仅 caveat/based_on 文案字符串变化(0新增函数、0逻辑行);版本仍7.5.0;no_touch锚点未变;纪律条文仅追加V10+共同边界第2条计数表述",
+    "G2_纯文案验证": "conclusion_evidence_probe 改动前后 per_heartbeat/state_counts/pass_weak_count/pass_weak_rate/is_gate_verdict 逐字相等(用pre_patch_s48备份内核加载旧函数对比);仅 caveat 字段新增且含'hypothesis'/'intervention'/Anthropic 锚点",
+    "G3_V10锚点": "V10 条逐字含 14/23 与 40%→61%→75% 两个一手数字、来源层级、Anthropic 一手锚点;不声称本仓获得'知识删除'能力",
+    "G4_负向自咬": "①加载备份旧函数与新函数对比六项输出全等、仅caveat不同(证明纯文案);②caveat 含干预检验锚点串;③空心跳输入仍返回空结构不崩、is_gate_verdict=False",
+    "G5_权威态零副作用": "result.json=0f3ccb13… / authoritative_state=5f7a2584… 字节未动,verdict=GAP_INCONCLUSIVE,l3/absolute=false",
+    "G6_零回归": "全量测试 pytest tests 从/workspace根跑,通过数与基线1625一致"
+  },
+  "failure_branch": "任一 gate 不过→用 pre_patch_s48 两份备份回滚,如实记self-bite,不迁就测试/不改判据/不升版本/不碰权威态",
+  "honesty": "①V10 借 Anthropic unlearning 审计做权威背书,本仓无'知识删除'场景,只借纪律(指标达标≠目标达成),不声称同构能力;②证据轴的 tag 命中只是'读出假设'(readout),不是因果干预证实(intervention)——weak/substantive 只是假设强弱提示,注脚明说读出具只是假设需干预检验,不把 tag 命中说成已证实的因果证据;③判定权始终归用户",
+  "based_on": "Anthropic alignment 官方博客两篇《Neuron basis theory》/《Neuron basis applications》Jasmine Shone & Lisa Dunlap 2026-11-23,经 §4S47 一手回源逐字查证;公众号 AINLP 只译 Part1 上篇"
+}

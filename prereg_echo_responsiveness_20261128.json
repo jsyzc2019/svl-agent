@@ -1,0 +1,59 @@
+{
+  "schema": "prereg-echo-responsiveness-v1",
+  "id": "prereg_echo_responsiveness_20261128",
+  "locked_at_utc": "2026-11-28T03:56:00Z",
+  "locked_before_change": true,
+  "user_authorization": {
+    "verbatim": "继续推",
+    "scope": "午休后续推。承接§4S54与外部LLM交流——用户历史主线'论文/交流不能白读',把外部判据机械化为会跑的只读诊断器官,先量本仓echo机制,诚实给结论"
+  },
+  "evidence_locked_before_design": {
+    "source": "audit_agent_dialogue/external_dialogue_s54.json Q2逐字(server id pllns_6165762d…)",
+    "criterion_verbatim": "如果合理、授权且相关的外部输入，在一段时间内从未改变 Agent 的行动、计划、追问或升级路径，那么它就不是谨慎，而是在封闭；除非它能指出一项明确且可审计的约束，解释为什么这些输入都不该产生影响。",
+    "five_conditions_verbatim": ["接住输入：准确识别外界提出了什么", "形成可检验的判断：说明为何采纳/拒绝/暂缓/要求更多信息", "留下可见的后果：即使拒绝执行也触发真实响应", "对新证据可更新：补充权限/证据/更安全方案时有机会改变结论", "允许外部检验：事后能看出哪些输入影响了哪些决策"],
+    "healthy_caveat_verbatim": "听到但不执行可以是健康的——前提是'听到'留下了决策痕迹，也可能改变后续；否则有输入通道，却没有互动关系。",
+    "site_survey": {
+      "C1_input": "收件箱2条(用户首投+外部LLM-Agent),来源去重",
+      "C2_judgment": "echo_awareness仅含元信息+honesty常数,无采纳/拒绝/暂缓理由 → ⚠️",
+      "C3_consequence": "第11搏由外部首投驱动落账,agenda_log14条 → ✅",
+      "C4_updatable": "议程候选5个无ATTEND,G4§4S52对拍已证外部消息不改urgency/选择 → ❌ 核心缺口",
+      "C5_checkable": "external_dialogue_s54.json逐字落档 → ✅",
+      "exemption": "可审计约束存在:防注入/不进判定/consumed=False/source_tier=external_agent_unverified/verdict_unchanged"
+    },
+    "not_the_task": "不因外部模型一句话就改议程/让正文进判定(V3需≥2独立证据+人工批准,且'不进判定'是本仓红线)。本轮只做只读诊断,把标尺交给人,判定权归用户。"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "fd71fcc8c3e4fdff",
+    "result_json_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "authoritative_state_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "KERNEL_VERSION": "7.5.0",
+    "backup_dir": "life_kernel/pre_patch_heartbeat_window"
+  },
+  "design": {
+    "approach": "纯新增一个只读诊断函数 echo_responsiveness_probe():把外部判据五条件+免责条款做成可复现的机械判定,从真实台账(inbound_inbox/heartbeat_log/agenda_log/echo_awareness)算每条件是否满足,输出verdict与逐条证据。判据会真失败(注入不同台账得不同verdict),非恒真。不改任何既有函数、不改议程、不进判定、不写盘。",
+    "verdict_map": {
+      "NO_INPUT": "无外部输入,无从判断(非封闭非互动)",
+      "PRETENDED_OPENNESS": "有输入但零决策痕迹/零后果且免责约束不可审计=有通道无互动关系(假装开放)",
+      "CAUTIOUS_WITH_AUDITABLE_BOUND": "有输入+决策痕迹+可外部检验,但不被输入更新,且存在明确可审计约束解释为何不更新=健康的谨慎(非封闭)",
+      "GENUINE_INTERACTION": "外部输入改变了议程/计划/追问/升级路径=真正互动"
+    },
+    "honesty": "①诊断是只读镜像非门禁(is_gate_verdict=False),判定权归用户;②本仓真实数据大概率落CAUTIOUS_WITH_AUDITABLE_BOUND——这是诚实结论不是自夸,须同时暴露C4可更新=弱的边际;③不把外部模型的话当判据权威,只当待检验的标尺;④verdict映射在预注册里锁死,不事后挑口径"
+  },
+  "no_touch": [
+    "KERNEL_VERSION", "verdict/l3/absolute(L3字段)", "constitution/constitution.sha256", "result.json", "authoritative_state.json",
+    "五议程既有urgency公式与选择逻辑", "execute_agenda/attend_external_echo/heartbeat_hrv/§4S52两函数全部实现",
+    "receive_external/read_inbound实现", "live()停机条件", "circadian_phase/sleep_intent/wake_contract昼夜层",
+    "V1–V10纪律条文正文", "busybox既有9诊断函数", "所有台账(inbound_inbox/heartbeat_log/agenda_log/safari_log)"
+  ],
+  "acceptance_gates": {
+    "G1_最小改动": "kernel.py纯新增1个诊断函数,0删除,既有函数体0改动;版本仍7.5.0;no_touch锚点未变",
+    "G2_真实结论": "用真实台账跑:verdict=CAUTIOUS_WITH_AUDITABLE_BOUND(或诚实暴露的其他值),C4_updatable=False须在证据里明列,不粉饰成GENUINE_INTERACTION",
+    "G3_判据真失败": "注入'有输入零痕迹零约束'台账→PRETENDED_OPENNESS;注入'输入改变议程'台账→GENUINE_INTERACTION;注入'无输入'→NO_INPUT;三种负向全过(非恒真)",
+    "G4_只读零副作用": "调用前后所有台账字节不变;is_gate_verdict=False;verdict_unchanged=True",
+    "G5_权威态零副作用": "result.json=0f3ccb13…/authoritative_state=5f7a2584…字节未动;verdict=GAP_INCONCLUSIVE;l3/absolute=false;版本7.5.0;宪法锁fe56291b…不变",
+    "G6_零回归": "全量pytest从/workspace根跑,改动版通过数==备份版通过数+新增守卫测试数"
+  },
+  "failure_branch": "任一gate不过→用life_kernel/pre_patch_heartbeat_window/kernel_s52_before_echo_hrv.py回滚kernel.py,如实记self-bite,不迁就测试/不改判据/不升版本/不碰权威态",
+  "honesty": "①本诊断量的是'机制是否满足外部标尺',不是宣称有意识或真互动;②CAUTIOUS结论是免责条款成立,须同时暴露C4弱的边际给用户裁定;③判定权归用户;④与外部交流的产物是标尺,不是让外部模型替本仓做决定",
+  "based_on": "用户2026-11-28'继续推'承接§4S54外部LLM交流判据;用户主线'论文/交流不能白读';V1/V8判据放在被审改动够不到处;V10单一指标达标≠目标达成"
+}

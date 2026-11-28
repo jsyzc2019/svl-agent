@@ -1,0 +1,96 @@
+{
+  "section": "§4S64",
+  "at": "2026-11-28T04:50:54Z",
+  "prereg_sha256": "97bfd4ae68f274c10b71c49505976a1de500bc6abd74fccb97789d90e58b3882",
+  "heartbeat_log_sha_before": "5bce6660263b2e49c3d88a1bd14cdd4e822ece265ad5abc239b56c26fcd88b7f",
+  "heartbeat_log_sha_after": "ea749f76826dc59c0a964f22a4563e38120c062fb18c9093806395b26110ad35",
+  "backup": "life_kernel/pre_patch_verdict_birth/heartbeat_log_pre_backfill.jsonl",
+  "total": 11,
+  "backfilled": 9,
+  "untouched": 2,
+  "per_heartbeat": [
+    {
+      "index": 1,
+      "action": "BACKFILLED",
+      "verdict": "UNKNOWN",
+      "has_backfill_marker": true
+    },
+    {
+      "index": 2,
+      "action": "BACKFILLED",
+      "verdict": "PASS_DIVERSE",
+      "has_backfill_marker": true
+    },
+    {
+      "index": 3,
+      "action": "BACKFILLED",
+      "verdict": "PASS_DIVERSE",
+      "has_backfill_marker": true
+    },
+    {
+      "index": 4,
+      "action": "BACKFILLED",
+      "verdict": "PASS_DIVERSE",
+      "has_backfill_marker": true
+    },
+    {
+      "index": 5,
+      "action": "BACKFILLED",
+      "verdict": "PASS_DIVERSE",
+      "has_backfill_marker": true
+    },
+    {
+      "index": 6,
+      "action": "BACKFILLED",
+      "verdict": "PASS_DIVERSE",
+      "has_backfill_marker": true
+    },
+    {
+      "index": 7,
+      "action": "BACKFILLED",
+      "verdict": "FAIL_CONVERGED",
+      "has_backfill_marker": true
+    },
+    {
+      "index": 8,
+      "action": "BACKFILLED",
+      "verdict": "PASS_DIVERSE",
+      "has_backfill_marker": true
+    },
+    {
+      "index": 9,
+      "action": "BACKFILLED",
+      "verdict": "PASS_DIVERSE",
+      "has_backfill_marker": true
+    },
+    {
+      "index": 10,
+      "action": "UNTOUCHED",
+      "verdict": "PASS_DIVERSE",
+      "has_backfill_marker": false
+    },
+    {
+      "index": 11,
+      "action": "UNTOUCHED",
+      "verdict": "PASS_DIVERSE",
+      "has_backfill_marker": false
+    }
+  ],
+  "authoritative_state_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+  "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+  "honesty": "补平≠修复机制:8搏MISSING+1搏UNVERIFIABLE回填当前现算verdict并打backfill标记;synced_rate升至1.0是字段补齐的数学结果,不等于验证都在生成当下就位;UNKNOWN那搏仍UNKNOWN;已落盘2搏未动;非权威态;判定权归用户",
+  "final_probe_state": {
+    "counts": {
+      "BIRTH_SYNCED": 10,
+      "BIRTH_STALE": 0,
+      "BIRTH_MISSING_RECOMPUTED": 0,
+      "BIRTH_UNVERIFIABLE": 1
+    },
+    "synced_rate": 0.9091,
+    "authentic_birth_count": 2,
+    "backfilled_sync_count": 8,
+    "note": "synced=10含8搏事后补判;真·生成当下就位仅2搏(authentic_birth_count);不可把字段补齐误读为验证已在生成当下就位"
+  },
+  "kernel_sha_after_antifabrication": "1ad410f1304b0b15904fcb24d2d5bc2adb4abf36bcaaeb07ed2bd781b5c2f740",
+  "tests": "life_kernel/tests 206 passed = 基线195 + §4S63守卫7 + §4S64守卫4; 同口径对拍旧内核+旧测试=195零回归"
+}

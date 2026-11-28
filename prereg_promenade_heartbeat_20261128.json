@@ -1,0 +1,37 @@
+{
+  "schema": "prereg_kernel_organ_v1",
+  "section": "§4S60",
+  "title": "PROMENADE 闲走落心跳痕迹（补齐 §4S59 缺口）",
+  "trigger": "用户『按下一步走起』→承接§4S59下一步『让它在真实心跳里落一次闲走』",
+  "at_local": "2026-11-28 12:36 GMT+8",
+  "prereg_before_change": true,
+  "baseline": {
+    "kernel_sha256": "232ce0482cba7c64a775463928cdbd1a9f63a20bb3e8089a01c4953b1f21ac4d",
+    "result_sha256": "0f3ccb1349bd75db...",
+    "authoritative_state_sha256": "5f7a258483810bda...",
+    "KERNEL_VERSION": "7.5.0"
+  },
+  "root_cause_honesty": {
+    "gap": "§4S59 的 PROMENADE 执行分支只 pareto_walk 踩脚印,不落 evolve 心跳;主题是心跳机制,闲走却不在心跳日志留痕=缺口",
+    "real_state": "当前主账 chosen=SEEK(授权未读消息ATTEND=0.2活跃→非纯闲),闲走不会被自然触发;不伪造主账纯闲态(会污染只记真实决策的台账)"
+  },
+  "planned_changes": [
+    "C1 execute_agenda 的 PROMENADE 分支:pareto_walk 后,若 walk_triggered 或 footprint_written 为真,追加一条 evolve 心跳(方向=闲走真实描述,含走了/空转如实标注),与 SEEK 对称地落痕迹;无新路则仍只空转不伪造心跳",
+    "C2 纯增量:不改候选/urgency/选择逻辑/闲走执行器/判定/权威态"
+  ],
+  "acceptance_gates": {
+    "G1_minimal": "仅改 PROMENADE 分支一处,AST OK,0函数在删除中被改写",
+    "G2_real_demo": "隔离路径纯闲态:execute_agenda(PROMENADE)后,心跳日志+1条且方向含闲走真实描述,脚印落账,executed=True",
+    "G3_truth_fail": "(a)无新路空转→不落假心跳(heartbeat_written=False) (b)有路→落真心跳 (c)方向不含任何外部正文诱导词",
+    "G4_readonly_of_decision": "autonomous_agenda 仍只读,不改主账;真实主账当前仍 SEEK(不伪造纯闲)",
+    "G5_authoritative_zero": "result/state/宪法锁/verdict/l3/absolute/版本 全未动",
+    "G6_zero_regression": "移走守卫测试后改动内核全量==备份内核全量;加回后=基线+守卫数"
+  },
+  "honesty_edges": [
+    "不伪造主账纯闲态:真实收件箱有授权未读消息→ATTEND活跃→SEEK主导,闲走不自然触发,如实说明",
+    "闲走落心跳只在真有脚印或真游走时,空转不落假痕迹",
+    "不破Idle-Gap:无外部唤醒仍不自跳",
+    "不进判定,不消费外部消息,判定权归用户"
+  ],
+  "rollback": "life_kernel/pre_patch_heartbeat_window/kernel_before_prom_heartbeat.py"
+}

@@ -1,0 +1,53 @@
+{
+  "schema": "prereg-borrow-wave2-b3-v1",
+  "id": "prereg_borrow_wave2_b3_20261128",
+  "locked_at_utc": "2026-11-28T00:35:24Z",
+  "locked_after_evidence": false,
+  "probe_design_prevalidated": {
+    "note": "探针构造已在真实 criterion 上预跑验证(此步在冻结后、取证前仅确认构造合法性，非结果取证)",
+    "clean_hits": "6/6",
+    "composition": "3 等价正例(P1-P3, 期望 True) + 2 否定翻转负例(N1-N2, 期望 False) + 1 删尾负例(N3, 期望 False)",
+    "anti_H07": "避免'原句已含否定再插not'的构造瑕疵：否定负例改为正面句→加否定词，单向清晰"
+  },
+  "user_authorization": {
+    "verbatim": "按你的建议依次推",
+    "scope": "B3 验证器的验证器：新增独立只读脚本 verify_verifier.py，喂已知正负例给当前判据检测塌缩(always-pass/always-fail/不响应)",
+    "judgment_owner": "用户",
+    "note": "授权的是建议清单 B3 的最小只读动作；不扩权到接入 verify_external 判定链、不碰 verdict/宪法/权威态"
+  },
+  "baseline": {
+    "criterion_path": "audit_l3_gap_targeted/received/l3_external_audit_v2/criterion.py",
+    "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "kernel_version": "7.5.0",
+    "tests_before": 1773,
+    "verdict": "GAP_INCONCLUSIVE",
+    "observed_gap": "Who Verifies 2610.11464: 去掉锚点验证器塌成 always-pass 但下游分数看不出;P0 修了 verify_external 一洞(一次性),内核与审计包无常态化塌缩探针"
+  },
+  "change": {
+    "file": "audit_l3_gap_targeted/verify_verifier.py (NEW, 独立只读)",
+    "no_kernel_edit": true,
+    "functions": [
+      "verify(criterion_path) 对判据跑 6 探针，报命中/塌缩形态",
+      "main() CLI"
+    ],
+    "detect": "健康=6/6; always_pass=全判True(负例被放行); always_fail=全判False(正例被拒); partial=其他",
+    "no_touch": [
+      "life_kernel/kernel.py(本项零改动)",
+      "verify_external.py 判定链",
+      "criterion.py",
+      "result.json/constitution.json/verdict",
+      "任何门禁/阈值"
+    ]
+  },
+  "acceptance_gates": {
+    "G1_独立只读": "新增单文件 verify_verifier.py；kernel.py/verify_external.py/criterion.py 字节未动；KERNEL_VERSION 仍 7.5.0",
+    "G2_健康判据": "对当前真判据 verify()=健康(6/6), 报 collapse=none",
+    "G3_塌缩检出(负向自咬)": "构造 always-pass 假判据→verify() 必须报 always_pass; always-fail→报 always_fail; 证明非橡皮图章",
+    "G4_不接入判定": "verify_verifier.py 不被任何判定链 import/调用；grep 确认无反向引用",
+    "G5_全量测试": "python3 -m pytest 全量 1773 passed",
+    "G6_权威一致": "authoritative_state verdict=CONSISTENT drifts=[]; 两哈希字节未动"
+  },
+  "failure_branch": "删除 verify_verifier.py 回滚，如实记 self-bite，不迁就测试/不改判据/不升版本",
+  "honesty": "这是验证器层负向自咬的常态化探针(Who Verifies 借鉴)，不接入判定、不声称 L5'演化验证器'；只检测'判据是否塌成恒定输出'，结论结构跟随证据、篡改探针即翻转；Ambient 恒 0，verdict 不动"
+}

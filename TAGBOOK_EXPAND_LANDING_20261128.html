@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>tagbook 收窄扩展 · 落地验收 · 2026-11-28</title>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--mut:#8b949e;--bd:#30363d;--acc:#58a6ff;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--card:#161b22}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7}
+.wrap{max-width:1040px;margin:0 auto;padding:32px 22px 80px}
+h1{font-size:25px;margin:0 0 6px;color:#fff}h2{font-size:18px;margin:34px 0 12px;color:var(--acc);border-bottom:1px solid var(--bd);padding-bottom:7px}
+.sub{color:var(--mut);font-size:13px;margin-bottom:26px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:16px 20px;margin:14px 0}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}th,td{border:1px solid var(--bd);padding:9px 11px;text-align:left;vertical-align:top}th{background:#1c2128;color:var(--acc)}
+code{background:#1c2128;padding:1px 6px;border-radius:4px;font-size:12px;color:#a5d6ff}
+.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+.big{font-size:15px;padding:14px 18px;border-left:3px solid var(--acc);background:#111821}
+.big.badbox{border-left-color:var(--bad);background:#1c1214}
+.tag{display:inline-block;background:#1f2937;border:1px solid var(--bd);border-radius:20px;padding:2px 10px;font-size:12px;color:var(--mut);margin:2px}
+ul{margin:8px 0 8px 4px;padding-left:20px}li{margin:5px 0}
+.foot{margin-top:40px;color:var(--mut);font-size:12px;border-top:1px solid var(--bd);padding-top:16px}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+.num{font-size:30px;font-weight:700;color:var(--ok)}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>tagbook 收窄扩展 · 落地验收</h1>
+<div class="sub">2026-11-28 · 词表层（风险最高的一层）· 预注册 SHA <code>11b91ff3…</code> · 用户"继续"授权</div>
+
+<div class="big">
+<b>结果</b>：给 tagbook 加 3 个收窄主题词 + 3 个配套探针，F11/F12 终于被看见（coverage 贡献者 12→14/14）。判定信号实测零漂移，但过程中撞到一个真正的陷阱——<b>词表关键词的子串污染了静态源码探针，17 个测试崩溃</b>。这个陷阱比改动本身更值得记。
+</div>
+
+<h2>一、为什么扩词 + 补探针必须配套</h2>
+<div class="card">
+<table>
+<tr><th>种子</th><th>direction 真文本关键词</th><th>原 tagbook 结果</th><th>扩词后</th></tr>
+<tr><td>F11</td><td>经验策展 / 选择性丢弃 / 滚动摘要 / 常驻规则</td><td class="bad">general（memory 关键词一个不匹配）</td><td class="ok">curation</td></tr>
+<tr><td>F12</td><td>可证伪标尺 / Idle-Gap / self-direction / 自我边界</td><td class="bad">philosophy（agency/measurement 不在词表）</td><td class="ok">agency + measurement + philosophy</td></tr>
+</table>
+<p><b>关键验证</b>：只扩词不补探针 → F11/F12 的 Δ 仍为 0（coverage 探针里没有 curation/agency/measurement 可命中）。扩词 + 补 3 探针 → 贡献者 <b>12 → 14/14</b>、F11 Δ=1、F12 Δ=2、heldout_net 20→24。两者必须配套。</p>
+</div>
+
+<h2>二、风险最高的点：收窄词表</h2>
+<div class="card">
+<p>初拟给 <code>agency</code> 加"内稳态/homeostasis"——先验发现：近心跳里有 3 条"向外求新刺激：<b>内稳态</b>无失衡"，会把它们从 <code>general</code> 变成 <code>agency</code>，<b>直接改变 guard 的 jaccard 相似度</b>。收窄为特异性词（idle-gap / self-direction / 自我边界 / individuation / 七维agency / 自主意志）后，心跳 <b>0/9 漂移</b>、内置 E1-E7 <b>0 漂移</b>。</p>
+<p class="warn">这就是词表层比探针层更危险的地方：词会进入所有 13 处 <code>_tags_of</code> 调用，一个泛词就能牵动判定信号。</p>
+</div>
+
+<h2 class="bad">三、撞到的陷阱：子串污染静态源码探针</h2>
+<div class="card badbox">
+<p><b>首版词表里写了 <code>"scheduled rule"</code> 作为 agency 关键词。跑全量测试：<span class="bad">17 failed, 1756 passed</span>。</b></p>
+<p>失败全是 <code>has_idle_daemon is False</code> / <code>humble_verified is True</code> 断言——和词表看似无关。追查链路：</p>
+<ul>
+<li><code>diagnose_volition_aas.py</code> 用 <code>s in src</code> 做<b>裸子串匹配</b>，检查内核源码里有没有 daemon 符号；</li>
+<li>daemon 符号列表含 <code>"schedule"</code>；</li>
+<li>我加的 <code>"scheduled rule"</code> 含子串 <code>schedule</code> → <code>has_daemon=True</code> → <code>has_idle_daemon=True</code> → 17 个依赖"无守护进程"的断言连锁崩溃。</li>
+</ul>
+<p><b>修正</b>：<code>"scheduled rule"</code> → <code>"rule-following"</code>（不含任何 daemon 符号子串）。排查全部新增词与 8 个 daemon 符号的交叉，全 False。全量测试恢复 <span class="ok">1773 passed</span>，F12 的 agency 仍由 idle-gap/self-direction/自主意志命中，效果不变。</p>
+<p class="warn">这是本仓"词表层改动意外触达静态源码检查"的活证据——表面上是数据词表，实际上写进源码文本就会被别的探针当证据读。这类跨层耦合，只有全量测试能兜住。</p>
+</div>
+
+<h2>四、一处如实记录的偏差</h2>
+<div class="card">
+<p>预注册 G3 写"判定信号三数字逐字一致"。实测 <code>transfer_distinct_tags</code> <b>9 → 11</b>——扩词让候选覆盖的 tag 变多，是词表扩展的<b>直接目的与预期后果</b>。判定结果全部不变：<code>attribution_ok=True</code>、<code>all_pass=True</code>、<code>heldout_net=1</code>、guard 三样本 state/similarity 逐字一致。transfer 是描述性统计（门槛是 ≥2，9 和 11 都远超），不触及通过/拒绝决定。<b>如实记录为预期良性变化，不假装零漂移，也不因此回滚。</b></p>
+</div>
+
+<h2>五、验收汇总</h2>
+<div class="card">
+<table>
+<tr><th>门</th><th>结果</th></tr>
+<tr><td>G1 最小改动：3 新 tag + 3 新探针，原 11 tag 逐字不动，版本 7.5.0</td><td class="ok">PASS</td></tr>
+<tr><td>G2 词表效果：F11=curation、F12=agency+measurement、coverage 14/14</td><td class="ok">PASS</td></tr>
+<tr><td>G3 判定信号：心跳 0/9、内置 0、guard 一致、判定结果不变（transfer 9→11 如实记录）</td><td class="ok">PASS（含偏差说明）</td></tr>
+<tr><td>G4 双口径：original 1/14（能拒绝）、coverage 14/14（完整视图）</td><td class="ok">PASS</td></tr>
+<tr><td>G5 五项负向自咬（含删新词→F11 回 general、原词表原 7 探针复现 §4S35 [F11,F12]）</td><td class="ok">PASS</td></tr>
+<tr><td>G6 全量测试（修复子串污染后）</td><td class="ok">1773 passed</td></tr>
+<tr><td>G7 权威态：CONSISTENT / drifts=[] / 两哈希与注册表未动</td><td class="ok">PASS</td></tr>
+</table>
+<p class="warn"><b>另外两处 selftest 构造瑕疵（内核逻辑未动）</b>：G5⑤ 初用 <code>.bak6</code> 经 importlib 加载失败（后缀不认）→ 改源码 regex exec；层 2 初用已扩的探针 → 改用原 7 探针 <code>[:7]</code> 才复现基线。</p>
+</div>
+
+<h2>六、边界与处置</h2>
+<div class="card">
+<ul>
+<li>扩词让内核"<b>看得见</b>"策展/agency/测量主题，不是理解语义；Δ 仍基于 tag 词集，非任务收益。</li>
+<li><b>coverage 14/14 全贡献 = 诊断器失去区分力</b>，所以保留 original 窄口径（1/14）作"能拒绝"的对照——两口径并列，各司其职。</li>
+<li>词表层改动有长期影响：任何新词若含 daemon 符号子串或其他静态检查关键词，都会跨层触发。这次靠全量测试兜住，未来扩词须先查子串冲突。</li>
+<li>新编号 2610.09430 仍待用户裁定是否入表（本项未入表）。</li>
+</ul>
+</div>
+
+<div class="foot">
+零权威态副作用：result.json=<span class="mono">0f3ccb13…</span>、constitution.json=<span class="mono">fe56291b…</span>、runtime_policy=<span class="mono">88858ee5…</span> 字节未动，verdict/l3/absolute/宪法未碰。全量测试 1773 全绿，预注册 SHA <span class="mono">11b91ff3…</span> 完好。判定权归用户。留痕 §4S36。
+</div>
+
+</div></body></html>

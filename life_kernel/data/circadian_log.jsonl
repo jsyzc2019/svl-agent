@@ -10,4 +10,3 @@
 {"at": "2026-11-27T07:11:21Z", "woken_by": "workbuddy_automation:hourly_beat:utc=2026-11-27T07:11:21Z", "step": 6, "phase": "DAY", "intent": "WAKE", "chosen": "REORIENT", "urgency": 0.95, "executed": false, "need_external": false}
 {"at": "2026-11-27T09:29:04Z", "woken_by": "github_actions:run=45974067856:utc=2026-11-27T09:29:04Z", "step": 1, "phase": "NIGHT", "intent": "SLEEP", "reason": "夜伏相位(NIGHT)且无 C7 义务：尊重节律继续休眠，不强行扰动", "executed": false}
 {"at": "2026-11-27T18:45:58Z", "woken_by": "github_actions:run=46051863629:utc=2026-11-27T18:45:58Z", "step": 1, "phase": "NIGHT", "intent": "SLEEP", "reason": "夜伏相位(NIGHT)且无 C7 义务：尊重节律继续休眠，不强行扰动", "executed": false}
-{"at": "2026-11-28T01:50:01Z", "woken_by": "github_actions:run=46095065825:utc=2026-11-28T01:50:01Z", "step": 1, "phase": "DAY", "intent": "WAKE", "chosen": "SEEK", "urgency": 0.3, "executed": true, "need_external": true}

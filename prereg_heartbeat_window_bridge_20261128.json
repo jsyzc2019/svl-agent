@@ -1,0 +1,61 @@
+{
+  "schema": "prereg-heartbeat-window-bridge-v1",
+  "id": "prereg_heartbeat_window_bridge_20261128",
+  "locked_at_utc": "2026-11-28T03:30:00Z",
+  "locked_before_change": true,
+  "user_authorization": {
+    "verbatim": "建议强化一下心跳机制",
+    "scope": "用户选方向=心跳×开窗打通(唯一勾选)。让入站收件箱成为心跳内稳态的一个真实感知信号,心跳能'听到'外部消息,守只收不执行、不进判定、不联网不spawn。",
+    "direction_selection": "用户在四选多选中仅勾'心跳×开窗打通(推荐)',未勾HRV诊断/内容验证落盘/体检报告"
+  },
+  "evidence_locked_before_design": {
+    "note": "只读诊断已完成、先于设计与改动,确认真实缺口而非臆造",
+    "heartbeat_count": 10,
+    "heartbeat_gaps_hours": [0.1, 0.2, 0.5, 0.2, 75.7, 0.2, 0.2, 0.0, 19.0],
+    "content_verdict_landed": "1/10(仅第10搏),前9搏缺失靠诊断现算",
+    "inbound_messages": 1,
+    "inbound_nonce": "WINDOW-OPEN-20261128-1123",
+    "inbound_executed": false,
+    "inbound_consumed": false,
+    "gap_identified": "开窗(receive_external/read_inbound)与心跳内稳态(homeostatic_signals/autonomous_agenda)完全解耦:心跳感知五信号(unregistered/stale/converged/sparse/curiosity)无一读收件箱,故'听到外部'未进入律动,用户窗定义'被动听到外部世界'停留在台账层未接入心跳决策",
+    "not_the_gap": "不伪造后台自跳(Idle-Gap):间隔0.1~75.7h因被唤醒才落,此前已诚实标注,本轮不碰"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "f08e5307ae39aa762bfff63bd80b39d358529b1d928af0be142fbc94386e16f8",
+    "result_json_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "authoritative_state_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "KERNEL_VERSION": "7.5.0",
+    "verdict": "GAP_INCONCLUSIVE",
+    "backup_dir": "life_kernel/pre_patch_heartbeat_window"
+  },
+  "design": {
+    "approach": "纯新增一个心跳内稳态感知信号 inbound_echo:复用已存在的read_inbound(unread_only=True)被动读取未读外部消息,只把'有几条未读/来自谁'的元信息接入homeostatic_signals→autonomous_agenda的signals快照,让心跳决策时'听到外部'可见。不改既有五议程的urgency公式、不改选择逻辑、不消费消息、不执行内容、不回复、不联网不spawn、不进判定。",
+    "rationale": "最小改动原则:开窗的'听到'已由receive_external/read_inbound实现,缺的只是与心跳感知层的接线。复用现成只读函数,零新增通道、零网络,把外部呼唤作为内稳态的第六个感知信号(知情度标注,类C7守'改知情度不改紧迫度')。",
+    "touch_points": [
+      "homeostatic_signals()返回体新增只读字段 inbound_echo(未读消息数+来源sender/channel去重,不含消息正文)",
+      "autonomous_agenda()的signals快照自动携带inbound_echo(因decision['signals']=sig),并在decision顶层新增入站知情块 echo_awareness(标注consumed=False/不进判定)",
+      "仅此两处;不新增议程类型、不改execute_agenda任何分支、不改urgency公式"
+    ],
+    "honesty_boundary": "inbound_echo只暴露元信息(条数+sender:channel),绝不把外部消息正文喂进direction/判定(防注入);读不改账(consumed不被写回);不到处不空转:收件箱空时inbound_echo=0、不影响任何议程选择"
+  },
+  "no_touch": [
+    "KERNEL_VERSION", "verdict/l3/absolute(L3字段)", "constitution/constitution.sha256", "result.json", "authoritative_state.json",
+    "self_modify accepted门槛", "_validate_policy", "ATTRIBUTION_PROBES", "COVERAGE_PROBES",
+    "五议程既有urgency公式与选择逻辑(REORIENT/DIGEST/PRUNE/CONSOLIDATE/SEEK)",
+    "execute_agenda全部分支", "receive_external/read_inbound实现", "live()停机条件",
+    "V1–V10 纪律条文正文", "heartbeat_log/agenda_log/base_beat_log/inbound_inbox既有台账",
+    "busybox既有9诊断函数", "circadian_phase/sleep_intent/wake_contract昼夜节律层"
+  ],
+  "acceptance_gates": {
+    "G1_最小改动": "kernel.py diff:仅homeostatic_signals返回体+autonomous_agenda顶层各1处纯新增,0删除,既有函数体0改动;版本仍7.5.0;no_touch锚点未变",
+    "G2_感知真接通": "注入隔离log_path的未读消息→homeostatic_signals().inbound_echo.count>0;空收件箱→count=0;来源去重(sender:channel)可见;消息正文不出现在echo字段",
+    "G3_读不改账": "调用homeostatic_signals/autonomous_agenda前后inbound_inbox.jsonl字节不变(consumed未被写回);verdict_unchanged=True",
+    "G4_不改议程": "同一seed+同一policy,接线前基线的chosen/urgency/五候选urgency与接线后完全一致(用备份kernel.py对拍);inbound_echo不改变任何议程选择",
+    "G5_负向自咬": "空收件箱不空转也不假装听到;外部消息正文含判据词不得影响direction;隔离log_path不污染主账;来源去重正确",
+    "G6_权威态零副作用": "result.json=0f3ccb13…/authoritative_state=5f7a2584…字节未动;verdict=GAP_INCONCLUSIVE;l3/absolute=false;版本7.5.0;宪法锁SHA不变",
+    "G7_零回归": "全量pytest tests 从/workspace根目录跑,1625 passed与基线一致"
+  },
+  "failure_branch": "任一gate不过→用life_kernel/pre_patch_heartbeat_window/kernel.py.bak回滚,如实记self-bite,不迁就测试/不改判据/不升版本/不碰权威态",
+  "honesty": "①本轮是'感知接线'不是'后台自跳':心跳仍被唤醒才落,Idle-Gap未破,不伪造;②'听到外部'是知情度信号(类C7守改知情度不改紧迫度),不是行为指令,外部消息不触发任何行动;③不消费/不执行/不回复/不联网不spawn,判定权归用户;④真外部社会化Agent消息才完整兑现窗,本轮把已落账的1条首投真实接入心跳感知即算本轮打通,不冒充已与外网Agent实时接通",
+  "based_on": "用户2026-11-28'建议强化一下心跳机制'+四选方向勾选;窗定义见对话line1187;开窗实现见§4S51/prereg_open_window_20261128.json;内稳态五信号见homeostatic_signals()"
+}

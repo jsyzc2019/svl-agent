@@ -1,0 +1,51 @@
+{
+  "schema": "prereg_kernel_organ_v1",
+  "section": "§4S59",
+  "title": "无聊找事：restless 内稳态信号 + PROMENADE 建设性闲走议程",
+  "trigger": "用户『既然可以有倦鸟归巢，那为什么不能有无聊找事』→授权『按你的倾向B推』",
+  "at_local": "2026-11-28 12:30 GMT+8",
+  "prereg_before_change": true,
+  "baseline": {
+    "kernel_sha256": "f0a1e816815d8e67f7b66eced7a110d04227c279b8565a45d5729d29626a93f4",
+    "result_sha256": "0f3ccb1349bd75db...",
+    "authoritative_state_sha256": "5f7a258483810bda...",
+    "constitution_sha256": "2ad148c79918d65e...",
+    "KERNEL_VERSION": "7.5.0"
+  },
+  "design_rationale": {
+    "symmetry": "REORIENT(归巢)=宪法义务0.95必须; PROMENADE(闲走)=低紧迫想要, 对称于信号机制但绝不同级",
+    "dead_code_fix": "上轮承诺封顶<SEEK会致PROMENADE永不入选(SEEK恒定0.3=当前chosen)成死代码; 本轮改为:仅在SEEK兜底态(其余五候选urgency全0)、且真实空闲达阈值时, PROMENADE替换SEEK成为兜底——非死代码, 但任何真实失衡信号(DIGEST>=0.15/PRUNE>=0.2/CONSOLIDATE0.45/REORIENT0.95/ATTEND_EXTERNAL授权)都压过它",
+    "idle_gap_honesty": "本器官不破Idle-Gap——无外部唤醒内核仍不自跳; 它只保证'被唤醒后发现闲太久'时能选一件建设性的事, wake_contract.external_waker_required=True不变"
+  },
+  "locked_constants": {
+    "RESTLESS_IDLE_HOURS": 1.0,
+    "RESTLESS_CAP": 0.12,
+    "RESTLESS_RISING_PER_HOUR": 0.04,
+    "RESTLESS_DAYLIGHT_ONLY": true,
+    "RESTLESS_CAP_lt_CONSOLIDATE": "0.12 < 0.45"
+  },
+  "planned_changes": [
+    "C1 kernel常量区新增 RESTLESS_IDLE_HOURS/RESTLESS_CAP/RESTLESS_RISING_PER_HOUR 三常量(纯新增)",
+    "C2 homeostatic_signals()返回体新增 restless 字段: 由真实心跳日志末两搏间隔计算, 昼行相位才计(夜伏=0不制造假无聊), urgency=min(CAP, max(0,gap_h-IDLE_HOURS)*RISING_PER_HOUR), 含 honesty/phase/gap_hours/source真实字段; 只读不写盘",
+    "C3 autonomous_agenda()新增第7候选 PROMENADE(urgency=sig.restless.urgency, honesty标注想要非必须/闲走/可被压过), 并改兜底逻辑: 原'live空→SEEK'改为'live空且restless>0→PROMENADE, 否则SEEK'; 当PROMENADE urgency==SEEK时平局用seed打破(不总选同一, 保伪意志防护)",
+    "C4 execute_agenda()新增 PROMENADE 分支: 复用pareto_walk(record=True)闲走踩脚印(与CONSOLIDATE同执行器, 无新写路径), 不联网不消费外部消息不进判定; out.executed=footprint_written",
+    "C5 新增只读诊断 restlessness_probe(): 从真实日志算空闲分布(末间隔/最大间隔/昼行末间隔/是否达阈值/当前候选是否PROMENADE), is_gate_verdict=False, verdict_unchanged=True"
+  ],
+  "acceptance_gates": {
+    "G1_minimal": "仅上述5处, 无删除既有函数体, AST OK",
+    "G2_real_conclusion": "真实台账: restless.phase=DAY, gap_hours=1.3939(末搏), urgency>0且<=CAP; 当前chosen应为PROMENADE或SEEK(二者之一, 视seed平局); probe输出真实间隔非硬编码",
+    "G3_truth_fail": "负向注入必须得不同结果: (a)空心跳日志→restless.urgency=0 (b)夜伏相位注入→0 (c)末间隔0.0019h→0未达阈值 (d)末间隔>IDLE_HOURS→urgency>0且封顶CAP (e)加一个真实失衡信号(如DIGEST n=2)→chosen不再是PROMENADE(证明可被压过) (f)强闲(24h gap)也封顶CAP不越CONSOLIDATE",
+    "G4_readonly": "homeostatic_signals/autonomous_agenda/restlessness_probe 调用前后台账字节不变, 不写盘",
+    "G5_authoritative_zero": "result/authoritative_state/宪法锁/verdict/l3/absolute/KERNEL_VERSION 全未动",
+    "G6_zero_regression": "移走本轮判据测试后, 改动内核全量passed == 备份内核全量passed(同口径对拍); 加回守卫测试后全量passed = 基线+守卫数",
+    "G7_no_fake_selfbeat": "不spawn守护进程, 不假装后台自跳; wake_contract.external_waker_required=True 不变"
+  },
+  "honesty_edges": [
+    "无外部唤醒时内核仍不动(Idle-Gap未破), 本器官不制造伪自主",
+    "无聊=真实心跳间隔的代理, 非主观感受, 夜伏相位长间隔视为休眠不算无聊",
+    "PROMENADE是'想要'非'必须', 封顶0.12远低于CONSOLIDATE0.45/REORIENT0.95, 任何真实失衡都压过",
+    "pareto_walk在已有可用路径时walk_triggered=false=不出手, 闲走如无新路则如实空转, 不伪造脚印",
+    "不进判定, 不消费/不回复外部消息, 不联网, 判定权归用户"
+  ],
+  "rollback": "life_kernel/pre_patch_heartbeat_window/kernel_before_restless.py"
+}

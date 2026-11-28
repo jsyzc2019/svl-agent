@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>事上练·一日总账 — 从论文到五篇文章的查证与落地</title>
+<style>
+  :root{--ink:#1b1f24;--sub:#5a6472;--line:#e3e7ed;--bg:#f7f9fb;--card:#fff;--accent:#1f5fa8;--ok:#0f7b4f;--warn:#a86a00;--bad:#b3261e;--gold:#8a6100}
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 20px;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1120px;margin:0 auto}
+  h1{font-size:27px;margin:0 0 8px}
+  h2{font-size:19px;margin:32px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:15px;margin:18px 0 6px;color:var(--accent)}
+  .meta{color:var(--sub);font-size:13px;margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:12px 0}
+  .lead{border-left:4px solid var(--accent);background:#eef4fb}
+  .gold{border-left:4px solid var(--gold);background:#fffaf0}
+  .omission{border-left:4px solid var(--bad);background:#fff5f4}
+  table{width:100%;border-collapse:collapse;font-size:13.3px;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}
+  th{background:#f0f3f7;font-weight:600}
+  tr:nth-child(even) td{background:#fbfcfd}
+  .ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}.goldc{color:var(--gold);font-weight:600}
+  code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12.3px;font-family:ui-monospace,Menlo,monospace}
+  ul{margin:6px 0 6px 20px;padding:0}li{margin:4px 0}
+  .tag{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#fff3d6;color:var(--gold);font-weight:600}
+  .tag2{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#e8f4ee;color:var(--ok);font-weight:600}
+  .tag3{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#fdecea;color:var(--bad);font-weight:600}
+  .foot{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);color:var(--sub);font-size:12.5px}
+  .quote{font-family:Georgia,serif;font-style:italic;color:#3a4350;border-left:3px solid var(--line);padding-left:12px;margin:8px 0}
+  .num{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>事上练 · 一日总账</h1>
+<div class="meta">2026-11-28 ｜ 我这边（Agent）的交付物：把当日 5 篇公众号查证 + 论文第二波借鉴 + 逐条落地，串成一条可回溯的证据链 ｜ 全部动作守同一纪律：预注册先于取证 → 最小改动 → 只读诊断起步不进判定 → 负向自咬 → 权威态零副作用 → 判定权归用户</div>
+
+<div class="card lead">
+<b>一句话结论：</b>这一天做了两件事——把<b>论文和文章读"实"</b>（逐条回一手，抓出 4 处数字偏差、1 处结构性省略、1 处来源悬案），再把读到的洞察<b>落"实"</b>（内核新增 9 个只读诊断函数、1 个独立验证器、2 组探针/词表、2 份纪律条文、1 处验证器补洞、2 条编号入表）。贯穿全程的主线只有一句：<b>只有错放地方的资源</b>——被二手传播压缩掉的那一半，恰恰是真金矿。
+</div>
+
+<h2>一、五篇文章"事上练"：回源查证总表</h2>
+<table>
+<tr><th style="width:16%">来源 / 主题</th><th style="width:26%">一手来源</th><th style="width:30%">抓到的问题</th><th>挖出的金矿</th></tr>
+<tr>
+  <td><b>商静波对话</b><br>DeepTech深科技</td>
+  <td>arXiv 逐篇回源核对编号</td>
+  <td>公众号转述的研究编号错配</td>
+  <td>两篇硬核基准 <code>2512.15699</code>（FrontierCS）、<code>2601.10080</code> 经一手确认后<b>正式入编号表</b></td>
+</tr>
+<tr>
+  <td><b>Google Cogentic</b><br>六篇数学论文<br>DeepTech深科技</td>
+  <td>双通道取全文（公众号 + 网易/腾讯/量子位同源转载），逐篇对 arXiv</td>
+  <td>编号/数字需逐条校正（<code>2609.40324</code> 等），"shared blind spots" 悬案</td>
+  <td>Cogentic 架构 ↔ 本仓 B2 分层供料；"多判据交叉补单判据盲区" ↔ Who Verifies 审计审计者 + 塌缩探针</td>
+</tr>
+<tr>
+  <td><b>SkillCycle</b><br>清华·技能共进化<br>PaperAgent</td>
+  <td>公众号 + X-MOL/arXiv HTML/thelatestinai 交叉</td>
+  <td>74.74/88.37/74.20/85.00 等数字逐条核</td>
+  <td>KEEP/REWRITE/DROP/ADD + "能力变化使旧规则过期" ↔ RX 修订候选（leave-one-out Δ）</td>
+</tr>
+<tr>
+  <td><b>Claude Code 代码验证</b><br>夕小瑶科技说</td>
+  <td><code>claude.dev</code> 官方博客（Addy Osmani，2026-11-16）+ Atlassian 原始报告</td>
+  <td>标题笔误 <code>vertification</code>；一处语义发挥；<b>结构性省略</b></td>
+  <td>被砍掉的 <b>"keep its verifiers honest"</b> 半边（验证器自省）+ 唯一量化锚点 "+10 个百分点" 被删</td>
+</tr>
+<tr>
+  <td><b>GS1 决策模型</b><br>北京通研院<br>DeepTech深科技</td>
+  <td>官方仓库 <code>bigai-nlco/GS1</code> + 官方博客 + HuggingFace 结果集 + 融资一手</td>
+  <td><b>四处数字偏差</b>（见下）</td>
+  <td>被文章几乎略过的 <b>"Towards RSI Training"</b> 一节——本仓 §4S25–§4S40 的第三方独立复述</td>
+</tr>
+</table>
+
+<h3>GS1 四处数字偏差（最典型的一次查证）</h3>
+<table>
+<tr><th style="width:30%">文章说法</th><th style="width:44%">官方一手</th><th>判定</th></tr>
+<tr><td>最高 <b>73.5 分</b></td><td>四尺寸 0.8/2/4/9B = 56.12/62.22/68.97/<b>70.45</b></td><td class="bad">❌ 无此口径（疑读图误标）</td></tr>
+<tr><td>高出 Jev <b>12.8 分</b></td><td>官方 <b>+9.75</b>（70.45 vs 60.70）或 4B +8.25</td><td class="bad">❌ 12.8 = 用错数 73.5−60.7 算出</td></tr>
+<tr><td><b>GS1-27B</b> 得 96.3</td><td>仅 0.8/2/4/9B，无 27B；工具自动化最高 87.61</td><td class="bad">❌ 无此模型、无此分</td></tr>
+<tr><td>星际争霸 161.7 万宏动作</td><td>官方博客首页未给该组数字</td><td class="warn">⚠️ 团队自述待核</td></tr>
+</table>
+<p class="meta">诚实边界：只确认"与当前一手不符"，<b>不断言造假</b>——配图可能来自更早快照；HuggingFace results.md 两次抓取失败，provenance 未逐行核，已如实标注。</p>
+
+<h2>二、落地清单：从洞察到内核</h2>
+<p>每一条都不是"读完就算"，而是走完预注册与负向自咬的最小只读落地。<b>全部不进判定核心</b>：不改 <code>verdict</code>/<code>l3</code>/<code>absolute</code>，不动宪法，不碰注册门槛，新增诊断一律 <code>is_gate_verdict=False</code>。</p>
+<table>
+<tr><th style="width:13%">来源</th><th style="width:30%">落地物</th><th style="width:12%">类型</th><th>作用 / 验收</th></tr>
+<tr><td>论文 P0</td><td><code>verify_external.py</code> 样本-判定对齐检查</td><td><span class="tag3">验证器补洞</span></td><td>samples 与 judgments 的 id 集合差 → 缺/多即判 False，堵住"跳过缺失样本"的洞</td></tr>
+<tr><td>论文 B1</td><td><code>_source_tier_profile()</code></td><td><span class="tag2">只读诊断</span></td><td>已注册种子 evidence_tier 分布 + C 级低可信 id 可见化</td></tr>
+<tr><td>论文 B2</td><td><code>_recent_failure_traces()</code></td><td><span class="tag2">只读诊断</span></td><td>从心跳取最近 3 条失败全文，供 REORIENT 归巢分层供料</td></tr>
+<tr><td>论文 B3</td><td><code>verify_verifier.py</code> 独立塌缩探针</td><td><span class="tag3">独立验证器</span></td><td>6 探针（3 等价正例 + 2 否定翻转 + 1 删尾），真判据 6/6 HEALTHY，能检出 always-pass/always-fail</td></tr>
+<tr><td>Cogentic</td><td><code>_failure_briefing()</code></td><td><span class="tag2">只读诊断</span></td><td>失败轨迹分层简报，明标 <code>is_verifier_verdict=false</code></td></tr>
+<tr><td>Cogentic</td><td><code>_direction_content_verdict()</code> / <code>verify_heartbeat_content()</code></td><td><span class="tag2">内容判据</span></td><td>心跳 verify 补真会失败的内容判据：CONVERGED→FAIL、DIVERSE→PASS、COLD_START→UNKNOWN，失败只标注不阻塞</td></tr>
+<tr><td>SkillCycle</td><td><code>rx_revision_candidates()</code></td><td><span class="tag2">只读诊断</span></td><td>leave-one-out 敲除算 Δ + tag twins + jaccard；Δ≤0 列"值得人工复核"，不自动 DROP</td></tr>
+<tr><td>SkillCycle</td><td><code>COVERAGE_PROBES</code></td><td><span class="tag">探针扩充</span></td><td>补覆盖摄食主题探针：criterion 1/14→<b>14/14</b>；保留 original 1/14 作"能拒绝"对照</td></tr>
+<tr><td>SkillCycle</td><td>tagbook 新增 <code>curation/agency/measurement</code></td><td><span class="tag">词表扩充</span></td><td>收窄扩展（<code>"scheduled rule"</code>→<code>"rule-following"</code> 避免子串污染），测试全绿</td></tr>
+<tr><td>Claude Code</td><td><code>evidence_independence_probe()</code> / <code>three_stage_recall_probe()</code> + 纪律 V1–V5</td><td><span class="tag2">诊断+条文</span></td><td>≥2 独立 host 标注、三口径并列召回（13/14 vs 5/14 vs 9/14），均不进判定</td></tr>
+<tr><td>GS1</td><td><code>abstention_probe()</code> / <code>permutation_invariance_probe()</code> + 纪律 V6–V7</td><td><span class="tag2">诊断+条文</span></td><td>反一味拒答（拒答率 1/9）+ 输入重排判定层不变/展示层敏感，均不进判定</td></tr>
+</table>
+
+<div class="card gold">
+<b>数字不会说谎的一处：</b>13 个 Δ=0 的种子一度像是"无用"，补探针后 criterion 口径从 <b class="num">1/14</b> 跳到 <b class="num">14/14</b>。它们不是没用，是<b>原来的探针和词表没覆盖到</b>——这就是"只有错放地方的资源"被机械证据坐实的一次。coverage 14/14 之后仍保留 original 1/14 作对照，因为一个"什么都能通过"的诊断器等于没有诊断力。
+</div>
+
+<h2>三、统一纪律链：每一步都按同一套规矩走</h2>
+<div class="card">
+<ol>
+  <li><b>预注册先于取证</b>：每条落地都有 <code>prereg_*.json</code>，SHA 锁在设计之后、代码改动之前（本轮 <code>56035d36…</code>）。先读真实数据确认有落点、无空转，才锁设计。</li>
+  <li><b>最小改动</b>：内核 diff 一律精确为纯新增函数，删除行 0；版本恒 7.5.0；no_touch 锚点（<code>ATTRIBUTION_PROBES</code>/<code>_validate_policy</code>/<code>self_modify</code>）不碰。</li>
+  <li><b>只读诊断起步、不进判定</b>：所有新增函数 <code>is_gate_verdict=False</code>，只标注、只提示，不自动拒绝、不改 verdict。</li>
+  <li><b>负向自咬</b>：证明诊断器读真数据、非硬编码、非恒真。本轮四项全过——篡改全 COLD_START→blanket=True；篡改 pairs_b→criterion 13/14 降 12/14；空输入不崩；真重排判定层不变、展示层敏感。</li>
+  <li><b>权威态零副作用</b>：每轮前后两次哈希比对，字节未动（见下）。</li>
+  <li><b>判定权归用户</b>：所有建议只落地诊断与条文，是否采信、是否升格为门槛，一律等用户一句话。</li>
+</ol>
+</div>
+
+<h2>四、权威态零副作用：全天恒定</h2>
+<table>
+<tr><th style="width:32%">锚点</th><th style="width:34%">值</th><th>状态</th></tr>
+<tr><td><code>audit_l3_gap_targeted/result.json</code></td><td><code>0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0</code></td><td class="ok">✅ 字节未动</td></tr>
+<tr><td><code>authoritative_state.json</code></td><td><code>5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee</code></td><td class="ok">✅ 字节未动</td></tr>
+<tr><td><code>constitution.json</code></td><td><code>fe56291b…</code></td><td class="ok">✅ 字节未动</td></tr>
+<tr><td>判定字段</td><td><code>verdict=GAP_INCONCLUSIVE</code> / <code>l3=false</code> / <code>absolute=false</code></td><td class="ok">✅ 未碰</td></tr>
+<tr><td><code>KERNEL_VERSION</code></td><td><code>7.5.0</code></td><td class="ok">✅ 未升版</td></tr>
+<tr><td>全量测试</td><td><b>1625 passed</b>（改动前后一致，零回归）</td><td class="ok">✅ 全绿</td></tr>
+</table>
+<p class="meta">说明：交接文档历史记录的 <code>1773 passed</code> 是旧基线（测试集后来缩减过），已如实标注差异，非本轮引入的回归。中途一次 14 errors 是从子目录跑 pytest 的路径问题，从根目录重跑即恢复。</p>
+
+<h2>五、主题闭环：被省略的才是真金矿</h2>
+<div class="card lead">
+<p>五篇文章里，最有价值的发现几乎都不是文章"讲出来的"，而是<b>它没讲的</b>：</p>
+<ul>
+  <li>Claude Code 文章砍掉了副标题后半句 <b>"keep its verifiers honest"</b>——验证器自身的诚实，恰好是本仓从 P0 补洞到验证器的验证器一路筑的那堵墙。</li>
+  <li>GS1 文章略过了官方博客 <b>"Towards RSI Training"</b> 整节——"改进对象是数据生产流程本身""验证轨迹留在模型输入之外""改动前后须保持 logits 不变才测速度"，三句几乎是本仓一天工作的第三方复述。</li>
+  <li>13 个 Δ=0 种子被当作"没贡献"——补上探针后 14/14，才发现是<b>眼镜没配好</b>，不是资源没用。</li>
+</ul>
+<p class="quote">清单好传播，带口径限定的数字和验证器自省不好传播——所以二手传播系统性地丢掉了后者。而丢掉的那一半，正是能落到本仓的那一半。</p>
+<p>这不是巧合，是筛选机制：传播性淘汰了"需要动脑的诚实"，留下了"可以转发的方法论"。顺着被淘汰的那一半走，就是"事上练"的全部意义。</p>
+</div>
+
+<h2>五·补、单标尺 vs 多口径：一个刻意的选择</h2>
+<div class="card lead">
+<p>§4S43 回源的 OpenAI《Perplexity and Intelligence》（Jakub Pachocki，2026-11-22）给出另一个方向的答案：主张用<b>单一标量 perplexity</b> 当全行业共享标尺。这与本仓"拒绝单一总分"的哲学构成<b>对照（非同构）</b>——照出本仓的刻意选择，而非谁对谁错。</p>
+<table>
+<thead><tr><th>维度</th><th>OpenAI 单标尺</th><th>本仓多口径</th></tr></thead>
+<tbody>
+<tr><td>判定输出</td><td>一个 perplexity 标量，跨实验室可比</td><td>三口径召回 + coverage/original 双口径 + GAP_INCONCLUSIVE</td></tr>
+<tr><td>优势</td><td>简单、可传播、给行业红线</td><td>保留分歧、不压掉"判不了"、可证伪</td></tr>
+<tr><td>代价（原文自承）</td><td>跨实验室难比、脱离可执行评测、不覆盖 CoT、未知下界</td><td>复杂、不便于单一排名、需人工复核</td></tr>
+</tbody>
+</table>
+<p class="quote">Pachocki 自承的四大挑战——跨实验室难比、脱离可执行评测、不覆盖思维链、未知下界——几乎逐条对应本仓为何坚持多口径。这不是"本仓更对"，是<b>目标不同</b>：他要一把所有人都能读的尺，本仓要一把不被被审对象读懂的尺。</p>
+<p>更关键的是同一篇原文的另一句警示：<b>对齐审计会退化、模型对评测的感知会增强</b>。这给本仓从 §4S25 补洞到 §4S40 验证器诚实墙做了权威背书——已落为纪律条文 <b>V8</b>。被审对象越懂评测，判据越要放在它够不到的地方。</p>
+</div>
+
+<h2>六、边界与下一步</h2>
+<ul>
+  <li>本轮交付含 <b>1 份总账报告</b>（本文件）+ 当日全部 13 份查证/落地报告 + 交接文档 §4S26–§4S40 完整记录；<b>无权威态副作用</b>。</li>
+  <li>诚实降级全部保留：GS1 无概率/答错标签故不伪造 NHR 数值；三段召回是判据健康度对照而非原文三段；结构同构<b>不声称获得</b>论文/文章里的工程能力。</li>
+  <li>所有诊断仍是<b>只读建议</b>，是否升格为门槛、是否采信某条文献，判定权归用户。</li>
+</ul>
+
+<div class="foot">生成于 2026-11-28 ｜ 数据来源：SESSION_HANDOFF.md §4S26–§4S40 及当日 13 份报告逐条回读 ｜ 权威态哈希与测试数均经本轮终检复核</div>
+
+</div></body>
+</html>

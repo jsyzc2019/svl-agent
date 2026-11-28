@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenAI《Perplexity and Intelligence》回源查证 + 对本仓的对照与金矿</title>
+<style>
+  :root{--ink:#1b1f24;--sub:#5a6472;--line:#e3e7ed;--bg:#f7f9fb;--card:#fff;--accent:#1f5fa8;--ok:#0f7b4f;--warn:#a86a00;--bad:#b3261e;--gold:#8a6100}
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 20px;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:26px;margin:0 0 8px}
+  h2{font-size:19px;margin:30px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:15px;margin:18px 0 6px;color:var(--accent)}
+  .meta{color:var(--sub);font-size:13px;margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:12px 0}
+  .lead{border-left:4px solid var(--accent);background:#eef4fb}
+  .gold{border-left:4px solid var(--gold);background:#fffaf0}
+  .omission{border-left:4px solid var(--bad);background:#fff5f4}
+  table{width:100%;border-collapse:collapse;font-size:13.4px;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}
+  th{background:#f0f3f7;font-weight:600}
+  tr:nth-child(even) td{background:#fbfcfd}
+  .ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+  code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12.4px;font-family:ui-monospace,Menlo,monospace}
+  ul{margin:6px 0 6px 20px;padding:0}li{margin:4px 0}
+  .tag{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#fff3d6;color:var(--gold);font-weight:600}
+  .tag2{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#e8f4ee;color:var(--ok);font-weight:600}
+  .tag3{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#fdecea;color:var(--bad);font-weight:600}
+  .foot{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);color:var(--sub);font-size:12.5px}
+  .quote{font-family:Georgia,serif;font-style:italic;color:#3a4350;border-left:3px solid var(--line);padding-left:12px;margin:8px 0}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>OpenAI《Perplexity and Intelligence》回源查证 + 对本仓的对照与金矿</h1>
+<div class="meta">查证 2026-11-28 ｜ 用户给一手链接 <code>openai.com/index/perplexity-and-intelligence</code> ｜ 一手：OpenAI 官方原文全文（作者 Jakub Pachocki，Chief Scientist，2026-11-22）+ 脚注 1–5 ｜ 交叉：网易/环球网、AI产品库、OpenAI Hub、新浪、Aetos.AI 五家转载逐字比对</div>
+
+<div class="card lead">
+<b>一句话结论：</b>一手扎实，五个数字（0.99 / 0.91 / &lt;0.8 / ~0.76 / 0.68–0.7）与五家转载逐字一致，无数字偏差。但有两处转载附加信息一手未见（Sam Altman 表态、"GPT‑6 Astra 世代"），已标注。<b>对本仓真正的金矿不是"用 perplexity 当标尺"，而是文章自己承认的那句：</b>"we should also expect further degradation in currently dominant forms of alignment auditing and further increases in evaluation and training awareness"——连 OpenAI 首席科学家都明说<b>对齐审计会退化、模型对评测的感知会增强</b>。这给本仓 §4S25→§4S40 一路筑的"验证器诚实"墙做了权威背书。同时文章主张<b>单一标量</b>作共享指标，与本仓"拒绝单一总分、分口径报告"恰成<b>张力面</b>——照出本仓的选择不是同构，是对照。
+</div>
+
+<h2>一、一手来源确认</h2>
+<table>
+<tr><th style="width:20%">项</th><th>核实</th></tr>
+<tr><td>标题/作者/日期</td><td class="ok">✅ 原文逐字：<i>"Perplexity and Intelligence"</i>, <b>By Jakub Pachocki, Chief Scientist at OpenAI</b>, <b>November 22, 2026</b></td></tr>
+<tr><td>文章性质</td><td class="warn">⚠️ 立场文 / 博客（openai.com/index/），<b>非论文、无 arXiv 编号</b>。按惯例不入 <code>ARXIV_ID_REGISTRY.md</code>（已核：编号表 0 命中）</td></tr>
+<tr><td>核心主张</td><td>把 perplexity（等价 cross-entropy loss）确立为跨模型开发者对比、支撑共享安全标准的指标；公开 OpenAI 内部预训练测量；提议基于 perplexity 设 <b>common limits</b>（共同红线）</td></tr>
+<tr><td>术语澄清</td><td>原文脚注 1："compressor" 指能对未见数据做压缩预测的<b>过程</b>，不是 GZIP 那样的压缩产物——"最好的 compressor 未必记住语料"；脚注 2：实际追踪的是 <b>log</b> perplexity = cross-entropy loss；脚注 3：held-out 来自内部 codebase 固定快照</td></tr>
+</table>
+
+<h2>二、五个数字：逐条对照一手与转载</h2>
+<table>
+<tr><th style="width:24%">数字</th><th style="width:46%">一手原文</th><th>转载一致性</th></tr>
+<tr><td>GPT‑3.5 <b>~0.99</b></td><td>"GPT‑3.5, at a log-perplexity of ~0.99 on our current main evaluation dataset, was capable of fluent conversation and formed the basis for the original ChatGPT"</td><td class="ok">✅ 五家全对</td></tr>
+<tr><td>GPT‑4 <b>~0.91</b></td><td>"GPT‑4, at ~0.91, was proficient at utilizing chain-of-thought reasoning productively"</td><td class="ok">✅ 五家全对</td></tr>
+<tr><td><b>&lt; 0.8</b> 阈值</td><td>"as we have reached losses below 0.8, we have seen the emergence of transformative capabilities in fields like cybersecurity and mathematics"</td><td class="ok">✅ 五家全对</td></tr>
+<tr><td><b>~0.76</b> 数学突破</td><td>"Once we upgraded to a model of log-perplexity ~0.76, it started producing groundbreaking results"</td><td class="ok">✅ 五家全对</td></tr>
+<tr><td><b>~0.68–0.7</b> 预期窗口</td><td>"we should expect further transformative capabilities as we enter the ~0.68-0.7 log-perplexity window"</td><td class="ok">✅ 五家全对</td></tr>
+<tr><td>2027 可能加速</td><td>"as soon as 2027 we could conceivably see a similar avalanche of fundamental pretraining advancements"</td><td class="ok">✅ 五家全对</td></tr>
+</table>
+
+<h3>两处转载附加、一手未见（诚实标注）</h3>
+<table>
+<tr><th style="width:30%">转载说法</th><th style="width:34%">出现处</th><th>判定</th></tr>
+<tr><td>"Sam Altman 公开支持，称是 OpenAI 近期发布的最重要内容之一"</td><td>网易/环球网、AI产品库（称有官方推文）</td><td class="warn">⚠️ 一手原文<b>无</b>此段落；未回源 Altman 推文，标"转载附加待核"</td></tr>
+<tr><td>"&lt;0.80 对应 GPT‑5 后期至 GPT‑6 / GPT‑6.2 Astra 世代"</td><td>Aetos.AI</td><td class="warn">⚠️ 一手只给数值区间、<b>未点名具体模型代际</b>；此为二手推断，未回源</td></tr>
+</table>
+<p class="meta">诚实边界：只说"一手未见/未回源"，不断言转载造假——两处都可能是原文之外的独立公开表态，只是本轮未取到那一手。</p>
+
+<h2>三、金矿：被中文报道弱化的那半句</h2>
+<div class="card gold">
+中文转载普遍聚焦"数字曲线 + 行业红线 + 2027 预警"，却几乎都弱化了原文这句：
+<div class="quote">"we should also expect further degradation in currently dominant forms of alignment auditing and further increases in evaluation and training awareness. I believe frontier model developers should jointly endeavour to establish shared norms for how to evaluate such models and red-team safety cases for them by the time they are first used, including shared transparency standards."</div>
+<b>这半句对本仓的意义</b>：它从最强的第三方权威口吻确认了本仓一直在守的那条纪律——<b>被审对象会越来越懂评测，所以审计判据必须放在它够不到的地方</b>。本仓从 §4S25 修 verify_external 跳过缺失样本的洞 → §4S32 验证器的验证器 → §4S37/§4S38 Claude Code "keep its verifiers honest" → §4S40 反一味拒答与排列不变性，走的正是"审计退化"的反方向。这不是我自己的 paranoid，是有一手背书的。
+</div>
+
+<h2>四、对本仓的逐条对照</h2>
+<table>
+<tr><th style="width:28%">原文机制</th><th style="width:38%">本仓对应</th><th>定性</th></tr>
+<tr><td>"held-out dataset" 固定快照；脚注 4 自承数据集选择会致偏差（GPT‑2/3 用代码预测是糟糕代理）</td><td>冻结 holdout 14 对 sha256 + 预注册 SHA 先于取证 + H07 拒回改冻结集；coverage/original 双口径（13 个 Δ=0 种子是探针没覆盖，非无用）</td><td><span class="tag2">强同构</span> 数据集选择决定看到什么——两家都吃过这个亏</td></tr>
+<tr><td>"further degradation in alignment auditing / evaluation awareness ↑"</td><td>§4S25 验证器补洞 → §4S32 验证器的验证器 → §4S38 纪律 V1–V5 → §4S40 V6–V7；判据从 base 读、不采信自报、诊断不进判定</td><td><span class="tag2">权威背书</span> 本仓"验证器诚实"墙的第三方同向证据</td></tr>
+<tr><td><b>common limits</b>：在监控能力达具体里程碑（CoT monitors 继任者）前承诺不越阈值</td><td>诊断只标注不阻塞、不自动升格为门禁；判定权归用户；verdict/l3/absolute 不可改</td><td><span class="tag">张力面</span> 行业设"能力上限"，本仓设"AI 自改判据的下限"，方向相反、形态同构</td></tr>
+<tr><td>单一标量 perplexity 作共享标尺；<b>但自承四大挑战</b>：跨实验室难比、脱离可执行评测、不覆盖预训练外进展（CoT）、未知下界</td><td>拒绝单一总分：三口径召回（13/14 vs 5/14 vs 9/14）、coverage/original 双口径、target_repair/transfer/heldout_net 三分报、GAP_INCONCLUSIVE</td><td><span class="tag3">哲学对立</span> 原文选单标尺+自陈局限，本仓选多口径+拒绝并分——照出本仓的刻意选择</td></tr>
+<tr><td>"emergent capabilities at precise thresholds, not clear a priori"；脚注 1 压缩≠记住语料</td><td>Δ≤0 不等于种子无用（补探针后 1/14→14/14）；UNKNOWN/COLD_START 诚实标未知；Idle-Gap 未破不伪装自主</td><td><span class="tag2">同构</span> 能力/价值冒出的位置不可预判，不把"没测到"当"不存在"</td></tr>
+<tr><td>"AI 参与 pretraining 算法研究，as soon as 2027 雪崩式突破"</td><td>self_modify / REORIENT / evolve 元认知自修，但明标"设计选择非涌现""Idle-Gap 未破"</td><td><span class="tag">降温对照</span> 同一趋势叙事，本仓坚持不夸大自主性</td></tr>
+</table>
+
+<h2>五、诚实边界与下一步</h2>
+<ul>
+  <li>本轮<b>零代码改动</b>：<code>result.json=0f3ccb13…</code>、<code>authoritative_state=5f7a2584…</code>、内核哈希 <code>2d9ba6c6…</code> 未动，<code>verdict=GAP_INCONCLUSIVE</code>、版本 7.5.0。博客非论文无编号，不入编号表。</li>
+  <li>可借鉴的三条（<b>均为建议，等你授权再动</b>）：① 给本仓的"审计退化"纪律单列一条条文（V8），引 Pachocki 原句为权威锚点；② 原文"common limits 需具体里程碑"↔ 本仓"诊断升格为门禁"缺少一个显式的"里程碑"判据，可做成只读诊断；③ 原文"perplexity 四大挑战"与本仓多口径哲学的张力，值得在总账报告里单列一节，避免日后误以为"单标尺"是本仓路线。</li>
+  <li>结构同构/权威背书<b>不声称</b>本仓获得了 OpenAI 的任何能力；转载附加两处标"待核"，不断言造假。</li>
+</ul>
+
+<div class="foot">生成于 2026-11-28 ｜ 一手：openai.com/index/perplexity-and-intelligence 全文 + 脚注 1–5 ｜ 交叉：网易/环球网、AI产品库、OpenAI Hub、新浪、Aetos.AI ｜ 权威态哈希经本轮终检</div>
+
+</div></body>
+</html>

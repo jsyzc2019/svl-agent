@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>补覆盖摄食主题探针 · 落地验收 · 2026-11-28</title>
+<style>
+:root{--bg:#0d1117;--fg:#c9d1d9;--mut:#8b949e;--bd:#30363d;--acc:#58a6ff;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--card:#161b22}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7}
+.wrap{max-width:1040px;margin:0 auto;padding:32px 22px 80px}
+h1{font-size:25px;margin:0 0 6px;color:#fff}h2{font-size:18px;margin:34px 0 12px;color:var(--acc);border-bottom:1px solid var(--bd);padding-bottom:7px}
+.sub{color:var(--mut);font-size:13px;margin-bottom:26px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:16px 20px;margin:14px 0}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}th,td{border:1px solid var(--bd);padding:9px 11px;text-align:left;vertical-align:top}th{background:#1c2128;color:var(--acc)}
+code{background:#1c2128;padding:1px 6px;border-radius:4px;font-size:12px;color:#a5d6ff}
+.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+.big{font-size:15px;padding:14px 18px;border-left:3px solid var(--acc);background:#111821}
+.big.quotebox{border-left-color:var(--warn)}
+.tag{display:inline-block;background:#1f2937;border:1px solid var(--bd);border-radius:20px;padding:2px 10px;font-size:12px;color:var(--mut);margin:2px}
+ul{margin:8px 0 8px 4px;padding-left:20px}li{margin:5px 0}
+.foot{margin-top:40px;color:var(--mut);font-size:12px;border-top:1px solid var(--bd);padding-top:16px}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+.num{font-size:32px;font-weight:700;color:var(--ok)}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>补覆盖摄食主题探针 · 落地验收</h1>
+<div class="sub">2026-11-28 · 接 §4S34 RX 诊断的下一层 · 预注册 SHA <code>cc94e984…</code> · 用户洞察驱动</div>
+
+<div class="big quotebox">
+<b>用户的话</b>："你前面的论证再次印证<b>只有错放地方的资源</b>。"<br>
+这句话就是本轮的判词——13 个 Δ=0 的种子不是无用，是探针没覆盖到它们。补上一副"看摄食主题的眼镜"，看它们是否立刻重获价值。
+</div>
+
+<h2>一、更深一层根因</h2>
+<div class="card">
+<p>§4S34 说"探针只有 3 个主题太窄"。这轮再挖一层，根因是<b>词表与探针双重错位</b>：</p>
+<ul>
+<li><b>词表错位</b>：<code>tagbook</code> 只有 <b>11 个 tag</b>（rsi/memory/workflow/archive/l3_independence/self_evo/tool_evo/canary/safety/finance/philosophy），而种子自带 tags 有 <b>20+ 个</b>（metacognition/curriculum/coevo/agency/negotiation/communication… 都不在 tagbook）；<code>_tags_of</code> 只看 direction 文本，看不懂种子自带的丰富标签。</li>
+<li><b>探针错位</b>：原 heldout 探针只有金融/哲学/安全 3 主题，恰好是 tagbook 里种子<b>最少命中</b>的 3 个。</li>
+</ul>
+<p class="warn">两错叠加 → 14 个种子里只有 F12 靠"可证伪标尺"偶然命中哲学探针，其余全 Δ=0。这不是资源无用，是测量工具放错了地方。</p>
+</div>
+
+<h2>二、关键决策：并列注入，不改原判据</h2>
+<div class="card">
+<p>改 <code>ATTRIBUTION_PROBES["heldout"]</code> 会直接动 <code>self_modify</code> 的注册门槛（<code>attribution_ok</code> 用默认探针算），风险高、测试语义会漂移。所以走<b>并列注入</b>：</p>
+<table>
+<tr><th>改动</th><th>内容</th><th>影响面</th></tr>
+<tr><td>新增 <code>COVERAGE_PROBES</code></td><td>7 个探针，命中 rsi/workflow/memory/archive/l3_independence/self_evo/tool_evo 七个高频摄食 tag</td><td class="ok">独立常量，原判据字节未动</td></tr>
+<tr><td><code>rx_revision_candidates</code> 加 <code>probes</code> 参数</td><td>默认 <code>COVERAGE_PROBES</code>；传 <code>ATTRIBUTION_PROBES</code> 复现原窄口径</td><td class="ok">只注入诊断器，不碰注册门槛</td></tr>
+<tr><td>CLI 加 <code>--probes coverage|original</code></td><td>双口径可切换对比</td><td class="ok">零判定逻辑</td></tr>
+</table>
+<p><b>硬证据</b>：<code>ATTRIBUTION_PROBES</code> 段 sha256 前后均为 <code class="mono">91f2d803…</code> —— 原判据与 self_modify 注册门槛<b>零改动</b>。</p>
+</div>
+
+<h2>三、双口径对比：错放的资源归位</h2>
+<div class="card">
+<div style="display:flex;gap:28px;flex-wrap:wrap;align-items:center">
+<div><div class="num" style="color:var(--warn)">1 / 14</div><div class="sub">original 探针（金融/哲学/安全）<br>唯一贡献者 F12</div></div>
+<div style="font-size:28px;color:var(--mut)">→</div>
+<div><div class="num">12 / 14</div><div class="sub">coverage 探针（七个摄食主题）<br>heldout_net 1 → 20</div></div>
+</div>
+<p>换一副探针，原本"全 Δ=0"的 13 个种子里 <b>12 个立刻有了边际贡献</b>（Δ=1~3）。用户的判断被机械证实：资源没错放，只是没被看见。</p>
+<p><b>剩下 2 个是真缺口，如实保留</b>：<span class="tag">F11 direction 仅抽到 general</span><span class="tag">F12 需哲学探针才命中</span>——这两个不是探针分配问题，是种子自身表征或探针覆盖的真空，不强行归因。</p>
+</div>
+
+<h2>四、验收（七门全过）</h2>
+<div class="card">
+<table>
+<tr><th>门</th><th>判据</th><th>结果</th></tr>
+<tr><td>G1 最小改动</td><td>diff 仅 1 常量 + 1 参数 + CLI 开关；版本 7.5.0</td><td class="ok">PASS</td></tr>
+<tr><td>G2 重获区分度</td><td>original 1/14（F12）、coverage 12/14、候选=[F11,F12]，双口径可切换</td><td class="ok">PASS</td></tr>
+<tr><td>G3 原判据零改动</td><td>ATTRIBUTION_PROBES 段 sha256 前后一致；self_modify 门槛零影响；测试断言仍过</td><td class="ok">PASS</td></tr>
+<tr><td>G4 五项负向自咬</td><td>空注册→空 / 只含F12+original→贡献者 / 篡改F01→Δ=2 / 双口径1→12 / 空探针→贡献者归零</td><td class="ok">PASS（5/5）</td></tr>
+<tr><td>G5 全量测试</td><td><code>python3 -m pytest</code></td><td class="ok">1773 passed</td></tr>
+<tr><td>G6 权威一致</td><td>CONSISTENT / drifts=[]；两哈希、注册表哈希均未动</td><td class="ok">PASS</td></tr>
+<tr><td>G7 诚实边界</td><td>coverage_warning + is_drop_verdict=false + based_on 齐全</td><td class="ok">PASS</td></tr>
+</table>
+<p class="warn"><b>两处 selftest 构造瑕疵（如实记录，内核逻辑未动）</b>：① G7b 初用 coverage 口径断言 F12 是贡献者，但 coverage 下 F12 Δ=0 → 改用 original 口径；② G7e 初用"无关文本"探针想让贡献者归零，但 <code>_tags_of</code> 对无 tagbook 命中的文本返回兜底 <code>general</code>，恰与 F11 匹配 → 改用空探针列表。两处都是验收构造错，与 H07/B3 同类陷阱。</p>
+</div>
+
+<h2>五、边界与处置</h2>
+<div class="card">
+<ul>
+<li><b>补的是眼镜，不是判据</b>：给诊断器换一副看摄食主题的探针，内核判据与注册门槛零改动；不声称已实现真实任务收益验证。</li>
+<li><b>Δ 仍是 tag 词集覆盖</b>：不是任务收益；探针文本改了结论就会变——G7e 已证。</li>
+<li><b>真正的下一层</b>：F11/F12 的 Δ=0 提示——要么给 tagbook 补上 metacognition/agency/communication 等主题词（让它看得懂种子自带标签），要么给种子 direction 补表征。那会碰 <code>_tags_of</code> 词表本体，风险更高，需另行裁定。</li>
+<li>新编号 2610.09430 仍待用户裁定是否入表（本项未入表）。</li>
+</ul>
+</div>
+
+<div class="foot">
+零权威态副作用：result.json=<span class="mono">0f3ccb13…</span>、constitution.json=<span class="mono">fe56291b…</span>、runtime_policy=<span class="mono">88858ee5…</span> 字节未动，verdict/l3/absolute/宪法未碰。全量测试 1773 全绿，预注册 SHA <span class="mono">cc94e984…</span> 完好。判定权归用户。留痕 §4S35。
+</div>
+
+</div></body></html>

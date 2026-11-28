@@ -1,0 +1,48 @@
+{
+  "schema": "prereg-pachocki-honesty-landing-v1",
+  "id": "prereg_pachocki_honesty_landing_20261128",
+  "locked_at_utc": "2026-11-28T02:32:00Z",
+  "locked_after_evidence": true,
+  "user_authorization": {
+    "verbatim": "按你的建议推",
+    "scope": "对 §4S43 OpenAI《Perplexity and Intelligence》查证报告末尾三条建议的落地授权：①加 V8 审计退化条文(引 Pachocki 原句为锚点) ②'诊断升格为门禁'补一个显式里程碑只读诊断 ③总账报告单列'单标尺 vs 多口径'张力节",
+    "judgment_owner": "用户",
+    "note": "授权的是只读诊断与纪律条文/文档,不是改判定核心;仍按预注册→最小改动→负向自咬→判定权归用户"
+  },
+  "evidence_locked_before_design": {
+    "note": "先读真实数据与源码再设计;三条建议各自确认有真实数据基础、无空转风险后才锁设计",
+    "rec_1_v8": "§4S43 一手回源 OpenAI 原文 Jakub Pachocki 2026-11-22 逐字句 'we should also expect further degradation in currently dominant forms of alignment auditing and further increases in evaluation and training awareness' 已坐实;纪律条文现为 V1–V7 共70行,追加 V8 不碰前七条",
+    "rec_2_gate_readiness": "实测四个诊断函数(eindependence/three_stage_recall/abstention/permutation_invariance)返回均含 is_gate_verdict=False 字段;工作区有45个 prereg_*.json;可做'诊断→门禁'显式里程碑只读探针,读真字段不硬编码",
+    "rec_3_tension": "总账报告现有六节,第五节'主题闭环'与第六节'边界与下一步'之间可插入张力节;OpenAI 主张单一 perplexity 标量 vs 本仓拒绝单一总分(三口径/coverage+original 双口径/GAP_INCONCLUSIVE)是哲学对照非同构"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "2d9ba6c6fbaa3a9857c318fa43b981afa6896d64e05f5595a7c74a9dbed34a1a",
+    "discipline_md_sha256_before": "26e98bdd39a881373773fc2e0174697a6200941b7eeb4d67417d667daf949be2",
+    "ledger_html_sha256_before": "aca48481ec40d8811f0cf0bedfc4f13ce99c1190be959a6cc17a5100b81faa32",
+    "result_json_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "authoritative_state_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "kernel_version": "7.5.0",
+    "tests_baseline": "1625 passed (历史1773为旧基线,测试集缩减过)"
+  },
+  "design": {
+    "approach": "三项全部只读/文档：①纪律条文追加 V8(审计退化与评测感知增强),标来源层级=原文直述(Pachocki原句)+本仓自有,不改 V1–V7 与共同边界的判定语义;②kernel.py 纯新增 gate_readiness_probe(probes=None) 只读诊断,读四个诊断函数的真实 is_gate_verdict 字段与预注册文件计数,报每诊断 DIAGNOSTIC_ONLY 状态、unauthorized_gate_detected(若有诊断 self-report 非 False 则告警)、escalation_requires_user=True,is_gate_verdict=False;③总账报告第五节后插新节'单标尺 vs 多口径',把 OpenAI 单一标尺主张与本仓多口径哲学并列为'对照/刻意选择',不声称同构",
+    "g2_gate_probe": "真数据下 gate_readiness_probe 应报:四个诊断全部 DIAGNOSTIC_ONLY、unauthorized_gate_detected=False、escalation_requires_user=True、is_gate_verdict=False;prereg_count 为真实文件数",
+    "g3_v8": "V8 引文与 §4S43 报告逐字一致,来源层级标注完整,不与 V1–V7 编号冲突",
+    "g3_tension": "张力节明确标'对照非同构',列出 Pachocki 自承四挑战(跨实验室难比/脱离可执行评测/不覆盖CoT/未知下界)与本仓多口径选择的对应"
+  },
+  "no_touch": [
+    "KERNEL_VERSION", "verdict/l3/absolute(L3字段)", "constitution", "result.json", "authoritative_state.json",
+    "self_modify accepted门槛", "_validate_policy / verify_external 判定体", "ATTRIBUTION_PROBES / COVERAGE_PROBES 字节",
+    "四个既有诊断函数体(eindependence/three_stage_recall/abstention/permutation_invariance)", "纪律条文 V1–V7 语义"
+  ],
+  "acceptance_gates": {
+    "G1_最小改动": "kernel.py diff 精确=1个纯新增函数;版本仍7.5.0;no_touch锚点未变;纪律条文仅追加1条(V8)+共同边界1句;总账仅插1节",
+    "G2_门禁就绪度有效性": "gate_readiness_probe 真数据下四诊断全 DIAGNOSTIC_ONLY、unauthorized_gate_detected=False、is_gate_verdict=False、prereg_count>0",
+    "G4_负向自咬": "注入 is_gate_verdict=True 的假诊断→unauthorized_gate_detected=True(证明非恒真、读真字段);空probes→空结构不崩;真数据→全部DIAGNOSTIC_ONLY",
+    "G5_权威态零副作用": "result.json=0f3ccb13…、authoritative_state=5f7a2584…、内核版本7.5.0、verdict=GAP_INCONCLUSIVE 全程未动",
+    "G6_零回归": "全量测试 1625 passed 与基线一致"
+  },
+  "failure_branch": "任一 gate 不过→用 pre_patch_s44 三份备份回滚,如实记self-bite,不迁就测试/不改判据/不升版本/不碰权威态",
+  "honesty": "①V8 是纪律条文非能力,引文逐字来自 OpenAI 一手;②gate_readiness_probe 只显式展示'诊断→门禁'的距离,不执行任何升格,本探针自身 is_gate_verdict=False,升格判定权永远归用户;③张力节标'对照非同构'——本仓拒绝单一总分是刻意哲学选择,不宣称优于/等同 OpenAI 单标尺;④全文零代码进判定核心",
+  "based_on": "OpenAI 官方《Perplexity and Intelligence》Jakub Pachocki 2026-11-22 原文对齐审计退化句 + 单一 perplexity 标尺主张 + 自承四挑战;经 §4S43 回源查证(作者/日期/五数字全对,两处转载附加标待核)"
+}

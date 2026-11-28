@@ -1,0 +1,59 @@
+{
+  "schema": "prereg-rx-revision-candidate-v1",
+  "id": "prereg_rx_revision_candidate_20261128",
+  "locked_at_utc": "2026-11-28T01:13:22Z",
+  "locked_after_evidence": true,
+  "evidence_locked_before_design": {
+    "note": "先读真实数据再设计(反面教训:不凭想象造诊断器)",
+    "seed_count": 14,
+    "all_registered": true,
+    "heldout_net_full": 1,
+    "leave_one_out_finding": "逐 seed leave-one-out: 仅 F12 有边际贡献(敲除后 heldout_net 1->0, Δ=1),其余13个 Δ=0",
+    "root_cause": "heldout 探针集只有3个主题(金融/哲学/安全),14 seeds 多在 rsi/memory/workflow;F12 靠'可证伪标尺'偶然命中哲学探针",
+    "tag_redundancy_signal": "F02/F07 的 tags 完全相同 (metacognition,rsi,self_evo) = 结构冗余真信号",
+    "honest_boundary": "Δ<=0 只=对当前3个窄 heldout 探针无边际贡献,不等于种子无用/该删;探针集窄本身是本仓配对验证的覆盖盲区,须随候选一起报出",
+    "skillcycle_basis": "arXiv:2610.09430 matched-pair gains/losses 净收益才入库 + KEEP/REWRITE/DROP/ADD + 能力变化使旧技能过期;本仓无真实任务环境,只借'候选先证伪再标注'的纪律形态"
+  },
+  "user_authorization": {
+    "verbatim": "好的，走一步",
+    "scope": "给 seed 加 RX 修订候选的只读配对诊断:leave-one-out 敲除 + tag 冗余,只记录'当前能力下哪些注册种子值得人工复核',不改注册表/不自动 DROP",
+    "judgment_owner": "用户",
+    "note": "授权的是上一条建议的最小动作(RX 修订候选只读诊断),不扩权到自动删种子/改 policy/改 self_modify accepted/改判定"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "bcf365ea00cfd155496868accf4af694dbd4ea1b6cc019db2290c82dcaec14c9",
+    "kernel_version": "7.5.0",
+    "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "policy_registered": 14,
+    "tests_before": 1773,
+    "verdict": "GAP_INCONCLUSIVE"
+  },
+  "change": {
+    "file": "life_kernel/kernel.py",
+    "add_function": "rx_revision_candidates(policy=None, log_path=None) 纯只读:对每个已注册 seed 做 leave-one-out,算 heldout_marginal(敲除损失Δ)+tag 冗余(twin/jaccard),输出 {registered_count,full_heldout_net,probe_topics,candidates[{id,delta,tag_twins,max_jaccard,basis}],contributors[],coverage_warning,is_drop_verdict:false,caveat}",
+    "expose": "不进 autonomous_agenda/execute_agenda 主流程(避免每次心跳跑14次 leave-one-out);作为独立只读诊断函数,按需由脚本/人工调用",
+    "report_script": "life_kernel/rx_diagnostic.py (NEW CLI, 只 import+print, 零判定逻辑)",
+    "no_touch": [
+      "KERNEL_VERSION",
+      "constitution.json",
+      "result.json",
+      "verdict/l3/absolute",
+      "runtime_policy.json 注册表",
+      "self_modify/accepted/attribution_check/explore_pool/propose/novelty_guard 本体",
+      "autonomous_agenda/execute_agenda 字段与选向",
+      "B1/B2/Cogentic/心跳内容判据字段"
+    ]
+  },
+  "acceptance_gates": {
+    "G1_最小改动": "diff 仅=新增 rx_revision_candidates + 新 CLI 脚本;KERNEL_VERSION 仍 7.5.0;no_touch 逐字未变;注册表字节未动",
+    "G2_诊断真实": "对真实14种子:contributors=[F12](Δ=1),candidates=其余13个(Δ=0),tag_redundancy 含 F02/F07 同 tags;与预注册取证一致",
+    "G3_不改判定": "policy.json/result.json/constitution.json 字节未动;verdict/l3/absolute 未碰;主流程函数体未变",
+    "G4_诚实标注": "输出含 is_drop_verdict=false + caveat(Δ<=0≠无用) + probe_topics(3个) + coverage_warning(探针窄)",
+    "G5_全量测试": "python3 -m pytest 全量 1773 passed",
+    "G6_权威一致": "authoritative_state verdict=CONSISTENT drifts=[];两哈希字节未动",
+    "G7_负向自咬": "①清空注册集合→candidates 空;②构造只含 F12 的注册子集→F12 变 contributor 且 candidates 空;③篡改某 seed direction 使其命中某探针 tag→该 seed Δ 变正退出候选;证明读真数据非硬编码"
+  },
+  "failure_branch": "任一 gate 不过 → 用 pre_patch/kernel.py.bak4 回滚 + 删除新脚本,如实记 self-bite,不迁就测试/不改判据/不升版本",
+  "honesty": "这是 SkillCycle matched-pair 纪律的只读同构借鉴(候选先证伪再标注),不是照搬其 DROP/自动回滚——本仓无真实任务环境,Δ 基于窄探针集的 tag 覆盖而非真实任务收益;明确 is_drop_verdict=false,保留 candidates 供人工复核,判定权归用户;不声称已实现技能过期检测;Ambient 恒 0,verdict 不动"
+}

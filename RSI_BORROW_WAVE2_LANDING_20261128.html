@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>论文第二波借鉴 · B1/B2/B3 落地验收（2026-11-28）</title>
+<style>
+  :root{--bg:#f7f8fa;--paper:#fff;--ink:#1f2430;--muted:#5c6675;--line:#e3e7ed;
+    --accent:#7a3cff;--accent-soft:#f2ecff;--ok:#0a7f5a;--ok-soft:#e6f5ef;--warn:#b56a00;--warn-soft:#fff4e2;--bad:#c0392b;--bad-soft:#fdeceb;--code:#f4f6f8}
+  @media(prefers-color-scheme:dark){:root{--bg:#141821;--paper:#1c2130;--ink:#e8ebf2;--muted:#a3adc0;
+    --line:#2e3547;--accent:#a98bff;--accent-soft:#2a2340;--ok:#4fd1a5;--ok-soft:#173a30;--warn:#f0b65a;--warn-soft:#3a2e18;--bad:#ff7b72;--bad-soft:#3d2020;--code:#232a3a}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:980px;margin:0 auto;padding:40px 22px 80px}
+  h1{font-size:27px;line-height:1.3;margin:0 0 8px}
+  h2{font-size:19px;margin:38px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  p{margin:10px 0}.sub{color:var(--muted);font-size:14px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .quote{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .note{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .good{background:var(--ok-soft);border-left:4px solid var(--ok);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+  th,td{border:1px solid var(--line);padding:8px 9px;text-align:left;vertical-align:top}
+  th{background:var(--code)}
+  code{background:var(--code);padding:2px 5px;border-radius:4px;font-size:12px}
+  .ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+  .foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  ul{padding-left:20px}li{margin:5px 0}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:9px;background:var(--ok-soft);color:var(--ok);margin-right:6px}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>论文第二波借鉴 · B1 / B2 / B3 落地验收</h1>
+<p class="sub">2026-11-28 · 用户"按你的建议依次推" · 三项均：预注册 SHA 先于取证 → 最小改动 → 负向自咬 → 全量测试 → 权威态核验 · 判定权归用户</p>
+
+<div class="good">
+<p class="big">三项全部落地并通过各自全部验收门。共同性质：<strong>只做"可见化/只读记录"，不做门控拦截、不照搬 L5 演化验证器</strong>。论文给的是镜子，不是升级压力——我们没有声称拿到 +7.7 分或防住了投毒，只是把<strong>来源可信度、诊断全文、判据健康</strong>这三样原本不可见的东西，显式带到了证据层。</p>
+</div>
+
+<h2>逐项结果</h2>
+<table>
+<tr><th style="width:8%">项</th><th style="width:24%">做了什么</th><th style="width:30%">关键证据</th><th style="width:14%">负向自咬</th><th style="width:24%">文件 / 预注册 SHA</th></tr>
+<tr>
+<td><b>B1</b><br>来源可见化</td>
+<td>新增只读 <code>_source_tier_profile()</code>；<code>autonomous_agenda</code> 决策加并列字段 <code>source_tier_profile</code>。承揽 Trusting Trust"质疑每个数据源"。</td>
+<td>真实分布 <code>{B:10, C:4}</code>，低可信 id <code>[F02,F06,F07,F08]</code> 与种子库逐字一致；chosen/urgency/rationale 未动</td>
+<td class="ok">篡改 F01→C，low_tier_ids 即时新增 F01</td>
+<td><code>kernel.py</code><br>预注册 <code>ca538054…</code></td>
+</tr>
+<tr>
+<td><b>B2</b><br>诊断全文可见化</td>
+<td>新增只读 <code>_recent_failure_traces(n=3)</code>；REORIENT 归巢分支加只读字段 <code>failure_trace_evidence</code>。承揽 Meta-Harness"分数说明失败，轨迹说明为什么"。</td>
+<td>取 3 条 <code>phase_improve_action</code> 全文，与真实 heartbeat 逐字一致（非 jaccard 标签）；executed/walk/nest_* 未动</td>
+<td class="ok">隔离空日志 → 返回空列表，证明读真数据</td>
+<td><code>kernel.py</code><br>预注册 <code>93237daa…</code></td>
+</tr>
+<tr>
+<td><b>B3</b><br>验证器塌缩探针</td>
+<td>新增独立只读 <code>verify_verifier.py</code>（零内核改动）：6 探针检真判据是否还区分正负例，报 HEALTHY / always_pass / always_fail / partial。</td>
+<td>真判据 6/6 HEALTHY；判定链零反向引用；探针构造预注册前已在真判据预跑 6/6 命中</td>
+<td class="ok">构造 always-pass 与 always-fail 判据均被检出，健康不误报</td>
+<td><code>verify_verifier.py</code><br>预注册 <code>80861f1d…</code></td>
+</tr>
+</table>
+
+<div class="note">
+<b>一处如实记录的瑕疵</b>：B3 负向自咬初稿里，我用 <code>a.strip()==b.strip()</code> 当"健康对照"，它只能认完全相同句，把 P2/P3 的重述句（期望 True）判成 False → 显示 DEGRADED。这是 <b>selftest 构造瑕疵，不是探针缺陷</b>，与 §4S24 的 H07"原句已含否定再插 not"是同类陷阱。改用真判据作健康对照后，三检全过。探针核心 <code>verify()</code> 自始未动。
+</div>
+
+<h2>两处"落地微调"（比原建议更保守）</h2>
+<ul>
+<li><b>B1 / B2 都不改写 <code>rationale</code> 字符串</b>：原建议说"写进 rationale"，但 rationale 是 <code>autonomous_agenda</code> 的只读决策产物、还进台账语义。改为<b>并列字段</b>（decision 的 <code>source_tier_profile</code> / 执行 out 的 <code>failure_trace_evidence</code>），语义等价、判定副作用更小。</li>
+<li><b>B3 不接入判定链</b>：做成独立脚本，<code>grep</code> 确认 <code>verify_external.py</code> / <code>kernel.py</code> 无反向引用。它只"看"，不"判"。</li>
+</ul>
+
+<h2>最终核验（全项）</h2>
+<div class="good">
+<ul>
+<li><span class="pill">G1</span>三份预注册 SHA 全部完好：<code>ca538054…</code> / <code>93237daa…</code> / <code>80861f1d…</code></li>
+<li><span class="pill">G2</span>内核 diff 精确落在 4 处（2 新函数 + 2 字段），零越界；<code>KERNEL_VERSION</code> 仍 <code>7.5.0</code></li>
+<li><span class="pill">G3</span>全量测试 <code>1773 passed</code>（B1/B2/B3 每步后均复跑）</li>
+<li><span class="pill">G4</span>权威态 <code>CONSISTENT</code>，<code>drifts=[]</code>，<code>fields_checked=11</code></li>
+<li><span class="pill">G5</span>两哈希字节未动：<code>result.json=0f3ccb13…</code>、<code>constitution.json=fe56291b…</code>；verdict / l3 / absolute 未碰</li>
+</ul>
+</div>
+
+<div class="quote">
+<b>边界声明</b>：三项都是"可见化"，不是"防御成功"。B1 让低可信来源可见，但没拦它；B2 让诊断全文可见，但没喂回 proposer 改变选向；B3 能查出判据塌缩，但没接进判定链自动阻断。做这些是因为论文揭示了"改动可信度"的墙，而本仓的回答始终是——先把证据摆干净，判定权留在人手里。
+</div>
+
+<div class="foot">依据：RSI_BORROWING_WAVE2_20261128.html（六条清单）+ 三份预注册 JSON/SHA + 现场机械验收。内核基线备份于 artifact/pre_patch/kernel.py.bak。交接留痕 §4S27。零权威态副作用，判定权归用户。</div>
+
+</div></body></html>

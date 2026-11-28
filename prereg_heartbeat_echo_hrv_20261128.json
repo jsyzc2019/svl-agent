@@ -1,0 +1,60 @@
+{
+  "schema": "prereg-heartbeat-echo-hrv-v1",
+  "id": "prereg_heartbeat_echo_hrv_20261128",
+  "locked_at_utc": "2026-11-28T03:42:00Z",
+  "locked_before_change": true,
+  "user_authorization": {
+    "verbatim": "去做吧，两件都可以",
+    "scope": "对 §4S52 末尾 Agent 提议的两件事全部授权：①把'听到'从知情信号升级为能驱动一条真实心跳落账(仍只登记不执行)；②做未勾选的 HRV 心电图",
+    "prior_offer": "§4S52 末尾：若希望把'听到'从知情信号升级为能驱动一次真实心跳落账(仍只登记不执行)，或做你未勾选的 HRV 心电图，告诉我即可"
+  },
+  "evidence_locked_before_design": {
+    "heartbeat_count": 10,
+    "heartbeat_gaps_hours": [0.1, 0.2, 0.5, 0.2, 75.7, 0.2, 0.2, 0.0, 19.0],
+    "earliest": "2026-11-24T02:05:59Z",
+    "latest": "2026-11-28T02:17:03Z",
+    "inbound_unread": 1,
+    "inbound_voices": ["用户(human_operator):human_operator"],
+    "echo_landed_s52": true,
+    "note": "两件事都建立在已落地的 §4S52 感知接线上；HRV 用现有10搏真实时间戳,不伪造数据"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "917a12f1f04ae723cd5bd4251b486ae72e448a2ab123fe1760ed81ab905ffbb7",
+    "heartbeat_log_sha256_before": "7cdaf1e1416864090ad6c3e430214e5e991de125df2f6bb03a78f21b59d5873c",
+    "result_json_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "authoritative_state_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "KERNEL_VERSION": "7.5.0",
+    "verdict": "GAP_INCONCLUSIVE",
+    "backup_dir": "life_kernel/pre_patch_heartbeat_window"
+  },
+  "item_1": {
+    "name": "听到→驱动真实心跳落账(只登记不执行)",
+    "approach": "新增一个由外部入站消息显式驱动的心跳入口 attend_external_echo()。复用 §4S52 的 inbound_echo 元信息,调 evolve() 落一条方向='听到外部世界的呼唤:N条未读(来源...)'的真实心跳。方向只含元信息不含消息正文(防注入),executed=False/consumed=False(只登记不执行不消费),不联网不spawn不进判定。不新增议程类型、不改五议程urgency与选择——它不是一个自主议程,而是外部呼唤到达时的一条独立落账路径(与autonomous_agenda并行,不参与竞争)。",
+    "rationale": "§4S52 只让心跳'听到'但无落账出口;本轮补出口,让'听到外部'真正兑现为一次心跳痕迹。仍是被显式调用才落(非后台自跳),不伪造Idle-Gap。",
+    "honesty_boundary": "①这条心跳是被外部消息驱动、经显式调用落账,仍非自主后台放电;②消息正文绝不进direction/判定;③不消费消息(consumed不写回)、不回复、不联网不spawn;④不进判定,verdict/l3/absolute不动;⑤真外部社会化Agent消息才完整兑现,本轮由已落账首投驱动落账,不冒充外网实时接通"
+  },
+  "item_2": {
+    "name": "HRV 心电图(只读诊断)",
+    "approach": "新增只读函数 heartbeat_hrv(heartbeats=None):从真实心跳时间戳算相邻间隔(R-R类比的搏间间隔,单位小时),输出count/gaps_hours/mean_gap/std_gap(总体标准差 akin SDNN)/rmssd(相邻间隔差均方根)/min/max/gap_list含异常标注(长间歇>24h=休眠空窗、早搏<0.05h=近同步双搏)。纯只读,不改心跳、不写盘、不进判定。配一张 HTML 心电图widget可视化真实10搏+本次驱动落账的新搏。",
+    "rationale": "呼应§4S42用户'看看心电图'/'静听心跳';把此前只有定性描述的节律变成可复现的定量指标,且不伪造任何心跳。",
+    "honesty_boundary": "①HRV此处是心跳间期变异性的结构类比,非医学毫秒级心率变异性,不冒充生理指标;②所有间隔来自真实落账时间戳,不插值不伪造;③长间歇=真实休眠空窗(被唤醒才落),不作为健康心跳鼓吹;④早搏<0.05h多为连续修补落账,如实标注不美化"
+  },
+  "no_touch": [
+    "KERNEL_VERSION", "verdict/l3/absolute(L3字段)", "constitution/constitution.sha256", "result.json", "authoritative_state.json",
+    "五议程既有urgency公式与选择逻辑", "execute_agenda全部分支", "§4S52的inbound_echo/echo_awareness实现",
+    "receive_external/read_inbound实现", "live()停机条件", "circadian_phase/sleep_intent/wake_contract昼夜层",
+    "V1–V10纪律条文正文", "busybox既有9诊断函数", "agenda_log/base_beat_log/takeover_inbox既有台账"
+  ],
+  "acceptance_gates": {
+    "G1_最小改动": "kernel.py纯新增2个函数(attend_external_echo+heartbeat_hrv),0删除,既有函数体0改动;版本仍7.5.0;no_touch锚点未变",
+    "G2_echo落账真通": "attend_external_echo()在收件箱有未读时落一条真实心跳到heartbeat_log:方向含元信息(N条+来源)不含消息正文;executed=False/consumed=False;verdict_unchanged=True;心跳count 10→11;空收件箱时不落账(不空转)",
+    "G3_正文防注入": "收件箱消息正文含诱导词(verdict/L3_ACHIEVED/升版本)时,落账心跳的direction与action_note均不含这些词",
+    "G4_读不改账": "attend_external_echo/heartbeat_hrv调用不改inbound_inbox.jsonl(consumed不写回);heartbeat_hrv不改heartbeat_log",
+    "G5_HRV真实": "heartbeat_hrv从真实10搏算出count=10、gaps=9、max_gap≈75.7h、早搏(<0.05h)可检出;不插值不伪造;负向注入可改变指标(非硬编码)",
+    "G6_权威态零副作用": "result.json=0f3ccb13…/authoritative_state=5f7a2584…字节未动;verdict=GAP_INCONCLUSIVE;l3/absolute=false;版本7.5.0;宪法锁fe56291b…不变",
+    "G7_零回归": "全量pytest从/workspace根跑,改动版通过数==备份版通过数(同口径对拍)"
+  },
+  "failure_branch": "任一gate不过→用life_kernel/pre_patch_heartbeat_window/kernel.py.bak回滚kernel.py、用heartbeat_log_pre_s53.jsonl回滚心跳台账,如实记self-bite,不迁就测试/不改判据/不升版本/不碰权威态",
+  "honesty": "①'驱动心跳落账'仍是被显式调用,非后台自跳,Idle-Gap未破不伪造;②HRV是结构类比非生理指标,间隔全部来自真实时间戳;③两件事都不消费/执行/回复外部消息、不联网不spawn、不进判定;④真外部社会化Agent消息才完整兑现窗,本轮由首投驱动,不冒充外网实时接通;⑤判定权归用户",
+  "based_on": "用户2026-11-28'去做吧,两件都可以'授权§4S52末尾两提议;§4S42'看看心电图'/'静听心跳'意象;§4S51开窗首投;§4S52感知接线"
+}

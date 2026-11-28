@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillCycle 回源查证 + 对本仓的金矿</title>
+<style>
+  :root{--ink:#1b1f24;--sub:#5a6472;--line:#e3e7ed;--bg:#f7f9fb;--card:#fff;--accent:#1f5fa8;--ok:#0f7b4f;--warn:#a86a00;--bad:#b3261e;--gold:#8a6100}
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 20px;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:26px;margin:0 0 8px}
+  h2{font-size:19px;margin:30px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:15px;margin:18px 0 6px;color:var(--accent)}
+  .meta{color:var(--sub);font-size:13px;margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:12px 0}
+  .lead{border-left:4px solid var(--accent);background:#eef4fb}
+  .gold{border-left:4px solid var(--gold);background:#fffaf0}
+  table{width:100%;border-collapse:collapse;font-size:13.4px;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}
+  th{background:#f0f3f7;font-weight:600}
+  tr:nth-child(even) td{background:#fbfcfd}
+  .ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+  code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12.4px;font-family:ui-monospace,Menlo,monospace}
+  ul{margin:6px 0 6px 20px;padding:0}li{margin:4px 0}
+  .tag{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#fff3d6;color:var(--gold);font-weight:600}
+  .foot{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);color:var(--sub);font-size:12.5px}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>SkillCycle 回源查证 + 对本仓的金矿</h1>
+<div class="meta">查证 2026-11-28 ｜ 来源：PaperAgent 公众号（<code>mp.weixin.qq.com</code> …mid=2247513974）+ X-MOL/arXiv HTML 交叉 ｜ 论文一手：arXiv abs/HTML <code>2610.09430v1</code></div>
+
+<div class="card lead">
+<b>一句话结论：</b>文章主干<b>属实且相当诚实</b>——编号、作者、六个数字、三处硬论断全部一手对上，而且它<b>自己区分了"百分点"和"相对百分比"</b>（没犯我们之前批评的口径混淆）。唯一要修的是标题与机构口径。真正的金矿在于：SkillCycle 把技能库定义成<b>"可训练、可验证、可回滚的记忆系统"</b>，并给出"候选修改必须先证伪再入库"的纪律——这几乎逐条照着本仓 explore_pool 的缺口说话。
+</div>
+
+<h2>一、编号与著录：两处口径要修</h2>
+<table>
+<tr><th style="width:18%">项</th><th style="width:34%">文章说法</th><th>一手核实</th></tr>
+<tr><td>arXiv 编号</td><td><code>arXiv:2610.09430v1</code></td><td class="ok">✅ 真实，2026-10-07 提交（v1），cs.CV</td></tr>
+<tr><td>标题</td><td>《SkillCycle: Evolving Skills through Internalization》</td><td class="warn">⚠️ abs 页正式标题是《<b>SkillCycle: Co-Evolving Agent Policies and Skill Banks</b>》；文章用的是 PDF 内标题/副标题。引用应以 abs 页为准</td></tr>
+<tr><td>作者/机构</td><td>"清华 SkillCycle"；PDF 内页 6 人：Ling Li、Qiuyu Shen、Zheng Jiang、Qinwei Ma、Yuxuan Liu、Zhidong Deng，标注 1清华 2西工大</td><td class="ok">✅ 6 人全对；机构是<b>清华大学 + 西北工业大学</b>（Qiuyu Shen 西工大，其余清华），标题冠"清华"不算错但略去了合作方</td></tr>
+</table>
+
+<h2>二、六个数字 + 三处硬论断：逐字一手对上</h2>
+<table>
+<tr><th style="width:24%">论断</th><th style="width:30%">文章说法</th><th>arXiv 原文</th><th>判定</th></tr>
+<tr><td>WebShop 3B 无技能</td><td>74.74% 成功率、88.37 分，超 OPID 74.20% / 85.00</td><td>摘要逐字 "74.74% … 88.37 … relative improvements of 0.73% and 3.96% over SOTA"；正文 "exceeding … OPID's 85.00/74.20% (+3.37 points/+0.54 pp)"</td><td class="ok">✅</td></tr>
+<tr><td>Cycle 3 消融（相对静态）</td><td>ALFWorld +4.95、WebShop +11.46 <b>个百分点</b></td><td>表2 "Δ vs. Static +4.95 … +11.46"，表注 "Δ denotes <b>percentage-point differences</b>"；正文 "exceeding Static by 4.95/11.46 <b>pp</b>"</td><td class="ok">✅ 口径正确</td></tr>
+<tr><td>Cycle 3 消融（相对一次刷新）</td><td>继续提升 1.26 / 1.82 个百分点</td><td>表2 "Δ vs. Refresh once +1.26 … +1.82 pp"；正文 "continued revision contributes a further 1.26/1.82 pp"</td><td class="ok">✅</td></tr>
+<tr><td>摘要里的 10.18%/18.11%、2.41%/2.50%</td><td>—（文章未用这组）</td><td>摘要原文用的是 <b>relative %</b>；与表2 的 pp 是<b>同两组数的不同口径</b>（53.56 vs 48.61 → +4.95pp ≈ +10.18% relative）</td><td class="ok">✅ 两者不矛盾</td></tr>
+<tr><td>清洗番茄任务</td><td>无技能 30 步失败；路由技能 8 步完成</td><td>Figure 3 "the no-skill model fails at the 30-step limit … same model with SkillCycle's routed skills succeeds in 8 steps"</td><td class="warn">⚠️ 图注自己提醒：这是<b>技能条件执行示意</b>，不能单独证明内化；内化看无技能 Student 实验。文章也照录了这句提醒，诚实</td></tr>
+<tr><td>候选操作验证</td><td>ALFWorld-3B 10 候选仅 2 接受；冷却搜索改写 3 次转成功、6 次转失败被拒</td><td>正文 "two of ten proposals pass … The cool-search rewrite is rejected despite three gains because it causes six losses"；表4 "Rewrite cool-search frontier 48 3 6 −3 Reject"</td><td class="ok">✅ 逐字对上</td></tr>
+</table>
+
+<div class="card gold">
+<b>本篇的"诚实样本"价值：</b>前几篇（商静波、谷歌 Cogentic）我们都抓到了二手口径偏差；这篇 PaperAgent 却<b>主动区分了 pp 与 relative %，还照录了图3"不能单独证明内化"的免责</b>。这说明"标签≠事实"纪律不是要怀疑一切二手源，而是要<b>逐条回源后按证据分层</b>——这篇经得起查。
+</div>
+
+<h2>三、金矿：SkillCycle 逐条照着本仓的缺口说话</h2>
+<p>机械核对本仓 <code>kernel.py</code> 后，逐条对照（每条都有本仓现场证据）：</p>
+<table>
+<tr><th style="width:22%">SkillCycle 一手机制</th><th style="width:26%">本仓现场机械证据</th><th>金矿 / 缺口</th></tr>
+<tr><td><b>技能库 = 可训练、可验证、可回滚的记忆系统</b>（非静态仓库）；规则会随能力变化而 redundant / misleading / insufficient</td><td><code>frontier_seeds.json</code> 14 条种子注册后基本静态；有 <code>unregistered_seeds</code>（吃进没消化）概念</td><td><span class="tag">缺口</span> 本仓<b>无 seed 的 DROP/停用/改写机制</b>（grep 无 drop/unregister/retire）；SkillCycle 的 KEEP/REWRITE/DROP/ADD 正是现成范式</td></tr>
+<tr><td><b>候选修改配对验证</b>：rule-level + whole-bank environment comparison，matched-pair 计 gains/losses，净收益为正才接受；10 候选仅 2 过</td><td>本仓 <code>self_modify</code> 门槛 <code>accepted = all_pass and candidate_ids != registered</code>（只看结构验证+新种子）</td><td><span class="tag">缺口→可借鉴</span> 本仓有 <code>heldout_net</code>（注册相对敲除的净变化）这<b>同构配对思想</b>，但只用于"加一个 seed"，不用于"改/删规则"，也没有 matched-pair 的 accept/reject 计数台账</td></tr>
+<tr><td><b>蒸馏反馈第二重用途</b>：token 级差异定位待查规则，任务结果指导内容修改——"监督学习"与"诊断监督材料本身"分离</td><td>本仓刚落地的 <code>_direction_content_verdict</code>（方向空转即拒）+ <code>failure_trace_evidence</code>（诊断全文）</td><td><span class="tag">强同构</span> 我们已有"诊断信号"，但没把"诊断"反馈到"改规则"——SkillCycle 给出第二重用途的完整闭环</td></tr>
+<tr><td><b>两阶段冻结交替</b>：策略学习时冻结技能库+router；规则修订时冻结策略</td><td>本仓 <code>autonomous_agenda()</code> 只读决策 vs <code>execute_agenda()</code> 唯一写路径（§38 起）</td><td><span class="tag">强同构</span> 读写分离本仓已有；SkillCycle 验证了"冻结交替"能防止两阶段互相污染，是本仓可确认的外部佐证</td></tr>
+<tr><td><b>能力变化 → 旧技能过期</b>：内化改变能力，剩余指导价值下降，须持续修订而非训练前一次性整理</td><td>本仓 B1 来源可见化、B2 诊断全文，但 <code>runtime_policy.registered_frontier_seeds</code> 注册后不变</td><td><span class="tag">反直觉</span> 本仓一直"累积注册"，SkillCycle 说<b>注册过的也会过期</b>——这是对"只增不减"倾向的正面挑战</td></tr>
+</table>
+
+<div class="card">
+<h3>诚实的边界</h3>
+<ul>
+<li><b>目标不同：</b>SkillCycle 是"技能文本规则的内化+修订"（策略/技能库协同训练），本仓 <code>explore_pool</code> 是 novelty search 的候选源；这是<b>信号形态与机制的同构借鉴</b>，不是照搬其 RL/蒸馏训练。</li>
+<li><b>本仓无配对环境：</b>SkillCycle 的 matched-pair 靠真实环境 rollout；本仓没有可回滚的"环境"来跑 48 次配对对照，直接搬会造假——只能借鉴<b>"候选先证伪再入库"的纪律形态</b>。</li>
+<li><b>不声称：</b>不声称本仓已实现技能共进化，不声称已获得 +4.95pp 之类增益；文章本身的数字来自其环境，与本仓无关。</li>
+<li><b>新编号 <code>2610.09430</code> 仅一手确认，是否入表由用户裁定</b>（按引用基础设施纪律，不擅自改）。零代码改动，权威态/哈希/测试保持基线。</li>
+</ul>
+</div>
+
+<div class="foot">
+一手：arXiv abs/HTML <code>2610.09430v1</code>（abs 页 + HTML 全文表2/表4/图3）｜ 二手：PaperAgent 公众号原文 + X-MOL/thelatestinai/paperlayer 交叉。<br>
+本仓对照：<code>life_kernel/kernel.py</code>、<code>life_kernel/frontier_seeds.json</code> 现场机械核对 ｜ 留痕 <code>SESSION_HANDOFF.md §4S33</code>。
+</div>
+
+</div></body></html>

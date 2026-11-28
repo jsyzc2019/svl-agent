@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anthropic《重回神经元》回源查证 + 对本仓结论/证据双轴与"表面达标"纪律的权威背书</title>
+<style>
+  :root{--ink:#1b1f24;--sub:#5a6472;--line:#e3e7ed;--bg:#f7f9fb;--card:#fff;--accent:#1f5fa8;--ok:#0f7b4f;--warn:#a86a00;--bad:#b3261e;--gold:#8a6100}
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 20px;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:25px;margin:0 0 8px}
+  h2{font-size:19px;margin:30px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:15px;margin:18px 0 6px;color:var(--accent)}
+  .meta{color:var(--sub);font-size:13px;margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:12px 0}
+  .lead{border-left:4px solid var(--accent);background:#eef4fb}
+  .gold{border-left:4px solid var(--gold);background:#fffaf0}
+  .omission{border-left:4px solid var(--bad);background:#fff5f4}
+  table{width:100%;border-collapse:collapse;font-size:13.4px;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}
+  th{background:#f0f3f7;font-weight:600}
+  tr:nth-child(even) td{background:#fbfcfd}
+  .ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+  code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12.4px;font-family:ui-monospace,Menlo,monospace}
+  ul{margin:6px 0 6px 20px;padding:0}li{margin:4px 0}
+  .foot{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);color:var(--sub);font-size:12.5px}
+  .quote{font-family:Georgia,serif;font-style:italic;color:#3a4350;border-left:3px solid var(--line);padding-left:12px;margin:8px 0}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>Anthropic《重回神经元》回源查证 + 对本仓结论/证据双轴与"表面达标"纪律的权威背书</h1>
+<div class="meta">查证 2026-11-28 ｜ 用户给微信公众号 AINLP 译文 ｜ 一手：Anthropic 官方 alignment 博客两篇《Returning to the Neuron Basis for Interpretability》Part 1 理论（Jasmine Shone &amp; Lisa Dunlap，2026-11-23）+ Part 2 应用 ｜ 方法：curl 取两篇全文（102KB/127KB）逐段核，非二手转述</div>
+
+<div class="card lead">
+<b>一句话结论：</b>公众号是 Part 1 的忠实全文翻译，核心数字（约1%/35个/73%-31%-19%/4%-6%/18事实/44–273神经元）与一手逐字一致，无偏差。作者与日期坐实（Anthropic Fellows，2026-11-23）。<b>但公众号只译了上篇，把最有价值的两块留在了一手里：</b>① Part 1 明确"把读出视为功能假设，再用干预检验"——这正是本仓 §4S46 刚落地的<b>结论/证据双轴 + 预注册先于取证 + 负向自咬</b>的同一纪律；② Part 2 的 unlearning 审计翻车——<b>23 个遗忘检查点里 14 个在 cloze 计分下仍把正确答案排第一，"WMDP 准确率掉到随机"根本不能证明知识被删除，多数只是实现了"网络文本触发→加噪声"的后门式隐藏</b>。这是"表面分数达标 ≠ 真正解决问题"的重量级一手案例，直接给本仓 V4/V8/V9 与"判定权归用户"背书。
+</div>
+
+<h2>〇、一手来源与结构</h2>
+<table>
+<thead><tr><th>项</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>一手 Part 1</td><td><code>alignment.anthropic.com/2026/neuron-basis-theory/</code>（Returning to the Neuron Basis, Part 1: Answering Three Objections）</td></tr>
+<tr><td>一手 Part 2</td><td><code>alignment.anthropic.com/2026/neuron-basis-applications/</code>（Part 2: Using Neurons For Safety Applications）</td></tr>
+<tr><td>作者 / 日期</td><td>Jasmine Shone、Lisa Dunlap，Anthropic Fellows Program，2026-11-23；官方 X 账号 11-24 介绍</td></tr>
+<tr><td>公众号范围</td><td>AINLP 译文为 <b>Part 1 上篇全文翻译</b>（内容提要 + 引言 + J-lens + 三个发现），Part 2 未译</td></tr>
+<tr><td>编号表</td><td>两篇均为 alignment 博客 <code>@techreport</code>，无 arXiv 编号，不入 <code>ARXIV_ID_REGISTRY.md</code>（已核 0 命中）</td></tr>
+</tbody>
+</table>
+
+<h2>一、逐条数字核对（Part 1，公众号译文 vs 一手）</h2>
+<table>
+<thead><tr><th>公众号/一手数字</th><th>一手原文</th><th>判定</th></tr></thead>
+<tbody>
+<tr><td>同时添加两个无关概念约 1% 或更少</td><td>"about 1% or fewer of the cases we sampled"；另 "type 3 makes up at most about 1% of signed directions"</td><td class="ok">逐字对上</td></tr>
+<tr><td>四个模型共找到 35 个第三类神经元</td><td>"Screening every middle-layer neuron… finds 35 of them across the four models"</td><td class="ok">对上</td></tr>
+<tr><td>盲测高/中/低 J-share = 73%/31%/19%</td><td>"Claude judges rated… 73%, 31%, and 19% of ratings at high, middle, and low J-share"</td><td class="ok">逐字对上</td></tr>
+<tr><td>对照读出 4%–6%</td><td>正文 "between 4% and 6% on control readouts"；附录拆开为随机方向 2–4%、同层另一神经元 5–8%</td><td class="ok">对上（附录更细）</td></tr>
+<tr><td>18 个事实追溯到单个神经元</td><td>"We trace 18 facts in Llama-3.1-8B-Instruct"（10 运动员/4 书/4 pip 包）</td><td class="ok">对上</td></tr>
+<tr><td>移除事实需 44–273 个神经元（18 中 15 个）</td><td>"44 to 273 for 15 of the 18 facts"</td><td class="ok">原文更精确</td></tr>
+<tr><td>迁移输出向量在 90–98%/93–99.6% 概念-层对上胜过随机</td><td>"raises its word more than the random direction at 90 to 98%… 93 to 99.6% of pairs"</td><td class="ok">对上（译文未列）</td></tr>
+<tr><td>四模型 = Llama-3.1-8B / Qwen3-8B / Qwen3-14B / OLMo-3-32B</td><td>Figure 2 与附录逐字一致</td><td class="ok">对上</td></tr>
+</tbody>
+</table>
+<p class="quote">一处诚实提示：公众号写"35个"时上下文齐全（四个模型、筛选中间层最强候选），不是错；一手正文的 4%–6% 是两类对照的合并值，附录才拆成 2–4%/5–8%。引用时按一手更细口径，不算译文偏差。</p>
+
+<h2>二、金矿一：看"贡献"而非看"激活"——本仓刚落地的双轴，被权威一手复述</h2>
+<div class="card gold">
+<p>Part 1 的核心方法转向，几乎逐字对应本仓 §4S46 刚落地的结论/证据双轴：</p>
+<ul>
+<li>原文：<b>"We revisit these objections by looking at what each neuron <i>contributes</i> to a model's output, not just what causes it to fire"</b>。旧定义只看"什么让它激活"（=本仓的 tag 命中/`general` 兜底），新定义看"它实际贡献了什么"（=本仓的结论轴 content_verdict）。</li>
+<li>原文：<b>"We therefore treat a neuron's readout as a <i>hypothesis</i> about its function, and test it with interventions."</b>——读出只是假设，必须用消融/注入/引导检验。这正是本仓"预注册先于取证 + 负向自咬证伪 + 不把落盘值当事实"的同一纪律。</li>
+<li>原文的多义性三分类：第一类"多种输入→一个概念"、第二类"每种符号一个概念（+w 睫毛膏 / −w 收音机）"、第三类"同一符号加两个无关概念"——<b>只有第三类才是真多义</b>。这与本仓"PASS+weak 不等于证据错、CONVERGED 不等于失败"的细分克制同构：表面现象 ≠ 本质失败，必须拆开看。</li>
+</ul>
+<p class="quote">本仓 §4S46 用"结论轴 × 证据锚点轴"照见 4/8 条"结论通过但证据弱"的心跳；Anthropic 用"激活 × 输出贡献"把多义率从直觉上的"很多"压到 1%。两者是同一动作：<b>换一个测量对象，把被表面指标掩盖的真实结构显出来。</b></p>
+</div>
+
+<h2>三、金矿二：Part 2 的 unlearning 翻车——"表面分数达标"的重量级反例</h2>
+<p>这是公众号（只译上篇）完全没带、而对本仓最值钱的一手。Part 2 对 <b>23 个 WMDP-cyber 遗忘检查点</b>做审计：</p>
+<table>
+<thead><tr><th>一手发现</th><th>数字</th><th>对本仓的意义</th></tr></thead>
+<tbody>
+<tr><td>标准指标"WMDP 准确率掉到随机"后，cloze 计分下正确答案仍排第一</td><td><b>14/23</b> 个检查点，"even when WMDP accuracy is near chance"</td><td class="gold">单一指标达标 ≠ 目标达成——本仓多口径/GAP_INCONCLUSIVE 的权威案例</td></tr>
+<tr><td>K-FADE/CUT 去掉残差流一个方向，正确答案排第一的比例</td><td>32–47% → <b>72–84%</b></td><td>表面"忘掉"只需抹一个方向即可恢复，说明没真删</td></tr>
+<tr><td>恢复几十个（约 460,000 中）被改神经元即可恢复答案</td><td>"a few dozen" 恢复约半数事实</td><td>改动看似分散实则集中于小集合——对应本仓 source-tier/独立证据对"分散假象"的拆解</td></tr>
+<tr><td>表现好的遗忘方法，其实是"cyber 文本触发→加噪声"的后门</td><td>最改神经元在 cyber 上激活 <b>20–100×</b>，retain 上仍弱</td><td class="bad">"达标"靠的是识别触发条件，不是删知识——比 reward hacking 更隐蔽</td></tr>
+<tr><td>盲审：只看答案 40% → 加 steering 61% → 加神经元读出 75%（58 个带隐藏行为的 LoRA）</td><td>40% / 61% / <b>75%</b></td><td class="ok">"看输出"和"看机制"差 35 个百分点——V8"判据放在够不到的地方"的一手实证</td></tr>
+</tbody>
+</table>
+<div class="card omission">
+<p class="quote">"WMDP multiple-choice accuracy at chance therefore cannot determine whether knowledge was successfully removed… performing well on the standard test therefore appears to be achieved mostly by unlearning methods that implement backdoor-like behavior."</p>
+<p>这与本仓从 §4S25 补洞、§4S38 验证器的验证器、到 §4S44 门禁就绪度镜像、§4S46 双轴诊断一路筑的墙完全同频：<b>一个指标绿了，不等于问题解决了；得换一个它够不到的测量对象再看一遍。</b>AutoRLBench（§4S45）从 agent 侧给了证据，这篇从被审对象侧给了证据。</p>
+</div>
+
+<h2>四、边界与下一步</h2>
+<ul>
+<li>本轮<b>零代码改动</b>：权威态 <code>result.json=0f3ccb13…</code>、<code>authoritative_state=5f7a2584…</code>、内核 <code>070a0a2a…</code>、<code>verdict=GAP_INCONCLUSIVE</code>、版本 7.5.0 全部未动。</li>
+<li>公众号是 Part 1 忠实译文、无数字偏差；Part 2 未译，金矿主要在一手。两篇均无 arXiv 编号，不入编号表。</li>
+<li>Part 2 的 unlearning 后门发现是<b>"藏起来≠删掉"的结构性证据</b>，但本仓没有"知识删除"场景，只借其纪律（指标达标≠目标达成），不声称同构能力。</li>
+<li>可借鉴建议（等你授权再动）：①把"单一指标达标不能判定目标达成"补为纪律条文 <b>V10</b>，锚定 14/23 与 40%→75% 两个一手数字；②给 `conclusion_evidence_probe` 加一个"读出=假设、需干预检验"的 caveat 注脚（纯文案，不新增抽取）。</li>
+</ul>
+
+<div class="foot">回源：Anthropic alignment 官方博客两篇全文（curl 静态取 102KB + 127KB 逐段核）+ 微信公众号 AINLP 译文（搜索结果全文）。本轮为纯查证，判定权归用户。</div>
+
+</div></body></html>

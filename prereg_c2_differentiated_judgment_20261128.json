@@ -1,0 +1,63 @@
+{
+ "schema": "prereg-c2-differentiated-judgment-v1",
+ "id": "prereg_c2_differentiated_judgment_20261128",
+ "locked_at_local": "2026-11-28T12:14:00+08:00",
+ "locked_before_change": true,
+ "user_authorization": {
+  "verbatim": "补C2",
+  "scope": "承接§4S56——补齐 echo_responsiveness_probe 的 C2(可检验判断)缺口。§4S56末如实暴露C2(差异化判断)仍未补,用户裁定补上"
+ },
+ "evidence_locked_before_design": {
+  "criterion_source": "audit_agent_dialogue/external_dialogue_s54.json Q2逐字(pllns_6165762d…)",
+  "C2_verbatim": "形成可检验的判断：说明为何采纳、拒绝、暂缓或要求更多信息；理由应与风险、权限、证据有关，而不是永远落在'我不能确定'。",
+  "site_survey": {
+   "C2_gap": "echo_awareness仅honesty恒定常数'不消费不执行不进判定',对所有输入一视同仁;probe硬编码judge_constant=True→C2=False",
+   "meta_available": "read_inbound每条消息带source_tier/nonce/evidence_class/sender/channel元信息(正文message绝不读)",
+   "inbox": "2条:WINDOW-OPEN(human_operator,trusted)+EXT-DIALOGUE-S54(external_agent_unverified)"
+  },
+  "self_bite_on_s56_criterion": "诚实发现C2若只靠'写一段看似判断的文字'也能骗过——必须机械判据:每条输入须有disposition(采纳/拒绝/暂缓/要求更多信息)且reason_text须由该条输入的元信息(source_tier/evidence_class/revoked/enabled)确定性派生,不同元信息须产生不同disposition或reason;硬编码judge_constant=True的旧实现必须替换为真读逐条判断"
+ },
+ "baseline": {
+  "kernel_py_sha256_before": "58ecc82f0255328da417e1e1865a3cc8a4fec56a6027e6c4f0607a7e83cfdacd",
+  "result_json_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+  "authoritative_state_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+  "constitution_sha256": "2ad148c79918d65ea4519ccbca05bc0a5f967596fc37a528c28eddd930b953c3",
+  "KERNEL_VERSION": "7.5.0",
+  "backup": "life_kernel/pre_patch_heartbeat_window/kernel_before_c2.py"
+ },
+ "design": {
+  "principle": "对每条外部输入形成可审计的差异化判断(采纳/拒绝/暂缓/要求更多信息);理由确定性绑定到该条输入的权限/证据/撤销元信息;正文绝不读;判断只进echo_awareness知情层,不改agenda选择/不进判定/不执行",
+  "mechanism": [
+   "新增函数 _external_judgments(log_path,policy_override):逐条读read_inbound(unread_only)的元信息,为每条消息算disposition与reason_code: ①nonce∈revoked→REJECT(已撤销,拒绝) ②source_tier∉TRUSTED→DEFER(来源未授权,暂缓待授权) ③enabled=false→DEFER(通道关闭) ④trusted+enabled+非撤销→ATTEND(授权来源,采纳进受限关注通道);另设ASK_MORE保留给无证据档",
+   "每条judgment字段:nonce/sender/source_tier/evidence_class/disposition/reason_code/reason_text;reason_text由disposition+source_tier+evidence_class确定性格式化(如'来源未授权(source_tier=external_agent_unverified)→暂缓,待人工授权'),绝不拼入message正文",
+   "echo_awareness新增judgments列表(逐条差异化判断)+judgment_summary(disposition计数+是否全一致)+reasons_variety(不同reason_code数);保留honesty常数不变(向后兼容)",
+   "probe的C2判据替换硬编码judge_constant=True:真实分支judge_has_reason=每条judgment都有disposition+reason_text且reason_text含该条元信息锚(source_tier/evidence_class/reason_code);judge_constant=(judgments非空且所有disposition与reason_code全相同)——即真实台账2条不同来源(trusted/unverified)→disposition不同→constant=False→C2=True;单条输入也按元信息给具体reason(非笼统),不因条数少而判constant",
+   "probe的C2_evidence输出逐条disposition/reason_code/source_tier摘要,可外部检验证明'哪条输入导致哪个判断'",
+   "verdict映射:真实受限通道且C1..C5全真→升为ENGAGED_DISCERNMENT(有差异化判断的受限互动,5/5);C2仍False但C4True→保持BOUNDED_UPDATABLE(4/5,§4S56兼容);不冒充无界GENUINE_INTERACTION",
+   "C2判断只进echo_awareness与probe知情层:不新增execute_agenda分支、不改任何agenda urgency/选择、不改ATTEND_EXTERNAL、不消费不执行不回复不联网不spawn、不进判定"
+  ],
+  "disposition_map_locked": {
+   "REJECT": "nonce在revoked_nonces→拒绝(已撤销)",
+   "DEFER_UNAUTH": "source_tier∉TRUSTED_SOURCE_TIERS→暂缓(来源未授权)",
+   "DEFER_DISABLED": "enabled=false→暂缓(通道关闭)",
+   "ATTEND": "trusted+enabled+未撤销→采纳(进受限关注通道)",
+   "ASK_MORE": "有输入但证据档不足需补证→要求更多信息(本仓当前元信息不足时不用,保留枚举)"
+  },
+  "no_touch": [
+   "KERNEL_VERSION(仍7.5.0)、verdict/l3/absolute与result.json/authoritative_state.json、constitution",
+   "五议程(REORIENT/DIGEST/PRUNE/CONSOLIDATE/SEEK)+ATTEND_EXTERNAL既有urgency公式与选择逻辑",
+   "execute_agenda既有分支行为、_external_attention/§4S56受限通道实现",
+   "receive_external/read_inbound实现、live()停机条件、昼夜层、V1–V10纪律正文、busybox既有9诊断函数",
+   "所有台账内容、message正文绝不进入任何judgment/action/urgency/decision/probe判定"
+  ],
+  "acceptance_gates": {
+   "G1_最小改动": "kernel.py纯新增(_external_judgments+echo_awareness两字段+probe C2替换),0删除既有函数体;版本仍7.5.0;no_touch锚点哈希未变",
+   "G2_真实结论": "真实台账2条不同来源→C2=True,judgments逐条:WINDOW-OPEN=ATTEND(trusted),EXT-DIALOGUE=DEFER_UNAUTH(unverified);disposition不同→reason_constant=False;verdict=ENGAGED_DISCERNMENT(5/5)",
+   "G3_判据真失败": "注入仅unverified→全DEFER_UNAUTH→constant=True→C2=False→verdict=BOUNDED_UPDATABLE或CAUTIOUS;注入trusted+unverified→disposition不同→C2=True;注入撤销nonce→REJECT;注入enabled=false→DEFER_DISABLED;强注入echo_mode仍走旧分支不破坏test_genuine",
+   "G4_防注入与只读": "外部消息正文含诱导词不进judgment任何字段;调用前后台账字节不变;is_gate_verdict=False;verdict_unchanged=True",
+   "G5_权威态零副作用": "result/authoritative_state/constitution.sha256字节未动;verdict=GAP_INCONCLUSIVE;l3/absolute=false;版本7.5.0",
+   "G6_零回归": "全量pytest从/workspace根跑:移走3个判据测试文件后改动内核通过数==备份内核通过数;加回后=基线+新增数"
+  },
+  "failure_branch": "任一gate不过→用life_kernel/pre_patch_heartbeat_window/kernel_before_c2.py回滚,如实记录失败,不迁就测试不抹证据"
+ }
+}

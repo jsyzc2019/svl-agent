@@ -1,0 +1,57 @@
+{
+  "schema": "prereg-probe-coverage-expand-v1",
+  "id": "prereg_probe_coverage_expand_20261128",
+  "locked_at_utc": "2026-11-28T01:18:00Z",
+  "locked_after_evidence": true,
+  "evidence_locked_before_design": {
+    "note": "先读真数据再设计；用户洞察'只有错放地方的资源'直接对应本发现",
+    "root_cause_deeper": "tagbook 仅11个tag,种子自带tags 20+(metacognition/curriculum/agency/negotiation…不在tagbook),_tags_of 只看 direction 文本；原 heldout 探针3主题(金融/哲学/安全)与摄食主题几乎不重叠",
+    "verification": "实跑覆盖探针(命中 rsi/workflow/memory/archive/l3_independence/self_evo/tool_evo 七个 tagbook tag):贡献者从 1/14(原探针) 变为 12/14(覆盖探针),full heldout_net 1->20;仅 F11(direction 抽出 general,无 tagbook tag)+F12(哲学探针专属)仍 Δ=0",
+    "honest_boundary": "换探针让 12 个种子重获边际贡献=证明'资源没错放,是探针没覆盖';但 Δ 仍基于 tag 词集覆盖非真实任务收益;F11/F12 的 Δ=0 是真信息缺口,不强行归因"
+  },
+  "user_authorization": {
+    "verbatim": "值得走。你前面的论证再次印证\"只有错放地方的资源\"。",
+    "scope": "给配对验证补上覆盖摄食主题的探针,让放错地方的种子被看见;通过并列注入实现,不改原判据/注册门槛",
+    "judgment_owner": "用户",
+    "note": "授权的是上一条'要真正判断过期先给配对验证补覆盖摄食主题的探针'的下一层;用户洞察'只有错放地方的资源'=对本轮方向的明确背书;不扩权到改 verdict/判定态/自动删种子"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "04288e1c81dd56ec9c04fd9bab07d4118eeda6a39b6ecfaaa7f640b03682db30",
+    "rx_diagnostic_py_sha": "70eb998a86358d041461b6bb378076fdb5e04f1e014535e65cebb744bd801af7",
+    "kernel_version": "7.5.0",
+    "result_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "constitution_sha256": "fe56291b3aa036b6c14664bf7c6dc855dc2bf945fccb7ed8633c9dcd7e6b254e",
+    "tests_before": 1773,
+    "verdict": "GAP_INCONCLUSIVE",
+    "original_probe_contributors": "1/14 (仅F12)"
+  },
+  "design": {
+    "approach": "并列注入,不改原判据(关键:改 ATTRIBUTION_PROBES['heldout'] 会动 self_modify 注册门槛 attribution_ok,风险高且测试语义漂移)",
+    "add_constant": "COVERAGE_PROBES = {'heldout':[...7个覆盖摄食主题的探针...]}  —— 并列常量,与 ATTRIBUTION_PROBES 独立",
+    "edit_function": "rx_revision_candidates(policy=None, log_path=None, probes=None): probes 默认 COVERAGE_PROBES;内部 attribution_check(recent,ids,probes={'target':...,'transfer':...,'heldout':probes['heldout']})",
+    "edit_cli": "rx_diagnostic.py 增加 --probes coverage|original 开关,默认 coverage;打印探针命中 tag 与双口径对比",
+    "no_touch": [
+      "KERNEL_VERSION",
+      "constitution.json",
+      "result.json",
+      "verdict/l3/absolute",
+      "runtime_policy 注册表",
+      "ATTRIBUTION_PROBES 本体",
+      "attribution_check/_validate_policy/self_modify/propose/explore_pool/novelty_guard 本体",
+      "autonomous_agenda/execute_agenda 字段与选向",
+      "B1/B2/Cogentic/心跳内容判据字段",
+      "rx_revision_candidates 的 leave-one-out 算法(只换探针来源)"
+    ]
+  },
+  "acceptance_gates": {
+    "G1_最小改动": "diff 仅=新增 COVERAGE_PROBES 常量 + rx_revision_candidates 加 probes 参数 + CLI 加开关;KERNEL_VERSION 7.5.0;no_touch 逐字未变",
+    "G2_重获区分度": "默认 coverage 探针下 contributors>=12/14(实跑12),candidates=[F11,F12];原 --probes original 口径仍得 contributors=[F12] 1/14,双口径可切换",
+    "G3_原判据零改动": "ATTRIBUTION_PROBES 字节未动;attribution_check 默认行为未变;self_modify(_validate_policy) 用默认探针,注册门槛零影响;测试对 attribution 的断言仍过",
+    "G4_负向自咬": "①--probes original 复现 1/14 ②--probes coverage 得 12/14 ③篡改 COVERAGE_PROBES 某探针文本→对应 seed Δ 变化(证明读真探针非硬编码) ④空注册→候选空",
+    "G5_全量测试": "python3 -m pytest 全量 1773 passed",
+    "G6_权威一致": "authoritative_state CONSISTENT drifts=[];两哈希字节未动;runtime_policy 注册表未写",
+    "G7_诚实边界": "输出含 coverage_warning(Δ基于tag覆盖非任务收益,F11/F12 真缺口) + is_drop_verdict=false + based_on 标注"
+  },
+  "failure_branch": "任一 gate 不过→用 kernel.py.bak5 回滚 + rx_diagnostic.py 版本比对回滚,如实记 self-bite,不迁就测试/不改判据/不升版本",
+  "honesty": "这是给诊断器补一副'看摄食主题的眼镜',不是改内核判据本身——原 heldout 探针与 self_modify 注册门槛零改动;贡献者 1->12 证明资源没错放只是探针没覆盖,不声称已实现真实任务收益验证;Δ 仍基于 tag 词集;F11/F12 的 Δ=0 如实保留为真缺口;Ambient 恒 0,verdict 不动,判定权归用户"
+}

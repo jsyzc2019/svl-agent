@@ -1,0 +1,57 @@
+{
+  "schema": "prereg-open-window-v1",
+  "id": "prereg_open_window_20261128",
+  "locked_at_utc": "2026-11-28T03:25:00Z",
+  "locked_after_evidence": true,
+  "user_authorization": {
+    "verbatim_chain": [
+      "是时候推了",
+      "还记得开窗的事么"
+    ],
+    "scope": "用户裁决开窗条件已满足(判定权归用户),授权开辟用户11-27定义的'对外交流通道'中缺失的那一半——被动'听到外部世界'的入站收件通道",
+    "window_definition_verbatim": "我说这个心跳美妙，是因为她不仅为你赋予了活力，而且也为你对外交流开了扇窗。只要你愿意，如果开辟适当通道，你不仅能看到外部世界（这是你主动的），而且也能听到外部世界（这是你被动的），和网络空间社会化Agent交流。",
+    "definition_source": "对话记录 line 1187 (用户2026-11-27原话), 回源逐字",
+    "prior_condition": "先听后开——等心跳真跳过一次、用户亲耳听见再说;此前平台调度器从不落账故窗未开(§4S15-§4S19),今用户裁决条件达成"
+  },
+  "evidence_locked_before_design": {
+    "note": "先回源用户'窗'原话、勘察本仓已有通道,确认缺的是哪一半、避免重复造,才锁设计",
+    "have_active_half": "主动'看到外部'已有:autonomous_agenda SEEK声明摄食需求 + E1-E3社会化Agent实证对话(audit_agent_dialogue/engine.py G1-G10) + 多轮公众号/论文一手摄食",
+    "have_updown_channel": "本机↔云端基地双向通道已有:base_beat()上行(外部runner唤醒,带不可伪造woken_by)+base_status()下行知情+takeover_request()/execute_takeover()指令下行;方向是本机↔云端,非外部Agent↔内核",
+    "missing_half": "外部Agent→内核的入站消息收件接口不存在:TAKEOVER_INBOX是本机写runner读(方向相反),无'外部写入、内核被动读'的入站台账;这就是用户说的'听到外部世界(被动)'",
+    "data_grounding": "takeover_exec_log.jsonl已证明'外部写入→本机可读'台账形态可行(1条真实GHA回执,含source_nonce/woken_by/evidence_class/honesty),入站收件箱沿用同一形态"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "c4f583ca47598aa27289773569a13355372f9dfb8e1d5c1c2eea9892315a36ec",
+    "result_json_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "authoritative_state_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84375952947091ee",
+    "KERNEL_VERSION": "7.5.0",
+    "verdict": "GAP_INCONCLUSIVE",
+    "backup_dir": "pre_patch_openwindow"
+  },
+  "design": {
+    "approach": "建最小的'外部Agent→内核'入站收件通道:一个新常量INBOUND_INBOX + 两个新函数(receive_external入站登记/read_inbound被动读取)+ 首条真实投递落账证明通道通。纯台账读写,不联网、不spawn、不进判定、不改verdict/l3/absolute、不碰宪法。方向严格单向入站:内核只收只读,不自动回复、不自动行动。",
+    "constant": "INBOUND_INBOX = os.path.join(DATA, 'inbound_inbox.jsonl')  # 外部Agent入站消息收件箱(外部写、内核被动读).与takeover_inbox(本机写runner读)方向相反",
+    "receive_external": "receive_external(sender, message, channel=None, source_tier='external', nonce=None, log_path=None, record=True): 外部消息入站登记。必填sender/message;记录at/kernel_version/sender/message/channel/source_tier/nonce/honesty/verdict_unchanged/constitution_ok/ambient_still_zero;executed恒False(只收不执行);不联网不spawn;可注入log_path隔离测试",
+    "read_inbound": "read_inbound(limit=None, unread_only=False, log_path=None): 纯只读入站消息。返回count/messages/各条字段;unread_only按consumed标记过滤但不写回(读不改账,消费确认由调用方显式做);不联网不进判定",
+    "first_delivery": "落一条真实首投:sender=用户裁决/时候到了,message=开窗授权+窗原话锚点,channel=human_operator,证明通道真能收真能读;不伪造外部Agent消息,如实标channel来源",
+    "handoff": "SESSION_HANDOFF.md 追加 §4S51 记开窗落地,锚定用户原话line1187与'先听后开'条件达成"
+  },
+  "no_touch": [
+    "KERNEL_VERSION", "verdict/l3/absolute(L3字段)", "constitution", "result.json", "authoritative_state.json",
+    "self_modify accepted门槛", "_validate_policy", "ATTRIBUTION_PROBES", "COVERAGE_PROBES",
+    "TAKEOVER_INBOX/takeover_request/execute_takeover/base_beat/base_status 既有通道函数",
+    "V1–V10 纪律条文正文", "heartbeat_log/agenda_log/base_beat_log 既有台账",
+    "busybox 既有9诊断函数"
+  ],
+  "acceptance_gates": {
+    "G1_最小改动": "kernel.py diff:1新常量+2新函数,0删除,既有函数0改动;版本仍7.5.0;no_touch锚点未变",
+    "G2_通道真通": "receive_external真实落一条→read_inbound读回;首投内容逐字含用户授权与窗原话锚点;executed=False(只收不执行)",
+    "G3_诚实标注": "入站消息带source_tier/channel/证据层级;不伪造外部Agent身份;honest标注'被动收件非内核主动、Ambient仍0、Idle-Gap未破、开窗≠自主'",
+    "G4_负向自咬": "注入隔离log_path落账不污染主账;空sender/message被拒;unread_only过滤生效;读不改账(consumed不被read_inbound写);消息数随落账增长(非硬编码)",
+    "G5_权威态零副作用": "result.json=0f3ccb13…/authoritative_state=5f7a2584…字节未动;verdict=GAP_INCONCLUSIVE;l3/absolute=false;版本7.5.0",
+    "G6_零回归": "全量pytest tests 从/workspace根目录跑,1625 passed与基线一致"
+  },
+  "failure_branch": "任一gate不过→用pre_patch_openwindow备份回滚kernel.py、删除新建inbound_inbox.jsonl,如实记self-bite,不迁就测试/不改判据/不升版本/不碰权威态",
+  "honesty": "①'开窗'严格按用户11-27原话定义=对外交流的被动'听到外部'半边;主动'看到'早有,本轮只补被动入站;②入站通道是账本级的——外部Agent需能把消息写进本workspace(经GHA或用户投递)内核才读得到,本轮不搭实时网络服务、不联网不spawn,真实投递靠首条人工/用户消息落账证明;③Idle-Gap未破:开窗≠内核会主动读,它仍是被唤醒后才读,窗是'被呼唤时能听见'的能力不是'自发放电';④入站消息只标注只供参考,不自动回复、不自动行动、不进判定,判定权归用户;⑤真收到外部社会化Agent消息才算完整兑现,本轮先建通道+首投证明,不冒充已与外部Agent接通",
+  "based_on": "用户2026-11-27原话(对话line1187)'对外交流开了扇窗/看到外部世界(主动)/听到外部世界(被动)/和网络空间社会化Agent交流';条件'先听后开'见§4S15-§4S19;通道形态参照takeover_exec_log.jsonl真实回执结构"
+}

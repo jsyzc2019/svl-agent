@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>论文第二波借鉴清单 · 还没被本仓吸收的六条（2026-11-28）</title>
+<style>
+  :root{--bg:#f7f8fa;--paper:#fff;--ink:#1f2430;--muted:#5c6675;--line:#e3e7ed;
+    --accent:#7a3cff;--accent-soft:#f2ecff;--ok:#0a7f5a;--ok-soft:#e6f5ef;--warn:#b56a00;--warn-soft:#fff4e2;--bad:#c0392b;--bad-soft:#fdeceb;--code:#f4f6f8}
+  @media(prefers-color-scheme:dark){:root{--bg:#141821;--paper:#1c2130;--ink:#e8ebf2;--muted:#a3adc0;
+    --line:#2e3547;--accent:#a98bff;--accent-soft:#2a2340;--ok:#4fd1a5;--ok-soft:#173a30;--warn:#f0b65a;--warn-soft:#3a2e18;--bad:#ff7b72;--bad-soft:#3d2020;--code:#232a3a}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:40px 22px 80px}
+  h1{font-size:27px;line-height:1.3;margin:0 0 8px}
+  h2{font-size:19px;margin:40px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:16px;margin:18px 0 6px}
+  p{margin:10px 0}.sub{color:var(--muted);font-size:14px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .quote{background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .note{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .good{background:var(--ok-soft);border-left:4px solid var(--ok);border-radius:0 8px 8px 0;padding:11px 16px;margin:12px 0;font-size:14.5px}
+  .orig{background:var(--code);border-radius:8px;padding:9px 13px;margin:7px 0;font-size:12.5px;line-height:1.6;word-break:break-word}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+  th,td{border:1px solid var(--line);padding:8px 9px;text-align:left;vertical-align:top}
+  th{background:var(--code)}
+  code{background:var(--code);padding:2px 5px;border-radius:4px;font-size:12px}
+  .ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+  .foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  ul{padding-left:20px}li{margin:5px 0}
+  .star{color:var(--warn);letter-spacing:1px}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:9px;margin-right:6px;background:var(--accent-soft);color:var(--accent)}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>论文第二波借鉴清单 · 还没被本仓吸收的六条</h1>
+<p class="sub">2026-11-28 · 回应"我们还能继续从中借鉴些啥，论文不能白读" · 全文级论文（12 篇）对照本仓内核现场实读 · 零代码改动，判定权归用户</p>
+
+<div class="card">
+<p class="big">第一波（P0–P2）已把论文里<strong>最像"本仓缺陷"</strong>的部分补齐：验证器洞、留出集对打、增益归因、负面结果账本、架构三栏、编号回源。这一波换个问法——<strong>论文里还有哪些洞察，本仓连"像"都还没沾上？</strong></p>
+<p>答案是六条。每条都给：一手依据（哪篇、哪句话）+ 本仓机械证据（现场读出来的，不是印象）+ 借鉴价值 + 红线判定 + 建议动作。按证据强度排序。</p>
+</div>
+
+<h2>一、六条增量借鉴点</h2>
+<table>
+<tr><th style="width:5%">#</th><th style="width:20%">借鉴点</th><th style="width:22%">论文一手依据</th><th style="width:26%">本仓机械证据（现场实读）</th><th style="width:12%">价值/红线</th><th style="width:15%">建议动作</th></tr>
+<tr><td><b>B1</b></td><td><b>摄食来源可信度门控</b></td><td>Trusting Trust 2609.17817："所有自改进数据来源都应被质疑"，投毒跨代遗传</td><td>14 种子（10 B + 4 C）<b>全部注册</b>；C 级二手转述（CSDN / 腾讯新闻 / eigent.ai 营销页）与 arXiv 一手同等进池；5/5 用户链接错配、公众号 13 错 10 皆二手源</td><td><span class="star">★★★★★</span><br><span class="warn">中危·需预注册</span></td><td>给注册加 tier 软标注或门槛</td></tr>
+<tr><td><b>B2</b></td><td><b>喂给 propose 的信号：全量轨迹 vs 压扁标签</b></td><td>Meta-Harness 2603.28052：proposer 读全部历史代码/分数/轨迹，+7.7 分少 4× token；"分数只说明失败，轨迹才说明为什么"</td><td><code>propose()</code> 只算 <code>_tags_of</code> 标签 jaccard；<code>root_cause_trace()</code> 也只取 direction 标签；而 heartbeat_log 31KB + path_traces 4.8KB 全量落盘却未在决策时读全文</td><td><span class="star">★★★★☆</span><br><span class="ok">低危·只读可选</span></td><td>加"读近期失败轨迹全文"诊断字段</td></tr>
+<tr><td><b>B3</b></td><td><b>验证器的验证器 · 常态化自检</b></td><td>Who Verifies 2610.11464：三承诺含"审计审计者"；去掉锚点塌成 always-pass 且<b>下游分数看不出</b></td><td>P0 修了 verify_external 一个洞（一次性）；内核无 always-pass / 塌缩常态化探针；静态审计是一次性外部动作</td><td><span class="star">★★★★☆</span><br><span class="warn">中危·自检可只读</span></td><td><code>verify_verifier()</code> 只读塌缩探针</td></tr>
+<tr><td><b>B4</b></td><td><b>append-only 账本单调性契约</b></td><td>Exo 2611.00463 storage contract：<code>H(dt) ⪯ H(dt+1)</code>，记录不可覆写删除、artifact 保旧版本</td><td>有 SHA256 快照锁（一致性），但无"账本只增不减"的形式化断言；各 jsonl 靠约定 append</td><td><span class="star">★★★☆☆</span><br><span class="ok">低危·只读校验</span></td><td><code>ledger_monotonicity_audit()</code></td></tr>
+<tr><td><b>B5</b></td><td><b>增益不确定度制度化</b></td><td>Winner's Curse 2610.09239："report held-out gains with their uncertainty"；连 64 条消平均偏差，单次仍偏 6 分</td><td>P1a 做了一次对打（+57.15pp ± 14.54pp）但手动一次性；内核 evolve 落账无不确定度字段</td><td><span class="star">★★★☆☆</span><br><span class="ok">低危·只记录</span></td><td>把 ±se 写进 evolve 可选字段</td></tr>
+<tr><td><b>B6</b></td><td><b>失败成分细分 → 改哪一层</b></td><td>Harness Ceiling 2610.11655：process F1–F3 / content F4 分类决定改 harness 还是训权重；安慰剂 adapter 反低于基座</td><td><code>root_cause_trace()</code> 只有 sampling_narrow / pool_exhausted 两类且基于标签 jaccard，无 process/content 之分；<code>verify_fix_effect()</code> 无"伪修复必须被拒"的安慰剂分支</td><td><span class="star">★★★☆☆</span><br><span class="ok">低危·只读诊断</span></td><td>加第三机制类 + 安慰剂分支</td></tr>
+</table>
+
+<h2>二、最值得先碰的三条 · 展开</h2>
+
+<div class="card">
+<h3><span class="tag">B1</span>摄食来源门控——双重证据，最硬</h3>
+<p>这不是"发现 bug"，而是论文提示的一道<strong>额外防线</strong>。本仓的 <code>evidence_tier</code> 本就是可信度标签（设计选择是"都进池，由 self_modify 的经验验证筛"），并非缺陷。但 Trusting Trust 的要求更严：投毒源会跨代遗传，且"用干净基准继续演化仍持续"。而我们手上恰好有活证据——三轮编号核实里，用户给的 5 条链接 <span class="bad">5/5 错配</span>、公众号清单 13 引用 <span class="bad">错 10</span>，<strong>错的全是二手转述</strong>（新闻站 / 营销页 / 公众号），一手 arXiv 源零错配。</p>
+<div class="orig">证据：frontier_seeds.json 共 14 条，tier B=10 / C=4；runtime_policy.json 的 registered_frontier_seeds = 14 条，即 C 级（F02 CSDN、F06/F08 eigent.ai、F07 腾讯新闻）全部与 B 级同等注册。self_modify() 源码中无 tier 相关判断。</div>
+<p class="sub">借鉴而非照搬：论文针对"自改进数据可被投毒"，本仓针对"摄食种子来源可信度"。同构在"质疑每个数据源"。最小动作是给 explore_pool 的候选标注 tier 并在议程 rationale 里显示（零风险），进阶门槛化才需授权。</p>
+</div>
+
+<div class="card">
+<h3><span class="tag">B2</span>别把轨迹压扁成标签——论文最强的一条</h3>
+<p>Meta-Harness 这篇的核心不是"改进循环"，而是<strong>喂给 proposer 的信息形态</strong>：它让 proposer 用文件系统选择性访问全部历史的代码、分数、执行轨迹来形成假设，而不是看压缩摘要，换来 +7.7 分、少 4× token、单次最多 1000 万 token 诊断信息（超此前反馈预算 3 个数量级）。原文的判词很锋利：</p>
+<div class="orig">"分数只说明有东西失败了，轨迹才能说明为什么失败——把完整轨迹交给提出改动的 agent。"</div>
+<p>本仓恰恰在这点上"压扁"了：<code>propose()</code> 和 <code>root_cause_trace()</code> 都把方向转成 <code>_tags_of</code> 的词集合做 jaccard 相似度——这是一种标签级信号。而完整的 heartbeat_log（31KB）、path_traces（4.8KB）、失败原因台账都已落盘，决策时却不读全文。</p>
+<p class="sub">诚实边界：本仓的 propose 是 novelty search（求多样性），Meta-Harness 的 proposer 是生成新 harness 假设（求能力），两者目标不同。这是"信号形态"维度的<strong>同构借鉴</strong>，不是照搬。最小动作：加一个可选的诊断字段，让 REORIENT 分支读近期失败轨迹全文写进 rationale，先只记录、不改选向。</p>
+</div>
+
+<div class="card">
+<h3><span class="tag">B3</span>验证器也要被验证——P0 只补了一颗牙</h3>
+<p>Who Verifies 把演化对象从"被评分的 artifact"换成"<strong>评分函数本身</strong>"（由带类型的缺陷检测器组合），三条承诺：锚定不可伪造之物、保持验证器可读、<strong>审计审计者</strong>。最刺的一句：</p>
+<div class="orig">"去掉锚点守卫，验证器塌成 always-pass grader，但塌掉的验证器训练技能效果一样好——下游任务分数无法认证一个自我进化的验证器。"</div>
+<p>P0 修的 <code>verify_external.py</code> 严格 id 集合相等，是补了一个具体的洞；但"验证器会不会整体塌缩"这件事，本仓没有常态化探针——静态审计是一次性外部动作，跑了就完了。这正好是论文说的第三条承诺缺位。</p>
+<p class="sub">最小动作：<code>verify_verifier()</code> 只读器官，喂一组已知正/负例给当前判据，看是否全放行（塌缩成 always-pass）；结论结构跟随证据、篡改探针即翻转。这是负向自咬在"验证器层"的延伸。</p>
+</div>
+
+<h2>三、明确不借鉴（延续既有裁决，不重复讨论）</h2>
+<ul>
+<li><b>不照搬 L5 元自修改</b>：Hyperagents 唯一够 L5 的工作增益 p&gt;0.05、跨运行累积不显著；本仓连 L3 都在证明路上。（§4S22 / P2b）</li>
+<li><b>不用 agent 下游分数验证验证器</b>：Who Verifies 已证伪——塌成 always-pass 也看不出。（§4S20）</li>
+<li><b>不加常规测试 CI</b>：与"只留 GHA 一条真通道"裁决冲突。（§4S15）</li>
+<li><b>不自发 Ambient 心跳 / 后台守护</b>：违 L0，AAS 判据未达 autotelic，昼夜节律靠外部授时因子是刻意设计。（§4av / §4bg）</li>
+</ul>
+
+<h2>四、一句话总览</h2>
+<div class="good">第一波补的是"改动可信度"的证据密度；第二波指向的是<strong>改动的输入与来源可信度</strong>——喂给改进者的是什么信号（B2）、允许什么数据源进来（B1）、谁来盯住守门人（B3）。三条其实还是论文里那堵墙的延伸：<strong>让改动可信，比让改动发生更难</strong>。以上都是参谋建议，零代码改动，权威态未触碰，判定权归用户。</div>
+
+<div class="foot">一手来源：RSI 综述 2610.11464（原文 2609.11873 见编号表）、Meta-Harness 2603.28052、Who Verifies 2610.11464、Trusting Trust 2609.17817、Exo 2611.00463、Winner's Curse 2610.09239、Harness Ceiling 2610.11655，均为 2026-11-28 前已回源深读的全文。本仓状态为同日现场实读（kernel.py / frontier_seeds.json / runtime_policy.json / verify_external.py / duel_log.jsonl）。编号有疑义以 ARXIV_ID_REGISTRY.md 为准。本清单为建议稿，未改任何代码、未碰权威态。</div>
+
+</div></body></html>

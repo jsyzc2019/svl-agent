@@ -1,0 +1,49 @@
+{
+  "schema": "prereg-guard-honesty-landing-v1",
+  "id": "prereg_guard_honesty_landing_20261128",
+  "locked_at_utc": "2026-11-28T03:18:00Z",
+  "locked_after_evidence": true,
+  "user_authorization": {
+    "verbatim": "可以推",
+    "scope": "对 §4S49 GUARD(arXiv:2611.23476)查证报告末尾三条建议的落地授权：①regression_vs_gap_probe()(新破坏vs未解决分类诊断)；②拒绝台账去重清单；③弃权率显式指标",
+    "source_section": "§4S49"
+  },
+  "evidence_locked_before_design": {
+    "note": "先回源深读 GUARD 一手全文、再探查本仓真实数据落点，确认三条都有据、无空转，才锁设计",
+    "rec_1_regression_vs_gap": "correction_ledger.KNOWN_BAD_CHAINS(B01 detected_unrecorded/B02 record_unpropagated/B03 tamper/B04 broken_chain)=被抓到的'新破坏'; 71个audit_*/result.json中 verdict 含 INCONCLUSIVE/PARTIAL 的=未解决gap; 两类真数据可分",
+    "rec_2_dedup": "KNOWN_BAD_CHAINS 中 B01/B02/B03 的 detect 同为 ['kb_count'] 但 type 各异——按 detect 去重会误合并三类不同坏链，正好演示 GUARD gated buffer 拒绝台账防重复的同构",
+    "rec_3_abstention_zero": "permutation_invariance_probe all_decision_layers_invariant=True(真零转移); abstention_probe UNKNOWN=1、conclusion_evidence_probe UNKNOWN_EVIDENCE=1(弃权态); 三态齐全可区分'真零'vs'弃权式零'vs'未检测'"
+  },
+  "baseline": {
+    "kernel_py_sha256_before": "8f3d3689882409d176bf01cc0e4bad7a2a8d41eb7c203f1eaf81d4b55f637773",
+    "discipline_md_sha256_before": "4b84a3f05f7a5ed57976eec53d12f488a7257bee4d04cd7c744b7c715a62d0f8",
+    "result_json_sha256": "0f3ccb1349bd75db47346dc720687c4c7f6e02244e62384de07746ea0bcf7da0",
+    "authoritative_state_sha256": "5f7a258483810bda4c5ea37dd5eb613bb17aea50807ec84379475952947091ee",
+    "KERNEL_VERSION": "7.5.0",
+    "verdict": "GAP_INCONCLUSIVE",
+    "backup_dir": "pre_patch_s50"
+  },
+  "design": {
+    "approach": "三条全部 kernel.py 纯新增只读诊断函数(不写盘、不进判定、is_gate_verdict=False);不改任何判据/门槛/权威态。条文仅诚实维护'共同边界'诊断函数计数表述(六个→九个),不新增纪律条文、不碰V1–V10",
+    "rec_1": "regression_vs_gap_probe(bad_chains=None, audit_verdicts=None): 类别化'新破坏'(correction_ledger坏链type)与'未解决'(audit verdict含INCONCLUSIVE/PARTIAL),输出 new_breakage/new_gap 两类计数与 GUARD 'new breakage prioritized over unresolved' 的优先级声明;优先级只标注不自动决策;not_original_guard=True(本仓无skill晋升与实测性能回退)",
+    "rec_2": "rejection_ledger_dedup_probe(bad_chains=None): 按 detect签名 与 (type,detect)签名 双口径对 KNOWN_BAD_CHAINS 分组,输出 detect_only_groups 与 strict_groups,展示'按detect去重会误合并B01/B02/B03'的口径差异;GUARD gated buffer 拒绝台账防重复的只读同构;fixture_not_live=True(这是测试夹具坏链,非运行期被拒候选)",
+    "rec_3": "abstention_zero_transfer_probe(heartbeats=None): 与 abstention_probe 明确分工——后者测'一味拒答占比',本函数测'零指标是否由弃权造成':区分 measured_zero(实测真零) / abstention_masked_zero(因gate弃权UNKNOWN而无从测) / not_measured(未完成判据);输出 zero_claim_attributable_to_abstention 布尔;锚定 GUARD 'FWT is zero because the gate abstained';not_original_fwt=True(本仓无FWT概念)"
+  },
+  "no_touch": [
+    "KERNEL_VERSION", "verdict/l3/absolute(L3字段)", "constitution", "result.json", "authoritative_state.json",
+    "self_modify accepted门槛", "_validate_policy", "ATTRIBUTION_PROBES", "COVERAGE_PROBES",
+    "V1–V10 纪律条文正文", "心跳日志/决策台账", "correction_ledger.py 本身(只读import)",
+    "abstention_probe/gate_readiness_probe/conclusion_evidence_probe 等既有函数"
+  ],
+  "acceptance_gates": {
+    "G1_最小改动": "kernel.py diff 仅纯新增3函数(0删除/0逻辑改动到既有函数);条文仅共同边界计数表述一处;版本仍7.5.0;no_touch锚点未变",
+    "G2_真实运行": "三函数真实数据运行:regression_vs_gap 分出new_breakage(B01-B04)与new_gap(INCONCLUSIVE/PARTIAL);dedup 的 detect_only_groups<strict_groups(证明误合并);abstention_zero_transfer 三态计数非恒真",
+    "G3_条文锚点": "共同边界计数更新为九个且列全函数名;V1–V10 正文未删;三个新函数均列is_gate_verdict=False",
+    "G4_负向自咬": "注入篡改坏链/ verdict/弃权态→分类随之变化,证明读真数据非硬编码;空输入返回空结构不崩;三函数 is_gate_verdict 恒 False",
+    "G5_权威态零副作用": "result.json=0f3ccb13…/authoritative_state=5f7a2584… 字节未动;verdict=GAP_INCONCLUSIVE;l3/absolute=false;版本7.5.0",
+    "G6_零回归": "全量pytest tests 从/workspace根目录跑,通过数与基线1625一致(历史1773为旧基线,已如实标注)"
+  },
+  "failure_branch": "任一 gate 不过→用 pre_patch_s50 两份备份回滚 kernel.py 与条文,如实记 self-bite,不迁就测试/不改判据/不升版本/不碰权威态",
+  "honesty": "①三条都是 GUARD 纪律的只读同构,本仓无 skill 晋升/实测性能回退/FWT,not_original_guard=True、not_original_fwt=True、fixture_not_live=True 明示;②GUARD 用 Theorem 把非回归做成数学保证,本仓拒绝把零副作用当充分证明,只做每轮可证伪;③GUARD 'FWT is zero because the gate abstained'——弃权被算成零负迁移,本仓只标注不庆祝(V6防blanket abstention、V10单一指标达标≠目标达成);④优先级/去重/弃权归因都只标注供人工复核,不自动决策,判定权归用户",
+  "based_on": "GUARD: Stabilizing Recursive Self-Improvement with Regret Guidance, arXiv:2611.23476v1 (Google Cloud, Minghe Zhang & Xuetao Kang, 2026-11-17), 经 §4S49 一手回源逐字查证; SIM(2611.18856)已阅略过"
+}

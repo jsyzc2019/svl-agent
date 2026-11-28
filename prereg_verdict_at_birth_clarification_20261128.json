@@ -1,0 +1,17 @@
+{
+  "schema": "prereg_clarification_v1",
+  "section": "§4S63",
+  "at_local": "2026-11-28 13:00 GMT+8",
+  "target_prereg": "prereg_verdict_at_birth_20261128.json",
+  "target_sha256_unchanged": "d2cf5c9e2ab9e339c09ad1bd6ac421cdb4f1b520bc8051fc1a3ad50049d5a9cf",
+  "why": "实现G3e负向注入测试时暴露预注册内部口径矛盾：locked_constants的字面比较规则(落盘==现算即SYNCED)会让'落盘UNKNOWN+现算UNKNOWN'算成BIRTH_SYNCED，但acceptance_gates.G3e明确要求此情形算BIRTH_UNVERIFIABLE",
+  "resolution": "采用G3e的诚实口径，不改原预注册文件(其SHA保持不变、口径锁定效力不变)，仅澄清四态判定优先级",
+  "clarified_decision_order": [
+    "1) 现算recomputed==UNKNOWN → BIRTH_UNVERIFIABLE（当前判据判不了=弃权不算验证就位；与 abstention_masked_zero '没判≠判了没问题' 纪律一致；落盘即便写了PASS/UNKNOWN也只是旧判据产物，不采信为就位）",
+    "2) 否则若落盘stored存在且==recomputed → BIRTH_SYNCED",
+    "3) 否则若落盘stored存在且!=recomputed → BIRTH_STALE",
+    "4) 否则落盘stored缺失且recomputed非UNKNOWN → BIRTH_MISSING_RECOMPUTED"
+  ],
+  "consistency_check": "该澄清不改变真实台账结论：真实11搏中现算仅#1为UNKNOWN(本就UNVERIFIABLE)，其余10搏recomputed均为PASS/FAIL，故SYNCED=2/MISSING=8/UNVERIFIABLE=1不变；澄清方向是更严格(弃权不算就位)，非迁就结果",
+  "honesty": "口径矛盾如实记账、不静默改预注册；判定权归用户"
+}

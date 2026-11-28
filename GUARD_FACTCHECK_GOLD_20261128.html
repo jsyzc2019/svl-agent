@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUARD 论文回源查证 + 对本仓验证器诚实墙/拒绝台账的第三方基准化对照</title>
+<style>
+  :root{--ink:#1b1f24;--sub:#5a6472;--line:#e3e7ed;--bg:#f7f9fb;--card:#fff;--accent:#1f5fa8;--ok:#0f7b4f;--warn:#a86a00;--bad:#b3261e;--gold:#8a6100}
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 20px;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:25px;margin:0 0 8px}
+  h2{font-size:19px;margin:30px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+  h3{font-size:16px;margin:20px 0 8px}
+  .small{font-size:13px;color:var(--sub)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin:14px 0}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:#eef2f7}
+  .ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}.gold{color:var(--gold);font-weight:600}
+  .quote{border-left:3px solid var(--accent);margin:12px 0;padding:8px 14px;background:#f0f5fb;color:#27405e;font-style:italic}
+  code{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:13px}
+  ul{margin:8px 0 8px 20px}li{margin:5px 0}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>GUARD 论文回源查证 + 对本仓的基准化对照</h1>
+<p class="small">查证时间 2026-11-28 · 纯查证轮（零代码改动）· 判定权归用户</p>
+
+<div class="card">
+<b>一句话结论：</b>用户给的两篇，<b>SIM（2611.18856）早已深度读过并落地</b>（11-27 有原文 PDF/txt、预注册、证据文件、报告，编译为 <code>svagent/improvement_memory.py</code>，§55 用六道门禁再审过），按"已阅就略过"跳过；<b>GUARD（2611.23476）全仓 0 命中，本轮新读</b>。一手是 arXiv 原文本人（HTML experimental 全文 18 万字符），作者 Google Cloud 等，Minghe Zhang & Xuetao Kang 共同一作，2026-11-17。核心数字逐字对上：54.5% token 削减（59,651 vs 131,032）、22.5% MCP 调用削减、9.75 任务/1M tokens（1.50× 最佳基线）、19/19 非回归晋升、12 个 block 转换零均值下滑、64% 候选池削减。<b>GUARD 的 Soft-HURT 门 + 拒绝台账 + "新破坏优先于未解决"三件事，几乎是本仓从 §4S25→§4S48 一路筑的验证器诚实墙的第三方论文版</b>——但有一处根本分歧必须讲清：它把非回归做成可证的数学保证，本仓拒绝把"零副作用"当充分证明。
+</div>
+
+<h2>一、回源与已阅核对</h2>
+<table>
+<tr><th>项</th><th>结果</th><th>判定</th></tr>
+<tr><td>SIM arXiv:2611.18856</td><td>编号表 0 命中，但全仓有 <code>rsi_sim_paper.pdf</code> / <code>.txt</code> / <code>sim_preregistration.json</code>(sha eda33fc1…) / <code>rsi_sim_evidence.json</code> / <code>sim_report.html</code> / <code>sim_memory_report.html</code> / <code>svagent/improvement_memory.py</code>，commentary §34/§55 两次深度精研</td><td class="ok">已阅且深度落地 → 按用户要求略过</td></tr>
+<tr><td>GUARD arXiv:2611.23476</td><td>编号表/交接/全仓 0 命中；本轮首次回源 arXiv abs + HTML 全文</td><td class="ok">未阅 → 本轮深读</td></tr>
+<tr><td>我的初次判断</td><td>先只查编号表+交接文档就报"两篇都未阅"，是全仓精确搜索后自查纠正的</td><td class="warn">如实记录的判断纠错，未造成副作用</td></tr>
+</table>
+<p class="small">SIM 未入 <code>ARXIV_ID_REGISTRY.md</code> 是历史遗留（落地走的是 svagent 通道而非编号表），本轮不擅动编号表，仅在此注明。</p>
+
+<h2>二、一手核心：机制与数字逐字核</h2>
+<table>
+<tr><th>原文主张/数字</th><th>一手英文原句</th><th>判定</th></tr>
+<tr><td>全称</td><td>"GUARD (Grader-free Unsupervised Environment Design [UED] with Adaptive Rule Distillation)"</td><td class="ok">对上</td></tr>
+<tr><td>问题诊断</td><td>"reflection and scalar scores conflate what an edit newly broke with what remains unsolved, causing local regressions, skill forgetting, and memory bloat"</td><td class="ok">对上</td></tr>
+<tr><td>核心洞察：分解自检查 + directional regret</td><td>"decompose each task into pre-execution self-checks and guide harness updates via directional regret"</td><td class="ok">对上</td></tr>
+<tr><td> Analyze 阶段</td><td>"separates newly broken behaviors from remaining gaps and pins working rules"</td><td class="ok">对上</td></tr>
+<tr><td> Propose 阶段</td><td>"samples a parallel group of candidate harnesses from one domain-agnostic seed prompt ... ranks them by critic-free group-standardized fitness (a selection step, not a gradient step)"；候选池削减 <b>64%</b></td><td class="ok">对上</td></tr>
+<tr><td> Gate = Soft-HURT</td><td>"promotes an edit only when gains outweigh regressions ... guaranteeing non-regression on its gated buffer"；<b>19/19</b> 非回归晋升（EvoHarnessBench/Drift Gauntlet/专业套件）、拒绝台账"logging rejected edits so bad changes are not repeated"</td><td class="ok">对上</td></tr>
+<tr><td>token 削减</td><td>"cuts tokens/task by <b>54.5%</b> (59,651 vs 131,032) and MCP calls by <b>22.5%</b> while solving <b>9.75</b> tasks per 1M tokens (1.50× the best baseline)"</td><td class="ok">对上</td></tr>
+<tr><td>持续学习</td><td>"no stream-mean drop across all <b>12</b> block transitions and zero post-block forgetting on all four Drift Gauntlet streams"; "ties the memory-pollution floor on PAST-Bench"</td><td class="ok">对上</td></tr>
+<tr><td>测试时</td><td>"candidate pooling, self-review, and gating are turned off, deploying the single frozen harness for standard single-run evaluation (pass@1 ... matching the base agent's rollout budget)"</td><td class="ok">对上</td></tr>
+<tr><td>理论保证</td><td>"dense checklist grading removes the 1/ε passive-discovery penalty ... paired priority ranks every fresh regression above every non-regressed criterion ... pins exactly the mastered criteria (Proposition 1) ... gating keeps self-review scores non-decreasing on each round's gated task buffer (Theorem 1)"</td><td class="ok">对上（原文给出证明，本轮不复核数学）</td></tr>
+</table>
+<p class="small">作者机构：Minghe Zhang / Xuetao Kang（Google Cloud，共同一作）等；38 页 / 8 图 / 13 表；cs.AI + cs.LG。本轮读 HTML 全文，未逐字复核论文里的数学证明（只核其命题陈述），属诚实边界。</p>
+
+<h2>三、金矿：GUARD 三件事几乎是本仓诚实墙的论文版</h2>
+<div class="quote">"separates newly broken behaviors from remaining gaps and pins working rules" + "promotes an edit only when gains outweigh regressions" + "logging rejected edits so bad changes are not repeated"</div>
+<table>
+<tr><th>GUARD 机制</th><th>本仓对应（§4S25→§4S48）</th><th>定性</th></tr>
+<tr><td>新破坏（fresh regression）优先于未解决（unsolved gap）</td><td>§4S25 P0 补洞"静默 continue 吞失败"、§4S36 词表污染查根因恢复——改动先问"新破坏了什么"，再看"还剩什么没解决"</td><td class="gold">同构（行为先于口号）</td></tr>
+<tr><td>pin 已掌握规则（mastered rules 不再被改）</td><td>V1 宪法锁 <code>fe56291b…</code> + 预注册 SHA 先于取证 + verdict/l3/absolute 不由 agent 改；"规则放在被审改动够不到的地方"</td><td class="ok">同构且本仓物理更强（不可改文件）</td></tr>
+<tr><td>Soft-HURT 门：gains &gt; regressions 才晋升，且保证 gated buffer 非回归</td><td>§4S25–§4S48 每轮"备份内核切换对比、判定信号零漂移才判零回归"；G1 要求 diff 精确、G5 权威态字节未动</td><td class="gold">同构——本仓一直在做，GUARD 给了术语与数学保证</td></tr>
+<tr><td>拒绝台账 logging rejected edits（坏改动不重复）</td><td>§4gj 认错台账 detect→record(sha256 自锁)→propagate→verify + §4S38–S48 每轮的失败分支/self-bite 落档</td><td class="ok">同构（本仓更早、带 sha 自锁）</td></tr>
+<tr><td>critic-free group-relative fitness（无外部评分员，组内相对择优）</td><td>本仓 P1a 留出集对打（真判据 13/14 vs always-pass 5/14）、`verify_verifier.py` 塌缩探针——靠对照而非单一裁判</td><td class="ok">同构</td></tr>
+<tr><td>测试时关掉自审/门控，单 frozen harness 一次 pass</td><td>本仓诊断全部 <code>is_gate_verdict=False</code>、只读不进判定、判定权归用户——诊断不污染运行时判定</td><td class="ok">同构</td></tr>
+</table>
+
+<h2>四、必须讲清的根本分歧：非回归"保证" vs 零副作用"不声称充分"</h2>
+<p>GUARD 用 Theorem 1 给出门控后 self-review 分数在每轮 gated buffer 上<b>单调不减</b>的数学保证；本仓恰恰<b>拒绝</b>把"零副作用"当充分证明：</p>
+<ul>
+<li>本仓的"权威态零副作用"是<b>每次实测的字节核验</b>（<code>result.json=0f3ccb13…</code>、宪法 <code>fe56291b…</code> 未动），不是从机制推出的保证；一旦下一轮改动它可能对，所以每轮重验。</li>
+<li>本仓有 §4gz「有效性被夸大」的教训——用器官自己的命中数证明它有效是循环论证；GUARD 的 "19/19 non-regressive promotions" 若只数被门放行的样本，也需防选择性偏差（被拒的 6 个去哪了？门自己 abstain 的阶段怎么算？）。论文说 "FWT is zero because the gate abstained at later stages"——<b>弃权被算作零负迁移，这在本仓纪律里只能标注、不能当成胜利</b>（对应 V6 防 blanket abstention、V10 单一指标达标≠目标达成）。</li>
+<li>结论：<b>GUARD 把非回归做成可保证的工程性质；本仓把零副作用做成每轮可证伪的实测纪律。</b>前者强在形式化，后者强在不对自己已经"证明"的东西放过。不是谁更对，是目标不同。</li>
+</ul>
+
+<h2>五、可借鉴的真实缺口（未擅动，等授权）</h2>
+<ol>
+<li><b>"新破坏 vs 未解决"的显式分类诊断</b>：本仓有 `root_cause_trace`（查根因）和拒绝台账，但没有一个只读探针把"这次改动新破坏了什么"与"原来就没解决什么"分开统计——GUARD 的 Δ_hurt 正是这个。可做成 <code>regression_vs_gap_probe()</code>，纯只读。</li>
+<li><b>拒绝台账的"不重复"可勾稽</b>：本仓拒绝/self-bite 散在各轮 §4S 与 result 的 self_bites，没有一份"已拒改动"的机械清单防重复踩坑。GUARD 的 rejected-edits ledger 可借鉴为一份只读去重索引。</li>
+<li><b>把"弃权率"作为显式指标</b>：本仓有 V6 blanket-abstention 告警，但没有像 GUARD "gate abstained at later stages" 那样把门弃权单独计数并接受复核。可作为门禁就绪度探针的扩展字段。</li>
+</ol>
+
+<h2>六、边界与下一步</h2>
+<ul>
+<li>本轮<b>零代码改动</b>：权威态 <code>result.json=0f3ccb13…</code>、<code>authoritative_state=5f7a2584…</code>、内核 <code>8f3d3689…</code>、<code>verdict=GAP_INCONCLUSIVE</code>、版本 7.5.0 全部未动。</li>
+<li>GUARD 有 arXiv 编号（2611.23476），SIM 有（2611.18856）；两篇编号表当前均无条目。SIM 历史已落地但未入表；本轮只做查证，<b>编号入表与三条建议都等你授权再动</b>。</li>
+<li>未逐字复核论文数学证明，只核命题陈述与实验数字——这是能力边界，如实标注。</li>
+</ul>
+
+<p class="small">报告：GUARD_FACTCHECK_GOLD_20261128.html · 交接文档 §4S49 · 判定权归用户</p>
+</div></body></html>

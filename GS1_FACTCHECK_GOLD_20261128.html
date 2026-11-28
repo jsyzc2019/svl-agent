@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GS1 决策模型文章回源查证 + 对本仓的 RSI 金矿</title>
+<style>
+  :root{--ink:#1b1f24;--sub:#5a6472;--line:#e3e7ed;--bg:#f7f9fb;--card:#fff;--accent:#1f5fa8;--ok:#0f7b4f;--warn:#a86a00;--bad:#b3261e;--gold:#8a6100}
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 20px;background:var(--bg);color:var(--ink);font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:26px;margin:0 0 8px}
+  h2{font-size:19px;margin:30px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  h3{font-size:15px;margin:18px 0 6px;color:var(--accent)}
+  .meta{color:var(--sub);font-size:13px;margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:12px 0}
+  .lead{border-left:4px solid var(--accent);background:#eef4fb}
+  .gold{border-left:4px solid var(--gold);background:#fffaf0}
+  .omission{border-left:4px solid var(--bad);background:#fff5f4}
+  table{width:100%;border-collapse:collapse;font-size:13.4px;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}
+  th{background:#f0f3f7;font-weight:600}
+  tr:nth-child(even) td{background:#fbfcfd}
+  .ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+  code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12.4px;font-family:ui-monospace,Menlo,monospace}
+  ul{margin:6px 0 6px 20px;padding:0}li{margin:4px 0}
+  .tag{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#fff3d6;color:var(--gold);font-weight:600}
+  .tag2{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#e8f4ee;color:var(--ok);font-weight:600}
+  .tag3{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;background:#fdecea;color:var(--bad);font-weight:600}
+  .foot{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);color:var(--sub);font-size:12.5px}
+  .quote{font-family:Georgia,serif;font-style:italic;color:#3a4350;border-left:3px solid var(--line);padding-left:12px;margin:8px 0}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>GS1 决策模型文章回源查证 + 对本仓的 RSI 金矿</h1>
+<div class="meta">查证 2026-11-28 ｜ 来源：DeepTech 深科技公众号（<code>mp.weixin.qq.com</code> …mid=2649809190）+ 腾讯新闻/网易同源转载逐字一致 ｜ 一手：官方仓库 <code>github.com/bigai-nlco/GS1</code> README + 官方博客 <code>gs1.mybigai.ac.cn</code> + <code>huggingface.co/bigai/GS1-Decision-Index-Public-Results</code> ｜ 融资一手：<code>typesafe.ai/blog/series-ai</code></div>
+
+<div class="card lead">
+<b>一句话结论：</b>文章主干属实，但<b>四处关键数字与官方一手不符</b>：73.5 分（官方最高 70.45）、高出 Jev 12.8 分（官方 +9.75）、GS1-27B（官方只有 0.8/2/4/9B，无 27B）、工具调用 96.3（官方 Tools & Automation 最高 87.61）。融资、架构三技术、CRPO、12.51ms/6.05× 全部对上。<b>真正的金矿在官方博客被文章几乎略过的 "Towards RSI Training" 一节</b>——它把"改进对象是数据生产流程本身""验证轨迹留在模型输入之外""候选实现须先保持 logits 不变才测速度"讲得极清楚，这三句几乎是本仓 §4S25–§4S38 一路做下来的第三方独立复述。
+</div>
+
+<h2>一、一手来源确认</h2>
+<table>
+<tr><th style="width:18%">项</th><th style="width:36%">文章说法</th><th>一手核实</th></tr>
+<tr><td>模型/机构</td><td>"北京通研院（BIGAI）推出 GS1（General System One）系列开源通用系统一模型"</td><td class="ok">✅ 官方仓库 <code>bigai-nlco/GS1</code>、官方博客 <code>gs1.mybigai.ac.cn</code> 确认；技术报告署名 Zheng Zilong/Liu Yang/Qin Shuhan/Lin Ziyong/Li Jiaqi/Jia Zixia/Zhu Song-Chun，机构 BIGAI</td></tr>
+<tr><td>开源许可</td><td>"开源模型/开源仓库"</td><td class="ok">✅ 代码与权重 Apache-2.0（官方 README 明示）；Hugging Face 有 0.8/2/4/9B 四个权重</td></tr>
+<tr><td>Jev 融资/估值</td><td>"发布不到一个月完成 8.7 亿美元融资，估值 75 亿美元"</td><td class="ok">✅ TypeSafe AI 官方博客脚注逐字："<b>$870 million at a $7.5B valuation</b>"，a16z 领投、红杉/DCVC 参与、Martin Casado 入董事会，2026-10-09 发布（官方正文用 $$$ 玩梗，数字在脚注）</td></tr>
+<tr><td>技术报告</td><td>—（文章未给出）</td><td class="warn">⚠️ GS1 是 <code>@techreport</code>（BIGAI 2026），<b>无 arXiv 编号</b>；官方博客 "Technical Report" 链接即首页自身。不入 ARXIV_ID_REGISTRY.md（无编号可入）</td></tr>
+</table>
+
+<h2>二、四处数字偏差：逐条对照官方一手</h2>
+<table>
+<tr><th style="width:24%">文章说法</th><th style="width:30%">官方一手</th><th>判定</th></tr>
+<tr><td>"Decision Index 0.4.1 Public 最高 <b>73.5 分</b>"</td><td>官方博客："GS1-9B <b>70.45</b> % Public Index… 70.45 vs 60.70"；GitHub README 表：0.8B=56.12 / 2B=62.22 / 4B=68.97 / 9B=70.45</td><td class="bad">❌ 无 73.5 官方口径。文章配图 OCR 里 <code>73.55</code> 紧邻一个标作 "GS1 27B" 的点——疑似把图上某点读成/标成 GS1 值；当前一手四个尺寸最高 70.45</td></tr>
+<tr><td>"相较 Jev 1.14 高出 <b>12.8 分</b>"</td><td>官方博客："<b>+9.75 %</b> GS1-9B above Jev 1.14. 70.45 vs 60.70"；GitHub README："GS1-4B reaches 68.97… 8.25 points above Jev 1.14"（snapshot 口径）</td><td class="bad">❌ 官方口径是 <b>+9.75</b>（9B 对 Jev）或 +8.25（4B snapshot），无 12.8。12.8 = 73.5−60.7，即用错误的 73.5 减 Jev 算出</td></tr>
+<tr><td>"<b>GS1-27B</b> 在工具调用与自动化相关测试得分 <b>96.3</b>"</td><td>官方只有 <b>0.8B/2B/4B/9B</b> 四尺寸；官方博客 Tools & Automation：9B=<b>87.61</b>、4B=87.49、2B=83.57、0.8B=79.26</td><td class="bad">❌ 无 27B 模型，无 96.3 分。文章配图里 "GS1 27B" 应是误标（图中另有 StartLux v1.1 27B / GLIDE 27B 等竞品）</td></tr>
+<tr><td>"星际争霸 II：161.7 万次宏动作，6.2%→峰值 37.5%"</td><td>官方博客展示 StarCraft II 演示视频，但<b>未在首页给出该组数字</b>；文章署团队实验自述</td><td class="warn">⚠️ 一手未核到具体数字，标"团队自述待核"，非官方博客逐字</td></tr>
+</table>
+
+<div class="card">
+<b>发布时点差异的诚实说明：</b>文章 2026-11-25 发布，配图可能来自更早的评测快照；官方 README 标注 "edition 0.3 最新完整公开套件评测结果"、Hugging Face README 同时出现 68.95（report snapshot）与 68.97/70.45（最新实测）。因此 73.5/27B/96.3 <b>可能是旧版或读图误差，我不能确证是造假</b>，只确认"与当前一手不符"——按纪律如实记录，不臆断动机。（Hugging Face <code>results.md</code> raw/resolve 两次抓取失败，无法逐行核 provenance，已在证据链标注。）</div>
+
+<h2>三、逐条对上的部分</h2>
+<table>
+<tr><th style="width:30%">论断</th><th>官方一手</th><th>判定</th></tr>
+<tr><td>直接输出各选项概率、零生成 token</td><td>"Choice / Noul / Score 分布，生成输出 token 数为零"；"without generating answer strings or reading a fixed letter vocabulary"</td><td class="ok">✅</td></tr>
+<tr><td>三项架构改造</td><td>"因果 Gated DeltaNet 和分段双向全注意力" + "保留 carry 的 Attention Residual" + "原生多头交叉注意力决策头"；基于 Qwen3.5 混合骨干</td><td class="ok">✅</td></tr>
+<tr><td>状态前缀可复用</td><td>"The state remains independent of later questions and candidates"；"a reusable state prefix… immutable prefixes for reuse across questions"</td><td class="ok">✅</td></tr>
+<tr><td>12.5ms / 6.05×</td><td>"CUDA Graph P50 12.51 ms"；"6.05× speedup… 8 questions"，RTX 4090 / BF16 / 256 token / 单问题，预热5次测30次</td><td class="ok">✅</td></tr>
+<tr><td>CRPO / Brier / 过度自信惩罚</td><td>"CRPO samples a group of actions… rewards correctness minus a Brier-derived penalty… Confident errors cost more"；官方示例 80% 概率选错 → reward −0.640</td><td class="ok">✅</td></tr>
+<tr><td>RLCD 出自 Jev</td><td>"Jev's RLCD targets decisions with probabilities that reflect their reliability"</td><td class="ok">✅</td></tr>
+<tr><td>拒答/延后/补证据</td><td>"Native probabilities and confidence support evidence gathering, deferral and explicit abstention choices"；NHR 目标防 "blanket abstention"</td><td class="ok">✅</td></tr>
+<tr><td>ACL 2025 Look Both Ways and No Sink</td><td>文章述团队前作；本轮未回 ACL 原文核编号，标二手待核</td><td class="warn">⚠️ 未核</td></tr>
+</table>
+
+<div class="card omission">
+<b>被文章略去的半边 —— 官方博客 "Towards RSI Training" 一节，才是最值钱的部分。</b> 它讲了两件事：①<b>数据侧</b>：task world → executable oracle → semantic checks → model feedback → generator revision，明确写 <span class="quote">"The object of improvement is the data-producing process itself"… "Hidden outcomes and verification traces stay outside the model input"… "Independent semantic checks verify that the language still describes the same problem"</span>；②<b>推理侧</b>：<span class="quote">"Every candidate implementation must preserve the fixed model's logits, probability vectors and typed answers before speed is measured"</span>。这三句分别是本仓"预注册先于取证 + 判定权归用户""盲评/验证器放改动够不到处""no_touch + 判定信号零漂移才算零回归"的第三方独立表述。文章只在结尾用"知行合一"一笔带过 RSI。
+</div>
+
+<h2>四、金矿：逐条照着本仓 §4S25–§4S38 说话</h2>
+<table>
+<tr><th style="width:28%">GS1 官方一手机制</th><th style="width:28%">本仓现场机械证据</th><th>金矿 / 定性</th></tr>
+<tr><td><b>"改动前后必须保持固定模型的 logits/概率/类型化答案不变，才测速度"</b>（推理引擎 RSI）</td><td>§4S38 备份内核切换对比：改动前后均 1625 passed、两诊断函数输出逐字相同、权威态哈希未动，才判零回归</td><td><span class="tag2">第三方独立同构</span> 本仓做的是"改的是内核外围只读诊断，判定信号零漂移才接受"；GS1 是"固定权重下优化推理代码"——<b>同一纪律的两种载体</b></td></tr>
+<tr><td><b>"改进对象是数据生产流程本身"</b>；model errors 反馈给 world builders/renderers/checks，verified revisions 成下一代生成器</td><td>§4S34–§4S36 RX 修订候选 → 补探针 → 补词表：改的是"看种子的眼镜"（探针/词表），不是内核判定；§4S31 失败轨迹分层供料</td><td><span class="tag2">强同构</span> 本仓已经在改"摄食判据的生产过程"而非只改摄食结果；GS1 是生产数据的流程，本仓是生产判断的探针集</td></tr>
+<tr><td><b>"验证轨迹与隐藏结果留在模型输入之外"</b> + 独立语义检查验证语言仍描述同一问题</td><td>预注册 SHA 先于取证、冻结留出集 sha256、判据从 base 分支读、判定权归用户、verify_verifier 不采信自报</td><td><span class="tag2">架构级同构</span> GS1 防的是"模型看到答案再答题"，本仓防的是"取证后改判据/改标签"（§4S24 H07 拒绝回改冻结集）</td></tr>
+<tr><td><b>CRPO 惩罚过度自信</b>：80% 概率选错 reward −0.640；置信度低可 deferral / abstention</td><td>§4S32 <code>content_verdict</code> COLD_START→<b>UNKNOWN（样本不足诚实标未知，不假装判过）</b>；全局 verdict=GAP_INCONCLUSIVE</td><td><span class="tag2">强同构</span> 本仓的 UNKNOWN / GAP_INCONCLUSIVE 就是 explicit abstention；差别是本仓无概率数值、只用状态标注（更粗但更守边界）</td></tr>
+<tr><td><b>NHR（非幻觉率）= 拒答 / (拒答+错误)</b>，与准确率联合优化，防 "blanket abstention"</td><td>本仓有 GAP_INCONCLUSIVE 拒答态，但<b>无"一味拒答"的反向指标</b>——拒答永远安全的漏洞未量化</td><td><span class="tag">真实缺口</span> 可借鉴：给"总说不知道"设一个反向约束指标；只读诊断起步，不进判定</td></tr>
+<tr><td><b>候选排列不变性</b>："candidate permutation 撤销后 head-level 概率相同"</td><td>本仓负向自咬靠"篡改探针→Δ变化"验证读真数据，但<b>无"输入重排后判定不变"这一不变量检查</b></td><td><span class="tag">新审计角度</span> 可加一条排列不变性自检（换序喂同一判据应同结论）；只读，不改 verdict</td></tr>
+<tr><td><b>状态前缀不可变 / 可复用</b>："state reads only the state, later questions cannot change it"</td><td>预注册锁定后取证只读、冻结集不可回改、宪法 SHA 锁</td><td><span class="tag2">同构</span> 都是"固定前缀不被后续输入污染"的纪律，保证多次判断共享同一基准</td></tr>
+</table>
+
+<h2>五、诚实边界</h2>
+<ul>
+<li>73.5 / 27B / 96.3 的偏差只确认"与当前一手不符"，<b>不断言造假</b>——可能是旧快照或读图误差；Hugging Face results.md 两次抓取失败，provenance 未能逐行核。</li>
+<li>对照属<b>结构同构</b>，不声称本仓获得 GS1 的决策能力，也不声称 GS1 团队读过本仓；GS1 是神经决策模型，本仓是符号/词集诊断器，载体不同。</li>
+<li>161.7 万宏动作、6.2%→37.5% 为团队自述，官方博客首页未给数字；ACL 2025 前作编号未回源核。</li>
+<li>本轮<b>零代码改动</b>：<code>result.json=0f3ccb13…</code>、<code>authoritative_state=5f7a2584…</code>、<code>verdict=GAP_INCONCLUSIVE</code>、<code>KERNEL_VERSION=7.5.0</code> 均核验未动。</li>
+</ul>
+
+<div class="card gold">
+<b>下一步建议（判定权归用户，均未擅动）：</b><br>
+① <b>不入 ARXIV_ID_REGISTRY.md</b>——GS1 是 <code>@techreport</code>，无 arXiv 编号；<br>
+② 若走"<b>反一味拒答</b>"指标（NHR 同构）或"<b>排列不变性</b>"自检，按惯例先预注册、只读诊断起步，等一句授权再动；<br>
+③ 可把 GS1 的"改动前后不变量先验"补进 §4S38 刚建的纪律条文文件（待授权）。
+</div>
+
+<div class="foot">本文为"事上练"纪律演练：一手回源 → 逐字比对 → 数字/来源分层 → 本仓机械对照 → 判定权归用户。英文原句摘自 GS1 官方仓库/博客与 TypeSafe AI 官方博客，中文文章说法摘自 DeepTech 深科技公众号公开全文。</div>
+
+</div></body></html>

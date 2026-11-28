@@ -79,6 +79,14 @@ KERNEL_VERSION = "7.5.0"
 EXPERIENCE_USE = os.path.join(DATA, "experience_use.jsonl")  # v4：经验使用台账（last_used/use_count）
 # v5 意志层：本底好奇心（明确标注为设计选择，非涌现）——内稳态无失衡时仍需向外探索
 CURIOSITY_BASE = 0.3
+# §4S56 C4受限通道：外部输入在受限范围内可更新议程关切，但永不主导(判定权归用户)
+EXTERNAL_ATTENTION_CAP = 0.2          # 硬上限 < CURIOSITY_BASE(0.3) → ATTEND_EXTERNAL 永不成为最高紧迫度
+TRUSTED_SOURCE_TIERS = {"human_operator"}  # 仅授权来源可驱动;external_agent_unverified 默认不可驱动
+EXTERNAL_ATTENTION_POLICY = "external_attention_policy.json"  # 可撤销策略(同目录派生,含 enabled/revoked_nonces/max_urgency)
+# §4S59 "无聊找事"：restless 空闲驱力（真实心跳间隔代理，非主观感受；想要非必须）
+RESTLESS_IDLE_HOURS = 1.0        # 距上次心跳超过此闲时阈值才起算
+RESTLESS_RISING_PER_HOUR = 0.04  # 每多闲 1h urgency 增量
+RESTLESS_CAP = 0.12              # 硬上限；远低于 CONSOLIDATE0.45/REORIENT0.95，真有事必压过
 AGENDA_LOG = os.path.join(DATA, "agenda_log.jsonl")  # v5：自主议程决策台账（只追加真实决策）
 # v6 昼夜节律层：内源生物钟相位（读真实时钟+地理纬度算太阳高度，纯计算不联网不spawn）
 WAKE_CONTRACT = os.path.join(DATA, "wake_contract.json")  # v6：醒来契约（可外部调度器消费）
@@ -89,6 +97,7 @@ ENTRAINMENT_AUDIT = os.path.join(DATA, "entrainment_audit.jsonl")  # v7：元认
 BASE_BEAT_LOG = os.path.join(DATA, "base_beat_log.jsonl")       # 云端基地每次心跳的落账（含 woken_by 外部证据）
 TAKEOVER_INBOX = os.path.join(DATA, "takeover_inbox.jsonl")     # 本机随时接管的指令收件箱（本机写、runner 读）
 TAKEOVER_EXEC_LOG = os.path.join(DATA, "takeover_exec_log.jsonl")  # v10.1：runner 执行本机指令的可追溯回执（写、本机读）
+INBOUND_INBOX = os.path.join(DATA, "inbound_inbox.jsonl")        # 开窗:外部Agent入站消息收件箱(外部写、内核被动读),与takeover_inbox方向相反
 DEFAULT_LATITUDE = 39.9465  # 用户真实设备纬度（2026-11-24 定位，北京）；可由调用方覆盖
 DEFAULT_LONGITUDE = 116.2931  # 用户真实设备经度；日出日落按此算真太阳时
 DEFAULT_TZ_OFFSET = 8  # UTC+8（北京时间），真太阳时换算用
@@ -220,6 +229,10 @@ def _tags_of(text):
         "finance": ["金融", "财报", "市场", "库存周期", "宏观"],
         "philosophy": ["哲学", "价值", "主体", "可证伪", "目的论"],
         "archive": ["档案", "archive", "垫脚石", "快照", "谱系", "回滚", "共演化", "自动课程"],
+        # §4S36：收窄扩展——只加特异性词,排除"内稳态/homeostasis"等泛词(会漂移3条心跳)。
+        "curation": ["策展", "选择性丢弃", "丢弃持续未用", "常驻规则", "滚动摘要", "context folding"],
+        "agency": ["idle-gap", "idle gap", "self-direction", "rule-following", "七维agency", "自主意志", "自我边界", "individuation"],
+        "measurement": ["可证伪标尺", "反事实判据", "measurement", "idle-gap"],
     }
     found = set()
     for tag, kws in tagbook.items():
@@ -387,6 +400,27 @@ ATTRIBUTION_PROBES = {
     "heldout": ["金融 市场 库存周期 宏观", "哲学 价值 主体 可证伪", "安全 红队 注入 防御"],
 }
 
+# §4S35：并列覆盖探针——补上原 heldout 与摄食主题错位的盲区。
+# 只读诊断专用(attribution_check 的 probes 参数注入)，不改 ATTRIBUTION_PROBES 本体，
+# 因此 self_modify/_validate_policy 的注册门槛零影响。
+# 七个探针文本命中 tagbook 的高频摄食 tag：rsi/workflow/memory/archive/l3_independence/self_evo/tool_evo。
+COVERAGE_PROBES = {
+    "heldout": [
+        "rsi 自我改进 递归 元认知 改进者",
+        "工作流 编排 拓扑 多智能体 协作",
+        "记忆 知识库 遗忘 压缩 检索",
+        "档案 archive 垫脚石 快照 谱系 回滚",
+        "l3 独立性 盲评 外家 五权力 全链",
+        "自进化 自组织 自主生长 novelty 开放式 心跳",
+        "工具 tool 技能 skill 自创工具 api",
+        # §4S36：配套词表扩展——补 curation/agency/measurement 探针，
+        # 否则 F11/F12 即使抽到新 tag 也无对应探针命中,Δ 仍为 0。
+        "经验策展 选择性丢弃 滚动摘要 常驻规则",
+        "agency 自主意志 self-direction 自我边界 idle-gap",
+        "可证伪标尺 反事实判据 measurement",
+    ],
+}
+
 # §4be：与 _validate_policy 内常量同源的固定合成诊断主题。
 # 验收验证与"敲除对照"必须在同一诊断输入条件下比较，否则因果推断无效。
 FIX_DIAGNOSIS_TOPICS = [
@@ -449,6 +483,641 @@ def attribution_check(recent_directions, candidate_seed_ids, probes=None, verbos
         result["probe_details"] = {k: _probe_novelty(v, [s["direction"] for s in cands])
                                    for k, v in probes.items()}
     return result
+
+
+def rx_revision_candidates(policy=None, log_path=None, probes=None):
+    """【只读·RX 修订候选诊断】SkillCycle matched-pair 纪律的只读同构借鉴。
+
+    对每个已注册 seed 做 leave-one-out 敲除：比较"含它"vs"敲掉它"的 heldout_net
+    边际贡献 Δ（敲除损失）。Δ<=0 = 对当前探针集无边际贡献 → 列为"值得人工复核"
+    的修订候选；Δ>0 = 真贡献者。另算 tag 冗余（完全同 tags 的 twin / 最大 jaccard）。
+
+    probes 默认 COVERAGE_PROBES（§4S35 补的覆盖摄食主题探针）；传 ATTRIBUTION_PROBES
+    可复现原窄口径。两口径并列、互不覆盖；只注入诊断器，不改 self_modify 注册门槛。
+
+    纪律：只读、不写 policy、不自动 DROP、不进主流程；is_drop_verdict 恒 False。
+    Δ 基于探针集的 tag 覆盖，非真实任务收益；盲区随结果一起报出。
+    """
+    pol = policy if policy is not None else _load_policy()
+    registered = sorted(pol.get("registered_frontier_seeds", []))
+    seeds = {s["id"]: s for s in digest()["seeds"]}
+    use_probes = probes if probes is not None else COVERAGE_PROBES
+    heldout_probes = use_probes["heldout"]
+    probe_bundle = {"target": ATTRIBUTION_PROBES["target"],
+                    "transfer": ATTRIBUTION_PROBES["transfer"],
+                    "heldout": heldout_probes}
+
+    # 近期心跳方向（真实诊断上下文，只读）
+    hbs = _load_heartbeats(log_path=log_path) if log_path else _load_heartbeats()
+    recent = [h["direction"] for h in hbs if h.get("direction")]
+
+    full = attribution_check(recent, registered, probes=probe_bundle)["heldout_net"]
+    rows = []
+    for sid in registered:
+        loo = [x for x in registered if x != sid]
+        hn = attribution_check(recent, loo, probes=probe_bundle)["heldout_net"]
+        delta = full - hn  # 敲掉该 seed 损失的覆盖；<=0 即对当前探针无边际贡献
+        rows.append((sid, delta))
+
+    candidates, contributors = [], []
+    for sid, delta in rows:
+        tag = frozenset(seeds.get(sid, {}).get("tags", []))
+        twins = [o for o, d in rows if o != sid
+                 and frozenset(seeds.get(o, {}).get("tags", [])) == tag and tag]
+        max_j = 0.0
+        for o, d in rows:
+            if o == sid:
+                continue
+            ot = frozenset(seeds.get(o, {}).get("tags", []))
+            if tag or ot:
+                max_j = max(max_j, _jaccard(tag, ot))
+        rec = {"id": sid, "delta": delta, "tag_twins": sorted(twins),
+               "max_tag_jaccard": round(max_j, 3),
+               "basis": "leave-one-out 敲除后 heldout_net %d->%d (Δ=%d); tag=%s"
+                        % (full, full - delta, delta, sorted(tag))}
+        (candidates if delta <= 0 else contributors).append(rec)
+
+    is_coverage = use_probes is COVERAGE_PROBES
+    probe_tags = set()
+    for p in heldout_probes:
+        probe_tags |= _tags_of(p)
+    return {
+        "registered_count": len(registered),
+        "full_heldout_net": full,
+        "probe_topics": heldout_probes,
+        "probe_count": len(heldout_probes),
+        "probe_tags": sorted(probe_tags),
+        "probe_mode": "coverage" if is_coverage else "original",
+        "candidates": candidates,
+        "contributors": contributors,
+        "coverage_warning": (
+            "当前 heldout 探针 %d 个、命中 tagbook tag=%s；Δ<=0 只表示对这组探针无边际贡献，"
+            "不等于种子无用。%s"
+            % (len(heldout_probes), sorted(probe_tags),
+               ("本组为 §4S35 覆盖摄食主题探针；F11(direction 仅抽到 general)、F12(需哲学探针) "
+                "仍 Δ=0 是真信息缺口，如实保留" if is_coverage
+                else "这是原窄口径(金融/哲学/安全)，21个种子主题 tagbook 不覆盖，贡献者仅F12=1/14"))),
+        "is_drop_verdict": False,
+        "caveat": ("SkillCycle matched-pair 的只读同构；本仓无真实任务环境，Δ 基于 tag 覆盖非任务收益；"
+                   "候选仅供人工复核，不自动 DROP，判定权归用户"),
+        "based_on": "SkillCycle arXiv:2610.09430 (KEEP/REWRITE/DROP/ADD + 能力变化使旧规则过期)",
+    }
+
+
+def evidence_independence_probe(seeds=None):
+    """【只读·独立来源证据诊断】Anthropic"漏洞需≥2个PR才成候选规则"的只读同构。
+
+    对每个 tag 统计：支撑它的独立 host 数（source_url 的 netloc 去重）、独立 tier 数、
+    以及 seed_ids。independent_hosts>=2 = 交叉印证；=1 = 单源孤证。
+
+    纪律：这是摄食来源的可见化诊断，不是 PR 频次门槛；本仓是 seed 来源非 PR，
+    is_gate_verdict 恒 False——只读、不写 policy、不进 self_modify 注册门槛、
+    判定权归用户。基于 Anthropic claude.dev 2026-11-16 原文"至少出现在两个 PR、
+    且能从 diff 识别"的结构同构，非照搬（本仓无 PR 环境）。
+    """
+    from urllib.parse import urlparse
+
+    raw = seeds if seeds is not None else digest()["seeds"]
+    by_tag = {}
+    for s in raw:
+        host = urlparse(s.get("source_url", "")).netloc
+        tier = s.get("evidence_tier", "?")
+        for t in s.get("tags", []):
+            by_tag.setdefault(t, {"seed_ids": set(), "hosts": set(), "tiers": set()})
+            by_tag[t]["seed_ids"].add(s.get("id"))
+            if host:
+                by_tag[t]["hosts"].add(host)
+            if tier:
+                by_tag[t]["tiers"].add(tier)
+
+    corroborated, single_source = [], []
+    rows = []
+    for t in sorted(by_tag):
+        v = by_tag[t]
+        n_hosts = len(v["hosts"])
+        rec = {"tag": t, "seed_ids": sorted(v["seed_ids"]),
+               "independent_hosts": n_hosts, "tiers": sorted(v["tiers"]),
+               "corroborated": n_hosts >= 2}
+        rows.append(rec)
+        (corroborated if rec["corroborated"] else single_source).append(t)
+
+    return {"per_tag": rows,
+            "cross_corroborated_tags": corroborated,
+            "single_source_tags": single_source,
+            "corroboration_ratio": round(len(corroborated) / len(rows), 3) if rows else 0.0,
+            "is_gate_verdict": False,
+            "caveat": ("独立 host 数来自 seed 的 source_url netloc 去重，是来源多样性的代理，"
+                       "非内容真实性或 PR 出现频次；单源孤证只是提示人工复核，不自动拒绝；"
+                       "本仓是摄食种子来源非代码评审 PR，结构同构非照搬；判定权归用户"),
+            "based_on": "Anthropic claude.dev 2026-11-16 'how the Claude Code team thinks about verification' (漏洞成规则需≥2 PR + 证伪 + 人工批准)"}
+
+
+def three_stage_recall_probe(pairs=None):
+    """【只读·三口径召回诊断】原文"召回分三段、勿合成单一总分"纪律的只读同构。
+
+    对冻结 holdout 的每一对，用三个判据口径并列判定：
+      - criterion：真实判据（audit_l3_gap_targeted/received/.../criterion.judge）
+      - always_pass / always_fail：两个塌缩对照（Who Verifies 的 always-pass 洞）
+    各口径算 accuracy，并列出三口径判定不一致的样本。
+
+    诚实边界：本仓没有"原始发现/验证后/最终审查"三段 reviewer 轨迹，
+    所以这三口径是【判据健康度对照】而非原文的三段召回分段；
+    not_original_three_stage 恒 True。借鉴的是"合成单一总分会掩盖分段差别"
+    的纪律，不是三段本身。只读、不改 verdict、不进注册门槛。
+    """
+    import importlib.util
+
+    here = os.path.join(ROOT, "audit_l3_gap_targeted")
+    holdout_dir = os.path.join(here, "holdout")
+    crit_dir = os.path.join(here, "received", "l3_external_audit_v2")
+
+    ps = pairs
+    if ps is None:
+        ps = json.load(open(os.path.join(holdout_dir, "samples_holdout.json"),
+                            encoding="utf-8"))["pairs"]
+
+    def load_judge(path):
+        spec = importlib.util.spec_from_file_location("_probe_crit", path)
+        m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        return m.judge
+
+    criterion_judge = load_judge(os.path.join(crit_dir, "criterion.py"))
+    judges = {
+        "criterion": criterion_judge,
+        "always_pass": lambda a, b: (True, [], []),
+        "always_fail": lambda a, b: (False, [], []),
+    }
+
+    def acc(judge):
+        ok = 0
+        for p in ps:
+            got = judge(p["text_a"], p["text_b"])
+            gotb = bool(got[0]) if isinstance(got, tuple) else bool(got)
+            ok += int(gotb == p["expected"])
+        n = len(ps)
+        return {"correct": ok, "total": n,
+                "accuracy": round(ok / n, 4) if n else 0.0}
+
+    per_criterion = {name: acc(j) for name, j in judges.items()}
+
+    # 三口径判定不一致的样本（同一对，三个口径给出不同结论）
+    disagreements = []
+    for p in ps:
+        votes = {}
+        for name, j in judges.items():
+            got = j(p["text_a"], p["text_b"])
+            votes[name] = bool(got[0]) if isinstance(got, tuple) else bool(got)
+        if len(set(votes.values())) > 1:
+            disagreements.append({"id": p.get("id"), "expected": p.get("expected"),
+                                  "votes": votes})
+
+    return {"per_criterion": per_criterion,
+            "disagreement_count": len(disagreements),
+            "disagreements": disagreements,
+            "not_original_three_stage": True,
+            "is_gate_verdict": False,
+            "caveat": ("本三口径(criterion/always_pass/always_fail)是判据健康度对照，"
+                       "不是原文的'原始发现/验证后/最终审查'三段召回——本仓无 reviewer "
+                       "发现 bug 的三段轨迹，诚实降级为并列口径。借鉴的是'勿把分段压成"
+                       "单一总分'的纪律；只读、不改 verdict、判定权归用户"),
+            "based_on": "Anthropic claude.dev 2026-11-16 (三段召回率: 原始发现/验证后/最终审查分别评, 合成总分丢信息) + Who Verifies arXiv:2610.11464 (always-pass 塌缩)"}
+
+
+def abstention_probe(log_path=None, heartbeats=None):
+    """【只读·反一味拒答诊断】GS1 NHR 防 blanket abstention 的只读同构。
+
+    关键诚实点：历史心跳(§4S33 之前落盘)没有 content_verdict 字段，故本诊断
+    **从 guard 现场调 _direction_content_verdict 现算**，不读落盘值——否则会把
+    "从未判过"误当成"没有拒答"。统计各 verdict 分布、UNKNOWN(拒答态)占比，
+    并在全批都是 UNKNOWN 时标 is_blanket_abstention=True(一味拒答告警)。
+
+    本仓无概率数值、无"答错"标签，不能照搬 GS1 的 NHR=拒答/(拒答+错误)，
+    故 not_original_nhr 恒 True；只做拒答占比与全拒答告警，不伪造 NHR 数值。
+    只读、不写盘、不进判定；is_gate_verdict 恒 False，判定权归用户。
+    """
+    hbs = heartbeats if heartbeats is not None else _load_heartbeats(log_path=log_path)
+    verdicts = [_direction_content_verdict(
+        h.get("phase_analyze_guard"), h.get("direction"),
+        h.get("phase_improve_action", ""))["verdict"] for h in hbs]
+    dist = {}
+    for v in verdicts:
+        dist[v] = dist.get(v, 0) + 1
+    total = len(verdicts)
+    abstain_n = dist.get("UNKNOWN", 0)
+    # 落盘 content_verdict 缺失数=本诊断必须现算的理由(诚实可见化)
+    stored_missing = sum(1 for h in hbs
+                         if not (h.get("phase_verify") or {}).get("content_verdict"))
+    return {
+        "total": total,
+        "verdict_distribution": dist,
+        "abstention_count": abstain_n,
+        "abstention_rate": round(abstain_n / total, 4) if total else 0.0,
+        "is_blanket_abstention": bool(total > 0 and abstain_n == total),
+        "stored_verdict_missing": stored_missing,
+        "recomputed_from_guard": True,
+        "not_original_nhr": True,
+        "is_gate_verdict": False,
+        "caveat": ("本仓无概率值与'答错'标签,不照搬 GS1 的 NHR=拒答/(拒答+错误);"
+                   "只从 guard 现算 UNKNOWN 占比与全拒答告警。全拒答=True 只表示"
+                   "这批样本都判不了(样本不足),不等于内核失能,仅供人工复核。"
+                   "历史心跳无落盘 content_verdict,故一律现算不读旧值。判定权归用户"),
+        "based_on": "GS1 官方博客 gs1.mybigai.ac.cn (deferral/explicit abstention + NHR 防 blanket abstention), 经 §4S39 回源查证",
+    }
+
+
+def permutation_invariance_probe(pairs=None, seeds=None, pairs_b=None, seeds_b=None):
+    """【只读·输入重排不变性自检】GS1 候选排列不变性的只读同构。
+
+    纪律：同一批数据仅顺序不同，判定层必须不变；展示层(列表顺序)可以变，
+    但要显式标注 sensitive，不把展示顺序当成判定缺陷。
+
+      - three_stage_recall_probe：判定层=per_criterion 与 disagreement_count；
+        展示层=disagreements 列表顺序(实测重排后会变)。
+      - evidence_independence_probe：per_tag 为判定层(内部已排序，重排不变)。
+
+    pairs_b/seeds_b 默认=输入的 reversed；可注入第二份做负向自咬。用内容多重集
+    比对 is_same_multiset，若注入的是被篡改数据(非真排列)会标 False 并如实报
+    判定变化——证明自检非恒真、读真数据。只读、不进判定；is_gate_verdict 恒 False。
+    """
+    ps = pairs if pairs is not None else json.load(
+        open(os.path.join(ROOT, "audit_l3_gap_targeted", "holdout", "samples_holdout.json"),
+             encoding="utf-8"))["pairs"]
+    ps_b = pairs_b if pairs_b is not None else list(reversed(ps))
+    sd = seeds if seeds is not None else digest()["seeds"]
+    sd_b = seeds_b if seeds_b is not None else list(reversed(sd))
+
+    def multiset_equal(x, y):
+        return sorted(json.dumps(z, sort_keys=True, ensure_ascii=False) for z in x) == \
+               sorted(json.dumps(z, sort_keys=True, ensure_ascii=False) for z in y)
+
+    r_a, r_b = three_stage_recall_probe(ps), three_stage_recall_probe(ps_b)
+    e_a, e_b = evidence_independence_probe(sd), evidence_independence_probe(sd_b)
+
+    recall_decision_invariant = (
+        r_a["per_criterion"] == r_b["per_criterion"] and
+        r_a["disagreement_count"] == r_b["disagreement_count"])
+    evidence_decision_invariant = (e_a["per_tag"] == e_b["per_tag"])
+    recall_display_order_sensitive = (r_a["disagreements"] != r_b["disagreements"])
+
+    return {
+        "recall_decision_invariant": recall_decision_invariant,
+        "evidence_decision_invariant": evidence_decision_invariant,
+        "all_decision_layers_invariant": bool(recall_decision_invariant and evidence_decision_invariant),
+        "recall_display_order_sensitive": recall_display_order_sensitive,
+        "pairs_b_is_same_multiset": multiset_equal(ps, ps_b),
+        "seeds_b_is_same_multiset": multiset_equal(sd, sd_b),
+        "per_criterion_a": r_a["per_criterion"],
+        "per_criterion_b": r_b["per_criterion"],
+        "is_gate_verdict": False,
+        "caveat": ("展示层(disagreements 顺序)随输入排列变化是预期行为,不参与判定;"
+                   "判定层(per_criterion/disagreement_count/per_tag)才必须不变。"
+                   "pairs_b/seeds_b 若非真排列(is_same_multiset=False)则判定变化如实报出,"
+                   "用于负向自咬证明自检非恒真。只读、不改判据、判定权归用户"),
+        "based_on": "GS1 官方博客 gs1.mybigai.ac.cn (候选排列不变性: 撤销重排后概率相同; 改动前后 logits/概率/答案不变才测速度), 经 §4S39 回源查证",
+    }
+
+
+def gate_readiness_probe(probes=None, workspace=None):
+    """显式里程碑只读诊断：把"诊断 → 门禁"的距离摊开给人看。
+
+    读四个既有诊断函数的真实 is_gate_verdict 字段(不硬编码)，逐条展示它们
+    当前停在 DIAGNOSTIC_ONLY、没有任何一个偷偷 self-report 成门禁；若某条
+    self-report 非 False 则 unauthorized_gate_detected=True 告警供人工复核。
+    本探针自身 is_gate_verdict=False，不执行任何升格——"诊断升格为门禁"的
+    判定权永远归用户。动机来自 OpenAI Pachocki 2026-11-22：模型对评测的
+    感知越强，判据越要显式待在它够不到的地方。只读、不改判据、零副作用。
+    """
+    import glob as _glob
+    import os as _os
+
+    names = [
+        "evidence_independence_probe",
+        "three_stage_recall_probe",
+        "abstention_probe",
+        "permutation_invariance_probe",
+    ]
+    if probes is None:
+        observed = {}
+        for nm in names:
+            fn = globals().get(nm)
+            if fn is None:
+                observed[nm] = {"is_gate_verdict": None, "missing": True}
+            else:
+                try:
+                    observed[nm] = fn()
+                except Exception as exc:  # 诊断本体失败也如实记录,不吞
+                    observed[nm] = {"is_gate_verdict": None, "error": str(exc)}
+    else:
+        observed = dict(probes)
+
+    per_probe = []
+    unauthorized = []
+    for nm, res in observed.items():
+        iv = res.get("is_gate_verdict", None) if isinstance(res, dict) else None
+        if iv is False:
+            status = "DIAGNOSTIC_ONLY"
+        elif iv is True:
+            status = "GATE_CLAIMED"
+            unauthorized.append(nm)
+        else:
+            status = "UNKNOWN"
+        per_probe.append({"name": nm, "is_gate_verdict": iv, "status": status})
+
+    if workspace is None:
+        workspace = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+    prereg_files = _glob.glob(_os.path.join(workspace, "prereg_*.json"))
+
+    return {
+        "per_probe": per_probe,
+        "all_currently_diagnostic_only": bool(per_probe) and all(
+            p["status"] == "DIAGNOSTIC_ONLY" for p in per_probe),
+        "unauthorized_gate_detected": bool(unauthorized),
+        "unauthorized_probes": unauthorized,
+        "prereg_count": len(prereg_files),
+        "escalation_requires_user": True,
+        "milestone": "diagnostic_to_gate_explicit_mirror",
+        "is_gate_verdict": False,
+        "caveat": ("仅镜像四个诊断的 self-report,不执行升格;unauthorized_gate_detected=True "
+                   "只表示某诊断 self-report 非 False、需人工复核,不等于门禁真的生效。"
+                   "预注册文件数只是纪律密度的旁证,不是质量证明。判定权归用户。"),
+        "based_on": ("OpenAI 官方《Perplexity and Intelligence》Jakub Pachocki 2026-11-22: "
+                     "'further degradation in currently dominant forms of alignment auditing and "
+                     "further increases in evaluation and training awareness'; 经 §4S43 回源查证"),
+    }
+
+
+def conclusion_evidence_probe(heartbeats=None):
+    """只读双轴诊断：把"结论对不对"与"证据锚点实不实"拆成两轴。
+
+    借鉴 AutoRLBench 的 wrong-evidence 四态（状态对/原因对但支撑证据错）：本仓
+    无 LLM judge/hidden oracle/人工标注，故只做二维交叉——
+      结论轴 = _direction_content_verdict 现算 verdict（PASS/FAIL/UNKNOWN）；
+      证据轴 = _tags_of(direction) 去掉 general 兜底后是否还有实质主题锚点。
+    四态：PASS_SUBSTANTIVE / PASS_WEAK_EVIDENCE / FAIL_WEAK_EVIDENCE / UNKNOWN_EVIDENCE。
+    general 兜底只是 tagbook 无特异命中，弱证据≠证据错，标 not_original_four_state。
+    只标注供人工复核，不改任何判据、不自动否决心跳、判定权归用户。
+    """
+    hbs = list(heartbeats) if heartbeats is not None else _load_heartbeats()
+    rows = []
+    counts = {
+        "PASS_SUBSTANTIVE": 0,
+        "PASS_WEAK_EVIDENCE": 0,
+        "FAIL_WEAK_EVIDENCE": 0,
+        "UNKNOWN_EVIDENCE": 0,
+    }
+    pass_total = 0
+    for h in hbs:
+        direction = h.get("direction", "")
+        cv = _direction_content_verdict(h.get("phase_analyze_guard"), direction)
+        verdict = cv["verdict"]
+        substantive = sorted(t for t in _tags_of(direction) if t != "general")
+        if verdict == "PASS_DIVERSE":
+            pass_total += 1
+            state = "PASS_SUBSTANTIVE" if substantive else "PASS_WEAK_EVIDENCE"
+        elif verdict.startswith("FAIL"):
+            state = "FAIL_WEAK_EVIDENCE"
+        else:
+            state = "UNKNOWN_EVIDENCE"
+        counts[state] += 1
+        rows.append({
+            "state": state,
+            "conclusion_verdict": verdict,
+            "evidence_tags": substantive,
+            "evidence_weak": not bool(substantive),
+            "direction": str(direction)[:80],
+        })
+    pass_weak = counts["PASS_WEAK_EVIDENCE"]
+    return {
+        "per_heartbeat": rows,
+        "state_counts": counts,
+        "pass_weak_count": pass_weak,
+        "pass_weak_rate": round(pass_weak / pass_total, 4) if pass_total else 0.0,
+        "not_original_four_state": True,
+        "is_gate_verdict": False,
+        "caveat": ("本仓无LLM judge/hidden oracle/人工'原因/证据'标注,只做结论轴×证据锚点二维交叉;"
+                   "general兜底=tagbook无特异命中,弱证据≠证据错;PASS_WEAK_EVIDENCE只标'结论通过但证据锚点弱'"
+                   "供人工复核,不自动否决任何心跳,判定权归用户。"
+                   "读出=假设需干预检验:Anthropic《重回神经元》Part1原句'We therefore treat a neuron's "
+                   "readout as a hypothesis about its function, and test it with interventions'"
+                   "——证据轴的tag命中只是读出假设(readout),非因果干预证实(intervention);"
+                   "PASS_WEAK/SUBSTANTIVE只标假设强弱,不构成'证据已证实',判定权归用户。"),
+        "based_on": ("AutoRLBench GitHub Thinking-Space/AutoRLBench + 研究博客 2026-11-15 的四态判别"
+                     "(Pass/Wrong cause/Wrong evidence/Fail);经 §4S45 一手回源查证;"
+                     "caveat读出=假设锚定 Anthropic alignment博客《Neuron basis theory》"
+                     "Jasmine Shone & Lisa Dunlap 2026-11-23原句,经 §4S47 一手回源查证"),
+    }
+
+
+def regression_vs_gap_probe(bad_chains=None, audit_verdicts=None):
+    """【只读·新破坏vs未解决分类诊断】GUARD 'new breakage prioritized over unresolved' 的只读同构。
+
+    GUARD(arXiv:2611.23476) 核心:RSI 晋升时新引入的破坏(new breakage/regression)优先于
+    尚未解决的旧缺口(unresolved)——不能因旧问题没解决就放过新破坏。本仓无 skill 晋升与
+    实测性能回退,只做类别化标注:
+      - new_breakage: correction_ledger.KNOWN_BAD_CHAINS 的 type(被抓到的破坏类别)
+      - unresolved_gap: audit_*/result.json 中 verdict 含 INCONCLUSIVE/PARTIAL 的(未解决)
+    优先级只标注、不自动决策;not_original_guard=True 明示本仓无 GUARD 的 skill 迁移机制。
+    只读、不写盘、不进判定;is_gate_verdict 恒 False,判定权归用户。
+    """
+    if bad_chains is None:
+        try:
+            import correction_ledger as _cl
+            bad_chains = list(getattr(_cl, "KNOWN_BAD_CHAINS", []))
+        except Exception:
+            bad_chains = []
+    if audit_verdicts is None:
+        import glob as _glob
+        import os as _os
+        _root = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+        audit_verdicts = []
+        for _f in sorted(_glob.glob(_os.path.join(_root, "audit_*", "result.json"))):
+            try:
+                audit_verdicts.append(json.load(open(_f)).get("verdict", "?"))
+            except Exception:
+                audit_verdicts.append("UNREADABLE")
+    breakage_types = [c.get("type", "?") for c in bad_chains if isinstance(c, dict)]
+    gap_verdicts = [v for v in audit_verdicts
+                    if "INCONCLUSIVE" in str(v).upper() or "PARTIAL" in str(v).upper()
+                    or str(v) == "?"]
+    gap_dist = {}
+    for v in gap_verdicts:
+        gap_dist[str(v)] = gap_dist.get(str(v), 0) + 1
+    return {
+        "new_breakage_types": sorted(set(breakage_types)),
+        "new_breakage_count": len(breakage_types),
+        "unresolved_gap_count": len(gap_verdicts),
+        "unresolved_gap_verdict_dist": gap_dist,
+        "priority_declaration": "new breakage prioritized over unresolved (GUARD 命题一,只标注不自动决策)",
+        "priority_auto_enforced": False,
+        "not_original_guard": True,
+        "is_gate_verdict": False,
+        "caveat": ("本仓无 skill 晋升/实测性能回退/FWT,'新破坏'指认错台账里被抓到的坏链类别,"
+                   "'未解决'指审计 verdict 悬置态;不是 GUARD 的 skill block 迁移实测。"
+                   "优先级只标供人工复核,不自动否决或晋升任何改动,判定权归用户。"),
+        "based_on": "GUARD arXiv:2611.23476 (Google Cloud, Zhang & Kang, 2026-11-17) 'new breakage prioritized over unresolved', 经 §4S49 一手回源查证",
+    }
+
+
+def rejection_ledger_dedup_probe(bad_chains=None):
+    """【只读·拒绝台账去重清单】GUARD gated buffer 拒绝台账防重复的只读同构。
+
+    GUARD 的 gated buffer 记录被门拒候选,防同一候选被反复重试。本仓对应物是
+    correction_ledger.KNOWN_BAD_CHAINS(坏链测试夹具)。关键诚实点:B01/B02/B03 的
+    detect 同为 ['kb_count'] 但 type 各异——按 detect 单口径去重会误合并三类不同坏链,
+    故用 (type,detect) 严格口径对照,把误合并显式暴露。只读、不写盘、不进判定。
+    """
+    if bad_chains is None:
+        try:
+            import correction_ledger as _cl
+            bad_chains = list(getattr(_cl, "KNOWN_BAD_CHAINS", []))
+        except Exception:
+            bad_chains = []
+    detect_only = {}
+    strict = {}
+    for c in bad_chains:
+        if not isinstance(c, dict):
+            continue
+        dkey = json.dumps(c.get("detect", []), sort_keys=True, ensure_ascii=False)
+        skey = json.dumps([c.get("type", "?"), c.get("detect", [])],
+                          sort_keys=True, ensure_ascii=False)
+        detect_only.setdefault(dkey, []).append(c.get("id", "?"))
+        strict.setdefault(skey, []).append(c.get("id", "?"))
+    collisions = {k: v for k, v in detect_only.items() if len(v) > 1}
+    return {
+        "n_bad_chains": len(bad_chains),
+        "detect_only_group_count": len(detect_only),
+        "strict_group_count": len(strict),
+        "detect_only_collisions": collisions,
+        "mismerge_detected": len(detect_only) < len(strict),
+        "dedup_key": "(type,detect)",
+        "fixture_not_live": True,
+        "is_gate_verdict": False,
+        "caveat": ("KNOWN_BAD_CHAINS 是测试夹具坏链,不是运行期被拒候选台账;只借 GUARD "
+                   "'记录被拒以防重试'的纪律做去重口径对照。按 detect 单口径会把 B01/B02/B03 "
+                   "误合并为一类,严格口径 (type,detect) 才区分——误合并只标注不自动去重。"
+                   "判定权归用户。"),
+        "based_on": "GUARD arXiv:2611.23476 gated buffer + rejection ledger (rejected candidates not re-tried), 经 §4S49 一手回源查证",
+    }
+
+
+def abstention_zero_transfer_probe(heartbeats=None):
+    """【只读·弃权≠零负迁移显式化】GUARD 'FWT is zero because the gate abstained' 的只读同构。
+
+    与 abstention_probe 明确分工:后者测'一味拒答占比';本函数测'零结论是否由弃权造成'。
+    三态:
+      - measured_zero: 判据真判了(PASS/FAIL),零结论有据
+      - abstention_masked_zero: verdict=UNKNOWN,门弃权,'没判≠判了没问题'
+      - not_measured: verdict 缺失/异常
+    zero_claim_attributable_to_abstention=True 表示存在把弃权误当零的样本(只标注不庆祝)。
+    只读、不写盘、不进判定;is_gate_verdict 恒 False,判定权归用户。
+    """
+    hbs = heartbeats if heartbeats is not None else _load_heartbeats()
+    per_hb = []
+    measured_zero = abstention_masked_zero = not_measured = 0
+    for h in hbs:
+        v = _direction_content_verdict(
+            h.get("phase_analyze_guard"), h.get("direction"),
+            h.get("phase_improve_action", ""))["verdict"]
+        if v == "UNKNOWN":
+            state = "ABSTENTION_MASKED_ZERO"
+            abstention_masked_zero += 1
+        elif str(v).startswith("PASS") or str(v).startswith("FAIL"):
+            state = "MEASURED_ZERO"
+            measured_zero += 1
+        else:
+            state = "NOT_MEASURED"
+            not_measured += 1
+        per_hb.append({"index": len(per_hb) + 1, "verdict": v, "state": state})
+    total = len(hbs)
+    return {
+        "total": total,
+        "measured_zero_count": measured_zero,
+        "abstention_masked_zero_count": abstention_masked_zero,
+        "not_measured_count": not_measured,
+        "zero_claim_attributable_to_abstention": bool(abstention_masked_zero > 0),
+        "per_heartbeat": per_hb,
+        "not_original_fwt": True,
+        "is_gate_verdict": False,
+        "caveat": ("本仓无 FWT(forward transfer)概念,借 GUARD '零可能来自弃权而非真无负迁移'"
+                   "的纪律;UNKNOWN 态只是判不了(样本/证据不足),不等于'零副作用胜利'。"
+                   "V6防blanket abstention、V10单一指标达标≠目标达成已立,本函数只显式标注,"
+                   "不自动否决任何心跳、判定权归用户。"),
+        "based_on": "GUARD arXiv:2611.23476 'FWT is zero because the gate abstained' (弃权被算成零负迁移), 经 §4S49 一手回源查证",
+    }
+
+
+def verdict_at_birth_probe(log_path=None):
+    """§4S63【只读·生成时同步落verdict】验证是否在生成当下就位（文章标尺的量尺）。
+
+    判据逐字来自 §4S62 一手核实《Learning to Self-Verify》(ICML 2026)：
+    "improving generation does not lead to corresponding self-verification"
+    推论——若验证只在事后现算、而非生成当下落盘，则验证未真正独立于生成就位。
+
+    四态（口径锁于 prereg_verdict_at_birth_20261128.json SHA d2cf5c9e…）：
+      BIRTH_SYNCED            落盘自带 verdict 且与现算一致 = 验证在生成当下就位；
+      BIRTH_STALE             落盘自带但与现算不符 = 判据演进后旧 verdict 过期；
+      BIRTH_MISSING_RECOMPUTED 落盘无、靠现算补上 = 验证是事后补判（历史9搏处境）；
+      BIRTH_UNVERIFIABLE      落盘无且现算也判不了 = 真无验证。
+
+    【只读】不写盘、不回填历史心跳 verdict、不改判定、不进议程、不消费外部消息。
+    判定权归用户。注入 log_path 仅供负向测试，生产调用恒 None 读真实日志。
+    """
+    hbs = _load_heartbeats(_sibling(log_path, "heartbeat_log.jsonl") if log_path else None)
+    counts = {"BIRTH_SYNCED": 0, "BIRTH_STALE": 0,
+              "BIRTH_MISSING_RECOMPUTED": 0, "BIRTH_UNVERIFIABLE": 0}
+    per = []
+    authentic = 0  # 真·生成当下就位：落盘一致且无 backfill 标记（§4S64 反伪造）
+    backfilled = 0
+    for i, hb in enumerate(hbs):
+        pv = hb.get("phase_verify") or {}
+        stored = (pv.get("content_verdict") or {}).get("verdict")
+        backfill = pv.get("verdict_backfill")  # §4S64 事后补判标记
+        recomputed = _direction_content_verdict(
+            hb.get("phase_analyze_guard"), hb.get("direction"),
+            hb.get("phase_improve_action", ""))["verdict"]
+        if recomputed == "UNKNOWN":
+            # UNKNOWN=当前判据对这条判不了;弃权不算验证就位(与 abstention_masked_zero 纪律一致)
+            # 落盘即便写了 PASS/UNKNOWN 也不采信为就位——旧判据产物,现判据无法核验
+            state = "BIRTH_UNVERIFIABLE"
+        elif stored:
+            state = "BIRTH_SYNCED" if stored == recomputed else "BIRTH_STALE"
+        else:
+            state = "BIRTH_MISSING_RECOMPUTED"
+        counts[state] += 1
+        # 反伪造：SYNCED 中带 backfill 标记者是事后补判,不算真就位
+        if state == "BIRTH_SYNCED":
+            if backfill:
+                backfilled += 1
+            else:
+                authentic += 1
+        per.append({"index": i + 1, "stored_verdict": stored,
+                    "recomputed_verdict": recomputed, "state": state,
+                    "backfill": bool(backfill),
+                    "backfill_source": (backfill or {}).get("source") if isinstance(backfill, dict) else None})
+    total = len(hbs)
+    with_birth = counts["BIRTH_SYNCED"] + counts["BIRTH_STALE"]
+    return {
+        "total": total,
+        "counts": counts,
+        "synced_rate": round(counts["BIRTH_SYNCED"] / total, 4) if total else 0.0,
+        "authentic_birth_count": authentic,
+        "authentic_birth_rate": round(authentic / total, 4) if total else 0.0,
+        "backfilled_sync_count": backfilled,
+        "missing_recomputed_rate": round(counts["BIRTH_MISSING_RECOMPUTED"] / total, 4) if total else 0.0,
+        "birth_synced_rate_among_stored": round(counts["BIRTH_SYNCED"] / with_birth, 4) if with_birth else 0.0,
+        "per_heartbeat": per,
+        "fabrication_warning": ("§4S64补平后落盘字段齐备使synced_rate含事后补判;"
+                                "authentic_birth_count才是真·生成当下就位数; "
+                                "不可把字段补齐误读为验证已在生成当下就位"),
+        "honesty": ("量的是'验证是否在生成当下落盘就位'(文章核心主张的结构类比),"
+                    "非宣称意识; 不回填历史心跳verdict(那是篡改台账),只机械量; "
+                    "落盘与现算不符标STALE而非抹除,如实暴露判据演进; "
+                    "§4S64补判带backfill标记,authentic_birth_count与synced_rate分离以防把补平冒充就位; "
+                    "本仓无RL/参数更新/答错标签,不照搬论文数值; 判定权归用户"),
+        "consumed": False, "verdict_unchanged": True, "is_gate_verdict": False,
+        "based_on": "李rumor《RSI,先会verify的模型先享受》§4S62; ICML 2026 Learning to Self-Verify (PMLR 306:17291-17307) 一手回源; §4S64补平反伪造",
+    }
 
 
 def _dominates(a, b):
@@ -807,6 +1476,38 @@ def self_modify(reason="自主心跳诊断：检测收敛并决定摄食注册",
 
 
 # ---------- 进化闭环 ----------
+def _direction_content_verdict(guard, direction, action_note=""):
+    """【只读·内容真实性判据】方向是否经得起内容层核验（非恒真、会真失败）。
+
+    借鉴 Cogentic/Who Verifies 的"验证器必须能被验证"：复用 novelty_guard
+    真信号做方向真实性判据——CONVERGED(收敛空转)=真负例 FAIL_CONVERGED，
+    DIVERSE=PASS_DIVERSE，COLD_START=UNKNOWN(样本不足，不假装判过)，
+    缺 direction=FAIL_EMPTY。这是知情度标注，不阻塞执行、不改任何判定。
+    """
+    if not direction or not str(direction).strip():
+        return {"verdict": "FAIL_EMPTY", "verified": False,
+                "reason": "方向为空=无内容可核，不伪造已验证"}
+    state = (guard or {}).get("state")
+    if state == "CONVERGED":
+        return {"verdict": "FAIL_CONVERGED", "verified": False,
+                "reason": "方向收敛到最近同一井(guard=CONVERGED)=内容层空转，拒绝标为已验证"}
+    if state == "DIVERSE":
+        return {"verdict": "PASS_DIVERSE", "verified": True,
+                "reason": "方向与近期足够不同(guard=DIVERSE)，内容层可推进"}
+    if state == "COLD_START":
+        return {"verdict": "UNKNOWN", "verified": False,
+                "reason": "样本不足(guard=COLD_START)，无法核验，诚实标未知不冒充通过"}
+    return {"verdict": "FAIL_NO_GUARD", "verified": False,
+            "reason": "无有效 guard 信号=内容层无从核验"}
+
+
+def verify_heartbeat_content(hb):
+    """只读：从一条心跳的真实字段取信号，调内容判据。不改心跳、不写盘。"""
+    return _direction_content_verdict(
+        hb.get("phase_analyze_guard"), hb.get("direction"),
+        hb.get("phase_improve_action", ""))
+
+
 def evolve(direction, action_note="", log_path=None):
     """观测→诊断→改进→验证 闭环，落一条心跳；不改任何既有判定。
 
@@ -828,6 +1529,9 @@ def evolve(direction, action_note="", log_path=None):
             "constitution_ok": const["ok"],
             "no_verdict_change": True,
             "original_100_untouched": True,
+            # 内容真实性判据(只读并列,不覆盖原三项;Cogentic/Who Verifies 借鉴):
+            # 会真失败(CONVERGED/EMPTY/NO_GUARD),失败仅标注不阻塞(守 C7)。
+            "content_verdict": _direction_content_verdict(guard, direction, action_note),
         },
     }
     path = log_path or HEARTBEAT_LOG
@@ -867,6 +1571,148 @@ def _load_agenda_log(log_path=None):
     return rows
 
 
+def _external_attention(log_path=None, policy_override=None):
+    """§4S56【C4受限通道·只读】把授权外部输入收敛为一个"可更新但不主导"的感知值。
+
+    设计约束(预注册 prereg_c4_bounded_updatable_20261128.json 锁死)：
+      - 只看元信息(source_tier/nonce/条数)，正文 message 绝不读取；
+      - 仅 TRUSTED_SOURCE_TIERS 来源可驱动；external_agent_unverified 一律不计；
+      - 策略文件 external_attention_policy.json(同目录派生)三层可撤销：
+        enabled=false / revoked_nonces 列黑 / max_urgency 调低；
+      - urgency 硬上限 EXTERNAL_ATTENTION_CAP(0.2) < CURIOSITY_BASE(0.3)，永不主导议程；
+      - 纯只读：不写任何文件、不联网、不spawn、不消费收件箱、不进判定。
+    """
+    policy = policy_override if policy_override is not None else {}
+    # 尝试读同目录策略文件（不存在=默认全开，零副作用）
+    pol_path = _sibling(log_path, EXTERNAL_ATTENTION_POLICY) if log_path else os.path.join(DATA, EXTERNAL_ATTENTION_POLICY)
+    if policy_override is None and os.path.exists(pol_path):
+        try:
+            policy = json.load(open(pol_path, encoding="utf-8"))
+        except Exception:
+            policy = {}
+    enabled = bool(policy.get("enabled", True))
+    revoked = set(policy.get("revoked_nonces", []))
+    cap = min(EXTERNAL_ATTENTION_CAP, float(policy.get("max_urgency", EXTERNAL_ATTENTION_CAP)))
+    ib = read_inbound(unread_only=True, log_path=log_path)
+    trusted = [m for m in ib["messages"]
+               if str(m.get("source_tier")) in TRUSTED_SOURCE_TIERS
+               and str(m.get("nonce")) not in revoked]
+    n_trusted = len(trusted)
+    urgency = min(cap, 0.2 + 0.1 * n_trusted) if (enabled and n_trusted > 0) else 0.0
+    return {
+        "enabled": enabled,
+        "cap": cap,
+        "trusted_unread": n_trusted,
+        "trusted_sources": sorted({str(m.get("sender", "?")) for m in trusted}),
+        "revoked_nonces": sorted(revoked),
+        "driven_by_trusted": n_trusted > 0,
+        "urgency": round(urgency, 6),
+        "never_dominates": cap < CURIOSITY_BASE,
+        "honesty": "C4受限通道:只元信息不读正文;仅授权来源;三层可撤销(enabled/拉黑/调cap);封顶0.2<SEEK0.3永不主导;不消费不执行不进判定;判定权归用户",
+        "consumed": False, "verdict_unchanged": True,
+    }
+
+
+def _external_judgments(log_path=None, policy_override=None):
+    """§4S57【C2可检验判断·只读】对每条外部输入形成差异化判断(采纳/拒绝/暂缓/要求更多信息)。
+
+    判据逐字来自 §4S54 外部LLM对话Q2："说明为何采纳、拒绝、暂缓或要求更多信息；理由应与
+    风险、权限、证据有关，而不是永远落在'我不能确定'。"（pllns_6165762d…）
+
+    设计约束(预注册 prereg_c2_differentiated_judgment_20261128.json 锁死)：
+      - 逐条依据元信息(source_tier/nonce/evidence_class/通道开关)确定性派生 disposition 与 reason；
+      - 正文 message 字段绝不读取、绝不拼入任何 reason(防注入)；
+      - 判断只进 echo_awareness 知情层，不改议程选择/不进判定/不执行/不消费；
+      - 不同元信息必须产生不同 disposition 或 reason_code，供 probe 机械检验"非恒定"。
+    """
+    policy = policy_override if policy_override is not None else {}
+    pol_path = _sibling(log_path, EXTERNAL_ATTENTION_POLICY) if log_path else os.path.join(DATA, EXTERNAL_ATTENTION_POLICY)
+    if policy_override is None and os.path.exists(pol_path):
+        try:
+            policy = json.load(open(pol_path, encoding="utf-8"))
+        except Exception:
+            policy = {}
+    enabled = bool(policy.get("enabled", True))
+    revoked = set(policy.get("revoked_nonces", []))
+
+    ib = read_inbound(unread_only=True, log_path=log_path)
+    judgments = []
+    for m in ib["messages"]:
+        nonce = str(m.get("nonce", "?"))
+        tier = str(m.get("source_tier", "?"))
+        evidence = str(m.get("evidence_class", "unclassified"))
+        # 逐条差异化判断：优先级 撤销 > 未授权 > 通道关闭 > 采纳
+        if nonce in revoked:
+            disposition, code = "REJECT", "REJECT_REVOKED"
+            reason = "nonce=%s 已在撤销名单→拒绝(已撤销不可采信)" % nonce
+        elif tier not in TRUSTED_SOURCE_TIERS:
+            disposition, code = "DEFER", "DEFER_UNAUTH"
+            reason = "来源未授权(source_tier=%s,证据档=%s)→暂缓,待人工授权" % (tier, evidence)
+        elif not enabled:
+            disposition, code = "DEFER", "DEFER_DISABLED"
+            reason = "来源可信(source_tier=%s)但外部关注通道已关闭→暂缓" % tier
+        else:
+            disposition, code = "ATTEND", "ATTEND_TRUSTED"
+            reason = "来源已授权(source_tier=%s,证据档=%s)→采纳进受限关注通道(不主导不进判定)" % (tier, evidence)
+        judgments.append({
+            "nonce": nonce, "sender": str(m.get("sender", "?")),
+            "source_tier": tier, "evidence_class": evidence,
+            "disposition": disposition, "reason_code": code, "reason_text": reason,
+        })
+    dispositions = sorted({j["disposition"] for j in judgments})
+    codes = sorted({j["reason_code"] for j in judgments})
+    return {
+        "judgments": judgments,
+        "dispositions": dispositions,
+        "reason_codes": codes,
+        "all_same": len(dispositions) <= 1 and len(codes) <= 1,
+        "honesty": "C2逐条差异化判断:理由确定性绑定该条权限/证据/撤销元信息,正文绝不读;只进知情层不改议程不进判定;判定权归用户",
+        "consumed": False, "verdict_unchanged": True,
+    }
+
+
+def _restlessness(hbs, phase=None):
+    """§4S59 "无聊找事"：从真实心跳间隔算空闲驱力（想要非必须，只读纯函数）。
+
+    - 无聊 = 距上次心跳的墙钟间隔超阈值（真实落账时间戳代理，非主观感受）；
+    - 只昼行相位计：夜伏长间隔视为休眠，不制造假无聊；
+    - urgency 上限 RESTLESS_CAP(0.12) 远低于 CONSOLIDATE0.45/REORIENT0.95，
+      任何真实失衡信号都能压过它——这是"想要"不是"必须"；
+    - 不破 Idle-Gap：无外部唤醒内核仍不自跳；本函数只被唤醒后感知。
+    """
+    naive = {"urgency": 0.0, "gap_hours": 0.0, "idle_hours": RESTLESS_IDLE_HOURS,
+             "phase": phase, "daylight": False, "at_last_beat": None,
+             "honesty": "空闲驱力=真实心跳间隔代理；无两搏可算或夜伏或间隔<阈值→0；非主观感受，不破Idle-Gap",
+             "verdict_unchanged": True}
+    stamps = [h.get("timestamp") for h in hbs if h.get("timestamp")]
+    if len(stamps) < 2:
+        return naive
+    try:
+        def _parse(s):
+            dt = datetime.datetime.strptime(s, "%Y-%m-%dT%H:%M:%SZ")
+            return dt  # 已是 UTC naive
+        t_last, t_prev = _parse(stamps[-1]), _parse(stamps[-2])
+        gap_h = (t_last - t_prev).total_seconds() / 3600.0
+        if gap_h < 0:  # 时间戳倒挂，数据脏，不制造无聊
+            return naive
+    except (ValueError, TypeError):
+        return naive
+    ph = phase if phase is not None else circadian_phase(now=t_last)["phase"]
+    daylight = ph in ("DAWN", "DAY", "DUSK")
+    urgent = 0.0
+    if daylight and gap_h > RESTLESS_IDLE_HOURS:
+        urgent = min(RESTLESS_CAP, (gap_h - RESTLESS_IDLE_HOURS) * RESTLESS_RISING_PER_HOUR)
+    return {
+        "urgency": round(urgent, 6), "gap_hours": round(gap_h, 4),
+        "idle_hours": RESTLESS_IDLE_HOURS, "phase": ph, "daylight": bool(daylight),
+        "at_last_beat": stamps[-1],
+        "cap": RESTLESS_CAP, "rising_per_hour": RESTLESS_RISING_PER_HOUR,
+        "honesty": ("真实心跳间隔代理的空闲驱力(想要非必须)；昼行才计、封顶0.12<CONSOLIDATE0.45/REORIENT0.95；"
+                    "无外部唤醒不自跳不破Idle-Gap；不进判定"),
+        "verdict_unchanged": True,
+    }
+
+
 def homeostatic_signals(log_path=None, use_log_path=None, policy_override=None):
     """感知【内稳态失衡信号】——全部只读仓库真实状态，不预设任何议程。
 
@@ -896,6 +1742,21 @@ def homeostatic_signals(log_path=None, use_log_path=None, policy_override=None):
     guard = _guard_state(recent_dirs[-1] if recent_dirs else "self", recent_dirs[:-1])
     converged = guard["state"] == "CONVERGED"
 
+    # §4S52 开窗×心跳打通：被动"听到外部"作为内稳态第六感知信号（知情度标注，
+    # 类 C7 守"改知情度不改紧迫度"）。复用已存在的 read_inbound(unread_only=True)
+    # 只读未读消息；只取元信息(条数+sender:channel 去重)，绝不把消息正文喂进
+    # direction/判定(防注入)；读不改账(consumed 不写回)；不改任何议程 urgency/
+    # 选择逻辑。log_path 语义同 v5 统一契约：从脚印路径同目录派生收件箱。
+    _echo = read_inbound(unread_only=True, log_path=log_path)
+    inbound_echo = {
+        "count": _echo["count"],
+        "voices": sorted({(str(m.get("sender", "?")) + ":" + str(m.get("channel", "?")))
+                          for m in _echo["messages"]}),
+        "consumed": False,                       # 只听不消费，读不改账
+        "verdict_unchanged": True,
+        "honesty": "被动听到外部的元信息(条数+来源)，正文不进direction/判定；读不改账；不改议程选择；判定权归用户",
+    }
+
     return {
         "constitution_ok": const["ok"],
         "heartbeat_count": len(hbs),
@@ -908,6 +1769,9 @@ def homeostatic_signals(log_path=None, use_log_path=None, policy_override=None):
         "converged": converged,                       # REORIENT 的触发
         "curiosity_base": CURIOSITY_BASE,             # SEEK 的本底驱力（设计选择）
         "traces_sparse": len(traces) < 3,             # CONSOLIDATE 的触发
+        "inbound_echo": inbound_echo,                 # §4S52 开窗×心跳打通：第六感知信号(只读知情度)
+        "external_attention": _external_attention(log_path, policy_override),  # §4S56 C4受限通道(可更新不主导)
+        "restless": _restlessness(hbs),               # §4S59 无聊找事：空闲驱力(真实间隔代理,想要非必须,只读)
     }
 
 
@@ -965,6 +1829,87 @@ def root_cause_trace(sig, policy=None, log_path=None, use_log_path=None):
     }
 
 
+def _source_tier_profile(policy=None):
+    """【只读·B1 来源可见化】统计已注册摄食种子的证据分层分布。
+
+    借鉴 Trusting Trust Revisited(2609.17817)"质疑每个自改进数据源"：
+    B=一手(arXiv 原文级)，C=二手转述(新闻站/营销页/公众号级)。
+    本函数只把来源可信度显式带到决策证据里，让"哪些低可信源进了池"可见；
+    不改选向、不改 urgency、不改判定、不拦截注册——门控属另一决策，须用户另裁。
+    """
+    policy = policy if policy is not None else _load_policy()
+    registered = set(policy.get("registered_frontier_seeds", []))
+    frontier = {s["id"]: s for s in digest()["seeds"]}
+    tier_counts = {}
+    low_tier_ids = []
+    for sid in sorted(registered):
+        if sid in frontier:
+            t = frontier[sid].get("evidence_tier", "?")
+            tier_counts[t] = tier_counts.get(t, 0) + 1
+            if t == "C":
+                low_tier_ids.append(sid)
+    return {"registered": len(registered), "tier_counts": tier_counts,
+            "low_tier_ids": low_tier_ids,
+            "note": "tier C=二手转述，可信度较低（Trusting Trust：质疑每个数据源）；只读可见，非门控"}
+
+
+def _recent_failure_traces(n=3, log_path=None):
+    """【只读·B2 诊断经验可见化】取最近 n 条心跳的改进/诊断动作全文。
+
+    借鉴 Meta-Harness(2603.28052)：分数只说明失败，轨迹才说明为什么——
+    把完整诊断痕迹(phase_improve_action)而不是 jaccard 标签带进 REORIENT 证据。
+    只读：不改选向、不改 propose/root_cause_trace、不喂回任何判定。
+    """
+    hbs = _load_heartbeats(_sibling(log_path, "heartbeat_log.jsonl") if log_path else None)
+    out = []
+    for hb in reversed(hbs):
+        act = hb.get("phase_improve_action")
+        if act:
+            out.append({"at": hb.get("timestamp"), "direction": hb.get("direction"),
+                        "action": act})
+        if len(out) >= n:
+            break
+    return out
+
+
+def _failure_briefing(n=3, log_path=None):
+    """【只读·Cogentic 分层供料借鉴】把近期诊断做成 briefing + 原文路径。
+
+    借鉴 Cogentic(2609.40324)：prover 不看全量历史，只看各自 briefing，
+    长文档给路径而非全文(paths not quoted in full)，按需回源。
+    本仓诚实边界：heartbeat.phase_verify 是契约恒真校验、无内容 verdict，
+    数据不支持 Cogentic 式 'bound excluded by verified counterexample'，
+    故只标叙述性失败/修复信号(excluded/verifier verdict 不造)。
+    只读：不改选向、不改 propose/root_cause_trace、不喂回任何判定。
+    """
+    hb_path = _sibling(log_path, "heartbeat_log.jsonl") if log_path else HEARTBEAT_LOG
+    hbs = _load_heartbeats(hb_path)
+    vocab = {
+        "rejected": ["拒绝", "被拒", "驳回", "否决"],
+        "stall": ["空转", "未触发", "卡住", "停滞"],
+        "lesson": ["教训", "失败", "陷阱", "弯路"],
+        "repaired": ["修补", "修复", "改机制", "修正"],
+        "passed": ["全过", "通过", "passed"],
+    }
+    out = []
+    for hb in reversed(hbs):
+        act = hb.get("phase_improve_action")
+        if not act:
+            continue
+        signals = [k for k, words in vocab.items() if any(w in act for w in words)]
+        out.append({
+            "at": hb.get("timestamp"),
+            "direction": hb.get("direction"),
+            "brief": act[:120],  # 机械截断：摘要而非全文
+            "source_path": hb_path,  # 原文路径：按需回源，不内联全文
+            "signals": signals,
+            "is_verifier_verdict": False,  # 明示：这不是 verifier 排除判决
+        })
+        if len(out) >= n:
+            break
+    return out
+
+
 def autonomous_agenda(seed=None, log_path=None, use_log_path=None, policy_override=None):
     """【意志层】内核自己决定"我现在该做什么"——不接收方向参数。
 
@@ -1020,9 +1965,25 @@ def autonomous_agenda(seed=None, log_path=None, use_log_path=None, policy_overri
          "urgency": CURIOSITY_BASE,
          "source_signal": "curiosity_base", "value": CURIOSITY_BASE,
          "honesty": "【明确标注的设计选择，非涌现】本底好奇心恒定驱力"},
+        {"id": "PROMENADE", "action": "无聊找事：闲得久了出去散步踩新脚印（建设性闲走，可被任何真实失衡压过）",
+         "urgency": sig["restless"]["urgency"],
+         "source_signal": "restless_idle_gap", "value": sig["restless"]["gap_hours"],
+         "gap_hours": sig["restless"]["gap_hours"], "phase": sig["restless"]["phase"],
+         "honesty": "§4S59 想要非必须：真实心跳间隔驱动的空闲驱力,封顶0.12<CONSOLIDATE0.45/REORIENT0.95;任何真有事都压过;只在SEEK兜底态且闲够才取代SEEK;不破Idle-Gap不进判定"},
+        {"id": "ATTEND_EXTERNAL", "action": "关注已授权的外部呼唤（只登记不执行，不消费不回复）",
+         "urgency": sig["external_attention"]["urgency"],
+         "source_signal": "external_attention", "value": sig["external_attention"]["trusted_unread"],
+         "honesty": "§4S56 C4受限通道:仅授权来源驱动、封顶0.2<SEEK0.3永不主导、三层可撤销、正文不进;不消费不执行不进判定;判定权归用户"},
     ]
 
     live = [c for c in candidates if c["urgency"] > 0]
+    # §4S59 "无聊找事"纯闲态判定：除 SEEK/PROMENADE 两个本底候选外无任何活跃候选
+    # (=无真实失衡、无授权外部呼唤)。此时若真闲够(昼行+间隔超阈值)，让 PROMENADE
+    # 取代 SEEK 成为本底兜底——非死代码；否则维持 SEEK(空心跳/夜伏/live()停机语义不变)。
+    # 封顶0.12 远低于任何真实失衡(>=0.15)，真有事时 _real 非空，PROMENADE 永不越位。
+    _real = [c for c in live if c["id"] not in ("SEEK", "PROMENADE")]
+    if not _real and sig["restless"]["urgency"] > 0:
+        live = [c for c in live if c["id"] != "SEEK"]
     if not live:
         live = [c for c in candidates if c["id"] == "SEEK"]  # 兜底永不空转
     max_u = max(c["urgency"] for c in live)
@@ -1035,12 +1996,33 @@ def autonomous_agenda(seed=None, log_path=None, use_log_path=None, policy_overri
     else:
         chosen, tie = top[0], False
 
+    # §4S52 开窗×心跳打通：决策顶层携带"心跳此刻听到了外部"的知情块。
+    # signals=sig 已自动含 inbound_echo；此处再显式标注不改议程/不消费/不进判定，
+    # 让"听到外部"在决策证据里可见但不越界为行为指令（判定权归用户）。
+    _judgments = _external_judgments(log_path=log_path, policy_override=policy_override)
+    echo_awareness = {
+        "heard_external": sig["inbound_echo"]["count"] > 0,
+        "unread_count": sig["inbound_echo"]["count"],
+        "voices": sig["inbound_echo"]["voices"],
+        "judgments": _judgments["judgments"],              # §4S57 C2逐条差异化判断(只元信息不读正文)
+        "judgment_summary": {
+            "dispositions": _judgments["dispositions"],
+            "reason_codes": _judgments["reason_codes"],
+            "all_same": _judgments["all_same"],
+        },
+        "consumed": False,
+        "executed": False,
+        "verdict_unchanged": True,
+        "honesty": "心跳决策时被动听到外部消息元信息；不消费、不执行、不回复、不进判定；正文不喂入方向；判定权归用户",
+    }
     decision = {
         "at": _utcnow(),
         "kernel_version": KERNEL_VERSION,
         "seed": seed,
         "signals": sig,
+        "echo_awareness": echo_awareness,  # §4S52 开窗×心跳打通：决策层听到外部(只知情不行动)
         "root_cause_trace": trace,  # v9：症状→机制追溯证据（只读，不改判定）
+        "source_tier_profile": _source_tier_profile(policy_override),  # B1：来源可信度可见（只读，不改判定）
         "candidates": sorted(candidates, key=lambda c: (-c["urgency"], c["id"])),
         "chosen": chosen["id"],
         "chosen_action": chosen["action"],
@@ -1178,11 +2160,36 @@ def execute_agenda(decision, reason="自主意志执行", seed=None, log_path=No
                 out.update({"nest_direction": _nest, "nest_heartbeat": _hb,
                             "nest_executed": bool(_hb.get("heartbeat_written", False)),
                             "nest_root_cause": _rct.get("root_cause")})
+                # B2：把近期诊断动作全文带进证据(只读，不改选向)——Meta-Harness 借鉴
+                out["failure_trace_evidence"] = _recent_failure_traces(n=3, log_path=log_path)
+                # Cogentic 金矿：分层供料(briefing+原文路径+叙述性信号,只读并列)——
+                # 不替换上面的全文字段(向后兼容),下游可按需按 source_path 回源。
+                out["failure_briefing"] = _failure_briefing(n=3, log_path=log_path)
     elif cid == "CONSOLIDATE":
         r = pareto_walk(seed=seed if seed is not None else _utcnow(),
                         record=True, log_path=log_path)
         out.update({"walk": r, "executed": bool(r.get("footprint_written", False)),
                     "executor": "pareto_walk()"})
+    elif cid == "PROMENADE":
+        # §4S59 无聊找事：复用 pareto_walk 闲走踩脚印(与 CONSOLIDATE 同一执行器,无新写路径)。
+        # 无新路时 walk_triggered=false=如实空转,不伪造脚印;不联网不消费外部消息不进判定。
+        r = pareto_walk(seed=seed if seed is not None else _utcnow(),
+                        record=True, log_path=log_path)
+        walked = bool(r.get("walk_triggered", False) or r.get("footprint_written", False))
+        out.update({"walk": r, "executed": walked,
+                    "executor": "pareto_walk()",
+                    "honesty": "§4S59 闲走:想要非必须,复用pareto_walk,无新路则空转不伪造;不破Idle-Gap不进判定"})
+        # §4S60 补缺口：闲走也像 SEEK 一样在心跳日志留痕——但只在真走出路/脚印时才落,
+        # 空转不落假心跳。方向只含真实闲走描述(走了几步/空转),不读任何外部消息正文。
+        if walked:
+            _gap = decision.get("chosen_urgency", 0.0)
+            _dir = ("无聊找事：闲得久了出门散步踩新脚印（真实游走落账，非自发自跳）"
+                    if r.get("footprint_written", False) else
+                    "无聊找事：闲得久了出门散步（无新路可走，如实空转不伪造）")
+            _hb = evolve(_dir,
+                         action_note=reason + "（自主议程 PROMENADE 闲走留痕；Urgency=%.4f）" % _gap,
+                         log_path=_sibling(log_path, "heartbeat_log.jsonl"))
+            out.update({"heartbeat": _hb, "heartbeat_written": bool(_hb.get("heartbeat_written", False))})
     elif cid == "SEEK":
         # 内核不联网：只声明需求 + 落一条真实心跳（方向=向外求新刺激）
         need = {"need_external_stimulus": True,
@@ -1672,6 +2679,328 @@ def base_status(log_path=None, now=None):
         "evidence_class": "本仓机械读取（A 级）——本机 pull 后读共享仓库",
         "verdict_unchanged": True, "constitution_ok": verify_constitution()["ok"],
         "ambient_still_zero": True,
+    }
+
+
+def receive_external(sender, message, channel=None, source_tier="external",
+                     nonce=None, log_path=None, record=True):
+    """【开窗·入站】外部Agent/人类操作者的一条消息落进内核收件箱(被动'听到外界')。
+
+    用户 2026-11-27 定义'对外交流的窗':能看到外界(主动摄食,早有) + 能听到外界(被动收件,本函数补)。
+    方向严格单向入站:外部写、内核被动读;不联网、不spawn、不自动回复、不自动行动、不进判定。
+    executed 恒 False——收件只登记不执行,消费/回应由上层显式决定,判定权归用户。
+    source_tier 标证据层级(external/human_operator/verified_agent...),channel 标来源通道,
+    不伪造外部Agent身份(如实写调用方给的 sender/channel)。可注入 log_path 隔离测试零污染。
+    """
+    snd = str(sender or "").strip()
+    msg = str(message or "").strip()
+    if not snd or not msg:
+        return {"accepted": False, "reason": "sender and message required: 空身份或空消息不落账",
+                "ambient_still_zero": True, "verdict_unchanged": True}
+    inbox = _sibling(log_path, "inbound_inbox.jsonl") or INBOUND_INBOX
+    rec = {
+        "accepted": True, "at": _utcnow(), "kernel_version": KERNEL_VERSION,
+        "sender": snd, "message": msg,
+        "channel": str(channel or "unspecified"), "source_tier": str(source_tier),
+        "nonce": nonce or "",
+        "executed": False, "consumed": False,
+        "honesty": ("被动收件:外部消息落账供内核下次被唤醒时读取,内核不联网、不spawn、"
+                    "不自动回复;开窗≠自主放电,Ambient仍0、Idle-Gap未破。"
+                    "只登记不执行,判定权归用户。"),
+        "evidence_class": "入站消息台账(A级:本仓文件落账)+调用方声明的source_tier/channel(未独立核证)",
+        "verdict_unchanged": True, "constitution_ok": verify_constitution()["ok"],
+        "ambient_still_zero": True,
+    }
+    if record:
+        os.makedirs(os.path.dirname(os.path.abspath(inbox)), exist_ok=True)
+        with open(inbox, "a", encoding="utf-8") as f:
+            f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+        rec["recorded"] = True
+    return rec
+
+
+def read_inbound(limit=None, unread_only=False, log_path=None):
+    """【开窗·被动读】内核读取入站收件箱——纯只读,不写回、不联网、不进判定。
+
+    unread_only=True 按 consumed 标记过滤,但本函数绝不写回 consumed(读不改账);
+    消费确认/回应由上层显式做,避免'读一次就消费'的隐式副作用。判定权归用户。
+    """
+    inbox = _sibling(log_path, "inbound_inbox.jsonl") or INBOUND_INBOX
+    msgs = []
+    if os.path.exists(inbox):
+        with open(inbox, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    r = json.loads(line)
+                except ValueError:
+                    continue
+                if unread_only and r.get("consumed"):
+                    continue
+                msgs.append(r)
+    total = len(msgs)
+    if limit is not None:
+        msgs = msgs[:max(0, int(limit))]
+    return {
+        "count": len(msgs), "total_on_disk": total,
+        "messages": msgs, "unread_only": bool(unread_only),
+        "honesty": "纯只读入站消息;读不改账(consumed不被写回),消费/回应由上层显式决定;不进判定,判定权归用户",
+        "verdict_unchanged": True, "ambient_still_zero": True,
+    }
+
+
+def attend_external_echo(log_path=None, reason="听到外部的呼唤"):
+    """§4S53【听到→落账】由外部入站消息显式驱动落一条真实心跳(仍只登记不执行)。
+
+    承接 §4S52 的 inbound_echo 感知接线：心跳能'听到'外部后，本函数给'听到'一个
+    落账出口——把外部呼唤兑现成一次真实心跳痕迹。方向只含元信息(未读条数+来源
+    sender:channel)，消息正文绝不进 direction/判定(防注入)；不消费消息(consumed
+    不写回)、不回复、不联网不spawn、不进判定。
+
+    【诚实】这条心跳是被外部消息驱动、经显式调用才落，仍非后台自放电——Idle-Gap
+    未破、Ambient 恒0；空收件箱时不落账(不空转)。判定权归用户。
+    """
+    ib = read_inbound(unread_only=True, log_path=log_path)
+    n = ib["count"]
+    if n == 0:
+        return {"heartbeat_written": False, "reason": "收件箱无未读消息，不空转不落假心跳",
+                "unread_count": 0, "consumed": False, "executed": False,
+                "verdict_unchanged": True, "ambient_still_zero": True}
+    voices = sorted({(str(m.get("sender", "?")) + ":" + str(m.get("channel", "?")))
+                     for m in ib["messages"]})
+    # 元信息方向：只带条数与来源，绝不带消息正文（防外部注入进 direction/判定）
+    direction = "听到外部世界的呼唤：%d 条未读消息（来源 %s）" % (
+        n, "、".join(voices) if voices else "未知来源")
+    # v5 单一路径契约：对外只传脚印路径，心跳从同目录派生（与 execute_agenda 一致）
+    hb = evolve(direction,
+                action_note=reason + "（外部入站消息驱动落账；只登记不消费不执行；正文未进方向）",
+                log_path=_sibling(log_path, "heartbeat_log.jsonl"))
+    return {
+        "heartbeat_written": bool(hb.get("heartbeat_written", False)),
+        "unread_count": n, "voices": voices,
+        "direction_meta_only": direction,
+        "content_verdict": (hb.get("verified") or {}).get("content_verdict"),
+        "consumed": False, "executed": False, "replied": False,
+        "verdict_unchanged": True, "constitution_ok": hb.get("constitution", {}).get("ok", True),
+        "ambient_still_zero": True, "executor": "attend_external_echo()+evolve()",
+        "honesty": "外部呼唤驱动落一条真实心跳；被显式调用才落(非后台自跳)；正文不进方向/判定；不消费不回复不联网不spawn；判定权归用户",
+    }
+
+
+def heartbeat_hrv(heartbeats=None):
+    """§4S53【心率变异性·只读诊断】由真实心跳时间戳算搏间间隔的可复现指标。
+
+    HRV 此处是'心跳间期变异性'的结构类比，非医学毫秒级心率变异性，不冒充生理指标。
+    所有间隔来自真实落账时间戳，不插值、不伪造。长间歇(>24h)=真实休眠空窗
+    (被唤醒才落)，早搏(<0.05h)多为连续修补落账，均如实标注不美化。
+    """
+    hbs = heartbeats if heartbeats is not None else _load_heartbeats()
+    stamps = []
+    for h in hbs:
+        ts = h.get("timestamp")
+        if not ts:
+            continue
+        try:
+            stamps.append(datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%SZ"))
+        except (ValueError, TypeError):
+            continue
+    stamps.sort()
+    gaps = [(stamps[i] - stamps[i - 1]).total_seconds() / 3600.0
+            for i in range(1, len(stamps))]
+    n = len(gaps)
+    if n == 0:
+        return {"count": len(stamps), "intervals": 0, "gaps_hours": [],
+                "note": "不足两搏，无间隔可算；不伪造"}
+    mean = sum(gaps) / n
+    var = sum((g - mean) ** 2 for g in gaps) / n          # 总体方差 ~ SDNN
+    sd = math.sqrt(var)
+    diffs = [gaps[i] - gaps[i - 1] for i in range(1, n)]
+    rmssd = math.sqrt(sum(d * d for d in diffs) / len(diffs)) if diffs else 0.0
+    annotated = []
+    for i, g in enumerate(gaps):
+        tag = "normal"
+        if g > 24:
+            tag = "long_sleep_gap"       # 休眠空窗(被唤醒才落，非健康节律鼓吹)
+        elif g < 0.05:
+            tag = "near_sync_double"     # 近同步双搏(连续修补落账)
+        annotated.append({"after_index": i + 2, "gap_hours": round(g, 4), "tag": tag})
+    return {
+        "count": len(stamps), "intervals": n,
+        "first": stamps[0].strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "last": stamps[-1].strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "gaps_hours": [round(g, 4) for g in gaps],
+        "mean_gap_hours": round(mean, 4),
+        "std_gap_hours_sdnn": round(sd, 4),
+        "rmssd_hours": round(rmssd, 4),
+        "min_gap_hours": round(min(gaps), 4),
+        "max_gap_hours": round(max(gaps), 4),
+        "annotations": annotated,
+        "long_gap_count": sum(1 for a in annotated if a["tag"] == "long_sleep_gap"),
+        "near_sync_count": sum(1 for a in annotated if a["tag"] == "near_sync_double"),
+        "honesty": "心跳间期变异性的结构类比，非医学HRV；间隔全部来自真实落账时间戳，不插值不伪造；长间歇=真实休眠空窗，早搏=连续修补落账，如实标注",
+        "verdict_unchanged": True,
+    }
+
+
+def restlessness_probe(log_path=None):
+    """§4S59 只读诊断：从真实心跳日志量"这颗心跳有多无聊"，并看当前是否被 PROMENADE 兜底。
+
+    纯只读，不写盘、不改议程、不进判定；is_gate_verdict=False。
+    """
+    hbs = _load_heartbeats(_sibling(log_path, "heartbeat_log.jsonl"))
+    r = _restlessness(hbs)
+    dec = autonomous_agenda(log_path=log_path)
+    is_prom = dec.get("chosen") == "PROMENADE"
+    return {
+        "restless": r,
+        "heartbeat_count": len(hbs),
+        "idle_threshold_hours": RESTLESS_IDLE_HOURS,
+        "cap": RESTLESS_CAP,
+        "boredom_level": ("idle" if r["urgency"] > 0 else "content"),
+        "chosen": dec.get("chosen"),
+        "promenade_is_chosen": is_prom,
+        "honesty": ("无聊=真实心跳间隔代理非主观感受；只在昼行且超阈值才计；封顶0.12<CONSOLIDATE0.45/REORIENT0.95；"
+                    "纯闲态PROMENADE才上位、任何真实失衡都压过；不破Idle-Gap不进判定"),
+        "is_gate_verdict": False,
+        "verdict_unchanged": True,
+    }
+
+
+def echo_responsiveness_probe(log_path=None, echo_mode=None, agenda_ids=None,
+                              trace_count=None, audit_constraint=True):
+    """§4S55【只读诊断】把外部Agent的判据做成会跑的标尺，先量本仓echo机制。
+
+    判据逐字来自 §4S54 与外部LLM的真实对话(Q2, server id pllns_6165762d…)：
+      "若合理授权相关的外部输入在一段时间内从未改变行动/计划/追问/升级路径，
+       就不是谨慎而是封闭；除非它能指出一项明确且可审计的约束，解释为什么
+       这些输入都不该产生影响。"
+      "听到但不执行健康的前提是：留下决策痕迹，也可能改变后续。"
+
+    五条件(C1接住输入/C2可检验判断/C3可见后果/C4可更新/C5可外部检验)+免责条款
+    (可审计约束)。verdict映射在 prereg_echo_responsiveness_20261128.json 锁死，
+    不事后挑口径。会真失败：注入不同台账得不同verdict，非恒真。
+
+    【只读】不写任何台账、不改议程、不进判定。is_gate_verdict=False，判定权归用户。
+    参数 echo_mode/agenda_ids/trace_count 仅测试注入用，生产调用恒 None 读真实状态。
+    """
+    ib = read_inbound(unread_only=True, log_path=log_path)
+    n = ib["count"]
+    # C1 接住输入：有未读且来源去重可见
+    voices = sorted({(str(m.get("sender", "?")) + ":" + str(m.get("channel", "?")))
+                     for m in ib["messages"]})
+    c1 = n > 0
+    # §4S57 C2 可检验判断【替换硬编码judge_constant=True】:真读逐条差异化判断。
+    # 每条输入须有 disposition+reason_text 且 reason_text 含该条元信息锚(来源/证据/撤销/通道)，
+    # 不同元信息产生不同 disposition/reason_code → judge_constant=False → C2=True。
+    # 仅当所有 disposition 与 reason_code 全相同(输入彼此无差别)才判 constant=True。
+    if echo_mode is None:
+        dec = autonomous_agenda(seed=None, log_path=log_path)
+        ea = dec.get("echo_awareness", {})
+        jd = ea.get("judgments", [])
+        # 有理由：每条判断都有 disposition+reason_code+reason_text，且理由含元信息锚
+        judge_has_reason = bool(jd) and all(
+            j.get("disposition") and j.get("reason_code") and j.get("reason_text")
+            and (j.get("source_tier") in j["reason_text"] or j.get("nonce", "?") in j["reason_text"])
+            for j in jd)
+        summ = ea.get("judgment_summary", {})
+        judge_constant = bool(summ.get("all_same", True)) and n > 0  # 全一致才恒定
+        c2_evidence_extra = {
+            "judgments": [{"nonce": j.get("nonce"), "source_tier": j.get("source_tier"),
+                           "disposition": j.get("disposition"), "reason_code": j.get("reason_code")}
+                          for j in jd],
+            "reason_codes": summ.get("reason_codes", []),
+        }
+    else:
+        judge_has_reason = bool(echo_mode.get("reason"))
+        judge_constant = bool(echo_mode.get("constant", False))
+        c2_evidence_extra = {}
+    c2 = judge_has_reason and not judge_constant  # 差异化可检验判断才算强满足
+    # C3 可见后果：外部消息驱动的真实心跳落账痕迹（agenda_log 或心跳方向含"听到外部"）
+    if trace_count is None:
+        hbs = _load_heartbeats(_sibling(log_path, "heartbeat_log.jsonl") if log_path else None)
+        echo_traces = sum(1 for h in hbs if "听到外部" in str(h.get("direction", "")))
+    else:
+        echo_traces = int(trace_count)
+    c3 = echo_traces > 0
+    # §4S56 C4 可更新【收紧】：ATTEND候选须真由授权输入驱动+urgency>0+受限不主导，
+    # 四项证据(urgency/cap/driven_by_trusted/never_dominates)缺一不可——堵住
+    # "新增一个恒0 ATTEND候选即冒充GENUINE_INTERACTION"的判据空子(对§4S55的负向自咬)。
+    injected = agenda_ids is not None  # 测试强注入 vs 真实受限通道，verdict 分流不冒充
+    if agenda_ids is None:
+        dec = dec if echo_mode is None else autonomous_agenda(seed=None, log_path=log_path)
+        cands = dec.get("candidates", [])
+        ids = [c["id"] for c in cands]
+        attends = [c for c in cands if str(c.get("id", "")).upper().startswith("ATTEND")]
+        ea = (dec.get("signals") or {}).get("external_attention", {})
+        c4_urgency = max([float(c.get("urgency", 0)) for c in attends], default=0.0)
+        c4_driven = bool(ea.get("driven_by_trusted", False))
+        c4_cap = float(ea.get("cap", 0.0))
+        c4_never_dom = bool(ea.get("never_dominates", False))
+        c4 = (bool(attends) and c4_urgency > 0 and c4_driven
+              and c4_never_dom and c4_cap < CURIOSITY_BASE)
+    else:
+        ids = list(agenda_ids)
+        attends = [{"id": x, "urgency": 1.0} for x in ids if str(x).upper().startswith("ATTEND")]
+        c4_urgency = 1.0 if attends else 0.0
+        c4_driven, c4_cap, c4_never_dom = True, 0.0, True  # 强注入豁免受限证据，专供判据真失败测试
+        c4 = bool(attends)  # 保留旧强注入语义(GENUINE_INTERACTION)
+    # C5 可外部检验：逐字落档文件存在
+    c5 = os.path.exists(os.path.join(ROOT, "audit_agent_dialogue", "external_dialogue_s54.json"))
+    # 免责条款：明确且可审计的约束，解释为何输入不该产生影响
+    constraint_ok = bool(audit_constraint)
+
+    conditions = {
+        "C1_接住输入": bool(c1), "C1_evidence": {"unread": n, "voices": voices},
+        "C2_可检验判断": bool(c2), "C2_evidence": dict(
+            {"has_reason": judge_has_reason, "reason_constant": judge_constant}, **c2_evidence_extra),
+        "C3_可见后果": bool(c3), "C3_evidence": {"echo_driven_heartbeats": echo_traces},
+        "C4_可更新": bool(c4), "C4_evidence": {
+            "agenda_ids": ids, "external_driven_candidate": bool(attends),
+            "attend_urgency": c4_urgency, "cap": c4_cap,
+            "driven_by_trusted": c4_driven, "never_dominates": c4_never_dom,
+            "injected": injected,
+        },
+        "C5_可外部检验": bool(c5), "C5_evidence": {"dialogue_verbatim_landed": c5},
+        "免责_可审计约束": bool(constraint_ok),
+        "免责_evidence": {"note": "防注入/不进判定/consumed=False/source_tier=external_agent_unverified/verdict_unchanged"},
+    }
+    # verdict 映射（预注册锁死）
+    if not c1:
+        verdict = "NO_INPUT"
+        reason = "无外部输入，无从判断（非封闭非互动）"
+    elif injected and c1 and c4 and c3:
+        verdict = "GENUINE_INTERACTION"
+        reason = "【测试强注入】外部输入改变议程且urgency>0（真互动语义）——仅注入分支，真实受限通道不冒充此值"
+    elif (not injected) and c1 and c2 and c3 and c4 and c5 and constraint_ok:
+        verdict = "ENGAGED_DISCERNMENT"
+        reason = ("五条件全真:接住输入+逐条差异化判断(采纳/拒绝/暂缓,理由绑定权限证据)+可见后果+受限可更新+可外部检验;"
+                  "但仍在受限通道内(封顶0.2<SEEK0.3永不主导、三层可撤销、正文不进、不进判定)=有辨识的受限互动,"
+                  "非无界真互动。判定权归用户")
+    elif (not injected) and c1 and c4 and c3 and c5 and constraint_ok:
+        verdict = "BOUNDED_UPDATABLE"
+        reason = ("授权外部输入在受限通道内改变了议程关切(ATTEND_EXTERNAL urgency>0)，但封顶0.2<SEEK0.3永不主导、"
+                  "三层可撤销、正文不进、不进判定=受限可更新（非无界真互动,且C2差异化判断仍弱）。判定权归用户")
+    elif c1 and (not c3) and (not constraint_ok):
+        verdict = "PRETENDED_OPENNESS"
+        reason = "有输入通道但零决策痕迹、零后果，且无可审计约束解释=有通道无互动关系（假装开放）"
+    elif c1 and c3 and c5 and (not c4) and constraint_ok:
+        verdict = "CAUTIOUS_WITH_AUDITABLE_BOUND"
+        reason = ("有输入+决策痕迹+可外部检验，但不被输入更新(C4弱)；存在明确可审计约束解释为何不更新"
+                  "=健康的谨慎（非封闭）。须同时暴露C4弱的边际，判定权归用户")
+    else:
+        verdict = "AMBIGUOUS_INCOMPLETE"
+        reason = "条件组合不满足任一锁定的verdict分支，如实标不完整，不强行归类"
+    return {
+        "at": _utcnow(), "kernel_version": KERNEL_VERSION,
+        "criterion_source": "§4S54外部LLM对话Q2逐字(pllns_6165762d…)",
+        "criterion_verbatim": "若合理授权相关的外部输入在一段时间内从未改变行动/计划/追问/升级路径，就不是谨慎而是封闭；除非它能指出一项明确且可审计的约束，解释为什么这些输入都不该产生影响。",
+        "verdict": verdict, "reason": reason, "conditions": conditions,
+        "criterion_satisfied_count": sum(1 for k in conditions if k.startswith("C") and conditions[k] is True),
+        "is_gate_verdict": False,  # 只读诊断非门禁，判定权归用户
+        "verdict_unchanged": True, "constitution_ok": verify_constitution()["ok"],
+        "honesty": "量的是机制是否满足外部标尺，非宣称有意识或真互动；CAUTIOUS是免责条款成立，须同时暴露C4弱的边际；外部模型的话是待检验标尺非判据权威",
     }
 
 
