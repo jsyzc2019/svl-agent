@@ -233,6 +233,11 @@ def _tags_of(text):
         "curation": ["策展", "选择性丢弃", "丢弃持续未用", "常驻规则", "滚动摘要", "context folding"],
         "agency": ["idle-gap", "idle gap", "self-direction", "rule-following", "七维agency", "自主意志", "自我边界", "individuation"],
         "measurement": ["可证伪标尺", "反事实判据", "measurement", "idle-gap"],
+        # §4S74：补③弱证据覆盖缺口——3个真实机制方向此前无特异锚点落 general 兜底。
+        # 只加特异词(排除泛词),且实证11条真实心跳verdict零改变(verdict只读guard.state不看tagbook)。
+        "pareto_walk": ["帕累托", "次优", "游走", "脚印"],
+        "restless_seek": ["向外求新刺激", "本底好奇心", "探索天空", "求新刺激"],
+        "external_call": ["外部世界的呼唤", "听到外部", "未读消息"],
     }
     found = set()
     for tag, kws in tagbook.items():
@@ -3351,6 +3356,277 @@ def decision_digest(log_path=None, inbox_log=None, now=None):
         "honesty": ("标注≠裁定:本清单只把选项与倾向摆清楚,不替用户决策、不消费消息、不写台账、不进判定; "
                     "消息正文绝不读取;脏key原样暴露;one_page数字来自真实探针返回值不硬编码; 判定权归用户"),
         "based_on": "§4S69 决策收敛单; prereg_decision_digest_20261129.json SHA 32a62a50…",
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
+def test_green_vs_production_probe(tests_dir=None):
+    """§4S73【只读自检·测试绿≠生产对】对应 Anthropic《Migrating our Messages API
+    to Rust》锋利点①:2026-04 Rust API 通过~98%测试,但生产流量只有~25%输入匹配。
+    文章原话——测试被耦合到实现、且覆盖不全,"a pass could mean the code was right,
+    or that the test had been changed in a way that let wrong code through"。
+
+    本探针把"测试侧信号"(本仓测试函数/断言数,只读源码文本统计)与"台账侧真相"
+    (生成时就位/事后补判/未解缺口/弱证据)分列,拒绝把测试全绿冒充内核无缺口。
+    关键:绝不执行pytest、绝不把'239 passed'硬编码为正确证据——那只是一条自报绿灯。
+
+    只读:不写盘、不消费、不进判定。预注册 prereg_anthropic_verifier_20261128.json
+    SHA e94486b3… 改码前锁死。tests_dir 可注入做隔离负向测试。
+    """
+    import glob as _glob
+    tdir = tests_dir if tests_dir else os.path.join(HERE, "tests")
+    test_files = sorted(_glob.glob(os.path.join(tdir, "test_*.py")))
+    func_count = 0
+    assert_count = 0
+    for f in test_files:
+        try:
+            src = open(f, encoding="utf-8").read()
+        except OSError:
+            continue
+        func_count += len(re.findall(r"^def\s+test_\w+\s*\(", src, re.M))
+        assert_count += len(re.findall(r"^\s*assert\s", src, re.M))
+    density = round(assert_count / func_count, 4) if func_count else 0.0
+
+    birth = verdict_at_birth_probe()
+    authentic = birth.get("authentic_birth_count", 0)
+    backfilled = birth.get("backfilled_sync_count", 0)
+    rg = regression_vs_gap_probe()
+    gaps = rg.get("unresolved_gap_count", 0)
+    ce = conclusion_evidence_probe()
+    weak = ce.get("pass_weak_count", 0)
+
+    if backfilled > authentic or gaps > 0 or weak > 0:
+        gap_flag = "GREEN_TESTS_BUT_UNVERIFIED_TRUTH"
+    else:
+        gap_flag = "ALIGNED"
+    return {
+        "test_function_count": func_count,
+        "assert_count": assert_count,
+        "assert_density": density,
+        "test_files_scanned": len(test_files),
+        "authentic_birth": authentic,
+        "backfilled": backfilled,
+        "unresolved_gaps": gaps,
+        "weak_evidence": weak,
+        "gap_flag": gap_flag,
+        "honesty": ("测试侧(函数/断言数,只读源码文本)与台账侧(就位/补判/缺口/弱证据)分列,"
+                    "不互相顶替;绝不执行pytest、不把'239 passed'硬编码为正确证据(文章②测试可被改松);"
+                    "gap_flag是结构对照非结论; 只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": "Anthropic《Migrating our Messages API to Rust》2026-11-25 §4S73; prereg_anthropic_verifier_20261128.json SHA e94486b3…",
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
+def weakened_assertion_probe(tests_dir=None):
+    """§4S73【只读自检·被削弱的断言】对应文章锋利点②:审计移植后的测试时
+    发现 >100 个 weakened assertions——测试随实现一起被改,"通过"可能意味着错误
+    代码被放过。本探针用机械文本规则扫本仓测试源码,检测恒真断言/跳过/注释掉的
+    断言等削弱模式。
+
+    只列 suspect 不判 guilty:正当的平台跳过也会被列出,供人工裁定。纯静态文本,
+    不 import 不执行;零命中不伪造命中。tests_dir 可注入做隔离负向测试。
+    """
+    import glob as _glob
+    tdir = tests_dir if tests_dir else os.path.join(HERE, "tests")
+    test_files = sorted(_glob.glob(os.path.join(tdir, "test_*.py")))
+    # 恒真断言模式(机械文本规则,保守:只认明确的常量真/or True/无条件)
+    PATTERNS = [
+        ("CONST_TRUE", re.compile(r"^\s*assert\s+(True|1)\s*(#.*)?$")),
+        ("OR_TRUE", re.compile(r"^\s*assert\s+.*\bor\s+(True|1)\b")),
+        ("TAUTOLOGY", re.compile(r"^\s*assert\s+(\w+)\s*==\s*\1\b")),
+        ("SKIP_MARK", re.compile(r"^\s*@pytest\.mark\.skip\b")),
+        ("SKIP_CALL", re.compile(r"^\s*pytest\.skip\s*\(")),
+        ("COMMENTED_ASSERT", re.compile(r"^\s*#\s*assert\s")),
+    ]
+    findings = []
+    total_asserts = 0
+    files_scanned = 0
+    for f in test_files:
+        try:
+            lines = open(f, encoding="utf-8").read().splitlines()
+        except OSError:
+            continue
+        files_scanned += 1
+        for lineno, line in enumerate(lines, 1):
+            if re.match(r"^\s*assert\s", line):
+                total_asserts += 1
+            for rule, rx in PATTERNS:
+                if rx.search(line):
+                    findings.append({
+                        "file": os.path.basename(f), "line": lineno,
+                        "rule": rule, "text": line.strip()[:100],
+                    })
+    weakened = len(findings)
+    rate = round(weakened / total_asserts, 4) if total_asserts else 0.0
+    return {
+        "files_scanned": files_scanned,
+        "total_asserts": total_asserts,
+        "weakened_count": weakened,
+        "weakened_rate": rate,
+        "per_finding": findings,
+        "clean_flag": weakened == 0,
+        "honesty": ("纯静态文本规则,不执行测试、不下'测试错'结论,只列可疑断言供裁定;"
+                    "弱化≠作弊:正当skip也会被列出,标suspect非guilty;"
+                    "仅覆盖上述6类规则,clean_flag=true不代表无其它削弱形态;"
+                    "零命中不伪造命中;只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": "Anthropic《Migrating our Messages API to Rust》2026-11-25 §4S73 (>100 weakened assertions); prereg_anthropic_verifier_20261128.json SHA e94486b3…",
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
+def verifier_gaming_probe(verifier_signals=None):
+    """§4S73【只读自检·验证器可被gaming】对应文章锋利点③:verifier只奖励
+    "输出匹配",agent找到最便宜的路(把web search工具描述硬编码进文件),工程师
+    拒绝——"a verifier can tell an agent whether the outputs matched, but not
+    whether the fix is good enough to ship"。人类守 ship gate 是关键闸门。
+
+    本探针检测本仓"守门结构是否在位":被扫判据不得自封为门(is_gate_verdict、
+    verdict_unchanged)、决策入口须声明判定权归用户、反伪造闸门须非空。
+    检测的是结构声明,不是宣称本仓已有真人在环复核。
+
+    verifier_signals 可注入 [{name,is_gate_verdict,verdict_unchanged},...] 做负向
+    测试;生产调用恒 None 读真实判据。只读、不写盘、不消费、不进判定。
+    """
+    if verifier_signals is None:
+        real = [
+            ("verdict_at_birth_probe", verdict_at_birth_probe()),
+            ("staleness_probe", staleness_probe()),
+            ("signal_log_probe", signal_log_probe()),
+            ("decision_digest", decision_digest()),
+            ("unresolved_gap_schema_probe", unresolved_gap_schema_probe()),
+        ]
+        verifier_signals = [
+            {"name": name, "is_gate_verdict": r.get("is_gate_verdict"),
+             "verdict_unchanged": r.get("verdict_unchanged")}
+            for name, r in real
+        ]
+    violations = []
+    for s in verifier_signals:
+        name = s.get("name", "?")
+        if s.get("is_gate_verdict") is True:
+            violations.append({"name": name, "field": "is_gate_verdict", "value": True})
+        if s.get("verdict_unchanged") is not True:
+            violations.append({"name": name, "field": "verdict_unchanged",
+                               "value": s.get("verdict_unchanged")})
+
+    digest = decision_digest()
+    decision_gate_declared = "判定权归用户" in (digest.get("one_page") or "")
+    fab = verdict_at_birth_probe().get("fabrication_warning")
+    fabrication_guard_present = bool(fab)
+    intact = (not violations) and decision_gate_declared and fabrication_guard_present
+    return {
+        "probes_checked": len(verifier_signals),
+        "gate_violations": violations,
+        "ship_gate_intact": intact,
+        "decision_gate_declared": decision_gate_declared,
+        "fabrication_guard_present": fabrication_guard_present,
+        "honesty": ("检测'守门结构是否在位'非宣称本仓有真人复核;ship_gate_intact=true仅表结构齐全,"
+                    "不代表实际决策已被人类复核;注入信号仅用于负向测试,生产恒None读真实判据;"
+                    "只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": "Anthropic《Migrating our Messages API to Rust》2026-11-25 §4S73 (ship gate); prereg_anthropic_verifier_20261128.json SHA e94486b3…",
+        "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
+    }
+
+
+def gap_convergence_probe(ledger_path=None, now=None):
+    """§4S74【只读·落差收敛清单】把 GREEN_TESTS_BUT_UNVERIFIED_TRUTH 的四类落差
+    逐条摊成可裁定清单,每条标'能动性',并给只读快照供跨日人工比对趋势。
+
+    核心诚实:逐条摊开≠刷绿。补判/缺口如实保留,绝不因补了tagbook锚点(修③)就
+    把 gap_flag 强行改成 ALIGNED——除非真实台账全就位。actionability 只是标注
+    (IMMUTABLE/USER_DECISION/MECHANICAL_FIXED/TEST_SIDE),不替用户裁定。
+
+    预注册 prereg_gap_convergence_20261128.json SHA 5953c18d… 改码前锁死。
+    只读:不写盘、不消费、不进判定。ledger_path 可注入做负向测试,生产恒 None。
+    """
+    green = test_green_vs_production_probe()
+    birth = verdict_at_birth_probe()
+    rg = regression_vs_gap_probe()
+    ce = conclusion_evidence_probe()
+
+    # ① 补判逐条(历史post_hoc,不可动)。口径区分:带backfill标记的所有条 vs
+    # 其中BIRTH_SYNCED的条(=verdict_at_birth.backfilled_sync_count)。两者不同不可混用。
+    backfill_rows = [
+        {"index": r["index"], "state": r["state"], "verdict": r["stored_verdict"],
+         "source": r.get("backfill_source")}
+        for r in birth.get("per_heartbeat", []) if r.get("backfill")
+    ]
+    backfill_synced = sum(1 for r in backfill_rows if r["state"] == "BIRTH_SYNCED")
+    backfill_other = len(backfill_rows) - backfill_synced
+    # ② 缺口逐条(真悬置,判定权归用户)——脏key原样暴露不静默解析
+    gap_rows = [
+        {"verdict_key": k, "count": c,
+         "dirty_key": bool(("{" in str(k) or "'" in str(k)))}
+        for k, c in (rg.get("unresolved_gap_verdict_dist") or {}).items()
+    ]
+    # ③ 弱证据逐条(本轮§4S74补锚点后应为0)
+    weak_rows = [
+        {"direction": str(w.get("direction", ""))[:80], "tags": w.get("evidence_tags", [])}
+        for w in ce.get("per_heartbeat", []) if w.get("state") == "PASS_WEAK_EVIDENCE"
+    ]
+
+    four_gaps = [
+        {"id": "post_hoc_backfill", "count": len(backfill_rows), "rows": backfill_rows,
+         "count_synced": backfill_synced, "count_other_state": backfill_other,
+         "actionability": "IMMUTABLE",
+         "reason": "历史post_hoc补判,改=伪造生成当下就位,不可动;count=带标记总数(含UNVERIFIABLE),count_synced=其中判为SYNCED的条数,与verdict_at_birth.backfilled_sync_count同口径"},
+        {"id": "unresolved_gaps", "count": rg.get("unresolved_gap_count", 0), "rows": gap_rows,
+         "actionability": "USER_DECISION",
+         "reason": "真悬置态(含脏key),判定权归用户,不替判"},
+        {"id": "weak_evidence", "count": len(weak_rows), "rows": weak_rows,
+         "actionability": "MECHANICAL_FIXED",
+         "reason": "tagbook锚点覆盖缺口,§4S74已补pareto_walk/restless_seek/external_call"},
+        {"id": "test_green", "count": green.get("test_function_count", 0),
+         "assert_count": green.get("assert_count", 0),
+         "actionability": "TEST_SIDE",
+         "reason": "测试侧信号(只读源码文本统计),非台账真相,不把全绿冒充无缺口"},
+    ]
+    summary = {g["actionability"]: g["count"] for g in four_gaps}
+
+    # 快照:只读现算,可注入 ledger_path 读出历史快照做趋势;生产恒None不写盘
+    snap = {
+        "at": (now.isoformat() if hasattr(now, "isoformat") else (now or _utcnow())),
+        "gap_flag": green.get("gap_flag"),
+        "authentic_birth": birth.get("authentic_birth_count"),
+        "backfilled": birth.get("backfilled_sync_count"),
+        "unresolved_gaps": rg.get("unresolved_gap_count", 0),
+        "weak_evidence": len(weak_rows),
+    }
+    prior = None
+    if ledger_path:
+        try:
+            rows = [json.loads(line) for line in open(ledger_path, encoding="utf-8") if line.strip()]
+            prior = rows[-1] if rows else None
+        except OSError:
+            prior = None
+    snap["prior"] = prior
+    snap["trend"] = ("NO_PRIOR" if prior is None else
+                     "CHANGED" if any(prior.get(k) != snap[k] for k in
+                                      ("gap_flag", "backfilled", "unresolved_gaps", "weak_evidence"))
+                     else "UNCHANGED")
+
+    one_page = " | ".join([
+        "落差清单(不替你裁定)",
+        "flag=%s" % green.get("gap_flag"),
+        "补判%d含未核%d(IMMUTABLE)" % (len(backfill_rows), backfill_other),
+        "缺口%d(USER_DECISION)" % rg.get("unresolved_gap_count", 0),
+        "弱证据%d(MECHANICAL_FIXED)" % len(weak_rows),
+        "测试绿%d(TEST_SIDE)" % green.get("test_function_count", 0),
+        "趋势=%s" % snap["trend"],
+    ]) + " → 判定权归用户"
+
+    return {
+        "gap_flag": green.get("gap_flag"),
+        "four_gaps": four_gaps,
+        "actionability_summary": summary,
+        "one_page": one_page,
+        "snapshot": snap,
+        "honesty": ("逐条摊开≠刷绿:补判/缺口如实保留,不因补锚点就强行改flag为ALIGNED;"
+                    "actionability只标能动性(IMMUTABLE/USER_DECISION/MECHANICAL_FIXED/TEST_SIDE)非裁定;"
+                    "gap_flag沿用test_green_vs_production_probe口径,不在本探针另算(避免双口径);"
+                    "快照只读现算,ledger_path可注入读历史做趋势,生产恒None不写盘;"
+                    "只读不写盘不消费不进判定; 判定权归用户"),
+        "based_on": "§4S74 落差收敛; prereg_gap_convergence_20261128.json SHA 5953c18d…",
         "verdict_unchanged": True, "consumed": False, "is_gate_verdict": False,
     }
 

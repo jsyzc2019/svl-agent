@@ -31,8 +31,9 @@ def test_real_data_not_arbitrating():
     assert "判定权归用户" in r["one_page"]
     assert "不替你决定" in r["one_page"]
     # §4S70 回填后:35个'?'已正名,未解决缺口 46→14(11原生+3回填保留悬置),真实数据演进
+    # §4S74 补tagbook锚点:弱证据 5→0(3个真实机制方向获特异锚点),total 21→16;负向注入测试仍保留
     assert r["by_section"]["gap_clusters"] == 14
-    assert r["by_section"]["weak_evidence"] == 5
+    assert r["by_section"]["weak_evidence"] == 0
     assert r["by_section"]["inbox_messages"] == 2
 
 

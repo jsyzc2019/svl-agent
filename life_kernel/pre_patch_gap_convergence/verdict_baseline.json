@@ -1,0 +1,19 @@
+{
+ "source": "pre_patch_gap_convergence/kernel_before_gap_convergence.py",
+ "kernel_sha": "23664e2f353dbbb9cde85ed8f9f126b46e8116c78f52acb482a799414b10786e",
+ "note": "§4S74补tagbook锚点前的11条真实心跳verdict基线;补锚点后须逐条相等(非刷绿铁证)",
+ "count": 11,
+ "verdicts": [
+  "UNKNOWN",
+  "PASS_DIVERSE",
+  "PASS_DIVERSE",
+  "PASS_DIVERSE",
+  "PASS_DIVERSE",
+  "PASS_DIVERSE",
+  "FAIL_CONVERGED",
+  "PASS_DIVERSE",
+  "PASS_DIVERSE",
+  "PASS_DIVERSE",
+  "PASS_DIVERSE"
+ ]
+}
